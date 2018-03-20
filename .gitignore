@@ -1,3 +1,7 @@
+dist/
+doc/api # Don't check in API docs
+
+## Node ###
 # Logs
 logs
 *.log
@@ -57,3 +61,9 @@ typings/
 # dotenv environment variables file
 .env
 
+.vscode/
+.idea/
+*.iml
+
+out/
+doc/api/
