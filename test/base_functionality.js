@@ -1,8 +1,5 @@
 let client = require("../dist/splunk");
 let expect = require("chai").expect;
-let stubby = require("stubby");
-let path = require("path");
-let yaml = require("js-yaml");
 
 describe("Basic client functionality", function() {
     var s = new client.Splunk("http://localhost:8882", "admin", "changeme");

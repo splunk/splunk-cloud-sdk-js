@@ -1,6 +1,8 @@
 import {ApiProxy} from "./apiproxy"
 import {NovaEvent} from "./models/nova_event"
 
+let SERVICE_PREFIX='/v1';
+
 export class NovaProxy extends ApiProxy {
     constructor(client) {
         super(client);
@@ -8,11 +10,11 @@ export class NovaProxy extends ApiProxy {
     }
 
     sendEvent(event) {
-        return this.client.post("/events", [event]);
+        return this.client.post(`${SERVICE_PREFIX}/events`, [event]);
     }
 
     queryEvents(query) {
-        return this.client.get("/events", query)
+        return this.client.get(`${SERVICE_PREFIX}/events`, query)
         .then(function(data) {
             return new NovaSearchResults(data.metadata, data.fields, data.events);
         });

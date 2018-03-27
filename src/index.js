@@ -1,4 +1,5 @@
 import {NovaProxy} from './nova';
+import {SearchProxy} from './search';
 import 'isomorphic-fetch';
 import { Base64 } from 'js-base64';
 
@@ -7,6 +8,14 @@ function assertResponse(response) {
     if (!response.ok) {
         // TODO: Make this an error model
         throw "This should be an error model"
+    }
+}
+
+function decodeJson(text) {
+    try {
+        return JSON.parse(text);
+    } catch (e) {
+        throw new Error(`Unable to parse message: "${text}"`);
     }
 }
 
@@ -23,6 +32,7 @@ export class Splunk {
 
         // Add api proxies
         this.nova = new NovaProxy(this);
+        this.search = new SearchProxy(this);
     }
 
     buildUrl(path) {
@@ -51,8 +61,9 @@ export class Splunk {
             headers: this._buildHeaders()
         })
         .then(function(response) {
-            return response.json();
-        });
+            return response.text();
+        })
+        .then(decodeJson);
     }
 
     post(path, data) {
@@ -62,8 +73,26 @@ export class Splunk {
             body: JSON.stringify(data),
             headers: this._buildHeaders()
         }).then(function(response) {
-            // return response.json();
-            return response.text().then(function(text) {console.log(text); return text;});
+            return response.text();
+        }).then(decodeJson);
+    }
+
+    /**
+     * Temporary method for allowing sync
+     * searches as they do not return json
+     * @param path
+     * @param data
+     * @returns {Promise<string>}
+     * @deprecated
+     */
+    postRaw(path, data) {
+        this.login()
+        return fetch(this.buildUrl(path), {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: this._buildHeaders()
+        }).then(function(response) {
+            return response.text();
         });
     }
 
@@ -74,8 +103,8 @@ export class Splunk {
             body: JSON.stringify(data),
             headers: this._buildHeaders()
         }).then(function(response) {
-            return response.json();
-        });
+            return response.text();
+        }).then(decodeJson);
     }
 
 
