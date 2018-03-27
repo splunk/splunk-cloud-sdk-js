@@ -1,7 +1,7 @@
 {
-  "name": "splunk-sdk",
+  "name": "ssc-client-js",
   "version": "0.0.1",
-  "description": "Splunk SDK",
+  "description": "Splunk SSC SDK for Javascript",
   "main": "src/index.js",
   "scripts": {
     "test": "webpack && mocha --require babel-core/register",
@@ -9,7 +9,8 @@
     "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/"
   },
   "author": "Splunk, Inc.",
-  "license": "Apache-2.0",
+  "private": true,
+  "license": "UNLICENSED",
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",

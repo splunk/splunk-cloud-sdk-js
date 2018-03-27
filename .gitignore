@@ -1,5 +1,6 @@
 dist/
-doc/api # Don't check in API docs
+doc/api/ # Don't check in API docs
+out/
 
 ## Node ###
 # Logs
@@ -65,5 +66,3 @@ typings/
 .idea/
 *.iml
 
-out/
-doc/api/
