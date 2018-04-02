@@ -2,3 +2,4 @@ ssc-client-js:
   build:
     image: splunk/ssc-client-js
     dockerfile: ci/Dockerfile
+    encrypted_env_file: ci/env.encrypted

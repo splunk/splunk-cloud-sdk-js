@@ -6,5 +6,5 @@ WORKDIR /
 # Copy the content of your repository into the image
 COPY . ./
 
-RUN npm install -g yarn
-RUN npm install
+# Install all npm dependencies, using yarn
+RUN yarn install

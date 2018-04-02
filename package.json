@@ -4,7 +4,9 @@
   "description": "Splunk SSC SDK for Javascript",
   "main": "src/index.js",
   "scripts": {
-    "test": "webpack && mocha --require babel-core/register",
+    "codecov": "codecov",
+    "cover": "NODE_ENV=coverage nyc --reporter=lcov npm run test",
+    "test": "webpack && mocha -R min --require babel-core/register",
     "stubserver": "npx stubby -d stubs/*.yml -w",
     "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/"
   },
@@ -16,11 +18,15 @@
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
+    "codecov": "^3.0.0",
     "eslint": "^4.18.2",
     "eslint-config-google": "^0.9.1",
+    "istanbul": "^0.4.5",
+    "istanbul-instrumenter-loader": "^3.0.1",
     "js-yaml": "^3.11.0",
     "jsdoc": "^3.5.5",
     "mocha": "^5.0.4",
+    "nyc": "^11.6.0",
     "stubby": "^4.0.0",
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.12"
@@ -28,5 +34,21 @@
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
     "js-base64": "^2.4.3"
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "include": [
+      "src/**/*.js"
+    ],
+    "instrument": false,
+    "sourceMap": false,
+    "exclude": [
+      ".tmp",
+      "test",
+      "node_modules"
+    ]
   }
 }

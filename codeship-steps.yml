@@ -1,5 +1,8 @@
 - type: serial
   steps:
-    - name: test
+    - name: test with coverage
       service: ssc-client-js
-      command: yarn test
+      command: yarn run cover
+    - name: generate coverage report
+      service: ssc-client-js
+      command: yarn run codecov
