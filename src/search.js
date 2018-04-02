@@ -1,9 +1,6 @@
 import {ApiProxy} from "./apiproxy"
-
-let SERVICE_PREFIX= "/search/v1";
-function path(pathname) {
-    return `${SERVICE_PREFIX}/${pathname}`;
-}
+import {SEARCH_SERVICE_PREFIX} from "./common/constants"
+import {buildPath} from "./common/utils"
 
 /**
  * Encapsulates search endpoints
@@ -23,7 +20,7 @@ export class SearchProxy extends ApiProxy {
      * @return {Promise<SearchProxy~Job>}
      */
     createJob(jobArgs) {
-        return this.client.post(path('/jobs'), jobArgs);
+        return this.client.post(buildPath(SEARCH_SERVICE_PREFIX,'/jobs'), jobArgs);
     }
 
     /**
@@ -32,7 +29,7 @@ export class SearchProxy extends ApiProxy {
      * @return {Promise<string>} The results as a string (concatenated json or CSV)
      */
     createJobSync(jobArgs) {
-        return this.client.post(path('/jobs/sync'), jobArgs);
+        return this.client.post(buildPath(SEARCH_SERVICE_PREFIX,'/jobs/sync'), jobArgs);
     }
 
     /**
@@ -41,7 +38,7 @@ export class SearchProxy extends ApiProxy {
      * @return {Promise<SearchProxy~Job>}
      */
     getJob(jobId) {
-        return this.client.get(path(`/jobs/${jobId}`));
+        return this.client.get(buildPath(SEARCH_SERVICE_PREFIX,`/jobs/${jobId}`));
     }
 
     /**
@@ -50,7 +47,7 @@ export class SearchProxy extends ApiProxy {
      * @return {Promise}
      */
     deleteJob(jobId) {
-        return this.client.delete(path(`/jobs/${jobId}`));
+        return this.client.delete(buildPath(SEARCH_SERVICE_PREFIX,`/jobs/${jobId}`));
     }
 }
 

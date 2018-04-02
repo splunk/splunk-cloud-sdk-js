@@ -2,6 +2,7 @@ import {NovaProxy} from './nova';
 import {SearchProxy} from './search';
 import 'isomorphic-fetch';
 import { Base64 } from 'js-base64';
+import { flatMap } from 'lodash';
 
 
 function assertResponse(response) {
@@ -35,8 +36,9 @@ export class Splunk {
         this.search = new SearchProxy(this);
     }
 
-    buildUrl(path) {
-        return this.url + path;
+    buildUrl(path, query) {
+        var queryEncoded = flatMap(query, (v, k) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&')
+        return `${this.url}${path}?${queryEncoded}`
     }
 
     login() {
@@ -54,15 +56,13 @@ export class Splunk {
         });
     }
 
-    get(path) {
+    get(path, query) {
         this.login();
-        return fetch(this.buildUrl(path), {
+        return fetch(this.buildUrl(path, query), {
             method: "GET",
             headers: this._buildHeaders()
         })
-        .then(function(response) {
-            return response.text();
-        })
+        .then(response => response.text())
         .then(decodeJson);
     }
 
@@ -72,9 +72,8 @@ export class Splunk {
             method: "POST",
             body: JSON.stringify(data),
             headers: this._buildHeaders()
-        }).then(function(response) {
-            return response.text();
-        }).then(decodeJson);
+        }).then((response) => response.text())
+        .then(decodeJson);
     }
 
     /**
@@ -91,9 +90,7 @@ export class Splunk {
             method: "POST",
             body: JSON.stringify(data),
             headers: this._buildHeaders()
-        }).then(function(response) {
-            return response.text();
-        });
+        }).then((response) => response.text());
     }
 
     put(path, data) {
@@ -102,18 +99,16 @@ export class Splunk {
             method: "PUT",
             body: JSON.stringify(data),
             headers: this._buildHeaders()
-        }).then(function(response) {
-            return response.text();
-        }).then(decodeJson);
+        }).then((response) => response.text())
+        .then(decodeJson);
     }
-
 
     delete(path) {
         this.login();
         return fetch(this.buildUrl(path), {
             method: "DELETE",
             headers: this._buildHeaders()
-        }).then(function(response) {
+        }).then((response) => {
             assertResponse(response, 204);
             return {};
         });

@@ -6,7 +6,9 @@
   "scripts": {
     "test": "webpack && mocha --require babel-core/register",
     "stubserver": "npx stubby -d stubs/*.yml -w",
-    "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/"
+    "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/",
+    "build": "webpack",
+    "open-spec": "docker run -d -p 80:8080 swaggerapi/swagger-ui"
   },
   "author": "Splunk, Inc.",
   "private": true,
@@ -23,7 +25,8 @@
     "mocha": "^5.0.4",
     "stubby": "^4.0.0",
     "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.12"
+    "webpack-cli": "^2.0.12",
+    "lodash": "^4.17.5"
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
