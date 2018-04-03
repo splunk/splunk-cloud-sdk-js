@@ -1,7 +1,20 @@
 # Syntax at https://github.com/mrak/stubby4node#endpoint-configuration
+# todo: Authorization change to use test credential
+#-  request:
+#      url: /datasets/set1/conf
+#      method: GET
+#   response:
+#      headers:
+#         Content-Type: application/json
+#         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+#      latency: 1 // Only here to remind me of the option
+#      status: 200
+#      body:
+#            foo: <% url[0] %>
 
+#curl  http://0.0.0.0:8882/dataset/ds1
 -  request:
-      url: /datasets/name/conf
+      url: /catalog/v1/datasets/ds1
       method: GET
    response:
       headers:
@@ -10,91 +23,159 @@
       latency: 1 // Only here to remind me of the option
       status: 200
       body:
-            foo: <% url[0] %>
+          {
+            "id": "5ac3d5170ed3330007caab65",
+            "name": "ds1",
+            "kind": ""
+          }
+#
+#-  request:
+#      url: /catalog/v1/datasets/
+#      method: PUT
+#   response:
+#      headers:
+#         Content-Type: application/json
+#         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+#      json: '{"friar":"tuck"}'
+#      status: 200
+#      body:
+#            friar: name
 
-#curl  http://0.0.0.0:8882/dataset/?name=myname
--  request:
-      url: /datasets/?
-      query:
-        name: myname
-      method: GET
-   response:
-      headers:
-         Content-Type: application/json
-         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
-      latency: 1 // Only here to remind me of the option
-      status: 200
-      body:
-            1: <% url %>
-            2: <% query %>
-
--  request:
-      url: /datasets/:name
-      method: PUT
-   response:
-      headers:
-         Content-Type: application/json
-         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
-      json: '{"friar":"tuck"}'
-      status: 200
-      body:
-            friar: name
-
--  request:
-      url: /datasets/:name
-      method: DELETE
-   response:
-      headers:
-         Content-Type: application/json
-         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
-      status: 204
+#-  request:
+#      url: /catalog/v1/datasets/:name
+#      method: DELETE
+#   response:
+#      headers:
+#         Content-Type: application/json
+#         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+#      status: 204
 
 
 # /datasets
 -  request:
-      url: /datasets
+      url: /catalog/v1/datasets
       method: GET
    response:
       headers:
          Content-Type: application/json
          Authorization: Basic YWRtaW46Y2hhbmdlbWU=
-      latency: 1 // Only here to remind me of the option
       status: 200
       body:
-            foo: "barjhj"
+            '[
+              {
+                "id": "string",
+                "name": "myname",
+                "kind": "VIEW",
+                "rules": [
+                  "string"
+                ],
+                "todo": "string"
+              },
+              {
+                "id": "string",
+                "name": "ds1",
+                "kind": "VIEW",
+                "rules": [
+                  "string"
+                ],
+                "todo": "string"
+              }
+            ]'
 
+# TODO: not working?
 -  request:
-      url: /datasets
-      method: POST
+      url: /catalog/v1/datasets
+      method: post
+      headers:
+          Content-Type: application/json
+          Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      post: {
+                "name": "ds1",
+                "match": "haha",
+                "priority": 0,
+                "description": "string",
+                "actions": [
+                  {
+                    "kind": "REGEX",
+                    "field": "string",
+                    "alias": "string"
+                  }
+                ]
+              }
    response:
       headers:
          Content-Type: application/json
-         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
-      json: '{"friar":"tuck"}'
-      status: 200
-      body:
-            friar: "tuck"
+      status: 201
+      body: {"id":"5ac3d5170ed3330007caab65","name":"ds1","kind":""}
+
 
 -  request:
-      url: /rules
+      url: /catalog/v1/rules
       method: GET
    response:
       headers:
          Content-Type: application/json
          Authorization: Basic YWRtaW46Y2hhbmdlbWU=
-      latency: 1 // Only here to remind me of the option
       status: 200
       body:
-            foo: "bar"
+        [
+          {
+            "id": "",
+            "name": "rule1",
+            "match": "newrule",
+            "priority": 7,
+            "description": "first rule",
+            "actions": [
+              {
+                "kind": "AUTOKV",
+                "mode": "NONE",
+                "trim": true
+              },
+              {
+                "kind": "EVAL",
+                "expression": "string",
+                "result": "string"
+              },
+              {
+                "kind": "LOOKUP",
+                "expression": "string"
+              }
+            ]
+          }
+        ]
 
+#TODO: not working
 -  request:
-      url: /rules
+      url: /catalog/v1/rules
       method: POST
+      headers:
+          Content-Type: application/json
+          Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      post:
+        {
+          "name": "rule1",
+          "match": "newrule",
+          "priority": 7,
+          "description": "first rule",
+          "actions": [
+            {
+              "kind": "AUTOKV",
+              "mode": "NONE",
+              "trim": true
+            },
+            {
+              "kind": "EVAL",
+              "expression": "string",
+              "result": "string"
+            },
+            {
+              "kind": "LOOKUP",
+              "expression": "string"
+            }
+          ]
+        }
+
    response:
       headers:
          Content-Type: application/json
-         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
-      json: '{"friar":"tuck"}'
-      status: 200
-      body:
-            friar: "tuck"
+      status: 201
