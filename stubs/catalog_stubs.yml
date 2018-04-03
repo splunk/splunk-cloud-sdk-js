@@ -1,0 +1,100 @@
+# Syntax at https://github.com/mrak/stubby4node#endpoint-configuration
+
+-  request:
+      url: /datasets/name/conf
+      method: GET
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      latency: 1 // Only here to remind me of the option
+      status: 200
+      body:
+            foo: <% url[0] %>
+
+#curl  http://0.0.0.0:8882/dataset/?name=myname
+-  request:
+      url: /datasets/?
+      query:
+        name: myname
+      method: GET
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      latency: 1 // Only here to remind me of the option
+      status: 200
+      body:
+            1: <% url %>
+            2: <% query %>
+
+-  request:
+      url: /datasets/:name
+      method: PUT
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      json: '{"friar":"tuck"}'
+      status: 200
+      body:
+            friar: name
+
+-  request:
+      url: /datasets/:name
+      method: DELETE
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      status: 204
+
+
+# /datasets
+-  request:
+      url: /datasets
+      method: GET
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      latency: 1 // Only here to remind me of the option
+      status: 200
+      body:
+            foo: "barjhj"
+
+-  request:
+      url: /datasets
+      method: POST
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      json: '{"friar":"tuck"}'
+      status: 200
+      body:
+            friar: "tuck"
+
+-  request:
+      url: /rules
+      method: GET
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      latency: 1 // Only here to remind me of the option
+      status: 200
+      body:
+            foo: "bar"
+
+-  request:
+      url: /rules
+      method: POST
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      json: '{"friar":"tuck"}'
+      status: 200
+      body:
+            friar: "tuck"
