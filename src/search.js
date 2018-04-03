@@ -14,15 +14,6 @@ export class SearchProxy extends ApiProxy {
     }
 
     /**
-     *
-     * @param query
-     * @returns {PostJobsRequestBuilder}
-     */
-    buildPostJobRequest(query) {
-        return new PostJobsRequestBuilder(query);
-    }
-
-    /**
      * Dispatch a search and return the newly created search job
      * @param jobArgs {SearchProxy~PostJobsRequest}
      * @return {Promise<SearchProxy~Job>}

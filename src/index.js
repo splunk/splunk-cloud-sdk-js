@@ -11,41 +11,35 @@ class SplunkError extends Error {
     }
 }
 
+/* eslint-disable */
+// Disabling eslint as it flags the hoisting of the err variable into the outer
+// scope as an issue, but it's appropriate in this context.
 function handleResponse(response) {
     if (response.ok) {
         return response.text().then(decodeJson);
-    } else {
-        return response.text().then(function(text) {
-            var err;
-            try {
-                var json = JSON.parse(text);
-                err = new SplunkError(json.message, response.status);
-                err.code = json.code;
-            } catch(ex) {
-                var err = new SplunkError(`Unknown error: ${text}`, response.status);
-            }
-            throw err;
-        });
     }
-    if (!response.ok) {
-        var text = response.text();
+    return response.text().then(function(text) {
+        var err;
         try {
-            throw new Error(decodeJson(text).message);
-        } catch(err) {
-            throw new Error(`Unknown error: ${text}`);
+            var json = JSON.parse(text);
+            err = new SplunkError(json.message, response.status);
+        } catch (ex) {
+            err = new SplunkError(`Unknown error: ${text}`, response.status);
         }
-    }
+        throw err;
+    });
 }
+/* eslint-disable */
 
 function decodeJson(text) {
-    if (text != "") {
+    if (text == "") {
+        return "";
+    } else {
         try {
             return JSON.parse(text);
         } catch (e) {
             throw new Error(`Unable to parse message: "${text}"`);
         }
-    } else {
-        return "";
     }
 }
 
@@ -142,7 +136,7 @@ export class Splunk {
     }
 
     /**
-     * performs a put on the splunk ssc environment with the supplied path.
+     * Performs a put on the splunk ssc environment with the supplied path.
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
      * @param path - path portion of the url to request from splunk
