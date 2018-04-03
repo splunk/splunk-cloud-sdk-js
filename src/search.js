@@ -2,7 +2,7 @@ import {ApiProxy} from "./apiproxy"
 
 let SERVICE_PREFIX= "/search/v1";
 function path(pathname) {
-    return `${SERVICE_PREFIX}/${pathname}`;
+    return `${SERVICE_PREFIX}${pathname}`;
 }
 
 /**
@@ -13,13 +13,18 @@ export class SearchProxy extends ApiProxy {
         super(client);
     }
 
-    static buildPostJobRequest(query) {
+    /**
+     *
+     * @param query
+     * @returns {PostJobsRequestBuilder}
+     */
+    buildPostJobRequest(query) {
         return new PostJobsRequestBuilder(query);
     }
 
     /**
      * Dispatch a search and return the newly created search job
-     * @param jobArgs {(object|PostJobsRequest)}
+     * @param jobArgs {SearchProxy~PostJobsRequest}
      * @return {Promise<SearchProxy~Job>}
      */
     createJob(jobArgs) {
@@ -28,7 +33,7 @@ export class SearchProxy extends ApiProxy {
 
     /**
      * Dispatch a search and return the newly created search job
-     * @param jobArgs {(object|PostJobsRequest)}
+     * @param jobArgs {SearchProxy~PostJobsRequest}
      * @return {Promise<string>} The results as a string (concatenated json or CSV)
      */
     createJobSync(jobArgs) {
@@ -45,6 +50,16 @@ export class SearchProxy extends ApiProxy {
     }
 
     /**
+     * Returns results for the search job corresponding to "id".
+     *         Returns results post-transform, if applicable.
+     * @param jobId
+     * @returns {Promise<object>}
+     */
+    getResults(jobId) {
+        return this.client.get(path(`/jobs/${jobId}/results`));
+    }
+
+    /**
      * Delete the search job with the given `id`, cancelling the search if it is running.
      * @param {string} jobId
      * @return {Promise}
@@ -52,6 +67,8 @@ export class SearchProxy extends ApiProxy {
     deleteJob(jobId) {
         return this.client.delete(path(`/jobs/${jobId}`));
     }
+
+
 }
 
 /**
@@ -92,29 +109,3 @@ export class SearchProxy extends ApiProxy {
  * @property {number} ttl - The time, in seconds, after the search has completed until the search job expires and results are deleted.
  * @property {number} limit - The number of events to process before the job is automatically finalized. Set to 0 to disable automatic finalization.
  */
-
-class PostJobsRequestBuilder {
-    constructor(query) {
-        this.query = query;
-    }
-
-    withFormat(format) {
-        this.format = format;
-        return this;
-    }
-
-    withTimeout(timeout) {
-        this.timeout = timeout;
-        return this;
-    }
-
-    withTtl(ttl) {
-        this.ttl = ttl;
-        return this;
-    }
-
-    withLimit(limit) {
-        this.limit = limit;
-        return this;
-    }
-}

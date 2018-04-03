@@ -1,0 +1,211 @@
+{
+  "fields": [
+    {
+      "name": "_bkt"
+    },
+    {
+      "name": "_cd"
+    },
+    {
+      "name": "_eventtype_color"
+    },
+    {
+      "name": "_indextime"
+    },
+    {
+      "name": "_raw"
+    },
+    {
+      "name": "_serial"
+    },
+    {
+      "name": "_si"
+    },
+    {
+      "name": "_sourcetype"
+    },
+    {
+      "name": "_time"
+    },
+    {
+      "name": "capacity_gb"
+    },
+    {
+      "name": "device"
+    },
+    {
+      "name": "entity"
+    },
+    {
+      "name": "eventtype"
+    },
+    {
+      "name": "host"
+    },
+    {
+      "name": "index"
+    },
+    {
+      "name": "language"
+    },
+    {
+      "name": "linecount"
+    },
+    {
+      "name": "punct"
+    },
+    {
+      "name": "source"
+    },
+    {
+      "name": "sourcetype"
+    },
+    {
+      "name": "splunk_server"
+    },
+    {
+      "name": "splunk_server_group"
+    }
+  ],
+  "highlighted": {},
+  "init_offset": 0,
+  "messages": [],
+  "preview": false,
+  "results": [
+    {
+      "_bkt": "events-ef711e94~0~B9D5F9F5-FBED-4B1B-8E2A-F74AD872D732",
+      "_cd": "0:21",
+      "_indextime": "1522698119",
+      "_raw": "{\"capacity_gb\":\"128\",\"device\":\"iphone\",\"entity\":\"splunknova/intro/send_events\",\"language\":\"en\"}",
+      "_serial": "0",
+      "_si": [
+        "si-b24c61c6-69bf959f5d-p2rvr",
+        "events-ef711e94"
+      ],
+      "_sourcetype": "httpevent",
+      "_time": "2018-04-02T19:41:59.000+00:00",
+      "capacity_gb": "128",
+      "device": "iphone",
+      "entity": [
+        "splunknova/intro/send_events",
+        "splunknova/intro/send_events"
+      ],
+      "host": "si-b24c61c6:8088",
+      "index": "events-ef711e94",
+      "language": "en",
+      "linecount": "1",
+      "punct": "{\"\":\"\",\"\":\"\",\"\":\"//\",\"\":\"\"}",
+      "source": "splunknova/intro/device",
+      "sourcetype": "httpevent",
+      "splunk_server": "si-b24c61c6-69bf959f5d-p2rvr"
+    },
+    {
+      "_bkt": "events-ef711e94~0~B9D5F9F5-FBED-4B1B-8E2A-F74AD872D732",
+      "_cd": "0:17",
+      "_indextime": "1522698119",
+      "_raw": "{\"capacity_gb\":\"256\",\"device\":\"android\",\"entity\":\"splunknova/intro/send_events\",\"language\":\"en\"}",
+      "_serial": "1",
+      "_si": [
+        "si-b24c61c6-69bf959f5d-p2rvr",
+        "events-ef711e94"
+      ],
+      "_sourcetype": "httpevent",
+      "_time": "2018-04-02T19:41:59.000+00:00",
+      "capacity_gb": "256",
+      "device": "android",
+      "entity": [
+        "splunknova/intro/send_events",
+        "splunknova/intro/send_events"
+      ],
+      "host": "si-b24c61c6:8088",
+      "index": "events-ef711e94",
+      "language": "en",
+      "linecount": "1",
+      "punct": "{\"\":\"\",\"\":\"\",\"\":\"//\",\"\":\"\"}",
+      "source": "splunknova/intro/device",
+      "sourcetype": "httpevent",
+      "splunk_server": "si-b24c61c6-69bf959f5d-p2rvr"
+    },
+    {
+      "_bkt": "events-ef711e94~0~B9D5F9F5-FBED-4B1B-8E2A-F74AD872D732",
+      "_cd": "0:13",
+      "_indextime": "1522698119",
+      "_raw": "{\"capacity_gb\":\"192\",\"device\":\"android\",\"entity\":\"splunknova/intro/send_events\",\"language\":\"en\"}",
+      "_serial": "2",
+      "_si": [
+        "si-b24c61c6-69bf959f5d-p2rvr",
+        "events-ef711e94"
+      ],
+      "_sourcetype": "httpevent",
+      "_time": "2018-04-02T19:41:59.000+00:00",
+      "capacity_gb": "192",
+      "device": "android",
+      "entity": [
+        "splunknova/intro/send_events",
+        "splunknova/intro/send_events"
+      ],
+      "host": "si-b24c61c6:8088",
+      "index": "events-ef711e94",
+      "language": "en",
+      "linecount": "1",
+      "punct": "{\"\":\"\",\"\":\"\",\"\":\"//\",\"\":\"\"}",
+      "source": "splunknova/intro/device",
+      "sourcetype": "httpevent",
+      "splunk_server": "si-b24c61c6-69bf959f5d-p2rvr"
+    },
+    {
+      "_bkt": "events-ef711e94~0~B9D5F9F5-FBED-4B1B-8E2A-F74AD872D732",
+      "_cd": "0:9",
+      "_indextime": "1522698119",
+      "_raw": "{\"capacity_gb\":\"64\",\"device\":\"iphone\",\"entity\":\"splunknova/intro/send_events\",\"language\":\"en\"}",
+      "_serial": "3",
+      "_si": [
+        "si-b24c61c6-69bf959f5d-p2rvr",
+        "events-ef711e94"
+      ],
+      "_sourcetype": "httpevent",
+      "_time": "2018-04-02T19:41:59.000+00:00",
+      "capacity_gb": "64",
+      "device": "iphone",
+      "entity": [
+        "splunknova/intro/send_events",
+        "splunknova/intro/send_events"
+      ],
+      "host": "si-b24c61c6:8088",
+      "index": "events-ef711e94",
+      "language": "en",
+      "linecount": "1",
+      "punct": "{\"\":\"\",\"\":\"\",\"\":\"//\",\"\":\"\"}",
+      "source": "splunknova/intro/device",
+      "sourcetype": "httpevent",
+      "splunk_server": "si-b24c61c6-69bf959f5d-p2rvr"
+    },
+    {
+      "_bkt": "events-ef711e94~0~B9D5F9F5-FBED-4B1B-8E2A-F74AD872D732",
+      "_cd": "0:5",
+      "_indextime": "1522698119",
+      "_raw": "{\"capacity_gb\":\"128\",\"device\":\"iphone\",\"entity\":\"splunknova/intro/send_events\",\"language\":\"en\"}",
+      "_serial": "4",
+      "_si": [
+        "si-b24c61c6-69bf959f5d-p2rvr",
+        "events-ef711e94"
+      ],
+      "_sourcetype": "httpevent",
+      "_time": "2018-04-02T19:41:59.000+00:00",
+      "capacity_gb": "128",
+      "device": "iphone",
+      "entity": [
+        "splunknova/intro/send_events",
+        "splunknova/intro/send_events"
+      ],
+      "host": "si-b24c61c6:8088",
+      "index": "events-ef711e94",
+      "language": "en",
+      "linecount": "1",
+      "punct": "{\"\":\"\",\"\":\"\",\"\":\"//\",\"\":\"\"}",
+      "source": "splunknova/intro/device",
+      "sourcetype": "httpevent",
+      "splunk_server": "si-b24c61c6-69bf959f5d-p2rvr"
+    }
+  ]
+}

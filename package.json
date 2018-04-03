@@ -10,7 +10,7 @@
     "build": "webpack",
     "pretest": "yarn lint",
     "test": "yarn build && mocha -R min --require babel-core/register",
-    "stubserver": "npx stubby -d stubs/*.yml -w",
+    "stubserver": "npx stubby -d stubs/stubs.yml -w",
     "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/"
   },
   "author": "Splunk, Inc.",
@@ -22,6 +22,7 @@
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
     "codecov": "^3.0.0",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^4.18.2",
     "eslint-config-google": "^0.9.1",
     "istanbul": "^0.4.5",
