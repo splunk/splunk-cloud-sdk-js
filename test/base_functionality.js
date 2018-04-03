@@ -1,5 +1,9 @@
 let client = require("../dist/splunk");
-let expect = require("chai").expect;
+let chai = require("chai");
+var chaiAsPromised = require("chai-as-promised");
+chai.use(chaiAsPromised);
+
+let expect = chai.expect;
 
 describe("Basic client functionality", function() {
     var s = new client.Splunk("http://localhost:8882", "admin", "changeme");
@@ -40,6 +44,12 @@ describe("Basic client functionality", function() {
             expect(promise).to.be.a("promise");
             return promise;
         })
+    });
+
+    describe("Errors", function() {
+        it("should throw on an error response", function() {
+            return expect(s.get("/error")).to.be.rejectedWith(Error, "Something exploded");
+        });
     });
 
 });

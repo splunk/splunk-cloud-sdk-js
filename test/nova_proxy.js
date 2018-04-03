@@ -1,6 +1,9 @@
 let client = require("../dist/splunk");
 let expect = require("chai").expect;
 
+// Commenting this out- the nova APIs will be removed as soon as we have HEC endpoints implemented. I want to
+// leave these so that we have a way of creating events.
+/*
 describe("Using Nova APIs", function() {
     it("should allow submitting and retrieving events", function() {
         let splunk = new client.Splunk('https://api-beta.splunknovadev.com/',
@@ -25,3 +28,4 @@ describe("Using Nova APIs", function() {
             });
     });
 });
+*/

@@ -4,21 +4,54 @@ import 'isomorphic-fetch';
 import { Base64 } from 'js-base64';
 
 
-function assertResponse(response) {
+class SplunkError extends Error {
+    constructor(message, code) {
+        super(message);
+        this.code = code;
+    }
+}
+
+function handleResponse(response) {
+    if (response.ok) {
+        return response.text().then(decodeJson);
+    } else {
+        return response.text().then(function(text) {
+            var err;
+            try {
+                var json = JSON.parse(text);
+                err = new SplunkError(json.message, response.status);
+                err.code = json.code;
+            } catch(ex) {
+                var err = new SplunkError(`Unknown error: ${text}`, response.status);
+            }
+            throw err;
+        });
+    }
     if (!response.ok) {
-        // TODO: Make this an error model
-        throw "This should be an error model"
+        var text = response.text();
+        try {
+            throw new Error(decodeJson(text).message);
+        } catch(err) {
+            throw new Error(`Unknown error: ${text}`);
+        }
     }
 }
 
 function decodeJson(text) {
-    try {
-        return JSON.parse(text);
-    } catch (e) {
-        throw new Error(`Unable to parse message: "${text}"`);
+    if (text != "") {
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            throw new Error(`Unable to parse message: "${text}"`);
+        }
+    } else {
+        return "";
     }
 }
 
+/**
+ * @property {SearchProxy} search - Proxies for the search APIs
+ */
 export class Splunk {
     constructor(url, user_or_token, pass) {
         if (pass) {
@@ -61,9 +94,8 @@ export class Splunk {
             headers: this._buildHeaders()
         })
         .then(function(response) {
-            return response.text();
-        })
-        .then(decodeJson);
+            return handleResponse(response);
+        });
     }
 
     post(path, data) {
@@ -73,26 +105,7 @@ export class Splunk {
             body: JSON.stringify(data),
             headers: this._buildHeaders()
         }).then(function(response) {
-            return response.text();
-        }).then(decodeJson);
-    }
-
-    /**
-     * Temporary method for allowing sync
-     * searches as they do not return json
-     * @param path
-     * @param data
-     * @returns {Promise<string>}
-     * @deprecated
-     */
-    postRaw(path, data) {
-        this.login()
-        return fetch(this.buildUrl(path), {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: this._buildHeaders()
-        }).then(function(response) {
-            return response.text();
+            return handleResponse(response);
         });
     }
 
@@ -103,10 +116,9 @@ export class Splunk {
             body: JSON.stringify(data),
             headers: this._buildHeaders()
         }).then(function(response) {
-            return response.text();
-        }).then(decodeJson);
+            return handleResponse(response);
+        });
     }
-
 
     delete(path) {
         this.login();
@@ -114,7 +126,7 @@ export class Splunk {
             method: "DELETE",
             headers: this._buildHeaders()
         }).then(function(response) {
-            assertResponse(response, 204);
+            handleResponse(response, 204);
             return {};
         });
     }
