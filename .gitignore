@@ -1,5 +1,6 @@
 dist/
-doc/api/ # Don't check in API docs
+# Don't check in API docs
+doc/api/
 out/
 
 ## Node ###
