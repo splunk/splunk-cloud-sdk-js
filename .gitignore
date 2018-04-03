@@ -66,3 +66,9 @@ typings/
 .idea/
 *.iml
 
+# this repo uses yarn
+package-lock.json
+
+# codeship
+ci/env
+codeship.aes

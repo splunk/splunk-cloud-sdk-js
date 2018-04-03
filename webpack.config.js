@@ -12,7 +12,11 @@ module.exports = {
     rules: [{
       test: /\.js$/,
       exclude: /node_modules/,
-      use: 'babel-loader'
+      use: {
+        loader: 'istanbul-instrumenter-loader',
+        options: { esModules: true }
+      },
+      enforce: 'post'
     }]
   },
   stats: {
