@@ -1,6 +1,7 @@
-let client = require("../dist/splunk");
-let expect = require("chai").expect;
+// let client = require("../dist/splunk");
+// let expect = require("chai").expect;
 
+<<<<<<< HEAD
 describe("Using Search APIs", function() {
     let splk = new client.Splunk("http://localhost:8882", "admin", "changeme");
 
@@ -32,3 +33,15 @@ describe("Using Search APIs", function() {
     });
 
 });
+=======
+// describe("Using Search APIs", function() {
+//     it("should allow sync searching", function() {
+//         let splunk = new client.Splunk('https://api-beta.splunknovadev.com/',
+//             'irXiqgjEYTvJmbqw9P29uwcQ3JSQT9OL',
+//             'Ia2ry3ar13HLWpGJjzR1aZcqoguTbo-5pZlDtyX_AphHZiwcL3f7fIexH1y6nq2D');
+//         return splunk.search.createJobSync({query: "search index=*"}).then(function(data) {
+//             console.log(data);
+//         });
+//     });
+// });
+>>>>>>> 9e399b73227876693f5c8b26b273a56155736cdc

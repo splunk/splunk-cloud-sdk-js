@@ -65,7 +65,6 @@ export class Splunk {
         this.search = new SearchProxy(this);
         this.catalog = new CatalogProxy(this);
     }
-
     /**
      * Builds the URL from a service + endpoint path
      * (concatenates the URL with the path)
@@ -73,8 +72,12 @@ export class Splunk {
      * @param path
      * @returns {string}
      */
-    buildUrl(path) {
-        return this.url + path;
+    buildUrl(path, query) {
+        if (query) {
+            var queryEncoded = flatMap(query, (v, k) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
+            return `${this.url}${path}?${queryEncoded}`;
+        }
+        return `${this.url}${path}`;
     }
 
     /**
@@ -100,7 +103,6 @@ export class Splunk {
             'Content-Type': 'application/json'
         });
     }
-
     /**
      * Performs a GET on the Splunk SSC environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
@@ -108,7 +110,7 @@ export class Splunk {
      * @param path - Path portion of the URL to request from Splunk
      * @returns {Promise<object>}
      */
-    get(path) {
+    get(path, query) {
         this.login();
         return fetch(this.buildUrl(path, query), {
             method: "GET",

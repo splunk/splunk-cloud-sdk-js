@@ -4,6 +4,7 @@
   "description": "Splunk SSC SDK for Javascript",
   "main": "src/index.js",
   "scripts": {
+<<<<<<< HEAD
     "codecov": "codecov",
     "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test",
     "lint": "eslint 'src/**/*.js'",
@@ -12,6 +13,13 @@
     "test": "yarn build && mocha -R min --require babel-core/register",
     "stubserver": "npx stubby -d stubs/stubs.yml -w",
     "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/"
+=======
+    "test": "webpack && mocha --require babel-core/register",
+    "stubserver": "npx stubby -d stubs/*.yml -w",
+    "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/",
+    "build": "webpack",
+    "open-spec": "docker run -d -p 80:8080 swaggerapi/swagger-ui"
+>>>>>>> 9e399b73227876693f5c8b26b273a56155736cdc
   },
   "author": "Splunk, Inc.",
   "private": true,
