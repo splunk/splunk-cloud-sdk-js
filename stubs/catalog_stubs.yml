@@ -1,16 +1,17 @@
 # Syntax at https://github.com/mrak/stubby4node#endpoint-configuration
 # todo: Authorization change to use test credential
-#-  request:
-#      url: /datasets/set1/conf
-#      method: GET
-#   response:
-#      headers:
-#         Content-Type: application/json
-#         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
-#      latency: 1 // Only here to remind me of the option
-#      status: 200
-#      body:
-#            foo: <% url[0] %>
+
+-  request:
+      url: /datasets/ds1/conf
+      method: GET
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      latency: 1 // Only here to remind me of the option
+      status: 200
+      body:
+           {"id":"5ac3d5170ed3330007caab65","name":"ds1","kind":""}
 
 #curl  http://0.0.0.0:8882/dataset/ds1
 -  request:
@@ -28,10 +29,11 @@
             "name": "ds1",
             "kind": ""
           }
-#
+
+#TODO: not implemented in API
 #-  request:
 #      url: /catalog/v1/datasets/
-#      method: PUT
+#      method: PATCH
 #   response:
 #      headers:
 #         Content-Type: application/json
@@ -41,14 +43,14 @@
 #      body:
 #            friar: name
 
-#-  request:
-#      url: /catalog/v1/datasets/:name
-#      method: DELETE
-#   response:
-#      headers:
-#         Content-Type: application/json
-#         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
-#      status: 204
+-  request:
+      url: /catalog/v1/datasets/ds1
+      method: DELETE
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      status: 200
 
 
 # /datasets
@@ -87,8 +89,7 @@
       url: /catalog/v1/datasets
       method: POST
       json: '{
-                "id": "string",
-                "name": "myname",
+                "name": "ds1",
                 "kind": "VIEW",
                 "rules": [
                   "string"
@@ -100,14 +101,13 @@
          Content-Type: application/json
       status: 201
       body: '{
-                "id": "string",
-                "name": "myname",
-                "kind": "VIEW",
-                "rules": [
-                  "string"
-                ],
-                "todo": "string"
-            }'
+               "id": "5ac534e00ed3330007caab68",
+               "name": "ds1",
+               "kind": "VIEW",
+               "rules": [
+                 "string"
+               ]
+             }'
 
 
 -  request:
@@ -178,24 +178,35 @@
       status: 201
       body:
         '{
-          "name": "rule1",
-          "match": "newrule",
-          "priority": 7,
-          "description": "first rule",
-          "actions": [
-            {
-              "kind": "AUTOKV",
-              "mode": "NONE",
-              "trim": true
-            },
-            {
-              "kind": "EVAL",
-              "expression": "string",
-              "result": "string"
-            },
-            {
-              "kind": "LOOKUP",
-              "expression": "string"
-            }
-          ]
-        }'
+           "id": "5ac537f10ed3330007caab6c",
+           "name": "rule4",
+           "match": "newrule",
+           "priority": 7,
+           "description": "first rule",
+           "actions": [
+             {
+               "kind": "AUTOKV",
+               "mode": "NONE",
+               "trim": true
+             },
+             {
+               "kind": "EVAL",
+               "expression": "string",
+               "result": "string"
+             },
+             {
+               "kind": "LOOKUP",
+               "expression": "string"
+             }
+           ]
+         }'
+
+
+-  request:
+      url: /catalog/v1/rules/rule1
+      method: DELETE
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      status: 200
