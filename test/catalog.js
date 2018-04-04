@@ -2,7 +2,7 @@
 let client = require("../dist/splunk");
 let assert = require("chai").assert;
 
-let splunk = new client.Splunk('http://localhost:8882', 'admin', 'changeme');
+let splunk = new client.Splunk('http://ssc-sdk-shared-stubby:8882', 'admin', 'changeme');
 
 describe('Datasets Endpoints', () => {
 
