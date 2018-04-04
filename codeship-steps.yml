@@ -5,5 +5,5 @@
       service: ssc-client-js-with-stubby
       command: yarn run cover
     - name: generate coverage report
-      service: ssc-client-js
+      service: ssc-client-js-with-stubby
       command: yarn run codecov
