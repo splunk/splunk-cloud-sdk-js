@@ -1,9 +1,9 @@
 # TODO: currently unused
-ssc-client-js:
-  build:
-    image: splunk/ssc-client-js
-    dockerfile: ci/Dockerfile
-    encrypted_env_file: ci/env.encrypted
+# ssc-client-js:
+#   build:
+#     image: splunk/ssc-client-js
+#     dockerfile: ci/Dockerfile
+#     encrypted_env_file: ci/env.encrypted
 
 ssc-client-js-with-stubby:
   build:
@@ -16,7 +16,6 @@ ssc-client-js-with-stubby:
 ssc-sdk-shared-stubby:
   image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared:latest
   dockercfg_service: aws-generator
-  cached: false
 
 aws-generator:
   add_docker: true
