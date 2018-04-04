@@ -70,5 +70,5 @@ typings/
 package-lock.json
 
 # codeship
-ci/env
+ci/**/env
 codeship.aes
