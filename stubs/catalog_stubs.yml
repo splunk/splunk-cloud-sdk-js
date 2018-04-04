@@ -178,9 +178,27 @@
       status: 201
       body:
         '{
-           "id": "5ac536ab0ed3330007caab6b",
-           "name": "rule1",
-           "kind": ""
+           "id": "5ac537f10ed3330007caab6c",
+           "name": "rule4",
+           "match": "newrule",
+           "priority": 7,
+           "description": "first rule",
+           "actions": [
+             {
+               "kind": "AUTOKV",
+               "mode": "NONE",
+               "trim": true
+             },
+             {
+               "kind": "EVAL",
+               "expression": "string",
+               "result": "string"
+             },
+             {
+               "kind": "LOOKUP",
+               "expression": "string"
+             }
+           ]
          }'
 
 
