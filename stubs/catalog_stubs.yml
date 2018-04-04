@@ -87,23 +87,27 @@
       url: /catalog/v1/datasets
       method: POST
       json: '{
-                "name": "ds1",
-                "match": "haha",
-                "priority": 0,
-                "description": "string",
-                "actions": [
-                  {
-                    "kind": "REGEX",
-                    "field": "string",
-                    "alias": "string"
-                  }
-                ]
-              }'
+                "id": "string",
+                "name": "myname",
+                "kind": "VIEW",
+                "rules": [
+                  "string"
+                ],
+                "todo": "string"
+            }'
    response:
       headers:
          Content-Type: application/json
       status: 201
-      body: '{"id":"5ac3d5170ed3330007caab65","name":"ds1","kind":""}'
+      body: '{
+                "id": "string",
+                "name": "myname",
+                "kind": "VIEW",
+                "rules": [
+                  "string"
+                ],
+                "todo": "string"
+            }'
 
 
 -  request:
@@ -117,7 +121,6 @@
       body:
         [
           {
-            "id": "",
             "name": "rule1",
             "match": "newrule",
             "priority": 7,
@@ -175,7 +178,6 @@
       status: 201
       body:
         '{
-          "id": "5ac3d9af0ed3330007caab67",
           "name": "rule1",
           "match": "newrule",
           "priority": 7,

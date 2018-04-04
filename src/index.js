@@ -1,8 +1,9 @@
-import {NovaProxy} from './nova';
-import {SearchProxy} from './search';
 import 'isomorphic-fetch';
 import { Base64 } from 'js-base64';
 import { flatMap } from 'lodash';
+import {NovaProxy} from './nova';
+import {SearchProxy} from './search';
+import { CatalogProxy } from './catalog';
 
 
 class SplunkError extends Error {
@@ -62,6 +63,7 @@ export class Splunk {
         // Add api proxies
         this.nova = new NovaProxy(this);
         this.search = new SearchProxy(this);
+        this.catalog = new CatalogProxy(this);
     }
 
     /**
