@@ -1,7 +1,9 @@
-import {NovaProxy} from './nova';
-import {SearchProxy} from './search';
 import 'isomorphic-fetch';
 import { Base64 } from 'js-base64';
+import { flatMap } from 'lodash';
+import {NovaProxy} from './nova';
+import {SearchProxy} from './search';
+import { CatalogProxy } from './catalog';
 
 
 class SplunkError extends Error {
@@ -61,17 +63,22 @@ export class Splunk {
         // Add api proxies
         this.nova = new NovaProxy(this);
         this.search = new SearchProxy(this);
+        this.catalog = new CatalogProxy(this);
     }
-
     /**
-     * Builds the URL from a service + endpoint path
+     * Builds the URL from a service + endpoint with query encoded in url
      * (concatenates the URL with the path)
      * @private
      * @param path
+     * @param {Object} query
      * @returns {string}
      */
-    buildUrl(path) {
-        return this.url + path;
+    buildUrl(path, query) {
+        if (query) {
+            var queryEncoded = flatMap(query, (v, k) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
+            return `${this.url}${path}?${queryEncoded}`;
+        }
+        return `${this.url}${path}`;
     }
 
     /**
@@ -97,23 +104,20 @@ export class Splunk {
             'Content-Type': 'application/json'
         });
     }
-
     /**
      * Performs a GET on the Splunk SSC environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
      * @param path - Path portion of the URL to request from Splunk
+     * @param {Object} query - Object that contains query parameters
      * @returns {Promise<object>}
      */
-    get(path) {
+    get(path, query) {
         this.login();
-        return fetch(this.buildUrl(path), {
+        return fetch(this.buildUrl(path, query), {
             method: "GET",
             headers: this._buildHeaders()
-        })
-        .then(function(response) {
-            return handleResponse(response);
-        });
+        }).then(response => handleResponse(response));
     }
 
     /**
@@ -130,9 +134,7 @@ export class Splunk {
             method: "POST",
             body: JSON.stringify(data),
             headers: this._buildHeaders()
-        }).then(function(response) {
-            return handleResponse(response);
-        });
+        }).then(response => handleResponse(response));
     }
 
     /**
@@ -149,12 +151,11 @@ export class Splunk {
             method: "PUT",
             body: JSON.stringify(data),
             headers: this._buildHeaders()
-        }).then(function(response) {
-            return handleResponse(response);
-        });
+        }).then(response => handleResponse(response));
     }
 
-    /**
+
+   /**
      * Performs a DELETE on the Splunk SSC environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
@@ -166,7 +167,7 @@ export class Splunk {
         return fetch(this.buildUrl(path), {
             method: "DELETE",
             headers: this._buildHeaders()
-        }).then(function(response) {
+        }).then(response => {
             handleResponse(response, 204);
             return {};
         });
