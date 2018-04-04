@@ -1,16 +1,16 @@
 import 'isomorphic-fetch';
 import { Base64 } from 'js-base64';
 import { flatMap } from 'lodash';
-import {NovaProxy} from './nova';
-import {SearchProxy} from './search';
+import { NovaProxy } from './nova';
+import { SearchProxy } from './search';
 import { CatalogProxy } from './catalog';
 
 
 class SplunkError extends Error {
-    constructor(message, code) {
-        super(message);
-        this.code = code;
-    }
+  constructor(message, code) {
+    super(message);
+    this.code = code;
+  }
 }
 
 /* eslint-disable */
@@ -47,7 +47,9 @@ function decodeJson(text) {
 
 /**
  * This class is a Splunk SSC client.
+ * @property {NovaProxy} nova - Proxies for events APIs
  * @property {SearchProxy} search - Proxies for the search APIs
+ * @property {CatalogProxy} catalog - Proxies for the catalog APIs
  */
 export class Splunk {
     constructor(url, user_or_token, pass) {

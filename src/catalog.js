@@ -1,63 +1,60 @@
-import {ApiProxy} from './apiproxy';
-import {CATALOG_SERVICE_PREFIX} from './common/constants';
-import {buildPath} from './common/utils';
+/* eslint-disable import/prefer-default-export */
+import { ApiProxy } from './apiproxy';
+import { CATALOG_SERVICE_PREFIX } from './common/constants';
+import { buildPath } from './common/utils';
 
 
 /**
  * Encapsulates catalog endpoints
  */
 export class CatalogProxy extends ApiProxy {
-    constructor(client) {
-        super(client)
-    }
-
- /**
+  /**
   * Returns a list of datasets, optionally filtered by the given query parameters.
   * @param {Object} query
   * @return {Promise<CatalogProxy~Datasets>}
   */
-    getDatasets(query) {
-        return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, '/datasets'), query);
-    }
+  getDatasets(query) {
+    return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, '/datasets'), query);
+  }
 
   /**
    * Create a new dataset.
    * @param {Object|CatalogProxy~Dataset} dataset
    * @return {Promise<CatalogProxy~Dataset>}
    */
-    createDataset(dataset) {
-        return this.client.post(buildPath(CATALOG_SERVICE_PREFIX, `/datasets`, dataset));
-    }
+  createDataset(dataset) {
+    return this.client.post(buildPath(CATALOG_SERVICE_PREFIX, '/datasets', dataset));
+  }
 
   /**
    * Returns the dataset resource with the given `id`.
    * @param {string} datasetId
    * @return {Promise<CatalogProxy~Dataset>}
    */
-    getDataset(datasetId) {
-        return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
-    }
+  getDataset(datasetId) {
+    return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
+  }
 
-    getDatasetConf(datasetId) {
-        return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}/conf`));
-    }
+  getDatasetConf(datasetId) {
+    return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}/conf`));
+  }
 
   /**
    * Updates the dataset resource with the given `id`.
    * @param {string} datasetId
    * @return {Promise<CatalogProxy~Dataset>}
    */
-    patchDataset(datasetId) {
-        return this.client.patch(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
-    }
+  patchDataset(datasetId) {
+    return this.client.patch(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
+  }
 
   /**
    * Delete the dataset resource with the given `id`.
    * @param {string} datasetId
    */
-    deleteDataset(datasetId) {
-        return this.client.delete(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
-    }
+  deleteDataset(datasetId) {
+    return this.client.delete(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
+  }
 
   /**
    * Returns a list of search time rule definitions, optionally filtered by
@@ -69,49 +66,50 @@ export class CatalogProxy extends ApiProxy {
    * match {string}: Return rule definitions that match the given match clause.
    * @return {Promise<CatalogProxy~Rules>}
    */
-    getRules(query) {
-        return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, '/rules'), query);
-    }
+  getRules(query) {
+    return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, '/rules'), query);
+  }
 
   /**
    * Create a new search time rule definition.
    * @param {Object|CatalogProxy~Rule} rule
    * @return {Promise<CatalogProxy~Rule>}
    */
-    createRule(rule) {
-        return this.client.post(buildPath(CATALOG_SERVICE_PREFIX, `/rules`, rule));
-    }
+  createRule(rule) {
+    return this.client.post(buildPath(CATALOG_SERVICE_PREFIX, '/rules', rule));
+  }
 
   /**
-   * Returns the rule identified by the given path. The path must be fully qualified, if the path is a prefix the request returns 404
+   * Returns the rule identified by the given path.
+   * The path must be fully qualified, if the path is a prefix the request returns 404
    * because it does identify a rule resource.
    * @param {string} rulePath
    * @return {Promise<CatalogProxy~Rule>}
    */
-    getRule(rulePath) {
-        return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
-    }
+  getRule(rulePath) {
+    return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
+  }
 
-    getRuleConf(name) {
-        return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${name}/conf`));
-    }
+  getRuleConf(name) {
+    return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${name}/conf`));
+  }
 
   /**
    * Updates the rule by the given path.
    * @param {string} rulePath
    * @return {Promise<CatalogProxy~Rule>}
    */
-    patchRule(rulePath) {
-        return this.client.patch(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
-    }
+  patchRule(rulePath) {
+    return this.client.patch(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
+  }
 
   /**
    * Delete the rule by the given path.
    * @param {string} rulePath
    */
-    deleteRule(rulePath) {
-        return this.client.delete(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
-    }
+  deleteRule(rulePath) {
+    return this.client.delete(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
+  }
 }
 
 /**
@@ -207,7 +205,8 @@ export class CatalogProxy extends ApiProxy {
  * @property {string} match
  * @property {number} [priority]
  * @property {string} [description]
- * @property {CatalogProxy~AliasAction[]|CatalogProxy~AutoKVAction[]|CatalogProxy~EvalAction[]|CatalogProxy~LookupAction[]|CatalogProxy~RegexAction[]} [actions]
+ * @property {CatalogProxy~AliasAction[]|CatalogProxy~AutoKVAction[]|
+ * CatalogProxy~EvalAction[]|CatalogProxy~LookupAction[]|CatalogProxy~RegexAction[]} [actions]
  */
 
 /**

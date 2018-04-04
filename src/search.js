@@ -1,62 +1,57 @@
-import {ApiProxy} from "./apiproxy"
-import {SEARCH_SERVICE_PREFIX} from "./common/constants"
-import {buildPath} from "./common/utils"
+/* eslint-disable import/prefer-default-export */
+import { ApiProxy } from './apiproxy';
+import { SEARCH_SERVICE_PREFIX } from './common/constants';
+import { buildPath } from './common/utils';
 
 /**
  * Encapsulates search endpoints
  */
 export class SearchProxy extends ApiProxy {
-    constructor(client) {
-        super(client);
-    }
-
-    /**
+  /**
      * Dispatch a search and return the newly created search job
      * @param jobArgs {SearchProxy~PostJobsRequest}
      * @return {Promise<SearchProxy~Job>}
      */
-    createJob(jobArgs) {
-        return this.client.post(buildPath(SEARCH_SERVICE_PREFIX, '/jobs'), jobArgs);
-    }
+  createJob(jobArgs) {
+    return this.client.post(buildPath(SEARCH_SERVICE_PREFIX, '/jobs'), jobArgs);
+  }
 
-    /**
+  /**
      * Dispatch a search and return the newly created search job
      * @param jobArgs {SearchProxy~PostJobsRequest}
      * @return {Promise<string>} The results as a string (concatenated json or CSV)
      */
-    createJobSync(jobArgs) {
-        return this.client.post(buildPath(SEARCH_SERVICE_PREFIX, '/jobs/sync'), jobArgs);
-    }
+  createJobSync(jobArgs) {
+    return this.client.post(buildPath(SEARCH_SERVICE_PREFIX, '/jobs/sync'), jobArgs);
+  }
 
-    /**
+  /**
      * Returns the job resource with the given `id`.
      * @param {string} jobId
      * @return {Promise<SearchProxy~Job>}
      */
-    getJob(jobId) {
-        return this.client.get(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
-    }
+  getJob(jobId) {
+    return this.client.get(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
+  }
 
-    /**
+  /**
      * Returns results for the search job corresponding to "id".
      *         Returns results post-transform, if applicable.
      * @param jobId
      * @returns {Promise<object>}
      */
-    getResults(jobId) {
-        return this.client.get(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}/results`));
-    }
+  getResults(jobId) {
+    return this.client.get(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}/results`));
+  }
 
-    /**
+  /**
      * Delete the search job with the given `id`, cancelling the search if it is running.
      * @param {string} jobId
      * @return {Promise}
      */
-    deleteJob(jobId) {
-        return this.client.delete(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
-    }
-
-
+  deleteJob(jobId) {
+    return this.client.delete(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
+  }
 }
 
 /**
