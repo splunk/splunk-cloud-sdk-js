@@ -6,11 +6,11 @@ chai.use(chaiAsPromised);
 let expect = chai.expect;
 
 describe("Basic client functionality", function() {
-    var s = new client.Splunk("http://localhost:8882", "admin", "changeme");
+    var s = new client.Splunk("http://ssc-sdk-shared-stubby:8882", "admin", "changeme");
 
     describe("GET", function() {
         it("should return a promise", function() {
-            let promise = s.get("/basic");            
+            let promise = s.get("/basic");
             expect(promise).to.be.a("promise");
             return promise.then(function(data) {
                 expect(data).to.haveOwnProperty("foo");
