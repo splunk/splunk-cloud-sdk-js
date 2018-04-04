@@ -35,8 +35,7 @@
     "stubby": "^4.0.0",
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.12",
-    "lodash": "^4.17.5",
-    "eslint-config-airbnb": "^15.0.2"
+    "lodash": "^4.17.5"
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
