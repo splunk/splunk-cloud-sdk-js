@@ -10,14 +10,12 @@ export class NovaProxy extends ApiProxy {
     }
 
     sendEvent(event) {
-        return this.client.post(buildPath(EVENT_SERVICE_PREFIX,'/events'), [event]);
+        return this.client.post(buildPath(EVENT_SERVICE_PREFIX, '/events'), [event]);
     }
 
     queryEvents(query) {
-        return this.client.get(buildPath(EVENT_SERVICE_PREFIX,'/events'), query)
-        .then((data) => {
-            return new NovaSearchResults(data.metadata, data.fields, data.events);
-        });
+        return this.client.get(buildPath(EVENT_SERVICE_PREFIX, '/events'), query)
+        .then(data => new NovaSearchResults(data.metadata, data.fields, data.events));
     }
 
 }

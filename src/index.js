@@ -66,10 +66,11 @@ export class Splunk {
         this.catalog = new CatalogProxy(this);
     }
     /**
-     * Builds the URL from a service + endpoint path
+     * Builds the URL from a service + endpoint with query encoded in url
      * (concatenates the URL with the path)
      * @private
      * @param path
+     * @param {Object} query
      * @returns {string}
      */
     buildUrl(path, query) {
@@ -108,6 +109,7 @@ export class Splunk {
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
      * @param path - Path portion of the URL to request from Splunk
+     * @param {Object} query - Object that contains query parameters
      * @returns {Promise<object>}
      */
     get(path, query) {
@@ -115,9 +117,7 @@ export class Splunk {
         return fetch(this.buildUrl(path, query), {
             method: "GET",
             headers: this._buildHeaders()
-        })
-        .then(response => response.text())
-        .then(decodeJson);
+        }).then(response => handleResponse(response));
     }
 
     /**
@@ -134,8 +134,7 @@ export class Splunk {
             method: "POST",
             body: JSON.stringify(data),
             headers: this._buildHeaders()
-        }).then((response) => response.text())
-        .then(decodeJson);
+        }).then(response => handleResponse(response));
     }
 
     /**
@@ -146,32 +145,30 @@ export class Splunk {
      * @param data - data object (to be converted to json) to supply as put body
      * @returns {promise<object>}
      */
-    postRaw(path, data) {
-        this.login()
-        return fetch(this.buildUrl(path), {
-            method: "POST",
-            body: JSON.stringify(data),
-            headers: this._buildHeaders()
-        }).then((response) => response.text());
-    }
-
     put(path, data) {
         this.login();
         return fetch(this.buildUrl(path), {
             method: "PUT",
             body: JSON.stringify(data),
             headers: this._buildHeaders()
-        }).then((response) => response.text())
-        .then(decodeJson);
+        }).then(response => handleResponse(response));
     }
 
+
+   /**
+     * Performs a DELETE on the Splunk SSC environment with the supplied path.
+     * For the most part this is an internal implementation, but is here in
+     * case an API endpoint is unsupported by the SDK.
+     * @param path - Path portion of the URL to request from Splunk
+     * @returns {Promise<object>}
+     */
     delete(path) {
         this.login();
         return fetch(this.buildUrl(path), {
             method: "DELETE",
             headers: this._buildHeaders()
-        }).then((response) => {
-            assertResponse(response, 204);
+        }).then(response => {
+            handleResponse(response, 204);
             return {};
         });
     }

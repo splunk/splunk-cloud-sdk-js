@@ -94,6 +94,225 @@
       status: 200
       file: 'oneshot_results.json'
 
+############################################################
+## CATALOG
+############################################################
+
+-  request:
+      url: /datasets/ds1/conf
+      method: GET
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      latency: 1 // Only here to remind me of the option
+      status: 200
+      body:
+           {
+              "id":"5ac3d5170ed3330007caab65",
+              "name":"ds1",
+              "kind":""
+           }
+
+#curl  http://0.0.0.0:8882/dataset/ds1
+-  request:
+      url: /catalog/v1/datasets/ds1
+      method: GET
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      latency: 1 // Only here to remind me of the option
+      status: 200
+      body:
+          {
+            "id": "5ac3d5170ed3330007caab65",
+            "name": "ds1",
+            "kind": ""
+          }
+
+#TODO: not implemented in API
+#-  request:
+#      url: /catalog/v1/datasets/
+#      method: PATCH
+#   response:
+#      headers:
+#         Content-Type: application/json
+#         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+#      json: '{"friar":"tuck"}'
+#      status: 200
+#      body:
+#            friar: name
+
+-  request:
+      url: /catalog/v1/datasets/ds1
+      method: DELETE
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      status: 200
+
+
+# /datasets
+-  request:
+      url: /catalog/v1/datasets
+      method: GET
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      status: 200
+      body:
+            '[
+              {
+                "id": "string",
+                "name": "myname",
+                "kind": "VIEW",
+                "rules": [
+                  "string"
+                ],
+                "todo": "string"
+              },
+              {
+                "id": "string",
+                "name": "ds1",
+                "kind": "VIEW",
+                "rules": [
+                  "string"
+                ],
+                "todo": "string"
+              }
+            ]'
+
+# curl  -X POST http://0.0.0.0:8882/catalog/v1/datasets
+-  request:
+      url: /catalog/v1/datasets
+      method: POST
+      json: '{
+                "name": "ds1",
+                "kind": "VIEW",
+                "rules": [
+                  "string"
+                ],
+                "todo": "string"
+            }'
+   response:
+      headers:
+         Content-Type: application/json
+      status: 201
+      body: '{
+               "id": "5ac534e00ed3330007caab68",
+               "name": "ds1",
+               "kind": "VIEW",
+               "rules": [
+                 "string"
+               ]
+             }'
+
+
+-  request:
+      url: /catalog/v1/rules
+      method: GET
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      status: 200
+      body:
+        [
+          {
+            "name": "rule1",
+            "match": "newrule",
+            "priority": 7,
+            "description": "first rule",
+            "actions": [
+              {
+                "kind": "AUTOKV",
+                "mode": "NONE",
+                "trim": true
+              },
+              {
+                "kind": "EVAL",
+                "expression": "string",
+                "result": "string"
+              },
+              {
+                "kind": "LOOKUP",
+                "expression": "string"
+              }
+            ]
+          }
+        ]
+
+# curl  -X POST http://0.0.0.0:8882/catalog/v1/rules
+-  request:
+      url: /catalog/v1/rules
+      method: POST
+      json:
+        '{
+          "name": "rule1",
+          "match": "newrule",
+          "priority": 7,
+          "description": "first rule",
+          "actions": [
+            {
+              "kind": "AUTOKV",
+              "mode": "NONE",
+              "trim": true
+            },
+            {
+              "kind": "EVAL",
+              "expression": "string",
+              "result": "string"
+            },
+            {
+              "kind": "LOOKUP",
+              "expression": "string"
+            }
+          ]
+        }'
+
+   response:
+      headers:
+         Content-Type: application/json
+      status: 201
+      body:
+        '{
+           "id": "5ac537f10ed3330007caab6c",
+           "name": "rule4",
+           "match": "newrule",
+           "priority": 7,
+           "description": "first rule",
+           "actions": [
+             {
+               "kind": "AUTOKV",
+               "mode": "NONE",
+               "trim": true
+             },
+             {
+               "kind": "EVAL",
+               "expression": "string",
+               "result": "string"
+             },
+             {
+               "kind": "LOOKUP",
+               "expression": "string"
+             }
+           ]
+         }'
+
+
+-  request:
+      url: /catalog/v1/rules/rule1
+      method: DELETE
+   response:
+      headers:
+         Content-Type: application/json
+         Authorization: Basic YWRtaW46Y2hhbmdlbWU=
+      status: 200
+
+
 - request:
       url: '*'
   response:

@@ -1,3 +1,4 @@
+/* eslint-disable */
 let client = require("../dist/splunk");
 let assert = require("chai").assert;
 
@@ -30,21 +31,30 @@ describe('Datasets Endpoints', () => {
 
   describe('Post', () => {
     it('should return the created dataset with post', () => {
-      const dataset = 
+      const postBody = 
       {
-        "id": "string",
-        "name": "myname",
+        "name": "ds1",
         "kind": "VIEW",
         "rules": [
           "string"
         ],
         "todo": "string"
       };
-      return splunk.catalog.createDataset(dataset).then(response => {
-        assert.deepEqual(response, dataset, 'response should contain the same dataset posted.')
+      const expectedResponse = 
+      {
+        "id": "5ac534e00ed3330007caab68",
+        "name": "ds1",
+        "kind": "VIEW",
+        "rules": [
+          "string"
+        ]
+      }
+      return splunk.catalog.createDataset(postBody).then(response => {
+        assert.deepEqual(response, expectedResponse, 'response should contain the same dataset posted.')
       });
     });
   });
+
 });
 
 describe('Rules Endpoints', () => {
@@ -86,9 +96,33 @@ describe('Rules Endpoints', () => {
           }
         ]
       };
+      const expectedResponse = 
+      {
+        "id": "5ac537f10ed3330007caab6c",
+        "name": "rule4",
+        "match": "newrule",
+        "priority": 7,
+        "description": "first rule",
+        "actions": [
+          {
+            "kind": "AUTOKV",
+            "mode": "NONE",
+            "trim": true
+          },
+          {
+            "kind": "EVAL",
+            "expression": "string",
+            "result": "string"
+          },
+          {
+            "kind": "LOOKUP",
+            "expression": "string"
+          }
+        ]
+      };
       return splunk.catalog.createRule(rule).then(response => {
         assert.typeOf(response, 'object', 'response should be an object');
-        assert.deepEqual(response, rule, 'response should contain the same object posted');
+        assert.deepEqual(response, expectedResponse, 'response should contain the same object posted');
       });
     });
   });
