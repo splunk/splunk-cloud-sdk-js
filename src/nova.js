@@ -1,15 +1,15 @@
 /* eslint-disable import/prefer-default-export */
-import { forEach } from 'lodash';
 import { ApiProxy } from './apiproxy';
 import { NovaEvent } from './models/nova_event';
 import { EVENT_SERVICE_PREFIX } from './common/constants';
 import { buildPath } from './common/utils';
 
 class NovaSearchResult {
+    /* eslint-disable */
   constructor(fields) {
-    forEach(fields, (value, key) => {
-      this[key] = value;
-    });
+    for (var field in fields) {
+      this[field] = fields[field];
+    }
   }
 
   getDate() {

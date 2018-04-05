@@ -7,51 +7,51 @@ import { buildPath } from './common/utils';
  * Encapsulates search endpoints
  */
 export class SearchProxy extends ApiProxy {
-  /**
+    /**
      * Dispatch a search and return the newly created search job
      * @param jobArgs {SearchProxy~PostJobsRequest}
      * @return {Promise<SearchProxy~Job>}
      */
-  createJob(jobArgs) {
-    return this.client.post(buildPath(SEARCH_SERVICE_PREFIX, '/jobs'), jobArgs);
-  }
+    createJob(jobArgs) {
+        return this.client.post(buildPath(SEARCH_SERVICE_PREFIX, '/jobs'), jobArgs);
+    }
 
-  /**
+    /**
      * Dispatch a search and return the newly created search job
      * @param jobArgs {SearchProxy~PostJobsRequest}
      * @return {Promise<string>} The results as a string (concatenated json or CSV)
      */
-  createJobSync(jobArgs) {
-    return this.client.post(buildPath(SEARCH_SERVICE_PREFIX, '/jobs/sync'), jobArgs);
-  }
+    createJobSync(jobArgs) {
+        return this.client.post(buildPath(SEARCH_SERVICE_PREFIX, '/jobs/sync'), jobArgs);
+    }
 
-  /**
+    /**
      * Returns the job resource with the given `id`.
      * @param {string} jobId
      * @return {Promise<SearchProxy~Job>}
      */
-  getJob(jobId) {
-    return this.client.get(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
-  }
+    getJob(jobId) {
+        return this.client.get(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
+    }
 
-  /**
+    /**
      * Returns results for the search job corresponding to "id".
      *         Returns results post-transform, if applicable.
      * @param jobId
      * @returns {Promise<object>}
      */
-  getResults(jobId) {
-    return this.client.get(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}/results`));
-  }
+    getResults(jobId) {
+        return this.client.get(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}/results`));
+    }
 
-  /**
+    /**
      * Delete the search job with the given `id`, cancelling the search if it is running.
      * @param {string} jobId
      * @return {Promise}
      */
-  deleteJob(jobId) {
-    return this.client.delete(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
-  }
+    deleteJob(jobId) {
+        return this.client.delete(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
+    }
 }
 
 /**
@@ -72,23 +72,36 @@ export class SearchProxy extends ApiProxy {
  * @property {string} query - The SPL query string.
  * @property {number} duration - Time in seconds that the search executed.
  * @property {SearchProxy~JobFormat} format - The output format for search results.
- * @property {number} limit - The number of events to process before the job is automatically finalized. Set to 0 to disable automatic finalization.
+ * @property {number} limit
+ *  - The number of events to process before the job is automatically finalized.
+ *    Set to 0 to disable automatic finalization.
  * @property {object} performance - not yet defined
  * @property {number} priority
- * @property {number} progress - A number between 0 and 1.0 that indicates the approximate progress of the search.
+ * @property {number} progress
+ *  - A number between 0 and 1.0 that indicates the approximate progress of the search.
  * @property {number} resultCount - The total number of results returned by the search.
  * @property {number} scanCount - The number of events that have been scanned by the search
  * @property {SearchProxy~JobStatus} status
- * @property {number} timeout - Cancel the search after this many seconds of inactivity. Set to 0 to disable timeout.
- * @property {number} ttl - The time, in seconds, after the search has been completed until the search job expires and results are deleted.
+ * @property {number} timeout
+ *  - Cancel the search after this many seconds of inactivity. Set to 0 to disable timeout.
+ * @property {number} ttl
+ *  - The time, in seconds, after the search has been completed
+ *    until the search job expires and results are deleted.
  */
 
 /**
  * Request/Response payloads
  * @typedef {Object} SearchProxy~PostJobsRequest
  * @property {string} query - The SPL query string. (Required)
- * @property {SearchProxy~JobFormat} format - Specify the output format for search results. (Default JSON)
- * @property {number} timeout - Cancel the search after this many seconds of inactivity. Set to 0 to disable timeout. (Default 30)
- * @property {number} ttl - The time, in seconds, after the search has completed until the search job expires and results are deleted.
- * @property {number} limit - The number of events to process before the job is automatically finalized. Set to 0 to disable automatic finalization.
+ * @property {SearchProxy~JobFormat} format
+ *  - Specify the output format for search results. (Default JSON)
+ * @property {number} timeout
+ *  - Cancel the search after this many seconds of inactivity.
+ *    Set to 0 to disable timeout. (Default 30)
+ * @property {number} ttl
+ *  - The time, in seconds, after the search has completed
+ *    until the search job expires and results are deleted.
+ * @property {number} limit
+ *  - The number of events to process before the job is automatically finalized.
+ *    Set to 0 to disable automatic finalization.
  */
