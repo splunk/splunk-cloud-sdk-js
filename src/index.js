@@ -33,13 +33,8 @@ function handleResponse(response) {
 /* eslint-enable */
 
 function decodeJson(text) {
-<<<<<<< HEAD
     if (text === '') {
         return '';
-=======
-    if (text == "") {
-        return "";
->>>>>>> initial
     }
     try {
         return JSON.parse(text);
@@ -194,10 +189,10 @@ export class Splunk {
 
         /* Not actually a sync method, but named as such in the API */
         /* eslint-disable-next-line no-sync */
-        var promise = this.search.createJobSync(searchArgs);
-        return Observable.create(function(observable) {
-            promise.then(function(data) {
-                for (var evt of data.results) {
+        const promise = this.search.createJobSync(searchArgs);
+        return Observable.create((observable) => {
+            promise.then((data) => {
+                for (const evt of data.results) {
                     observable.next(evt);
                 }
                 observable.complete();
