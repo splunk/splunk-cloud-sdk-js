@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { ApiProxy } from './apiproxy';
 import { NovaEvent } from './models/nova_event';
-import { EVENT_SERVICE_PREFIX } from './common/constants';
+import { EVENT_SERVICE_PREFIX } from './common/service_prefixes';
 import { buildPath } from './common/utils';
 
 class NovaSearchResult {

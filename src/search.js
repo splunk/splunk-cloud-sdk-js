@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { ApiProxy } from './apiproxy';
-import { SEARCH_SERVICE_PREFIX } from './common/constants';
+import { SEARCH_SERVICE_PREFIX } from './common/service_prefixes';
 import { buildPath } from './common/utils';
 
 /**

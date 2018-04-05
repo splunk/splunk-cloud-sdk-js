@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import { ApiProxy } from './apiproxy';
-import { CATALOG_SERVICE_PREFIX } from './common/constants';
+import { CATALOG_SERVICE_PREFIX } from './common/service_prefixes';
 import { buildPath } from './common/utils';
 
 
@@ -9,104 +9,110 @@ import { buildPath } from './common/utils';
  */
 export class CatalogProxy extends ApiProxy {
     /**
-  * Returns a list of datasets, optionally filtered by the given query parameters.
-  * @param {Object} query
-  * @return {Promise<CatalogProxy~Datasets>}
-  */
+     * Returns a list of datasets, optionally filtered by the given query parameters.
+     * @param {Object} query
+     * @return {Promise<CatalogProxy~Datasets>}
+     */
     getDatasets(query) {
         return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, '/datasets'), query);
     }
 
     /**
-   * Create a new dataset.
-   * @param {Object|CatalogProxy~Dataset} dataset
-   * @return {Promise<CatalogProxy~Dataset>}
-   */
+     * Create a new dataset.
+     * @param {Object|CatalogProxy~Dataset} dataset
+     * @return {Promise<CatalogProxy~Dataset>}
+     */
     createDataset(dataset) {
         return this.client.post(buildPath(CATALOG_SERVICE_PREFIX, '/datasets', dataset));
     }
 
     /**
-   * Returns the dataset resource with the given `id`.
-   * @param {string} datasetId
-   * @return {Promise<CatalogProxy~Dataset>}
-   */
+     * Returns the dataset resource with the given `id`.
+     * @param {string} datasetId
+     * @return {Promise<CatalogProxy~Dataset>}
+     */
     getDataset(datasetId) {
         return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
     }
-
+    /**
+     * @private
+     * TODO: Remove this method as it's only for testing
+     */
     getDatasetConf(datasetId) {
         return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}/conf`));
     }
 
     /**
-   * Updates the dataset resource with the given `id`.
-   * @param {string} datasetId
-   * @return {Promise<CatalogProxy~Dataset>}
-   */
+     * Updates the dataset resource with the given `id`.
+     * @param {string} datasetId
+     * @return {Promise<CatalogProxy~Dataset>}
+     */
     patchDataset(datasetId) {
         return this.client.patch(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
     }
 
     /**
-   * Delete the dataset resource with the given `id`.
-   * @param {string} datasetId
-   */
+     * Delete the dataset resource with the given `id`.
+     * @param {string} datasetId
+     */
     deleteDataset(datasetId) {
         return this.client.delete(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
     }
 
     /**
-   * Returns a list of search time rule definitions, optionally filtered by
-   * the given query parameters.
-   * @param {Object} query - supported params are:
-   * path {string}: Returns rule definitions that match the given path prefix. If the
-   * path is fully qualified, returns the single matching rule.
-   * kind {string}: Return rule definitions that match the given kind.
-   * match {string}: Return rule definitions that match the given match clause.
-   * @return {Promise<CatalogProxy~Rules>}
-   */
+     * Returns a list of search time rule definitions, optionally filtered by
+     * the given query parameters.
+     * @param {Object} query - supported params are:
+     * path {string}: Returns rule definitions that match the given path prefix. If the
+     * path is fully qualified, returns the single matching rule.
+     * kind {string}: Return rule definitions that match the given kind.
+     * match {string}: Return rule definitions that match the given match clause.
+     * @return {Promise<CatalogProxy~Rules>}
+     */
     getRules(query) {
         return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, '/rules'), query);
     }
 
     /**
-   * Create a new search time rule definition.
-   * @param {Object|CatalogProxy~Rule} rule
-   * @return {Promise<CatalogProxy~Rule>}
-   */
+     * Create a new search time rule definition.
+     * @param {Object|CatalogProxy~Rule} rule
+     * @return {Promise<CatalogProxy~Rule>}
+     */
     createRule(rule) {
         return this.client.post(buildPath(CATALOG_SERVICE_PREFIX, '/rules', rule));
     }
 
     /**
-   * Returns the rule identified by the given path.
-   * The path must be fully qualified, if the path is a prefix the request returns 404
-   * because it does identify a rule resource.
-   * @param {string} rulePath
-   * @return {Promise<CatalogProxy~Rule>}
-   */
+     * Returns the rule identified by the given path.
+     * The path must be fully qualified, if the path is a prefix the request returns 404
+     * because it does identify a rule resource.
+     * @param {string} rulePath
+     * @return {Promise<CatalogProxy~Rule>}
+     */
     getRule(rulePath) {
         return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
     }
-
+    /**
+     * @private
+     * TODO: Remove this method as it's only for testing
+     */
     getRuleConf(name) {
         return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${name}/conf`));
     }
 
     /**
-   * Updates the rule by the given path.
-   * @param {string} rulePath
-   * @return {Promise<CatalogProxy~Rule>}
-   */
+     * Updates the rule by the given path.
+     * @param {string} rulePath
+     * @return {Promise<CatalogProxy~Rule>}
+     */
     patchRule(rulePath) {
         return this.client.patch(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
     }
 
     /**
-   * Delete the rule by the given path.
-   * @param {string} rulePath
-   */
+     * Delete the rule by the given path.
+     * @param {string} rulePath
+     */
     deleteRule(rulePath) {
         return this.client.delete(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
     }
