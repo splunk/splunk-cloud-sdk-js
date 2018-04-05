@@ -29,7 +29,7 @@ function handleResponse(response) {
         throw err;
     });
 }
-/* eslint-disable */
+/* eslint-enable */
 
 function decodeJson(text) {
     if (text == "") {
