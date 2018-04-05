@@ -2,7 +2,7 @@ import {NovaProxy} from './nova';
 import {SearchProxy} from './search';
 import 'isomorphic-fetch';
 import { Base64 } from 'js-base64';
-
+import { Observable } from 'rxjs/Observable';
 
 class SplunkError extends Error {
     constructor(message, code) {
@@ -169,6 +169,27 @@ export class Splunk {
         }).then(function(response) {
             handleResponse(response, 204);
             return {};
+        });
+    }
+
+    /**
+     * Performs a search and returns an Observable of
+     * Splunk events for the search.
+     * @param searchArgs
+     * @returns {Observable}
+     */
+    searchObserver(searchArgs) {
+        this.login();
+        var promise = this.search.createJobSync(searchArgs);
+        return Observable.create(function(observable) {
+            promise.then(function(data) {
+                for (var evt of data.results) {
+                    observable.next(evt);
+                }
+                observable.complete();
+            }, function(err) {
+                observable.error(err);
+            });
         });
     }
 }
