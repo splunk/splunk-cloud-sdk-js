@@ -31,7 +31,7 @@ function handleResponse(response) {
         throw err;
     });
 }
-/* eslint-disable */
+/* eslint-enable */
 
 function decodeJson(text) {
     if (text == "") {
@@ -172,6 +172,27 @@ export class Splunk {
         }).then(response => {
             handleResponse(response, 204);
             return {};
+        });
+    }
+
+    /**
+     * Performs a search and returns an Observable of
+     * Splunk events for the search.
+     * @param searchArgs
+     * @returns {Observable}
+     */
+    searchObserver(searchArgs) {
+        this.login();
+        var promise = this.search.createJobSync(searchArgs);
+        return Observable.create(function(observable) {
+            promise.then(function(data) {
+                for (var evt of data.results) {
+                    observable.next(evt);
+                }
+                observable.complete();
+            }, function(err) {
+                observable.error(err);
+            });
         });
     }
 }

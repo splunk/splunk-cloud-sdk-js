@@ -31,4 +31,26 @@ describe("Using Search APIs", function() {
         });
     });
 
+    describe("Easy-to-use APIs", function() {
+        it("should allow search by Rx.Observable", function(done) {
+            var observable = splk.searchObserver({query: "search index=*"});
+            var count = 0;
+            observable.subscribe({
+                next: function(evt) {
+                    count++;
+                    expect(evt).to.have.property("index");
+                },
+                error: err => done(err),
+                complete: function() {
+                    try {
+                        expect(count).to.equal(5);
+                        done();
+                    } catch (err) {
+                        done(err);
+                    }
+                }
+            });
+        });
+    });
+
 });
