@@ -179,6 +179,7 @@ export class Splunk {
      */
     searchObserver(searchArgs) {
         this.login();
+
         /* Not actually a sync method, but named as such in the API */
         /* eslint-disable-next-line no-sync */
         var promise = this.search.createJobSync(searchArgs);
