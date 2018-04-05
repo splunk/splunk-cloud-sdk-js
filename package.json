@@ -8,9 +8,9 @@
     "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test",
     "lint": "eslint 'src/**/*.js'",
     "lint:fix": "eslint 'src/**/*.js' --fix",
-    "build": "webpack",
+    "build": "webpack --display minimal",
     "pretest": "yarn lint",
-    "test": "yarn build && mocha -R min --require babel-core/register",
+    "test": "yarn build && mocha --require babel-core/register",
     "stubserver": "npx stubby -d stubs/stubs.yml -w",
     "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/",
     "open-spec": "docker run -d -p 80:8080 swaggerapi/swagger-ui"
