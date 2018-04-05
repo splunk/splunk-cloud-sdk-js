@@ -34,12 +34,11 @@ function handleResponse(response) {
 function decodeJson(text) {
     if (text == "") {
         return "";
-    } else {
-        try {
-            return JSON.parse(text);
-        } catch (e) {
-            throw new Error(`Unable to parse message: "${text}"`);
-        }
+    }
+    try {
+        return JSON.parse(text);
+    } catch (e) {
+        throw new Error(`Unable to parse message: "${text}"`);
     }
 }
 
@@ -180,6 +179,8 @@ export class Splunk {
      */
     searchObserver(searchArgs) {
         this.login();
+        /* Not actually a sync method, but named as such in the API */
+        /* eslint-disable-next-line no-sync */
         var promise = this.search.createJobSync(searchArgs);
         return Observable.create(function(observable) {
             promise.then(function(data) {
