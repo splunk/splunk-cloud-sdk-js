@@ -1,3 +1,9 @@
+dist/
+# Don't check in API docs
+doc/api/
+out/
+
+## Node ###
 # Logs
 logs
 *.log
@@ -57,3 +63,13 @@ typings/
 # dotenv environment variables file
 .env
 
+.vscode/
+.idea/
+*.iml
+
+# this repo uses yarn
+package-lock.json
+
+# codeship
+ci/**/env
+codeship.aes
