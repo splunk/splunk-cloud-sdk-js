@@ -2,8 +2,8 @@ import 'isomorphic-fetch';
 import { Observable } from 'rxjs/Observable';
 import { Base64 } from 'js-base64';
 import { NovaProxy } from './nova';
-import { SearchProxy } from './search';
-import { CatalogProxy } from './catalog';
+import SearchProxy from './search';
+import CatalogProxy from './catalog';
 
 class SplunkError extends Error {
     constructor(message, code) {
@@ -90,7 +90,7 @@ export class Splunk {
      * Should be and remain idempotent
      */
     login() {
-    // TODO: Check token
+        // TODO: Check token
         if (!this.token) {
             this.token = Base64.encode(`${this.user}:${this.pass}`);
         }
@@ -102,10 +102,10 @@ export class Splunk {
      * @private
      */
     _buildHeaders() {
-    // TODO: Cache
+        // TODO: Cache
         return new Headers({
             Authorization: `Basic ${this.token}`,
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         });
     }
     /**
@@ -121,7 +121,7 @@ export class Splunk {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
             /* eslint-disable no-underscore-dangle */
-            headers: this._buildHeaders(),
+            headers: this._buildHeaders()
         }).then(response => handleResponse(response));
     }
 
@@ -138,7 +138,7 @@ export class Splunk {
         return fetch(this.buildUrl(path), {
             method: 'POST',
             body: JSON.stringify(data),
-            headers: this._buildHeaders(),
+            headers: this._buildHeaders()
         }).then(response => handleResponse(response));
     }
 
@@ -155,10 +155,9 @@ export class Splunk {
         return fetch(this.buildUrl(path), {
             method: 'PUT',
             body: JSON.stringify(data),
-            headers: this._buildHeaders(),
+            headers: this._buildHeaders()
         }).then(response => handleResponse(response));
     }
-
 
     /**
      * Performs a DELETE on the Splunk SSC environment with the supplied path.
@@ -171,13 +170,12 @@ export class Splunk {
         this.login();
         return fetch(this.buildUrl(path), {
             method: 'DELETE',
-            headers: this._buildHeaders(),
-        }).then((response) => {
+            headers: this._buildHeaders()
+        }).then(response => {
             handleResponse(response, 204);
             return {};
         });
     }
-    /* eslint-disable no-restricted-syntax */
     /**
      * Performs a search and returns an Observable of
      * Splunk events for the search.
@@ -188,17 +186,20 @@ export class Splunk {
         this.login();
 
         /* Not actually a sync method, but named as such in the API */
-        /* eslint-disable-next-line no-sync */
         const promise = this.search.createJobSync(searchArgs);
-        return Observable.create((observable) => {
-            promise.then((data) => {
-                for (const evt of data.results) {
-                    observable.next(evt);
+        return Observable.create(observable => {
+            promise.then(
+                data => {
+                    /* eslint-disable-next-line no-restricted-syntax */
+                    for (const evt of data.results) {
+                        observable.next(evt);
+                    }
+                    observable.complete();
+                },
+                err => {
+                    observable.error(err);
                 }
-                observable.complete();
-            }, (err) => {
-                observable.error(err);
-            });
+            );
         });
     }
 }
