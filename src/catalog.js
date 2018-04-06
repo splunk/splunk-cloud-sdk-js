@@ -1,13 +1,11 @@
-/* eslint-disable import/prefer-default-export */
-import { ApiProxy } from './apiproxy';
+import ApiProxy from './apiproxy';
 import { CATALOG_SERVICE_PREFIX } from './common/service_prefixes';
 import { buildPath } from './common/utils';
-
 
 /**
  * Encapsulates catalog endpoints
  */
-export class CatalogProxy extends ApiProxy {
+export default class CatalogProxy extends ApiProxy {
     /**
      * Returns a list of datasets, optionally filtered by the given query parameters.
      * @param {Object} query
@@ -199,7 +197,6 @@ export class CatalogProxy extends ApiProxy {
  * @property {string} query
  */
 
-
 /**
  * The kinds of search time transformation action known by the service.
  * One of "ALIAS", "AUTOKV", "REGEX", "EVAL", "LOOKUP"
@@ -235,7 +232,6 @@ export class CatalogProxy extends ApiProxy {
  * One of "NONE", "AUTO", "MULTIKV", "XML", "JSON".
  * @typedef {string} CatalogProxy~AutoMode
  */
-
 
 /**
  * AliasAction - Represents a field name alias.

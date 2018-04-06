@@ -1,5 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-export class ApiProxy {
+export default class ApiProxy {
     constructor(client) {
         this.client = client;
     }
