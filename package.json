@@ -11,9 +11,11 @@
     "build": "webpack --display minimal",
     "pretest": "yarn lint",
     "test": "yarn build && mocha --require babel-core/register",
-    "stubserver": "npx stubby -d stubs/stubs.yml -w",
+    "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared:latest",
+    "stop:stubserver": "docker rm -f stubserver",
     "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/",
-    "open-spec": "docker run -d -p 80:8080 swaggerapi/swagger-ui"
+    "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
+    "stop:swagger": "docker rm -f swagger"
   },
   "author": "Splunk, Inc.",
   "private": true,
