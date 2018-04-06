@@ -1,6 +1,6 @@
 module.exports = {
     parser: 'babel-eslint',
-    extends: 'eslint-config-airbnb-base',
+    extends: ['eslint-config-airbnb-base','prettier'],
     globals: {
         __DEV__: true,
     },
@@ -25,5 +25,9 @@ module.exports = {
         // disabled until this issue is fixed:
         //  https://github.com/eslint/eslint/issues/5150#issuecomment-317525339
         'no-return-assign': 'off',
+        // eslint-config-prettier disables a few valuable rules by default to be compatible with
+        // common presets and/or because they only work with certain options when used with prettier
+        curly: ['error', 'all'],
+        'no-tabs': 'error',
     },
 };
