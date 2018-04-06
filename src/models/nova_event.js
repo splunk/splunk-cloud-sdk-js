@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 function deswizzleTime(time) {
     if (time instanceof Date) {
         return time.valueOf();
@@ -17,7 +15,7 @@ function deswizzleTime(time) {
     throw Error('Unable to determine time');
 }
 
-export class NovaEvent {
+export default class NovaEvent {
     constructor(entity) {
         this.entity = entity;
     }
@@ -42,10 +40,10 @@ export class NovaEvent {
     }
 
     /* eslint-disable */
-  withFields(args) {
-    for (var key in args) {
-      this[key] = args[key];
+    withFields(args) {
+        for (var key in args) {
+            this[key] = args[key];
+        }
+        return this;
     }
-    return this;
-  }
 }

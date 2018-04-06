@@ -1,12 +1,11 @@
-/* eslint-disable import/prefer-default-export */
-import { ApiProxy } from './apiproxy';
+import ApiProxy from './apiproxy';
 import { SEARCH_SERVICE_PREFIX } from './common/service_prefixes';
 import { buildPath } from './common/utils';
 
 /**
  * Encapsulates search endpoints
  */
-export class SearchProxy extends ApiProxy {
+export default class SearchProxy extends ApiProxy {
     /**
      * Dispatch a search and return the newly created search job
      * @param jobArgs {SearchProxy~PostJobsRequest}
