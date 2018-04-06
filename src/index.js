@@ -1,8 +1,9 @@
-import {NovaProxy} from './nova';
-import {SearchProxy} from './search';
 import 'isomorphic-fetch';
-import { Base64 } from 'js-base64';
 import { Observable } from 'rxjs/Observable';
+import { Base64 } from 'js-base64';
+import { NovaProxy } from './nova';
+import { SearchProxy } from './search';
+import { CatalogProxy } from './catalog';
 
 class SplunkError extends Error {
     constructor(message, code) {
@@ -32,8 +33,8 @@ function handleResponse(response) {
 /* eslint-enable */
 
 function decodeJson(text) {
-    if (text == "") {
-        return "";
+    if (text === '') {
+        return '';
     }
     try {
         return JSON.parse(text);
@@ -41,44 +42,55 @@ function decodeJson(text) {
         throw new Error(`Unable to parse message: "${text}"`);
     }
 }
-
+/* eslint-disable import/prefer-default-export */
 /**
  * This class is a Splunk SSC client.
+ * @property {NovaProxy} nova - Proxies for events APIs
  * @property {SearchProxy} search - Proxies for the search APIs
+ * @property {CatalogProxy} catalog - Proxies for the catalog APIs
  */
 export class Splunk {
-    constructor(url, user_or_token, pass) {
+    constructor(url, userOrToken, pass) {
         if (pass) {
-            this.user = user_or_token;
+            this.user = userOrToken;
             this.pass = pass;
             this.token = null;
         } else {
-            this.token = user_or_token;
+            this.token = userOrToken;
         }
         this.url = url;
 
         // Add api proxies
         this.nova = new NovaProxy(this);
         this.search = new SearchProxy(this);
+        this.catalog = new CatalogProxy(this);
     }
-
     /**
-     * Builds the URL from a service + endpoint path
+     * Builds the URL from a service + endpoint with query encoded in url
      * (concatenates the URL with the path)
      * @private
      * @param path
+     * @param {Object} query
      * @returns {string}
      */
-    buildUrl(path) {
-        return this.url + path;
+    buildUrl(path, query) {
+        if (query) {
+            const encoder = encodeURIComponent;
+            const queryEncoded = Object.keys(query)
+                .map(k => `${encoder(k)}=${encoder(query[k])}`)
+                .join('&');
+            return `${this.url}${path}?${queryEncoded}`;
+        }
+        return `${this.url}${path}`;
     }
 
     /**
      * If we haven't logged in, log in and cache the token
-     * TODO: This endpoint is expected to change as auth service comes online.  Should be and remain idempotent
+     * TODO: This endpoint is expected to change as auth service comes online.
+     * Should be and remain idempotent
      */
     login() {
-        // TODO: Check token
+    // TODO: Check token
         if (!this.token) {
             this.token = Base64.encode(`${this.user}:${this.pass}`);
         }
@@ -90,29 +102,27 @@ export class Splunk {
      * @private
      */
     _buildHeaders() {
-        // TODO: Cache
+    // TODO: Cache
         return new Headers({
-            'Authorization': `Basic ${this.token}`,
-            'Content-Type': 'application/json'
+            Authorization: `Basic ${this.token}`,
+            'Content-Type': 'application/json',
         });
     }
-
     /**
      * Performs a GET on the Splunk SSC environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
      * @param path - Path portion of the URL to request from Splunk
+     * @param {Object} query - Object that contains query parameters
      * @returns {Promise<object>}
      */
-    get(path) {
+    get(path, query) {
         this.login();
-        return fetch(this.buildUrl(path), {
-            method: "GET",
-            headers: this._buildHeaders()
-        })
-        .then(function(response) {
-            return handleResponse(response);
-        });
+        return fetch(this.buildUrl(path, query), {
+            method: 'GET',
+            /* eslint-disable no-underscore-dangle */
+            headers: this._buildHeaders(),
+        }).then(response => handleResponse(response));
     }
 
     /**
@@ -126,12 +136,10 @@ export class Splunk {
     post(path, data) {
         this.login();
         return fetch(this.buildUrl(path), {
-            method: "POST",
+            method: 'POST',
             body: JSON.stringify(data),
-            headers: this._buildHeaders()
-        }).then(function(response) {
-            return handleResponse(response);
-        });
+            headers: this._buildHeaders(),
+        }).then(response => handleResponse(response));
     }
 
     /**
@@ -145,13 +153,12 @@ export class Splunk {
     put(path, data) {
         this.login();
         return fetch(this.buildUrl(path), {
-            method: "PUT",
+            method: 'PUT',
             body: JSON.stringify(data),
-            headers: this._buildHeaders()
-        }).then(function(response) {
-            return handleResponse(response);
-        });
+            headers: this._buildHeaders(),
+        }).then(response => handleResponse(response));
     }
+
 
     /**
      * Performs a DELETE on the Splunk SSC environment with the supplied path.
@@ -163,14 +170,14 @@ export class Splunk {
     delete(path) {
         this.login();
         return fetch(this.buildUrl(path), {
-            method: "DELETE",
-            headers: this._buildHeaders()
-        }).then(function(response) {
+            method: 'DELETE',
+            headers: this._buildHeaders(),
+        }).then((response) => {
             handleResponse(response, 204);
             return {};
         });
     }
-
+    /* eslint-disable no-restricted-syntax */
     /**
      * Performs a search and returns an Observable of
      * Splunk events for the search.
@@ -182,14 +189,14 @@ export class Splunk {
 
         /* Not actually a sync method, but named as such in the API */
         /* eslint-disable-next-line no-sync */
-        var promise = this.search.createJobSync(searchArgs);
-        return Observable.create(function(observable) {
-            promise.then(function(data) {
-                for (var evt of data.results) {
+        const promise = this.search.createJobSync(searchArgs);
+        return Observable.create((observable) => {
+            promise.then((data) => {
+                for (const evt of data.results) {
                     observable.next(evt);
                 }
                 observable.complete();
-            }, function(err) {
+            }, (err) => {
                 observable.error(err);
             });
         });

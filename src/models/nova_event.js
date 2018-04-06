@@ -1,18 +1,20 @@
+/* eslint-disable import/prefer-default-export */
+
 function deswizzleTime(time) {
     if (time instanceof Date) {
         return time.valueOf();
     }
 
-    if (typeof time == "string") {
+    if (typeof time === 'string') {
         return Date.parse(time).valueOf();
     }
 
-    if (typeof time == "number") {
+    if (typeof time === 'number') {
         return time;
     }
 
     // TODO: better message
-    throw "Unable to determine time";
+    throw Error('Unable to determine time');
 }
 
 export class NovaEvent {
@@ -39,10 +41,11 @@ export class NovaEvent {
         return this;
     }
 
-    withFields(args) {
-        for (var key in args) {
-            this[key] = args[key];
-        }
-        return this;
+    /* eslint-disable */
+  withFields(args) {
+    for (var key in args) {
+      this[key] = args[key];
     }
+    return this;
+  }
 }

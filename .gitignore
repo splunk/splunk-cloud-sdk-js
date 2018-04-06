@@ -1,5 +1,6 @@
 dist/
-doc/api/ # Don't check in API docs
+# Don't check in API docs
+doc/api/
 out/
 
 ## Node ###
@@ -70,5 +71,5 @@ typings/
 package-lock.json
 
 # codeship
-ci/env
+ci/**/env
 codeship.aes

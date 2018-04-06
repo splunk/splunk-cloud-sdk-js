@@ -2,7 +2,7 @@ let client = require("../dist/splunk");
 let expect = require("chai").expect;
 
 describe("Using Search APIs", function() {
-    let splk = new client.Splunk("http://localhost:8882", "admin", "changeme");
+    let splk = new client.Splunk("http://ssc-sdk-shared-stubby:8882", "admin", "changeme");
 
     describe("Submit a search", function() {
         it("should allow submission of a search", function() {
