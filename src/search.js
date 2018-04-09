@@ -1,11 +1,11 @@
-import ApiProxy from './apiproxy';
-import { SEARCH_SERVICE_PREFIX } from './common/service_prefixes';
-import { buildPath } from './common/utils';
+const ApiProxy = require('./apiproxy');
+const  { SEARCH_SERVICE_PREFIX } = require('./common/service_prefixes');
+const { buildPath } = require('./common/utils');
 
 /**
  * Encapsulates search endpoints
  */
-export default class SearchProxy extends ApiProxy {
+class SearchProxy extends ApiProxy {
     /**
      * Dispatch a search and return the newly created search job
      * @param jobArgs {SearchProxy~PostJobsRequest}
@@ -104,3 +104,5 @@ export default class SearchProxy extends ApiProxy {
  *  - The number of events to process before the job is automatically finalized.
  *    Set to 0 to disable automatic finalization.
  */
+
+module.exports = SearchProxy;

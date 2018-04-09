@@ -15,7 +15,7 @@ function deswizzleTime(time) {
     throw Error('Unable to determine time');
 }
 
-export default class NovaEvent {
+class NovaEvent {
     constructor(entity) {
         this.entity = entity;
     }
@@ -47,3 +47,5 @@ export default class NovaEvent {
         return this;
     }
 }
+
+module.exports = NovaEvent;

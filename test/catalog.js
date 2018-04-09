@@ -1,5 +1,5 @@
 /* eslint-disable */
-let client = require("../dist/splunk");
+let client = require("../src/index");
 let assert = require("chai").assert;
 
 let splunk = new client.Splunk('http://ssc-sdk-shared-stubby:8882', 'admin', 'changeme');

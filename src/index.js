@@ -1,9 +1,9 @@
-import 'isomorphic-fetch';
-import { Observable } from 'rxjs/Observable';
-import { Base64 } from 'js-base64';
-import { NovaProxy } from './nova';
-import SearchProxy from './search';
-import CatalogProxy from './catalog';
+require('isomorphic-fetch');
+const { Observable } = require('rxjs/Observable');
+const { Base64 } = require('js-base64');
+const { NovaProxy } = require('./nova');
+const SearchProxy = require('./search');
+const CatalogProxy = require('./catalog');
 
 class SplunkError extends Error {
     constructor(message, code) {
@@ -49,7 +49,7 @@ function decodeJson(text) {
  * @property {SearchProxy} search - Proxies for the search APIs
  * @property {CatalogProxy} catalog - Proxies for the catalog APIs
  */
-export class Splunk {
+class Splunk {
     constructor(url, userOrToken, pass) {
         if (pass) {
             this.user = userOrToken;
@@ -203,3 +203,5 @@ export class Splunk {
         });
     }
 }
+
+module.exports.Splunk = Splunk;
