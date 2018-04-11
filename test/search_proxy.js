@@ -1,4 +1,4 @@
-const Splunk = require("../src/index");
+const Splunk = require("../index");
 const { expect } = require("chai");
 
 describe("Using Search APIs", () => {
@@ -53,7 +53,7 @@ describe("Using Search APIs", () => {
 
 describe("Should be able to import only search", () => {
     it("should allow import of a single module", () => {
-        const SearchClient = require("../src/search");
+        const SearchClient = require("../search");
         const search = new SearchClient("http://ssc-sdk-shared-stubby:8882", "admin", "changeme");
         return search.createJobSync({query: "search index=*"});
     });

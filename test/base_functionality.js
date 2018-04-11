@@ -1,12 +1,13 @@
-let client = require("../dist/splunk");
-let chai = require("chai");
-var chaiAsPromised = require("chai-as-promised");
+const { SSCProxy } = require("../client");
+const chai = require("chai");
+const chaiAsPromised = require("chai-as-promised");
+
 chai.use(chaiAsPromised);
 
-let expect = chai.expect;
+const expect = chai.expect;
 
 describe("Basic client functionality", function() {
-    var s = new client.Splunk("http://ssc-sdk-shared-stubby:8882", "admin", "changeme");
+    var s = new SSCProxy("http://ssc-sdk-shared-stubby:8882", "admin", "changeme");
 
     describe("GET", function() {
         it("should return a promise", function() {

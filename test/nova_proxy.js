@@ -1,4 +1,4 @@
-let client = require("../dist/splunk");
+let client = require("../index");
 let expect = require("chai").expect;
 
 // Commenting this out- the nova APIs will be removed as soon as we have HEC endpoints implemented. I want to
