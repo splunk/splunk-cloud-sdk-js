@@ -21,7 +21,7 @@ class CatalogProxy extends ApiProxy {
      * @return {Promise<CatalogProxy~Dataset>}
      */
     createDataset(dataset) {
-        return this.client.post(buildPath(CATALOG_SERVICE_PREFIX, '/datasets', dataset));
+        return this.client.post(buildPath(CATALOG_SERVICE_PREFIX, '/datasets'), dataset);
     }
 
     /**
@@ -77,7 +77,7 @@ class CatalogProxy extends ApiProxy {
      * @return {Promise<CatalogProxy~Rule>}
      */
     createRule(rule) {
-        return this.client.post(buildPath(CATALOG_SERVICE_PREFIX, '/rules', rule));
+        return this.client.post(buildPath(CATALOG_SERVICE_PREFIX, '/rules'), rule);
     }
 
     /**
