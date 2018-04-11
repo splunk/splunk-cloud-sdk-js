@@ -1,6 +1,7 @@
 const ApiProxy = require('./apiproxy');
 const  { SEARCH_SERVICE_PREFIX } = require('./common/service_prefixes');
 const { buildPath } = require('./common/utils');
+const { Observable } = require('rxjs/Observable');
 
 /**
  * Encapsulates search endpoints
@@ -50,6 +51,31 @@ class SearchProxy extends ApiProxy {
      */
     deleteJob(jobId) {
         return this.client.delete(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
+    }
+
+    /**
+     * Performs a search and returns an Observable of
+     * Splunk events for the search.
+     * @param searchArgs
+     * @returns {Observable}
+     */
+    searchObserver(searchArgs) {
+        /* Not actually a sync method, but named as such in the API */
+        const promise = this.createJobSync(searchArgs);
+        return Observable.create(observable => {
+            promise.then(
+                data => {
+                    /* eslint-disable-next-line no-restricted-syntax */
+                    for (const evt of data.results) {
+                        observable.next(evt);
+                    }
+                    observable.complete();
+                },
+                err => {
+                    observable.error(err);
+                }
+            );
+        });
     }
 }
 

@@ -1,8 +1,8 @@
-const client = require("../src/index");
+const Splunk = require("../src/index");
 const { expect } = require("chai");
 
-describe("Using Search APIs", function() {
-    let splk = new client.Splunk("http://ssc-sdk-shared-stubby:8882", "admin", "changeme");
+describe("Using Search APIs", () => {
+    const splk = new Splunk("http://ssc-sdk-shared-stubby:8882", "admin", "changeme");
 
     describe("Submit a search", () => {
         it("should allow submission of a search", () => {
@@ -29,7 +29,7 @@ describe("Using Search APIs", function() {
 
     describe("Easy-to-use APIs", () => {
         it("should allow search by Rx.Observable", (done) => {
-            const observable = splk.searchObserver({query: "search index=*"});
+            const observable = splk.search.searchObserver({query: "search index=*"});
             let count = 0;
             observable.subscribe({
                 next(evt) {
@@ -49,4 +49,12 @@ describe("Using Search APIs", function() {
         });
     });
 
+});
+
+describe("Should be able to import only search", () => {
+    it("should allow import of a single module", () => {
+        const SearchClient = require("../src/search");
+        const search = new SearchClient("http://ssc-sdk-shared-stubby:8882", "admin", "changeme");
+        return search.createJobSync({query: "search index=*"});
+    });
 });

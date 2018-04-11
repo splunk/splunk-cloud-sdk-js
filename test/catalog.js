@@ -1,8 +1,8 @@
 /* eslint-disable */
-let client = require("../src/index");
+let Splunk = require("../src/index");
 let assert = require("chai").assert;
 
-let splunk = new client.Splunk('http://ssc-sdk-shared-stubby:8882', 'admin', 'changeme');
+let splunk = new Splunk('http://ssc-sdk-shared-stubby:8882', 'admin', 'changeme');
 
 describe('Datasets Endpoints', () => {
 

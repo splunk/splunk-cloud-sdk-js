@@ -1,6 +1,12 @@
+const { SSCProxy } = require("./client");
+
 class ApiProxy {
-    constructor(client) {
-        this.client = client;
+    constructor(clientOrUrl, userOrToken, pass) {
+        if (clientOrUrl instanceof SSCProxy) {
+            this.client = clientOrUrl;
+        } else {
+            this.client = new SSCProxy(clientOrUrl, userOrToken, pass);
+        }
     }
 }
 
