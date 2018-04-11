@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "codecov": "codecov",
-    "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test",
+    "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test && yarn run cover:report",
+    "cover:report": "nyc report",
     "lint": "eslint 'src/**/*.js'",
     "lint:fix": "eslint 'src/**/*.js' --fix",
     "pretest": "yarn lint",
@@ -44,14 +45,17 @@
       "text-summary"
     ],
     "include": [
-      "src/**/*.js"
+      "*.js"
     ],
-    "instrument": false,
-    "sourceMap": false,
     "exclude": [
       ".tmp",
+      "ci",
+      "coverage",
+      "dist",
+      "node_modules",
       "test",
-      "node_modules"
+      "tmp",
+      ".eslintrc.js"
     ]
   }
 }

@@ -1,3 +1,3 @@
 module.exports = {
-    host: !!process.env.CI_COMMIT_ID ? "ssc-sdk-shared-stubby" : "localhost"
+    host: !!process.env.CI ? "ssc-sdk-shared-stubby" : "localhost"
 };
