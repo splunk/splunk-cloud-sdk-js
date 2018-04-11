@@ -1,4 +1,4 @@
-const Splunk = require("../index");
+const Splunk = require("../splunk");
 const { expect } = require("chai");
 
 describe("Using Search APIs", () => {
