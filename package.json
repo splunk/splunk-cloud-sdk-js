@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "codecov": "codecov",
-    "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test",
+    "cover": "NODE_ENV=coverage nyc --reporter lcovonly yarn test",
     "lint": "eslint 'src/**/*.js'",
     "lint:fix": "eslint 'src/**/*.js' --fix",
     "build": "webpack --display minimal",
