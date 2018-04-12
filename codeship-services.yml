@@ -10,6 +10,8 @@ ssc-client-js-with-stubby:
     image: splunk/ssc-client-js
     dockerfile: ci/Dockerfile
   encrypted_env_file: ci/env.encrypted
+  environment:
+    - CI=true
   depends_on:
     - ssc-sdk-shared-stubby
 
