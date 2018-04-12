@@ -1,5 +1,4 @@
 module.exports = {
-    parser: 'babel-eslint',
     extends: ['eslint-config-airbnb-base','prettier'],
     globals: {
         __DEV__: true,
@@ -10,16 +9,10 @@ module.exports = {
         "node": true,
         "mocha": true
     },
-    settings: {
-        "import/resolver": {
-            "webpack": { "config": "webpack.config.js" }
-        }
-    },
     rules: {
         'import/extensions': 'off',
         'import/no-extraneous-dependencies': 'off',
         'import/no-unresolved': 'off',
-        'import/no-webpack-loader-syntax': 'off',
 
         indent: ['error', 4, { SwitchCase: 1, VariableDeclarator: 1, outerIIFEBody: 1 }],
         // disabled until this issue is fixed:
