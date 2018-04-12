@@ -2,7 +2,7 @@
   "name": "ssc-client-js",
   "version": "0.0.1",
   "description": "Splunk SSC SDK for Javascript",
-  "main": "index.js",
+  "main": "splunk.js",
   "scripts": {
     "codecov": "codecov",
     "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test",

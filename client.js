@@ -37,6 +37,15 @@ function decodeJson(text) {
         throw new Error(`Unable to parse message: "${text}"`);
     }
 }
+
+/**
+ * This class acts as a raw proxy for Splunk SSC, implementing
+ * authorization for requests, setting the proper headers,
+ * and GET, POST, etc.  For the most part you shouldn't need
+ * to use this class directly- look at the service proxies
+ * that implement the actual endpoints.
+ * TODO: Add links to actual endpoints, SSC name
+ */
 class SSCProxy {
     constructor(url, userOrToken, pass) {
         if (pass) {
