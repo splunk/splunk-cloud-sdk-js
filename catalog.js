@@ -1,11 +1,11 @@
-import ApiProxy from './apiproxy';
-import { CATALOG_SERVICE_PREFIX } from './common/service_prefixes';
-import { buildPath } from './common/utils';
+const ApiProxy = require('./apiproxy');
+const { CATALOG_SERVICE_PREFIX } = require('./common/service_prefixes');
+const { buildPath } = require('./common/utils');
 
 /**
  * Encapsulates catalog endpoints
  */
-export default class CatalogProxy extends ApiProxy {
+class CatalogProxy extends ApiProxy {
     /**
      * Returns a list of datasets, optionally filtered by the given query parameters.
      * @param {Object} query
@@ -278,3 +278,5 @@ export default class CatalogProxy extends ApiProxy {
  * @property {CatalogProxy~ExtractOptions[]} options
  * @property {string} expression
  */
+
+module.exports = CatalogProxy;

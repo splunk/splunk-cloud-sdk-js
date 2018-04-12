@@ -1,9 +1,4 @@
-import 'isomorphic-fetch';
-import { Observable } from 'rxjs/Observable';
-import { Base64 } from 'js-base64';
-import { NovaProxy } from './nova';
-import SearchProxy from './search';
-import CatalogProxy from './catalog';
+const { Base64 } = require('js-base64');
 
 class SplunkError extends Error {
     constructor(message, code) {
@@ -42,14 +37,16 @@ function decodeJson(text) {
         throw new Error(`Unable to parse message: "${text}"`);
     }
 }
-/* eslint-disable import/prefer-default-export */
+
 /**
- * This class is a Splunk SSC client.
- * @property {NovaProxy} nova - Proxies for events APIs
- * @property {SearchProxy} search - Proxies for the search APIs
- * @property {CatalogProxy} catalog - Proxies for the catalog APIs
+ * This class acts as a raw proxy for Splunk SSC, implementing
+ * authorization for requests, setting the proper headers,
+ * and GET, POST, etc.  For the most part you shouldn't need
+ * to use this class directly- look at the service proxies
+ * that implement the actual endpoints.
+ * TODO: Add links to actual endpoints, SSC name
  */
-export class Splunk {
+class SSCProxy {
     constructor(url, userOrToken, pass) {
         if (pass) {
             this.user = userOrToken;
@@ -60,10 +57,6 @@ export class Splunk {
         }
         this.url = url;
 
-        // Add api proxies
-        this.nova = new NovaProxy(this);
-        this.search = new SearchProxy(this);
-        this.catalog = new CatalogProxy(this);
     }
     /**
      * Builds the URL from a service + endpoint with query encoded in url
@@ -176,30 +169,6 @@ export class Splunk {
             return {};
         });
     }
-    /**
-     * Performs a search and returns an Observable of
-     * Splunk events for the search.
-     * @param searchArgs
-     * @returns {Observable}
-     */
-    searchObserver(searchArgs) {
-        this.login();
-
-        /* Not actually a sync method, but named as such in the API */
-        const promise = this.search.createJobSync(searchArgs);
-        return Observable.create(observable => {
-            promise.then(
-                data => {
-                    /* eslint-disable-next-line no-restricted-syntax */
-                    for (const evt of data.results) {
-                        observable.next(evt);
-                    }
-                    observable.complete();
-                },
-                err => {
-                    observable.error(err);
-                }
-            );
-        });
-    }
 }
+
+module.exports.SSCProxy = SSCProxy;

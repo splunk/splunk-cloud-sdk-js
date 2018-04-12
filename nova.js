@@ -1,7 +1,7 @@
-import ApiProxy from './apiproxy';
-import NovaEvent from './models/nova_event';
-import { EVENT_SERVICE_PREFIX } from './common/service_prefixes';
-import { buildPath } from './common/utils';
+const ApiProxy = require('./apiproxy');
+const NovaEvent = require('./models/nova_event');
+const { EVENT_SERVICE_PREFIX } = require('./common/service_prefixes');
+const { buildPath } = require('./common/utils');
 
 class NovaSearchResult {
     /* eslint-disable */
@@ -24,7 +24,7 @@ class NovaSearchResults {
     }
 }
 
-export class NovaProxy extends ApiProxy {
+class NovaProxy extends ApiProxy {
     constructor(client) {
         super(client);
         this.Event = NovaEvent;
@@ -40,3 +40,5 @@ export class NovaProxy extends ApiProxy {
             .then(data => new NovaSearchResults(data.metadata, data.fields, data.events));
     }
 }
+
+module.exports.NovaProxy = NovaProxy;

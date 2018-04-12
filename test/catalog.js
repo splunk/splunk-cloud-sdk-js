@@ -1,8 +1,10 @@
 /* eslint-disable */
-let client = require("../dist/splunk");
+const config = require("./config");
+const { SSCProxy } = require("../client");
+let Splunk = require("../splunk");
 let assert = require("chai").assert;
 
-let splunk = new client.Splunk('http://ssc-sdk-shared-stubby:8882', 'admin', 'changeme');
+let splunk = new Splunk(`http://${config.host}:8882`, 'admin', 'changeme');
 
 describe('Datasets Endpoints', () => {
 
