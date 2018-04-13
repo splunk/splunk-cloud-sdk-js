@@ -4,7 +4,7 @@
   "description": "Splunk SSC SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
-    "codecov": "codecov -f ./coverage/lcov.info",
+    "codecov": "npm run cover && codecov -f ./coverage/lcov.info",
     "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test && yarn run cover:report",
     "cover:report": "nyc report",
     "lint": "eslint 'src/**/*.js'",
