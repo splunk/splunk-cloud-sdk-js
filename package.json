@@ -45,7 +45,7 @@
       "text-summary"
     ],
     "include": [
-      "*.js"
+      "**/**.js"
     ],
     "exclude": [
       ".tmp",
