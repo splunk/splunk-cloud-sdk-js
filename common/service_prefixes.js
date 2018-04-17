@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
     SEARCH_SERVICE_PREFIX : '/search/v1',
     EVENT_SERVICE_PREFIX : '/v1',
