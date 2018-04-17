@@ -1,8 +1,6 @@
 # SSC Client for JavaScript
 
-This is the Self
-
-Use `yarn` (`npm install -g yarn`) instead of `npm`.
+This is the SSC Client for JavaScript
 
 # Repository Statues
 [![Codeship Status for splunk/ssc-client-js](https://app.codeship.com/projects/efc247e0-15d9-0136-51cc-4ecad654e338/status?branch=develop)](https://app.codeship.com/projects/283657)
