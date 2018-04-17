@@ -1,3 +1,5 @@
+'use strict';
+
 let client = require("../splunk");
 let expect = require("chai").expect;
 
