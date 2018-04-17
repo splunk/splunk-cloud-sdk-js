@@ -1,3 +1,5 @@
+'use strict';
+
 const ApiProxy = require('./apiproxy');
 const NovaEvent = require('./models/nova_event');
 const { EVENT_SERVICE_PREFIX } = require('./common/service_prefixes');
