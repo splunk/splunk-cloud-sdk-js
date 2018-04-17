@@ -1,3 +1,5 @@
+'use strict';
+
 const config = require("./config");
 const { SSCProxy } = require("../client");
 const chai = require("chai");
