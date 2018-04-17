@@ -1,5 +1,3 @@
-'use strict';
-
 function buildPath(prefix, pathname) {
     return `${prefix}${pathname}`;
 }

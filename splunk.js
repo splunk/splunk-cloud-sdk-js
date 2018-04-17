@@ -1,5 +1,3 @@
-'use strict';
-
 require('isomorphic-fetch');
 const { NovaProxy } = require('./nova');
 const SearchProxy = require('./search');
