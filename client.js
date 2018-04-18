@@ -49,17 +49,11 @@ function decodeJson(text) {
  * TODO: Add links to actual endpoints, SSC name
  */
 class SSCProxy {
-    constructor(url, userOrToken, pass) {
-        if (pass) {
-            this.user = userOrToken;
-            this.pass = pass;
-            this.token = null;
-        } else {
-            this.token = userOrToken;
-        }
+    constructor(url, token) {
+        this.token = token;
         this.url = url;
-
     }
+
     /**
      * Builds the URL from a service + endpoint with query encoded in url
      * (concatenates the URL with the path)
@@ -99,7 +93,7 @@ class SSCProxy {
     _buildHeaders() {
         // TODO: Cache
         return new Headers({
-            Authorization: `Basic ${this.token}`,
+            Authorization: `Bearer ${this.token}`,
             'Content-Type': 'application/json'
         });
     }
