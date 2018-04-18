@@ -1,3 +1,5 @@
+'use strict';
+
 const ApiProxy = require('./apiproxy');
 const { CATALOG_SERVICE_PREFIX } = require('./common/service_prefixes');
 const { buildPath } = require('./common/utils');

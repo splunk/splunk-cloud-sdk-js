@@ -5,7 +5,8 @@ FROM node:9-alpine
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh
 
-WORKDIR /
+RUN mkdir /build
+WORKDIR /build
 
 # Copy the content of your repository into the image
 COPY . ./
