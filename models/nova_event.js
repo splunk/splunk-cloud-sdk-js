@@ -1,3 +1,5 @@
+'use strict';
+
 function deswizzleTime(time) {
     if (time instanceof Date) {
         return time.valueOf();

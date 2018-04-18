@@ -1,3 +1,5 @@
+'use strict';
+
 /* eslint-disable */
 const config = require("./config");
 const { SSCProxy } = require("../client");
