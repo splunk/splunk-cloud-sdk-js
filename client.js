@@ -1,5 +1,3 @@
-'use strict';
-
 const { Base64 } = require('js-base64');
 
 class SplunkError extends Error {
