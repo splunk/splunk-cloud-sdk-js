@@ -14,8 +14,8 @@ const { SSCProxy } = require('./client');
  * @property {CatalogProxy} catalog - Proxies for the catalog APIs
  */
 class Splunk {
-    constructor(url, userOrToken, pass) {
-        const client = new SSCProxy(url, userOrToken, pass);
+    constructor(url, token) {
+        const client = new SSCProxy(url, token);
         this.nova = new NovaProxy(client);
         this.search = new SearchProxy(client);
         this.catalog = new CatalogProxy(client);

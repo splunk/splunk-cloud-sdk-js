@@ -5,7 +5,7 @@ const Splunk = require("../splunk");
 const { expect } = require("chai");
 
 describe("Using Search APIs", () => {
-    const splk = new Splunk(`http://${config.host}:8882`, "admin", "changeme");
+    const splk = new Splunk(`http://${config.host}:8882`, "mytoken");
 
     describe("Submit a search", () => {
         it("should allow submission of a search", () => {
