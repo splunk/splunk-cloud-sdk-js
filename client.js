@@ -95,11 +95,15 @@ class SSCProxy {
      * @private
      */
     _buildHeaders() {
-        // TODO: Cache
-        return new Headers({
-            Authorization: `Basic ${this.token}`,
-            'Content-Type': 'application/json'
-        });
+        const headers = new Headers({'Content-Type': 'application/json'});
+        let authType = 'Basic';
+
+        // Constructor called without the pass arg is using an okta token
+        if (!this.pass && this.token) {
+            authType = 'Bearer';
+        }
+        headers.append('Authorization', `${authType} ${this.token}`);
+        return headers
     }
     /**
      * Performs a GET on the Splunk SSC environment with the supplied path.
