@@ -4,3 +4,7 @@
     - name: test with coverage
       service: ssc-client-js-with-stubby
       command: bash -c 'yarn run codecov'
+    - name: deploy
+      service: ssc-client-js-with-stubby
+      tag: master
+      command: ./ci/publish.sh
