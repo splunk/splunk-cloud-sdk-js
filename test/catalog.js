@@ -6,7 +6,7 @@ const { SSCProxy } = require("../client");
 let Splunk = require("../splunk");
 let assert = require("chai").assert;
 
-let splunk = new Splunk(`http://${config.host}:8882`, 'admin', 'changeme');
+let splunk = new Splunk(`http://${config.host}:8882`, config.authToken);
 
 describe('Datasets Endpoints', () => {
 
