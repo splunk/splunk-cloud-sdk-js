@@ -1,5 +1,3 @@
-const { Base64 } = require('js-base64');
-
 class SplunkError extends Error {
     constructor(message, code) {
         super(message);
@@ -10,6 +8,12 @@ class SplunkError extends Error {
 /* eslint-disable */
 // Disabling eslint as it flags the hoisting of the err variable into the outer
 // scope as an issue, but it's appropriate in this context.
+/**
+ * Interrogates the response, decodes if successful and throws if error
+ * @private
+ * @param {Response} response
+ * @returns {Promise<object>}
+ */
 function handleResponse(response) {
     if (response.ok) {
         return response.text().then(decodeJson);
@@ -27,6 +31,14 @@ function handleResponse(response) {
 }
 /* eslint-enable */
 
+/**
+ * Decodes the JSON into an object.  Returns a string if empty or an
+ * error if unable to parse.
+ * @private
+ * @param {string} text
+ * @returns {object}
+ */
+// TODO(david): Should we throw if response is empty? We may get here on DELETE
 function decodeJson(text) {
     if (text === '') {
         return '';
@@ -46,10 +58,34 @@ function decodeJson(text) {
  * that implement the actual endpoints.
  * TODO: Add links to actual endpoints, SSC name
  */
-class SSCProxy {
-    constructor(url, token) {
+class ServiceClient {
+  /**
+   * Create a ServiceClient with the given URL and an auth token
+   * @param {string} url Url to Splunk SSC instance
+   * @param {string} token Authentication token
+   * @param {string} tenantId Default tenant ID to use
+   * TODO(david): figure out how to manage token refresh
+   */
+    constructor(url, token, tenantId) {
         this.token = token;
         this.url = url;
+        this.tenant = tenantId;
+    }
+
+    /**
+     * Set the default tenant for the client
+     * @param {string} tenantId Default tenant ID
+     */
+    setTenant(tenantId) {
+        this.tenant = tenantId;
+    }
+
+    buildPath(servicePrefix, pathname, overrideTenant) {
+        const effectiveTenant = overrideTenant || this.tenant;
+        if (!effectiveTenant) {
+            throw new Error("No tenant specified");
+        }
+        return `/api/${effectiveTenant}${servicePrefix}${pathname}`;
     }
 
     /**
@@ -57,7 +93,7 @@ class SSCProxy {
      * (concatenates the URL with the path)
      * @private
      * @param path
-     * @param {Object} query
+     * @param {Object} [query]
      * @returns {string}
      */
     buildUrl(path, query) {
@@ -69,18 +105,6 @@ class SSCProxy {
             return `${this.url}${path}?${queryEncoded}`;
         }
         return `${this.url}${path}`;
-    }
-
-    /**
-     * If we haven't logged in, log in and cache the token
-     * TODO: This endpoint is expected to change as auth service comes online.
-     * Should be and remain idempotent
-     */
-    login() {
-        // TODO: Check token
-        if (!this.token) {
-            this.token = Base64.encode(`${this.user}:${this.pass}`);
-        }
     }
 
     /**
@@ -104,7 +128,6 @@ class SSCProxy {
      * @returns {Promise<object>}
      */
     get(path, query) {
-        this.login();
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
             /* eslint-disable no-underscore-dangle */
@@ -121,7 +144,6 @@ class SSCProxy {
      * @returns {Promise<object>}
      */
     post(path, data) {
-        this.login();
         return fetch(this.buildUrl(path), {
             method: 'POST',
             body: JSON.stringify(data),
@@ -135,10 +157,9 @@ class SSCProxy {
      * case an api endpoint is unsupported by the sdk.
      * @param path - path portion of the url to request from splunk
      * @param data - data object (to be converted to json) to supply as put body
-     * @returns {promise<object>}
+     * @returns {Promise<object>}
      */
     put(path, data) {
-        this.login();
         return fetch(this.buildUrl(path), {
             method: 'PUT',
             body: JSON.stringify(data),
@@ -154,15 +175,14 @@ class SSCProxy {
      * @returns {Promise<object>}
      */
     delete(path) {
-        this.login();
         return fetch(this.buildUrl(path), {
             method: 'DELETE',
             headers: this._buildHeaders()
         }).then(response => {
-            handleResponse(response, 204);
-            return {};
+            handleResponse(response)
+                .then(() => {});
         });
     }
 }
 
-module.exports.SSCProxy = SSCProxy;
+module.exports.SSCProxy = ServiceClient;
