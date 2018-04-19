@@ -6,6 +6,7 @@ let assert = require('chai').assert;
 let splunk = new Splunk(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
 
 describe('Identity Endpoints', () => {
+
     describe('Get', () => {
         it('should return a user profile', () => {
             return splunk.identity.getUserProfile().then(data => {
@@ -29,4 +30,16 @@ describe('Identity Endpoints', () => {
             });
         });
     });
+
+    describe('Delete', () => {
+        it('should return no response body', () => {
+            return splunk.identity.deleteTenant('devtestTenant').then(response => {
+                assert(!response);
+            });
+        });
+    });
+
+
+
+
 });
