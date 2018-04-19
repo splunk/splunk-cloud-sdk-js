@@ -1,6 +1,5 @@
 const ApiProxy = require('./apiproxy');
 const { IDENTITY_SERVICE_PREFIX } = require('./common/service_prefixes');
-const { buildPath } = require('./common/utils');
 
 class IdentityProxy extends ApiProxy {
     /**
@@ -9,7 +8,7 @@ class IdentityProxy extends ApiProxy {
      * @returns {Promise<Object>}
      */
     getUserProfile() {
-        return this.client.get(buildPath(IDENTITY_SERVICE_PREFIX, '/userprofile'));
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, '/userprofile', 'system'));
     }
 
     /**
@@ -18,7 +17,7 @@ class IdentityProxy extends ApiProxy {
      * @returns {Promise<Object>}
      */
     createTenant(tenant) {
-        return this.client.post(buildPath(IDENTITY_SERVICE_PREFIX, '/tenants'), tenant);
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, '/tenants', 'system'), tenant);
     }
 }
 

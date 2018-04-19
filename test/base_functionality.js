@@ -1,5 +1,3 @@
-'use strict';
-
 const config = require("./config");
 const { SSCProxy } = require("../client");
 const chai = require("chai");
@@ -10,7 +8,7 @@ chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 describe("Basic client functionality", function() {
-    var s = new SSCProxy(`http://${config.host}:8882`, config.authToken);
+    var s = new SSCProxy(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
     describe("GET", function() {
         it("should return a promise", function() {
             let promise = s.get("/basic");
