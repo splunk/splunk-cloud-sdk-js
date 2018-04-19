@@ -2,7 +2,6 @@
 
 const ApiProxy = require('./apiproxy');
 const  { SEARCH_SERVICE_PREFIX } = require('./common/service_prefixes');
-const { buildPath } = require('./common/utils');
 const { Observable } = require('rxjs/Observable');
 
 /**
@@ -15,7 +14,7 @@ class SearchProxy extends ApiProxy {
      * @return {Promise<SearchProxy~Job>}
      */
     createJob(jobArgs) {
-        return this.client.post(buildPath(SEARCH_SERVICE_PREFIX, '/jobs'), jobArgs);
+        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, '/jobs'), jobArgs);
     }
 
     /**
@@ -24,7 +23,7 @@ class SearchProxy extends ApiProxy {
      * @return {Promise<string>} The results as a string (concatenated json or CSV)
      */
     createJobSync(jobArgs) {
-        return this.client.post(buildPath(SEARCH_SERVICE_PREFIX, '/jobs/sync'), jobArgs);
+        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, '/jobs/sync'), jobArgs);
     }
 
     /**
@@ -33,7 +32,7 @@ class SearchProxy extends ApiProxy {
      * @return {Promise<SearchProxy~Job>}
      */
     getJob(jobId) {
-        return this.client.get(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
     }
 
     /**
@@ -43,7 +42,7 @@ class SearchProxy extends ApiProxy {
      * @returns {Promise<object>}
      */
     getResults(jobId) {
-        return this.client.get(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}/results`));
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}/results`));
     }
 
     /**
@@ -52,7 +51,7 @@ class SearchProxy extends ApiProxy {
      * @return {Promise}
      */
     deleteJob(jobId) {
-        return this.client.delete(buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
+        return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
     }
 
     /**

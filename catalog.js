@@ -1,8 +1,5 @@
-'use strict';
-
 const ApiProxy = require('./apiproxy');
 const { CATALOG_SERVICE_PREFIX } = require('./common/service_prefixes');
-const { buildPath } = require('./common/utils');
 
 /**
  * Encapsulates catalog endpoints
@@ -14,7 +11,7 @@ class CatalogProxy extends ApiProxy {
      * @return {Promise<CatalogProxy~Datasets>}
      */
     getDatasets(query) {
-        return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, '/datasets'), query);
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, '/datasets'), query);
     }
 
     /**
@@ -23,7 +20,7 @@ class CatalogProxy extends ApiProxy {
      * @return {Promise<CatalogProxy~Dataset>}
      */
     createDataset(dataset) {
-        return this.client.post(buildPath(CATALOG_SERVICE_PREFIX, '/datasets'), dataset);
+        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, '/datasets'), dataset);
     }
 
     /**
@@ -32,14 +29,14 @@ class CatalogProxy extends ApiProxy {
      * @return {Promise<CatalogProxy~Dataset>}
      */
     getDataset(datasetId) {
-        return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
     }
     /**
      * @private
      * TODO: Remove this method as it's only for testing
      */
     getDatasetConf(datasetId) {
-        return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}/conf`));
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}/conf`));
     }
 
     /**
@@ -48,7 +45,7 @@ class CatalogProxy extends ApiProxy {
      * @return {Promise<CatalogProxy~Dataset>}
      */
     patchDataset(datasetId) {
-        return this.client.patch(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
     }
 
     /**
@@ -56,7 +53,7 @@ class CatalogProxy extends ApiProxy {
      * @param {string} datasetId
      */
     deleteDataset(datasetId) {
-        return this.client.delete(buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, `/datasets/${datasetId}`));
     }
 
     /**
@@ -70,7 +67,7 @@ class CatalogProxy extends ApiProxy {
      * @return {Promise<CatalogProxy~Rules>}
      */
     getRules(query) {
-        return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, '/rules'), query);
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, '/rules'), query);
     }
 
     /**
@@ -79,7 +76,7 @@ class CatalogProxy extends ApiProxy {
      * @return {Promise<CatalogProxy~Rule>}
      */
     createRule(rule) {
-        return this.client.post(buildPath(CATALOG_SERVICE_PREFIX, '/rules'), rule);
+        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, '/rules'), rule);
     }
 
     /**
@@ -90,14 +87,14 @@ class CatalogProxy extends ApiProxy {
      * @return {Promise<CatalogProxy~Rule>}
      */
     getRule(rulePath) {
-        return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
     }
     /**
      * @private
      * TODO: Remove this method as it's only for testing
      */
     getRuleConf(name) {
-        return this.client.get(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${name}/conf`));
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, `/rules/${name}/conf`));
     }
 
     /**
@@ -106,7 +103,7 @@ class CatalogProxy extends ApiProxy {
      * @return {Promise<CatalogProxy~Rule>}
      */
     patchRule(rulePath) {
-        return this.client.patch(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
     }
 
     /**
@@ -114,7 +111,7 @@ class CatalogProxy extends ApiProxy {
      * @param {string} rulePath
      */
     deleteRule(rulePath) {
-        return this.client.delete(buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, `/rules/${rulePath}`));
     }
 }
 
