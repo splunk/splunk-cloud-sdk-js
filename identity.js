@@ -19,6 +19,15 @@ class IdentityProxy extends ApiProxy {
     createTenant(tenant) {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, '/tenants', 'system'), tenant);
     }
+
+    /**
+     * Deletes a tenant
+     * @param {string} tenantId
+     * @returns {Promise<Object>}
+     */
+    deleteTenant(tenantId) {
+        return this.client.delete(buildPath(IDENTITY_SERVICE_PREFIX, `/tenants/${tenantId}/`));
+    }
 }
 
 /**
