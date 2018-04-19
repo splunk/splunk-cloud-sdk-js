@@ -5,7 +5,7 @@ const Splunk = require("../splunk");
 const { expect } = require("chai");
 
 describe("Using Search APIs", () => {
-    const splk = new Splunk(`http://${config.host}:8882`, config.authToken);
+    const splk = new Splunk(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
 
     describe("Submit a search", () => {
         it("should allow submission of a search", () => {
@@ -57,7 +57,7 @@ describe("Using Search APIs", () => {
 describe("Should be able to import only search", () => {
     it("should allow import of a single module", () => {
         const SearchClient = require("../search");
-        const search = new SearchClient(`http://${config.host}:8882`, config.authToken);
+        const search = new SearchClient(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
         return search.createJobSync({query: "search index=*"});
     });
 });

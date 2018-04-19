@@ -1,12 +1,9 @@
-'use strict';
-
 /* eslint-disable */
 const config = require("./config");
-const { SSCProxy } = require("../client");
 let Splunk = require("../splunk");
 let assert = require("chai").assert;
 
-let splunk = new Splunk(`http://${config.host}:8882`, config.authToken);
+let splunk = new Splunk(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
 
 describe('Datasets Endpoints', () => {
 
