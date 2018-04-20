@@ -28,7 +28,7 @@ class SplunkSSC {
         this.debug = Debug;
 
         // Commented out because it doesn't work, but maybe someday
-        // this.configure_logger();
+        this.configure_logger();
     }
 
     configure_logger() {
@@ -36,13 +36,13 @@ class SplunkSSC {
         // wrap it with another function that will log the request so that we
         // don't have to mark every fetch function with a debug
         // --------
-        // let log_request = function(function_to_wrap) {
-        //     return function() {
-        //         console.log(arguments);
-        //         return function_to_wrap.apply(this, arguments);
-        //     };
-        // };
-        // fetch = log_request(fetch);
+        let log_request = function(function_to_wrap) {
+            return function() {
+                console.log(arguments);
+                return function_to_wrap.apply(this, arguments);
+            };
+        };
+        fetch = log_request(fetch);
     }
 }
 

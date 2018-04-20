@@ -1,5 +1,3 @@
-const { Debug } = require('./debug');
-
 class SplunkError extends Error {
     constructor(message, code) {
         super(message);
@@ -142,16 +140,11 @@ class ServiceClient {
      * @returns {Promise<object>}
      */
     get(path, query) {
-        let request_url = this.buildUrl(path, query);
-        let request_properties = {
+        return fetch(this.buildUrl(path, query), {
             method: 'GET',
             /* eslint-disable no-underscore-dangle */
             headers: this._buildHeaders(),
-        };
-
-        Debug.emit_event('requests', request_url, request_properties);
-
-        return fetch(request_url, request_properties).then(response => handleResponse(response));
+        }).then(response => handleResponse(response));
     }
 
     /**
@@ -163,16 +156,11 @@ class ServiceClient {
      * @returns {Promise<object>}
      */
     post(path, data) {
-        let request_url = this.buildUrl(path);
-        let request_properties = {
+        return fetch(this.buildUrl(path), {
             method: 'POST',
             body: JSON.stringify(data),
             headers: this._buildHeaders(),
-        };
-
-        Debug.emit_event('requests', request_url, request_properties);
-
-        return fetch(request_url, request_properties).then(response => handleResponse(response));
+        }).then(response => handleResponse(response));
     }
 
     /**
@@ -184,16 +172,11 @@ class ServiceClient {
      * @returns {Promise<object>}
      */
     put(path, data) {
-        let request_url = this.buildUrl(path);
-        let request_properties = {
+        return fetch(this.buildUrl(path), {
             method: 'PUT',
             body: JSON.stringify(data),
             headers: this._buildHeaders(),
-        };
-
-        Debug.emit_event('requests', request_url, request_properties);
-
-        return fetch(request_url, request_properties).then(response => handleResponse(response));
+        }).then(response => handleResponse(response));
     }
 
     /**
@@ -204,17 +187,11 @@ class ServiceClient {
      * @returns {Promise<object>}
      */
     delete(path) {
-        let request_url = this.buildUrl(path);
-        let request_properties = {
+        return fetch(this.buildUrl(path), {
             method: 'DELETE',
             headers: this._buildHeaders(),
-        };
-
-        Debug.emit_event('requests', request_url, request_properties);
-
-        return fetch(request_url, request_properties).then(response => {
-            handleResponse(response, 204);
-            return {};
+        }).then(response => {
+            handleResponse(response).then(() => {});
         });
     }
 }
