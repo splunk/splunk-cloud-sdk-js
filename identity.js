@@ -26,7 +26,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Object>}
      */
     deleteTenant(tenantId) {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, `/tenants/${tenantId}`, 'system'));
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, [`/tenants/${tenantId}`], 'system'));
     }
 }
 
