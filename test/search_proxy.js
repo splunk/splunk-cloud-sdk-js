@@ -1,5 +1,3 @@
-'use strict';
-
 const config = require("./config");
 const SplunkSSC = require("../splunk");
 const { expect } = require("chai");

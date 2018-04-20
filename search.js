@@ -1,5 +1,3 @@
-'use strict';
-
 const BaseApiService = require('./baseapiservice');
 const  { SEARCH_SERVICE_PREFIX } = require('./common/service_prefixes');
 const { Observable } = require('rxjs/Observable');
