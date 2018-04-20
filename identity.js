@@ -35,7 +35,7 @@ class IdentityProxy extends ApiProxy {
      * @returns {Promise<Array>}
      */
     getTenantUsers(tenantId) {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, `/tenants/${tenantId}/users`));
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, `/tenants/${tenantId}/users`, 'system'));
     }
 
     // TODO(Parul): Currently PUT and PATCH are both same - raise a JIRA with Cliff's team
@@ -46,7 +46,7 @@ class IdentityProxy extends ApiProxy {
      * @returns {Promise<Object>}
      */
     replaceTenantUsers(tenantId, users) {
-        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, `/tenants/${tenantId}/users`), users);
+        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, `/tenants/${tenantId}/users`, 'system'), users);
     }
 
     /**
@@ -56,7 +56,7 @@ class IdentityProxy extends ApiProxy {
      * @returns {Promise<Object>}
      */
     addTenantUsers(tenantId, users) {
-        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, `/tenants/${tenantId}/users`), users);
+        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, `/tenants/${tenantId}/users`, 'system'), users);
     }
 
     /**
@@ -66,7 +66,7 @@ class IdentityProxy extends ApiProxy {
      * @returns {Promise<Object>}
      */
     deleteTenantUsers(tenantId, users) {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, `/tenants/${tenantId}/users`), users);
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, `/tenants/${tenantId}/users`, 'system'), users);
     }
 }
 
