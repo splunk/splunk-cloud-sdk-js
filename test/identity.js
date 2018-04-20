@@ -29,14 +29,9 @@ describe('Identity Endpoints', () => {
     });
 
     describe('Delete', () => {
-        it('should return no response body', () => {
-            return splunk.identity.deleteTenant('devtestTenant').then(response => {
-                assert(!response);
-            });
-        });
+        it('should return no response body', () => splunk.identity.deleteTenant('devtestTenant').then(response => {
+            assert(!response);
+        }));
     });
-
-
-
-
+    
 });
