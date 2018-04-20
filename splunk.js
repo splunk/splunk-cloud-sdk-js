@@ -3,6 +3,7 @@ const SearchService = require('./search');
 const CatalogService = require('./catalog');
 const IdentityService = require('./identity');
 const { ServiceClient } = require('./client');
+const { Debug } = require('./debug');
 
 /* eslint-disable import/prefer-default-export */
 /**
@@ -24,8 +25,8 @@ class SplunkSSC {
         this.search = new SearchService(client);
         this.catalog = new CatalogService(client);
         this.identity = new IdentityService(client);
+        this.debug = Debug;
     }
 }
 
 module.exports = SplunkSSC;
-
