@@ -190,7 +190,6 @@ class ServiceClient {
      * @returns {Promise<object>}
      */
     patch(path, data) {
-        this.login();
         return fetch(this.buildUrl(path), {
             method: 'PATCH',
             body: JSON.stringify(data),
@@ -208,7 +207,6 @@ class ServiceClient {
      */
     delete(path, data) {
         let deleteData = data;
-        this.login();
         if (data === undefined || data == null) {
             deleteData = {};
         }
