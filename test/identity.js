@@ -1,25 +1,22 @@
-/* eslint-disable */
 const config = require('./config');
-const Splunk = require('../splunk');
-let assert = require('chai').assert;
+const SplunkSSC = require('../splunk');
+const {assert} = require('chai');
 
-let splunk = new Splunk(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
+const splunk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
 
 describe('Identity Endpoints', () => {
 
-    describe('Get a user profile', () => {
-        it('should return a user profile', () => {
-            return splunk.identity.getUserProfile().then(data => {
-                assert.typeOf(data, 'object', 'response should be an object');
-                assert('email' in data, 'devtest@splunk.com');
-                assert('firstName' in data, 'Dev');
-                assert('id' in data, 'devtest@splunk.com');
-                assert('lastName' in data, 'Test');
-                assert('locale' in data, 'en-US');
-                assert('name' in data, 'Dev Test');
-                assert('tenantMemberships' in data, ['devtestTenant']);
-            });
-        });
+    describe('Get user profile', () => {
+        it('should return a user profile', () => splunk.identity.getUserProfile().then(data => {
+            assert.typeOf(data, 'object', 'response should be an object');
+            assert('email' in data, 'devtest@splunk.com');
+            assert('firstName' in data, 'Dev');
+            assert('id' in data, 'devtest@splunk.com');
+            assert('lastName' in data, 'Test');
+            assert('locale' in data, 'en-US');
+            assert('name' in data, 'Dev Test');
+            assert('tenantMemberships' in data, ['devtestTenant']);
+        }));
     });
 
     describe('Post a new tenant', () => {
@@ -32,23 +29,19 @@ describe('Identity Endpoints', () => {
     });
 
     describe('Delete a tenant', () => {
-        it('should return no response body', () => {
-            return splunk.identity.deleteTenant('devtestTenant').then(response => {
-                assert(!response);
-            });
-        });
+        it('should return no response body', () => splunk.identity.deleteTenant('devtestTenant').then(response => {
+            assert(!response);
+        }));
     });
 
     describe('Get a list of users in tenant', () => {
-        it('should return a list of users', () => {
-            return splunk.identity.getTenantUsers('devtestTenant').then(data => {
-                assert.typeOf(data, 'Array', 'response should be an array');
-                assert('id' in data[0], 'devtest1@splunk.com');
-            });
-        });
+        it('should return a list of users', () => splunk.identity.getTenantUsers('devtestTenant').then(data => {
+            assert.typeOf(data, 'Array', 'response should be an array');
+            assert('id' in data[0], 'devtest1@splunk.com');
+        }));
     });
 
-    // TODO(Parul): Replace isn't working as expected, contact Cliff's team
+    // TODO: Currently works as Add users function, bug to be raised with Cliff's team
     describe('Replace current users in tenant with new users', () => {
         it('should return no response body', () => {
             const usersList = [
@@ -91,9 +84,6 @@ describe('Identity Endpoints', () => {
         it('should return no response body', () => {
             const usersList = [
                 {
-                    "id": "devtest4@splunk.com"
-                },
-                {
                     "id": "devtest5@splunk.com"
                 }
             ];
@@ -110,7 +100,7 @@ describe('Identity Endpoints', () => {
     //                 "id": "devtest6@splunk.com"
     //             }
     //         ];
-    //         return splunk.identity.deleteTenantUsers('devtestTenant', usersList).then(response => {
+    //         return splunk.identity.deleteTenantUsers('devtestTenant', usersList).then( => {
     //         });
     //     });
     // });
