@@ -84,6 +84,9 @@ describe('Identity Endpoints', () => {
         it('should return no response body', () => {
             const usersList = [
                 {
+                    "id": "devtest4@splunk.com"
+                },
+                {
                     "id": "devtest5@splunk.com"
                 }
             ];
