@@ -18,7 +18,7 @@ function handleResponse(response) {
     if (response.ok) {
         return response.text().then(decodeJson);
     }
-    return response.text().then(function(text) {
+    return response.text().then(function (text) {
         var err;
         try {
             var json = JSON.parse(text);
@@ -29,6 +29,7 @@ function handleResponse(response) {
         throw err;
     });
 }
+
 /* eslint-enable */
 
 /**
@@ -59,13 +60,13 @@ function decodeJson(text) {
  * TODO: Add links to actual endpoints, SSC name
  */
 class ServiceClient {
-  /**
-   * Create a ServiceClient with the given URL and an auth token
-   * @param {string} url Url to Splunk SSC instance
-   * @param {string} token Authentication token
-   * @param {string} tenantId Default tenant ID to use
-   * TODO(david): figure out how to manage token refresh
-   */
+    /**
+     * Create a ServiceClient with the given URL and an auth token
+     * @param {string} url Url to Splunk SSC instance
+     * @param {string} token Authentication token
+     * @param {string} tenantId Default tenant ID to use
+     * TODO(david): figure out how to manage token refresh
+     */
     constructor(url, token, tenantId) {
         this.token = token;
         this.url = url;
@@ -119,6 +120,7 @@ class ServiceClient {
             'Content-Type': 'application/json'
         });
     }
+
     /**
      * Performs a GET on the Splunk SSC environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
@@ -152,11 +154,11 @@ class ServiceClient {
     }
 
     /**
-     * Performs a put on the splunk ssc environment with the supplied path.
+     * Performs a PUT on the splunk ssc environment with the supplied path.
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
-     * @param path - path portion of the url to request from splunk
-     * @param data - data object (to be converted to json) to supply as put body
+     * @param path - Path portion of the url to request from splunk
+     * @param data - Data object (to be converted to json) to supply as put body
      * @returns {Promise<object>}
      */
     put(path, data) {
@@ -168,20 +170,39 @@ class ServiceClient {
     }
 
     /**
+     * Performs a PATCH on the splunk ssc environment with the supplied path.
+     * for the most part this is an internal implementation, but is here in
+     * case an api endpoint is unsupported by the sdk.
+     * @param path - Path portion of the url to request from splunk
+     * @param data - Data object (to be converted to json) to supply as patch body
+     * @returns {Promise<object>}
+     */
+    patch(path, data) {
+        return fetch(this.buildUrl(path), {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+            headers: this._buildHeaders()
+        }).then(response => handleResponse(response));
+    }
+
+    /**
      * Performs a DELETE on the Splunk SSC environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
      * @param path - Path portion of the URL to request from Splunk
+     * @param data - Data object (to be converted to json) to supply as delete body
      * @returns {Promise<object>}
      */
-    delete(path) {
+    delete(path, data) {
+        let deleteData = data;
+        if (data === undefined || data == null) {
+            deleteData = {};
+        }
         return fetch(this.buildUrl(path), {
             method: 'DELETE',
+            body: JSON.stringify(deleteData),
             headers: this._buildHeaders()
-        }).then(response => {
-            handleResponse(response)
-                .then(() => {});
-        });
+        }).then(response => handleResponse(response));
     }
 }
 
