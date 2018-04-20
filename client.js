@@ -1,3 +1,5 @@
+require('isomorphic-fetch');
+
 class SplunkError extends Error {
     constructor(message, code) {
         super(message);
