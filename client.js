@@ -81,12 +81,24 @@ class ServiceClient {
         this.tenant = tenantId;
     }
 
+    /**
+     *
+     * @param servicePrefix
+     * @param {array<string>} pathname
+     * @param overrideTenant
+     * @returns {string}
+     */
     buildPath(servicePrefix, pathname, overrideTenant) {
         const effectiveTenant = overrideTenant || this.tenant;
         if (!effectiveTenant) {
             throw new Error("No tenant specified");
         }
-        return `/api/${effectiveTenant}${servicePrefix}${pathname}`;
+        const path = `/api/${effectiveTenant}${servicePrefix}/${pathname.join("/")}`;
+        const emptyElems = pathname.find(value => value.trim() === '');
+        if (emptyElems) {
+            throw new Error(`Empty elements in path: ${path}`)
+        }
+        return path;
     }
 
     /**
@@ -157,8 +169,8 @@ class ServiceClient {
      * Performs a PUT on the splunk ssc environment with the supplied path.
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
-     * @param path - Path portion of the url to request from splunk
-     * @param data - Data object (to be converted to json) to supply as put body
+     * @param path - path portion of the url to request from splunk
+     * @param data - data object (to be converted to json) to supply as put body
      * @returns {Promise<object>}
      */
     put(path, data) {
@@ -178,6 +190,7 @@ class ServiceClient {
      * @returns {Promise<object>}
      */
     patch(path, data) {
+        this.login();
         return fetch(this.buildUrl(path), {
             method: 'PATCH',
             body: JSON.stringify(data),
@@ -195,6 +208,7 @@ class ServiceClient {
      */
     delete(path, data) {
         let deleteData = data;
+        this.login();
         if (data === undefined || data == null) {
             deleteData = {};
         }
@@ -206,4 +220,4 @@ class ServiceClient {
     }
 }
 
-module.exports.SSCProxy = ServiceClient;
+module.exports.ServiceClient = ServiceClient;

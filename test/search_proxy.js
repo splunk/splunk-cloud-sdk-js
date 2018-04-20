@@ -1,11 +1,9 @@
-'use strict';
-
 const config = require("./config");
-const Splunk = require("../splunk");
+const SplunkSSC = require("../splunk");
 const { expect } = require("chai");
 
 describe("Using Search APIs", () => {
-    const splk = new Splunk(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
+    const splk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
 
     describe("Submit a search", () => {
         it("should allow submission of a search", () => {
