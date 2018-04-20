@@ -5,6 +5,7 @@ const {assert} = require('chai');
 const splunk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
 
 describe('Identity Endpoints', () => {
+
     describe('Get', () => {
         it('should return a user profile', () => splunk.identity.getUserProfile().then(data => {
             assert.typeOf(data, 'object', 'response should be an object');
@@ -26,4 +27,11 @@ describe('Identity Endpoints', () => {
             });
         });
     });
+
+    describe('Delete', () => {
+        it('should return no response body', () => splunk.identity.deleteTenant('devtestTenant').then(response => {
+            assert(!response);
+        }));
+    });
+    
 });

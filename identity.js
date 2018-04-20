@@ -5,7 +5,7 @@ class IdentityService extends BaseApiService {
     /**
      * Authenticate the user by the access token obtained from authorization header and return user profile data,
      * including tenant memberships
-     * @returns {Promise<Object>}
+     * @returns {Promise<IdentityService~UserProfile>}
      */
     getUserProfile() {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], 'system'));
@@ -13,12 +13,40 @@ class IdentityService extends BaseApiService {
 
     /**
      * Adds a tenant
-     * @param {string} tenant
+     * @param {IdentityService~Tenant} tenant
      * @returns {Promise<Object>}
      */
     createTenant(tenant) {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenant);
     }
+
+    /**
+     * Deletes a tenant
+     * @param {string} tenantId
+     * @returns {Promise<Object>}
+     */
+    deleteTenant(tenantId) {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, [`/tenants/${tenantId}`], 'system'));
+    }
 }
 
+/**
+ * UserProfile - Represents the User recogized by the Identity Service.
+ * @typedef {Object} IdentityService~UserProfile
+ * @property {string} email
+ * @property {string} firstName
+ * @property {string} id
+ * @property {string} lastName
+ * @property {string} locale
+ * @property {string} name
+ * @property {array} [email] tenantMemberships
+ */
+
+/**
+ * Tenant - The unique account within the Identity Service
+ * @typedef {Object} IdentityService~Tenant
+ * @property {string} tenantId
+ */
+
 module.exports = IdentityService;
+
