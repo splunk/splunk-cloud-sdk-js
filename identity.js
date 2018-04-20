@@ -1,23 +1,23 @@
-const ApiProxy = require('./apiproxy');
+const BaseApiService = require('./baseapiservice');
 const { IDENTITY_SERVICE_PREFIX } = require('./common/service_prefixes');
 
-class IdentityProxy extends ApiProxy {
+class IdentityService extends BaseApiService {
     /**
      * Authenticate the user by the access token obtained from authorization header and return user profile data,
      * including tenant memberships
-     * @returns {Promise<IdentityProxy~UserProfile>}
+     * @returns {Promise<IdentityService~UserProfile>}
      */
     getUserProfile() {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, '/userprofile', 'system'));
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], 'system'));
     }
 
     /**
      * Adds a tenant
-     * @param {IdentityProxy~Tenant} tenant
+     * @param {IdentityService~Tenant} tenant
      * @returns {Promise<Object>}
      */
     createTenant(tenant) {
-        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, '/tenants', 'system'), tenant);
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenant);
     }
 
     /**
@@ -32,7 +32,7 @@ class IdentityProxy extends ApiProxy {
 
 /**
  * UserProfile - Represents the User recogized by the Identity Service.
- * @typedef {Object} IdentityProxy~UserProfile
+ * @typedef {Object} IdentityService~UserProfile
  * @property {string} email
  * @property {string} firstName
  * @property {string} id
@@ -44,8 +44,9 @@ class IdentityProxy extends ApiProxy {
 
 /**
  * Tenant - The unique account within the Identity Service
- * @typedef {Object} IdentityProxy~Tenant
+ * @typedef {Object} IdentityService~Tenant
  * @property {string} tenantId
  */
 
-module.exports = IdentityProxy;
+module.exports = IdentityService;
+

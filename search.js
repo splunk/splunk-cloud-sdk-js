@@ -1,36 +1,36 @@
-const ApiProxy = require('./apiproxy');
+const BaseApiService = require('./baseapiservice');
 const  { SEARCH_SERVICE_PREFIX } = require('./common/service_prefixes');
 const { Observable } = require('rxjs/Observable');
 
 /**
  * Encapsulates search endpoints
  */
-class SearchProxy extends ApiProxy {
+class SearchService extends BaseApiService {
     /**
      * Dispatch a search and return the newly created search job
-     * @param jobArgs {SearchProxy~PostJobsRequest}
-     * @return {Promise<SearchProxy~Job>}
+     * @param jobArgs {SearchService~PostJobsRequest}
+     * @return {Promise<SearchService~Job>}
      */
     createJob(jobArgs) {
-        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, '/jobs'), jobArgs);
+        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs);
     }
 
     /**
      * Dispatch a search and return the newly created search job
-     * @param jobArgs {SearchProxy~PostJobsRequest}
+     * @param jobArgs {SearchService~PostJobsRequest}
      * @return {Promise<string>} The results as a string (concatenated json or CSV)
      */
     createJobSync(jobArgs) {
-        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, '/jobs/sync'), jobArgs);
+        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', 'sync']), jobArgs);
     }
 
     /**
      * Returns the job resource with the given `id`.
      * @param {string} jobId
-     * @return {Promise<SearchProxy~Job>}
+     * @return {Promise<SearchService~Job>}
      */
     getJob(jobId) {
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
     }
 
     /**
@@ -40,7 +40,7 @@ class SearchProxy extends ApiProxy {
      * @returns {Promise<object>}
      */
     getResults(jobId) {
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}/results`));
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']));
     }
 
     /**
@@ -49,7 +49,7 @@ class SearchProxy extends ApiProxy {
      * @return {Promise}
      */
     deleteJob(jobId) {
-        return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, `/jobs/${jobId}`));
+        return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
     }
 
     /**
@@ -80,22 +80,22 @@ class SearchProxy extends ApiProxy {
 
 /**
  * The output format for search results. One of "CSV", "JSON", "JSON_COLS", "JSON_ROWS"
- * @typedef {string} SearchProxy~JobFormat
+ * @typedef {string} SearchService~JobFormat
  */
 
 /**
  * The current status of the search job.
  * One of "QUEUED", "PARSING", "RUNNING", "PAUSED", "FINALIZING", "FAILED", "DONE"
- * @typedef {string} SearchProxy~JobStatus
+ * @typedef {string} SearchService~JobStatus
  */
 
 /**
  * Test Job
- * @typedef {Object} SearchProxy~Job
+ * @typedef {Object} SearchService~Job
  * @property {string} id
  * @property {string} query - The SPL query string.
  * @property {number} duration - Time in seconds that the search executed.
- * @property {SearchProxy~JobFormat} format - The output format for search results.
+ * @property {SearchService~JobFormat} format - The output format for search results.
  * @property {number} limit
  *  - The number of events to process before the job is automatically finalized.
  *    Set to 0 to disable automatic finalization.
@@ -105,7 +105,7 @@ class SearchProxy extends ApiProxy {
  *  - A number between 0 and 1.0 that indicates the approximate progress of the search.
  * @property {number} resultCount - The total number of results returned by the search.
  * @property {number} scanCount - The number of events that have been scanned by the search
- * @property {SearchProxy~JobStatus} status
+ * @property {SearchService~JobStatus} status
  * @property {number} timeout
  *  - Cancel the search after this many seconds of inactivity. Set to 0 to disable timeout.
  * @property {number} ttl
@@ -115,9 +115,9 @@ class SearchProxy extends ApiProxy {
 
 /**
  * Request/Response payloads
- * @typedef {Object} SearchProxy~PostJobsRequest
+ * @typedef {Object} SearchService~PostJobsRequest
  * @property {string} query - The SPL query string. (Required)
- * @property {SearchProxy~JobFormat} format
+ * @property {SearchService~JobFormat} format
  *  - Specify the output format for search results. (Default JSON)
  * @property {number} timeout
  *  - Cancel the search after this many seconds of inactivity.
@@ -130,4 +130,4 @@ class SearchProxy extends ApiProxy {
  *    Set to 0 to disable automatic finalization.
  */
 
-module.exports = SearchProxy;
+module.exports = SearchService;
