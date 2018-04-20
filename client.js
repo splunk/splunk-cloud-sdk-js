@@ -59,7 +59,7 @@ function decodeJson(text) {
  * TODO: Add links to actual endpoints, SSC name
  */
 class ServiceClient {
-  /**
+    /**
    * Create a ServiceClient with the given URL and an auth token
    * @param {string} url Url to Splunk SSC instance
    * @param {string} token Authentication token
@@ -80,12 +80,24 @@ class ServiceClient {
         this.tenant = tenantId;
     }
 
+    /**
+     *
+     * @param servicePrefix
+     * @param {array<string>} pathname
+     * @param overrideTenant
+     * @returns {string}
+     */
     buildPath(servicePrefix, pathname, overrideTenant) {
         const effectiveTenant = overrideTenant || this.tenant;
         if (!effectiveTenant) {
             throw new Error("No tenant specified");
         }
-        return `/api/${effectiveTenant}${servicePrefix}${pathname}`;
+        const path = `/api/${effectiveTenant}${servicePrefix}/${pathname.join('/')}`;
+        const emptyElems = pathname.find(value => value.trim() === '');
+        if (emptyElems) {
+            throw new Error(`Empty elements in path: ${path}`)
+        }
+        return path;
     }
 
     /**
@@ -185,4 +197,4 @@ class ServiceClient {
     }
 }
 
-module.exports.SSCProxy = ServiceClient;
+module.exports.ServiceClient = ServiceClient;
