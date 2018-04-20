@@ -1,3 +1,5 @@
+const { Debug } = require('./debug');
+
 class SplunkError extends Error {
     constructor(message, code) {
         super(message);
@@ -90,12 +92,12 @@ class ServiceClient {
     buildPath(servicePrefix, pathname, overrideTenant) {
         const effectiveTenant = overrideTenant || this.tenant;
         if (!effectiveTenant) {
-            throw new Error("No tenant specified");
+            throw new Error('No tenant specified');
         }
         const path = `/api/${effectiveTenant}${servicePrefix}/${pathname.join('/')}`;
         const emptyElems = pathname.find(value => value.trim() === '');
         if (emptyElems) {
-            throw new Error(`Empty elements in path: ${path}`)
+            throw new Error(`Empty elements in path: ${path}`);
         }
         return path;
     }
@@ -128,7 +130,7 @@ class ServiceClient {
         // TODO: Cache
         return new Headers({
             Authorization: `Bearer ${this.token}`,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         });
     }
     /**
@@ -140,11 +142,16 @@ class ServiceClient {
      * @returns {Promise<object>}
      */
     get(path, query) {
-        return fetch(this.buildUrl(path, query), {
+        let request_url = this.buildUrl(path, query);
+        let request_properties = {
             method: 'GET',
             /* eslint-disable no-underscore-dangle */
-            headers: this._buildHeaders()
-        }).then(response => handleResponse(response));
+            headers: this._buildHeaders(),
+        };
+
+        Debug.emit_event('requests', request_url, request_properties);
+
+        return fetch(request_url, request_properties).then(response => handleResponse(response));
     }
 
     /**
@@ -156,11 +163,16 @@ class ServiceClient {
      * @returns {Promise<object>}
      */
     post(path, data) {
-        return fetch(this.buildUrl(path), {
+        let request_url = this.buildUrl(path);
+        let request_properties = {
             method: 'POST',
             body: JSON.stringify(data),
-            headers: this._buildHeaders()
-        }).then(response => handleResponse(response));
+            headers: this._buildHeaders(),
+        };
+
+        Debug.emit_event('requests', request_url, request_properties);
+
+        return fetch(request_url, request_properties).then(response => handleResponse(response));
     }
 
     /**
@@ -172,11 +184,16 @@ class ServiceClient {
      * @returns {Promise<object>}
      */
     put(path, data) {
-        return fetch(this.buildUrl(path), {
+        let request_url = this.buildUrl(path);
+        let request_properties = {
             method: 'PUT',
             body: JSON.stringify(data),
-            headers: this._buildHeaders()
-        }).then(response => handleResponse(response));
+            headers: this._buildHeaders(),
+        };
+
+        Debug.emit_event('requests', request_url, request_properties);
+
+        return fetch(request_url, request_properties).then(response => handleResponse(response));
     }
 
     /**
@@ -187,12 +204,17 @@ class ServiceClient {
      * @returns {Promise<object>}
      */
     delete(path) {
-        return fetch(this.buildUrl(path), {
+        let request_url = this.buildUrl(path);
+        let request_properties = {
             method: 'DELETE',
-            headers: this._buildHeaders()
-        }).then(response => {
-            handleResponse(response)
-                .then(() => {});
+            headers: this._buildHeaders(),
+        };
+
+        Debug.emit_event('requests', request_url, request_properties);
+
+        return fetch(request_url, request_properties).then(response => {
+            handleResponse(response, 204);
+            return {};
         });
     }
 }
