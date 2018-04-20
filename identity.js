@@ -1,14 +1,14 @@
-const ApiProxy = require('./apiproxy');
+const BaseApiService = require('./baseapiservice');
 const { IDENTITY_SERVICE_PREFIX } = require('./common/service_prefixes');
 
-class IdentityProxy extends ApiProxy {
+class IdentityService extends BaseApiService {
     /**
      * Authenticate the user by the access token obtained from authorization header and return user profile data,
      * including tenant memberships
      * @returns {Promise<Object>}
      */
     getUserProfile() {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, '/userprofile', 'system'));
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], 'system'));
     }
 
     /**
@@ -17,8 +17,8 @@ class IdentityProxy extends ApiProxy {
      * @returns {Promise<Object>}
      */
     createTenant(tenant) {
-        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, '/tenants', 'system'), tenant);
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenant);
     }
 }
 
-module.exports = IdentityProxy;
+module.exports = IdentityService;
