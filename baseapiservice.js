@@ -5,11 +5,11 @@ const { ServiceClient } = require("./client");
  */
 class BaseApiService {
     // TODO: Document when we have a final auth story
-    constructor(clientOrUrl, userOrToken, pass) {
+    constructor(clientOrUrl, token, pass) {
         if (clientOrUrl instanceof ServiceClient) {
             this.client = clientOrUrl;
         } else {
-            this.client = new ServiceClient(clientOrUrl, userOrToken, pass);
+            this.client = new ServiceClient(clientOrUrl, token, pass);
         }
     }
 }
