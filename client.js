@@ -190,6 +190,9 @@ class ServiceClient {
             body: JSON.stringify(data),
             headers: this._buildHeaders(),
         };
+
+        Debug.emit_event('requests', request_url, request_properties);
+
         return fetch(request_url, request_properties).then(response => handleResponse(response));
     }
 
@@ -206,6 +209,9 @@ class ServiceClient {
             method: 'DELETE',
             headers: this._buildHeaders(),
         };
+
+        Debug.emit_event('requests', request_url, request_properties);
+
         return fetch().then(response => {
             handleResponse(response).then(() => {});
         });
