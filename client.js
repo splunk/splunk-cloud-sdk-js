@@ -90,12 +90,12 @@ class ServiceClient {
     buildPath(servicePrefix, pathname, overrideTenant) {
         const effectiveTenant = overrideTenant || this.tenant;
         if (!effectiveTenant) {
-            throw new Error('No tenant specified');
+            throw new Error("No tenant specified");
         }
         const path = `/api/${effectiveTenant}${servicePrefix}/${pathname.join('/')}`;
         const emptyElems = pathname.find(value => value.trim() === '');
         if (emptyElems) {
-            throw new Error(`Empty elements in path: ${path}`);
+            throw new Error(`Empty elements in path: ${path}`)
         }
         return path;
     }
@@ -128,7 +128,7 @@ class ServiceClient {
         // TODO: Cache
         return new Headers({
             Authorization: `Bearer ${this.token}`,
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
         });
     }
     /**
@@ -143,7 +143,7 @@ class ServiceClient {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
             /* eslint-disable no-underscore-dangle */
-            headers: this._buildHeaders(),
+            headers: this._buildHeaders()
         }).then(response => handleResponse(response));
     }
 
@@ -159,7 +159,7 @@ class ServiceClient {
         return fetch(this.buildUrl(path), {
             method: 'POST',
             body: JSON.stringify(data),
-            headers: this._buildHeaders(),
+            headers: this._buildHeaders()
         }).then(response => handleResponse(response));
     }
 
@@ -175,7 +175,7 @@ class ServiceClient {
         return fetch(this.buildUrl(path), {
             method: 'PUT',
             body: JSON.stringify(data),
-            headers: this._buildHeaders(),
+            headers: this._buildHeaders()
         }).then(response => handleResponse(response));
     }
 
@@ -189,9 +189,10 @@ class ServiceClient {
     delete(path) {
         return fetch(this.buildUrl(path), {
             method: 'DELETE',
-            headers: this._buildHeaders(),
+            headers: this._buildHeaders()
         }).then(response => {
-            handleResponse(response).then(() => {});
+            handleResponse(response)
+                .then(() => {});
         });
     }
 }
