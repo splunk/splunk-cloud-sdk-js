@@ -26,7 +26,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Object>}
      */
     deleteTenant(tenantId) {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, [`tenants/${tenantId}`], 'system'));
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId], 'system'));
     }
 
     /**
@@ -35,7 +35,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Array>}
      */
     getTenantUsers(tenantId) {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, [`tenants/${tenantId}/users`], 'system'));
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'));
     }
 
     // TODO: Currently PUT and PATCH are both same, bug to be raised with Cliff's team
@@ -46,7 +46,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Object>}
      */
     replaceTenantUsers(tenantId, users) {
-        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, [`tenants/${tenantId}/users`], 'system'), users);
+        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
     }
 
     /**
@@ -56,7 +56,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Object>}
      */
     addTenantUsers(tenantId, users) {
-        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, [`tenants/${tenantId}/users`], 'system'), users);
+        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
     }
 
     /**
@@ -66,7 +66,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Object>}
      */
     deleteTenantUsers(tenantId, users) {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, [`tenants/${tenantId}/users`], 'system'), users);
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
     }
 }
 

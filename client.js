@@ -1,5 +1,3 @@
-require('isomorphic-fetch');
-
 class SplunkError extends Error {
     constructor(message, code) {
         super(message);
@@ -20,7 +18,7 @@ function handleResponse(response) {
     if (response.ok) {
         return response.text().then(decodeJson);
     }
-    return response.text().then(function (text) {
+    return response.text().then(function(text) {
         var err;
         try {
             var json = JSON.parse(text);
