@@ -96,6 +96,7 @@ describe('Identity Endpoints', () => {
         });
     });
 
+    // TODO (Parul): Implement stubby test for the below scenario.
     // describe('Delete a user in tenant (user absent in tenant)', () => {
     //     it('should return 405 status code - some users are not members of tenant demoTenant', () => {
     //         const usersList = [
