@@ -1,5 +1,5 @@
 const BaseApiService = require('./baseapiservice');
-const { IDENTITY_SERVICE_PREFIX } = require('./common/service_prefixes');
+const {IDENTITY_SERVICE_PREFIX} = require('./common/service_prefixes');
 
 class IdentityService extends BaseApiService {
     /**
@@ -26,7 +26,46 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Object>}
      */
     deleteTenant(tenantId) {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, [`/tenants/${tenantId}`], 'system'));
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId], 'system'));
+    }
+
+    /**
+     * Reads a list of users in the given tenant
+     * @param {string} tenantId
+     * @returns {Promise<Array>}
+     */
+    getTenantUsers(tenantId) {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'));
+    }
+
+    /**
+     * Replaces current tenant users with new users
+     * @param {string} tenantId
+     * @param usersList object
+     * @returns {Promise<Object>}
+     */
+    replaceTenantUsers(tenantId, users) {
+        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
+    }
+
+    /**
+     * Adds a list of users to the tenant
+     * @param {string} tenantId
+     * @param usersList object
+     * @returns {Promise<Object>}
+     */
+    addTenantUsers(tenantId, users) {
+        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
+    }
+
+    /**
+     * Deletes a list of users from the tenant
+     * @param {string} tenantId
+     * @param usersList object
+     * @returns {Promise<Object>}
+     */
+    deleteTenantUsers(tenantId, users) {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
     }
 }
 
