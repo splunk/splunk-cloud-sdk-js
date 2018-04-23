@@ -1,6 +1,6 @@
 {
   "name": "@splunk/ssc-client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Splunk SSC SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
