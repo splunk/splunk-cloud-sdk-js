@@ -41,7 +41,6 @@ describe('Identity Endpoints', () => {
         }));
     });
 
-    // TODO: Currently works as Add users function, bug to be raised with Cliff's team
     describe('Replace current users in tenant with new users', () => {
         it('should return no response body', () => {
             const usersList = [

@@ -38,7 +38,6 @@ class IdentityService extends BaseApiService {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'));
     }
 
-    // TODO: Currently PUT and PATCH are both same, bug to be raised with Cliff's team
     /**
      * Replaces current tenant users with new users
      * @param {string} tenantId
