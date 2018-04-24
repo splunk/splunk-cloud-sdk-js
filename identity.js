@@ -35,7 +35,7 @@ class IdentityService extends BaseApiService {
     /**
      * Reads a list of users in the given tenant
      * @param {string} tenantId
-     * @returns {Promise<Array<string>>}
+     * @returns {Promise<Array<User>>}
      */
     getTenantUsers(tenantId) {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'));
