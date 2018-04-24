@@ -35,7 +35,7 @@ class IdentityService extends BaseApiService {
     /**
      * Reads a list of users in the given tenant
      * @param {string} tenantId
-     * @returns {Promise<Array<string>>}
+     * @returns {Promise<IdentityService~User[]>}
      */
     getTenantUsers(tenantId) {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'));
@@ -44,7 +44,7 @@ class IdentityService extends BaseApiService {
     /**
      * Replaces current tenant users with new users
      * @param {string} tenantId
-     * @param {string[]} users
+     * @param {IdentityService~User[]} users
      * @returns {Promise<Object>}
      */
     replaceTenantUsers(tenantId, users) {
@@ -54,7 +54,7 @@ class IdentityService extends BaseApiService {
     /**
      * Adds a list of users to the tenant
      * @param {string} tenantId
-     * @param {string[]} users
+     * @param {IdentityService~User[]} users
      * @returns {Promise<Object>}
      */
     addTenantUsers(tenantId, users) {
@@ -64,7 +64,7 @@ class IdentityService extends BaseApiService {
     /**
      * Deletes a list of users from the tenant
      * @param {string} tenantId
-     * @param {string[]} users
+     * @param {IdentityService~User[]} users
      * @returns {Promise<Object>}
      */
     deleteTenantUsers(tenantId, users) {
@@ -85,9 +85,15 @@ class IdentityService extends BaseApiService {
  */
 
 /**
- * Tenant - The unique account within the Identity Service
+ * Tenant - The unique tenant account within the Identity Service
  * @typedef {Object} IdentityService~Tenant
  * @property {string} tenantId
+ */
+
+/**
+ * User - The unique user within the Identity Service
+ * @typedef {Object} IdentityService~User
+ * @property {string} id
  */
 
 module.exports = IdentityService;
