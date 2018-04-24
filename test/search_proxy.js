@@ -1,11 +1,9 @@
-'use strict';
-
 const config = require("./config");
-const Splunk = require("../splunk");
+const SplunkSSC = require("../splunk");
 const { expect } = require("chai");
 
 describe("Using Search APIs", () => {
-    const splk = new Splunk(`http://${config.host}:8882`, "admin", "changeme");
+    const splk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
 
     describe("Submit a search", () => {
         it("should allow submission of a search", () => {
@@ -57,7 +55,7 @@ describe("Using Search APIs", () => {
 describe("Should be able to import only search", () => {
     it("should allow import of a single module", () => {
         const SearchClient = require("../search");
-        const search = new SearchClient(`http://${config.host}:8882`, "admin", "changeme");
+        const search = new SearchClient(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
         return search.createJobSync({query: "search index=*"});
     });
 });

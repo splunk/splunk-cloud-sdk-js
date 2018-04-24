@@ -1,7 +1,5 @@
-'use strict';
-
 const config = require("./config");
-const { SSCProxy } = require("../client");
+const { ServiceClient } = require("../client");
 const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
 
@@ -9,50 +7,62 @@ chai.use(chaiAsPromised);
 
 const expect = chai.expect;
 
-describe("Basic client functionality", function() {
-    var s = new SSCProxy(`http://${config.host}:8882`, "admin", "changeme");
-
-    describe("GET", function() {
-        it("should return a promise", function() {
-            let promise = s.get("/basic");
+describe("Basic client functionality", () => {
+    const s = new ServiceClient(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
+    describe("GET", () => {
+        it("should return a promise", () => {
+            const promise = s.get("/basic");
             expect(promise).to.be.a("promise");
-            return promise.then(function(data) {
+            return promise.then((data) => {
                 expect(data).to.haveOwnProperty("foo");
             });
         });
     });
 
-    describe("POST", function() {
-        it("should return a promise", function() {
-            let promise = s.post("/basic", {robin: "hood"});
+    describe("POST", () => {
+        it("should return a promise", () => {
+            const promise = s.post("/basic", {robin: "hood"});
             expect(promise).to.be.a("promise");
-            return promise.then(function(data) {
+            return promise.then((data) => {
                 expect(data).to.haveOwnProperty("friar", "tuck");
             });
         })
     });
 
-    describe("PUT", function() {
-        it("should return a promise", function() {
-            let promise = s.put("/basic", {walrus: "carpenter"});
+    describe("PUT", () => {
+        it("should return a promise", () => {
+            const promise = s.put("/basic", {walrus: "carpenter"});
             expect(promise).to.be.a("promise");
-            return promise.then(function(data) {
+            return promise.then((data) => {
                 expect(data).to.haveOwnProperty("oysters", "sad");
             });
         })
     });
 
-    describe("DELETE", function() {
-        it("should return a promise", function() {
-            let promise = s.delete("/basic");
+    describe("DELETE", () => {
+        it("should return a promise", () => {
+            const promise = s.delete("/basic");
             expect(promise).to.be.a("promise");
             return promise;
         })
     });
 
-    describe("Errors", function() {
-        it("should throw on an error response", function() {
-            return expect(s.get("/error")).to.be.rejectedWith(Error, "Something exploded");
+    describe("Errors", () => {
+        it("should throw on an error response", () => expect(s.get("/error")).to.be.rejectedWith(Error, "Something exploded"));
+    });
+
+    describe("Path building", () => {
+        it("Catch empty path elements", () => {
+            let failed = false;
+            try {
+                s.buildPath('/PREFIX', ['foo', ' '], "TENANT");
+                failed = true;
+            } catch (err) {
+                expect(err).to.have.property('message').that.matches(/\/api\/TENANT\/PREFIX\/foo\/ /);
+            }
+            if (failed) {
+                expect.fail('Should have thrown an error');
+            }
         });
     });
 
