@@ -1,6 +1,9 @@
 const BaseApiService = require('./baseapiservice');
 const {IDENTITY_SERVICE_PREFIX} = require('./common/service_prefixes');
 
+/**
+ * Encapsulates Identity endpoints
+ */
 class IdentityService extends BaseApiService {
     /**
      * Authenticate the user by the access token obtained from authorization header and return user profile data,
@@ -32,7 +35,7 @@ class IdentityService extends BaseApiService {
     /**
      * Reads a list of users in the given tenant
      * @param {string} tenantId
-     * @returns {Promise<Array>}
+     * @returns {Promise<Array<string>>}
      */
     getTenantUsers(tenantId) {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'));
@@ -41,7 +44,7 @@ class IdentityService extends BaseApiService {
     /**
      * Replaces current tenant users with new users
      * @param {string} tenantId
-     * @param usersList object
+     * @param {string[]} users
      * @returns {Promise<Object>}
      */
     replaceTenantUsers(tenantId, users) {
@@ -51,7 +54,7 @@ class IdentityService extends BaseApiService {
     /**
      * Adds a list of users to the tenant
      * @param {string} tenantId
-     * @param usersList object
+     * @param {string[]} users
      * @returns {Promise<Object>}
      */
     addTenantUsers(tenantId, users) {
@@ -61,7 +64,7 @@ class IdentityService extends BaseApiService {
     /**
      * Deletes a list of users from the tenant
      * @param {string} tenantId
-     * @param usersList object
+     * @param {string[]} users
      * @returns {Promise<Object>}
      */
     deleteTenantUsers(tenantId, users) {
@@ -70,7 +73,7 @@ class IdentityService extends BaseApiService {
 }
 
 /**
- * UserProfile - Represents the User recogized by the Identity Service.
+ * UserProfile - Represents the User recognized by the Identity Service.
  * @typedef {Object} IdentityService~UserProfile
  * @property {string} email
  * @property {string} firstName
