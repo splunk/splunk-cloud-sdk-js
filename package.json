@@ -5,6 +5,7 @@
   "main": "splunk.js",
   "scripts": {
     "build": "babel src -d .",
+    "clean": "find src/ -name '*.js' | sed 's/src\\//./' | xargs rm",
     "codecov": "npm run cover && codecov -f ./coverage/lcov.info",
     "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test && yarn run cover:report",
     "cover:report": "nyc report",
