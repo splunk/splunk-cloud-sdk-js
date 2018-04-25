@@ -6,21 +6,30 @@ const { HEC2_SERVICE_PREFIX } = require('./common/service_prefixes');
  */
 class HEC2Service extends BaseApiService {
     /**
-     * Send a structured event to be ingested by Splunk SSC via HEC2.
+     * Create a structured event to be ingested by Splunk SSC via HEC2.
      * @param {Object|HEC2Service~Event} event
      * @return {Promise<HEC2Service~Response>}
      */
-    sendEvent(event) {
+    createEvent(event) {
         return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['events']), event);
     }
 
     /**
-     * Send structured events to be ingested by Splunk SSC via HEC2.
+     * Create structured events to be ingested by Splunk SSC via HEC2.
      * @param {Object|HEC2Events} events
      * @return {Promise<HEC2Service~Response>}
      */
-    sendEvents(events) {
+    createEvents(events) {
         return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['events']), events.toJSONs());
+    }
+
+    /**
+     * Create unstructured event data to be ingested by Splunk SSC via HEC2.
+     * @param {Object} eventData
+     * @return {Promise<HEC2Service~Response>}
+     */
+    createRawEvent(eventData) {
+        return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['raw']), eventData);
     }
 }
 

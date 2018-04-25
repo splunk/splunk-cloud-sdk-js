@@ -28,7 +28,7 @@ describe('Events Endpoint', () => {
     
     describe('Post event', () => {
         it('should return a successful response', () => {
-            return splunk.hec2.sendEvent(event1).then(response => {
+            return splunk.hec2.createEvent(event1).then(response => {
                 assert.deepEqual(response, successResponse, 'response should be expected success response.')
             });
         });
@@ -38,7 +38,7 @@ describe('Events Endpoint', () => {
         it('should return a successful response', () => {
             var events = new HEC2Events().add(event1).add(event2).add(event3);
 
-            return splunk.hec2.sendEvents(events).then(response => {
+            return splunk.hec2.createEvents(events).then(response => {
                 assert.deepEqual(response, successResponse, 'response should be expected success response.')
             });
         });
