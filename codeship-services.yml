@@ -15,6 +15,13 @@ ssc-client-js-with-stubby:
   depends_on:
     - ssc-sdk-shared-stubby
 
+ssc-client-js-against-playground:
+    build:
+      image: splunk/ssc-client-js-with-stubby
+      dockerfile: ci/Dockerfile
+    encrypted_env_file: ci/integration/env.encrypted
+
+
 ssc-sdk-shared-stubby:
   image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest
   dockercfg_service: aws-generator
