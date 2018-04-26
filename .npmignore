@@ -1,0 +1,12 @@
+src/
+CODEOWNERS
+codeship*
+env
+ci/
+test/
+*.iml
+tmp/
+jsdoc.json
+.eslintrc.*
+.npmpignore
+.babelrc

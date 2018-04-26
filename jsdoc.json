@@ -1,6 +1,6 @@
 {
     "source": {
-        "include": [".", "common", "models"],
+        "include": [".", "common"],
         "exclude": [".git", "ci", "node_modules"]
     },
     "templates": {
