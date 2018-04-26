@@ -1,6 +1,6 @@
 {
   "name": "@splunk/ssc-client",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Splunk SSC SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
@@ -12,7 +12,8 @@
     "lint": "eslint 'src/**/*.js'",
     "lint:fix": "eslint 'src/**/*.js' --fix",
     "pretest": "yarn lint",
-    "test": "mocha",
+    "test": "mocha -i -g integration",
+    "test:integration": "mocha -g integration",
     "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",
     "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/",
@@ -24,6 +25,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.0.0",
@@ -31,6 +33,7 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.7.0",
+    "is-guid": "^0.0.2",
     "istanbul": "^0.4.5",
     "js-yaml": "^3.11.0",
     "jsdoc": "^3.5.5",

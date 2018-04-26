@@ -65,6 +65,7 @@ typings/
 
 # dotenv environment variables file
 .env
+secret.env
 
 .vscode/
 .idea/
