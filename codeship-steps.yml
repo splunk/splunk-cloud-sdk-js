@@ -8,3 +8,9 @@
       service: ssc-client-js-with-stubby
       tag: master
       command: ./ci/publish.sh
+
+- type: parallel
+  steps:
+    - name: integration
+      service: ssc-client-js-against-playground
+      command: bash -c "source ci/integration/runtests"

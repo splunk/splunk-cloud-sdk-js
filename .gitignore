@@ -1,4 +1,7 @@
-dist/
+/*.js
+common/ # built dir
+!/.eslintrc.js
+
 # Don't check in API docs
 doc/api/
 out/
@@ -62,6 +65,7 @@ typings/
 
 # dotenv environment variables file
 .env
+secret.env
 
 .vscode/
 .idea/

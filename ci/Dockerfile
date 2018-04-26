@@ -3,7 +3,8 @@ FROM node:9-alpine
 
 # Install git for Codecov
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh
+    apk add --no-cache bash git openssh && \
+    apk add --no-cache curl jq
 
 RUN mkdir /build
 WORKDIR /build
@@ -12,4 +13,4 @@ WORKDIR /build
 COPY . ./
 
 # Install all Node.js dependencies, using yarn
-RUN yarn install --non-interactive --silent
+RUN yarn install --non-interactive --silent && yarn build
