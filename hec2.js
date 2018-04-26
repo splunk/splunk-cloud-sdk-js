@@ -16,56 +16,22 @@ class HEC2Service extends BaseApiService {
 
     /**
      * Create structured events to be ingested by Splunk SSC via HEC2.
-     * @param {Object|HEC2Events} events
+     * @param {Object|HEC2Service~Event[]} events
      * @return {Promise<HEC2Service~Response>}
      */
     createEvents(events) {
-        return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['events']), events.toJSONs());
-    }
 
-    /**
-     * Create unstructured event data to be ingested by Splunk SSC via HEC2.
-     * @param {Object|HEC2Service~Event} eventData
-     * @return {Promise<HEC2Service~Response>}
-     */
-    createRawEvent(event) {
-        var queryParams = {};
-        // Convert event properties to a flat object of keys and JSON stringified values, omitting the "event"
-        // key which will be the body of the POST
-        for (var key in event) {
-            if (key == 'event')
-                continue;
-            queryParams[key] = JSON.stringify(event[key]);
-        }
-        return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['raw']), event['event'], queryParams);
-    }
-}
-
-/**
- * HEC2 Events 
- */
-class HEC2Events {
-    constructor() {
-        this.events = [];
-    }
-
-    /**
-     * Add event to this collection.
-     * @param {Object|HEC2Service~Event} event HEC2-compatible event
-     * @return {HEC2Events}
-     */
-    add(event) {
-        this.events.push(event);
-        return this;
+        return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['events']), HEC2Service.eventsToJSONs(events));
     }
 
     /**
      * Create a HEC2-compatible string consisting of concatenated JSON events.
+     * @param {Object|HEC2Service~Event[]} events
      * @return {string} Returns a HEC2-compatible string consisting of concatenated JSON events.
      */
-    toJSONs() {
+    static eventsToJSONs(events) {
         // Convert Objects to JSON strings and concatenate them together
-        return this.events.map(function (evt) { return JSON.stringify(evt); }).join("");
+        return events.map(function (evt) { return JSON.stringify(evt); }).join('');
     }
 }
 
@@ -92,4 +58,3 @@ class HEC2Events {
  */
 
 module.exports.HEC2Service = HEC2Service;
-module.exports.HEC2Events = HEC2Events;

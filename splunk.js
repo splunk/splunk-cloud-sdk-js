@@ -8,7 +8,6 @@ const { ServiceClient } = require('./client');
 /* eslint-disable import/prefer-default-export */
 /**
  * This class is a Splunk SSC client.
- * @property {NovaProxy} nova - Proxies for events APIs
  * @property {SearchService} search - Proxies for the search APIs
  * @property {CatalogService} catalog - Proxies for the catalog APIs
  * @property {IdentityService} identity - Proxies for the identity APIs
