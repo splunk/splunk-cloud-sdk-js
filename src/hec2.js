@@ -31,7 +31,7 @@ class HEC2Service extends BaseApiService {
      */
     static eventsToJSONs(events) {
         // Convert Objects to JSON strings and concatenate them together
-        return events.map(function (evt) { return JSON.stringify(evt); }).join('');
+        return events.map(evt => JSON.stringify(evt)).join('');
     }
 }
 
