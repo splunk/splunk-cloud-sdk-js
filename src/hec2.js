@@ -25,14 +25,14 @@ class HEC2Service extends BaseApiService {
 
     /**
      * Create unstructured event data to be ingested by Splunk SSC via HEC2.
-     * @param {Object|HEC2Service~Event} eventData
+     * @param {Object|HEC2Service~Event} event
      * @return {Promise<HEC2Service~Response>}
      */
     createRawEvent(event) {
         const queryParams = {};
         // Convert event properties to a flat object of keys and JSON stringified values, omitting the "event"
         // key which will be the body of the POST
-        event.keys().array.forEach(key => {
+        Object.keys(event).forEach(key => {
             if (key !== 'event') {
                 queryParams[key] = JSON.stringify(event[key]);
             }
