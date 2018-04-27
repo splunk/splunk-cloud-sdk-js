@@ -21,17 +21,15 @@ describe('Datasets Endpoints', () => {
                     "rule1"
                 ]
             };
-        it('should return the created dataset with post', () => {
-            return splunk.catalog.createDataset(postDataset).then(response => {
-                assert(response);
-                assert(response.id);
-                datasetName = postDataset.name;
-                assert.equal(response.name, postDataset.name, "Name should be equal")
-                assert.equal(response.kind, "VIEW")
-                assert.equal(response.rules.length, 1)
-                assert.equal(response.rules[0].name, "string")
-            });
-        });
+        it('should return the created dataset with post', () => splunk.catalog.createDataset(postDataset).then(response => {
+            assert(response);
+            assert(response.id);
+            datasetName = postDataset.name;
+            assert.equal(response.name, postDataset.name, "Name should be equal")
+            assert.equal(response.kind, "VIEW")
+            assert.equal(response.rules.length, 1)
+            assert.equal(response.rules[0].name, "string")
+        }));
     });
 
     // Delete the created dataset else would get 409 conflict error
