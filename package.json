@@ -1,6 +1,6 @@
 {
   "name": "@splunk/ssc-client",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "description": "Splunk SSC SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
@@ -33,8 +33,8 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.7.0",
-    "istanbul": "^0.4.5",
     "is-guid": "^0.0.2",
+    "istanbul": "^0.4.5",
     "js-yaml": "^3.11.0",
     "jsdoc": "^3.5.5",
     "mocha": "^5.0.4",
