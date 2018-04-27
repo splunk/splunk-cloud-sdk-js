@@ -1,5 +1,5 @@
 const config = require("./config");
-const SplunkSSC = require("../splunk");
+const SplunkSSC = require("../src/splunk");
 const { HEC2Service } = require("../src/hec2");
 const { assert } = require("chai");
 
