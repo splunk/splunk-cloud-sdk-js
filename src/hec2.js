@@ -20,7 +20,6 @@ class HEC2Service extends BaseApiService {
      * @return {Promise<HEC2Service~Response>}
      */
     createEvents(events) {
-
         return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['events']), HEC2Service.eventsToJSONs(events));
     }
 
@@ -30,15 +29,15 @@ class HEC2Service extends BaseApiService {
      * @return {Promise<HEC2Service~Response>}
      */
     createRawEvent(event) {
-        var queryParams = {};
+        const queryParams = {};
         // Convert event properties to a flat object of keys and JSON stringified values, omitting the "event"
         // key which will be the body of the POST
-        for (var key in event) {
-            if (key == 'event')
-                continue;
-            queryParams[key] = JSON.stringify(event[key]);
-        }
-        return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['raw']), event['event'], queryParams);
+        event.keys().array.forEach(key => {
+            if (key !== 'event') {
+                queryParams[key] = JSON.stringify(event[key]);
+            }
+        });
+        return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['raw']), event.event, queryParams);
     }
 
     /**
@@ -48,7 +47,7 @@ class HEC2Service extends BaseApiService {
      */
     static eventsToJSONs(events) {
         // Convert Objects to JSON strings and concatenate them together
-        return events.map(function (evt) { return JSON.stringify(evt); }).join('');
+        return events.map(evt => JSON.stringify(evt)).join('');
     }
 }
 
