@@ -77,3 +77,6 @@ package-lock.json
 # codeship
 **/env
 codeship.aes
+
+# built files
+common/
