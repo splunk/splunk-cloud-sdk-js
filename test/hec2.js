@@ -4,6 +4,8 @@ const { HEC2Service } = require("../hec2");
 const { assert } = require("chai");
 
 const splunk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
+const splunkBadToken = new SplunkSSC(`http://${config.host}:8882`, "BAD_TOKEN", 'TEST_TENANT');
+const successResponse = {'code':0,'text':'Success'};
 const event1 = {'sourcetype':'splunkd','source':'mysource','time':1524599658,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.251 -0700 INFO  ServerConfig - Will generate GUID, as none found on this server.'};
 const event2 = {'sourcetype':'splunkd','source':'mysource','time':1524599659,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.252 -0700 INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A'};
 const event3 = {'sourcetype':'splunkd','source':'mysource','time':1524599660,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.258 -0700 INFO  ServerConfig - My server name is "9765f1bebdb4".'};
@@ -22,12 +24,11 @@ describe('Events Formation', () => {
 });
 
 describe('Events Endpoint', () => {
-    const successResponse = {'code':0,'text':'Success'};
     
     describe('Post event', () => {
         it('should return a successful response', () => {
             return splunk.hec2.createEvent(event1).then(response => {
-                assert.deepEqual(response, successResponse, 'response should be expected success response.')
+                assert.deepEqual(response, successResponse, 'response should be expected success response.');
             });
         });
     });
@@ -37,7 +38,33 @@ describe('Events Endpoint', () => {
             var events = [event1, event2, event3];
 
             return splunk.hec2.createEvents(events).then(response => {
-                assert.deepEqual(response, successResponse, 'response should be expected success response.')
+                assert.deepEqual(response, successResponse, 'response should be expected success response.');
+            });
+        });
+    });
+
+    describe('Post events with bad auth token', () => {
+        it('should return a 401 response', () => {
+            var events = [event1, event2, event3];
+            
+            splunkBadToken.hec2.createEvents(events).then(response => {
+                assert.fail('request with bad auth should not succeed');
+            }).catch(err => {
+                assert.equal(err.code, 401, 'response status should be 401');
+            });
+        });
+    });
+
+});
+
+describe('Raw Endpoint', () => {
+    
+    describe('Post raw event', () => {
+        it('should return a successful response', () => {
+            return splunk.hec2.createRawEvent(event1).then(response => {
+                assert.deepEqual(response, successResponse, 'response should be expected success response.');
+            }).catch(err => {
+                assert.fail('request should not have failed');
             });
         });
     });
