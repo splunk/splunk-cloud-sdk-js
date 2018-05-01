@@ -65,7 +65,7 @@ typings/
 
 # dotenv environment variables file
 .env
-secret.env
+*.env
 
 .vscode/
 .idea/
@@ -77,3 +77,6 @@ package-lock.json
 # codeship
 **/env
 codeship.aes
+
+# built files
+common/
