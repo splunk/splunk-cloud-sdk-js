@@ -49,6 +49,39 @@ class HEC2Service extends BaseApiService {
         // Convert Objects to JSON strings and concatenate them together
         return events.map(evt => JSON.stringify(evt)).join('');
     }
+
+    /**
+     * Create batch events based on a given size and interval
+     * @param {Object|HEC2Service~Event[]} events
+     * @param {int} batchSize
+     * @param {int} interval (milliseconds)
+     * @param {Promise<HEC2Service~Response>[]} results
+     */
+    createBatchEvents(events, batchSize, interval, results) {
+        const batchEvents = [];
+
+        if (events == null || events.length === 0 || batchSize < 0 || interval < 0 || results == null) {
+            throw Error("Invalid arguments for batch event processing.");
+        }
+
+        if (events.length <= batchSize) {
+            results.push(this.createEvents(events));
+            return;
+        }
+
+        if (events.length > batchSize) {
+            let i = batchSize;
+            while (i > 0) {
+                batchEvents.push(events.pop());
+                i -= 1;
+            }
+
+            results.push(this.createEvents(batchEvents));
+            setTimeout(() => {}, interval);
+        }
+
+        this.createBatchEvents(events, batchSize, interval, results);
+    }
 }
 
 /**
