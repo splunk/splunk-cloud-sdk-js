@@ -21,7 +21,6 @@ describe('integration tests for Datasets Endpoints', () => {
 
     before(() => {
         // add any set up tasks here
-
     });
 
     describe('Post a Data set', () => {
@@ -102,7 +101,7 @@ describe('integration tests for Datasets Endpoints', () => {
     });
 });
 
-// Scenario2: Error scenarios
+// Scenario 2: Error scenarios
 // Post a Data set, repeat post a dataset with the same name, validate 409 conflict
 // Post an invalid Data set, validate a 400 response
 // Delete a unknown Data set, validate a 404
@@ -123,16 +122,16 @@ describe('integration error tests for Datasets Endpoints', () => {
                 "kind": "VIEW",
                 "todo": "string",
             };
-        // const invalidPostDataset =
-        //     {
-        //         "name": dataSetName,
-        //         "kind": "VIEW",
-        //         "rules": [
-        //             {
-        //                 "name":"test"
-        //             }
-        //         ]
-        //     };
+        const invalidPostDataset =
+             {
+                 "name": dataSetName,
+                 "kind": "VIEW",
+                 "rules": [
+                     {
+                         "name":"test"
+                     }
+                 ]
+             };
         it('should return the created dataset with post for error test', () => splunk.catalog.createDataset(postDataset).then(response => {
             assert(response);
             assert(response.id);
@@ -140,19 +139,19 @@ describe('integration error tests for Datasets Endpoints', () => {
             assert.equal(response.kind, "VIEW")
         }));
 
-        it('should throw a 409 conflict response when creating an already existing Data set', () => splunk.catalog.createDataset(postDataset).then(success =>
+        it('should throw a 409 CONFLICT response when creating an already existing Data set', () => splunk.catalog.createDataset(postDataset).then(success =>
             assert.fail(success), err => assert.equal(err.code,"409")
         ));
 
-        // it('should throw a 400 response when invalid post data specified to create a Data set', () => splunk.catalog.createDataset(invalidPostDataset).then(success =>
-        //     assert.fail(success), err => assert.equal(err.code,"400")
-        // ));
+        it('should throw a 400 BAD REQUEST response when invalid post data specified to create a Data set', () => splunk.catalog.createDataset(invalidPostDataset).then(success =>
+            assert.fail(success), err => assert.equal(err.code,"400")
+        ));
 
-        it('should throw a 404 response when Get on non-existing Data set', () => splunk.catalog.getDataset("Invalid").then(success =>
+        it('should throw a 404 NOT FOUND response when Get on non-existing Data set', () => splunk.catalog.getDataset("Invalid").then(success =>
             assert.fail(success), err => assert.equal(err.code,"404")
         ));
 
-        it('should throw a 404 response when Delete on non-existing Data Set', () => splunk.catalog.deleteDataset("Invalid").then(success =>
+        it('should throw a 404 NOT FOUND response when Delete on non-existing Data Set', () => splunk.catalog.deleteDataset("Invalid").then(success =>
             assert.fail(success), err => assert.equal(err.code,"404")
         ));
 
@@ -225,6 +224,7 @@ describe('integration tests for Rules Endpoints', () => {
                     }
                 ]
             };
+
         it('should return the created rule rule1 in the response', () => splunk.catalog.createRule(postRule1).then(response => {
             assert(response);
             assert(response.id);
@@ -234,9 +234,11 @@ describe('integration tests for Rules Endpoints', () => {
             assert.equal(response.description, "first test rule")
             assert.equal(response.actions.length, 3)
         }));
-        it('should throw a 409 CONFLICT response when creating an already existing rule', () => splunk.catalog.createRule(postRule1).catch((err) => {
-            assert(err.code, "409")
-        }));
+
+        it('should throw a 409 CONFLICT response when creating an already existing rule', () => splunk.catalog.createRule(postRule1).then(success =>
+            assert.fail(success), err => assert.equal(err.code,"409")
+        ));
+
         it('should return the created rule rule2 in the response', () => splunk.catalog.createRule(postRule2).then(response => {
             assert(response);
             assert(response.id);
@@ -263,15 +265,15 @@ describe('integration tests for Rules Endpoints', () => {
     });
 
     describe('Delete an invaild test rule', () => {
-        it('should throw a 404 NOT FOUND response when trying to delete a rule not present in nova store', () => splunk.catalog.deleteRule(ruleName3).catch((err) => {
-            assert(err.code, "404")
-        }));
+        it('should throw a 404 NOT FOUND response when trying to delete a rule not present in nova store', () => splunk.catalog.deleteRule(ruleName3).then(success =>
+            assert.fail(success), err => assert.equal(err.code, "404")
+        ));
     });
 
     describe('Delete valid test rule with invalid authToken', () => {
-        it('should throw a 401 NOT AUTHORIZED response when trying to delete a valid rule with invalid authToken', () => splunkWithIncorrectCredentials.catalog.deleteRule(ruleName1).catch((err) => {
-            assert(err.code, "401")
-        }));
+        it('should throw a 401 NOT AUTHORIZED response when trying to delete a valid rule with invalid authToken', () => splunkWithIncorrectCredentials.catalog.deleteRule(ruleName1).then(success =>
+            assert.fail(success), err => assert.equal(err.code, "401")
+        ));
     });
 
     // clean up the created rules else would get 409 conflict error
