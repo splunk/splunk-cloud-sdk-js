@@ -64,18 +64,21 @@ describe('Events Endpoint', () => {
 
     describe('Post batch 10 events', () => {
 
-        it('should create 10 batched events and send them right away', () => {
+        it('should create 10 batched events and send them when event10 is added', () => {
             const events = [event1, event2, event3, event4, event5, event6, event7, event8, event9, event10];
 
             // 10 total events, batch size 5, batch count 10, 3000 ms
             let  eb = new EventBatcher(splunk.hec2, 5, 10, 3000);
             try {
-                eb.queueEvents(events).then(response => {
-                    assert.deepEqual(response, successResponse, 'response should be expected success response.');
-                });
+                for (let i=0; i < events.length; i+=1) {
+                    eb.add(events[i]).then(response => {
+                        assert.deepEqual(response, successResponse, 'response should be expected success response.');
+                    });
+
+                }
 
             } finally {
-                clearInterval(eb.timerId);
+                eb.stop();
                 eb = null;
             }
         });
@@ -89,12 +92,14 @@ describe('Events Endpoint', () => {
             // 7 total events, batch size 5, batch count 10, 3000 ms
             let eb = new EventBatcher(splunk.hec2, 5, 10, 3000);
             try {
-                eb.queueEvents(events).then(response => {
-                    assert.deepEqual(response, successResponse, 'response should be expected success response.');
-                });
+                for (let i=0; i < events.length; i+=1) {
+                    eb.add(events[i]).then(response => {
+                        assert.deepEqual(response, successResponse, 'response should be expected success response.');
+                    });
+                }
 
             } finally {
-                clearInterval(eb.timerId);
+                eb.stop();
                 eb = null;
             }
         });
@@ -103,16 +108,15 @@ describe('Events Endpoint', () => {
     describe('Post batch 1 events', () => {
 
         it('should create 1 batch event and wait for timer to send it', () => {
-            const events = [event1];
 
             // 1 total events, batch size 50000, batch count 10, 3000 ms
             let eb = new EventBatcher(splunk.hec2, 50000, 10, 3000);
             try {
-                const result = eb.queueEvents(events);
+                const result = eb.add(event1);
                 assert.isNull(result);
 
             } finally {
-                clearInterval(eb.timerId);
+                eb.stop();
                 eb = null;
             }
         });

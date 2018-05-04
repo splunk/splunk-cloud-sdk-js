@@ -22,22 +22,23 @@ class EventBatcher {
     /**
      * Add a new event to the array, sends all the events if the event limits are met.
      *
-     * @param {Object|HEC2Service~Event} event - a single event or group of events
+     * @param {HEC2Service~Event} event - a single event or group of events
      * @return {Promise<HEC2Service~Response>}
      */
-    queueEvents(event) {
+    add(event) {
         this.queue.push(event);
-        return this.send();
+        return this.run();
 
     }
 
     /**
      * Creates a periodic task to send all the events.
      *
-     * @return {Object|Timeout} timerId - unique id of the timer created
+     * @return {int} timerId - unique id of the timer created
+     * @private
      */
     setTimer() {
-        return setInterval(() => {
+        return setTimeout(() => {
             if (this.queue.length > 0) {
                 this.flush();
 
@@ -49,9 +50,10 @@ class EventBatcher {
 
     /**
      * Reset the timer, update the timerId.
+     * @private
      */
     resetTimer() {
-        clearInterval(this.timerId);
+        this.stop();
         this.timerId = this.setTimer();
 
     }
@@ -70,11 +72,12 @@ class EventBatcher {
     }
 
     /**
-     * Send events to HEC based on the batchSize and timer.
+     * Send events to HEC based on the batchSize, batchCount and timer.
      *
      * @return {Promise<HEC2Service~Response>} - can return null if event has not been sent yet.
+     * @private
      */
-    send() {
+    run() {
         const maxCountReached = (this.queue.length >= this.batchCount);
         const eventByteSize = Buffer.byteLength(JSON.stringify(this.queue), "utf8");
 
@@ -84,6 +87,13 @@ class EventBatcher {
         }
         return null;
 
+    }
+
+    /**
+     * Stop the timer
+     */
+    stop() {
+        clearTimeout(this.timerId);
     }
 
 }
