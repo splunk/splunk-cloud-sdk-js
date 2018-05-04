@@ -78,12 +78,12 @@ describe('integration tests for Datasets Endpoints', () => {
 
 
         }))
-
     });
 
     describe('Get all the datasets', () => {
         it('should return an array of datasets', () => splunk.catalog.getDatasets().then(data => {
             assert.typeOf(data, 'array', 'response should be an array');
+            assert.equal(data.length, 3)
             data.forEach(dataset => {
                 assert('id' in dataset, 'dataset should contain key: id');
                 assert('name' in dataset, 'dataset should contain key: name');
