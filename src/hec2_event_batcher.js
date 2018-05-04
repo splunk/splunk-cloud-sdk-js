@@ -15,8 +15,7 @@ class EventBatcher {
         this.batchCount = batchCount;
         this.timeOut = timeOut;
         this.queue = [];
-        this.timerId = -1;
-        this.setTimer();
+        this.timerId = this.setTimer();
 
     }
 
