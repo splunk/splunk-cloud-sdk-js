@@ -8,7 +8,8 @@ const tenantID = process.env.TENANT_ID;
 const splunk = new SplunkSSC(`https://${config.novaHost}:443`, token, tenantID);
 const splunkWithIncorrectCredentials = new SplunkSSC(`https://${config.novaHost}:443`, config.invalidAuthToken, config.testTenant);
 
-// Scenario 1: Integration tests for Dataset endpoints
+// Scenario 1:
+// Integration tests for Data set endpoints
 // 1. Create multiple data sets
 // 2. Get and validate a particular data set
 // 3. Get all data sets and validate
@@ -100,11 +101,12 @@ describe('integration tests for Datasets Endpoints', () => {
     });
 });
 
-// Scenario 2: Integration tests for Dataset endpoints - Error scenarios
+// Scenario 2:
+// Integration tests for Data set endpoints - Error scenarios
 // 1. Post a Data set, repeat post a dataset with the same name, validate 409 conflict
 // 2. Post an invalid Data set, validate a 400 response
 // 3. Delete a unknown Data set, validate a 404
-// 4. Get on a non-existent dataset 404// types kind  One of "catalog", "EXTERN", "INDEX", "KVSTORE", "TOPIC"," VIEW"
+// 4. Get on a non-existent dataset 404
 describe('integration error tests for Datasets Endpoints', () => {
     const dataSetName = "ds400";
 
@@ -285,7 +287,7 @@ describe('integration tests for Rules Endpoints', () => {
         }));
     });
 
-    describe('Delete an invaild test rule', () => {
+    describe('Delete an invalid test rule', () => {
         it('should throw a 404 NOT FOUND response when trying to delete a rule not present in nova store', () => splunk.catalog.deleteRule(ruleName4).then(success =>
             assert.fail(success), err => assert.equal(err.code, "404")
         ));
