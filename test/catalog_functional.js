@@ -15,76 +15,70 @@ const splunkWithIncorrectCredentials = new SplunkSSC(`https://${config.novaHost}
 // 3. Get all data sets and validate
 // 4. Delete the data sets created in the test
 describe('integration tests for Datasets Endpoints', () => {
-    const dataSetName1 = "ds1";
-    const dataSetName2 = "ds2";
-    const dataSetName3 = "ds3";
-
-    before(() => {
-        // add any set up tasks here
-    });
+    const integrationTestDatasetName1 = "ds1";
+    const integrationTestDatasetName2 = "ds2";
+    const integrationTestDatasetName3 = "ds3";
 
     describe('Post a Data set', () => {
-        const postDataset1 =
+        const testPostDataset1 =
             {
-                "name": dataSetName1,
+                "name": integrationTestDatasetName1,
                 "kind": "VIEW",
                 "todo": "string",
             };
-        const postDataset2 =
+        const testPostDataset2 =
             {
-                "name": dataSetName2,
+                "name": integrationTestDatasetName2,
                 "kind": "INDEX",
                 "todo": "string",
             };
-        const postDataset3 =
+        const testPostDataset3 =
             {
-                "name": dataSetName3,
+                "name": integrationTestDatasetName3,
                 "kind": "VIEW",
                 "todo": "string",
                 "rules": [
                     "rule12"
                 ]
             };
-        it('should return the created dataset with post', () => splunk.catalog.createDataset(postDataset1).then(response => {
+        it('should return the created dataset with post', () => splunk.catalog.createDataset(testPostDataset1).then(response => {
             assert(response);
             assert(response.id);
-            assert.equal(response.name, dataSetName1, "Name should be equal")
+            assert.equal(response.name, integrationTestDatasetName1, "Name should be equal")
             assert.equal(response.kind, "VIEW")
         }));
 
-        it('should return the created dataset with post', () => splunk.catalog.createDataset(postDataset2).then(response => {
+        it('should return the created dataset with post', () => splunk.catalog.createDataset(testPostDataset2).then(response => {
             assert(response);
             assert(response.id);
-            assert.equal(response.name, dataSetName2, "Name should be equal")
+            assert.equal(response.name, integrationTestDatasetName2, "Name should be equal")
             assert.equal(response.kind, "INDEX")
         }));
 
-        it('should return the created dataset with post', () => splunk.catalog.createDataset(postDataset3).then(response => {
+        it('should return the created dataset with post', () => splunk.catalog.createDataset(testPostDataset3).then(response => {
             assert(response);
             assert(response.id);
-            assert.equal(response.name, dataSetName3, "Name should be equal")
+            assert.equal(response.name, integrationTestDatasetName3, "Name should be equal")
             assert.equal(response.kind, "VIEW")
             assert.equal(response.rules.length, 1)
         }));
     });
 
     describe('Get a Data set', () => {
-        it('should return an array of datasets', () => splunk.catalog.getDataset(dataSetName1).then(dataset => {
+        it('should return an array of datasets', () => splunk.catalog.getDataset(integrationTestDatasetName1).then(dataset => {
             assert.typeOf(dataset, 'object', 'response data should be an object');
             assert('id' in dataset, 'dataset should contain key: id');
             assert('name' in dataset, 'dataset should contain key: name');
             assert('kind' in dataset, 'dataset should contain key: kind');
-            assert.equal(dataset.name, dataSetName1)
+            assert.equal(dataset.name, integrationTestDatasetName1)
             assert.equal(dataset.kind, "VIEW")
-
-
         }))
     });
 
     describe('Get all the datasets', () => {
         it('should return an array of datasets', () => splunk.catalog.getDatasets().then(data => {
             assert.typeOf(data, 'array', 'response should be an array');
-            assert.equal(data.length, 3)
+            assert.isAtLeast(data.length, 3)
             data.forEach(dataset => {
                 assert('id' in dataset, 'dataset should contain key: id');
                 assert('name' in dataset, 'dataset should contain key: name');
@@ -95,9 +89,9 @@ describe('integration tests for Datasets Endpoints', () => {
 
     // Clean up the data sets after tests are done
     after(() => {
-        splunk.catalog.deleteDataset(dataSetName1)
-        splunk.catalog.deleteDataset(dataSetName2)
-        splunk.catalog.deleteDataset(dataSetName3)
+        splunk.catalog.deleteDataset(integrationTestDatasetName1)
+        splunk.catalog.deleteDataset(integrationTestDatasetName2)
+        splunk.catalog.deleteDataset(integrationTestDatasetName3)
     });
 });
 
@@ -108,22 +102,18 @@ describe('integration tests for Datasets Endpoints', () => {
 // 3. Delete a unknown Data set, validate a 404
 // 4. Get on a non-existent dataset 404
 describe('integration error tests for Datasets Endpoints', () => {
-    const dataSetName = "ds400";
-
-    before(() => {
-        // add any set up tasks here
-    });
+    const integrationTestErrorDatasetName = "ds400";
 
     describe('Test Post a Data set', () => {
-        const postDataset =
+        const testPostDataset =
             {
-                "name": dataSetName,
+                "name": integrationTestErrorDatasetName,
                 "kind": "VIEW",
                 "todo": "string",
             };
-        const invalidPostDataset =
+        const testInvalidPostDataset =
             {
-                "name": dataSetName,
+                "name": integrationTestErrorDatasetName,
                 "kind": "VIEW",
                 "rules": [
                     {
@@ -131,18 +121,18 @@ describe('integration error tests for Datasets Endpoints', () => {
                     }
                 ]
             };
-        it('should return the created dataset with post for error test', () => splunk.catalog.createDataset(postDataset).then(response => {
+        it('should return the created dataset with post for error test', () => splunk.catalog.createDataset(testPostDataset).then(response => {
             assert(response);
             assert(response.id);
-            assert.equal(response.name, dataSetName, "Name should be equal")
+            assert.equal(response.name, integrationTestErrorDatasetName, "Name should be equal")
             assert.equal(response.kind, "VIEW")
         }));
 
-        it('should throw a 409 CONFLICT response when creating an already existing Data set', () => splunk.catalog.createDataset(postDataset).then(success =>
+        it('should throw a 409 CONFLICT response when creating an already existing Data set', () => splunk.catalog.createDataset(testPostDataset).then(success =>
             assert.fail(success), err => assert.equal(err.code, "409")
         ));
 
-        it('should throw a 400 BAD REQUEST response when invalid post data specified to create a Data set', () => splunk.catalog.createDataset(invalidPostDataset).then(success =>
+        it('should throw a 400 BAD REQUEST response when invalid post data specified to create a Data set', () => splunk.catalog.createDataset(testInvalidPostDataset).then(success =>
             assert.fail(success), err => assert.equal(err.code, "400")
         ));
 
@@ -158,7 +148,7 @@ describe('integration error tests for Datasets Endpoints', () => {
 
     // Clean up the data sets after tests are done
     after(() => {
-        splunk.catalog.deleteDataset(dataSetName)
+        splunk.catalog.deleteDataset(integrationTestErrorDatasetName)
     });
 });
 
@@ -171,19 +161,15 @@ describe('integration error tests for Datasets Endpoints', () => {
 // 6. Create a duplicate/already existing rule: should return '409 conflict' error
 describe('integration tests for Rules Endpoints', () => {
 
-    const ruleName1 = "rule1"
-    const ruleName2 = "rule2"
-    const ruleName3 = "rule3"
-    const ruleName4 = "rule4"
-
-    before(() => {
-        // Make sure the NOVA playground is stable. TODO (Parul): Health check on Nova playground
-    });
+    const integrationTestRuleName1 = "rule1"
+    const integrationTestRuleName2 = "rule2"
+    const integrationTestRuleName3 = "rule3"
+    const integrationTestRuleName4 = "rule4"
 
     describe('Post new test rules', () => {
-        const postRule1 =
+        const testPostRule1 =
             {
-                "name": ruleName1,
+                "name": integrationTestRuleName1,
                 "match": "newrule",
                 "priority": 7,
                 "description": "first test rule",
@@ -204,9 +190,9 @@ describe('integration tests for Rules Endpoints', () => {
                     }
                 ]
             };
-        const postRule2 =
+        const testPostRule2 =
             {
-                "name": ruleName2,
+                "name": integrationTestRuleName2,
                 "match": "newrule",
                 "priority": 8,
                 "description": "second test rule",
@@ -223,9 +209,9 @@ describe('integration tests for Rules Endpoints', () => {
                     }
                 ]
             };
-        const postRule3 =
+        const testPostRule3 =
             {
-                "name": ruleName3,
+                "name": integrationTestRuleName3,
                 "match": "newrule",
                 "priority": 9,
                 "description": "third test rule",
@@ -244,31 +230,31 @@ describe('integration tests for Rules Endpoints', () => {
                 ]
             };
 
-        it('should return the created rule rule1 in the response', () => splunk.catalog.createRule(postRule1).then(response => {
+        it('should return the created rule rule1 in the response', () => splunk.catalog.createRule(testPostRule1).then(response => {
             assert(response);
             assert(response.id);
-            assert.equal(response.name, ruleName1, "Name should be equal")
+            assert.equal(response.name, integrationTestRuleName1, "Name should be equal")
             assert.equal(response.match, "newrule")
             assert.equal(response.priority, 7)
             assert.equal(response.description, "first test rule")
             assert.equal(response.actions.length, 3)
         }));
 
-        it('should throw a 409 CONFLICT response when creating an already existing rule', () => splunk.catalog.createRule(postRule1).then(success =>
+        it('should throw a 409 CONFLICT response when creating an already existing rule', () => splunk.catalog.createRule(testPostRule1).then(success =>
             assert.fail(success), err => assert.equal(err.code, "409")
         ));
 
-        it('should return the created rule rule2 in the response', () => splunk.catalog.createRule(postRule2).then(response => {
+        it('should return the created rule rule2 in the response', () => splunk.catalog.createRule(testPostRule2).then(response => {
             assert(response);
             assert(response.id);
-            assert.equal(response.name, ruleName2, "Name should be equal")
+            assert.equal(response.name, integrationTestRuleName2, "Name should be equal")
             assert.equal(response.match, "newrule")
             assert.equal(response.priority, 8)
             assert.equal(response.description, "second test rule")
             assert.equal(response.actions.length, 2)
         }));
 
-        it('should throw a 400 BAD REQUEST response when invalid post data specified to create a test rule', () => splunk.catalog.createRule(postRule3).then(success =>
+        it('should throw a 400 BAD REQUEST response when invalid post data specified to create a test rule', () => splunk.catalog.createRule(testPostRule3).then(success =>
             assert.fail(success), err => assert.equal(err.code, "400")
         ));
     });
@@ -276,7 +262,7 @@ describe('integration tests for Rules Endpoints', () => {
     describe('Get test rules', () => {
         it('should return an array of rules', () => splunk.catalog.getRules("").then(data => {
             assert.typeOf(data, 'array', 'response should be an array')
-            assert.equal(data.length, 2)
+            assert.isAtLeast(data.length, 2)
             data.forEach(rule => {
                 assert('name' in rule, 'rule should contain key: name')
                 assert('match' in rule, 'rule should contain key: match')
@@ -288,21 +274,21 @@ describe('integration tests for Rules Endpoints', () => {
     });
 
     describe('Delete an invalid test rule', () => {
-        it('should throw a 404 NOT FOUND response when trying to delete a rule not present in nova store', () => splunk.catalog.deleteRule(ruleName4).then(success =>
+        it('should throw a 404 NOT FOUND response when trying to delete a rule not present in nova store', () => splunk.catalog.deleteRule(integrationTestRuleName4).then(success =>
             assert.fail(success), err => assert.equal(err.code, "404")
         ));
     });
 
     describe('Delete valid test rule with invalid authToken', () => {
-        it('should throw a 401 NOT AUTHORIZED response when trying to delete a valid rule with invalid authToken', () => splunkWithIncorrectCredentials.catalog.deleteRule(ruleName1).then(success =>
+        it('should throw a 401 NOT AUTHORIZED response when trying to delete a valid rule with invalid authToken', () => splunkWithIncorrectCredentials.catalog.deleteRule(integrationTestRuleName1).then(success =>
             assert.fail(success), err => assert.equal(err.code, "401")
         ));
     });
 
     // clean up the created rules else would get 409 conflict error
     after(() => {
-        splunk.catalog.deleteRule(ruleName1)
-        splunk.catalog.deleteRule(ruleName2)
+        splunk.catalog.deleteRule(integrationTestRuleName1)
+        splunk.catalog.deleteRule(integrationTestRuleName2)
     });
 });
 
