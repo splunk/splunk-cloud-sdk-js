@@ -4,19 +4,18 @@
  *
  * @param {HEC2Service} hec2 - Proxies for the HEC2 APIs
  * @param {int} batchSize - Size of events in bytes
- * @param {int} bathcCount - Number of events
- * @param {int} timeOut - Interval (milliseconds) to send the events and flush the queue
+ * @param {int} batchCount - Number of events
+ * @param {int} timeout - Interval (milliseconds) to send the events and flush the queue
  */
 class EventBatcher {
 
-    constructor(hec2, batchSize, batchCount, timeOut) {
+    constructor(hec2, batchSize, batchCount, timeout) {
         this.hec2 = hec2;
         this.batchSize = batchSize;
         this.batchCount = batchCount;
-        this.timeOut = timeOut;
+        this.timeout = timeout;
         this.queue = [];
         this.timerId = this.setTimer();
-
     }
 
     /**
@@ -28,7 +27,6 @@ class EventBatcher {
     add(event) {
         this.queue.push(event);
         return this.run();
-
     }
 
     /**
@@ -41,11 +39,8 @@ class EventBatcher {
         return setTimeout(() => {
             if (this.queue.length > 0) {
                 this.flush();
-
             }
-
-        }, this.timeOut)
-
+        }, this.timeout)
     }
 
     /**
@@ -55,7 +50,6 @@ class EventBatcher {
     resetTimer() {
         this.stop();
         this.timerId = this.setTimer();
-
     }
 
     /**
@@ -68,11 +62,12 @@ class EventBatcher {
         this.queue = [];
         this.resetTimer();
         return this.hec2.createEvents(data);
-
     }
 
     /**
-     * Send events to HEC based on the batchSize, batchCount and timer.
+     * Process the events in the queue, sends them to HEC when the queue limits are met or exceeded.
+     * If the events are sent a Promise will be returned, otherwise the event will be queue until the limit is reached.
+     * A timer will run periodically to ensure that events don't stay queued too long.
      *
      * @return {Promise<HEC2Service~Response>} - can return null if event has not been sent yet.
      * @private
@@ -83,10 +78,8 @@ class EventBatcher {
 
         if (maxCountReached || eventByteSize >= this.batchSize) {
             return this.flush();
-
         }
         return null;
-
     }
 
     /**
