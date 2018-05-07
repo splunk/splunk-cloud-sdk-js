@@ -155,10 +155,11 @@ class ServiceClient {
      * case an API endpoint is unsupported by the SDK.
      * @param path - Path portion of the URL to request from Splunk
      * @param data - Data object (to be converted to JSON) to supply as POST body
+     * @param {Object} query - Object that contains query parameters
      * @returns {Promise<object>}
      */
-    post(path, data) {
-        return fetch(this.buildUrl(path), {
+    post(path, data, query) {
+        return fetch(this.buildUrl(path, query), {
             method: 'POST',
             body: JSON.stringify(data),
             headers: this._buildHeaders()
