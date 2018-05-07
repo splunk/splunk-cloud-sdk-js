@@ -20,3 +20,9 @@ describe("integration Using Search APIs", () => {
         });
     });
 });
+
+describe("integration failure", () => {
+    it("should always fail", () => {
+        expect(1).equals(2);
+    });
+});
