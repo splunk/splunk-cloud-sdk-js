@@ -74,7 +74,6 @@ describe('Events Endpoint', () => {
                     eb.add(events[i]).then(response => {
                         assert.deepEqual(response, successResponse, 'response should be expected success response.');
                     });
-
                 }
 
             } finally {
@@ -114,7 +113,6 @@ describe('Events Endpoint', () => {
             try {
                 const result = eb.add(event1);
                 assert.isNull(result);
-
             } finally {
                 eb.stop();
                 eb = null;

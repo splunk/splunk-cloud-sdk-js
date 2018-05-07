@@ -66,7 +66,7 @@ class EventBatcher {
 
     /**
      * Process the events in the queue, sends them to HEC when the queue limits are met or exceeded.
-     * If the events are sent a Promise will be returned, otherwise the event will be queue until the limit is reached.
+     * If the events are sent, a Promise will be returned otherwise the event will be queued until the limit is reached.
      * A timer will run periodically to ensure that events don't stay queued too long.
      *
      * @return {Promise<HEC2Service~Response>} - can return null if event has not been sent yet.
