@@ -290,5 +290,39 @@ describe('integration tests for Rules Endpoints', () => {
         splunk.catalog.deleteRule(integrationTestRuleName1)
         splunk.catalog.deleteRule(integrationTestRuleName2)
     });
+
 });
+
+// Scenario 4: Integration tests for Delete Dataset
+// 1. Create Data set
+// 2. Delete Data set
+// 3. Get Data set: should return '404 not found' error
+describe('integration tests for Delete Dataset Endpoint', () => {
+    const integrationTestDeleteDatasetName = "dsDelete";
+
+    describe('Delete a Data set and validate', () => {
+        const postDatasetDelete =
+                {
+                    "name": integrationTestDeleteDatasetName,
+                    "kind": "VIEW",
+                    "todo": "string",
+                    "rules": [
+                        "rule14"
+                    ]
+                };
+        it('should return the created dataset with post for delete test', () => splunk.catalog.createDataset(postDatasetDelete).then(response => {
+            assert(response);
+            assert(response.id);
+            assert.equal(response.name, integrationTestDeleteDatasetName, "Name should be equal")
+            assert.equal(response.kind, "VIEW")
+        }));
+        it('should delete data set', () => splunk.catalog.deleteDataset(integrationTestDeleteDatasetName).then(() => {
+            it('should throw a 404 Invalid', () => splunk.catalog.getDataset(integrationTestDeleteDatasetName).then(success =>
+                assert.fail(success), err => assert.equal(err.code, "404")
+            ));
+        }));
+    });
+});
+
+
 
