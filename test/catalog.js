@@ -1,5 +1,5 @@
 const config = require("./config");
-const SplunkSSC = require("../splunk");
+const SplunkSSC = require("../src/splunk");
 const {assert} = require("chai");
 
 const splunk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
@@ -29,7 +29,7 @@ describe('Datasets Endpoints', () => {
 
     describe('Post', () => {
         it('should return the created dataset with post', () => {
-            const postBody = 
+            const postBody =
       {
           "name": "ds1",
           "kind": "VIEW",
@@ -38,7 +38,7 @@ describe('Datasets Endpoints', () => {
           ],
           "todo": "string"
       };
-            const expectedResponse = 
+            const expectedResponse =
       {
           "id": "5ac534e00ed3330007caab68",
           "name": "ds1",
@@ -92,7 +92,7 @@ describe('Rules Endpoints', () => {
               }
           ]
       };
-            const expectedResponse = 
+            const expectedResponse =
       {
           "id": "5ac537f10ed3330007caab6c",
           "name": "rule4",
