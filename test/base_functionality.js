@@ -1,3 +1,4 @@
+require('isomorphic-fetch');
 const config = require("./config");
 const { ServiceClient } = require("../client");
 const chai = require("chai");
