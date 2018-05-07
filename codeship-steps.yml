@@ -1,17 +1,23 @@
-- type: serial
+- type: parallel
   steps:
-    # TODO: how can we run ONLY the integration tests in the ssc-client-js-with-stubby image
-    - name: test with coverage
-      service: ssc-client-js-with-stubby
-      command: bash -c 'yarn run codecov'
-    - name: deploy
-      service: ssc-client-js-with-stubby
-      tag: master
-      command: ./ci/publish.sh
+  - type: serial
+    steps:
+      # TODO: how can we run ONLY the integration tests in the ssc-client-js-with-stubby image
+      - name: test with coverage
+        service: ssc-client-js-with-stubby
+        command: bash -c 'yarn run codecov'
+      - name: deploy
+        service: ssc-client-js-with-stubby
+        tag: master
+        command: ./ci/publish.sh
 
-# Note: Disable integration tests for now to unblock PR's
-#- type: parallel
-#  steps:
-#    - name: integration
-#      service: ssc-client-js-against-playground
-#      command: bash -c "source ci/integration/runtests"
+  - type: parallel
+    steps:
+      - name: integration tests - not gated
+        service: ssc-client-js-against-playground
+        exclude: master
+        command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
+      - name: integration tests - gated
+        service: ssc-client-js-against-playground
+        tag: master
+        command: bash -c "./ci/integration/runtests.sh"

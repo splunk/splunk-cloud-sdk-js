@@ -12,7 +12,7 @@ describe("integration Using Search APIs", () => {
 
     describe("Submit a search", () => {
         it("should allow submission of a search", () => {
-            const response = splk.search.createJobSync({query: "search index=_internal"});
+            const response = splk.search.createJob({query: "search index=_internal | head 5"});
             return response.then((json) => {
                 expect(json).to.have.property("searchId");
                 expect(isGuid(json.searchId));
