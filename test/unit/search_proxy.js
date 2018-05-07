@@ -1,5 +1,5 @@
 const config = require("./config");
-const SplunkSSC = require("../splunk");
+const SplunkSSC = require("../../splunk");
 const { expect } = require("chai");
 
 describe("Using Search APIs", () => {
@@ -54,7 +54,7 @@ describe("Using Search APIs", () => {
 
 describe("Should be able to import only search", () => {
     it("should allow import of a single module", () => {
-        const SearchClient = require("../search");
+        const SearchClient = require("../../search");
         const search = new SearchClient(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
         return search.createJobSync({query: "search index=*"});
     });

@@ -1,5 +1,5 @@
 const config = require("./config");
-const { ServiceClient } = require("../client");
+const { ServiceClient } = require("../../client");
 const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
 

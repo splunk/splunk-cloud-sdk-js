@@ -1,6 +1,6 @@
 const config = require("./config");
-const SplunkSSC = require("../splunk");
-const { HEC2Service } = require("../hec2");
+const SplunkSSC = require("../../splunk");
+const { HEC2Service } = require("../../hec2");
 const { assert } = require("chai");
 
 const splunk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');

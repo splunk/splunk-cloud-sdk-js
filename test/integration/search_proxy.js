@@ -1,4 +1,4 @@
-const SplunkSSC = require("../splunk");
+const SplunkSSC = require("../../splunk");
 const { expect } = require("chai");
 const { isGuid } = require("is-guid");
 
