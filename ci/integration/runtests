@@ -1,4 +1,3 @@
-#!/bin/bash
 
 source ./ci/integration/okta.sh
 yarn example || exit 1
