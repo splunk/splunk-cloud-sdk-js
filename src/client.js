@@ -159,9 +159,14 @@ class ServiceClient {
      * @returns {Promise<object>}
      */
     post(path, data, query) {
+        let stringBody = data
+        if (typeof data !== "string") {
+            stringBody = JSON.stringify(data)
+        }
+
         return fetch(this.buildUrl(path, query), {
             method: 'POST',
-            body: JSON.stringify(data),
+            body: stringBody,
             headers: this._buildHeaders()
         }).then(response => handleResponse(response));
     }
