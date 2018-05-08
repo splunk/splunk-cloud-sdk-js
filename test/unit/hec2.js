@@ -1,4 +1,4 @@
-const config = require("./config");
+const config = require("../config");
 const SplunkSSC = require("../../splunk");
 const { HEC2Service } = require("../../hec2");
 const EventBatcher = require("../../hec2_event_batcher");

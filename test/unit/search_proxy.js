@@ -1,4 +1,4 @@
-const config = require("./config");
+const config = require("../config");
 const SplunkSSC = require("../../splunk");
 const { expect } = require("chai");
 
