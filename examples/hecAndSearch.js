@@ -4,7 +4,7 @@ const SplunkSSC = require("../splunk");
 // const TENANT_ID = process.env.TENANT_ID;
 
 const HOST = "https://next.splunknovadev-playground.com:443";
-const AUTH_TOKEN = "eyJraWQiOiJTVGR3WXFCVnFQZlpkeXNNUTQyOElEWTQ5VzRZQzN5MzR2ajNxSl9LRjlvIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULi1mZE8wT2luQ1pXcEtaNmt5M2ppX2ZSM2NZZjh2QkswdG42elB3QWg1anciLCJpc3MiOiJodHRwczovL3NwbHVuay1jaWFtLm9rdGEuY29tL29hdXRoMi9kZWZhdWx0IiwiYXVkIjoiYXBpOi8vZGVmYXVsdCIsImlhdCI6MTUyNTczMTE4MiwiZXhwIjoxNTI1NzM0NzgyLCJjaWQiOiIwb2FwYmcyem1MYW1wV2daNDJwNiIsInVpZCI6IjAwdTEwa20yMWhiT3BUbzdTMnA3Iiwic2NwIjpbInByb2ZpbGUiLCJvcGVuaWQiLCJlbWFpbCJdLCJzdWIiOiJ0ZXN0MUBzcGx1bmsuY29tIn0.BI2cOFAdrWIiZHLRDEjrjXg1MIGUx8ZMyOln0vaj5Ik1yZtmFyDem0ZhWh0rv0wW8PzYQjIVgdyAMs8VrZMQYiN79o087kfghaIPKy_S3MJdKwn_UDv6Qy6QsbprY9ayP1ldbJgHAWWuu5b2ju9pK-48w2M6eEcNJ02m8HJH09KqJ20XCl2YfADsBX9DWQ0PmUGa4Jsr39yIb_k2CS1V3b2B2I82b2H_NgQelAWie3rPkTuYmUd9oF8DdUIEldLvZBB1hJk3xkFLZKwy-APoZTBPL6PcfPN41xUibXPoFYfIR69yd1alRGL0F1Trn5mqPlTnW9FBt6YALQXZXnY6qQ";
+const AUTH_TOKEN = "eyJraWQiOiJTVGR3WXFCVnFQZlpkeXNNUTQyOElEWTQ5VzRZQzN5MzR2ajNxSl9LRjlvIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmF3cXoweWN0c3NhV0wtWFVLblFSUlA4bklZdXVhcGhOamc0TktlX3pKSlEiLCJpc3MiOiJodHRwczovL3NwbHVuay1jaWFtLm9rdGEuY29tL29hdXRoMi9kZWZhdWx0IiwiYXVkIjoiYXBpOi8vZGVmYXVsdCIsImlhdCI6MTUyNTgxNzI0OSwiZXhwIjoxNTI1ODIwODQ5LCJjaWQiOiIwb2FwYmcyem1MYW1wV2daNDJwNiIsInVpZCI6IjAwdTEwa20yMWhiT3BUbzdTMnA3Iiwic2NwIjpbInByb2ZpbGUiLCJlbWFpbCIsIm9wZW5pZCJdLCJzdWIiOiJ0ZXN0MUBzcGx1bmsuY29tIn0.WGsjT9BRpoTp3T1go5QvX2KOc7FA7zFVqrUa_fCv7tJMIkr8wsihZ2xJ3c2QuVRWEul4FG7p2yzUYQCfgOIG684NSfio1FCHfm5vCGO7LoX4Fly9exHikxFqEfxj8F-HRqivWO4ckYuPw21aBN4OxtC3_zxFheaXy-wE-P0qtlnJ_yLIauQcyOGzw_HHs36J_PG-dAmff1LdvEA4QXTbkNkZDzl32JPSKvZeTQKlMtivdX50byc0UjyTszwFDn5Yhss-AcUUX0SgkvT1oHleEAbONfh8sRMd-lGK55RoMsHMxKFiNuDgTzFuoAhRLXl83g0b4SoVfuds8rjBJ0U7Gg";
 const TENANT_ID = "3f64d905-ec7e-40a2-a43b-7217ccdae522";
 
 // ************* Authenticate a ServiceClient
@@ -91,6 +91,9 @@ const getSearchResult = async function(start) {
                 console.log("try search again ....");
                 console.log(`spent ${Date.now() - start}  `);
 
+                if(Date.now()-start>50000){
+                    return -1
+                }
                 return getSearchResult(start);
             }
 
@@ -100,4 +103,4 @@ const getSearchResult = async function(start) {
 };
 
 const start = Date.now();
-getSearchResult(start);
+getSearchResult(start)

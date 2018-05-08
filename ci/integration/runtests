@@ -1,4 +1,4 @@
 
 source ./ci/integration/okta.sh
-yarn example || exit 1
-#yarn test:integration || exit 1
+yarn example
+yarn test:integration
