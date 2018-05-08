@@ -1,4 +1,0 @@
-#!/bin/bash
-
-source ./ci/integration/okta.sh
-yarn run codecov:integration
