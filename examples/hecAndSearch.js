@@ -1,11 +1,12 @@
 const SplunkSSC = require("../splunk");
 
-// const AUTH_TOKEN = process.env.BEARER_TOKEN;
-// const TENANT_ID = process.env.TENANT_ID;
+const AUTH_TOKEN = process.env.BEARER_TOKEN;
+const TENANT_ID = process.env.TENANT_ID;
+const HOST = process.env.HOST;
 
-const HOST = "https://next.splunknovadev-playground.com:443";
-const AUTH_TOKEN = "eyJraWQiOiJTVGR3WXFCVnFQZlpkeXNNUTQyOElEWTQ5VzRZQzN5MzR2ajNxSl9LRjlvIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmF3cXoweWN0c3NhV0wtWFVLblFSUlA4bklZdXVhcGhOamc0TktlX3pKSlEiLCJpc3MiOiJodHRwczovL3NwbHVuay1jaWFtLm9rdGEuY29tL29hdXRoMi9kZWZhdWx0IiwiYXVkIjoiYXBpOi8vZGVmYXVsdCIsImlhdCI6MTUyNTgxNzI0OSwiZXhwIjoxNTI1ODIwODQ5LCJjaWQiOiIwb2FwYmcyem1MYW1wV2daNDJwNiIsInVpZCI6IjAwdTEwa20yMWhiT3BUbzdTMnA3Iiwic2NwIjpbInByb2ZpbGUiLCJlbWFpbCIsIm9wZW5pZCJdLCJzdWIiOiJ0ZXN0MUBzcGx1bmsuY29tIn0.WGsjT9BRpoTp3T1go5QvX2KOc7FA7zFVqrUa_fCv7tJMIkr8wsihZ2xJ3c2QuVRWEul4FG7p2yzUYQCfgOIG684NSfio1FCHfm5vCGO7LoX4Fly9exHikxFqEfxj8F-HRqivWO4ckYuPw21aBN4OxtC3_zxFheaXy-wE-P0qtlnJ_yLIauQcyOGzw_HHs36J_PG-dAmff1LdvEA4QXTbkNkZDzl32JPSKvZeTQKlMtivdX50byc0UjyTszwFDn5Yhss-AcUUX0SgkvT1oHleEAbONfh8sRMd-lGK55RoMsHMxKFiNuDgTzFuoAhRLXl83g0b4SoVfuds8rjBJ0U7Gg";
-const TENANT_ID = "3f64d905-ec7e-40a2-a43b-7217ccdae522";
+// const HOST = "https://next.splunknovadev-playground.com:443";
+// const AUTH_TOKEN = "eyJraWQiOiJTVGR3WXFCVnFQZlpkeXNNUTQyOElEWTQ5VzRZQzN5MzR2ajNxSl9LRjlvIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULllIY2ItTDhjSzJPQVlJbDdqejM3Y1B4SG5yWGhqMG9zVGFYV3dlcjVMN0UiLCJpc3MiOiJodHRwczovL3NwbHVuay1jaWFtLm9rdGEuY29tL29hdXRoMi9kZWZhdWx0IiwiYXVkIjoiYXBpOi8vZGVmYXVsdCIsImlhdCI6MTUyNTg5NzQ1OSwiZXhwIjoxNTI1OTAxMDU5LCJjaWQiOiIwb2FwYmcyem1MYW1wV2daNDJwNiIsInVpZCI6IjAwdTEwa20yMWhiT3BUbzdTMnA3Iiwic2NwIjpbImVtYWlsIiwib3BlbmlkIiwicHJvZmlsZSJdLCJzdWIiOiJ0ZXN0MUBzcGx1bmsuY29tIn0.kOmoxI00NPeadFaYWtcys1I4H0rm8lEoxcNZI6O8hIMFoatSj-KpOOWnOX83v6mkJm_cI24OnI-mP7RfICBCZ4jgN4Eu-bnwPDwM1ovN_TfLlwEJXQW-1AJWhLAJKxSxjE0oivQXZEWFYDqqrHsIPgc4GckdbI8j0jYrKwBnHKxoNkCEpPtw9dugY4itlJfSK5h7AwrgYfx1qi_gcSo1I3kAcSQuWa6xoqb1HFHS1lDQNWTW5sxvz_X6ZBFutsMkB7Em1JY-Umnly8AJme7oWpph0Sv914txWmaimin_6_R84WXJlcVLC7IgHstpyea7NOMMgb0oR_gGyD_vmi1UnA";
+// const TENANT_ID = "3f64d905-ec7e-40a2-a43b-7217ccdae522";
 
 // ************* Authenticate a ServiceClient
 const splunk = new SplunkSSC(`${HOST}`, AUTH_TOKEN, TENANT_ID);
@@ -92,7 +93,7 @@ const getSearchResult = async function(start) {
                 console.log(`spent ${Date.now() - start}  `);
 
                 if(Date.now()-start>50000){
-                    return -1
+                    throw Error("search process is timeout")
                 }
                 return getSearchResult(start);
             }
