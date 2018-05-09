@@ -6,8 +6,8 @@
   "scripts": {
     "build": "babel src -d .",
     "clean": "find src/ -name '*.js' | sed 's/src\\//./' | xargs rm",
-    "codecov": "npm run cover && codecov -f ./coverage/lcov.info",
-    "codecov:integration": "npm run cover:integration && codecov -f ./coverage-integration/lcov.info",
+    "codecov": "yarn cover && codecov -f ./coverage/lcov.info",
+    "codecov:integration": "yarn cover:integration && codecov -f ./coverage-integration/lcov.info",
     "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test && yarn run cover:report",
     "cover:integration": "NODE_ENV=coverage nyc --reporter=lcov --report-dir coverage-integration yarn test:integration && yarn run cover:report",
     "cover:report": "nyc report",
