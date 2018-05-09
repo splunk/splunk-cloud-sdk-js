@@ -1,11 +1,9 @@
 const SplunkSSC = require("../splunk");
 
+const HOST = "https://next.splunknovadev-playground.com:443";
 const AUTH_TOKEN = process.env.BEARER_TOKEN;
 const TENANT_ID = process.env.TENANT_ID;
-const HOST = process.env.HOST;
-
-// const HOST = "https://next.splunknovadev-playground.com:443";
-// const AUTH_TOKEN = "eyJraWQiOiJTVGR3WXFCVnFQZlpkeXNNUTQyOElEWTQ5VzRZQzN5MzR2ajNxSl9LRjlvIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULllIY2ItTDhjSzJPQVlJbDdqejM3Y1B4SG5yWGhqMG9zVGFYV3dlcjVMN0UiLCJpc3MiOiJodHRwczovL3NwbHVuay1jaWFtLm9rdGEuY29tL29hdXRoMi9kZWZhdWx0IiwiYXVkIjoiYXBpOi8vZGVmYXVsdCIsImlhdCI6MTUyNTg5NzQ1OSwiZXhwIjoxNTI1OTAxMDU5LCJjaWQiOiIwb2FwYmcyem1MYW1wV2daNDJwNiIsInVpZCI6IjAwdTEwa20yMWhiT3BUbzdTMnA3Iiwic2NwIjpbImVtYWlsIiwib3BlbmlkIiwicHJvZmlsZSJdLCJzdWIiOiJ0ZXN0MUBzcGx1bmsuY29tIn0.kOmoxI00NPeadFaYWtcys1I4H0rm8lEoxcNZI6O8hIMFoatSj-KpOOWnOX83v6mkJm_cI24OnI-mP7RfICBCZ4jgN4Eu-bnwPDwM1ovN_TfLlwEJXQW-1AJWhLAJKxSxjE0oivQXZEWFYDqqrHsIPgc4GckdbI8j0jYrKwBnHKxoNkCEpPtw9dugY4itlJfSK5h7AwrgYfx1qi_gcSo1I3kAcSQuWa6xoqb1HFHS1lDQNWTW5sxvz_X6ZBFutsMkB7Em1JY-Umnly8AJme7oWpph0Sv914txWmaimin_6_R84WXJlcVLC7IgHstpyea7NOMMgb0oR_gGyD_vmi1UnA";
+// const AUTH_TOKEN = "eyJraWQiOiJTVGR3WXFCVnFQZlpkeXNNUTQyOElEWTQ5VzRZQzN5MzR2ajNxSl9LRjlvIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULjJTaDNXMXZFNWNoZlhOSmhzeGtlY1BGV0xydFFvYUQ0Um0zV0dkZGo0cW8iLCJpc3MiOiJodHRwczovL3NwbHVuay1jaWFtLm9rdGEuY29tL29hdXRoMi9kZWZhdWx0IiwiYXVkIjoiYXBpOi8vZGVmYXVsdCIsImlhdCI6MTUyNTkwMTAwNCwiZXhwIjoxNTI1OTA0NjA0LCJjaWQiOiIwb2FwYmcyem1MYW1wV2daNDJwNiIsInVpZCI6IjAwdTEwa20yMWhiT3BUbzdTMnA3Iiwic2NwIjpbImVtYWlsIiwib3BlbmlkIiwicHJvZmlsZSJdLCJzdWIiOiJ0ZXN0MUBzcGx1bmsuY29tIn0.nNjDqow696Iiwyb6quSI9rGaUf3BVSuqYyLdntSxT8sPFowJ0Sz8wF6lVdHIozzMnTfv8kT5VCTl2h1m3YT-F__vphud16J6o8OB13vGfi5H8XuoZaehwqxVdB5-pGlNnh1PoRHggLsjSUpaQLQmtKe7j-7dm3AJhs07DZx0deJm_AkrmQ4o_BwEXLEupxgxXAnlXJGxi5go6ciiX3xXyP9qgTriNyrAE0laja_JPzBvyIPOKYjdXJE9Rxmk9OvueAcyiL-PQIWMS_uGmIoOkmsv-uRxl5K48N7pExP4xpzcWAP2Ys5jginZcFHxRsBlruBwEZpU61IaD8ZA_HqSJA";
 // const TENANT_ID = "3f64d905-ec7e-40a2-a43b-7217ccdae522";
 
 // ************* Authenticate a ServiceClient
@@ -92,8 +90,8 @@ const getSearchResult = async function(start) {
                 console.log("try search again ....");
                 console.log(`spent ${Date.now() - start}  `);
 
-                if(Date.now()-start>50000){
-                    throw Error("search process is timeout")
+                if(Date.now()-start>100000){
+                    throw Error("TIMEOUT!!!! Search is taking too long, terminate!")
                 }
                 return getSearchResult(start);
             }
