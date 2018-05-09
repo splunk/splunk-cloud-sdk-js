@@ -26,3 +26,7 @@
         service: ssc-client-js-against-playground
         tag: ^(master|develop)$
         command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
+      - name: run examples - not gated
+        service: ssc-client-js-against-playground
+        exclude: ^(master|develop)$
+        command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
