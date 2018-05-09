@@ -6,7 +6,7 @@
       # TODO: how can we run ONLY the integration tests in the ssc-client-js-with-stubby image
       - name: test with coverage
         service: ssc-client-js-with-stubby
-        command: bash -c 'yarn run codecov'
+        command: bash -c "yarn run codecov"
       - name: deploy
         service: ssc-client-js-with-stubby
         tag: master
