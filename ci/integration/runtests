@@ -1,4 +1,0 @@
-
-source ./ci/integration/okta.sh
-yarn example
-yarn test:integration

@@ -1,10 +1,11 @@
 const SplunkSSC = require("../splunk");
 
-const HOST = "https://next.splunknovadev-playground.com:443";
+const HOST = process.env.SSC_HOST
 const AUTH_TOKEN = process.env.BEARER_TOKEN;
 const TENANT_ID = process.env.TENANT_ID;
-// const AUTH_TOKEN = "eyJraWQiOiJTVGR3WXFCVnFQZlpkeXNNUTQyOElEWTQ5VzRZQzN5MzR2ajNxSl9LRjlvIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULjJTaDNXMXZFNWNoZlhOSmhzeGtlY1BGV0xydFFvYUQ0Um0zV0dkZGo0cW8iLCJpc3MiOiJodHRwczovL3NwbHVuay1jaWFtLm9rdGEuY29tL29hdXRoMi9kZWZhdWx0IiwiYXVkIjoiYXBpOi8vZGVmYXVsdCIsImlhdCI6MTUyNTkwMTAwNCwiZXhwIjoxNTI1OTA0NjA0LCJjaWQiOiIwb2FwYmcyem1MYW1wV2daNDJwNiIsInVpZCI6IjAwdTEwa20yMWhiT3BUbzdTMnA3Iiwic2NwIjpbImVtYWlsIiwib3BlbmlkIiwicHJvZmlsZSJdLCJzdWIiOiJ0ZXN0MUBzcGx1bmsuY29tIn0.nNjDqow696Iiwyb6quSI9rGaUf3BVSuqYyLdntSxT8sPFowJ0Sz8wF6lVdHIozzMnTfv8kT5VCTl2h1m3YT-F__vphud16J6o8OB13vGfi5H8XuoZaehwqxVdB5-pGlNnh1PoRHggLsjSUpaQLQmtKe7j-7dm3AJhs07DZx0deJm_AkrmQ4o_BwEXLEupxgxXAnlXJGxi5go6ciiX3xXyP9qgTriNyrAE0laja_JPzBvyIPOKYjdXJE9Rxmk9OvueAcyiL-PQIWMS_uGmIoOkmsv-uRxl5K48N7pExP4xpzcWAP2Ys5jginZcFHxRsBlruBwEZpU61IaD8ZA_HqSJA";
-// const TENANT_ID = "3f64d905-ec7e-40a2-a43b-7217ccdae522";
+// const HOST = "https://next.splunknovadev-playground.com:443";
+// const AUTH_TOKEN = "eyJraWQiOiJTVGR3WXFCVnFQZlpkeXNNUTQyOElEWTQ5VzRZQzN5MzR2ajNxSl9LRjlvIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULlFjSzNGcG5sVWp3bEQ5Z1VkVGdZTFVNbkVXY2lMY1ZKaUU2azZlRG0yREEiLCJpc3MiOiJodHRwczovL3NwbHVuay1jaWFtLm9rdGEuY29tL29hdXRoMi9kZWZhdWx0IiwiYXVkIjoiYXBpOi8vZGVmYXVsdCIsImlhdCI6MTUyNTk3MTY4OSwiZXhwIjoxNTI1OTc1Mjg5LCJjaWQiOiIwb2FwYmcyem1MYW1wV2daNDJwNiIsInVpZCI6IjAwdTEwa20yMWhiT3BUbzdTMnA3Iiwic2NwIjpbImVtYWlsIiwicHJvZmlsZSIsIm9wZW5pZCJdLCJzdWIiOiJ0ZXN0MUBzcGx1bmsuY29tIn0.YnSF2QwPEqgoOWR5p3DUstsExVFevQp8S8ptbs9LMDUKuDGOD6xBeQ9AlrMi-xur5mc8F95xJ5sHKjK1wfkVKzm4-0lVPkQ9v83q7fahX1E2sxDvwQ2moe2tXeW9iWED4gEKLT214LTDrkWU7_6Jc7u_bzmt5kOhFbTqQarQD0JgNGm81RluZ3-auN0Jed9dseQo1aHs3UBaZ15AoAhF-vM-nOnqiFGeoE3QGlpZMQWrvakDOcb8gAToLE56PQ_hIjdl1gMpS2Q6zqTc9p4pK6NZWx7x-x3s6aaTvZn1awcVwAm1hUVsAXtfjIo8hlVLMF_PMxNpeNGHuODLrUDOdQ";
+// const TENANT_ID = "22bc0f33-7228-47bc-9a7c-fa6b01392c51";
 
 // ************* Authenticate a ServiceClient
 const splunk = new SplunkSSC(`${HOST}`, AUTH_TOKEN, TENANT_ID);
@@ -68,6 +69,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+// check if the returned results contains the events we just sent via HEC
 const checkresult = function(jobResults) {
     let found = 0;
     Object.entries(jobResults.results).forEach(entry => {
@@ -81,13 +83,14 @@ const checkresult = function(jobResults) {
     return found;
 };
 
+// search results to make sure all 5 events can be found
 const getSearchResult = async function(start) {
     await sleep(5000);
     await splunk.search.createJobSync({ query: "search index=main" })
         .then(results => {
             const found = checkresult(results);
             if (found !== 5) {
-                console.log("try search again ....");
+                console.log("Try search again ....");
                 console.log(`spent ${Date.now() - start}  `);
 
                 if(Date.now()-start>100000){
@@ -101,5 +104,4 @@ const getSearchResult = async function(start) {
         });
 };
 
-const start = Date.now();
-getSearchResult(start)
+getSearchResult(Date.now())

@@ -30,7 +30,7 @@ class SearchService extends BaseApiService {
      * @return {Promise<SearchService~Job>}
      */
     getJob(jobId) {
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs','sync', jobId]));
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
     }
 
     /**
