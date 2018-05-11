@@ -3,7 +3,6 @@
 CONFIG_FILE="./okta/.token"
 if [ -f $CONFIG_FILE ]; then
     echo "Token found in $CONFIG_FILE"
-    cat $CONFIG_FILE
 else
     echo "Token was not set to $CONFIG_FILE"
     exit 1
