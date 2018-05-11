@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# TODO: instead of running okta.sh here, get creds from the service
-
-# source ./ci/integration/okta.sh
-echo $BEARER_TOKEN
-yarn test:integration || exit 1

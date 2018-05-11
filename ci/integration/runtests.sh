@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# source ./ci/integration/okta.sh
 CONFIG_FILE="./okta/.token"
 if [ -f $CONFIG_FILE ]; then
     echo "Token found in $CONFIG_FILE"
