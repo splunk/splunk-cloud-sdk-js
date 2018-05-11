@@ -80,3 +80,6 @@ codeship.aes
 
 # built files
 common/
+
+# Hide the token file created by token-fetcher
+okta/.token
