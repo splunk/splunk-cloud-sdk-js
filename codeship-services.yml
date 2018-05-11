@@ -22,6 +22,8 @@ ssc-client-js-against-playground:
   encrypted_env_file: ci/env.encrypted
   volumes_from:
     - ssc-sdk-shared-token-fetcher
+  environment:
+    - CI=true
 
 ssc-sdk-shared-stubby:
   image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest

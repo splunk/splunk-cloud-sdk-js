@@ -1,5 +1,5 @@
 module.exports = {
-    host: !!process.env.CI ? "ssc-sdk-shared-stubby" : "localhost",
+    host: process.env.CI ? "ssc-sdk-shared-stubby" : "localhost",
     authToken: "TEST_AUTH_TOKEN", // TODO (Parul): Generate a valid auth token on-the-fly
     invalidAuthToken: "TEST_INVALID_AUTH_TOKEN",
     novaHost: "next.splunknovadev-playground.com",
