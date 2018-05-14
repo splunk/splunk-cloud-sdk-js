@@ -3,11 +3,11 @@
 CONFIG_FILE="./okta/.token"
 if [ -f $CONFIG_FILE ]; then
     echo "Token found in $CONFIG_FILE"
+    BEARER_TOKEN=$(cat $CONFIG_FILE)
 else
     echo "Token was not set to $CONFIG_FILE"
     exit 1
 fi
-exit 0
 
 if [ "$allow_failures" -eq "1" ]; then
     echo "Running integration tests but not gating on failures..."
