@@ -1,6 +1,6 @@
 const SplunkSSC = require("../splunk");
 
-const HOST = process.env.SSC_HOST
+const HOST = process.env.SSC_HOST;
 const AUTH_TOKEN = process.env.BEARER_TOKEN;
 const { TENANT_ID } = process.env;
 
@@ -91,8 +91,8 @@ const getSearchResult = async function(start) {
                 console.log("Try search again ....");
                 console.log(`spent ${Date.now() - start}  `);
 
-                if(Date.now()-start>100000){
-                    throw Error("TIMEOUT!!!! Search is taking too long, terminate!")
+                if (Date.now() - start > 100000) {
+                    throw Error("TIMEOUT!!!! Search is taking too long, terminate!");
                 }
                 return getSearchResult(start);
             }
@@ -102,4 +102,4 @@ const getSearchResult = async function(start) {
         });
 };
 
-getSearchResult(Date.now())
+getSearchResult(Date.now());

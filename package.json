@@ -21,7 +21,7 @@
     "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/",
     "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
     "stop:swagger": "docker rm -f swagger",
-    "example": "yarn node examples/*.js"
+    "example": "node examples/*.js"
   },
   "author": "Splunk, Inc.",
   "license": "UNLICENSED",
