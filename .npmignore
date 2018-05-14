@@ -10,3 +10,4 @@ jsdoc.json
 .eslintrc.*
 .npmpignore
 .babelrc
+examples/
