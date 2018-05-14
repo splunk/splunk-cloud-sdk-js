@@ -7,7 +7,7 @@ ssc-sdk-shared-token-fetcher:
 
 ssc-client-js-with-stubby:
   build:
-    image: splunk/ssc-client-js
+    image: splunk/ssc-client-js-with-stubby
     dockerfile: ci/Dockerfile
   encrypted_env_file: ci/env.encrypted
   environment:
@@ -17,7 +17,7 @@ ssc-client-js-with-stubby:
 
 ssc-client-js-against-playground:
   build:
-    image: splunk/ssc-client-js-with-stubby
+    image: splunk/ssc-client-js-against-playground
     dockerfile: ci/Dockerfile
   encrypted_env_file: ci/env.encrypted
   volumes_from:
