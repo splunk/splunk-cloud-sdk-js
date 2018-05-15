@@ -1,16 +1,32 @@
-- type: serial
-  steps:
-    # TODO: how can we run ONLY the integration tests in the ssc-client-js-with-stubby image
-    - name: test with coverage
-      service: ssc-client-js-with-stubby
-      command: bash -c 'yarn run codecov'
-    - name: deploy
-      service: ssc-client-js-with-stubby
-      tag: master
-      command: ./ci/publish.sh
-
 - type: parallel
   steps:
-    - name: integration
-      service: ssc-client-js-against-playground
-      command: bash -c "source ci/integration/runtests"
+
+  - type: serial
+    steps:
+      # TODO: how can we run ONLY the integration tests in the ssc-client-js-with-stubby image
+      - name: test with coverage
+        service: ssc-client-js-with-stubby
+        command: bash -c "yarn run codecov"
+      - name: deploy
+        service: ssc-client-js-with-stubby
+        tag: master
+        command: ./ci/publish.sh
+
+  - type: parallel
+    steps:
+      - name: integration tests - not gated
+        service: ssc-client-js-against-playground
+        exclude: ^(master|develop)$
+        command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
+      - name: integration tests - gated
+        service: ssc-client-js-against-playground
+        tag: ^(master|develop)$
+        command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
+      - name: run examples - gated
+        service: ssc-client-js-against-playground
+        tag: ^(master|develop)$
+        command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
+      - name: run examples - not gated
+        service: ssc-client-js-against-playground
+        exclude: ^(master|develop)$
+        command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
