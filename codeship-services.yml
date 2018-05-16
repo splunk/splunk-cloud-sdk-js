@@ -24,8 +24,6 @@ ssc-client-js-against-playground:
     - ssc-sdk-shared-token-fetcher
   volumes:
     - ./okta:/okta
-  # volumes_from:
-  #   - ssc-sdk-shared-token-fetcher
   environment:
     - CI=true
 
