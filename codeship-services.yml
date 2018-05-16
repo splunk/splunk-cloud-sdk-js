@@ -22,8 +22,10 @@ ssc-client-js-against-playground:
   encrypted_env_file: ci/env.encrypted
   depends_on:
     - ssc-sdk-shared-token-fetcher
-  volumes_from:
-    - ssc-sdk-shared-token-fetcher
+  volumes:
+    - ./okta:/okta
+  # volumes_from:
+  #   - ssc-sdk-shared-token-fetcher
   environment:
     - CI=true
 
