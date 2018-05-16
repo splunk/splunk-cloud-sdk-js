@@ -1,30 +1,27 @@
-- type: parallel
+- type: serial
+  name: stubby 
   steps:
-
-  - type: serial
-    steps:
-      # TODO: how can we run ONLY the integration tests in the ssc-client-js-with-stubby image
-      - name: test with coverage
-        service: ssc-client-js-with-stubby
-        command: bash -c "yarn run codecov"
-      - name: deploy
-        service: ssc-client-js-with-stubby
-        tag: master
-        command: ./ci/publish.sh
-
-  - type: serial
-    steps:
-    - name: fetch Okta token
-      service: ssc-sdk-shared-token-fetcher
-      command: echo "hi"
-    - type: parallel
-      name: integration tests
+    - name: stubby tests with coverage
+      service: ssc-client-js-with-stubby
+      command: bash -c "yarn run codecov"
+    - type: serial
+      name: integration
       steps:
-        - name: integration tests - not gated
-          service: ssc-client-js-against-playground
-          exclude: ^(master|develop)$
-          command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
-        - name: integration tests - gated
-          service: ssc-client-js-against-playground
-          tag: ^(master|develop)$
-          command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
+      - name: fetch Okta token
+        service: ssc-sdk-shared-token-fetcher
+        command: echo "hi"
+      - type: parallel
+        name: integration tests
+        steps:
+          - name: integration tests - not gated
+            service: ssc-client-js-against-playground
+            exclude: ^(master|develop)$
+            command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
+          - name: integration tests - gated
+            service: ssc-client-js-against-playground
+            tag: ^(master|develop)$
+            command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
+    - name: deploy
+      service: ssc-client-js-with-stubby
+      tag: master
+      command: ./ci/publish.sh
