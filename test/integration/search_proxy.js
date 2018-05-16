@@ -4,11 +4,8 @@ const {isGuid} = require("is-guid");
 const {assert} = require("chai");
 const {expect} = require("chai");
 
-const token = "eyJraWQiOiJTVGR3WXFCVnFQZlpkeXNNUTQyOElEWTQ5VzRZQzN5MzR2ajNxSl9LRjlvIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmN3RVE5ZXdWaS1WLUhKc2Q3bEdKSnBaYjFHMXZpZFhwa2hHckxqM0hHa2MiLCJpc3MiOiJodHRwczovL3NwbHVuay1jaWFtLm9rdGEuY29tL29hdXRoMi9kZWZhdWx0IiwiYXVkIjoiYXBpOi8vZGVmYXVsdCIsImlhdCI6MTUyNjUwNDg3MywiZXhwIjoxNTI2NTA4NDczLCJjaWQiOiIwb2FwYmcyem1MYW1wV2daNDJwNiIsInVpZCI6IjAwdTEwa20yMWhiT3BUbzdTMnA3Iiwic2NwIjpbIm9wZW5pZCIsImVtYWlsIiwicHJvZmlsZSJdLCJzdWIiOiJ0ZXN0MUBzcGx1bmsuY29tIn0.L1lc343Vy_OmOh6Q118dNnUXzs9w5JVg8ftptTQuybeGdksSWG894v75rzFN0KJM6cNO1OFw8UTUJbDuJZESRzacXQ4xtwVe-GP2P1QRcLTZXv883H-EJt74YblSG5Qn-meTWZlJFfOVBd-_4O1vnnNOxRA8-qW7a_nh2qP9Td9klwvGoWVO6FVYjiwQSP_uoKXUTH3bvwCf9omO-ryN0dxq7IabYXF2K8VHJ6mVDd_2qRka-qLia86ixXgLk8ifjdJKtYy-wG9doGVINl_0qRmaSAag_yzZwkUfagmyqfL4G9BdSQt_7ovoYrH5MSa6Mv4lK_kI9-tssdeDxM2eKQ"
-const tenantID = "6fecc441-fb60-4992-a822-069feb622feb"
-
-// const token = process.env.BEARER_TOKEN;
-// const tenantID = process.env.TENANT_ID;
+const token = process.env.BEARER_TOKEN;
+const tenantID = process.env.TENANT_ID;
 
 const splunk = new SplunkSSC(`https://${config.novaHost}:443`, token, tenantID);
 
@@ -44,11 +41,12 @@ describe("integration tests Using Search APIs", () => {
     // Scenario 1:
     // Dispatch a new search job
     // Validate a search id is returned
-    // Repeat test with various other supported queryparams such as Limit, TTL, Timeout
+    // Repeat test with various other supported query params such as Limit, TTL, Timeout
+    // Error case when a bad search request is provided
 
     let searchGuid;
 
-    describe("Submit a search", () => {
+    describe("Create new search", () => {
 
         it("Dispatch a new search job", () => {
             const response = splunk.search.createJob(standardQuery);
@@ -92,6 +90,9 @@ describe("integration tests Using Search APIs", () => {
                 expect(isGuid(searchGuid));
             });
         });
+        it('should throw a 400 with a bad search request', () => splunk.search.createJob({}).then(success =>
+            assert.fail(success), err => assert.equal(err.code, "400")
+        ));
     });
 
     // Scenario 2:
@@ -99,7 +100,7 @@ describe("integration tests Using Search APIs", () => {
     // Validate a search id is returned
     // Get job results for that search id
     // Validate results are non-empty
-    // Test error scenario to Retrieve results when invalid searchId
+    // Error case to Retrieve results when invalid SearchId is specified
 
     describe("Create search and get search results ", () => {
         it("Create job and get search results for that search id", () => {
@@ -139,7 +140,7 @@ describe("integration tests Using Search APIs", () => {
     // Scenario 3:
     // Dispatch a new search job asynchronously
     // Validate results returned once the job completes and returns
-    // Repeat tests with various other supported queryparams such as Limit, TTL, Timeout
+    // Repeat tests with various other supported query params such as Limit, TTL, Timeout
 
     describe("Dispatch async search job ", () => {
         it("Dispatch a new search job asynchronously", () => {
@@ -194,7 +195,6 @@ describe("integration tests Using Search APIs", () => {
                 assert.fail(err)
             })
         });
-
     });
 });
 
