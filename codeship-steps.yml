@@ -9,7 +9,7 @@
       steps:
       - name: fetch Okta token
         service: ssc-sdk-shared-token-fetcher
-        command: echo "hi"
+        command: true
       - type: parallel
         name: integration tests
         steps:
