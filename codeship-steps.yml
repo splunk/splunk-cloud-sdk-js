@@ -12,13 +12,19 @@
         tag: master
         command: ./ci/publish.sh
 
-  - type: parallel
+  - type: serial
     steps:
-      - name: integration tests - not gated
-        service: ssc-client-js-against-playground
-        exclude: ^(master|develop)$
-        command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
-      - name: integration tests - gated
-        service: ssc-client-js-against-playground
-        tag: ^(master|develop)$
-        command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
+    - name: fetch Okta token
+      service: ssc-sdk-shared-token-fetcher
+      command: echo "hi"
+    - type: parallel
+      name: integration tests
+      steps:
+        - name: integration tests - not gated
+          service: ssc-client-js-against-playground
+          exclude: ^(master|develop)$
+          command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
+        - name: integration tests - gated
+          service: ssc-client-js-against-playground
+          tag: ^(master|develop)$
+          command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
