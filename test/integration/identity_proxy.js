@@ -4,17 +4,18 @@ const {assert} = require('chai');
 
 const token = process.env.BEARER_TOKEN;
 const tenantID = process.env.TENANT_ID;
+const sscHost = process.env.SSC_HOST;
 
-const splunk = new SplunkSSC(`https://${config.novaHost}:443`, token, tenantID);
-const splunkWithIncorrectCredentials = new SplunkSSC(`https://${config.novaHost}:443`, config.invalidAuthToken, config.testTenant);
+const splunk = new SplunkSSC(sscHost, token, tenantID);
+const splunkWithIncorrectCredentials = new SplunkSSC(sscHost, config.invalidAuthToken, config.testTenant);
 
 // Scenario 1:
 // Integration test for Tenant User endpoints
-// 1. Add new users to the tenant using Patch method
-// 2. Get and validate the newly added users
+// 1. Add new users to the tenant using addTenantUsers() method
+// 2. Get and validate the newly added users using getTenantUsers() method
 // 3. Add an already present user to the tenant, should throw 405 Method Not Allowed error
 // 4. Add a user list with duplicate entries, should throw 405 Method Not Allowed error
-// 5. Delete one of the users and validate the deletion process
+// 5. Delete one of the users and validate the deletion process using deleteTenantUsers() method
 // 6. Delete a user that is currently not present in the tenant, should throw 405 Method Not Allowed error
 // 7. Replace the existing list with new list of users
 // 8. Get and validate the replaced set of users
@@ -28,7 +29,7 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
             }
         ];
 
-    describe('Add new users to the tenant using the Patch API and validate', () => {
+    describe('Add new users to the tenant and validate', () => {
         const testPostUserList1 =
             [
                 {
@@ -61,7 +62,7 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
         }));
     });
 
-    describe('Add new users to the tenant using the Patch API - Error cases', () => {
+    describe('Add new users to the tenant - Error cases', () => {
         const testPostUserListError1 =
             [
                 {
@@ -88,7 +89,7 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
         ));
     });
 
-    describe('Delete selected users from the tenant using the Delete API', () => {
+    describe('Delete selected users from the tenant', () => {
         const testDeleteUserList1 =
             [
                 {
@@ -115,7 +116,7 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
         }));
     });
 
-    describe('Delete selected users from the tenant using the Delete API - Error case', () => {
+    describe('Delete selected users from the tenant - Error case', () => {
         const testDeleteUserListError1 =
             [
                 {
@@ -131,7 +132,7 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
         ));
     });
 
-    describe('Replace the current users from the tenant using the Put API', () => {
+    describe('Replace the current users from the tenant', () => {
         it('should replace the current users with the new users', () => splunk.identity.replaceTenantUsers(tenantID, testReplaceUserList1).then(response => {
             assert(!response)
         }));
@@ -145,13 +146,13 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
         }));
     });
 
-    describe('Get the current users from the tenant using the Get API - Error case, unauthorized user', () => {
+    describe('Get the current users from the tenant - Error case, unauthorized user', () => {
         it('should throw a 401 Unauthorized response when retrieving users list due to invalid auth Token', () => splunkWithIncorrectCredentials.identity.getTenantUsers(tenantID).then(success =>
             assert.fail(success), err => assert.equal(err.code, "401")
         ));
     });
 
-    describe('Replace the current users from the tenant using the Put API - Error case', () => {
+    describe('Replace the current users from the tenant - Error case', () => {
         const testReplaceUserListError1 =
             [
                 {
@@ -174,14 +175,14 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
 
 // Scenario 2:
 // Integration test for Tenant endpoints
-// 1. Create a new test tenant and validate
+// 1. Create a new test tenant using createTenant() method and validate using getUserProfile() method
 // 2. Post a tenant in invalid format and validate that a 422 error is thrown
-// 3. Delete the newly created test tenant and validate
+// 3. Delete the newly created test tenant using deleteTenant() method and validate using getUserProfile() method
 // 4. Delete a tenant which is currently not present in the user-profile and validate that a 404 error is thrown
 describe('integration tests for Identity Tenant Endpoints', () => {
     const integrationTestTenantID = "integration_test_tenant"
 
-    describe('Create a new tenant using the Post API and validate - Good and Bad cases', () => {
+    describe('Create a new tenant and validate - Good and Bad cases', () => {
         const testPostTenant1 =
             {
                 "tenantId": integrationTestTenantID
@@ -206,7 +207,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         ));
     });
 
-    describe('Delete the test tenant using the Delete API and validate - Good and Bad cases', () => {
+    describe('Delete the test tenant and validate - Good and Bad cases', () => {
         const testDeleteTenant = "integration_test_delete_tenant"
 
         it('should delete the selected test tenant from user', () => splunk.identity.deleteTenant(integrationTestTenantID).then(response => {
