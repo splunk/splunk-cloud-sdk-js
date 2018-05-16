@@ -160,8 +160,8 @@ class ServiceClient {
      */
     post(path, data, query) {
         return fetch(this.buildUrl(path, query), {
-            method: 'POST',
-            body: JSON.stringify(data),
+            method: "POST",
+            body: typeof data !== "string" ? JSON.stringify(data) : data,
             headers: this._buildHeaders()
         }).then(response => handleResponse(response));
     }
