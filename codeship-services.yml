@@ -20,6 +20,8 @@ ssc-client-js-against-playground:
     image: splunk/ssc-client-js-against-playground
     dockerfile: ci/Dockerfile
   encrypted_env_file: ci/env.encrypted
+  depends_on:
+    - ssc-sdk-shared-token-fetcher
   volumes_from:
     - ssc-sdk-shared-token-fetcher
   environment:
