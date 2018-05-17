@@ -5,9 +5,10 @@ const { assert } = require("chai");
 
 const token = process.env.BEARER_TOKEN;
 const tenantID = process.env.TENANT_ID;
+const sscHost = process.env.SSC_HOST;
 
-const splunk = new SplunkSSC(`https://${config.novaHost}:443`, token, tenantID);
-const splunkBadToken = new SplunkSSC(`https://${config.novaHost}:443`, config.invalidAuthToken, config.testTenant);
+const splunk = new SplunkSSC(sscHost, token, tenantID);
+const splunkBadToken = new SplunkSSC(sscHost, config.invalidAuthToken, config.testTenant);
 
 describe('integration tests for HEC2 Endpoints', () => {
 
