@@ -4,12 +4,10 @@ const HOST = process.env.SSC_HOST;
 const AUTH_TOKEN = process.env.BEARER_TOKEN;
 const { TENANT_ID } = process.env;
 
-
 // ************* Authenticate a ServiceClient
 const splunk = new SplunkSSC(`${HOST}`, AUTH_TOKEN, TENANT_ID);
 
 // ************* Add a rule via catalog to add field extractions
-// todo: implement this till catalog service support it
 const createCatalog = function() {
     const regex1 = {
         "owner": "splunk",
