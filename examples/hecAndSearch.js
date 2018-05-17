@@ -4,6 +4,7 @@ const HOST = process.env.SSC_HOST;
 const AUTH_TOKEN = process.env.BEARER_TOKEN;
 const { TENANT_ID } = process.env;
 
+
 // ************* Authenticate a ServiceClient
 const splunk = new SplunkSSC(`${HOST}`, AUTH_TOKEN, TENANT_ID);
 
@@ -101,14 +102,16 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// search for results and verify if all events are found
+// search for results and verify all events are found
 const searchResults = async function(start, timeout, query, expected) {
 
     await sleep(5000);
     console.log(`Spent ${Date.now() - start}ms to wait for events from query ${query}`);
 
     if (Date.now() - start > timeout) {
-        throw Error(`TIMEOUT!!!! Search is taking more than ${timeout}ms, terminate!`);
+        console.log(`TIMEOUT!!!! Search is taking more than ${timeout}ms. Terminate!`);
+        process.exit(1)
+
     }
 
     splunk.search.createJobSync({ "query": query })
@@ -126,11 +129,13 @@ const searchResults = async function(start, timeout, query, expected) {
 };
 
 
+// define search timeout constraint
 const timeout = 30 * 1000;
 
+// search for extracted field that defined by the catalog rule
 let query = `search index=main ${hostSource.host},${hostSource.source} | where device_id="aa3"`;
 searchResults(Date.now(), timeout, query, 1);
 
+// search for all events sent via HEC
 query = `search index=main ${hostSource.host},${hostSource.source}`;
-searchResults(Date.now(), timeout, query, 6);
-
+searchResults(Date.now(), timeout, query, 5);
