@@ -110,8 +110,7 @@ const searchResults = async function(start, timeout, query, expected) {
 
     if (Date.now() - start > timeout) {
         console.log(`TIMEOUT!!!! Search is taking more than ${timeout}ms. Terminate!`);
-        process.exit(1)
-
+        process.exit(1);
     }
 
     splunk.search.createJobSync({ "query": query })
@@ -121,9 +120,9 @@ const searchResults = async function(start, timeout, query, expected) {
                 searchResults(start, timeout, query, expected);
             } else if (retNum > expected) {
                 throw Error(`find more events than expected for query ${query}`);
+            } else if (retNum === expected) {
+                console.log(`Successfully found ${retNum} events for query ${query}`);
             }
-
-            console.log(`Successfully found ${retNum} events for query ${query}`);
         });
 
 };
