@@ -11,32 +11,19 @@ const splunk = new SplunkSSC(`${HOST}`, AUTH_TOKEN, TENANT_ID);
 const createCatalog = function() {
     const regex1 = {
         "owner": "splunk",
-        "created": "2018-05-14 08:16:19.000718",
-        "modified": "2018-05-14 08:16:19.000718",
         "capabilities": "1101-00000:11010",
         "version": 1,
-        "id": "5af9ee931eb835000a50eb3b",
-        "name": "aaa0",
+        "name": "regexrule1",
         "module": "",
         "match": "host::192.1.1.168",
         "actions": [
             {
                 "owner": "splunk",
-                "created": "2018-05-14 08:16:19.000718",
-                "modified": "2018-05-14 08:16:19.000718",
-                "capabilities": "1101-00000:11010",
-                "version": 1,
-                "id": "5af9ee931eb835000a50eb3c",
                 "kind": "REGEX",
-                "createdby": "splunk",
-                "modifiedby": "splunk",
-                "ruleid": "5af9ee931eb835000a50eb3b",
                 "field": "foo",
                 "pattern": "device_id=\\[w+\\](?<err_code>[^:]+)"
             }
-        ],
-        "createdby": "splunk",
-        "modifiedby": "splunk"
+        ]
     };
 
     splunk.catalog.createRule(regex1).then(data => console.log(data));
