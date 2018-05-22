@@ -1,4 +1,4 @@
-- type: serial
+- type: parallel
   name: stubby 
   steps:
     - name: stubby tests with coverage
