@@ -9,12 +9,12 @@ const HOST = process.env.SSC_HOST;
 const AUTH_TOKEN = process.env.BEARER_TOKEN;
 const { TENANT_ID } = process.env;
 
-// ***** STEP 1: Perform authentication
-// ***** DESCRIPTION: Authenticate a ServiceClient.
+// ***** STEP 1: Get Splunk SSC client
+// ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
 const splunk = new SplunkSSC(`${HOST}`, AUTH_TOKEN, TENANT_ID);
 
 // ***** STEP 2: Add field extractions
-// ***** DESCRIPTION: Add a rule to the Metadata Catalog to add field extractions to the data.
+// ***** DESCRIPTION: Add a field extraction rule to the data in the Metadata Catalog.
 const createCatalog = function() {
     const regex1 = {
         "owner": "splunk",
