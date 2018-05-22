@@ -1,13 +1,20 @@
+// ***** TITLE: Get data in using HEC
+// ***** DESCRIPTION: This example show show to get data in using the HTTP Event Collector (HEC) in 
+//              different ways, then runs a search to verify the data was added. 
+
+
 const SplunkSSC = require("../splunk");
 
 const HOST = process.env.SSC_HOST;
 const AUTH_TOKEN = process.env.BEARER_TOKEN;
 const { TENANT_ID } = process.env;
 
-// ************* Authenticate a ServiceClient
+// ***** STEP 1: Get Splunk SSC client
+// ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
 const splunk = new SplunkSSC(`${HOST}`, AUTH_TOKEN, TENANT_ID);
 
-// ************* Add a rule via catalog to add field extractions
+// ***** STEP 2: Add field extractions
+// ***** DESCRIPTION: Add a field extraction rule to the data in the Metadata Catalog.
 const createCatalog = function() {
     const regex1 = {
         "owner": "splunk",
@@ -32,7 +39,8 @@ const createCatalog = function() {
 
 createCatalog();
 
-// ************* Get data in using HEC
+// ***** STEP 3: Get data in using HEC
+// ***** DESCRIPTION: Send a single event, a batch of events, and raw events using HEC.
 const sendDataViaHec = function() {
     const host = `myhost-${new Date().getSeconds()}`;
     const source = `mysource-${new Date().getMinutes()}`;
@@ -62,17 +70,17 @@ const sendDataViaHec = function() {
         "event": `04-24-2018 12:32:23.258 -0700 INFO device_id:aa2 device_id=aa3 haha2 "9765f1bebdb4".  ${host},${source}`
     };
 
-    // using hec raw endpoint to send data
+    // Use the HEC raw endpoint to send data
     splunk.hec2.createRawEvent(event1).then(data => {
         console.log(data);
     });
 
-    // using hec events endpoint to send one event
+    // Use the HEC endpoint to send one event
     splunk.hec2.createEvent(event2).then(data => {
         console.log(data);
     });
 
-    // using hec events endpoint to send multiple events
+    // Use the HEC endpoint to send multiple events
     splunk.hec2.createEvents([event1, event2, event3]).then(data => {
         console.log(data);
     });
@@ -82,12 +90,13 @@ const sendDataViaHec = function() {
 
 const hostSource = sendDataViaHec();
 
-// ************* Search the data ingested above and ensure the field extractions are present.
+// ***** STEP 4: Verify the data
+// ***** DESCRIPTION: Search the data to ensure the data was ingested and field extractions are present.
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// search for results and verify all events are found
+// Search for results and verify that all events are found
 const searchResults = async function(start, timeout, query, expected) {
 
     await sleep(5000);
@@ -113,13 +122,13 @@ const searchResults = async function(start, timeout, query, expected) {
 };
 
 
-// define search timeout constraint
+// Define a search timeout constraint
 const timeout = 30 * 1000;
 
-// search for extracted field that defined by the catalog rule
+// Search for an extracted field that was defined by the Metadata Catalog rule
 let query = `search index=main ${hostSource.host},${hostSource.source} | where device_id="aa3"`;
 searchResults(Date.now(), timeout, query, 1);
 
-// search for all events sent via HEC
+// Search for all events that were sent using HEC
 query = `search index=main ${hostSource.host},${hostSource.source}`;
 searchResults(Date.now(), timeout, query, 5);
