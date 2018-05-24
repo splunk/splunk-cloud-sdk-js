@@ -33,6 +33,7 @@ class CatalogService extends BaseApiService {
     }
     /**
      * @private
+     * @param {string} datasetId
      * TODO: Remove this method as it's only for testing
      */
     getDatasetConf(datasetId) {
@@ -91,6 +92,7 @@ class CatalogService extends BaseApiService {
     }
     /**
      * @private
+     * @param {string} conf name
      * TODO: Remove this method as it's only for testing
      */
     getRuleConf(name) {
