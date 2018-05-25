@@ -35,17 +35,6 @@ class CatalogService extends BaseApiService {
     getDataset(datasetId) {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]));
     }
-<<<<<<< HEAD
-=======
-    /**
-     * @private
-     * @param {string} datasetId
-     * TODO: Remove this method as it's only for testing
-     */
-    getDatasetConf(datasetId) {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId, 'conf']));
-    }
->>>>>>> origin/changes_for_gateway
 
     /**
      * Delete the DatasetInfo and its dependencies with the specified id
