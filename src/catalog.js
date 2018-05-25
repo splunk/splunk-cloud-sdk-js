@@ -65,25 +65,9 @@ class CatalogService extends BaseApiService {
     }
 
     /**
-<<<<<<< HEAD
      * Get the matching list of Rules
      * @param {string} [filter] An SPL filter string
      * @returns {Promise<CatalogService~Rule>}
-=======
-     * Returns the rule identified by the given path.
-     * The path must be fully qualified, if the path is a prefix the request returns 404
-     * because it does identify a rule resource.
-     * @param {string} rulePath
-     * @return {Promise<CatalogService~Rule>}
-     */
-    getRule(rulePath) {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', rulePath]));
-    }
-    /**
-     * @private
-     * @param {string} conf name
-     * TODO: Remove this method as it's only for testing
->>>>>>> origin/changes_for_gateway
      */
     getRules(filter) {
         const query = {};
