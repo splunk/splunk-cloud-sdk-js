@@ -12,15 +12,11 @@ const ssc = new SplunkSSC(process.env.SSC_HOST, token, tenantID);
 describe("catalog v2", () => {
     describe("datasets", () => {
         it("should return datasets", () => ssc.catalog.getDatasets().then((dslist) => {
-            console.log("DS LIST");
-            console.log(dslist);
             assert(dslist.length > 0);
             assert(dslist[0].kind);
         }));
 
         it("should return datasets with filter", () => ssc.catalog.getDatasets('kind=="index"').then((dslist) => {
-            console.log("FILTERED DS LIST");
-            console.log(dslist);
             assert(dslist.length > 0);
             assert(dslist[0].kind === "index");
         }));
@@ -35,11 +31,10 @@ describe("catalog v2", () => {
                 disabled: false
             };
             return ssc.catalog.createDataset(dataset).then(ds => {
-                console.log("CREATE DATASET");
                 assert(ds.name === name);
                 assert(ds.kind === "index");
                 return ds.id;
-            }).then(id => ssc.catalog.deleteDataset(id).then((d) => console.log(d)));
+            }).then(id => ssc.catalog.deleteDataset(id));
 
         });
     }).timeout(10000);
