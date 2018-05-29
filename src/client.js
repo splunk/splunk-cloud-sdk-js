@@ -1,7 +1,8 @@
 class SplunkError extends Error {
-    constructor(message, code) {
+    constructor(message, code, source) {
         super(message);
         this.code = code;
+        this.source = source;
     }
 }
 
@@ -22,7 +23,11 @@ function handleResponse(response) {
         var err;
         try {
             var json = JSON.parse(text);
-            err = new SplunkError(json.message, response.status);
+            if (!json.message) {
+                // TODO: This shouldn't go to production
+                console.log(`Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`);
+            }
+            err = new SplunkError(json.message, response.status, source);
         } catch (ex) {
             err = new SplunkError(`Unknown error: ${text}`, response.status);
         }
@@ -93,7 +98,7 @@ class ServiceClient {
         if (!effectiveTenant) {
             throw new Error("No tenant specified");
         }
-        const path = `/api/${effectiveTenant}${servicePrefix}/${pathname.join("/")}`;
+        const path = `/${effectiveTenant}${servicePrefix}/${pathname.join("/")}`;
         const emptyElems = pathname.find(value => value.trim() === '');
         if (emptyElems) {
             throw new Error(`Empty elements in path: ${path}`)

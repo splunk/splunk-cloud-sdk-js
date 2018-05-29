@@ -1,5 +1,5 @@
 /*.js
-common/ # built dir
+./common/ # built dir
 !/.eslintrc.js
 
 # Don't check in API docs

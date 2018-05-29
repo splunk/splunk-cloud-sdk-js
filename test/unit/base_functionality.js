@@ -59,7 +59,7 @@ describe("Basic client functionality", () => {
                 s.buildPath('/PREFIX', ['foo', ' '], "TENANT");
                 failed = true;
             } catch (err) {
-                expect(err).to.have.property('message').that.matches(/\/api\/TENANT\/PREFIX\/foo\/ /);
+                expect(err).to.have.property('message').that.matches(/\/TENANT\/PREFIX\/foo\/ /);
             }
             if (failed) {
                 expect.fail('Should have thrown an error');
