@@ -23,7 +23,7 @@ describe("catalog v2", () => {
             const name = "FooBar";
             const dataset = {
                 name,
-                owner: "dponcelow@splunk.com",
+                owner: "test@splunk.com",
                 kind: "index",
                 capabilities: "1101-00000:11010",
                 disabled: false
