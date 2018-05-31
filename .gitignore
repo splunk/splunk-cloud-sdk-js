@@ -1,5 +1,5 @@
 /*.js
-common/ # built dir
+./common/ # built dir
 !/.eslintrc.js
 
 # Don't check in API docs
@@ -81,3 +81,6 @@ codeship.aes
 
 # built files
 common/
+
+# Hide the token file created by token-fetcher
+okta/.token
