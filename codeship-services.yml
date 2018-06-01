@@ -49,9 +49,11 @@ ssc-client-js-against-playground:
   depends_on:
     - ssc-sdk-shared-token-fetcher
     - ssc-sdk-shared-tenant-creation
+    - ssc-sdk-shared-tenant-deletion
   volumes_from:
     - ssc-sdk-shared-token-fetcher
     - ssc-sdk-shared-tenant-creation
+    - ssc-sdk-shared-tenant-deletion
   environment:
     - CI=true
 
