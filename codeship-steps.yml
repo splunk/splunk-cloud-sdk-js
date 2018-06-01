@@ -1,5 +1,5 @@
 - type: parallel
-  name: stubby 
+  name: stubby
   steps:
     - name: stubby tests with coverage
       service: ssc-client-js-with-stubby
