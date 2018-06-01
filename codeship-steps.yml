@@ -7,8 +7,11 @@
     - type: serial
       name: integration
       steps:
-      - name: fetch Okta token
+      - name: initialize token fetcher service
         service: ssc-sdk-shared-token-fetcher
+        command: true
+      - name: initialize tenant creation service
+        service: ssc-sdk-shared-tenant-creation
         command: true
       - type: parallel
         name: integration tests & examples
@@ -29,6 +32,9 @@
             service: ssc-client-js-against-playground
             exclude: ^(master|develop)$
             command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
+      - name: delete tenant that was created
+        service: ssc-sdk-shared-tenant-deletion
+        command: true
     - name: deploy
       service: ssc-client-js-with-stubby
       tag: master

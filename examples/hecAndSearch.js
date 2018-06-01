@@ -5,12 +5,10 @@
 
 const SplunkSSC = require("../splunk");
 
-const HOST = process.env.SSC_HOST;
-const AUTH_TOKEN = process.env.BEARER_TOKEN;
-const { TENANT_ID } = process.env;
+const { HOST, AUTH_TOKEN, TENANT_ID } = process.env;
 
 // ***** STEP 1: Get Splunk SSC client
-// ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
+// ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authentication token.
 const splunk = new SplunkSSC(`${HOST}`, AUTH_TOKEN, TENANT_ID);
 
 // ***** STEP 2: Add field extractions

@@ -1,11 +1,20 @@
 #!/bin/bash
 
-CONFIG_FILE="./okta/.token"
-if [ -f $CONFIG_FILE ]; then
-    echo "Token found in $CONFIG_FILE"
-    export BEARER_TOKEN=$(cat $CONFIG_FILE)
+TOKEN_FILE="./.config/okta/token"
+if [ -f $TOKEN_FILE ]; then
+    echo "Token found in $TOKEN_FILE"
+    BEARER_TOKEN=$(cat $TOKEN_FILE)
 else
-    echo "Token was not set to $CONFIG_FILE"
+    echo "Token was not set to $TOKEN_FILE"
+    exit 1
+fi
+
+TENANT_FILE="./.config/ssc/tenant_id"
+if [ -f $TENANT_FILE ]; then
+    echo "Tenant found in $TENANT_FILE"
+    TENANT_ID=$(cat $TENANT_FILE)
+else
+    echo "Tenant was not set to $TENANT_FILE"
     exit 1
 fi
 
