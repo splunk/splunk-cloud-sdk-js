@@ -4,6 +4,7 @@ TOKEN_FILE="./.config/okta/token"
 if [ -f $TOKEN_FILE ]; then
     echo "Token found in $TOKEN_FILE"
     BEARER_TOKEN=$(cat $TOKEN_FILE)
+    export BEARER_TOKEN
 else
     echo "Token was not set to $TOKEN_FILE"
     exit 1
@@ -13,6 +14,7 @@ TENANT_FILE="./.config/ssc/tenant_id"
 if [ -f $TENANT_FILE ]; then
     echo "Tenant found in $TENANT_FILE"
     TENANT_ID=$(cat $TENANT_FILE)
+    export TENANT_ID
 else
     echo "Tenant was not set to $TENANT_FILE"
     exit 1
