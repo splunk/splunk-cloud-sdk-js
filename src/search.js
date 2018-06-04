@@ -1,5 +1,5 @@
 const BaseApiService = require('./baseapiservice');
-const  { SEARCH_SERVICE_PREFIX } = require('./common/service_prefixes');
+const { SEARCH_SERVICE_PREFIX } = require('./common/service_prefixes');
 const { Observable } = require('rxjs/Observable');
 
 /**
@@ -43,7 +43,7 @@ class SearchService extends BaseApiService {
      * @return {Promise<string>}
      */
     createJobControlAction(jobId, action) {
-        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), action);
+        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), { action });
     }
 
     // FIXME: Can't have a GET with a body
@@ -55,15 +55,68 @@ class SearchService extends BaseApiService {
     //     return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), action);
     // }
 
+    // FIXME: Handle other terminals other than DONE
+    /**
+     * @param {string} jobId
+     * @param {number} [ pollInterval ]
+     * @return {Promise<SearchService~Job>}
+     */
+    waitForJob(jobId, pollInterval) {
+        const self = this;
+        const interval = pollInterval || 250;
+        return new Promise((resolve) => {
+            this.getJob(jobId).then(job => {
+                if (job.dispatchState === 'DONE') {
+                    resolve(job);
+                } else {
+                    setTimeout(() => {
+                        resolve(self.waitForJob(jobId, interval)); // Resolving with a promise which will then resolve- recursion with the event loop
+                    })
+                }
+            })
+        });
+    }
 
     /**
      * Returns results for the search job corresponding to "id".
      *         Returns results post-transform, if applicable.
      * @param jobId
+     * @param {number} [ offset ]
+     * @param {number} [ batchSize ]
      * @returns {Promise<object>}
      */
-    getResults(jobId) {
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']));
+    getResults(jobId, offset, batchSize) {
+        const args = {};
+        if (offset) {
+            args.offset = offset;
+        }
+
+        if (batchSize) {
+            args.count = batchSize;
+        }
+
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), args);
+    }
+
+    /**
+     * Returns events for the search job corresponding to "id".
+     *         Returns results post-transform, if applicable.
+     * @param jobId
+     * @param {number} [ offset ]
+     * @param {number} [ batchSize ]
+     * @returns {Promise<object>}
+     */
+    getEvents(jobId, offset, batchSize) {
+        const args = {};
+        if (offset) {
+            args.offset = offset;
+        }
+
+        if (batchSize) {
+            args.count = batchSize;
+        }
+
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'events']), args);
     }
 
     /**
