@@ -11,7 +11,7 @@ ssc-sdk-shared-tenant-creation:
     - ./.config/okta:/opt/splunk/ssc-sdk-shared/okta
 
 ssc-sdk-shared-tenant-deletion:
-  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-tenant-creation:temporary-deletion
+  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-tenant-creation:temporary
   dockercfg_service: aws-generator
   encrypted_env_file: ci/env.encrypted
   volumes_from:
@@ -25,7 +25,7 @@ ssc-sdk-shared-tenant-deletion:
     - ./.config/okta:/opt/splunk/ssc-sdk-shared/okta
 
 ssc-sdk-shared-token-fetcher:
-  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-token-fetcher:latest
+  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-token-fetcher:temporary
   dockercfg_service: aws-generator
   encrypted_env_file: ci/env.encrypted
   volumes:

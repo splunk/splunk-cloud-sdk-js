@@ -12,7 +12,7 @@
         command: true
       - name: initialize tenant creation service
         service: ssc-sdk-shared-tenant-creation
-        command: true
+        command: python /opt/splunk/ssc-sdk-shared/tenant-creation/tenant_creation.py
       - type: parallel
         name: integration tests & examples
         steps:
@@ -34,7 +34,7 @@
             command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
       - name: delete tenant that was created
         service: ssc-sdk-shared-tenant-deletion
-        command: true
+        command: python /opt/splunk/ssc-sdk-shared/tenant-creation/tenant_deletion.py
     - name: deploy
       service: ssc-client-js-with-stubby
       tag: master
