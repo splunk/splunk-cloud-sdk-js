@@ -6,7 +6,7 @@ const { Observable } = require('rxjs/Observable');
  * Encapsulates search endpoints
  */
 class SearchService extends BaseApiService {
-    // FIXME: this should _not_ be an object return type.
+    // TODO:(dp) this should _not_ be an object return type.
     /**
      * Get details of all current searches.
      * @param jobArgs {SearchService~JobsRequest}
@@ -16,7 +16,7 @@ class SearchService extends BaseApiService {
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs);
     }
 
-    // FIXME: this should _not_ be a string return type.
+    // TODO:(dp) this should _not_ be a string return type.
     /**
      * Dispatch a search and return the newly created search job
      * @param jobArgs {SearchService~PostJobsRequest}
@@ -26,7 +26,7 @@ class SearchService extends BaseApiService {
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs);
     }
 
-    // FIXME: response is undefined in yaml
+    // TODO:(dp) response is undefined in yaml spec
     /**
      * Returns the job resource with the given `id`.
      * @param {string} jobId
@@ -36,7 +36,7 @@ class SearchService extends BaseApiService {
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
     }
 
-    // FIXME: response should not be a string
+    // TODO:(dp) response should not be a string
     /**
      * @param {string} jobId
      * @param {SearchService~JobControlAction} action
@@ -46,16 +46,7 @@ class SearchService extends BaseApiService {
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), { action });
     }
 
-    // FIXME: Can't have a GET with a body
-    /**
-     * @param {string} jobId
-     * @param {SearchService~FetchResultsRequest} resultsRequest
-     */
-    // getJobResults(jobId, resultsRequest) {
-    //     return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), action);
-    // }
-
-    // FIXME: Handle other terminals other than DONE
+    // TODO:(dp) Handle other terminals other than DONE (when I figure out what they are)
     /**
      * @param {string} jobId
      * @param {number} [ pollInterval ]
@@ -128,30 +119,6 @@ class SearchService extends BaseApiService {
         return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
     }
 
-    /**
-     * Performs a search and returns an Observable of
-     * Splunk events for the search.
-     * @param searchArgs
-     * @returns {Observable}
-     */
-    searchObserver(searchArgs) {
-        /* Not actually a sync method, but named as such in the API */
-        const promise = this.createJobSync(searchArgs);
-        return Observable.create(observable => {
-            promise.then(
-                data => {
-                    /* eslint-disable-next-line no-restricted-syntax */
-                    for (const evt of data.results) {
-                        observable.next(evt);
-                    }
-                    observable.complete();
-                },
-                err => {
-                    observable.error(err);
-                }
-            );
-        });
-    }
 }
 
 /**
