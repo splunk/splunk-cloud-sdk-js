@@ -10,7 +10,7 @@
       - name: initialize token fetcher service
         service: ssc-sdk-shared-token-fetcher
         command: true
-      - name: initialize tenant creation service
+      - name: create a tenant for CI
         service: ssc-sdk-shared-tenant-creation
         command: python /opt/splunk/ssc-sdk-shared/tenant-creation/tenant_creation.py
       - type: parallel

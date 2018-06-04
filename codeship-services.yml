@@ -2,20 +2,19 @@ ssc-sdk-shared-tenant-creation:
   image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-tenant-creation:temporary
   dockercfg_service: aws-generator
   encrypted_env_file: ci/env.encrypted
-  volumes_from:
-    - ssc-sdk-shared-token-fetcher
   depends_on:
+    - ssc-sdk-shared-token-fetcher
+  volumes_from:
     - ssc-sdk-shared-token-fetcher
   volumes:
     - ./.config/ssc:/opt/splunk/ssc-sdk-shared/ssc
-    - ./.config/okta:/opt/splunk/ssc-sdk-shared/okta
 
 ssc-sdk-shared-token-fetcher:
   image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-token-fetcher:temporary
   dockercfg_service: aws-generator
   encrypted_env_file: ci/env.encrypted
   volumes:
-    - ./.config/okta:/okta
+    - ./.config/okta:/opt/splunk/ssc-sdk-shared/okta
 
 ssc-client-js-with-stubby:
   build:
@@ -35,11 +34,9 @@ ssc-client-js-against-playground:
   depends_on:
     - ssc-sdk-shared-token-fetcher
     - ssc-sdk-shared-tenant-creation
-    - ssc-sdk-shared-tenant-deletion
   volumes_from:
     - ssc-sdk-shared-token-fetcher
     - ssc-sdk-shared-tenant-creation
-    - ssc-sdk-shared-tenant-deletion
   environment:
     - CI=true
 
