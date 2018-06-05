@@ -18,16 +18,16 @@
         steps:
           - name: integration tests - not gated
             service: ssc-client-js-against-playground
-            exclude: ^(master|develop)$
+            # exclude: ^(master|develop)$
             command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
-          - name: integration tests - gated
-            service: ssc-client-js-against-playground
-            # tag: ^(master|develop)$
-            command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
+          # - name: integration tests - gated
+          #   service: ssc-client-js-against-playground
+          #   tag: ^(master|develop)$
+          #   command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
           # - name: run examples - gated
           #   service: ssc-client-js-against-playground
           #   tag: ^(master|develop)$
-            command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
+            # command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
           - name: run examples - not gated
             service: ssc-client-js-against-playground
             exclude: ^(master|develop)$

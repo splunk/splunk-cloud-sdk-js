@@ -5,57 +5,54 @@ const { expect } = require("chai");
 describe("Using Search APIs", () => {
     const splk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
 
-    describe("Submit a search", () => {
-        it("should allow submission of a search", () => {
-            const response = splk.search.createJob({query: "search index=*"});
-            return response.then((json) => {
-                expect(json).to.have.property("searchId", "SEARCH_ID");
-            });
-        });
+    it("should allow submission of a search", () => splk.search.createJob({ query: "search index=*" })
+        .then((sid) => {
+            expect(sid).to.equal("SEARCH_ID");
+        })
+    );
 
-        it("should allow retrieval of results", () => splk.search.getResults("SEARCH_ID").then((json) => {
-            expect(json).to.have.property("fields");
-        }))
-    });
+    it("should allow retrieval of results", () => splk.search.getResults("SEARCH_ID")
+        .then(results => {
+            expect(results).to.have.property('fields');
+            expect(results).to.have.property('results');
+            expect(results).to.have.property('init_offset'); // Canary- I expect this to change
+            expect(results).to.have.property('preview', false);
+        })
+    );
 
-    describe("Search synchronously", () => {
-        // Undespecified- format will change
-        it("should allow posting a search and getting results", () => splk.search.createJobSync({query: "search index=*"}).then((data) => {
-            expect(data).to.have.property("fields");
-            const index = data.fields.filter(f => f.name === "index")[0];
-            expect(index).to.not.be.undefined;
-            expect(data).to.have.property("results").that.is.an("array").that.is.not.empty;
-        }));
-    });
+    it("should allow retrieval of events", () => splk.search.getEvents("SEARCH_ID")
+        .then(results => {
+            expect(results).to.have.property('fields');
+            expect(results).to.have.property('results');
+            expect(results).to.have.property('init_offset'); // Canary- I expect this to change
+            expect(results).to.have.property('preview', false);
+        })
+    );
 
-    describe("Easy-to-use APIs", () => {
-        it("should allow search by Rx.Observable", (done) => {
-            const observable = splk.search.searchObserver({query: "search index=*"});
-            let count = 0;
-            observable.subscribe({
-                next(evt) {
-                    count += 1;
-                    expect(evt).to.have.property("index");
-                },
-                error: err => done(err),
-                complete() {
-                    try {
-                        expect(count).to.equal(5);
-                        done();
-                    } catch (err) {
-                        done(err);
-                    }
-                }
-            });
-        });
-    });
+    it("should allow retrieval of a job status", () => splk.search.getJob("SEARCH_ID")
+        .then(results => {
+            expect(results).to.have.property('sid', 'SEARCH_ID');
+            expect(results).to.have.property('dispatchState', 'DONE');
+            expect(results).to.have.property('eventCount');
+            expect(results).to.have.property('optimizedSearch');
+        })
+    );
 
-});
+    it("should allow retrieval of the list of jobs", () => splk.search.getJobs()
+        .then(results => {
+            expect(results).to.be.an("array");
+            expect(results[0].content).to.have.property('sid', 'SEARCH_ID');
+            expect(results[0].content).to.have.property('dispatchState', 'DONE');
+            expect(results[0].content).to.have.property('eventCount');
+            expect(results[0].content).to.have.property('optimizedSearch');
+        })
+    );
 
-describe("Should be able to import only search", () => {
-    it("should allow import of a single module", () => {
-        const SearchClient = require("../../src/search");
-        const search = new SearchClient(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
-        return search.createJobSync({query: "search index=*"});
-    });
+    it("should allow job control", () => splk.search.createJobControlAction('SEARCH_ID', 'pause')
+        .then(result => {
+            expect(result).to.have.property('messages').and.be.an('array');
+            expect(result.messages[0]).to.have.property('type', 'INFO');
+            expect(result.messages[0]).to.have.property('text').and.match(/paused/);
+        })
+    );
 });
