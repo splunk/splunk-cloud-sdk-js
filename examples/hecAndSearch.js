@@ -96,34 +96,44 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Search for results and verify that all events are found
-const searchResults = async function(start, timeout, query, expected) {
-
-    await sleep(5000);
-    console.log(`Spent ${Date.now() - start}ms to wait for events from query ${query}`);
+const searchResults = async function (start, timeout, query, expected) {
 
     if (Date.now() - start > timeout) {
         console.log(`TIMEOUT!!!! Search is taking more than ${timeout}ms. Terminate!`);
         process.exit(1);
     }
 
-    splunk.search.createJobSync({ "query": query })
-        .then(results => {
-            const retNum = Object.entries(results.results).length;
-            if (retNum < expected) {
-                searchResults(start, timeout, query, expected);
-            } else if (retNum > expected) {
-                throw Error(`find more events than expected for query ${query}`);
-            } else if (retNum === expected) {
-                console.log(`Successfully found ${retNum} events for query ${query}`);
-            }
-        });
+    console.log(`Spent ${Date.now() - start}ms to wait for events from query ${query}`);
 
-};
+    await sleep(5000)
+    const sid = await splunk.search.createJob({ "query": query });
+    await sleep(5000)
+
+    splunk.search.getJob(sid).then(info => {
+        if (info.dispatchState === "DONE"){
+            splunk.search.getResults(sid).then(results => {
+                const retNum = Object.entries(results.results).length;
+                if (retNum < expected) {
+                    searchResults(start, timeout, query, expected);
+                } else if (retNum > expected) {
+                    console.log(Object.entries(results.results))
+                    throw Error(`find more events than expected for query ${query}`);
+                } else if (retNum === expected) {
+                    console.log(`Successfully found ${retNum} events for query ${query}, total spent ${Date.now() - start}ms`);
+                }
+            })
+        }
+        else {
+            console.log("job is not done !!!! need another try")
+            searchResults(start, timeout, query, expected)
+        }
+    })
+}
+
 
 
 // Define a search timeout constraint
-const timeout = 30 * 1000;
+const timeout = 100 * 1000;
 
 // Search for an extracted field that was defined by the Metadata Catalog rule
 let query = `search index=main ${hostSource.host},${hostSource.source} | where device_id="aa3"`;
