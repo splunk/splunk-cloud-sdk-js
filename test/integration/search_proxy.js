@@ -13,8 +13,16 @@ const standardQuery = {
 }
 
 describe("integration tests Using Search APIs", () => {
+    before(() => {
+        let events = [];
+        for (let i = 0; i < 10; i += 1) {
+            events.push({ event: `Test event no ${i}` });
+        }
+        splunk.hec2.createEvents(events);
+    })
 
     describe("Search", () => {
+
 
         it("should allow submitting a search and getting results", () => splunk.search.createJob(standardQuery)
             .then((sid) => splunk.search.getJob(sid))
@@ -86,6 +94,17 @@ describe("integration tests Using Search APIs", () => {
                     }));
         });
 
+        // it("should be easy to use", () => {
+        //     return splunk.search.submitSearch(standardQuery).then(search => {
+        //         // search.status().then(console.log);
+        //         // search.eventObserver().subscribe(console.log)
+        //         // search.wait().then(console.log);
+        //         // search.eventObserver()
+        //         //     .pipe(op.reduce((ary, elem) => { ary.push(elem); return ary }, []))
+        //         //     .subscribe(console.log);
+        //         search.cancel().then(console.log);
+        //     });
+        // })
     });
 
     describe("Search composite", () => {
