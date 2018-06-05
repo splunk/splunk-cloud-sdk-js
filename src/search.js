@@ -60,15 +60,16 @@ class Search {
     /**
      * Returns an Rx.Observable that will return events from the 
      * job when it is done processing
-     * 
+     * @param {Object} [arguments]
+     * @param {string} [arguments.batchSize] Number of events to fetch per call
      * @returns Observable
      */
-    eventObserver() {
+    eventObserver({ batchSize }) {
         const self = this;
         return Observable.create(observable => {
             co(function* observe() {
                 const job = yield self.client.waitForJob(self.sid);
-                const batchIterator = self.client.iterateBatches(job.sid, 2, job.eventCount);
+                const batchIterator = self.client.iterateBatches(job.sid, batchSize || 30, job.eventCount);
                 let next = batchIterator.next();
                 while (!next.done) {
                     const batch = yield next.value;
