@@ -91,7 +91,7 @@ class SearchService extends BaseApiService {
      * @return {Promise<object>}
      */
     getJobs(jobArgs) {
-        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs);
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs);
     }
 
     // TODO:(dp) this should _not_ be a string return type.

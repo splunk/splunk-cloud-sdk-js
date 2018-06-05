@@ -1,5 +1,5 @@
-const SplunkSSC = require("../../src/splunk");
-const op = require("rxjs/operators");
+const SplunkSSC = require("../../splunk");
+
 const { assert } = require("chai");
 const { expect } = require("chai");
 
@@ -94,6 +94,18 @@ describe("integration tests Using Search APIs", () => {
                     }));
         });
 
+        it("should allow retrieval of jobs", () => {
+            return splunk.search.getJobs()
+                .then(results => {
+                    expect(results).to.be.an('array');
+                    expect(results[0]).to.have.property('content');
+                    expect(results[0].content).to.have.property('sid');
+                    expect(results[0].content).to.have.property('eventCount');
+                    expect(results[0].content).to.have.property('optimizedSearch');
+                    expect(results[0].content).to.have.property('dispatchState');
+                })
+        })
+
         // it("should be easy to use", () => {
         //     return splunk.search.submitSearch(standardQuery).then(search => {
         //         // search.status().then(console.log);
@@ -101,7 +113,7 @@ describe("integration tests Using Search APIs", () => {
         //         // search.wait().then(console.log);
         //         // search.eventObserver()
         //         //     .pipe(op.reduce((ary, elem) => { ary.push(elem); return ary }, []))
-        //         //     .subscribe(console.log);
+        //         //     .subscribe(;console.log)
         //         search.cancel().then(console.log);
         //     });
         // })
