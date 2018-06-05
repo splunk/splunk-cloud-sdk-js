@@ -1,6 +1,84 @@
 const BaseApiService = require('./baseapiservice');
+const co = require('co');
 const { SEARCH_SERVICE_PREFIX } = require('./common/service_prefixes');
 const { Observable } = require('rxjs/Observable');
+
+/**
+ * A base for an easy-to-use search interface
+ */
+class Search {
+    /**
+     * @private
+     * @param {*} client 
+     * @param {*} sid 
+     */
+    constructor(client, sid) {
+        this.client = client;
+        this.sid = sid;
+    }
+
+    /**
+     * Returns the status of the search job
+     * @returns {Promise<object>} job
+     */
+    status() {
+        return this.client.getJob(this.sid);
+    }
+
+    /**
+     * Polls the job until it is done processing
+     * @returns {Promise} done
+     */
+    wait() {
+        return this.client.waitForJob(this.sid);
+    }
+
+    /**
+     * Submits a cancel job against this search job
+     * @returns {Promise} done
+     */
+    cancel() {
+        return this.client.createJobControlAction(this.sid, "cancel");
+    }
+
+    /** 
+     * Pauses this search job
+     * @returns {Promise} done
+     */
+    pause() {
+        return this.client.createJobControlAction(this.sid, "pause");
+    }
+
+    /**
+     * Resets the time to live on this search job
+     */
+    touch() {
+        return this.client.createJobControlAction(this.sid, "touch");
+    }
+
+    /**
+     * Returns an Rx.Observable that will return events from the 
+     * job when it is done processing
+     * 
+     * @returns Observable
+     */
+    eventObserver() {
+        const self = this;
+        return Observable.create(observable => {
+            co(function* observe() {
+                const job = yield self.client.waitForJob(self.sid);
+                const batchIterator = self.client.iterateBatches(job.sid, 2, job.eventCount);
+                let next = batchIterator.next();
+                while (!next.done) {
+                    const batch = yield next.value;
+                    batch.results.forEach(e => observable.next(e));
+                    next = batchIterator.next();
+                }
+                observable.complete();
+            });
+        });
+    }
+}
 
 /**
  * Encapsulates search endpoints
@@ -119,7 +197,28 @@ class SearchService extends BaseApiService {
         return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
     }
 
+    * iterateBatches(jobId, batchSize, max) {
+        let start = 0;
+        while (start < max) {
+            yield this.getEvents(jobId, start, batchSize);
+            start += batchSize;
+        }
+    }
+
+    /**
+     * Submits a search job and wraps the response in an object
+     * for easier further processing.
+     * @param {SearchService~NewSearchConfig} searchArgs 
+     * @returns {Promise<Search>} search
+     */
+    submitSearch(searchArgs) {
+        const self = this;
+        return this.createJob(searchArgs)
+            .then(sid => new Search(self, sid));
+    }
+
 }
+
 
 /**
  * create a new search

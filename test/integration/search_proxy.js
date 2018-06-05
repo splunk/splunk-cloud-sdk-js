@@ -1,4 +1,5 @@
 const SplunkSSC = require("../../src/splunk");
+const op = require("rxjs/operators");
 const { assert } = require("chai");
 const { expect } = require("chai");
 
@@ -84,6 +85,41 @@ describe("integration tests Using Search APIs", () => {
                         assert(result.results.length === 2, "Only two events should remain");
                     }));
         });
+
+    });
+
+    describe("Search composite", () => {
+        it("should allow for easy job status", () => {
+            return splunk.search.submitSearch(standardQuery).then(search => {
+                search.status()
+                    .then(status => expect(status).to.have.property('dispatchState', 'RUNNING'));
+            });
+        });
+
+        it("should allow for easy cancellation", () => {
+            return splunk.search.submitSearch(standardQuery).then(search => {
+                search.cancel()
+                    .then(() => splunk.search.getJob(search.sid))
+                    .then(() => assert.fail("Should have thrown"), (err) => expect(err).to.have.property('code', 404));
+            });
+        });
+
+        it("should allow for easy search", () => {
+            return splunk.search.submitSearch(standardQuery).then(search => {
+                return new Promise((resolve, reject) => {
+                    let counter = 0;
+                    search.eventObserver().subscribe(() => counter += 1, (err) => reject(err), () => {
+                        if (counter === 5) {
+                            resolve(counter);
+                        } else {
+                            reject(new Error(`Expected 5, got ${counter}`));
+                        }
+                    });
+                });
+            });
+
+        });
+
     });
 
 });
