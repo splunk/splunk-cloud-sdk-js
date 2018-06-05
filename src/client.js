@@ -1,3 +1,6 @@
+require("babel-core/register");
+require("babel-polyfill");
+
 class SplunkError extends Error {
     constructor(message, code, source) {
         super(message);
@@ -19,7 +22,7 @@ function handleResponse(response) {
     if (response.ok) {
         return response.text().then(decodeJson);
     }
-    return response.text().then(function(text) {
+    return response.text().then(function (text) {
         var err;
         try {
             var json = JSON.parse(text);

@@ -1,6 +1,6 @@
 {
   "name": "@splunk/ssc-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Splunk SSC SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
@@ -15,7 +15,7 @@
     "lint:fix": "eslint src/** examples/** --fix",
     "pretest": "yarn lint",
     "test": "mocha test/unit",
-    "test:integration": "mocha test/integration",
+    "test:integration": "mocha --timeout=10000 test/integration",
     "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",
     "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/ --pedantic",
@@ -44,6 +44,7 @@
     "nyc": "^11.6.0"
   },
   "dependencies": {
+    "co": "^4.6.0",
     "isomorphic-fetch": "^2.2.1",
     "js-base64": "^2.4.3",
     "rxjs": "^5.5.8"
