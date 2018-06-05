@@ -53,10 +53,10 @@ describe("Using Search APIs", () => {
 
 });
 
-describe("Should be able to import only search", () => {
-    it("should allow import of a single module", () => {
-        const SearchClient = require("../../src/search");
-        const search = new SearchClient(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
-        return search.createJobSync({ query: "search index=*" });
-    });
-});
+// describe("Should be able to import only search", () => {
+//     it("should allow import of a single module", () => {
+//         const SearchClient = require("../../src/search");
+//         const search = new SearchClient(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
+//         return search.createJobSync({ query: "search index=*" });
+//     });
+// });
