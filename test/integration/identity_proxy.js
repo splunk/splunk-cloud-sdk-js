@@ -1,6 +1,6 @@
 const config = require('../config');
 const SplunkSSC = require('../../src/splunk');
-const {assert} = require('chai');
+const { assert } = require('chai');
 
 const token = process.env.BEARER_TOKEN;
 const tenantID = process.env.TENANT_ID;
@@ -180,7 +180,7 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
 // 3. Delete the newly created test tenant using deleteTenant() method and validate using getUserProfile() method
 // 4. Delete a tenant which is currently not present in the user-profile and validate that a 404 error is thrown
 describe('integration tests for Identity Tenant Endpoints', () => {
-    const integrationTestTenantID = "integration_test_tenant"
+    const integrationTestTenantID = "integration-test-tenant"
 
     describe('Create a new tenant and validate - Good and Bad cases', () => {
         const testPostTenant1 =
@@ -219,8 +219,8 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             assert(!data.tenantMemberships.includes(integrationTestTenantID))
         }));
 
-        it('should throw a 404 Not Found error response when deleting a tenant currently not present in a user profile', () => splunk.identity.deleteTenant(testDeleteTenant).then(success =>
-            assert.fail(success), err => assert.equal(err.code, "404")
+        it('should throw a 422 Unprocessable Entity error response when deleting a tenant currently not present in a user profile', () => splunk.identity.deleteTenant(testDeleteTenant).then(success =>
+            assert.fail(success), err => assert.equal(err.code, "422")
         ));
     });
 });
