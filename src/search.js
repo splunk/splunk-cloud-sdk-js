@@ -51,6 +51,7 @@ class Search {
 
     /**
      * Resets the time to live on this search job
+     * @returns {Promise} done
      */
     touch() {
         return this.client.createJobControlAction(this.sid, "touch");
