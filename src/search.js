@@ -235,7 +235,7 @@ class SearchService extends BaseApiService {
  * @property {number} [ max_count ] The number of events that can be accessible in any given status bucket.
  * @property {number} [ max_time ] The number of seconds to run this search before finalizing. Specify 0 to never finalize.
  * @property {string} [ now ] current system time    Specify a time string to set the absolute time used for any relative time specifier in the search. Defaults to the current system time.
- * @property {string} search Search Query
+ * @property {string} query Search Query
  * @property {number} [ status_buckets ] The most status buckets to generate.
  * @property {string} [ time_format ] Used to convert a formatted time string from {start,end}_time into UTC seconds. The default value is the ISO-8601 format.
  * @property {number} [ timeout ] The number of seconds to keep this search after processing has stopped.
