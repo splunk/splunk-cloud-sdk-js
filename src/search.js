@@ -228,16 +228,15 @@ class SearchService extends BaseApiService {
 /**
  * create a new search
  * @typedef {object} SearchService~NewSearchConfig
- * @property {string} [ adhoc_search_level ] Use one of the following search modes. [ verbose | fast | smart ]
- * @property {string} [ earliest_time ] Specify a time string. Sets the earliest (inclusive), respectively,  time bounds for  the search
- * @property {string} [ exec_mode ] blocking | oneshot | normal  If set to normal, runs an asynchronous search. If set to blocking, returns the sid when the job is complete. If set to oneshot, returns results in the same call. In this case, you can specify the format for the output (for example, json output) using the output_mode parameter as described in GET search/jobs/export. Default format for output is xml.
- * @property {string} [ latest_time ] Specify a time string. Sets the latest (exclusive), respectively,  time bounds for the search.
- * @property {number} [ max_count ] The number of events that can be accessible in any given status bucket.
- * @property {number} [ max_time ] The number of seconds to run this search before finalizing. Specify 0 to never finalize.
+ * @property {string} [ adhocSearchLevel ] Use one of the following search modes. [ verbose | fast | smart ]
+ * @property {string} [ earliestTime ] Specify a time string. Sets the earliest (inclusive), respectively,  time bounds for  the search
+ * @property {string} [ latestTime ] Specify a time string. Sets the latest (exclusive), respectively,  time bounds for the search.
+ * @property {number} [ maxCount ] The number of events that can be accessible in any given status bucket.
+ * @property {number} [ maxTime ] The number of seconds to run this search before finalizing. Specify 0 to never finalize.
  * @property {string} [ now ] current system time    Specify a time string to set the absolute time used for any relative time specifier in the search. Defaults to the current system time.
  * @property {string} query Search Query
- * @property {number} [ status_buckets ] The most status buckets to generate.
- * @property {string} [ time_format ] Used to convert a formatted time string from {start,end}_time into UTC seconds. The default value is the ISO-8601 format.
+ * @property {number} [ statusBuckets ] The most status buckets to generate.
+ * @property {string} [ timeFormat ] Used to convert a formatted time string from {start,end}_time into UTC seconds. The default value is the ISO-8601 format.
  * @property {number} [ timeout ] The number of seconds to keep this search after processing has stopped.
  */
 
@@ -268,15 +267,15 @@ class SearchService extends BaseApiService {
   * @property {number} [ offset ] The first result (inclusive) from which to begin returning data. This value is 0-indexed. Default value is 0.
   * @property {string} [ f ] A field to return for the event set.
   * @property {string} [ search ] The post processing search to apply to results. Can be any valid search language string.
-  * @property {string} [ earliest_time ] A time string representing the earliest (inclusive), respectively, time bounds for the results to be returned. If not specified, the range applies to all results found. 
-  * @property {string} [ latest_time ] A time string representing the latest (exclusive), respectively,
+  * @property {string} [ earliestTime ] A time string representing the earliest (inclusive), respectively, time bounds for the results to be returned. If not specified, the range applies to all results found.
+  * @property {string} [ latestTime ] A time string representing the latest (exclusive), respectively,
             time bounds for the results to be returned. If not specified, the
             range applies to all results found.
-  * @property {number} [ max_lines ] The maximum lines that any single event _raw field should contain.
+  * @property {number} [ maxLines ] The maximum lines that any single event _raw field should contain.
             Specify 0 to specify no limit.
   * @property {string} [ segmentation ] The type of segmentation to perform on the data. This incudes an
             option to perform k/v segmentation.
-  * @property {string} [ time_format ] Expression to convert a formatted time string from {start,end}_time
+  * @property {string} [ timeFormat ] Expression to convert a formatted time string from {start,end}_time
             into UTC seconds.
   */
 module.exports = SearchService;
