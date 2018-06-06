@@ -145,7 +145,7 @@ class SearchService extends BaseApiService {
                 } else {
                     setTimeout(() => {
                         resolve(self.waitForJob(jobId, interval)); // Resolving with a promise which will then resolve- recursion with the event loop
-                    })
+                    }, pollInterval);
                 }
             })
         });
