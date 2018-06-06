@@ -60,16 +60,19 @@ class Search {
     /**
      * Returns an Rx.Observable that will return events from the 
      * job when it is done processing
-     * @param {Object} [arguments]
-     * @param {string} [arguments.batchSize] Number of events to fetch per call
+     * @param {Object} [attrs]
+     * @param {string} [attrs.batchSize] Number of events to fetch per call
      * @returns Observable
      */
-    eventObserver({ batchSize }) {
+    eventObserver(attrs) {
         const self = this;
+        const args = attrs || {};
+        const batchSize = args.batchSize || 30;
+
         return Observable.create(observable => {
             co(function* observe() {
                 const job = yield self.client.waitForJob(self.sid);
-                const batchIterator = self.client.iterateBatches(job.sid, batchSize || 30, job.eventCount);
+                const batchIterator = self.client.iterateBatches(job.sid, batchSize, job.eventCount);
                 let next = batchIterator.next();
                 while (!next.done) {
                     const batch = yield next.value;
@@ -232,7 +235,7 @@ class SearchService extends BaseApiService {
  * @property {number} [ max_count ] The number of events that can be accessible in any given status bucket.
  * @property {number} [ max_time ] The number of seconds to run this search before finalizing. Specify 0 to never finalize.
  * @property {string} [ now ] current system time    Specify a time string to set the absolute time used for any relative time specifier in the search. Defaults to the current system time.
- * @property {string} search Search Query
+ * @property {string} query Search Query
  * @property {number} [ status_buckets ] The most status buckets to generate.
  * @property {string} [ time_format ] Used to convert a formatted time string from {start,end}_time into UTC seconds. The default value is the ISO-8601 format.
  * @property {number} [ timeout ] The number of seconds to keep this search after processing has stopped.
