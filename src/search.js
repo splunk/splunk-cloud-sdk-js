@@ -135,16 +135,23 @@ class SearchService extends BaseApiService {
      * @param {number} [ pollInterval ]
      * @return {Promise<SearchService~Job>}
      */
-    waitForJob(jobId, pollInterval) {
+    waitForJob(jobId, pollInterval, callback) {
         const self = this;
         const interval = pollInterval || 250;
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this.getJob(jobId).then(job => {
+                if(callback) {
+                    callback(job);;
+                }
                 if (job.dispatchState === 'DONE') {
                     resolve(job);
+                } else if (job.dispatchState === 'FAILED') {
+                    const error = new Error("Job failed");
+                    error.job = job;
+                    reject(error);
                 } else {
                     setTimeout(() => {
-                        resolve(self.waitForJob(jobId, interval)); // Resolving with a promise which will then resolve- recursion with the event loop
+                        resolve(self.waitForJob(jobId, interval, callback)); // Resolving with a promise which will then resolve- recursion with the event loop
                     }, pollInterval);
                 }
             })
