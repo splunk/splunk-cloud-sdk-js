@@ -122,7 +122,7 @@ describe('integration tests for HEC2 Endpoints', () => {
                 return splunk.hec2.createRawEvent(event1).then(response => {
                     assert.deepEqual(response, successResponse, 'response should be expected success response.');
                 }).catch(err => {
-                    assert.fail('request should not have failed');
+                    assert.fail(`request should not have failed ${err}`);
                 });
             });
         });
