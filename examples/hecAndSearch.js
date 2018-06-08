@@ -9,18 +9,13 @@ const HOST = process.env.SSC_HOST;
 const AUTH_TOKEN = process.env.BEARER_TOKEN;
 const { TENANT_ID } = process.env;
 
+// define helper functions
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// ***** STEP 1: Get Splunk SSC client
-// ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
-const splunk = new SplunkSSC(`${HOST}`, AUTH_TOKEN, TENANT_ID);
-
-// define helper functions
-const index = "mewi1";
-
-const createIndex = async function() {
+async function createIndex(splunk, index) {
     const regex1 = {
         "owner": "splunk",
         "capabilities": "1101-00000:11010",
@@ -39,7 +34,7 @@ const createIndex = async function() {
     await sleep(90 * 1000);
 };
 
-const sendDataViaHec = function() {
+function sendDataViaHec(splunk, index) {
     const host = `myhost-${new Date().getSeconds()}`;
     const source = `mysource-${new Date().getMinutes()}`;
     console.log(host);
@@ -88,7 +83,7 @@ const sendDataViaHec = function() {
     return { host, source };
 };
 
-const searchResults = async function(start, timeout, query, expected) {
+async function searchResults(splunk, start, timeout, query, expected) {
 
     if (Date.now() - start > timeout) {
         console.log(`TIMEOUT!!!! Search is taking more than ${timeout}ms. Terminate!`);
@@ -108,7 +103,7 @@ const searchResults = async function(start, timeout, query, expected) {
                 const retNum = Object.entries(results.results).length;
                 console.log(`got ${retNum} results`);
                 if (retNum < expected) {
-                    searchResults(start, timeout, query, expected);
+                    searchResults(splunk, start, timeout, query, expected);
                 } else if (retNum > expected) {
                     console.log(Object.entries(results.results));
                     throw Error(`find more events than expected for query ${query}`);
@@ -119,37 +114,37 @@ const searchResults = async function(start, timeout, query, expected) {
         }
         else {
             console.log("job is not done !!!! need another try");
-            searchResults(start, timeout, query, expected);
+            searchResults(splunk, start, timeout, query, expected);
         }
     });
 };
 
 
-// define the workflow
-const workflow = async function() {
+// define the main workflow
+async function main() {
+
+    const index = "newindex1";
+    // ***** STEP 1: Get Splunk SSC client
+    // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
+    const splunk = new SplunkSSC(`${HOST}`, AUTH_TOKEN, TENANT_ID);
 
     // ***** STEP 2: Define a new index
     // ***** DESCRIPTION: Define a new index in the Metadata Catalog so that we can send events to the new index.
-    await createIndex();
+    await createIndex(splunk, index);
 
     // ***** STEP 3: Get data in using HEC
     // ***** DESCRIPTION: Send a single event, a batch of events, and raw events using HEC.
-    const hostSource = sendDataViaHec();
+    const hostSource = sendDataViaHec(splunk, index);
 
     // ***** STEP 4: Verify the data
     // ***** DESCRIPTION: Search the data to ensure the data was ingested and field extractions are present.
 
-    // Define a search timeout constraint
+    // Search for all 5 events that were sent using HEC
     const timeout = 90 * 1000;
-    // Search for an extracted field that was defined by the Metadata Catalog rule
-    // let query = `search index=main ${hostSource.host},${hostSource.source} | where err_code="401"`;
-    //  searchResults(Date.now(), timeout, query, 1);
-
-    // // Search for all events that were sent using HEC
     const query = `search index=${index} ${hostSource.host},${hostSource.source}`;
     console.log(query);
-    await searchResults(Date.now(), timeout, query, 5);
+    await searchResults(splunk, Date.now(), timeout, query, 5);
 };
 
 // run the workflow
-workflow();
+main();
