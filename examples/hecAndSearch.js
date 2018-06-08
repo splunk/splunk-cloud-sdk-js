@@ -28,9 +28,10 @@ async function createIndex(splunk, index) {
 
     splunk.catalog.createDataset(regex1)
         .then(data => console.log(data))
-        .catch(err => console.log(`create index:  ${err.code}`));
+        .catch(err => console.log(`create index error:  ${err.code}`));
 
     // it will take some time for the new index to finish the provisioning
+    console.log("wait for 90s for index to be provisioned")
     await sleep(90 * 1000);
 };
 
@@ -123,10 +124,10 @@ async function searchResults(splunk, start, timeout, query, expected) {
 // define the main workflow
 async function main() {
 
-    const index = "newindex1";
+    const index = "main";
     // ***** STEP 1: Get Splunk SSC client
     // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
-    const splunk = new SplunkSSC(`${HOST}`, AUTH_TOKEN, TENANT_ID);
+    const splunk = new SplunkSSC(HOST, AUTH_TOKEN, TENANT_ID);
 
     // ***** STEP 2: Define a new index
     // ***** DESCRIPTION: Define a new index in the Metadata Catalog so that we can send events to the new index.
