@@ -147,18 +147,16 @@ class Search {
         const args = attrs || {};
         const batchSize = args.batchSize || 30;
 
-        return Observable.create(observable => {
-            co(function* observe() {
-                const job = yield self.client.waitForJob(self.sid);
-                const fetchEvents = (start) => self.client.getEvents(self.sid, start, batchSize);
-                const batchIterator = self.client.iterateBatches(fetchEvents, batchSize, job.eventCount);
-                // let next = batchIterator.next();
-                for (const promise of batchIterator) {
-                    const batch = yield promise;
-                    batch.results.forEach(e => observable.next(e));
-                }
-                observable.complete();
-            });
+        return Observable.create(async observable => {
+            const job = await self.client.waitForJob(self.sid);
+            const fetchEvents = (start) => self.client.getEvents(self.sid, start, batchSize);
+            const batchIterator = self.client.iterateBatches(fetchEvents, batchSize, job.eventCount);
+            for (const promise of batchIterator) {
+                // eslint-disable-next-line no-await-in-loop
+                const batch = await promise;
+                batch.results.forEach(e => observable.next(e));
+            }
+            observable.complete();
         });
     }
 
