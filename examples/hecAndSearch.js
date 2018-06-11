@@ -22,7 +22,7 @@ async function createIndex(splunk, index) {
         "version": 1,
         "name": index,
         "kind": "index",
-        "module": "",
+        "module": "splunk",
         "disabled": false
     };
 
@@ -35,11 +35,7 @@ async function createIndex(splunk, index) {
     await sleep(90 * 1000);
 };
 
-function sendDataViaHec(splunk, index) {
-    const host = `myhost-${new Date().getSeconds()}`;
-    const source = `mysource-${new Date().getMinutes()}`;
-    console.log(host);
-    console.log(source);
+function sendDataViaHec(splunk, index, host, source) {
 
     const event1 = {
         "sourcetype": "splunkd",
@@ -124,7 +120,8 @@ async function searchResults(splunk, start, timeout, query, expected) {
 // define the main workflow
 async function main() {
 
-    const index = "newIndexTest";
+    // todo: should be a non-main index, but playground now still have issues for sending data to non-main index
+    const index = "main";
     // ***** STEP 1: Get Splunk SSC client
     // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
     const splunk = new SplunkSSC(HOST, AUTH_TOKEN, TENANT_ID);
@@ -135,14 +132,17 @@ async function main() {
 
     // ***** STEP 3: Get data in using HEC
     // ***** DESCRIPTION: Send a single event, a batch of events, and raw events using HEC.
-    const hostSource = sendDataViaHec(splunk, index);
+    const host = `myhost-${new Date().getSeconds()}`;
+    const source = `mysource-${new Date().getMinutes()}`;
+    console.log(`host=${host}, source = ${source}`);
+    sendDataViaHec(splunk, index, host, source);
 
     // ***** STEP 4: Verify the data
     // ***** DESCRIPTION: Search the data to ensure the data was ingested and field extractions are present.
 
     // Search for all 5 events that were sent using HEC
     const timeout = 90 * 1000;
-    const query = `search index=${index} ${hostSource.host},${hostSource.source}`;
+    const query = `search index=${index} ${host},${source}`;
     console.log(query);
     await searchResults(splunk, Date.now(), timeout, query, 5);
 };
