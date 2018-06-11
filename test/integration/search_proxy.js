@@ -18,7 +18,7 @@ describe("integration tests Using Search APIs", () => {
         for (let i = 0; i < 10; i += 1) {
             events.push({ event: `Test event no ${i}` });
         }
-        splunk.hec2.createEvents(events);
+        return splunk.hec2.createEvents(events);
     })
 
     describe("Search", () => {
@@ -29,7 +29,7 @@ describe("integration tests Using Search APIs", () => {
             .then(searchObj => { // Check the state of the job
                 expect(searchObj).to.have.property('sid');
                 expect(searchObj).to.have.property('dispatchState');
-                return splunk.search.waitForJob(searchObj.sid);
+                return splunk.search.waitForJob(searchObj.sid, 1000);
             }).then(searchObj => { // Ensure we have events when done
                 expect(searchObj).to.have.property('dispatchState', 'DONE');
                 expect(searchObj).to.have.property('eventCount', 5);
