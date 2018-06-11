@@ -1,5 +1,3 @@
-require("babel-core/register");
-require("babel-polyfill");
 
 class SplunkError extends Error {
     constructor(message, code, source) {

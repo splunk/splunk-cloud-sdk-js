@@ -1,7 +1,27 @@
+/* eslint-disable no-restricted-syntax */
 const BaseApiService = require('./baseapiservice');
-const co = require('co');
 const { SEARCH_SERVICE_PREFIX } = require('./common/service_prefixes');
 const { Observable } = require('rxjs/Observable');
+
+class SplunkSearchCancelError extends Error {
+}
+
+/**
+ * @private
+ * @param {function} func
+ * @param jobId
+ * @param batchSize
+ * @param max
+ * @returns {IterableIterator<Promise<Object>>}
+ */
+function* iterateBatches(func, batchSize, max) {
+    let start = 0;
+    while (start < max) {
+        yield func(start, batchSize);
+        start += batchSize;
+    }
+}
+
 
 /**
  * A base for an easy-to-use search interface
@@ -15,6 +35,7 @@ class Search {
     constructor(client, sid) {
         this.client = client;
         this.sid = sid;
+        this.isCancelling = false;
     }
 
     /**
@@ -27,10 +48,20 @@ class Search {
 
     /**
      * Polls the job until it is done processing
+     * @param {number} [updateInterval]
+     * @param {function} [statusCallback] Function that is called with job status on every update
      * @returns {Promise} done
      */
-    wait() {
-        return this.client.waitForJob(this.sid);
+    wait(updateInterval, statusCallback) {
+        const self = this;
+        return this.client.waitForJob(this.sid, updateInterval, statusCallback)
+            .catch(err => {
+                if (self.isCancelling && err.code === 404) {
+                    throw new SplunkSearchCancelError("Search has been cancelled");
+                } else {
+                    throw err;
+                }
+            });
     }
 
     /**
@@ -38,6 +69,7 @@ class Search {
      * @returns {Promise} done
      */
     cancel() {
+        this.isCancelling = true;
         return this.client.createJobControlAction(this.sid, "cancel");
     }
 
@@ -58,28 +90,112 @@ class Search {
     }
 
     /**
-     * Returns an Rx.Observable that will return events from the 
-     * job when it is done processing
-     * @param {Object} [arguments]
-     * @param {string} [arguments.batchSize] Number of events to fetch per call
-     * @returns Observable
+     * Returns the results from a search as a (promised) array. If 'args.offset'
+     * is supplied, a window of results will be returned.  If an offset is not
+     * supplied, all results will be fetched and concatenated.
+     * @param {object} [args]
+     * @param {number} [args.batchSize]
+     * @param {number} [args.offset]
+     * @returns {Promise<array>}
      */
-    eventObserver({ batchSize }) {
+    getResults(args) {
+        // eslint-disable-next-line no-param-reassign
+        args = args || {};
+        const batchSize = args.batchSize || 30;
         const self = this;
-        return Observable.create(observable => {
-            co(function* observe() {
-                const job = yield self.client.waitForJob(self.sid);
-                const batchIterator = self.client.iterateBatches(job.sid, batchSize || 30, job.eventCount);
-                let next = batchIterator.next();
-                while (!next.done) {
-                    const batch = yield next.value;
-                    batch.results.forEach(e => observable.next(e));
-                    next = batchIterator.next();
+        return self.status()
+            .then(async (job) => {
+                if (args.offset != null) {
+                    return self.client.getResults(self.sid, args.offset, batchSize)
+                        .then(response => response.results);
                 }
-                observable.complete();
+                const fetcher = (start) => self.client.getResults(self.sid, start, batchSize);
+                const iterator = iterateBatches(fetcher, batchSize, job.eventCount);
+                let results = [];
+                for (const batch of iterator) {
+                    // eslint-disable-next-line no-await-in-loop
+                    const data = await batch
+                    results = Array.concat(results, data.results);
+                }
+                return results;
+            });
+    }
+
+    /**
+     * Returns an observable that will poll the job and return results, updating
+     * until the job is final. If offset and batchSize are specified in the
+     * args, this method will return that window of results.  If neither are
+     * specified (or only batchSize is specified), all results available will
+     * be fetched.
+     * @param {object} [args]
+     * @param {number} [args.pollInterval]
+     * @param {number} [args.offset]
+     * @param {number} [args.batchSize]
+     * @returns {Observable}
+     */
+    resultObservable(args) {
+        const self = this;
+        // eslint-disable-next-line no-param-reassign
+        args = args || {};
+        const pollInterval = args.pollInterval || 500; // Increasing the default
+        return Observable.create(observable => {
+            const promises = [];
+            self.wait(pollInterval, (job) => {
+                if (job.eventCount > 0) { // Passes through arguments, so has the same semantics of offset == window
+                    promises.push(self.getResults(args).then(results => observable.next(results)));
+                }
+            }).then(() => {
+                Promise.all(promises).then(() => observable.complete());
             });
         });
     }
+
+    // TODO: Remove this misnamed function in next major release
+    /**
+     * Returns an Rx.Observable that will return events from the
+     * job when it is done processing
+     * @deprecated
+     * @param {Object} [attrs]
+     * @param {string} [attrs.batchSize] Number of events to fetch per call
+     * @returns Observable
+     */
+    eventObserver(attrs) {
+        console.log('eventObserver has been renamed to eventObservable.  This function will be removed in the next release');
+        return this.eventObservable(attrs);
+    }
+
+    /**
+     * Returns an Rx.Observable that will return events from the 
+     * job when it is done processing
+     * @param {Object} [attrs]
+     * @param {number} [attrs.batchSize] Number of events to fetch per call
+     * @returns Observable
+     */
+    eventObservable(attrs) {
+        const self = this;
+        const args = attrs || {};
+        const batchSize = args.batchSize || 30;
+
+        return Observable.create(async observable => {
+            const job = await self.client.waitForJob(self.sid);
+            const fetchEvents = (start) => self.client.getEvents(self.sid, start, batchSize);
+            const batchIterator = iterateBatches(fetchEvents, batchSize, job.eventCount);
+            for (const promise of batchIterator) {
+                // eslint-disable-next-line no-await-in-loop
+                const batch = await promise;
+                batch.results.forEach(e => observable.next(e));
+            }
+            observable.complete();
+        });
+    }
+
+    statusObservable(updateInterval) {
+        return Observable.create(observable => {
+            this.wait(updateInterval, (status) => observable.next(status))
+                .then(() => observable.complete(), err => observable.error(err))
+        })
+    }
+
 }
 
 /**
@@ -132,19 +248,26 @@ class SearchService extends BaseApiService {
      * @param {number} [ pollInterval ]
      * @return {Promise<SearchService~Job>}
      */
-    waitForJob(jobId, pollInterval) {
+    waitForJob(jobId, pollInterval, callback) {
         const self = this;
         const interval = pollInterval || 250;
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this.getJob(jobId).then(job => {
+                if(callback) {
+                    callback(job);
+                }
                 if (job.dispatchState === 'DONE') {
                     resolve(job);
+                } else if (job.dispatchState === 'FAILED') {
+                    const error = new Error("Job failed");
+                    error.job = job;
+                    reject(error);
                 } else {
                     setTimeout(() => {
-                        resolve(self.waitForJob(jobId, interval)); // Resolving with a promise which will then resolve- recursion with the event loop
-                    })
+                        resolve(self.waitForJob(jobId, interval, callback)); // Resolving with a promise which will then resolve- recursion with the event loop
+                    }, pollInterval);
                 }
-            })
+            }).catch(err => reject(err));
         });
     }
 
@@ -199,18 +322,10 @@ class SearchService extends BaseApiService {
         return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
     }
 
-    * iterateBatches(jobId, batchSize, max) {
-        let start = 0;
-        while (start < max) {
-            yield this.getEvents(jobId, start, batchSize);
-            start += batchSize;
-        }
-    }
-
     /**
      * Submits a search job and wraps the response in an object
      * for easier further processing.
-     * @param {SearchService~NewSearchConfig} searchArgs 
+     * @param {SearchService~PostJobsRequest} searchArgs
      * @returns {Promise<Search>} search
      */
     submitSearch(searchArgs) {
@@ -224,17 +339,16 @@ class SearchService extends BaseApiService {
 
 /**
  * create a new search
- * @typedef {object} SearchService~NewSearchConfig
- * @property {string} [ adhoc_search_level ] Use one of the following search modes. [ verbose | fast | smart ]
- * @property {string} [ earliest_time ] Specify a time string. Sets the earliest (inclusive), respectively,  time bounds for  the search
- * @property {string} [ exec_mode ] blocking | oneshot | normal  If set to normal, runs an asynchronous search. If set to blocking, returns the sid when the job is complete. If set to oneshot, returns results in the same call. In this case, you can specify the format for the output (for example, json output) using the output_mode parameter as described in GET search/jobs/export. Default format for output is xml.
- * @property {string} [ latest_time ] Specify a time string. Sets the latest (exclusive), respectively,  time bounds for the search.
- * @property {number} [ max_count ] The number of events that can be accessible in any given status bucket.
- * @property {number} [ max_time ] The number of seconds to run this search before finalizing. Specify 0 to never finalize.
+ * @typedef {object} SearchService~PostJobsRequest
+ * @property {string} [ adhocSearchLevel ] Use one of the following search modes. [ verbose | fast | smart ]
+ * @property {string} [ earliestTime ] Specify a time string. Sets the earliest (inclusive), respectively,  time bounds for  the search
+ * @property {string} [ latestTime ] Specify a time string. Sets the latest (exclusive), respectively,  time bounds for the search.
+ * @property {number} [ maxCount ] The number of events that can be accessible in any given status bucket.
+ * @property {number} [ maxTime ] The number of seconds to run this search before finalizing. Specify 0 to never finalize.
  * @property {string} [ now ] current system time    Specify a time string to set the absolute time used for any relative time specifier in the search. Defaults to the current system time.
- * @property {string} search Search Query
- * @property {number} [ status_buckets ] The most status buckets to generate.
- * @property {string} [ time_format ] Used to convert a formatted time string from {start,end}_time into UTC seconds. The default value is the ISO-8601 format.
+ * @property {string} query Search Query
+ * @property {number} [ statusBuckets ] The most status buckets to generate.
+ * @property {string} [ timeFormat ] Used to convert a formatted time string from {start,end}_time into UTC seconds. The default value is the ISO-8601 format.
  * @property {number} [ timeout ] The number of seconds to keep this search after processing has stopped.
  */
 
@@ -265,15 +379,15 @@ class SearchService extends BaseApiService {
   * @property {number} [ offset ] The first result (inclusive) from which to begin returning data. This value is 0-indexed. Default value is 0.
   * @property {string} [ f ] A field to return for the event set.
   * @property {string} [ search ] The post processing search to apply to results. Can be any valid search language string.
-  * @property {string} [ earliest_time ] A time string representing the earliest (inclusive), respectively, time bounds for the results to be returned. If not specified, the range applies to all results found. 
-  * @property {string} [ latest_time ] A time string representing the latest (exclusive), respectively,
+  * @property {string} [ earliestTime ] A time string representing the earliest (inclusive), respectively, time bounds for the results to be returned. If not specified, the range applies to all results found.
+  * @property {string} [ latestTime ] A time string representing the latest (exclusive), respectively,
             time bounds for the results to be returned. If not specified, the
             range applies to all results found.
-  * @property {number} [ max_lines ] The maximum lines that any single event _raw field should contain.
+  * @property {number} [ maxLines ] The maximum lines that any single event _raw field should contain.
             Specify 0 to specify no limit.
   * @property {string} [ segmentation ] The type of segmentation to perform on the data. This incudes an
             option to perform k/v segmentation.
-  * @property {string} [ time_format ] Expression to convert a formatted time string from {start,end}_time
+  * @property {string} [ timeFormat ] Expression to convert a formatted time string from {start,end}_time
             into UTC seconds.
   */
 module.exports = SearchService;

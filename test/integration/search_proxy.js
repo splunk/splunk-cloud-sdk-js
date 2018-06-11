@@ -14,7 +14,7 @@ const standardQuery = {
 
 describe("integration tests Using Search APIs", () => {
     before(() => {
-        let events = [];
+        const events = [];
         for (let i = 0; i < 10; i += 1) {
             events.push({ event: `Test event no ${i}` });
         }
@@ -80,50 +80,35 @@ describe("integration tests Using Search APIs", () => {
                     assert(result.results.length === 0);
                 })));
 
-        it("should allow pagination of events", () => {
-            return splunk.search.createJob(standardQuery)
-                .then(sid => splunk.search.waitForJob(sid)
-                    .then(job => { // As a child to keep sid in the closure
-                        expect(job).to.have.property('eventCount', 5);
-                        return splunk.search.getEvents(sid, 0, 3);
-                    }).then(result => {
-                        assert(result.results.length === 3, "Should have gotten three events in the first batch, got: ", JSON.stringify(result));
-                        return splunk.search.getEvents(sid, 3, 5);
-                    }).then(result => {
-                        assert(result.results.length === 2, "Only two events should remain");
-                    }));
-        });
+        it("should allow pagination of events", () => splunk.search.createJob(standardQuery)
+            .then(sid => splunk.search.waitForJob(sid)
+                .then(job => { // As a child to keep sid in the closure
+                    expect(job).to.have.property('eventCount', 5);
+                    return splunk.search.getEvents(sid, 0, 3);
+                }).then(result => {
+                    assert(result.results.length === 3, "Should have gotten three events in the first batch, got: ", JSON.stringify(result));
+                    return splunk.search.getEvents(sid, 3, 5);
+                }).then(result => {
+                    assert(result.results.length === 2, "Only two events should remain");
+                })));
 
-        it("should allow retrieval of jobs", () => {
-            return splunk.search.getJobs()
-                .then(results => {
-                    expect(results).to.be.an('array');
-                    expect(results[0]).to.have.property('content');
-                    expect(results[0].content).to.have.property('sid');
-                    expect(results[0].content).to.have.property('eventCount');
-                    expect(results[0].content).to.have.property('optimizedSearch');
-                    expect(results[0].content).to.have.property('dispatchState');
-                })
-        })
+        it("should allow retrieval of jobs", () => splunk.search.getJobs()
+            .then(results => {
+                expect(results).to.be.an('array');
+                expect(results[0]).to.have.property('content');
+                expect(results[0].content).to.have.property('sid');
+                expect(results[0].content).to.have.property('eventCount');
+                expect(results[0].content).to.have.property('optimizedSearch');
+                expect(results[0].content).to.have.property('dispatchState');
+            }))
 
-        // it("should be easy to use", () => {
-        //     return splunk.search.submitSearch(standardQuery).then(search => {
-        //         // search.status().then(console.log);
-        //         // search.eventObserver().subscribe(console.log)
-        //         // search.wait().then(console.log);
-        //         // search.eventObserver()
-        //         //     .pipe(op.reduce((ary, elem) => { ary.push(elem); return ary }, []))
-        //         //     .subscribe(;console.log)
-        //         search.cancel().then(console.log);
-        //     });
-        // })
     });
 
     describe("Search composite", () => {
         it("should allow for easy job status", () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
                 search.status()
-                    .then(status => expect(status).to.have.property('dispatchState', 'RUNNING'));
+                    .then(status => expect(status).to.have.property('dispatchState'));
             });
         });
 
@@ -135,11 +120,21 @@ describe("integration tests Using Search APIs", () => {
             });
         });
 
+        it("should throw a cancellation message when cancelled", () => {
+            return splunk.search.submitSearch(standardQuery).then(search => {
+                return search.cancel()
+                    .then(() => search.wait())
+                    .then(() => assert.fail("should have received error"), (err) => {
+                        expect(err).to.have.property('message').and.match(/cancelled/);
+                    })
+            });
+        });
+
         it("should allow for easy search", () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
                 return new Promise((resolve, reject) => {
                     let counter = 0;
-                    search.eventObserver().subscribe(() => counter += 1, (err) => reject(err), () => {
+                    search.eventObservable({batchSize: 2}).subscribe(() => counter += 1, (err) => reject(err), () => {
                         if (counter === 5) {
                             resolve(counter);
                         } else {
@@ -151,6 +146,88 @@ describe("integration tests Using Search APIs", () => {
 
         });
 
+        describe("Get results via promise", () => {
+            it("should allow retrieving all results", () => {
+                return splunk.search.submitSearch(standardQuery).then(search => {
+                    return search.wait()
+                        .then(() => search.getResults().then((results) => {
+                            expect(results).to.be.an('array').and.have.property('length', 5);
+                        }));
+                });
+            });
+
+            it("should allow retrieving result window", () => {
+                return splunk.search.submitSearch(standardQuery).then(search => {
+                    return search.wait()
+                        .then(() => search.getResults({offset: 0, batchSize: 2}).then((results) => {
+                            expect(results).to.be.an('array').and.have.property('length', 2);
+                        }));
+                });
+            });
+        });
+
+        describe("Results Observable", () => {
+            it("should allow results observable", () => {
+                return splunk.search.submitSearch(standardQuery).then(search => {
+                    return new Promise((resolve, reject) => {
+                        let results = null;
+                        search.resultObservable().subscribe(r => {results = r}, reject, () => {
+                            try {
+                                expect(results).to.be.an('array').and.have.property('length', 5);
+                                resolve();
+                            } catch(e) {
+                                reject(e);
+                            }
+                        });
+                    });
+                });
+            });
+
+            it("should allow results observable with window", () => {
+                return splunk.search.submitSearch(standardQuery).then(search => {
+                    return new Promise((resolve, reject) => {
+                        let results = null;
+                        search.resultObservable({offset: 0, batchSize: 2}).subscribe(r => {results = r}, reject, () => {
+                            try {
+                                expect(results).to.be.an('array').and.have.property('length', 2);
+                                resolve();
+                            } catch(e) {
+                                reject(e);
+                            }
+                        });
+                    });
+                });
+            });
+        });
+
+        it("should allow status subscription", () => {
+            return splunk.search.submitSearch(standardQuery).then(search => {
+                return new Promise((resolve, reject) => {
+                    let count = 0;
+                    search.statusObservable(10).subscribe(
+                        status => {
+                            count += 1;
+                            try {
+                                expect(status).to.have.property('sid');
+                                expect(status).to.have.property('eventCount');
+                                expect(status).to.have.property('dispatchState');
+                            } catch(e) {
+                                reject(e);
+                            }
+                        },
+                        reject,
+                        () => {
+                            try {
+                                assert(count > 0, "We should have gotten at least one status");
+                            } catch(e) {
+                                reject(e);
+                            }
+                            resolve();
+                        });
+                });
+            });
+
+        });
     });
 
 });
