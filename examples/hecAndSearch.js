@@ -96,7 +96,6 @@ async function searchResults(splunk, start, timeout, query, expected) {
     splunk.search.getJob(sid).then(info => {
         if (info.dispatchState === "DONE") {
             splunk.search.getResults(sid).then(results => {
-                // console.log(results)
                 const retNum = Object.entries(results.results).length;
                 console.log(`got ${retNum} results`);
                 if (retNum < expected) {
