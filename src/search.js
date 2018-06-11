@@ -325,7 +325,7 @@ class SearchService extends BaseApiService {
     /**
      * Submits a search job and wraps the response in an object
      * for easier further processing.
-     * @param {SearchService~NewSearchConfig} searchArgs 
+     * @param {SearchService~PostJobsRequest} searchArgs
      * @returns {Promise<Search>} search
      */
     submitSearch(searchArgs) {
@@ -339,7 +339,7 @@ class SearchService extends BaseApiService {
 
 /**
  * create a new search
- * @typedef {object} SearchService~NewSearchConfig
+ * @typedef {object} SearchService~PostJobsRequest
  * @property {string} [ adhocSearchLevel ] Use one of the following search modes. [ verbose | fast | smart ]
  * @property {string} [ earliestTime ] Specify a time string. Sets the earliest (inclusive), respectively,  time bounds for  the search
  * @property {string} [ latestTime ] Specify a time string. Sets the latest (exclusive), respectively,  time bounds for the search.
