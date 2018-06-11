@@ -124,7 +124,7 @@ async function searchResults(splunk, start, timeout, query, expected) {
 // define the main workflow
 async function main() {
 
-    const index = "main";
+    const index = "newIndexTest";
     // ***** STEP 1: Get Splunk SSC client
     // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
     const splunk = new SplunkSSC(HOST, AUTH_TOKEN, TENANT_ID);
