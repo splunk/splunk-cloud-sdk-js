@@ -4,6 +4,9 @@ const co = require('co');
 const { SEARCH_SERVICE_PREFIX } = require('./common/service_prefixes');
 const { Observable } = require('rxjs/Observable');
 
+class SplunkSearchCancelError extends Error {
+}
+
 /**
  * A base for an easy-to-use search interface
  */
@@ -16,6 +19,7 @@ class Search {
     constructor(client, sid) {
         this.client = client;
         this.sid = sid;
+        this.isCancelling = false;
     }
 
     /**
@@ -33,7 +37,15 @@ class Search {
      * @returns {Promise} done
      */
     wait(updateInterval, statusCallback) {
-        return this.client.waitForJob(this.sid, updateInterval, statusCallback);
+        const self = this;
+        return this.client.waitForJob(this.sid, updateInterval, statusCallback)
+            .catch(err => {
+                if (self.isCancelling && err.code === 404) {
+                    throw new SplunkSearchCancelError("Search has been cancelled");
+                } else {
+                    throw err;
+                }
+            });
     }
 
     /**
@@ -41,6 +53,7 @@ class Search {
      * @returns {Promise} done
      */
     cancel() {
+        this.isCancelling = true;
         return this.client.createJobControlAction(this.sid, "cancel");
     }
 
@@ -89,7 +102,7 @@ class Search {
                     results = Array.concat(results, data.results);
                 }
                 return results;
-            })
+            });
     }
 
     /**
@@ -238,7 +251,7 @@ class SearchService extends BaseApiService {
                         resolve(self.waitForJob(jobId, interval, callback)); // Resolving with a promise which will then resolve- recursion with the event loop
                     }, pollInterval);
                 }
-            })
+            }).catch(err => reject(err));
         });
     }
 

@@ -102,17 +102,6 @@ describe("integration tests Using Search APIs", () => {
                 expect(results[0].content).to.have.property('dispatchState');
             }))
 
-        // it("should be easy to use", () => {
-        //     return splunk.search.submitSearch(standardQuery).then(search => {
-        //         // search.status().then(console.log);
-        //         // search.eventObserver().subscribe(console.log)
-        //         // search.wait().then(console.log);
-        //         // search.eventObserver()
-        //         //     .pipe(op.reduce((ary, elem) => { ary.push(elem); return ary }, []))
-        //         //     .subscribe(;console.log)
-        //         search.cancel().then(console.log);
-        //     });
-        // })
     });
 
     describe("Search composite", () => {
@@ -128,6 +117,16 @@ describe("integration tests Using Search APIs", () => {
                 search.cancel()
                     .then(() => splunk.search.getJob(search.sid))
                     .then(() => assert.fail("Should have thrown"), (err) => expect(err).to.have.property('code', 404));
+            });
+        });
+
+        it("should throw a cancellation message when cancelled", () => {
+            return splunk.search.submitSearch(standardQuery).then(search => {
+                return search.cancel()
+                    .then(() => search.wait())
+                    .then(() => assert.fail("should have received error"), (err) => {
+                        expect(err).to.have.property('message').and.match(/cancelled/);
+                    })
             });
         });
 
