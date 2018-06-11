@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-syntax */
 const BaseApiService = require('./baseapiservice');
-const co = require('co');
 const { SEARCH_SERVICE_PREFIX } = require('./common/service_prefixes');
 const { Observable } = require('rxjs/Observable');
 
