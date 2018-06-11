@@ -8,7 +8,7 @@ const tenantID = process.env.TENANT_ID;
 const sscHost = process.env.SSC_HOST;
 
 const splunk = new SplunkSSC(sscHost, token, tenantID);
-const splunkBadToken = new SplunkSSC(sscHost, config.invalidAuthToken, config.testTenant);
+const splunkBadToken = new SplunkSSC(sscHost, config.invalidAuthToken, config.invalidTenant);
 
 describe('integration tests for HEC2 Endpoints', () => {
 
@@ -127,7 +127,7 @@ describe('integration tests for HEC2 Endpoints', () => {
             });
         });
 
-});
+    });
 
 
 });
