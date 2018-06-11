@@ -34,7 +34,7 @@ class HEC2Service extends BaseApiService {
         // key which will be the body of the POST
         Object.keys(event).forEach(key => {
             if (key !== 'event') {
-                queryParams[key] = JSON.stringify(event[key]);
+                queryParams[key] = event[key];
             }
         });
         return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['raw']), event.event, queryParams);
