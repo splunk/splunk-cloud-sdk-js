@@ -1,6 +1,6 @@
 const config = require("../config");
-const SplunkSSC = require("../../splunk");
-const EventBatcher = require("../../hec2_event_batcher");
+const SplunkSSC = require("../../src/splunk");
+const EventBatcher = require("../../src/hec2_event_batcher");
 const { assert } = require("chai");
 
 const token = process.env.BEARER_TOKEN;
