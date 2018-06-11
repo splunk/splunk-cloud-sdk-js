@@ -7,6 +7,23 @@ class SplunkSearchCancelError extends Error {
 }
 
 /**
+ * @private
+ * @param {function} func
+ * @param jobId
+ * @param batchSize
+ * @param max
+ * @returns {IterableIterator<Promise<Object>>}
+ */
+function* iterateBatches(func, batchSize, max) {
+    let start = 0;
+    while (start < max) {
+        yield func(start, batchSize);
+        start += batchSize;
+    }
+}
+
+
+/**
  * A base for an easy-to-use search interface
  */
 class Search {
@@ -93,7 +110,7 @@ class Search {
                         .then(response => response.results);
                 }
                 const fetcher = (start) => self.client.getResults(self.sid, start, batchSize);
-                const iterator = self.client.iterateBatches(fetcher, batchSize, job.eventCount);
+                const iterator = iterateBatches(fetcher, batchSize, job.eventCount);
                 let results = [];
                 for (const batch of iterator) {
                     // eslint-disable-next-line no-await-in-loop
@@ -162,7 +179,7 @@ class Search {
         return Observable.create(async observable => {
             const job = await self.client.waitForJob(self.sid);
             const fetchEvents = (start) => self.client.getEvents(self.sid, start, batchSize);
-            const batchIterator = self.client.iterateBatches(fetchEvents, batchSize, job.eventCount);
+            const batchIterator = iterateBatches(fetchEvents, batchSize, job.eventCount);
             for (const promise of batchIterator) {
                 // eslint-disable-next-line no-await-in-loop
                 const batch = await promise;
@@ -303,22 +320,6 @@ class SearchService extends BaseApiService {
      */
     deleteJob(jobId) {
         return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
-    }
-
-    /**
-     * @private
-     * @param {function} func
-     * @param jobId
-     * @param batchSize
-     * @param max
-     * @returns {IterableIterator<Promise<Object>>}
-     */
-    * iterateBatches(func, batchSize, max) {
-        let start = 0;
-        while (start < max) {
-            yield func(start, batchSize);
-            start += batchSize;
-        }
     }
 
     /**

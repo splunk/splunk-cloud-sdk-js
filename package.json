@@ -15,7 +15,7 @@
     "lint:fix": "eslint src/** examples/** --fix",
     "pretest": "yarn lint",
     "test": "mocha test/unit",
-    "test:integration": "mocha --timeout=10000 test/integration",
+    "test:integration": "mocha --timeout=10000 --require babel-polyfill test/integration",
     "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",
     "apidocs": "jsdoc -r -c jsdoc.json -d doc/api/ --pedantic",
@@ -27,7 +27,8 @@
   "license": "UNLICENSED",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
