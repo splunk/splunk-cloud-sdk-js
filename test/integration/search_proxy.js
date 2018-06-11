@@ -135,7 +135,7 @@ describe("integration tests Using Search APIs", () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
                 return new Promise((resolve, reject) => {
                     let counter = 0;
-                    search.eventObserver().subscribe(() => counter += 1, (err) => reject(err), () => {
+                    search.eventObservable({batchSize: 2}).subscribe(() => counter += 1, (err) => reject(err), () => {
                         if (counter === 5) {
                             resolve(counter);
                         } else {
@@ -147,6 +147,88 @@ describe("integration tests Using Search APIs", () => {
 
         });
 
+        describe("Get results via promise", () => {
+            it("should allow retrieving all results", () => {
+                return splunk.search.submitSearch(standardQuery).then(search => {
+                    return search.wait()
+                        .then(() => search.getResults().then((results) => {
+                            expect(results).to.be.an('array').and.have.property('length', 5);
+                        }));
+                });
+            });
+
+            it("should allow retrieving result window", () => {
+                return splunk.search.submitSearch(standardQuery).then(search => {
+                    return search.wait()
+                        .then(() => search.getResults({offset: 0, batchSize: 2}).then((results) => {
+                            expect(results).to.be.an('array').and.have.property('length', 2);
+                        }));
+                });
+            });
+        });
+
+        describe("Results Observable", () => {
+            it("should allow results observable", () => {
+                return splunk.search.submitSearch(standardQuery).then(search => {
+                    return new Promise((resolve, reject) => {
+                        let results = null;
+                        search.resultObservable().subscribe(r => {results = r}, reject, () => {
+                            try {
+                                expect(results).to.be.an('array').and.have.property('length', 5);
+                                resolve();
+                            } catch(e) {
+                                reject(e);
+                            }
+                        });
+                    });
+                });
+            });
+
+            it("should allow results observable with window", () => {
+                return splunk.search.submitSearch(standardQuery).then(search => {
+                    return new Promise((resolve, reject) => {
+                        let results = null;
+                        search.resultObservable({offset: 0, batchSize: 2}).subscribe(r => {results = r}, reject, () => {
+                            try {
+                                expect(results).to.be.an('array').and.have.property('length', 2);
+                                resolve();
+                            } catch(e) {
+                                reject(e);
+                            }
+                        });
+                    });
+                });
+            });
+        });
+
+        it("should allow status subscription", () => {
+            return splunk.search.submitSearch(standardQuery).then(search => {
+                return new Promise((resolve, reject) => {
+                    let count = 0;
+                    search.statusObservable(10).subscribe(
+                        status => {
+                            count += 1;
+                            try {
+                                expect(status).to.have.property('sid');
+                                expect(status).to.have.property('eventCount');
+                                expect(status).to.have.property('dispatchState');
+                            } catch(e) {
+                                reject(e);
+                            }
+                        },
+                        reject,
+                        () => {
+                            try {
+                                assert(count > 0, "We should have gotten at least one status");
+                            } catch(e) {
+                                reject(e);
+                            }
+                            resolve();
+                        });
+                });
+            });
+
+        });
     });
 
 });
