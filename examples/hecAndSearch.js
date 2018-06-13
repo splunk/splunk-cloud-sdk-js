@@ -1,6 +1,6 @@
 // ***** TITLE: Get data in using HEC
-// ***** DESCRIPTION: This example show show to get data in using the HTTP Event Collector (HEC) in 
-//              different ways, then runs a search to verify the data was added. 
+// ***** DESCRIPTION: This example show show to get data in using the HTTP Event Collector (HEC) in
+//              different ways, then runs a search to verify the data was added.
 
 
 const SplunkSSC = require("../splunk");
@@ -119,12 +119,13 @@ async function searchResults(splunk, start, timeout, query, expected) {
 // define the main workflow
 async function main() {
 
-    // todo: should be a non-main index, but playground now still have issues for sending data to non-main index
-    const index = "main";
-    // ***** STEP 1: Get Splunk SSC client
-    // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
-    const splunk = new SplunkSSC(HOST, AUTH_TOKEN, TENANT_ID);
-
+    console.log("hello world")
+    // // todo: should be a non-main index, but playground now still have issues for sending data to non-main index
+    // const index = "main";
+    // // ***** STEP 1: Get Splunk SSC client
+    // // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
+    // const splunk = new SplunkSSC(HOST, AUTH_TOKEN, TENANT_ID);
+    //
     // // ***** STEP 2: Define a new index
     // // ***** DESCRIPTION: Define a new index in the Metadata Catalog so that we can send events to the new index.
     // await createIndex(splunk, index);
