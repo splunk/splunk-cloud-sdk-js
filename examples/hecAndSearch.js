@@ -1,7 +1,7 @@
 // ***** TITLE: Get data in using HEC
 // ***** DESCRIPTION: This example show show to get data in using the HTTP Event Collector (HEC) in
 //              different ways, then runs a search to verify the data was added.
-require ("babel-polyfill")
+require("babel-polyfill");
 const SplunkSSC = require("../splunk");
 
 const HOST = process.env.SSC_HOST;
@@ -84,33 +84,25 @@ async function searchResults(splunk, start, timeout, query, expected) {
         console.log(`TIMEOUT!!!! Search is taking more than ${timeout}ms. Terminate!`);
         process.exit(1);
     }
-
-    console.log(`Spent ${Date.now() - start}ms to wait for events from query ${query}`);
-
-    await sleep(5000);
-    const sid = await splunk.search.createJob({ "query": query });
     await sleep(5000);
 
-    splunk.search.getJob(sid).then(info => {
-        if (info.dispatchState === "DONE") {
-            splunk.search.getResults(sid).then(results => {
-                const retNum = Object.entries(results.results).length;
-                console.log(`got ${retNum} results`);
-                if (retNum < expected) {
-                    searchResults(splunk, start, timeout, query, expected);
-                } else if (retNum > expected) {
-                    console.log(Object.entries(results.results));
-                    throw Error(`find more events than expected for query ${query}`);
-                } else if (retNum === expected) {
-                    console.log(`Successfully found ${retNum} events for query ${query}, total spent ${Date.now() - start}ms`);
-                }
-            });
-        }
-        else {
-            console.log("job is not done !!!! need another try");
-            searchResults(splunk, start, timeout, query, expected);
-        }
-    });
+    splunk.search.createJob({ "query": query })
+        .then(sid => splunk.search.waitForJob(sid))
+        .then(searchObj => {
+            splunk.search.getResults(searchObj.sid)
+                .then(resultResponse => {
+                    const retNum = resultResponse.results.length;
+                    console.log(`got ${retNum} results`);
+                    if (retNum < expected) {
+                        searchResults(splunk, start, timeout, query, expected);
+                    } else if (retNum > expected) {
+                        console.log(retNum);
+                        throw Error(`find more events than expected for query ${query}`);
+                    } else if (retNum === expected) {
+                        console.log(`Successfully found ${retNum} events for query ${query}, total spent ${Date.now() - start}ms`);
+                    }
+                });
+        });
 };
 
 
@@ -135,7 +127,6 @@ async function main() {
 
     // ***** STEP 4: Verify the data
     // ***** DESCRIPTION: Search the data to ensure the data was ingested and field extractions are present.
-
     // Search for all 5 events that were sent using HEC
     const timeout = 90 * 1000;
     const query = `search index=${index} ${host},${source}`;
