@@ -19,7 +19,7 @@
     "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",
     "docs": "jsdoc -r -c jsdoc.json -d docs --pedantic",
-    "publish:docs": "yarn install && yarn docs && yarn cicd-publish-docs",
+    "publish:docs": "yarn docs && yarn cicd-publish-docs",
     "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
     "stop:swagger": "docker rm -f swagger",
     "example": "node examples/*.js"
@@ -27,7 +27,7 @@
   "author": "Splunk, Inc.",
   "license": "UNLICENSED",
   "devDependencies": {
-    "@splunk/cicd-tools": "^0.0.9",
+    "@splunk/cicd-tools": "^0.0.10",
     "@splunk/jsdoc-loader": "^1.0.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",

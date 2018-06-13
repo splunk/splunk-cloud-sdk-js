@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@splunk/cicd-tools@^0.0.9":
-  version "0.0.9"
-  resolved "https://repo.splunk.com/artifactory/api/npm/npm-solutions-local/@splunk/cicd-tools/-/@splunk/cicd-tools-0.0.9.tgz#1a93918bb01887efffb49da74af30f4d9c099b3c"
+"@splunk/cicd-tools@^0.0.10":
+  version "0.0.10"
+  resolved "https://repo.splunk.com/artifactory/api/npm/npm-solutions-local/@splunk/cicd-tools/-/@splunk/cicd-tools-0.0.10.tgz#47f187c0e685b932669699229b224a3f5d5ae999"
   dependencies:
     archiver "^2.1.1"
     child-process-promise "^2.2.1"
