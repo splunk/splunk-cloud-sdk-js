@@ -125,25 +125,25 @@ async function main() {
     // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
     const splunk = new SplunkSSC(HOST, AUTH_TOKEN, TENANT_ID);
 
-    // ***** STEP 2: Define a new index
-    // ***** DESCRIPTION: Define a new index in the Metadata Catalog so that we can send events to the new index.
-    await createIndex(splunk, index);
-
-    // ***** STEP 3: Get data in using HEC
-    // ***** DESCRIPTION: Send a single event, a batch of events, and raw events using HEC.
-    const host = `myhost-${new Date().getSeconds()}`;
-    const source = `mysource-${new Date().getMinutes()}`;
-    console.log(`host=${host}, source = ${source}`);
-    sendDataViaHec(splunk, index, host, source);
-
-    // ***** STEP 4: Verify the data
-    // ***** DESCRIPTION: Search the data to ensure the data was ingested and field extractions are present.
-
-    // Search for all 5 events that were sent using HEC
-    const timeout = 90 * 1000;
-    const query = `search index=${index} ${host},${source}`;
-    console.log(query);
-    await searchResults(splunk, Date.now(), timeout, query, 5);
+    // // ***** STEP 2: Define a new index
+    // // ***** DESCRIPTION: Define a new index in the Metadata Catalog so that we can send events to the new index.
+    // await createIndex(splunk, index);
+    //
+    // // ***** STEP 3: Get data in using HEC
+    // // ***** DESCRIPTION: Send a single event, a batch of events, and raw events using HEC.
+    // const host = `myhost-${new Date().getSeconds()}`;
+    // const source = `mysource-${new Date().getMinutes()}`;
+    // console.log(`host=${host}, source = ${source}`);
+    // sendDataViaHec(splunk, index, host, source);
+    //
+    // // ***** STEP 4: Verify the data
+    // // ***** DESCRIPTION: Search the data to ensure the data was ingested and field extractions are present.
+    //
+    // // Search for all 5 events that were sent using HEC
+    // const timeout = 90 * 1000;
+    // const query = `search index=${index} ${host},${source}`;
+    // console.log(query);
+    // await searchResults(splunk, Date.now(), timeout, query, 5);
 };
 
 // run the workflow
