@@ -1,6 +1,6 @@
 const config = require("../config");
-const SplunkSSC = require("../../src/splunk");
-const EventBatcher = require("../../src/hec2_event_batcher");
+const SplunkSSC = require("../../splunk");
+const EventBatcher = require("../../hec2_event_batcher");
 const { assert } = require("chai");
 
 const token = process.env.BEARER_TOKEN;
@@ -122,7 +122,7 @@ describe('integration tests for HEC2 Endpoints', () => {
                 return splunk.hec2.createRawEvent(event1).then(response => {
                     assert.deepEqual(response, successResponse, 'response should be expected success response.');
                 }).catch(err => {
-                    assert.fail('request should not have failed');
+                    assert.fail(`request should not have failed ${err}`);
                 });
             });
         });
