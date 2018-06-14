@@ -4,10 +4,8 @@
 require("babel-polyfill");
 const SplunkSSC = require("../splunk");
 
-const HOST = process.env.SSC_HOST;
-const AUTH_TOKEN = process.env.BEARER_TOKEN;
-const { TENANT_ID } = process.env;
 
+const { SSC_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 // define helper functions
 
@@ -67,18 +65,28 @@ function sendDataViaHec(splunk, index, host, source) {
     // Use the HEC raw endpoint to send data
     splunk.hec2.createRawEvent(event1).then(data => {
         console.log(data);
-    }).catch(err => console.log(`hecraw: ${err.code}`));
+    }).catch(err => {
+        console.log(`hecraw: ${err}`);
+        process.exit(1);
+    });
 
     // Use the HEC endpoint to send one event
     splunk.hec2.createEvent(event2).then(data => {
         console.log(data);
-    }).catch(err => console.log(`hec event1: ${err.code}`));
+    }).catch(err => {
+        console.log(`hec event1: ${err}`);
+        process.exit(1);
+    });
 
 
     // Use the HEC endpoint to send multiple events
     splunk.hec2.createEvents([event1, event2, event3]).then(data => {
         console.log(data);
-    }).catch(err => console.log(`hec events: ${err.code}`));
+    }).catch(err => {
+        console.log(`hec events: ${err}`);
+        process.exit(1);
+
+    });
 };
 
 
@@ -101,11 +109,16 @@ async function searchResults(splunk, start, timeout, query, expected) {
                         searchResults(splunk, start, timeout, query, expected);
                     } else if (retNum > expected) {
                         console.log(retNum);
-                        throw Error(`find more events than expected for query ${query}`);
+                        console.log(`find more events than expected for query ${query}`);
+                        process.exit(1);
                     } else if (retNum === expected) {
                         console.log(`Successfully found ${retNum} events for query ${query}, total spent ${Date.now() - start}ms`);
                     }
                 });
+        })
+        .catch(err => {
+            console.log(err);
+            process.exit(1);
         });
 };
 
@@ -116,7 +129,7 @@ async function main() {
     const index = "main";
     // ***** STEP 1: Get Splunk SSC client
     // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
-    const splunk = new SplunkSSC(HOST, AUTH_TOKEN, TENANT_ID);
+    const splunk = new SplunkSSC(SSC_HOST, BEARER_TOKEN, TENANT_ID);
 
     // ***** STEP 2: Define a new index
     // ***** DESCRIPTION: Define a new index in the Metadata Catalog so that we can send events to the new index.
@@ -133,7 +146,7 @@ async function main() {
     // ***** DESCRIPTION: Search the data to ensure the data was ingested and field extractions are present.
     // Search for all 5 events that were sent using HEC
     const timeout = 90 * 1000;
-    const query = `search index=${index} ${host},${source}`;
+    const query = `search  index==${index} ${host} ${source}`;
     console.log(query);
     await searchResults(splunk, Date.now(), timeout, query, 5);
 
