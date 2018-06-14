@@ -96,6 +96,8 @@ async function searchResults(splunk, start, timeout, query, expected) {
         console.log(`TIMEOUT!!!! Search is taking more than ${timeout}ms. Terminate!`);
         process.exit(1);
     }
+
+    // sleep 5 seconds before to retry the search
     await sleep(5000);
 
     splunk.search.createJob({ "query": query })
