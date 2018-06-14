@@ -8,6 +8,7 @@ const HOST = process.env.SSC_HOST;
 const AUTH_TOKEN = process.env.BEARER_TOKEN;
 const { TENANT_ID } = process.env;
 
+
 // define helper functions
 
 function sleep(ms) {
@@ -25,13 +26,16 @@ async function createIndex(splunk, index) {
         "disabled": false
     };
 
-    splunk.catalog.createDataset(regex1)
-        .then(data => console.log(data))
-        .catch(err => console.log(`create index error:  ${err.code}`));
 
-    // it will take some time for the new index to finish the provisioning
-    console.log("wait for 90s for index to be provisioned")
-    await sleep(90 * 1000);
+    if (index !== "main") {
+        splunk.catalog.createDataset(regex1)
+            .then(data => console.log(data))
+            .catch(err => console.log(`create index error 1:  ${err.code}`));
+
+        // it will take some time for the new index to finish the provisioning
+        console.log("wait for 90s for index to be provisioned");
+        await sleep(70 * 1000);
+    }
 };
 
 function sendDataViaHec(splunk, index, host, source) {
@@ -132,7 +136,11 @@ async function main() {
     const query = `search index=${index} ${host},${source}`;
     console.log(query);
     await searchResults(splunk, Date.now(), timeout, query, 5);
-};
+
+    if (index !== "main") {
+        await splunk.catalog.deleteDataset();
+    }
+}
 
 // run the workflow
 main();
