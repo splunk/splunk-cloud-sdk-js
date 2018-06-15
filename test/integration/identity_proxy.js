@@ -180,7 +180,7 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
 // 3. Delete the newly created test tenant using deleteTenant() method and validate using getUserProfile() method
 // 4. Delete a tenant which is currently not present in the user-profile and validate that a 404 error is thrown
 describe('integration tests for Identity Tenant Endpoints', () => {
-    const integrationTestTenantID = `${Date.now()}-sdk-integration-test-tenant`;
+    const integrationTestTenantID = `${Date.now()}-sdk-integration`;
 
     describe('Create a new tenant and validate - Good and Bad cases', () => {
         const testPostTenant1 =
