@@ -69,6 +69,7 @@ typings/
 *.env
 
 .vscode/
+*.code-workspace
 .idea/
 *.iml
 

@@ -42,7 +42,7 @@ class HEC2Service extends BaseApiService {
 
     /**
      * Create metrics to be ingested by Splunk SSC.
-     * @param {Object|HEC2Service~MetricEvent} metrics
+     * @param {Object|HEC2Service~MetricEvent[]} metrics
      * @return {Promise<HEC2Service~Response>}
      */
     createMetrics(metrics) {

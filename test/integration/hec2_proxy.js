@@ -2,6 +2,7 @@ const config = require('../config');
 const SplunkSSC = require('../../splunk');
 const EventBatcher = require('../../hec2_event_batcher');
 const { assert } = require('chai');
+const { expect } = require("chai");
 
 const token = process.env.BEARER_TOKEN;
 const tenantID = process.env.TENANT_ID;
@@ -151,50 +152,61 @@ describe('integration tests for HEC2 Endpoints', () => {
             }
         ];
         
-        const metricEvent = {
-            "attributes": {
-                "defaultDimensions": {},
-                "defaultType": "g",
-                "defaultUnit": "MB"
+        const metricEvent1 = {
+            'attributes': {
+                'defaultDimensions': {},
+                'defaultType': 'g',
+                'defaultUnit': 'MB'
             },
             'body': metrics,
-            "host": "myhost",
-            "id": "metric12345678",
-            "nanos": 9999998,
-            "source": "mysource",
-            "sourcetype": "mysourcetype",
-            "timestamp": 1529020697
+            'host': 'myhost',
+            'id': 'metric0001',
+            'nanos': 1,
+            'source': 'mysource',
+            'sourcetype': 'mysourcetype',
+            'timestamp': 1529020697
         };
 
-        const metricEventNoDefaults = JSON.parse(JSON.stringify(metricEvent));
+        const metricEventNoDefaults = JSON.parse(JSON.stringify(metricEvent1));
         metricEventNoDefaults.attributes = {};
 
+        const metricEvent2 = JSON.parse(JSON.stringify(metricEvent1));
+        metricEvent2.id = 'metric0002';
+        metricEvent2.nanos = 2;
+
         describe('Post metrics', () => {
-            it('should return a successful response', () => splunk.hec2.createMetrics(metricEvent).then(response => {
-                assert.isUndefined(response, 'response should be expected success response (blank).');
+            it('should return a successful response', () => splunk.hec2.createMetrics([metricEvent1]).then(response => {
+                expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
             }).catch(err => {
                 assert.fail(`request should not have failed ${err}`);
             }));
         });
 
         describe('Post metrics with no defaults', () => {
-            it('should return a successful response', () => splunk.hec2.createMetrics(metricEventNoDefaults).then(response => {
-                assert.isUndefined(response, 'response should be expected success response (blank).');
+            it('should return a successful response', () => splunk.hec2.createMetrics([metricEventNoDefaults]).then(response => {
+                expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
+            }).catch(err => {
+                assert.fail(`request should not have failed ${err}`);
+            }));
+        });
+
+        describe('Post metrics, two events', () => {
+            it('should return a successful response', () => splunk.hec2.createMetrics([metricEvent1, metricEvent2]).then(response => {
+                expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
             }).catch(err => {
                 assert.fail(`request should not have failed ${err}`);
             }));
         });
 
         describe('Post metrics bad format', () => {
-            it('should return a 400 response', () => splunk.hec2.createMetrics({"invalid": "data format"}).then(
-                response => {
+            it('should return a 400 response', () => splunk.hec2.createMetrics({'invalid': 'data format'}).then(
+                () => {
                     assert.fail('request with bad data format should not succeed')
                 },
                 err => {
                     assert.equal(err.code, 400, 'response status should be 400');
-                    // NOTE: The expected response format is:
                     // {'code':'INVALID_DATA','message':'Invalid data format'}
-                    // but it seems a bit brittle to assert that exact format
+                    expect(err).to.have.property('message').and.match(/INVALID_DATA/);
                 }
             ));
         });
