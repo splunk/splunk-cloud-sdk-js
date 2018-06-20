@@ -10,7 +10,7 @@ class IdentityService extends BaseApiService {
      * @param {IdentityService~Tenant} tenant
      * @returns {Promise<IdentityService~UserProfile>}
      */
-    getUserProfile() {
+    getUserProfile(tenant) {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], tenant));
     }
 
