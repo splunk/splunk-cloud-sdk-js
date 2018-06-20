@@ -115,7 +115,7 @@ class Search {
                     return self.client.getResults(self.sid, compiledArgs)
                         .then(response => response.results);
                 }
-                const fetcher = (start) => self.client.getResults(self.sid, { offset: start, count: compiledArgs.count });
+                const fetcher = (start) => self.client.getResults(self.sid, Object.assign({}, compiledArgs, { offset: start }));
                 const iterator = iterateBatches(fetcher, compiledArgs.count, job.eventCount);
                 let results = [];
                 for (const batch of iterator) {
