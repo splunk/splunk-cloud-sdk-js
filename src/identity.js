@@ -6,12 +6,12 @@ const {IDENTITY_SERVICE_PREFIX} = require('./common/service_prefixes');
  */
 class IdentityService extends BaseApiService {
     /**
-     * Authenticate the user by the access token obtained from authorization header and return user profile data,
-     * including tenant memberships
+     * Authenticate the user by the access token obtained from authorization header and return user profile data.
+     * @param {IdentityService~Tenant} tenant
      * @returns {Promise<IdentityService~UserProfile>}
      */
     getUserProfile() {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], 'system'));
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], tenant));
     }
 
     /**

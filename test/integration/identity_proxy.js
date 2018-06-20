@@ -197,7 +197,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             assert(!response)
         }));
 
-        it('should return the list of newly added test tenant', () => splunk.identity.getUserProfile().then(data => {
+        it('should return the list of newly added test tenant', () => splunk.identity.getUserProfile(integrationTestTenantID).then(data => {
             assert.typeOf(data, 'Object', 'response should be an object');
             assert(data.tenantMemberships.includes(integrationTestTenantID))
         }));
@@ -214,7 +214,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             assert(!response)
         }));
 
-        it('should return a user profile with test tenant deleted from the tenant memberships list', () => splunk.identity.getUserProfile().then(data => {
+        it('should return a user profile with test tenant deleted from the tenant memberships list', () => splunk.identity.getUserProfile(integrationTestTenantID).then(data => {
             assert.typeOf(data, 'Object', 'response should be an object');
             assert(!data.tenantMemberships.includes(integrationTestTenantID))
         }));
