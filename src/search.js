@@ -94,23 +94,29 @@ class Search {
      * is supplied, a window of results will be returned.  If an offset is not
      * supplied, all results will be fetched and concatenated.
      * @param {object} [args]
-     * @param {number} [args.batchSize]
+     * @param {number} [args.count]
      * @param {number} [args.offset]
      * @returns {Promise<array>}
      */
     getResults(args) {
         // eslint-disable-next-line no-param-reassign
-        args = args || {};
-        const batchSize = args.batchSize || 30;
+        const compiledArgs = args || {};
+        if (compiledArgs.batchSize) {
+            compiledArgs.count = compiledArgs.batchSize;
+            delete compiledArgs.batchSize;
+        }
+        if (!compiledArgs.count) {
+            compiledArgs.count = 30;
+        }
         const self = this;
         return self.status()
             .then(async (job) => {
-                if (args.offset != null) {
-                    return self.client.getResults(self.sid, args.offset, batchSize)
+                if (compiledArgs.offset != null) {
+                    return self.client.getResults(self.sid, compiledArgs)
                         .then(response => response.results);
                 }
-                const fetcher = (start) => self.client.getResults(self.sid, start, batchSize);
-                const iterator = iterateBatches(fetcher, batchSize, job.eventCount);
+                const fetcher = (start) => self.client.getResults(self.sid, Object.assign({}, compiledArgs, { offset: start }));
+                const iterator = iterateBatches(fetcher, compiledArgs.count, job.eventCount);
                 let results = [];
                 for (const batch of iterator) {
                     // eslint-disable-next-line no-await-in-loop
@@ -130,7 +136,7 @@ class Search {
      * @param {object} [args]
      * @param {number} [args.pollInterval]
      * @param {number} [args.offset]
-     * @param {number} [args.batchSize]
+     * @param {number} [args.count]
      * @returns {Observable}
      */
     resultObservable(args) {
@@ -168,17 +174,17 @@ class Search {
      * Returns an Rx.Observable that will return events from the 
      * job when it is done processing
      * @param {Object} [attrs]
-     * @param {number} [attrs.batchSize] Number of events to fetch per call
+     * @param {number} [attrs.count] Number of events to fetch per call
      * @returns Observable
      */
     eventObservable(attrs) {
         const self = this;
         const args = attrs || {};
-        const batchSize = args.batchSize || 30;
+        const batchSize = args.batchSize || args.count || 30;
 
         return Observable.create(async observable => {
             const job = await self.client.waitForJob(self.sid);
-            const fetchEvents = (start) => self.client.getEvents(self.sid, start, batchSize);
+            const fetchEvents = (start) => self.client.getEvents(self.sid, { offset: start, count: batchSize });
             const batchIterator = iterateBatches(fetchEvents, batchSize, job.eventCount);
             for (const promise of batchIterator) {
                 // eslint-disable-next-line no-await-in-loop
@@ -253,7 +259,7 @@ class SearchService extends BaseApiService {
         const interval = pollInterval || 250;
         return new Promise((resolve, reject) => {
             this.getJob(jobId).then(job => {
-                if(callback) {
+                if (callback) {
                     callback(job);
                 }
                 if (job.dispatchState === 'DONE') {
@@ -275,41 +281,40 @@ class SearchService extends BaseApiService {
      * Returns results for the search job corresponding to "id".
      *         Returns results post-transform, if applicable.
      * @param jobId
-     * @param {number} [ offset ]
-     * @param {number} [ batchSize ]
+     * @param {object} [ args ]
+     * @param {number} [ args.offset ]
+     * @param {number} [ args.count ]
+     * @param {number} [ backwardsCompatibleCount ] // TODO:(david) remove in future version
      * @returns {Promise<object>}
      */
-    getResults(jobId, offset, batchSize) {
-        const args = {};
-        if (offset) {
-            args.offset = offset;
+    getResults(jobId, args, backwardsCompatibleCount) {
+        let compiledArgs = args || {};
+        if (typeof args === 'number') {
+            console.warn("getResults now takes an ID and an args object.  Please update your code");
+            compiledArgs = {
+                offset: args
+            }
+            if (backwardsCompatibleCount != null) {
+                compiledArgs.count = backwardsCompatibleCount;
+            }
         }
-
-        if (batchSize) {
-            args.count = batchSize;
+        if (compiledArgs.batchSize) {
+            compiledArgs.count = compiledArgs.batchSize; // A good example of why we don't editorialize on the API.  Ooops. (DP)
+            delete compiledArgs.batchSize;
         }
-
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), args);
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), compiledArgs);
     }
 
     /**
      * Returns events for the search job corresponding to "id".
      *         Returns results post-transform, if applicable.
      * @param jobId
-     * @param {number} [ offset ]
-     * @param {number} [ batchSize ]
+     * @param {object} [ args ]
+     * @param {number} [ args.offset ]
+     * @param {number} [ args.count ]
      * @returns {Promise<object>}
      */
-    getEvents(jobId, offset, batchSize) {
-        const args = {};
-        if (offset) {
-            args.offset = offset;
-        }
-
-        if (batchSize) {
-            args.count = batchSize;
-        }
-
+    getEvents(jobId, args) {
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'events']), args);
     }
 
