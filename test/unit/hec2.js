@@ -2,8 +2,7 @@ const config = require("../config");
 const SplunkSSC = require("../../src/splunk");
 const { HEC2Service } = require("../../src/hec2");
 const EventBatcher = require("../../src/hec2_event_batcher");
-const { assert } = require("chai");
-const { expect } = require("chai");
+const { assert, expect } = require("chai");
 
 const splunk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
 const splunkBadToken = new SplunkSSC(`http://${config.host}:8882`, "BAD_TOKEN", 'TEST_TENANT');

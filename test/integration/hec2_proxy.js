@@ -1,8 +1,7 @@
 const config = require('../config');
 const SplunkSSC = require('../../splunk');
 const EventBatcher = require('../../hec2_event_batcher');
-const { assert } = require('chai');
-const { expect } = require("chai");
+const { assert, expect } = require('chai');
 
 const token = process.env.BEARER_TOKEN;
 const tenantID = process.env.TENANT_ID;
