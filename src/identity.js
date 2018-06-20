@@ -38,7 +38,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<IdentityService~User[]>}
      */
     getTenantUsers(tenantId) {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'));
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], tenantId));
     }
 
     /**
@@ -48,7 +48,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Object>}
      */
     replaceTenantUsers(tenantId, users) {
-        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
+        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], tenantId), users);
     }
 
     /**
@@ -58,7 +58,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Object>}
      */
     addTenantUsers(tenantId, users) {
-        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
+        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], tenantId), users);
     }
 
     /**
@@ -68,7 +68,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Object>}
      */
     deleteTenantUsers(tenantId, users) {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], tenantId), users);
     }
 }
 
