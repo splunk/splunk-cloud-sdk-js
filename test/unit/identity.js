@@ -7,7 +7,7 @@ const splunk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TE
 describe('Identity Endpoints', () => {
 
     describe('Get user profile', () => {
-        it('should return a user profile', () => splunk.identity.getUserProfile().then(data => {
+        it('should return a user profile', () => splunk.identity.getUserProfile('devtestTenant').then(data => {
             assert.typeOf(data, 'object', 'response should be an object');
             assert('email' in data, 'devtest@splunk.com');
             assert('firstName' in data, 'Dev');
