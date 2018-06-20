@@ -9,8 +9,8 @@ const tenantID = process.env.TENANT_ID;
 const splunk = new SplunkSSC(process.env.SSC_HOST, token, tenantID);
 
 const standardQuery = {
-    "query": "search index=* earliest=0 | head 5",
-}
+    "query": "| from index:main | head 5",
+};
 
 describe("integration tests Using Search APIs", () => {
     before(() => {
@@ -19,7 +19,7 @@ describe("integration tests Using Search APIs", () => {
             events.push({ event: `Test event no ${i}` });
         }
         splunk.hec2.createEvents(events);
-    })
+    });
 
     describe("Search", () => {
 
@@ -57,11 +57,11 @@ describe("integration tests Using Search APIs", () => {
                     return splunk.search.createJobControlAction(sid, 'pause');
                 }).then((response) => {
                     expect(response).to.have.property('messages'); // DP: I expect this one to change
-                    assert(response.messages[0].text === 'Search job paused.')
+                    assert(response.messages[0].text === 'Search job paused.');
                     return splunk.search.createJobControlAction(sid, 'cancel');
                 }).then((response) => {
                     expect(response).to.have.property('messages'); // DP: I expect this one to change
-                    assert(response.messages[0].text === 'Search job cancelled.')
+                    assert(response.messages[0].text === 'Search job cancelled.');
                     return splunk.search.getJob(sid);
                 }).then(() => assert.fail("Should have thrown"), err => assert(err.code === 404, "Job should not exist"))));
 
