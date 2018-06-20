@@ -2,7 +2,7 @@ const config = require("../config");
 const SplunkSSC = require("../../src/splunk");
 const { HEC2Service } = require("../../src/hec2");
 const EventBatcher = require("../../src/hec2_event_batcher");
-const { assert } = require("chai");
+const { assert, expect } = require("chai");
 
 const splunk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
 const splunkBadToken = new SplunkSSC(`http://${config.host}:8882`, "BAD_TOKEN", 'TEST_TENANT');
@@ -131,6 +131,53 @@ describe('Raw Endpoint', () => {
                 assert.fail('request should not have failed');
             });
         });
+    });
+
+});
+
+describe('Metrics Endpoint', () => {
+
+    const metrics = [
+        {
+            'dimensions': {'Server': 'ubuntu'},
+            'name': 'CPU',
+            'unit': 'percentage',
+            'value': 33.89
+        },
+        {
+            'dimensions': {'Region': 'us-east-1'},
+            'name': 'Memory',
+            'type': 'g',
+            'value': 2.27
+        },
+        {
+            'name': 'Disk',
+            'unit': 'GB',
+            'value': 10.444
+        }
+    ];
+    
+    const metricEvent1 = {
+        'attributes': {
+            'defaultDimensions': {},
+            'defaultType': 'g',
+            'defaultUnit': 'MB'
+        },
+        'body': metrics,
+        'host': 'myhost',
+        'id': 'metric0001',
+        'nanos': 1,
+        'source': 'mysource',
+        'sourcetype': 'mysourcetype',
+        'timestamp': 1529020697
+    };
+
+    describe('Post metrics', () => {
+        it('should return a successful response', () => splunk.hec2.createMetrics([metricEvent1]).then(response => {
+            expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
+        }).catch(err => {
+            assert.fail(`request should not have failed ${err}`);
+        }));
     });
 
 });
