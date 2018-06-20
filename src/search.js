@@ -184,7 +184,7 @@ class Search {
 
         return Observable.create(async observable => {
             const job = await self.client.waitForJob(self.sid);
-            const fetchEvents = (start) => self.client.getEvents(self.sid, start, batchSize);
+            const fetchEvents = (start) => self.client.getEvents(self.sid, { offset: start, count: batchSize });
             const batchIterator = iterateBatches(fetchEvents, batchSize, job.eventCount);
             for (const promise of batchIterator) {
                 // eslint-disable-next-line no-await-in-loop
@@ -309,20 +309,12 @@ class SearchService extends BaseApiService {
      * Returns events for the search job corresponding to "id".
      *         Returns results post-transform, if applicable.
      * @param jobId
-     * @param {number} [ offset ]
-     * @param {number} [ batchSize ]
+     * @param {object} [ args ]
+     * @param {number} [ args.offset ]
+     * @param {number} [ args.count ]
      * @returns {Promise<object>}
      */
-    getEvents(jobId, offset, batchSize) {
-        const args = {};
-        if (offset) {
-            args.offset = offset;
-        }
-
-        if (batchSize) {
-            args.count = batchSize;
-        }
-
+    getEvents(jobId, args) {
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'events']), args);
     }
 

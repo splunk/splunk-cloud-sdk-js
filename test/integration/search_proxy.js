@@ -84,10 +84,10 @@ describe("integration tests Using Search APIs", () => {
             .then(sid => splunk.search.waitForJob(sid)
                 .then(job => { // As a child to keep sid in the closure
                     expect(job).to.have.property('eventCount', 5);
-                    return splunk.search.getEvents(sid, 0, 3);
+                    return splunk.search.getEvents(sid, { offset: 0, count: 3 });
                 }).then(result => {
                     assert(result.results.length === 3, "Should have gotten three events in the first batch, got: ", JSON.stringify(result));
-                    return splunk.search.getEvents(sid, 3, 5);
+                    return splunk.search.getEvents(sid, { offset: 3, count: 5 });
                 }).then(result => {
                     assert(result.results.length === 2, "Only two events should remain");
                 })));
