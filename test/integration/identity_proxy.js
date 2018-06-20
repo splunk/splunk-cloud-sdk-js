@@ -214,7 +214,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             assert(!response)
         }));
 
-        it('should return a user profile with test tenant deleted from the tenant memberships list', () => splunk.identity.getUserProfile(integrationTestTenantID).then(data => {
+        it('should return a user profile with test tenant deleted from the tenant memberships list', () => splunk.identity.getUserProfile(tenantID).then(data => {
             assert.typeOf(data, 'Object', 'response should be an object');
             assert(!data.tenantMemberships.includes(integrationTestTenantID))
         }));
