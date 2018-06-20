@@ -69,13 +69,13 @@ describe("integration tests Using Search APIs", () => {
             .then(sid => splunk.search.waitForJob(sid)
                 .then(job => { // As a child to keep sid in the closure
                     expect(job).to.have.property('eventCount', 5);
-                    return splunk.search.getResults(sid, 0, 3);
+                    return splunk.search.getResults(sid, { offset: 0, count: 3 });
                 }).then(result => {
                     assert(result.results.length === 3);
-                    return splunk.search.getResults(sid, 3, 5);
+                    return splunk.search.getResults(sid, { offset: 3, count: 5 });
                 }).then(result => {
                     assert(result.results.length === 2, "Only two events should remain");
-                    return splunk.search.getResults(sid, 10, 10);
+                    return splunk.search.getResults(sid, { offset: 10, count: 10 });
                 }).then(result => {
                     assert(result.results.length === 0);
                 })));
@@ -134,7 +134,7 @@ describe("integration tests Using Search APIs", () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
                 return new Promise((resolve, reject) => {
                     let counter = 0;
-                    search.eventObservable({batchSize: 2}).subscribe(() => counter += 1, (err) => reject(err), () => {
+                    search.eventObservable({ batchSize: 2 }).subscribe(() => counter += 1, (err) => reject(err), () => {
                         if (counter === 5) {
                             resolve(counter);
                         } else {
@@ -159,7 +159,7 @@ describe("integration tests Using Search APIs", () => {
             it("should allow retrieving result window", () => {
                 return splunk.search.submitSearch(standardQuery).then(search => {
                     return search.wait()
-                        .then(() => search.getResults({offset: 0, batchSize: 2}).then((results) => {
+                        .then(() => search.getResults({ offset: 0, batchSize: 2 }).then((results) => {
                             expect(results).to.be.an('array').and.have.property('length', 2);
                         }));
                 });
@@ -171,11 +171,11 @@ describe("integration tests Using Search APIs", () => {
                 return splunk.search.submitSearch(standardQuery).then(search => {
                     return new Promise((resolve, reject) => {
                         let results = null;
-                        search.resultObservable().subscribe(r => {results = r}, reject, () => {
+                        search.resultObservable().subscribe(r => { results = r }, reject, () => {
                             try {
                                 expect(results).to.be.an('array').and.have.property('length', 5);
                                 resolve();
-                            } catch(e) {
+                            } catch (e) {
                                 reject(e);
                             }
                         });
@@ -187,11 +187,11 @@ describe("integration tests Using Search APIs", () => {
                 return splunk.search.submitSearch(standardQuery).then(search => {
                     return new Promise((resolve, reject) => {
                         let results = null;
-                        search.resultObservable({offset: 0, batchSize: 2}).subscribe(r => {results = r}, reject, () => {
+                        search.resultObservable({ offset: 0, batchSize: 2 }).subscribe(r => { results = r }, reject, () => {
                             try {
                                 expect(results).to.be.an('array').and.have.property('length', 2);
                                 resolve();
-                            } catch(e) {
+                            } catch (e) {
                                 reject(e);
                             }
                         });
@@ -211,7 +211,7 @@ describe("integration tests Using Search APIs", () => {
                                 expect(status).to.have.property('sid');
                                 expect(status).to.have.property('eventCount');
                                 expect(status).to.have.property('dispatchState');
-                            } catch(e) {
+                            } catch (e) {
                                 reject(e);
                             }
                         },
@@ -219,7 +219,7 @@ describe("integration tests Using Search APIs", () => {
                         () => {
                             try {
                                 assert(count > 0, "We should have gotten at least one status");
-                            } catch(e) {
+                            } catch (e) {
                                 reject(e);
                             }
                             resolve();
