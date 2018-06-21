@@ -147,7 +147,7 @@ async function main() {
     // ***** DESCRIPTION: Search the data to ensure the data was ingested and field extractions are present.
     // Search for all 5 events that were sent using HEC
     const timeout = 90 * 1000;
-    const query = `|from  index:${index} where host="${host}" andss source="${source}"`;
+    const query = `|from  index:${index} where host="${host}" and source="${source}"`;
     console.log(query);
     searchResults(splunk, Date.now(), timeout, query, 5).then(
         (ret) => {
