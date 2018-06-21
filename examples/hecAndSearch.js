@@ -127,7 +127,7 @@ async function searchResults(splunk, start, timeout, query, expected) {
 // define the main workflow
 async function main() {
     // todo: should be a non-main index, but playground now still have issues for sending data to non-main index
-    const index = "test1";
+    const index = `test_${new Date().getSeconds()}`;
     // ***** STEP 1: Get Splunk SSC client
     // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
     const splunk = new SplunkSSC(SSC_HOST, BEARER_TOKEN, TENANT_ID);
