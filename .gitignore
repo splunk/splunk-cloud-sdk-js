@@ -2,8 +2,9 @@
 ./common/ # built dir
 !/.eslintrc.js
 
-# Don't check in API docs
-doc/api/
+# Don't check in docs or built docs packages
+docs/
+build/
 out/
 
 ## Node ###
@@ -69,6 +70,7 @@ typings/
 *.env
 
 .vscode/
+*.code-workspace
 .idea/
 *.iml
 

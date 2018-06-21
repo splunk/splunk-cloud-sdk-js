@@ -180,7 +180,7 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
 // 3. Delete the newly created test tenant using deleteTenant() method and validate using getUserProfile() method
 // 4. Delete a tenant which is currently not present in the user-profile and validate that a 404 error is thrown
 describe('integration tests for Identity Tenant Endpoints', () => {
-    const integrationTestTenantID = "integration-test-tenant"
+    const integrationTestTenantID = `${Date.now()}-sdk-integration`;
 
     describe('Create a new tenant and validate - Good and Bad cases', () => {
         const testPostTenant1 =
@@ -197,7 +197,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             assert(!response)
         }));
 
-        it('should return the list of newly added test tenant', () => splunk.identity.getUserProfile().then(data => {
+        it('should return the list of newly added test tenant', () => splunk.identity.getUserProfile(integrationTestTenantID).then(data => {
             assert.typeOf(data, 'Object', 'response should be an object');
             assert(data.tenantMemberships.includes(integrationTestTenantID))
         }));
@@ -214,7 +214,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             assert(!response)
         }));
 
-        it('should return a user profile with test tenant deleted from the tenant memberships list', () => splunk.identity.getUserProfile().then(data => {
+        it('should return a user profile with test tenant deleted from the tenant memberships list', () => splunk.identity.getUserProfile(tenantID).then(data => {
             assert.typeOf(data, 'Object', 'response should be an object');
             assert(!data.tenantMemberships.includes(integrationTestTenantID))
         }));
