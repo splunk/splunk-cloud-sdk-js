@@ -46,7 +46,7 @@ export class Search {
     /**
      * Polls the job until it is done processing
      */
-    wait(updateInterval: number, statusCallback: (job: object) => null): Promise<any> {
+    wait(updateInterval: number, statusCallback: (job: Job) => null): Promise<any> {
         const self = this;
         return this.client.waitForJob(this.sid, updateInterval, statusCallback)
             .catch(err => {
@@ -127,7 +127,7 @@ export class Search {
         const pollInterval = args.pollInterval || 500; // Increasing the default
         return Observable.create(observable => {
             const promises = [];
-            self.wait(pollInterval, (job) => {
+            self.wait(pollInterval, (job: Job) => {
                 if (job.eventCount > 0) { // Passes through arguments, so has the same semantics of offset == window
                     promises.push(self.getResults(args).then(results => observable.next(results)));
                 }
@@ -177,9 +177,9 @@ export class Search {
     }
 
     statusObservable(updateInterval) {
-        return Observable.create(observable => {
-            this.wait(updateInterval, (status) => observable.next(status))
-                .then(() => observable.complete(), err => observable.error(err))
+        return new Observable<Job>((observable) => {
+            this.wait(updateInterval, (job) => observable.next(job))
+                .then(() => observable.complete(), (err: Error) => observable.error(err))
         })
     }
 
@@ -192,53 +192,50 @@ class SearchService extends BaseApiService {
     // TODO:(dp) this should _not_ be an object return type.
     /**
      * Get details of all current searches.
-     * @param jobArgs {SearchService~JobsRequest}
-     * @return {Promise<object>}
      */
-    getJobs(jobArgs: JobsRequest): Promise<object> {
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs);
+    getJobs(jobArgs: object): Promise<Array<Job>> { // TODO: Flesh out JobsRequest
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
+            .then(o => o as Array<Job>);
     }
 
     // TODO:(dp) this should _not_ be a string return type.
+    // TODO:(dp) In JS, having this as a one-off string worked.  In TypeScript, I don't want to 
+    // plumb through everything as a string or object, so I'm breaking the rule of proxying the
+    // endpoints directly as the new API will follow the rule of returning an object
     /**
      * Dispatch a search and return the newly created search job
      * @param jobArgs {SearchService~PostJobsRequest}
      * @return {Promise<string>}
      */
-    createJob(jobArgs) {
-        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs);
+    createJob(jobArgs?: object): Promise<Job> {
+        const self = this;
+        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
+            .then((sid) => self.getJob(sid));
     }
 
     // TODO:(dp) response is undefined in yaml spec
     /**
      * Returns the job resource with the given `id`.
-     * @param {string} jobId
-     * @return {Promise<SearchService~Job>}
      */
-    getJob(jobId) {
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
+    getJob(jobId: string): Promise<Job> {
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]))
+            .then(o => o as Job);
     }
 
     // TODO:(dp) response should not be a string
     /**
-     * @param {string} jobId
-     * @param {SearchService~JobControlAction} action
-     * @return {Promise<string>}
      */
-    createJobControlAction(jobId, action) {
+    createJobControlAction(jobId: string, action: { action: string }): Promise<any> {  // TODO: Flesh out what this returns
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), { action });
     }
 
     // TODO:(dp) Handle other terminals other than DONE (when I figure out what they are)
     /**
-     * @param {string} jobId
-     * @param {number} [ pollInterval ]
-     * @return {Promise<SearchService~Job>}
      */
-    waitForJob(jobId, pollInterval, callback) {
+    waitForJob(jobId: string, pollInterval?: number, callback?: (job: Job) => any) {
         const self = this;
         const interval = pollInterval || 250;
-        return new Promise((resolve, reject) => {
+        return new Promise<Job>((resolve, reject) => {
             this.getJob(jobId).then(job => {
                 if (callback) {
                     callback(job);
@@ -247,7 +244,7 @@ class SearchService extends BaseApiService {
                     resolve(job);
                 } else if (job.dispatchState === 'FAILED') {
                     const error = new Error("Job failed");
-                    error.job = job;
+                    // error.job = job; // TODO: Make this a better error where we can highlight what went wrong.
                     reject(error);
                 } else {
                     setTimeout(() => {
@@ -262,50 +259,34 @@ class SearchService extends BaseApiService {
      * Returns results for the search job corresponding to "id".
      * Returns results post-transform, if applicable.
      */
-    getResults(jobId: string, args: { offset?: number, count?: number }): Promise<{ results: Array<object> }> {
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), args);
+    getResults(jobId: string, args: { offset?: number, count?: number }): Promise<{ results: Array<object> }> { // TODO: Flesh out the results type
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), args)
+            .then(o => o as { results: Array<object> })
     }
 
     /**
      * Returns events for the search job corresponding to "id".
      *         Returns results post-transform, if applicable.
-     * @param jobId
-     * @param {number} [ offset ]
-     * @param {number} [ batchSize ]
-     * @returns {Promise<object>}
      */
-    getEvents(jobId, offset, batchSize) {
-        const args = {};
-        if (offset) {
-            args.offset = offset;
-        }
-
-        if (batchSize) {
-            args.count = batchSize;
-        }
-
+    getEvents(jobId: string, args?: { offset?: number, count?: number }) { // TODO: this has changed in dev
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'events']), args);
     }
 
     /**
      * Delete the search job with the given `id`, cancelling the search if it is running.
-     * @param {string} jobId
-     * @return {Promise}
      */
-    deleteJob(jobId) {
+    deleteJob(jobId: string): Promise<any> {
         return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
     }
 
     /**
      * Submits a search job and wraps the response in an object
      * for easier further processing.
-     * @param {SearchService~PostJobsRequest} searchArgs
-     * @returns {Promise<Search>} search
      */
-    submitSearch(searchArgs) {
+    submitSearch(searchArgs: PostJobsRequest): Promise<Search> {
         const self = this;
         return this.createJob(searchArgs)
-            .then(sid => new Search(self, sid));
+            .then(job => new Search(self, job.sid));
     }
 
 }
@@ -363,6 +344,13 @@ interface PostJobsRequest {
      * The number of seconds to keep this search after processing has stopped.
      */
     timeout?: number;
+
+}
+
+interface Job { // TODO: not in spec
+    dispatchState: string // TODO: enum
+    eventCount: number;
+    sid: string;
 
 }
 

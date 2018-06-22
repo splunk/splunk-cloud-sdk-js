@@ -4,7 +4,7 @@
   "description": "Splunk SSC SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
-    "build": "babel src -d .",
+    "build": "tsc",
     "clean": "find src/ -name '*.js' | sed 's/src\\//./' | xargs rm",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
     "codecov:integration": "yarn cover:integration && codecov -f ./coverage-integration/lcov.info -F integration",

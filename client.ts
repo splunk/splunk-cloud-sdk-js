@@ -147,7 +147,7 @@ export class ServiceClient {
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
      */
-    post(path: string, data: any, query: object): Promise<object> {
+    post(path: string, data: any, query?: object): Promise<object> {
         return fetch(this.buildUrl(path, query), {
             method: "POST",
             body: typeof data !== "string" ? JSON.stringify(data) : data,
@@ -187,7 +187,7 @@ export class ServiceClient {
      * case an API endpoint is unsupported by the SDK.
      */
     // FIXME: Why does delete have a body?
-    delete(path: string, data: object): Promise<any> {
+    delete(path: string, data?: object): Promise<any> {
         let deleteData = data;
         if (data === undefined || data == null) {
             deleteData = {};
