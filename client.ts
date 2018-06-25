@@ -61,7 +61,7 @@ function decodeJson(text: string): object {
 export default class ServiceClient {
     private readonly token: string;
     private readonly url: string;
-    private readonly tenant: string;
+    private readonly tenant?: string;
 
     /**
      * Create a ServiceClient with the given URL and an auth token
@@ -70,7 +70,7 @@ export default class ServiceClient {
      * @param tenant - Default tenant ID to use
      * TODO(david): figure out how to manage token refresh
      */
-    constructor(url: string, token: string, tenant: string) {
+    constructor(url: string, token: string, tenant?: string) {
         this.token = token;
         this.url = url;
         this.tenant = tenant;
