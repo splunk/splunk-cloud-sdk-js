@@ -1,16 +1,25 @@
+import { Event, HEC2Service } from './hec2';
+
 /**
  * Provides the ability to keep a growing number of events queued up and sends them to HEC.
  * The events are flushed on a periodic interval or when the set capacity has been reached.
  *
- * @param {HEC2Service} hec2 - Proxies for the HEC2 APIs
- * @param {int} batchSize - Size of events in bytes
- * @param {int} batchCount - Number of events
- * @param {int} timeout - Interval (milliseconds) to send the events and flush the queue
+ * @param hec2 - Proxies for the HEC2 APIs
+ * @param batchSize - Size of events in bytes
+ * @param batchCount - Number of events
+ * @param timeout - Interval (milliseconds) to send the events and flush the queue
  */
-class EventBatcher {
+export default class EventBatcher {
+    private hec2: HEC2Service;
+    private readonly batchSize: number;
+    private readonly batchCount: number;
+    private readonly timeout: number;
+    private queue: Event[];
+    private timerId: number;
 
-    constructor(hec2, batchSize, batchCount, timeout) {
+    constructor(hec2: HEC2Service, batchSize: number, batchCount: number, timeout: number) {
         this.hec2 = hec2;
+        // TODO: set some sane defaults so these 3 can be optional
         this.batchSize = batchSize;
         this.batchCount = batchCount;
         this.timeout = timeout;
@@ -21,10 +30,9 @@ class EventBatcher {
     /**
      * Add a new event to the array, sends all the events if the event limits are met.
      *
-     * @param {HEC2Service~Event} event - a single event
-     * @return {Promise<HEC2Service~Response>}
+     * @param event - a single event
      */
-    add(event) {
+    public add(event: Event): Promise<object>|null {
         this.queue.push(event);
         return this.run();
     }
@@ -32,32 +40,30 @@ class EventBatcher {
     /**
      * Creates a periodic task to send all the events.
      *
-     * @return {int} timerId - unique id of the timer created
-     * @private
+     * @return timerId - unique id of the timer created
      */
-    setTimer() {
-        return setTimeout(() => {
+    private setTimer(): number {
+        // TODO: is this legit? using window.* because @types/node causes an issue
+        // see: https://github.com/TypeStrong/atom-typescript/issues/1053#issuecomment-321126192
+        return window.setTimeout(() => {
             if (this.queue.length > 0) {
                 this.flush();
             }
-        }, this.timeout)
+        }, this.timeout);
     }
 
     /**
      * Reset the timer, update the timerId.
-     * @private
      */
-    resetTimer() {
+    private resetTimer() {
         this.stop();
         this.timerId = this.setTimer();
     }
 
     /**
      * Clean up the events and timer.
-     *
-     * @return {Promise<HEC2Service~Response>}
      */
-    flush() {
+    public flush(): Promise<object> {
         const data = this.queue;
         this.queue = [];
         this.resetTimer();
@@ -69,11 +75,11 @@ class EventBatcher {
      * If the events are sent, a Promise will be returned otherwise the event will be queued until the limit is reached.
      * A timer will run periodically to ensure that events don't stay queued too long.
      *
-     * @return {Promise<HEC2Service~Response>} - can return null if event has not been sent yet.
-     * @private
+     * @return can return null if event has not been sent yet.
      */
-    run() {
+    private run(): Promise<object>|null {
         const maxCountReached = (this.queue.length >= this.batchCount);
+        // TODO: is it okay to just import @types/node and call this good?
         const eventByteSize = Buffer.byteLength(JSON.stringify(this.queue), "utf8");
 
         if (maxCountReached || eventByteSize >= this.batchSize) {
@@ -85,10 +91,8 @@ class EventBatcher {
     /**
      * Stop the timer
      */
-    stop() {
+    public stop() {
         clearTimeout(this.timerId);
     }
 
 }
-
-module.exports = EventBatcher;

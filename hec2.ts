@@ -4,7 +4,7 @@ import { HEC2_SERVICE_PREFIX } from './common/service_prefixes';
 /**
  * Encapsulates HEC2 endpoints
  */
-export default class HEC2Service extends BaseApiService {
+export class HEC2Service extends BaseApiService {
     /**
      * Create a structured event to be ingested by Splunk SSC via HEC2.
      */
@@ -47,7 +47,7 @@ export default class HEC2Service extends BaseApiService {
 /**
  * Event - a Splunk event accepted by HEC2.
  */
-interface Event {
+export interface Event {
     /**
      * Epoch time in seconds.
      */
@@ -88,7 +88,7 @@ interface Fields {
 /**
  * Response - generic response from HEC2 endpoints.
  */
-type Response = object;
+export type Response = object;
 
 interface QueryParams {
     [key: string]: string;

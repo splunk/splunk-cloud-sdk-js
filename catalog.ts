@@ -4,7 +4,7 @@ import {CATALOG_SERVICE_PREFIX} from "./common/service_prefixes";
 /**
  * Encapsulates catalog endpoints
  */
-class CatalogService extends BaseApiService {
+export class CatalogService extends BaseApiService {
     /**
      * Returns a list of datasets, optionally filtered by the given query parameters.
      * @param {string} [filter] A SPL filter string
@@ -95,7 +95,7 @@ class CatalogService extends BaseApiService {
 
 }
 
-interface DatasetInfo {
+export interface DatasetInfo {
     id: string;
     name: string;
     kind: string;
@@ -109,7 +109,7 @@ interface DatasetInfo {
     fields: Field[];
 }
 
-interface Field {
+export interface Field {
     id: string;
     name: string;
     dataSetId: string;
@@ -123,7 +123,7 @@ interface Field {
     dataset?: DatasetInfo;
 }
 
-enum DataType {
+export enum DataType {
     DATE,
     NUMBER,
     OBJECT_ID,
@@ -131,19 +131,19 @@ enum DataType {
     UNKNOWN,
 }
 
-enum FieldType {
+export enum FieldType {
     DIMENSION,
     MEASURE,
     UNKNOWN,
 }
 
-enum Prevalence {
+export enum Prevalence {
     ALL,
     SOME,
     UNKNOWN,
 }
 
-interface Rule {
+export interface Rule {
     id: string;
     name: string;
     module: string;
@@ -157,7 +157,7 @@ interface Rule {
     version: number;
 }
 
-interface Action {
+export interface Action {
     id: string;
     ruleid: string;
     kind: string;
@@ -168,5 +168,3 @@ interface Action {
     modifiedBy: string;
     version: number;
 }
-
-export default CatalogService;
