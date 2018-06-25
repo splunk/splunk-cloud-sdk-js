@@ -10,7 +10,7 @@ class CatalogService extends BaseApiService {
      * @param {string} [filter] A SPL filter string
      * @return {Promise<Array<DatasetInfo>>}
      */
-    public getDatasets(filter?: string) {
+    public getDatasets(filter?: string): Promise<object> {
         const query = {filter};
         if (filter) {
             query.filter = filter;
@@ -23,7 +23,7 @@ class CatalogService extends BaseApiService {
      * @param dataset
      * @return {Promise<DatasetInfo>}
      */
-    public createDataset(dataset: object|DatasetInfo) {
+    public createDataset(dataset: object|DatasetInfo): Promise<object> {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), dataset);
     }
 
@@ -32,7 +32,7 @@ class CatalogService extends BaseApiService {
      * @param datasetId
      * @return {Promise<DatasetInfo>}
      */
-    public getDataset(datasetId: string) {
+    public getDataset(datasetId: string): Promise<object> {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]));
     }
 
@@ -40,7 +40,7 @@ class CatalogService extends BaseApiService {
      * Delete the DatasetInfo and its dependencies with the specified id
      * @param datasetId id of the DatasetInfo to delete
      */
-    public deleteDataset(datasetId: string) {
+    public deleteDataset(datasetId: string): Promise<object> {
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]));
     }
 
@@ -49,7 +49,7 @@ class CatalogService extends BaseApiService {
      * @param {DatasetInfo} dataset
      * @returns {Promise<DatasetInfo>}
      */
-    public updateDataset(dataset: DatasetInfo) {
+    public updateDataset(dataset: DatasetInfo): Promise<object> {
         return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', dataset.id]), dataset);
     }
 
@@ -60,7 +60,7 @@ class CatalogService extends BaseApiService {
      * @param {CatalogService~Rule} rule
      * @returns {Promise<CatalogService~Rule>}
      */
-    public createRule(rule: Rule) {
+    public createRule(rule: Rule): Promise<object> {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), rule);
     }
 
@@ -69,7 +69,7 @@ class CatalogService extends BaseApiService {
      * @param {string} [filter] An SPL filter string
      * @returns {Promise<CatalogService~Rule>}
      */
-    public getRules(filter?: string) {
+    public getRules(filter?: string): Promise<object> {
         const query = {filter};
         if (filter) {
             query.filter = filter;
@@ -81,7 +81,7 @@ class CatalogService extends BaseApiService {
      * Return the Rule with the specified id
      * @returns {Promise<CatalogService~Rule>}
      */
-    public getRule(ruleId: Rule["id"]) {
+    public getRule(ruleId: Rule["id"]): Promise<object> {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]));
     }
 
@@ -89,7 +89,7 @@ class CatalogService extends BaseApiService {
      * Delete the Rule and its dependencies with the specified id
      * @returns {Promise<Object>}
      */
-    public deleteRule(ruleId: Rule["id"]) {
+    public deleteRule(ruleId: Rule["id"]): Promise<object> {
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]));
     }
 
