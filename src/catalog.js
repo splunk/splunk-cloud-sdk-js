@@ -112,10 +112,15 @@ class CatalogService extends BaseApiService {
     /**
      * Get the list of dataset fields for the given datasetID
      * @param datasetID
+     * @param {string} [filter] An SPL filter string
      * @returns {Promise<CatalogService~Field>}
      */
-    getDatasetFields(datasetID) {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']));
+    getDatasetFields(datasetID, filter) {
+        const query = {};
+        if (filter) {
+            query.filter = filter;
+        }
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), query);
     }
 
     /**
@@ -131,7 +136,7 @@ class CatalogService extends BaseApiService {
     /**
      * Creates a new Dataset Field
      * @param datasetID
-     * @param {Promise<CatalogService~Field>} datasetField
+     * @param {Object|CatalogService~Field} datasetField
      * @returns {Promise<CatalogService~Field>}
      */
     postDatasetField(datasetID, datasetField) {
@@ -179,9 +184,9 @@ class CatalogService extends BaseApiService {
 /**
  * Field
  * @typedef {object} CatalogService~Field
- * @property {string} id
- * @property {string} name
- * @property {string} datasetId
+ * @property {string} [id]
+ * @property {string} [name]
+ * @property {string} [datasetId]
  * @property {string} [dataType] DATE | NUMBER | OBJECT_ID | STRING | UNKNOWN
  * @property {string} [fieldType] DIMENSION | MEASURE | UNKNOWN
  * @property {string} [prevalence] ALL | SOME | UNKNOWN
