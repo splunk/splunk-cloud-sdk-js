@@ -1,100 +1,94 @@
-const BaseApiService = require('./baseapiservice');
-const {IDENTITY_SERVICE_PREFIX} = require('./common/service_prefixes');
+import BaseApiService from './baseapiservice';
+import {IDENTITY_SERVICE_PREFIX} from './common/service_prefixes';
 
 /**
  * Encapsulates Identity endpoints
  */
-class IdentityService extends BaseApiService {
+export class IdentityService extends BaseApiService {
     /**
      * Authenticate the user by the access token obtained from authorization header and return user profile data,
      * including tenant memberships
-     * @returns {Promise<IdentityService~UserProfile>}
+     * @returns {Promise<UserProfile>}
      */
-    getUserProfile() {
+    public getUserProfile(): Promise<object> {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], 'system'));
     }
 
     /**
      * Adds a tenant
-     * @param {IdentityService~Tenant} tenant
-     * @returns {Promise<Object>}
      */
-    createTenant(tenant) {
-        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenant);
+    public createTenant(tenantId: string): Promise<object> {
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenantId);
     }
 
     /**
      * Deletes a tenant
      * @param {string} tenantId
-     * @returns {Promise<Object>}
      */
-    deleteTenant(tenantId) {
+    public deleteTenant(tenantId: string): Promise<object> {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId], 'system'));
     }
 
     /**
      * Reads a list of users in the given tenant
      * @param {string} tenantId
-     * @returns {Promise<IdentityService~User[]>}
+     * @returns {Promise<User[]>}
      */
-    getTenantUsers(tenantId) {
+    public getTenantUsers(tenantId: string): Promise<object> {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'));
     }
 
     /**
      * Replaces current tenant users with new users
      * @param {string} tenantId
-     * @param {IdentityService~User[]} users
-     * @returns {Promise<Object>}
+     * @param {User[]} users
      */
-    replaceTenantUsers(tenantId, users) {
+    public replaceTenantUsers(tenantId: string, users: User[]): Promise<object> {
         return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
     }
 
     /**
      * Adds a list of users to the tenant
      * @param {string} tenantId
-     * @param {IdentityService~User[]} users
-     * @returns {Promise<Object>}
+     * @param {User[]} users
      */
-    addTenantUsers(tenantId, users) {
+    public addTenantUsers(tenantId: string, users: User[]): Promise<object> {
         return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
     }
 
     /**
      * Deletes a list of users from the tenant
      * @param {string} tenantId
-     * @param {IdentityService~User[]} users
-     * @returns {Promise<Object>}
+     * @param {User[]} users
      */
-    deleteTenantUsers(tenantId, users) {
+    public deleteTenantUsers(tenantId: string, users: User[]): Promise<object> {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
     }
 }
 
 /**
  * UserProfile - Represents the User recognized by the Identity Service.
- * @typedef {Object} IdentityService~UserProfile
- * @property {string} email
- * @property {string} firstName
- * @property {string} id
- * @property {string} lastName
- * @property {string} locale
- * @property {string} name
- * @property {Array<string>} [tenantMemberships]
  */
+interface UserProfile {
+    email: string;
+    firstName: string;
+    id: string;
+    lastName: string;
+    locale: string;
+    name: string;
+    tenantMemberships?: string[];
+}
 
 /**
  * Tenant - The unique tenant account within the Identity Service
- * @typedef {Object} IdentityService~Tenant
- * @property {string} tenantId
  */
+interface Tenant {
+    tenantId: string;
+}
 
 /**
  * User - The unique user within the Identity Service
- * @typedef {Object} IdentityService~User
- * @property {string} id
  */
-
-module.exports = IdentityService;
-
+interface User {
+    id: string;
+}
