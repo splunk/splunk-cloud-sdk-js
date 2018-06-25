@@ -5,7 +5,7 @@
   "main": "splunk.js",
   "scripts": {
     "tslint": "tslint",
-    "tscBuild": "tsc catalog.ts --strict",
+    "tscBuild": "tsc catalog.ts hec2.ts --strict",
     "build": "babel src -d .",
     "clean": "find src/ -name '*.js' | sed 's/src\\//./' | xargs rm",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
