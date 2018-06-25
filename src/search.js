@@ -29,8 +29,8 @@ function* iterateBatches(func, batchSize, max) {
 class Search {
     /**
      * @private
-     * @param {*} client 
-     * @param {*} sid 
+     * @param {*} client
+     * @param {*} sid
      */
     constructor(client, sid) {
         this.client = client;
@@ -73,7 +73,7 @@ class Search {
         return this.client.createJobControlAction(this.sid, "cancel");
     }
 
-    /** 
+    /**
      * Pauses this search job
      * @returns {Promise} done
      */
@@ -171,7 +171,7 @@ class Search {
     }
 
     /**
-     * Returns an Rx.Observable that will return events from the 
+     * Returns an Rx.Observable that will return events from the
      * job when it is done processing
      * @param {Object} [attrs]
      * @param {number} [attrs.count] Number of events to fetch per call
@@ -350,6 +350,7 @@ class SearchService extends BaseApiService {
  * @property {string} [ latestTime ] Specify a time string. Sets the latest (exclusive), respectively,  time bounds for the search.
  * @property {number} [ maxCount ] The number of events that can be accessible in any given status bucket.
  * @property {number} [ maxTime ] The number of seconds to run this search before finalizing. Specify 0 to never finalize.
+ * @property {string} [ module ] The module setting for spl parser populate related configures
  * @property {string} [ now ] current system time    Specify a time string to set the absolute time used for any relative time specifier in the search. Defaults to the current system time.
  * @property {string} query Search Query
  * @property {number} [ statusBuckets ] The most status buckets to generate.
@@ -361,7 +362,7 @@ class SearchService extends BaseApiService {
   * @typedef {object} SearchService~PostJobsRequest
   * @property {number} [ count ] Maximum number of entries to return. Set value to 0 to get all available entries.
   * @property {number} [ offset ] Index of first item to return.
-  * @property {string} [ search ] Response filter, where the response field values are matched against this search expression. eg. search=foo matches on any field with the string foo in the name. 
+  * @property {string} [ search ] Response filter, where the response field values are matched against this search expression. eg. search=foo matches on any field with the string foo in the name.
   */
 
 /**
