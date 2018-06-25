@@ -1,5 +1,5 @@
-const BaseApiService = require('./baseapiservice');
-const { CATALOG_SERVICE_PREFIX } = require('./common/service_prefixes');
+import BaseApiService from "./baseapiservice";
+import {CATALOG_SERVICE_PREFIX} from "./common/service_prefixes";
 
 /**
  * Encapsulates catalog endpoints
@@ -10,8 +10,8 @@ class CatalogService extends BaseApiService {
      * @param {string} [filter] A SPL filter string
      * @return {Promise<Array<CatalogService~DatasetInfo>>}
      */
-    getDatasets(filter) {
-        const query = {};
+    public getDatasets(filter?: string) {
+        const query = {filter};
         if (filter) {
             query.filter = filter;
         }
@@ -20,27 +20,27 @@ class CatalogService extends BaseApiService {
 
     /**
      * Create a new dataset.
-     * @param {Object|CatalogService~DatasetInfo} dataset
+     * @param dataset
      * @return {Promise<CatalogService~DatasetInfo>}
      */
-    createDataset(dataset) {
+    public createDataset(dataset: object|DatasetInfo) {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), dataset);
     }
 
     /**
      * Returns the dataset resource with the specified `id`.
-     * @param {string} datasetId
+     * @param datasetId
      * @return {Promise<CatalogService~DatasetInfo>}
      */
-    getDataset(datasetId) {
+    public getDataset(datasetId: string) {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]));
     }
 
     /**
      * Delete the DatasetInfo and its dependencies with the specified id
-     * @param {string} datasetId id of the DatasetInfo to delete
+     * @param datasetId id of the DatasetInfo to delete
      */
-    deleteDataset(datasetId) {
+    public deleteDataset(datasetId: string) {
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]));
     }
 
@@ -49,7 +49,7 @@ class CatalogService extends BaseApiService {
      * @param {CatalogService~DatasetInfo} dataset
      * @returns {Promise<CatalogService~DatasetInfo>}
      */
-    updateDataset(dataset) {
+    public updateDataset(dataset: DatasetInfo) {
         return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', dataset.id]), dataset);
     }
 
@@ -60,7 +60,7 @@ class CatalogService extends BaseApiService {
      * @param {CatalogService~Rule} rule
      * @returns {Promise<CatalogService~Rule>}
      */
-    createRule(rule) {
+    public createRule(rule: Rule) {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), rule);
     }
 
@@ -69,8 +69,8 @@ class CatalogService extends BaseApiService {
      * @param {string} [filter] An SPL filter string
      * @returns {Promise<CatalogService~Rule>}
      */
-    getRules(filter) {
-        const query = {};
+    public getRules(filter?: string) {
+        const query = {filter};
         if (filter) {
             query.filter = filter;
         }
@@ -79,85 +79,94 @@ class CatalogService extends BaseApiService {
 
     /**
      * Return the Rule with the specified id
-     * @param ruleId
      * @returns {Promise<CatalogService~Rule>}
      */
-    getRule(ruleId) {
+    public getRule(ruleId: Rule["id"]) {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]));
     }
 
     /**
      * Delete the Rule and its dependencies with the specified id
-     * @param ruleId
      * @returns {Promise<Object>}
      */
-    deleteRule(ruleId) {
+    public deleteRule(ruleId: Rule["id"]) {
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]));
     }
 
 }
 
-/**
- * DatasetInfo
- * @typedef {object} CatalogService~DatasetInfo
- * @property {string} [id]
- * @property {string} name
- * @property {string} kind
- * @property {string} owner
- * @property {string} [created]
- * @property {string} [modified]
- * @property {string} [createdBy]
- * @property {string} [modifiedBy]
- * @property {string} [capabilities]
- * @property {number} [version]
- * @property {Array<Field>} fields
- */
+interface DatasetInfo {
+    id: string;
+    name: string;
+    kind: string;
+    owner: string;
+    created?: string;
+    modified?: string;
+    createdBy?: string;
+    modifiedBy?: string;
+    capabilities?: string;
+    version?: number;
+    fields: Field[];
+}
 
-/**
- * Field
- * @typedef {object} CatalogService~Field
- * @property {string} id
- * @property {string} name
- * @property {string} datasetId
- * @property {string} [dataType] DATE | NUMBER | OBJECT_ID | STRING | UNKNOWN
- * @property {string} [fieldType] DIMENSION | MEASURE | UNKNOWN
- * @property {string} [prevalence] ALL | SOME | UNKNOWN
- * @property {string} [created]
- * @property {string} [modified]
- * @property {string} [versionAdded]
- * @property {string} [versionRemoved]
- * @property {CatalogService~DatasetInfo} [dataset]
- */
+interface Field {
+    id: string;
+    name: string;
+    dataSetId: string;
+    dataType?: DataType;
+    fieldType?: FieldType;
+    prevalence?: Prevalence;
+    created?: string;
+    modified?: string;
+    versionAdded?: string;
+    versionRemoved?: string;
+    dataset?: DatasetInfo;
+}
 
-/**
- * Rule
- * @typedef {object} CatalogService~Rule
- * @property {string} id
- * @property {string} name
- * @property {string} module
- * @property {string} match
- * @property {string} owner
- * @property {Array<CatalogService~Action>} actions
- * @property {string} created
- * @property {string} modified
- * @property {string} createdBy
- * @property {string} modifiedBy
- * @property {number} version
- */
+enum DataType {
+    DATE,
+    NUMBER,
+    OBJECT_ID,
+    STRING,
+    UNKNOWN,
+}
 
+enum FieldType {
+    DIMENSION,
+    MEASURE,
+    UNKNOWN,
+}
 
-/**
- * Action
- * @typedef {object} CatalogService~Action
- * @property {string} id
- * @property {string} ruleid
- * @property {string} kind
- * @property {string} owner
- * @property {string} created
- * @property {string} modified
- * @property {string} createdBy
- * @property {string} modifiedBy
- * @property {number} version
- */
+enum Prevalence {
+    ALL,
+    SOME,
+    UNKNOWN,
+}
 
-module.exports = CatalogService;
+interface Rule {
+    id: string;
+    name: string;
+    module: string;
+    match: string;
+    owner: string;
+    actions: Action[];
+    created: string;
+    modified: string;
+    createdBy: string;
+    modifiedBy: string;
+    version: number;
+}
+
+interface Action {
+    id: string;
+    ruleid: string;
+    kind: string;
+    owner: string;
+    created: string;
+    modified: string;
+    createdBy: string;
+    modifiedBy: string;
+    version: number;
+}
+
+export default CatalogService;

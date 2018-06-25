@@ -1,8 +1,8 @@
 
 class SplunkError extends Error {
-    public code: number;
-    public source: object;
-    constructor(message, code?: number, source?: object) {
+    public code?: number;
+    public source?: object;
+    constructor(message: string, code?: number, source?: object) {
         super(message);
         this.code = code;
         this.source = source;
@@ -17,10 +17,10 @@ function handleResponse(response: Response): Promise<object> {
     if (response.ok) {
         return response.text().then(decodeJson);
     }
-    return response.text().then(function (text) {
-        var err;
+    return response.text().then(text => {
+        let err;
         try {
-            var json = JSON.parse(text);
+            const json = JSON.parse(text);
             if (!json.message) {
                 // TODO: This shouldn't go to production
                 console.log(`Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`);
@@ -58,16 +58,16 @@ function decodeJson(text: string): object {
  * that implement the actual endpoints.
  * TODO: Add links to actual endpoints, SSC name
  */
-export class ServiceClient {
-    private token: string;
-    private url: string;
-    private tenant: string;
+export default class ServiceClient {
+    private readonly token: string;
+    private readonly url: string;
+    private readonly tenant: string;
 
     /**
      * Create a ServiceClient with the given URL and an auth token
-     * @param {string} url Url to Splunk SSC instance
-     * @param {string} token Authentication token
-     * @param {string} tenant Default tenant ID to use
+     * @param url - Url to Splunk SSC instance
+     * @param token - Authentication token
+     * @param tenant - Default tenant ID to use
      * TODO(david): figure out how to manage token refresh
      */
     constructor(url: string, token: string, tenant: string) {
@@ -77,36 +77,10 @@ export class ServiceClient {
     }
 
     /**
-     * Set the default tenant for the client
-     * @param {string} tenantId Default tenant ID
-     */
-    setTenant(tenant: string) {
-        this.tenant = tenant;
-    }
-
-    /**
-     * @private
-     */
-    buildPath(servicePrefix: string, pathname: Array<string>, overrideTenant?: string): string {
-        const effectiveTenant = overrideTenant || this.tenant;
-        if (!effectiveTenant) {
-            throw new Error("No tenant specified");
-        }
-        const path = `/${effectiveTenant}${servicePrefix}/${pathname.join("/")}`;
-        for (const elem in pathname) {
-            if (elem.trim() === '') {
-                throw new Error(`Empty elements in path: ${path}`)
-            }
-        }
-        return path;
-    }
-
-    /**
      * Builds the URL from a service + endpoint with query encoded in url
      * (concatenates the URL with the path)
-     * @private
      */
-    buildUrl(path: string, query?: object): string {
+    private buildUrl(path: string, query?: object): string {
         if (query && Object.keys(query).length > 0) {
             const encoder = encodeURIComponent;
             const queryEncoded = Object.keys(query)
@@ -119,14 +93,27 @@ export class ServiceClient {
 
     /**
      * Builds headers required for request to Splunk SSC (auth, content-type, etc)
-     * @private
      */
-    _buildHeaders(): Headers {
+    private buildHeaders(): Headers {
         // TODO: Cache
         return new Headers({
-            Authorization: `Bearer ${this.token}`,
-            'Content-Type': 'application/json'
+            'Authorization': `Bearer ${this.token}`,
+            'Content-Type': 'application/json',
         });
+    }
+
+    public buildPath(servicePrefix: string, pathname: string[], overrideTenant?: string): string {
+        const effectiveTenant = overrideTenant || this.tenant;
+        if (!effectiveTenant) {
+            throw new Error("No tenant specified");
+        }
+        const path = `/${effectiveTenant}${servicePrefix}/${pathname.join("/")}`;
+        for (const elem in pathname) {
+            if (elem.trim() === '') {
+                throw new Error(`Empty elements in path: ${path}`);
+            }
+        }
+        return path;
     }
 
     /**
@@ -134,11 +121,10 @@ export class ServiceClient {
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
      */
-    get(path: string, query?: object): Promise<object> {
+    public get(path: string, query?: object): Promise<object> {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
-            /* eslint-disable no-underscore-dangle */
-            headers: this._buildHeaders()
+            headers: this.buildHeaders(),
         }).then(response => handleResponse(response));
     }
 
@@ -147,11 +133,11 @@ export class ServiceClient {
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
      */
-    post(path: string, data: any, query?: object): Promise<object> {
+    public post(path: string, data: any, query?: object): Promise<object> {
         return fetch(this.buildUrl(path, query), {
             method: "POST",
             body: typeof data !== "string" ? JSON.stringify(data) : data,
-            headers: this._buildHeaders()
+            headers: this.buildHeaders(),
         }).then(response => handleResponse(response));
     }
 
@@ -160,11 +146,11 @@ export class ServiceClient {
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
      */
-    put(path: string, data: any): Promise<object> {
+    public put(path: string, data: any): Promise<object> {
         return fetch(this.buildUrl(path), {
             method: 'PUT',
             body: JSON.stringify(data),
-            headers: this._buildHeaders()
+            headers: this.buildHeaders(),
         }).then(response => handleResponse(response));
     }
 
@@ -173,11 +159,11 @@ export class ServiceClient {
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
      */
-    patch(path: string, data: object): Promise<object> {
+    public patch(path: string, data: object): Promise<object> {
         return fetch(this.buildUrl(path), {
             method: 'PATCH',
             body: JSON.stringify(data),
-            headers: this._buildHeaders()
+            headers: this.buildHeaders(),
         }).then(response => handleResponse(response));
     }
 
@@ -187,7 +173,7 @@ export class ServiceClient {
      * case an API endpoint is unsupported by the SDK.
      */
     // FIXME: Why does delete have a body?
-    delete(path: string, data?: object): Promise<any> {
+    public delete(path: string, data?: object): Promise<any> {
         let deleteData = data;
         if (data === undefined || data == null) {
             deleteData = {};
@@ -195,7 +181,7 @@ export class ServiceClient {
         return fetch(this.buildUrl(path), {
             method: 'DELETE',
             body: JSON.stringify(deleteData),
-            headers: this._buildHeaders()
+            headers: this.buildHeaders(),
         }).then(response => handleResponse(response));
     }
 }
