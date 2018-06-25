@@ -1,5 +1,5 @@
 const BaseApiService = require('./baseapiservice');
-const { CATALOG_SERVICE_PREFIX } = require('./common/service_prefixes');
+const {CATALOG_SERVICE_PREFIX} = require('./common/service_prefixes');
 
 /**
  * Encapsulates catalog endpoints
@@ -109,6 +109,55 @@ class CatalogService extends BaseApiService {
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]));
     }
 
+    /**
+     * Get the list of dataset fields for the given datasetID
+     * @param datasetID
+     * @returns {Promise<CatalogService~Field>}
+     */
+    getDatasetFields(datasetID) {
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']));
+    }
+
+    /**
+     * Gets the Field with the specified datasetID and datasetFieldID
+     * @param datasetID
+     * @param datasetFieldID
+     * @returns {Promise<CatalogService~Field>}
+     */
+    getDatasetField(datasetID, datasetFieldID) {
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]));
+    }
+
+    /**
+     * Creates a new Dataset Field
+     * @param datasetID
+     * @param {Promise<CatalogService~Field>} datasetField
+     * @returns {Promise<CatalogService~Field>}
+     */
+    postDatasetField(datasetID, datasetField) {
+        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), datasetField);
+    }
+
+    /**
+     * Updates an existing dataset field
+     * @param datasetID
+     * @param datasetFieldID
+     * @param {Promise<CatalogService~Field>} datasetField
+     * @returns {Promise<CatalogService~Field>}
+     */
+    patchDatasetField(datasetID, datasetFieldID, datasetField) {
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]), datasetField);
+    }
+
+    /**
+     * Deletes the dataset field with the specified datasetID and datasetFieldID
+     * @param datasetID
+     * @param datasetFieldID
+     * @returns {Promise<Object>}
+     */
+    deleteDatasetField(datasetID, datasetFieldID) {
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]));
+    }
 }
 
 /**
@@ -138,9 +187,6 @@ class CatalogService extends BaseApiService {
  * @property {string} [prevalence] ALL | SOME | UNKNOWN
  * @property {string} [created]
  * @property {string} [modified]
- * @property {string} [versionAdded]
- * @property {string} [versionRemoved]
- * @property {CatalogService~DatasetInfo} [dataset]
  */
 
 /**
