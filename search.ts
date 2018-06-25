@@ -1,9 +1,7 @@
 /* eslint-disable no-restricted-syntax */
-import BaseApiService from './baseapiservice';
-import servicePrefixes from './common/service_prefixes';
 import { Observable } from 'rxjs/Observable';
-
-const SEARCH_SERVICE_PREFIX = servicePrefixes.SEARCH_SERVICE_PREFIX;
+import BaseApiService from './baseapiservice';
+import { SEARCH_SERVICE_PREFIX } from './common/service_prefixes';
 
 export class SplunkSearchCancelError extends Error {
 }
@@ -18,7 +16,6 @@ function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchS
         start += batchSize;
     }
 }
-
 
 /**
  * A base for an easy-to-use search interface
@@ -66,7 +63,7 @@ export class Search {
         return this.client.createJobControlAction(this.sid, "cancel");
     }
 
-    /** 
+    /**
      * Pauses this search job
      */
     pause(): Promise<object> {
@@ -152,7 +149,7 @@ export class Search {
     }
 
     /**
-     * Returns an Rx.Observable that will return events from the 
+     * Returns an Rx.Observable that will return events from the
      * job when it is done processing
      * @param {Object} [attrs]
      * @param {number} [attrs.batchSize] Number of events to fetch per call
@@ -199,7 +196,7 @@ class SearchService extends BaseApiService {
     }
 
     // TODO:(dp) this should _not_ be a string return type.
-    // TODO:(dp) In JS, having this as a one-off string worked.  In TypeScript, I don't want to 
+    // TODO:(dp) In JS, having this as a one-off string worked.  In TypeScript, I don't want to
     // plumb through everything as a string or object, so I'm breaking the rule of proxying the
     // endpoints directly as the new API will follow the rule of returning an object
     /**
@@ -298,7 +295,7 @@ interface PostJobsRequest {
     /**
      * Use one of the following search modes. [ verbose | fast | smart ]
      */
-    adhocSearchLevel?: string;
+    adhocSearchLevel?: SearchLevel;
 
     /**
      * Specify a time string. Sets the earliest (inclusive), respectively,  time bounds for  the search
@@ -321,7 +318,7 @@ interface PostJobsRequest {
     maxTime?: number;
 
     /**
-     * current system time    Specify a time string to set the absolute time used for any relative time specifier in the search. Defaults to the current system time.
+     * current system time Specify a time string to set the absolute time used for any relative time specifier in the search. Defaults to the current system time.
      */
     now?: string;
 
@@ -347,8 +344,14 @@ interface PostJobsRequest {
 
 }
 
+enum SearchLevel {
+    VERBOSE,
+    FAST,
+    SMART,
+}
+
 interface Job { // TODO: not in spec
-    dispatchState: string // TODO: enum
+    dispatchState: string; // TODO: enum
     eventCount: number;
     sid: string;
 
@@ -412,7 +415,7 @@ interface FetchEventsRequest {
     maxLines?: number;
 
     /**
-     * The type of segmentation to perform on the data. This incudes an
+     * The type of segmentation to perform on the data. This includes an
      * option to perform k/v segmentation.
      */
     segmentation?: string;

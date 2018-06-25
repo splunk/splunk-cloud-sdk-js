@@ -1,4 +1,4 @@
-import { ServiceClient } from "./client";
+import ServiceClient from "./client";
 
 /**
  * Base class for each of the API proxies
