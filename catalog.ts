@@ -8,7 +8,7 @@ class CatalogService extends BaseApiService {
     /**
      * Returns a list of datasets, optionally filtered by the given query parameters.
      * @param {string} [filter] A SPL filter string
-     * @return {Promise<Array<CatalogService~DatasetInfo>>}
+     * @return {Promise<Array<DatasetInfo>>}
      */
     public getDatasets(filter?: string) {
         const query = {filter};
@@ -21,7 +21,7 @@ class CatalogService extends BaseApiService {
     /**
      * Create a new dataset.
      * @param dataset
-     * @return {Promise<CatalogService~DatasetInfo>}
+     * @return {Promise<DatasetInfo>}
      */
     public createDataset(dataset: object|DatasetInfo) {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), dataset);
@@ -30,7 +30,7 @@ class CatalogService extends BaseApiService {
     /**
      * Returns the dataset resource with the specified `id`.
      * @param datasetId
-     * @return {Promise<CatalogService~DatasetInfo>}
+     * @return {Promise<DatasetInfo>}
      */
     public getDataset(datasetId: string) {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]));
@@ -46,8 +46,8 @@ class CatalogService extends BaseApiService {
 
     /**
      * Updates the supplied dataset
-     * @param {CatalogService~DatasetInfo} dataset
-     * @returns {Promise<CatalogService~DatasetInfo>}
+     * @param {DatasetInfo} dataset
+     * @returns {Promise<DatasetInfo>}
      */
     public updateDataset(dataset: DatasetInfo) {
         return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', dataset.id]), dataset);
