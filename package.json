@@ -4,8 +4,9 @@
   "description": "Splunk SSC SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
-    "tslint": "tslint",
-    "tscBuild": "tsc -p tsconfig.json",
+    "tslint": "tslint -p tsconfig.json",
+    "tscBuild": "yarn tslint && tsc -p tsconfig.json",
+    "tscTest": "yarn tscBuild && yarn test",
     "build": "babel src -d .",
     "clean": "find src/ -name '*.js' | sed 's/src\\//./' | xargs rm",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",

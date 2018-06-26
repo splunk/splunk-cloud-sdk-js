@@ -166,7 +166,7 @@ describe("integration tests Using Search APIs", () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
                 return new Promise((resolve, reject) => {
                     let counter = 0;
-                    search.eventObservable({ batchSize: 2 }).subscribe(() => counter += 1, (err) => reject(err), () => {
+                    search.eventObservable({ count: 2 }).subscribe(() => counter += 1, (err) => reject(err), () => {
                         if (counter === 5) {
                             resolve(counter);
                         } else {

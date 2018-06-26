@@ -10,7 +10,7 @@ import Timer = NodeJS.Timer; // TODO: is this an okay import?
  * @param batchCount - Number of events
  * @param timeout - Interval (milliseconds) to send the events and flush the queue
  */
-export default class EventBatcher {
+export class EventBatcher {
     private hec2: HEC2Service;
     private readonly batchSize: number;
     private readonly batchCount: number;

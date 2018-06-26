@@ -1,12 +1,12 @@
 require('isomorphic-fetch');
 const config = require("../config");
-const { ServiceClient } = require("../../src/client");
+const { ServiceClient } = require("../../client");
 const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
 
 chai.use(chaiAsPromised);
 
-const expect = chai.expect;
+const {expect} = chai;
 
 describe("Basic client functionality", () => {
     const s = new ServiceClient(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');

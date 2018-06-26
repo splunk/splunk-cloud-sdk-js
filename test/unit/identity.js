@@ -1,5 +1,5 @@
 const config = require('../config');
-const SplunkSSC = require('../../src/splunk');
+const { SplunkSSC } = require('../../splunk');
 const {assert} = require('chai');
 
 const splunk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
@@ -23,7 +23,7 @@ describe('Identity Endpoints', () => {
         it('should return no response body', () => {
             const postBody = {tenantId: 'devtestTenant'};
             return splunk.identity.createTenant(postBody).then(response => {
-                assert(!response);
+                assert(!response); // TODO: we're returning {} instead of empty str
             });
         });
     });

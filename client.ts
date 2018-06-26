@@ -12,7 +12,7 @@ export class SplunkError extends Error {
  * Interrogates the response, decodes if successful and throws if error
  * @private
  */
-function handleResponse(response: Response): Promise<object> {
+function handleResponse(response: Response): Promise<any> {
     if (response.ok) {
         return response.text().then(decodeJson);
     }
@@ -24,8 +24,10 @@ function handleResponse(response: Response): Promise<object> {
                 // TODO: This shouldn't go to production
                 console.log(`Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`);
             }
+            // console.log(response);
             err = new SplunkError(json.message, response.status, json);
         } catch (ex) {
+            console.log(response);
             err = new SplunkError(`Unknown error: ${text}`, response.status);
         }
         throw err;
@@ -38,9 +40,10 @@ function handleResponse(response: Response): Promise<object> {
  * @private
  */
 // TODO(david): Should we throw if response is empty? We may get here on DELETE
-function decodeJson(text: string): object {
+function decodeJson(text: string): any { // TODO: change to returning object
     if (text === '') {
-        return {};
+        // return {}; // TODO(Shakeel): removed for now, this is a breaking change
+        return text;
     }
     try {
         return JSON.parse(text);
@@ -111,8 +114,9 @@ export class ServiceClient {
             throw new Error("No tenant specified");
         }
         const path = `/${effectiveTenant}${servicePrefix}/${pathname.join("/")}`;
+        console.log(path);
         for (const elem of pathname) {
-            if (elem.trim() === '') {
+            if (elem && elem.trim() === '') {
                 throw new Error(`Empty elements in path: ${path}`);
             }
         }

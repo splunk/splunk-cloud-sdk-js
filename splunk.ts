@@ -12,11 +12,11 @@ import { SearchService } from "./search";
  * @property {IdentityService} identity - Proxies for the identity APIs
  * @property {HEC2Service} hec2 - Proxies for the HEC2 APIs
  */
-class SplunkSSC {
-    private search: SearchService;
-    private catalog: CatalogService;
-    private identity: IdentityService;
-    private hec2: HEC2Service;
+export class SplunkSSC {
+    public search: SearchService;
+    public catalog: CatalogService;
+    public identity: IdentityService;
+    public hec2: HEC2Service;
     /**
      * Build a Splunk SSC Client
      * @param url URL to Splunk SSC environment TODO: SSC name
@@ -31,5 +31,3 @@ class SplunkSSC {
         this.hec2 = new HEC2Service(client);
     }
 }
-
-module.exports = SplunkSSC;

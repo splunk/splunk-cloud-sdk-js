@@ -61,21 +61,21 @@ export class Search {
      */
     public cancel(): Promise<object> {
         this.isCancelling = true;
-        return this.client.createJobControlAction(this.sid, {action: Action.CANCEL});
+        return this.client.createJobControlAction(this.sid, Action.CANCEL);
     }
 
     /**
      * Pauses this search job
      */
     public pause(): Promise<object> {
-        return this.client.createJobControlAction(this.sid, {action: Action.PAUSE});
+        return this.client.createJobControlAction(this.sid, Action.PAUSE);
     }
 
     /**
      * Resets the time to live on this search job
      */
     public touch(): Promise<object> {
-        return this.client.createJobControlAction(this.sid, {action: Action.TOUCH});
+        return this.client.createJobControlAction(this.sid, Action.TOUCH);
     }
 
     /**
@@ -183,7 +183,7 @@ export class SearchService extends BaseApiService {
     /**
      * Get details of all current searches.
      */
-    public getJobs(jobArgs: any): Promise<Job[]> { // TODO: Flesh out JobsRequest
+    public getJobs(jobArgs: any = {}): Promise<Job[]> { // TODO: Flesh out JobsRequest
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
             .then((o: object) => o as Job[]);
     }
@@ -193,24 +193,22 @@ export class SearchService extends BaseApiService {
     // plumb through everything as a string or object, so I'm breaking the rule of proxying the
     // endpoints directly as the new API will follow the rule of returning an object
     /**
-     * Dispatch a search and return the newly created search job
+     * Dispatch a search and return the newly created search job id
      * @param jobArgs {PostJobsRequest}
      * @return {Promise<string>}
      */
-    public createJob(jobArgs?: object): Promise<Job> {
+    public createJob(jobArgs?: object): Promise<Job["sid"]> {
         const self = this;
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
-            .then((job: Job) => self.getJob(job.sid));
+            .then((sid: Job["sid"]) => sid);
     }
 
     // TODO:(dp) response should not be a string
     /**
      */
-    public createJobControlAction(jobId: string, actionRequest: JobControlActionRequest): Promise<object> {  // TODO: Flesh out what this returns
-        if (actionRequest.action !== Action.SETTTL && actionRequest.ttl) {
-            delete actionRequest.ttl;
-        }
-        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']),  actionRequest);
+    // TODO: support ttl value via JobControlActionRequest
+    public createJobControlAction(jobId: string, action: string): Promise<object> {  // TODO: Flesh out what this returns
+        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), {action});
     }
 
     // TODO:(dp) response is undefined in yaml spec
@@ -283,7 +281,7 @@ export class SearchService extends BaseApiService {
     public submitSearch(searchArgs: PostJobsRequest): Promise<Search> {
         const self = this;
         return this.createJob(searchArgs)
-            .then(job => new Search(self, job.sid));
+            .then(sid => new Search(self, sid));
     }
 }
 

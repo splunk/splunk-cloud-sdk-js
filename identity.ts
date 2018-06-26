@@ -19,7 +19,7 @@ export class IdentityService extends BaseApiService {
      * Adds a tenant
      * @param tenantId
      */
-    public createTenant(tenantId: string): Promise<any> {
+    public createTenant(tenantId: object): Promise<any> { // TODO: change param to string, breaking change
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenantId);
     }
 
