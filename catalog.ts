@@ -1,5 +1,6 @@
 import BaseApiService from "./baseapiservice";
 import {CATALOG_SERVICE_PREFIX} from "./common/service_prefixes";
+import { QueryArgs } from "./client";
 
 /**
  * Encapsulates catalog endpoints
@@ -7,11 +8,11 @@ import {CATALOG_SERVICE_PREFIX} from "./common/service_prefixes";
 export class CatalogService extends BaseApiService {
     /**
      * Returns a list of datasets, optionally filtered by the given query parameters.
-     * @param {string} [filter] A SPL filter string
+     * @param [filter] A SPL filter string
      * @return {Promise<Array<DatasetInfo>>}
      */
     public getDatasets(filter?: string): Promise<object> {
-        const query = {filter};
+        const query: QueryArgs = {};
         if (filter) {
             query.filter = filter;
         }
@@ -70,7 +71,7 @@ export class CatalogService extends BaseApiService {
      * @returns {Promise<CatalogService~Rule>}
      */
     public getRules(filter?: string): Promise<object> {
-        const query = {filter};
+        const query: QueryArgs = {};
         if (filter) {
             query.filter = filter;
         }

@@ -1,4 +1,5 @@
 import BaseApiService from './baseapiservice';
+import { QueryArgs } from './client';
 import { HEC2_SERVICE_PREFIX } from './common/service_prefixes';
 
 /**
@@ -23,7 +24,7 @@ export class HEC2Service extends BaseApiService {
      * Create unstructured event data to be ingested by Splunk SSC via HEC2.
      */
     public createRawEvent(event: Event): Promise<Response> {
-        const queryParams: QueryParams = {};
+        const queryParams: QueryArgs = {};
         // Convert event properties to a flat object of keys and JSON stringified values, omitting the "event"
         // key which will be the body of the POST
         Object.keys(event).forEach((key: string) => {
@@ -76,6 +77,8 @@ export interface Event {
      * Event Object or string payload.
      */
     event: string|object;
+
+    [key: string]: any;
 }
 
 /**
@@ -89,7 +92,3 @@ interface Fields {
  * Response - generic response from HEC2 endpoints.
  */
 export type Response = object;
-
-interface QueryParams {
-    [key: string]: string;
-}

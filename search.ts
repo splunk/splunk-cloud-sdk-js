@@ -1,7 +1,9 @@
-/* eslint-disable no-restricted-syntax */
 import { Observable } from 'rxjs/Observable';
 import BaseApiService from './baseapiservice';
+import { QueryArgs } from "./client";
 import { SEARCH_SERVICE_PREFIX } from './common/service_prefixes';
+import { Event } from "./hec2";
+import { observable } from "rxjs/symbol/observable";
 
 export class SplunkSearchCancelError extends Error {
 }
@@ -9,7 +11,8 @@ export class SplunkSearchCancelError extends Error {
 /**
  * @private
  */
-function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchSize: number, max: number): IterableIterator<Promise<object>> {
+function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchSize: number, max: number)
+    : IterableIterator<Promise<any>> {
     let start = 0;
     while (start < max) {
         yield func(start, batchSize);
@@ -25,7 +28,6 @@ export class Search {
     private sid: string;
     private isCancelling: boolean;
     /**
-     * @private
      */
     constructor(service: SearchService, sid: string) {
         this.client = service;
@@ -36,18 +38,18 @@ export class Search {
     /**
      * Returns the status of the search job
      */
-    status(): Promise<object> {
+    public status(): Promise<object> {
         return this.client.getJob(this.sid);
     }
 
     /**
      * Polls the job until it is done processing
      */
-    wait(updateInterval: number, statusCallback: (job: Job) => null): Promise<any> {
+    public wait(updateInterval: number, statusCallback: (job: Job) => any): Promise<any> {
         const self = this;
         return this.client.waitForJob(this.sid, updateInterval, statusCallback)
-            .catch(err => {
-                if (self.isCancelling && err.code === 404) {
+            .catch((err: Error) => {
+                if (self.isCancelling /* TODO: fix && job.sid. === 404 */) {
                     throw new SplunkSearchCancelError("Search has been cancelled");
                 } else {
                     throw err;
@@ -58,23 +60,23 @@ export class Search {
     /**
      * Submits a cancel job against this search job
      */
-    cancel(): Promise<object> {
+    public cancel(): Promise<object> {
         this.isCancelling = true;
-        return this.client.createJobControlAction(this.sid, "cancel");
+        return this.client.createJobControlAction(this.sid, {action: Action.CANCEL});
     }
 
     /**
      * Pauses this search job
      */
-    pause(): Promise<object> {
-        return this.client.createJobControlAction(this.sid, "pause");
+    public pause(): Promise<object> {
+        return this.client.createJobControlAction(this.sid, {action: Action.PAUSE});
     }
 
     /**
      * Resets the time to live on this search job
      */
-    touch(): Promise<object> {
-        return this.client.createJobControlAction(this.sid, "touch");
+    public touch(): Promise<object> {
+        return this.client.createJobControlAction(this.sid, {action: Action.TOUCH});
     }
 
     /**
@@ -82,24 +84,22 @@ export class Search {
      * is supplied, a window of results will be returned.  If an offset is not
      * supplied, all results will be fetched and concatenated.
      */
-    getResults(args: { batchSize?: number, offset?: number }): Promise<Array<object>> {
-        // eslint-disable-next-line no-param-reassign
-        args = args || {};
-        args.batchSize = args.batchSize || 30;
+    public getResults(args: FetchResultsRequest = {}): Promise<object[]> {
+        const batchSize = args.batchSize = args.batchSize || 30;
+        args.offset = args.offset || 0;
         const self = this;
         return self.status()
-            .then(async (job) => {
+            .then(async (job: any) => {
                 if (args.offset != null) {
                     return self.client.getResults(self.sid, args)
                         .then(response => response.results);
                 }
-                const fetcher = (start) => self.client.getResults(self.sid, Object.assign({}, args, { offset: start }));
+                const fetcher = (start: number) => self.client.getResults(self.sid, (Object as any).assign({}, args, { offset: start }));
                 const iterator = iterateBatches(fetcher, batchSize, job.eventCount);
-                let results = [];
+                let results: object[] = [];
                 for (const batch of iterator) {
-                    // eslint-disable-next-line no-await-in-loop
-                    const data = await batch
-                    results = Array.concat(results, data.results);
+                    const data = await batch;
+                    results = results.concat(data.results);
                 }
                 return results;
             });
@@ -117,13 +117,11 @@ export class Search {
      * @param {number} [args.batchSize]
      * @returns {Observable}
      */
-    resultObservable(args) {
+    public resultObservable(args: any = {}): Observable<any> { // TODO: make resultObservableOptions interface
         const self = this;
-        // eslint-disable-next-line no-param-reassign
-        args = args || {};
         const pollInterval = args.pollInterval || 500; // Increasing the default
-        return Observable.create(observable => {
-            const promises = [];
+        return Observable.create((observable: any) => {
+            const promises: Array<Promise<any>> = [];
             self.wait(pollInterval, (job: Job) => {
                 if (job.eventCount > 0) { // Passes through arguments, so has the same semantics of offset == window
                     promises.push(self.getResults(args).then(results => observable.next(results)));
@@ -135,18 +133,18 @@ export class Search {
     }
 
     // TODO: Remove this misnamed function in next major release
-    /**
-     * Returns an Rx.Observable that will return events from the
-     * job when it is done processing
-     * @deprecated
-     * @param {Object} [attrs]
-     * @param {string} [attrs.batchSize] Number of events to fetch per call
-     * @returns Observable
-     */
-    eventObserver(attrs) {
-        console.log('eventObserver has been renamed to eventObservable.  This function will be removed in the next release');
-        return this.eventObservable(attrs);
-    }
+    // /**
+    //  * Returns an Rx.Observable that will return events from the
+    //  * job when it is done processing
+    //  * @deprecated
+    //  * @param {Object} [attrs]
+    //  * @param {string} [attrs.batchSize] Number of events to fetch per call
+    //  * @returns Observable
+    //  */
+    // public eventObserver(attrs: object) {
+    //     console.log('eventObserver has been renamed to eventObservable.  This function will be removed in the next release');
+    //     return this.eventObservable(attrs);
+    // }
 
     /**
      * Returns an Rx.Observable that will return events from the
@@ -155,44 +153,54 @@ export class Search {
      * @param {number} [attrs.batchSize] Number of events to fetch per call
      * @returns Observable
      */
-    eventObservable(attrs) {
+    public eventObservable(attrs: {batchSize: number} = {batchSize: 30}): Observable<any> { // TODO: eventObservableOptions interface
         const self = this;
-        const args = attrs || {};
-        const batchSize = args.batchSize || 30;
 
-        return Observable.create(async observable => {
+        return Observable.create(async (observable: any) => {
             const job = await self.client.waitForJob(self.sid);
-            const fetchEvents = (start) => self.client.getEvents(self.sid, start, batchSize);
-            const batchIterator = iterateBatches(fetchEvents, batchSize, job.eventCount);
+            const fetchEvents = (start: number) => self.client.getEvents(self.sid, {count: attrs.batchSize, offset: start});
+            const batchIterator = iterateBatches(fetchEvents, attrs.batchSize, job.eventCount);
             for (const promise of batchIterator) {
-                // eslint-disable-next-line no-await-in-loop
-                const batch = await promise;
-                batch.results.forEach(e => observable.next(e));
+                const batch: any = await promise;
+                batch.results.forEach((e: Event) => observable.next(e));
             }
             observable.complete();
         });
     }
 
-    statusObservable(updateInterval) {
-        return new Observable<Job>((observable) => {
-            this.wait(updateInterval, (job) => observable.next(job))
-                .then(() => observable.complete(), (err: Error) => observable.error(err))
-        })
+    public statusObservable(updateInterval: number): Observable<Job> {
+        return new Observable<Job>((o) => {
+            this.wait(updateInterval, (job: Job) => o.next(job))
+                .then(() => o.complete(), (err: Error) => o.error(err));
+        });
+
+        // return Observable.create((o: Observable<Job>) => {
+        //     this.wait(updateInterval, (job: Job) => o.next(job))
+        //         .then(() => o.complete(), (err: Error) => o.error(err));
+        // })
     }
 
+    /**
+     statusObservable(updateInterval) {
+        return Observable.create(observable => {
+            this.wait(updateInterval, (status) => observable.next(status))
+                .then(() => observable.complete(), err => observable.error(err))
+        })
+    }
+     */
 }
 
 /**
  * Encapsulates search endpoints
  */
-class SearchService extends BaseApiService {
+export class SearchService extends BaseApiService {
     // TODO:(dp) this should _not_ be an object return type.
     /**
      * Get details of all current searches.
      */
-    getJobs(jobArgs: object): Promise<Array<Job>> { // TODO: Flesh out JobsRequest
+    public getJobs(jobArgs: any): Promise<Job[]> { // TODO: Flesh out JobsRequest
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
-            .then(o => o as Array<Job>);
+            .then((o: object) => o as Job[]);
     }
 
     // TODO:(dp) this should _not_ be a string return type.
@@ -201,52 +209,56 @@ class SearchService extends BaseApiService {
     // endpoints directly as the new API will follow the rule of returning an object
     /**
      * Dispatch a search and return the newly created search job
-     * @param jobArgs {SearchService~PostJobsRequest}
+     * @param jobArgs {PostJobsRequest}
      * @return {Promise<string>}
      */
-    createJob(jobArgs?: object): Promise<Job> {
+    public createJob(jobArgs?: object): Promise<Job> {
         const self = this;
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
-            .then((sid) => self.getJob(sid));
+            .then((job: Job) => self.getJob(job.sid));
+    }
+
+    // TODO:(dp) response should not be a string
+    /**
+     */
+    public createJobControlAction(jobId: string, actionRequest: JobControlActionRequest): Promise<object> {  // TODO: Flesh out what this returns
+        if (actionRequest.action !== Action.SETTTL && actionRequest.ttl) {
+            delete actionRequest.ttl;
+        }
+        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']),  actionRequest);
     }
 
     // TODO:(dp) response is undefined in yaml spec
     /**
      * Returns the job resource with the given `id`.
      */
-    getJob(jobId: string): Promise<Job> {
+    public getJob(jobId: string): Promise<Job> {
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]))
             .then(o => o as Job);
-    }
-
-    // TODO:(dp) response should not be a string
-    /**
-     */
-    createJobControlAction(jobId: string, action: { action: string }): Promise<any> {  // TODO: Flesh out what this returns
-        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), { action });
     }
 
     // TODO:(dp) Handle other terminals other than DONE (when I figure out what they are)
     /**
      */
-    waitForJob(jobId: string, pollInterval?: number, callback?: (job: Job) => any) {
+    public waitForJob(jobId: string, pollInterval?: number, callback?: (job: Job) => object) {
         const self = this;
         const interval = pollInterval || 250;
-        return new Promise<Job>((resolve, reject) => {
+        return new Promise<Job>((resolve: (job: Job) => void, reject: (error: Error) => void) => {
             this.getJob(jobId).then(job => {
                 if (callback) {
                     callback(job);
                 }
-                if (job.dispatchState === 'DONE') {
+                if (job.dispatchState === DispatchState.DONE) {
                     resolve(job);
-                } else if (job.dispatchState === 'FAILED') {
+                } else if (job.dispatchState === DispatchState.FAILED) {
                     const error = new Error("Job failed");
                     // error.job = job; // TODO: Make this a better error where we can highlight what went wrong.
                     reject(error);
                 } else {
                     setTimeout(() => {
-                        resolve(self.waitForJob(jobId, interval, callback)); // Resolving with a promise which will then resolve- recursion with the event loop
-                    }, pollInterval);
+                        // Resolving with a promise which will then resolve- recursion with the event loop
+                        self.waitForJob(jobId, interval, callback).then(j => resolve(j));
+                    }, interval);
                 }
             }).catch(err => reject(err));
         });
@@ -256,23 +268,25 @@ class SearchService extends BaseApiService {
      * Returns results for the search job corresponding to "id".
      * Returns results post-transform, if applicable.
      */
-    getResults(jobId: string, args: { offset?: number, count?: number }): Promise<{ results: Array<object> }> { // TODO: Flesh out the results type
+    // TODO: Flesh out the results type
+    public getResults(jobId: string, args: { offset?: number, count?: number }): Promise<{ results: object[] }> {
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), args)
-            .then(o => o as { results: Array<object> })
+            .then((o: object) => o as { results: object[] });
     }
 
     /**
      * Returns events for the search job corresponding to "id".
      *         Returns results post-transform, if applicable.
      */
-    getEvents(jobId: string, args?: { offset?: number, count?: number }) { // TODO: this has changed in dev
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'events']), args);
+    public getEvents(jobId: string, args?: { offset?: number, count?: number }) { // TODO: this has changed in dev
+        const queryArgs: QueryArgs = args || {};
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'events']), queryArgs);
     }
 
     /**
      * Delete the search job with the given `id`, cancelling the search if it is running.
      */
-    deleteJob(jobId: string): Promise<any> {
+    public deleteJob(jobId: string): Promise<object> {
         return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
     }
 
@@ -280,12 +294,11 @@ class SearchService extends BaseApiService {
      * Submits a search job and wraps the response in an object
      * for easier further processing.
      */
-    submitSearch(searchArgs: PostJobsRequest): Promise<Search> {
+    public submitSearch(searchArgs: PostJobsRequest): Promise<Search> {
         const self = this;
         return this.createJob(searchArgs)
             .then(job => new Search(self, job.sid));
     }
-
 }
 
 /**
@@ -344,17 +357,22 @@ interface PostJobsRequest {
 
 }
 
-enum SearchLevel {
+export enum SearchLevel {
     VERBOSE,
     FAST,
     SMART,
 }
 
-interface Job { // TODO: not in spec
-    dispatchState: string; // TODO: enum
+export interface Job { // TODO: not in spec
+    dispatchState: DispatchState; // TODO: enum
     eventCount: number;
     sid: string;
+    status: string; // TODO: ??
+}
 
+enum DispatchState {
+    DONE = 'DONE',
+    FAILED = 'FAILED',
 }
 
 interface PostJobsRequest {
@@ -363,14 +381,33 @@ interface PostJobsRequest {
     search?: string;
 }
 
-interface JobControlAction {
-    action: string;
+interface JobControlActionRequest {
+    /**
+     * Action The control action to execute
+     */
+    action: Action;
+    /**
+     * Only accept with action=settl. Change the ttl of the search.
+     */
     ttl?: number;
+}
+
+enum Action {
+    PAUSE = "pause",
+    UNPAUSE = "unpause",
+    FINALIZE = "finalize",
+    CANCEL = "cancel",
+    TOUCH = "touch",
+    SETTTL = "setttl",
+    SETPRIORITY = "setpriority", // TODO: this should need a priority level for JobControlActionRequest
+    ENABLEPREVIEW = "enablepreview",
+    DISABLEPREVIEW = "disablepreview",
 }
 
 interface FetchResultsRequest {
     count?: number;
     offset?: number;
+    batchSize?: number;
     f?: string;
     search?: string;
 }

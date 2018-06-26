@@ -1,4 +1,5 @@
 import { Event, HEC2Service } from './hec2';
+import Timer = NodeJS.Timer;
 
 /**
  * Provides the ability to keep a growing number of events queued up and sends them to HEC.
@@ -15,7 +16,7 @@ export default class EventBatcher {
     private readonly batchCount: number;
     private readonly timeout: number;
     private queue: Event[];
-    private timerId: number;
+    private timer: Timer;
 
     constructor(hec2: HEC2Service, batchSize: number, batchCount: number, timeout: number) {
         this.hec2 = hec2;
@@ -24,7 +25,7 @@ export default class EventBatcher {
         this.batchCount = batchCount;
         this.timeout = timeout;
         this.queue = [];
-        this.timerId = this.setTimer();
+        this.timer = this.setTimer();
     }
 
     /**
@@ -42,10 +43,10 @@ export default class EventBatcher {
      *
      * @return timerId - unique id of the timer created
      */
-    private setTimer(): number {
+    private setTimer(): Timer {
         // TODO: is this legit? using window.* because @types/node causes an issue
         // see: https://github.com/TypeStrong/atom-typescript/issues/1053#issuecomment-321126192
-        return window.setTimeout(() => {
+        return setTimeout(() => {
             if (this.queue.length > 0) {
                 this.flush();
             }
@@ -57,7 +58,7 @@ export default class EventBatcher {
      */
     private resetTimer() {
         this.stop();
-        this.timerId = this.setTimer();
+        this.timer = this.setTimer();
     }
 
     /**
@@ -92,7 +93,7 @@ export default class EventBatcher {
      * Stop the timer
      */
     public stop() {
-        clearTimeout(this.timerId);
+        clearTimeout(this.timer);
     }
 
 }

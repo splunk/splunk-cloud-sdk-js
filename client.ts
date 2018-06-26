@@ -1,5 +1,4 @@
-
-class SplunkError extends Error {
+export class SplunkError extends Error {
     public code?: number;
     public source?: object;
     constructor(message: string, code?: number, source?: object) {
@@ -58,7 +57,7 @@ function decodeJson(text: string): object {
  * that implement the actual endpoints.
  * TODO: Add links to actual endpoints, SSC name
  */
-export default class ServiceClient {
+export class ServiceClient {
     private readonly token: string;
     private readonly url: string;
     private readonly tenant?: string;
@@ -80,11 +79,15 @@ export default class ServiceClient {
      * Builds the URL from a service + endpoint with query encoded in url
      * (concatenates the URL with the path)
      */
-    private buildUrl(path: string, query?: object): string {
+    private buildUrl(path: string, query?: QueryArgs): string {
         if (query && Object.keys(query).length > 0) {
             const encoder = encodeURIComponent;
             const queryEncoded = Object.keys(query)
-                .map(k => `${encoder(k)}=${encoder(query[k])}`)
+                .map(k => {
+                    if (query[k]) {
+                        return `${encoder(k)}=${encoder(String(query[k]))}`;
+                    }
+                })
                 .join('&');
             return `${this.url}${path}?${queryEncoded}`;
         }
@@ -121,11 +124,11 @@ export default class ServiceClient {
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
      */
-    public get(path: string, query?: object): Promise<object> {
+    public get(path: string, query?: QueryArgs): Promise<any> {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
             headers: this.buildHeaders(),
-        }).then(response => handleResponse(response));
+        }).then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -133,12 +136,12 @@ export default class ServiceClient {
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
      */
-    public post(path: string, data: any, query?: object): Promise<object> {
+    public post(path: string, data: any, query?: QueryArgs): Promise<any> {
         return fetch(this.buildUrl(path, query), {
             method: "POST",
             body: typeof data !== "string" ? JSON.stringify(data) : data,
             headers: this.buildHeaders(),
-        }).then(response => handleResponse(response));
+        }).then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -146,12 +149,12 @@ export default class ServiceClient {
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
      */
-    public put(path: string, data: any): Promise<object> {
+    public put(path: string, data: any): Promise<any> {
         return fetch(this.buildUrl(path), {
             method: 'PUT',
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
-        }).then(response => handleResponse(response));
+        }).then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -159,12 +162,12 @@ export default class ServiceClient {
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
      */
-    public patch(path: string, data: object): Promise<object> {
+    public patch(path: string, data: object): Promise<any> {
         return fetch(this.buildUrl(path), {
             method: 'PATCH',
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
-        }).then(response => handleResponse(response));
+        }).then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -182,6 +185,10 @@ export default class ServiceClient {
             method: 'DELETE',
             body: JSON.stringify(deleteData),
             headers: this.buildHeaders(),
-        }).then(response => handleResponse(response));
+        }).then((response: Response) => handleResponse(response));
     }
+}
+
+export interface QueryArgs {
+    [key: string]: string|number|undefined;
 }
