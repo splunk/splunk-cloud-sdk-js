@@ -3,7 +3,6 @@ import BaseApiService from './baseapiservice';
 import { QueryArgs } from "./client";
 import { SEARCH_SERVICE_PREFIX } from './common/service_prefixes';
 import { Event } from "./hec2";
-import { observable } from "rxjs/symbol/observable";
 
 export class SplunkSearchCancelError extends Error {
 }
@@ -84,8 +83,9 @@ export class Search {
      * is supplied, a window of results will be returned.  If an offset is not
      * supplied, all results will be fetched and concatenated.
      */
+    // TODO: backwardsCompatibleCount
     public getResults(args: FetchResultsRequest = {}): Promise<object[]> {
-        const batchSize = args.batchSize = args.batchSize || 30;
+        const count = args.count = args.count || 30;
         args.offset = args.offset || 0;
         const self = this;
         return self.status()
@@ -95,7 +95,7 @@ export class Search {
                         .then(response => response.results);
                 }
                 const fetcher = (start: number) => self.client.getResults(self.sid, (Object as any).assign({}, args, { offset: start }));
-                const iterator = iterateBatches(fetcher, batchSize, job.eventCount);
+                const iterator = iterateBatches(fetcher, count, job.eventCount);
                 let results: object[] = [];
                 for (const batch of iterator) {
                     const data = await batch;
@@ -107,14 +107,14 @@ export class Search {
 
     /**
      * Returns an observable that will poll the job and return results, updating
-     * until the job is final. If offset and batchSize are specified in the
+     * until the job is final. If offset and count are specified in the
      * args, this method will return that window of results.  If neither are
-     * specified (or only batchSize is specified), all results available will
+     * specified (or only count is specified), all results available will
      * be fetched.
      * @param {object} [args]
      * @param {number} [args.pollInterval]
      * @param {number} [args.offset]
-     * @param {number} [args.batchSize]
+     * @param {number} [args.count]
      * @returns {Observable}
      */
     public resultObservable(args: any = {}): Observable<any> { // TODO: make resultObservableOptions interface
@@ -138,7 +138,7 @@ export class Search {
     //  * job when it is done processing
     //  * @deprecated
     //  * @param {Object} [attrs]
-    //  * @param {string} [attrs.batchSize] Number of events to fetch per call
+    //  * @param {string} [attrs.count] Number of events to fetch per call
     //  * @returns Observable
     //  */
     // public eventObserver(attrs: object) {
@@ -149,17 +149,16 @@ export class Search {
     /**
      * Returns an Rx.Observable that will return events from the
      * job when it is done processing
-     * @param {Object} [attrs]
-     * @param {number} [attrs.batchSize] Number of events to fetch per call
+     * @param [attrs]
+     * @param [attrs.count] Number of events to fetch per call
      * @returns Observable
      */
-    public eventObservable(attrs: {batchSize: number} = {batchSize: 30}): Observable<any> { // TODO: eventObservableOptions interface
+    public eventObservable(attrs: {count: number} = {count: 30}): Observable<any> { // TODO: eventObservableOptions interface
         const self = this;
-
         return Observable.create(async (observable: any) => {
             const job = await self.client.waitForJob(self.sid);
-            const fetchEvents = (start: number) => self.client.getEvents(self.sid, {count: attrs.batchSize, offset: start});
-            const batchIterator = iterateBatches(fetchEvents, attrs.batchSize, job.eventCount);
+            const fetchEvents = (start: number) => self.client.getEvents(self.sid, {count: attrs.count, offset: start});
+            const batchIterator = iterateBatches(fetchEvents, attrs.count, job.eventCount);
             for (const promise of batchIterator) {
                 const batch: any = await promise;
                 batch.results.forEach((e: Event) => observable.next(e));
@@ -173,21 +172,7 @@ export class Search {
             this.wait(updateInterval, (job: Job) => o.next(job))
                 .then(() => o.complete(), (err: Error) => o.error(err));
         });
-
-        // return Observable.create((o: Observable<Job>) => {
-        //     this.wait(updateInterval, (job: Job) => o.next(job))
-        //         .then(() => o.complete(), (err: Error) => o.error(err));
-        // })
     }
-
-    /**
-     statusObservable(updateInterval) {
-        return Observable.create(observable => {
-            this.wait(updateInterval, (status) => observable.next(status))
-                .then(() => observable.complete(), err => observable.error(err))
-        })
-    }
-     */
 }
 
 /**
@@ -269,8 +254,9 @@ export class SearchService extends BaseApiService {
      * Returns results post-transform, if applicable.
      */
     // TODO: Flesh out the results type
-    public getResults(jobId: string, args: { offset?: number, count?: number }): Promise<{ results: object[] }> {
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), args)
+    public getResults(jobId: string, args?: FetchResultsRequest): Promise<{ results: object[] }> {
+        const queryArgs: QueryArgs = args || {};
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), queryArgs)
             .then((o: object) => o as { results: object[] });
     }
 
@@ -278,7 +264,7 @@ export class SearchService extends BaseApiService {
      * Returns events for the search job corresponding to "id".
      *         Returns results post-transform, if applicable.
      */
-    public getEvents(jobId: string, args?: { offset?: number, count?: number }) { // TODO: this has changed in dev
+    public getEvents(jobId: string, args?: { offset?: number, count?: number }): Promise<any> {
         const queryArgs: QueryArgs = args || {};
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'events']), queryArgs);
     }
@@ -306,7 +292,7 @@ export class SearchService extends BaseApiService {
  */
 interface PostJobsRequest {
     /**
-     * Use one of the following search modes. [ verbose | fast | smart ]
+     * Use one of the following search modes.
      */
     adhocSearchLevel?: SearchLevel;
 
@@ -329,6 +315,11 @@ interface PostJobsRequest {
      * The number of seconds to run this search before finalizing. Specify 0 to never finalize.
      */
     maxTime?: number;
+
+    /**
+     * The module setting for spl parser populate related configures.
+     */
+    module?: string;
 
     /**
      * current system time Specify a time string to set the absolute time used for any relative time specifier in the search. Defaults to the current system time.
@@ -358,9 +349,9 @@ interface PostJobsRequest {
 }
 
 export enum SearchLevel {
-    VERBOSE,
-    FAST,
-    SMART,
+    VERBOSE = "verbose",
+    FAST = "fast",
+    SMART = "smart",
 }
 
 export interface Job { // TODO: not in spec
@@ -405,11 +396,11 @@ enum Action {
 }
 
 interface FetchResultsRequest {
-    count?: number;
     offset?: number;
-    batchSize?: number;
+    count?: number;
     f?: string;
     search?: string;
+    [key: string]: any;
 }
 
 interface FetchEventsRequest {

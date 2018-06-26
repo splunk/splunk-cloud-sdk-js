@@ -8,52 +8,54 @@ export class IdentityService extends BaseApiService {
     /**
      * Authenticate the user by the access token obtained from authorization header and return user profile data,
      * including tenant memberships
-     * @returns {Promise<UserProfile>}
+     * @param tenantId
      */
-    public getUserProfile(): Promise<object> {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], 'system'));
+    public getUserProfile(tenantId: string): Promise<UserProfile> {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], tenantId))
+            .then(response => response as UserProfile);
     }
 
     /**
      * Adds a tenant
+     * @param tenantId
      */
-    public createTenant(tenantId: string): Promise<object> {
+    public createTenant(tenantId: string): Promise<any> {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenantId);
     }
 
     /**
      * Deletes a tenant
-     * @param {string} tenantId
+     * @param tenantId
      */
-    public deleteTenant(tenantId: string): Promise<object> {
+    public deleteTenant(tenantId: string): Promise<any> {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId], 'system'));
     }
 
     /**
      * Reads a list of users in the given tenant
-     * @param {string} tenantId
-     * @returns {Promise<User[]>}
+     * @param tenantId
      */
-    public getTenantUsers(tenantId: string): Promise<object> {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'));
+    public getTenantUsers(tenantId: string): Promise<User[]> {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId))
+            .then(response => response as User[]);
     }
 
     /**
      * Replaces current tenant users with new users
-     * @param {string} tenantId
-     * @param {User[]} users
+     * @param tenantId
+     * @param users
      */
-    public replaceTenantUsers(tenantId: string, users: User[]): Promise<object> {
-        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
+    public replaceTenantUsers(tenantId: string, users: User[]): Promise<any> {
+        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
     }
 
     /**
      * Adds a list of users to the tenant
-     * @param {string} tenantId
-     * @param {User[]} users
+     * @param tenantId
+     * @param users
      */
-    public addTenantUsers(tenantId: string, users: User[]): Promise<object> {
-        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
+    public addTenantUsers(tenantId: string, users: User[]): Promise<any> {
+        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
     }
 
     /**
@@ -61,8 +63,8 @@ export class IdentityService extends BaseApiService {
      * @param {string} tenantId
      * @param {User[]} users
      */
-    public deleteTenantUsers(tenantId: string, users: User[]): Promise<object> {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
+    public deleteTenantUsers(tenantId: string, users: User[]): Promise<any> {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
     }
 }
 

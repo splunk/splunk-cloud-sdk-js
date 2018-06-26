@@ -102,7 +102,7 @@ class ServiceClient {
         const path = `/${effectiveTenant}${servicePrefix}/${pathname.join("/")}`;
         const emptyElems = pathname.find(value => value.trim() === '');
         if (emptyElems) {
-            throw new Error(`Empty elements in path: ${path}`)
+            throw new Error(`Empty elements in path: ${path}`);
         }
         return path;
     }

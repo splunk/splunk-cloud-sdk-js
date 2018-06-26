@@ -8,89 +8,102 @@ import { QueryArgs } from "./client";
 export class CatalogService extends BaseApiService {
     /**
      * Returns a list of datasets, optionally filtered by the given query parameters.
-     * @param [filter] A SPL filter string
-     * @return {Promise<Array<DatasetInfo>>}
+     * @param [filter] An SPL filter string
      */
-    public getDatasets(filter?: string): Promise<object> {
+    public getDatasets(filter?: string): Promise<DatasetInfo[]> {
         const query: QueryArgs = {};
         if (filter) {
             query.filter = filter;
         }
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), query);
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), query)
+            .catch(response => response as DatasetInfo[]);
     }
 
     /**
      * Create a new dataset.
      * @param dataset
-     * @return {Promise<DatasetInfo>}
      */
-    public createDataset(dataset: object|DatasetInfo): Promise<object> {
-        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), dataset);
+    public createDataset(dataset: DatasetInfo): Promise<DatasetInfo> {
+        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), dataset)
+            .then(response => response as DatasetInfo);
     }
 
     /**
      * Returns the dataset resource with the specified `id`.
      * @param datasetId
-     * @return {Promise<DatasetInfo>}
      */
-    public getDataset(datasetId: string): Promise<object> {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]));
+    public getDataset(datasetId: DatasetInfo["id"]): Promise<DatasetInfo> {
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]))
+            .then(response => response as DatasetInfo);
     }
 
     /**
      * Delete the DatasetInfo and its dependencies with the specified id
      * @param datasetId id of the DatasetInfo to delete
      */
-    public deleteDataset(datasetId: string): Promise<object> {
+    public deleteDataset(datasetId: DatasetInfo["id"]): Promise<any> { // TODO: can we add stricter return typing?
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]));
+    }
+
+    /**
+     * Delete the DatasetInfo and its dependencies with the specified id
+     * @param name of the DatasetInfo to delete
+     */
+    public deleteDatasetByName(name: DatasetInfo["name"]): Promise<any> { // TODO: can we add stricter return typing?
+        return this.getDatasets(`name=="${name}"`).then(
+            ret => {
+                if (ret.length !== 1) {
+                    throw new Error("There are more than 1 dataset with the input name");
+                }
+                return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ["datasets", ret[0].id]));
+            });
     }
 
     /**
      * Updates the supplied dataset
      * @param {DatasetInfo} dataset
-     * @returns {Promise<DatasetInfo>}
      */
-    public updateDataset(dataset: DatasetInfo): Promise<object> {
-        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', dataset.id]), dataset);
+    public updateDataset(dataset: DatasetInfo): Promise<DatasetInfo> {
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', dataset.id]), dataset)
+            .then(response => response as DatasetInfo);
     }
 
     // rules
 
     /**
      * Create a new Rule
-     * @param {CatalogService~Rule} rule
-     * @returns {Promise<CatalogService~Rule>}
+     * @param {Rule} rule
      */
-    public createRule(rule: Rule): Promise<object> {
-        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), rule);
+    public createRule(rule: Rule): Promise<Rule> {
+        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), rule)
+            .then(response => response as Rule);
     }
 
     /**
      * Get the matching list of Rules
-     * @param {string} [filter] An SPL filter string
-     * @returns {Promise<CatalogService~Rule>}
+     * @param [filter] An SPL filter string
      */
-    public getRules(filter?: string): Promise<object> {
+    public getRules(filter?: string): Promise<Rule> {
         const query: QueryArgs = {};
         if (filter) {
             query.filter = filter;
         }
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), query);
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), query)
+            .then(response => response as Rule);
     }
 
     /**
      * Return the Rule with the specified id
-     * @returns {Promise<CatalogService~Rule>}
      */
-    public getRule(ruleId: Rule["id"]): Promise<object> {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]));
+    public getRule(ruleId: Rule["id"]): Promise<Rule> {
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]))
+            .then(response => response as Rule);
     }
 
     /**
      * Delete the Rule and its dependencies with the specified id
-     * @returns {Promise<Object>}
      */
-    public deleteRule(ruleId: Rule["id"]): Promise<object> {
+    public deleteRule(ruleId: Rule["id"]): Promise<any> { // TODO: can we add stricter return typing?
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]));
     }
 

@@ -1,5 +1,5 @@
 import { Event, HEC2Service } from './hec2';
-import Timer = NodeJS.Timer;
+import Timer = NodeJS.Timer; // TODO: is this an okay import?
 
 /**
  * Provides the ability to keep a growing number of events queued up and sends them to HEC.
@@ -41,11 +41,9 @@ export default class EventBatcher {
     /**
      * Creates a periodic task to send all the events.
      *
-     * @return timerId - unique id of the timer created
+     * @return the timer created
      */
     private setTimer(): Timer {
-        // TODO: is this legit? using window.* because @types/node causes an issue
-        // see: https://github.com/TypeStrong/atom-typescript/issues/1053#issuecomment-321126192
         return setTimeout(() => {
             if (this.queue.length > 0) {
                 this.flush();
@@ -64,7 +62,7 @@ export default class EventBatcher {
     /**
      * Clean up the events and timer.
      */
-    public flush(): Promise<object> {
+    public flush(): Promise<any> {
         const data = this.queue;
         this.queue = [];
         this.resetTimer();
@@ -78,7 +76,7 @@ export default class EventBatcher {
      *
      * @return can return null if event has not been sent yet.
      */
-    private run(): Promise<object>|null {
+    private run(): Promise<any>|null {
         const maxCountReached = (this.queue.length >= this.batchCount);
         // TODO: is it okay to just import @types/node and call this good?
         const eventByteSize = Buffer.byteLength(JSON.stringify(this.queue), "utf8");

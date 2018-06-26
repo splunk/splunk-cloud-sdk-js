@@ -111,7 +111,7 @@ export class ServiceClient {
             throw new Error("No tenant specified");
         }
         const path = `/${effectiveTenant}${servicePrefix}/${pathname.join("/")}`;
-        for (const elem in pathname) {
+        for (const elem of pathname) {
             if (elem.trim() === '') {
                 throw new Error(`Empty elements in path: ${path}`);
             }
