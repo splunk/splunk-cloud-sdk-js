@@ -35,6 +35,21 @@ describe("catalog v2", () => {
             }).then(id => ssc.catalog.deleteDataset(id));
 
         });
+
+        it("should allow delete of datasets by name", () => {
+            const name = "FooBar1";
+            const dataset = {
+                name,
+                owner: "test@splunk.com",
+                kind: "index",
+                capabilities: "1101-00000:11010",
+                disabled: false
+            };
+            return ssc.catalog.createDataset(dataset).then(ds => {
+                assert(ds.name === name);
+                assert(ds.kind === "index");
+            }).then(() => ssc.catalog.deleteDatasetByName(name));
+        });
     }).timeout(10000);
 
     describe("rules", () => {

@@ -9,8 +9,14 @@ const tenantID = process.env.TENANT_ID;
 const splunk = new SplunkSSC(process.env.SSC_HOST, token, tenantID);
 
 const standardQuery = {
-    "query": "search index=* earliest=0 | head 5",
-}
+    "query": "| from index:main | head 5",
+};
+
+const moduleQuery = {
+    "query": "| from index:main | head 5",
+    // catalog service isn't ready for handling module
+    "module": "",
+};
 
 describe("integration tests Using Search APIs", () => {
     before(() => {
@@ -19,12 +25,38 @@ describe("integration tests Using Search APIs", () => {
             events.push({ event: `Test event no ${i}` });
         }
         splunk.hec2.createEvents(events);
-    })
+    });
 
     describe("Search", () => {
 
 
         it("should allow submitting a search and getting results", () => splunk.search.createJob(standardQuery)
+            .then((sid) => splunk.search.getJob(sid))
+            .then(searchObj => { // Check the state of the job
+                expect(searchObj).to.have.property('sid');
+                expect(searchObj).to.have.property('dispatchState');
+                return splunk.search.waitForJob(searchObj.sid);
+            }).then(searchObj => { // Ensure we have events when done
+                expect(searchObj).to.have.property('dispatchState', 'DONE');
+                expect(searchObj).to.have.property('eventCount', 5);
+                return Promise.all([
+                    splunk.search.getResults(searchObj.sid)
+                        .then(resultResponse => {
+                            expect(resultResponse).to.have.property('results').with.lengthOf(5);
+                            expect(resultResponse).to.have.property('preview', false);
+                            expect(resultResponse).to.have.property('init_offset', 0);
+                        }),
+                    splunk.search.getEvents(searchObj.sid)
+                        .then(eventsResponse => {
+                            // TODO: determine why we have two endpoints that seem the same
+                            expect(eventsResponse).to.have.property('results').with.lengthOf(5);
+                            expect(eventsResponse).to.have.property('preview', false);
+                            expect(eventsResponse).to.have.property('init_offset', 0);
+                        })
+                ]);
+            }));
+
+        it("should allow submitting a search with module field and getting results", () => splunk.search.createJob(moduleQuery)
             .then((sid) => splunk.search.getJob(sid))
             .then(searchObj => { // Check the state of the job
                 expect(searchObj).to.have.property('sid');
@@ -57,11 +89,11 @@ describe("integration tests Using Search APIs", () => {
                     return splunk.search.createJobControlAction(sid, 'pause');
                 }).then((response) => {
                     expect(response).to.have.property('messages'); // DP: I expect this one to change
-                    assert(response.messages[0].text === 'Search job paused.')
+                    assert(response.messages[0].text === 'Search job paused.');
                     return splunk.search.createJobControlAction(sid, 'cancel');
                 }).then((response) => {
                     expect(response).to.have.property('messages'); // DP: I expect this one to change
-                    assert(response.messages[0].text === 'Search job cancelled.')
+                    assert(response.messages[0].text === 'Search job cancelled.');
                     return splunk.search.getJob(sid);
                 }).then(() => assert.fail("Should have thrown"), err => assert(err.code === 404, "Job should not exist"))));
 
@@ -69,13 +101,13 @@ describe("integration tests Using Search APIs", () => {
             .then(sid => splunk.search.waitForJob(sid)
                 .then(job => { // As a child to keep sid in the closure
                     expect(job).to.have.property('eventCount', 5);
-                    return splunk.search.getResults(sid, 0, 3);
+                    return splunk.search.getResults(sid, { offset: 0, count: 3 });
                 }).then(result => {
                     assert(result.results.length === 3);
-                    return splunk.search.getResults(sid, 3, 5);
+                    return splunk.search.getResults(sid, { offset: 3, count: 5 });
                 }).then(result => {
                     assert(result.results.length === 2, "Only two events should remain");
-                    return splunk.search.getResults(sid, 10, 10);
+                    return splunk.search.getResults(sid, { offset: 10, count: 10 });
                 }).then(result => {
                     assert(result.results.length === 0);
                 })));
@@ -84,10 +116,10 @@ describe("integration tests Using Search APIs", () => {
             .then(sid => splunk.search.waitForJob(sid)
                 .then(job => { // As a child to keep sid in the closure
                     expect(job).to.have.property('eventCount', 5);
-                    return splunk.search.getEvents(sid, 0, 3);
+                    return splunk.search.getEvents(sid, { offset: 0, count: 3 });
                 }).then(result => {
                     assert(result.results.length === 3, "Should have gotten three events in the first batch, got: ", JSON.stringify(result));
-                    return splunk.search.getEvents(sid, 3, 5);
+                    return splunk.search.getEvents(sid, { offset: 3, count: 5 });
                 }).then(result => {
                     assert(result.results.length === 2, "Only two events should remain");
                 })));
@@ -134,7 +166,7 @@ describe("integration tests Using Search APIs", () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
                 return new Promise((resolve, reject) => {
                     let counter = 0;
-                    search.eventObservable({batchSize: 2}).subscribe(() => counter += 1, (err) => reject(err), () => {
+                    search.eventObservable({ batchSize: 2 }).subscribe(() => counter += 1, (err) => reject(err), () => {
                         if (counter === 5) {
                             resolve(counter);
                         } else {
@@ -159,7 +191,7 @@ describe("integration tests Using Search APIs", () => {
             it("should allow retrieving result window", () => {
                 return splunk.search.submitSearch(standardQuery).then(search => {
                     return search.wait()
-                        .then(() => search.getResults({offset: 0, batchSize: 2}).then((results) => {
+                        .then(() => search.getResults({ offset: 0, batchSize: 2 }).then((results) => {
                             expect(results).to.be.an('array').and.have.property('length', 2);
                         }));
                 });
@@ -171,11 +203,11 @@ describe("integration tests Using Search APIs", () => {
                 return splunk.search.submitSearch(standardQuery).then(search => {
                     return new Promise((resolve, reject) => {
                         let results = null;
-                        search.resultObservable().subscribe(r => {results = r}, reject, () => {
+                        search.resultObservable().subscribe(r => { results = r }, reject, () => {
                             try {
                                 expect(results).to.be.an('array').and.have.property('length', 5);
                                 resolve();
-                            } catch(e) {
+                            } catch (e) {
                                 reject(e);
                             }
                         });
@@ -187,11 +219,11 @@ describe("integration tests Using Search APIs", () => {
                 return splunk.search.submitSearch(standardQuery).then(search => {
                     return new Promise((resolve, reject) => {
                         let results = null;
-                        search.resultObservable({offset: 0, batchSize: 2}).subscribe(r => {results = r}, reject, () => {
+                        search.resultObservable({ offset: 0, batchSize: 2 }).subscribe(r => { results = r }, reject, () => {
                             try {
                                 expect(results).to.be.an('array').and.have.property('length', 2);
                                 resolve();
-                            } catch(e) {
+                            } catch (e) {
                                 reject(e);
                             }
                         });
@@ -211,7 +243,7 @@ describe("integration tests Using Search APIs", () => {
                                 expect(status).to.have.property('sid');
                                 expect(status).to.have.property('eventCount');
                                 expect(status).to.have.property('dispatchState');
-                            } catch(e) {
+                            } catch (e) {
                                 reject(e);
                             }
                         },
@@ -219,7 +251,7 @@ describe("integration tests Using Search APIs", () => {
                         () => {
                             try {
                                 assert(count > 0, "We should have gotten at least one status");
-                            } catch(e) {
+                            } catch (e) {
                                 reject(e);
                             }
                             resolve();

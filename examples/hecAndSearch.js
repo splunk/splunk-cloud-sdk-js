@@ -32,7 +32,7 @@ async function createIndex(splunk, index) {
 
         // it will take some time for the new index to finish the provisioning
         console.log("wait for 90s for index to be provisioned");
-        await sleep(70 * 1000);
+        await sleep(90 * 1000);
     }
 };
 
@@ -94,33 +94,32 @@ async function searchResults(splunk, start, timeout, query, expected) {
 
     if (Date.now() - start > timeout) {
         console.log(`TIMEOUT!!!! Search is taking more than ${timeout}ms. Terminate!`);
-        process.exit(1);
+        return false;
     }
 
     // sleep 5 seconds before to retry the search
     await sleep(5000);
 
-    splunk.search.createJob({ "query": query })
+    return splunk.search.createJob({ "query": query })
         .then(sid => splunk.search.waitForJob(sid))
-        .then(searchObj => {
-            splunk.search.getResults(searchObj.sid)
-                .then(resultResponse => {
-                    const retNum = resultResponse.results.length;
-                    console.log(`got ${retNum} results`);
-                    if (retNum < expected) {
-                        searchResults(splunk, start, timeout, query, expected);
-                    } else if (retNum > expected) {
-                        console.log(retNum);
-                        console.log(`find more events than expected for query ${query}`);
-                        process.exit(1);
-                    } else if (retNum === expected) {
-                        console.log(`Successfully found ${retNum} events for query ${query}, total spent ${Date.now() - start}ms`);
-                    }
-                });
-        })
+        .then(searchObj => splunk.search.getResults(searchObj.sid)
+            .then(resultResponse => {
+                const retNum = resultResponse.results.length;
+                console.log(`got ${retNum} results`);
+                if (retNum < expected) {
+                    return searchResults(splunk, start, timeout, query, expected);
+                } else if (retNum > expected) {
+                    console.log(retNum);
+                    console.log(`find moreyar events than expected for query ${query}`);
+                    return false;
+                }
+                console.log(`Successfully found ${retNum} events for query ${query}, total spent ${Date.now() - start}ms`);
+                return true;
+            })
+        )
         .catch(err => {
             console.log(err);
-            process.exit(1);
+            return false;
         });
 };
 
@@ -128,7 +127,7 @@ async function searchResults(splunk, start, timeout, query, expected) {
 // define the main workflow
 async function main() {
     // todo: should be a non-main index, but playground now still have issues for sending data to non-main index
-    const index = "main";
+    const index = `test_${new Date().getSeconds()}`;
     // ***** STEP 1: Get Splunk SSC client
     // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
     const splunk = new SplunkSSC(SSC_HOST, BEARER_TOKEN, TENANT_ID);
@@ -148,13 +147,23 @@ async function main() {
     // ***** DESCRIPTION: Search the data to ensure the data was ingested and field extractions are present.
     // Search for all 5 events that were sent using HEC
     const timeout = 90 * 1000;
-    const query = `search  index==${index} ${host} ${source}`;
+    const query = `|from  index:${index} where host="${host}" and source="${source}"`;
     console.log(query);
-    await searchResults(splunk, Date.now(), timeout, query, 5);
-
-    if (index !== "main") {
-        await splunk.catalog.deleteDataset();
-    }
+    searchResults(splunk, Date.now(), timeout, query, 5).then(
+        (ret) => {
+            if (index !== "main") {
+                console.log("delete index");
+                splunk.catalog.deleteDatasetByName(index).then(
+                    () => {
+                        console.log(`finish deleted index`);
+                        if (!ret) {
+                            process.exit(1);
+                        }
+                    });
+            } else if (!ret) {
+                process.exit(1);
+            }
+        });
 }
 
 // run the workflow

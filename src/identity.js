@@ -6,12 +6,12 @@ const {IDENTITY_SERVICE_PREFIX} = require('./common/service_prefixes');
  */
 class IdentityService extends BaseApiService {
     /**
-     * Authenticate the user by the access token obtained from authorization header and return user profile data,
-     * including tenant memberships
+     * Authenticate the user by the access token obtained from authorization header and return user profile data.
+     * @param {IdentityService~Tenant} tenant
      * @returns {Promise<IdentityService~UserProfile>}
      */
-    getUserProfile() {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], 'system'));
+    getUserProfile(tenant) {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], tenant));
     }
 
     /**
@@ -38,7 +38,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<IdentityService~User[]>}
      */
     getTenantUsers(tenantId) {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'));
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId));
     }
 
     /**
@@ -48,7 +48,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Object>}
      */
     replaceTenantUsers(tenantId, users) {
-        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
+        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
     }
 
     /**
@@ -58,7 +58,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Object>}
      */
     addTenantUsers(tenantId, users) {
-        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
+        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
     }
 
     /**
@@ -68,7 +68,7 @@ class IdentityService extends BaseApiService {
      * @returns {Promise<Object>}
      */
     deleteTenantUsers(tenantId, users) {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId, 'users'], 'system'), users);
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
     }
 }
 
