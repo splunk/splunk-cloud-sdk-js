@@ -59,6 +59,35 @@ describe('Datasets Endpoints', () => {
             });
         });
     });
+
+    describe('Patch', () => {
+        it('should return the updated dataset', () => {
+            const updateRequest =
+                {
+                    "disabled": true,
+                    "version": 5
+                };
+            const expectedResponse =
+                {
+                    "owner": "Splunk",
+                    "created": "2018-05-30 05:43:08.000915",
+                    "modified": "2018-05-30 05:43:08.000915",
+                    "version": 5,
+                    "id": "ds1",
+                    "module": "catalog",
+                    "name": "stubby_dataset_1",
+                    "kind": "index",
+                    "capabilities": "1101-00000:11010",
+                    "fields": [],
+                    "createdby": "Splunk",
+                    "modifiedby": "Splunk",
+                    "disabled": false
+                }
+            return splunk.catalog.updateDataset("ds1", updateRequest).then(response => {
+                assert.deepEqual(response, expectedResponse, 'response should contain the same dataset posted.')
+            });
+        });
+    });
 });
 
 describe('Rules Endpoints', () => {
