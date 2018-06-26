@@ -59,7 +59,6 @@ describe('Datasets Endpoints', () => {
             });
         });
     });
-
 });
 
 describe('Rules Endpoints', () => {
@@ -160,5 +159,97 @@ describe('Rules Endpoints', () => {
                 assert.deepEqual(response, expectedResponse, 'response should contain the same object posted');
             });
         });
+    });
+});
+
+describe('Field Endpoints', () => {
+
+    describe('Get a dataset field', () => {
+        it('should return a dataset field based on datasetID and datasetFieldID', () => splunk.catalog.getDatasetField('TEST_DATASET_ID', 'TEST_FIELD_ID_01').then(field => {
+            assert.typeOf(field, 'object', 'response data should be an object');
+            assert('name' in field, 'date_second');
+            assert('datatype' in field, 'NUMBER');
+            assert('fieldtype' in field, 'DIMENSION');
+            assert('prevalence' in field, 'ALL');
+        }));
+    });
+
+    describe('Get all the dataset fields', () => {
+        it('should return an array of dataset fields', () => splunk.catalog.getDatasetFields('TEST_DATASET_ID').then(fields => {
+            assert.typeOf(fields, 'array', 'response should be an array');
+            fields.forEach(field => {
+                assert('name' in field, 'field should contain key: name');
+                assert('datatype' in field, 'field should contain key: datatype');
+                assert('fieldtype' in field, 'field should contain key: fieldtype');
+                assert('prevalence' in field, 'field should contain key: prevalence');
+            });
+            assert.deepEqual(fields.length, 3, 'Three fields should be returned');
+        }));
+    });
+
+    describe('Post a new dataset field', () => {
+        it('should return the created dataset field with post', () => {
+            const datasetField =
+                {
+                    "datasetid": "TEST_DATASET_ID",
+                    "name": "test_data",
+                    "datatype": "S",
+                    "fieldtype": "D",
+                    "prevalence": "A"
+                };
+            const expectedResponse =
+                {
+                    "id": "TEST_FIELD_ID_01",
+                    "datasetid": "TEST_DATASET_ID",
+                    "name": "test_data",
+                    "datatype": "STRING",
+                    "fieldtype": "DIMENSION",
+                    "prevalence": "ALL",
+                    "created": "2018-06-22 05:13:51.000730",
+                    "modified": "2018-06-22 05:13:51.000730",
+                    "readroles": [],
+                    "writeroles": []
+                };
+            return splunk.catalog.postDatasetField('TEST_DATASET_ID', datasetField).then(response => {
+                assert.typeOf(response, 'object', 'response should be an object');
+                assert.deepEqual(response, expectedResponse, 'response should contain the same object posted');
+            });
+        });
+    });
+
+    describe('Patch an existing dataset field', () => {
+        it('should update an existing dataset field with new values', () => {
+            const datasetField =
+                {
+                    "datasetid": "TEST_DATASET_ID",
+                    "name": "test_data",
+                    "datatype": "N",
+                    "fieldtype": "D",
+                    "prevalence": "A"
+                };
+            const expectedResponse =
+                {
+                    "id": "TEST_FIELD_ID_01",
+                    "datasetid": "TEST_DATASET_ID",
+                    "name": "test_data",
+                    "datatype": "NUMBER",
+                    "fieldtype": "DIMENSION",
+                    "prevalence": "ALL",
+                    "created": "2018-06-22 05:13:51.000730",
+                    "modified": "2018-06-22 05:13:51.000730",
+                    "readroles": [],
+                    "writeroles": []
+                };
+            return splunk.catalog.patchDatasetField('TEST_DATASET_ID', 'TEST_FIELD_ID_01', datasetField).then(response => {
+                assert.typeOf(response, 'object', 'response should be an object');
+                assert.deepEqual(response, expectedResponse, 'response should contain the same object posted');
+            });
+        });
+    });
+
+    describe('Delete a dataset field', () => {
+        it('should return no response body', () => splunk.catalog.deleteDatasetField('TEST_DATASET_ID', 'TEST_FIELD_ID_01').then(response => {
+            assert(!response);
+        }));
     });
 });
