@@ -1,5 +1,5 @@
 const config = require('../config');
-const SplunkSSC = require('../../src/splunk');
+const {SplunkSSC} = require('../../splunk');
 const { assert } = require('chai');
 
 const token = process.env.BEARER_TOKEN;

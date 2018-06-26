@@ -1,7 +1,5 @@
-const SplunkSSC = require("../../splunk");
-
-const { assert } = require("chai");
-const { expect } = require("chai");
+const {SplunkSSC} = require("../../splunk");
+const { assert, expect } = require("chai");
 
 const token = process.env.BEARER_TOKEN;
 const tenantID = process.env.TENANT_ID;

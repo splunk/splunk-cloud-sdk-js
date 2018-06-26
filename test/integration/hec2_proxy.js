@@ -1,5 +1,5 @@
 const config = require('../config');
-const SplunkSSC = require('../../splunk');
+const {SplunkSSC} = require('../../splunk');
 const EventBatcher = require('../../hec2_event_batcher');
 const { assert, expect } = require('chai');
 
@@ -150,7 +150,7 @@ describe('integration tests for HEC2 Endpoints', () => {
                 'value': 10.444
             }
         ];
-        
+
         const metricEvent1 = {
             'attributes': {
                 'defaultDimensions': {},
