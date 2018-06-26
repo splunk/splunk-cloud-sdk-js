@@ -12,6 +12,12 @@ const standardQuery = {
     "query": "| from index:main | head 5",
 };
 
+const moduleQuery = {
+    "query": "| from index:main | head 5",
+    // catalog service isn't ready for handling module
+    "module": "",
+};
+
 describe("integration tests Using Search APIs", () => {
     before(() => {
         const events = [];
@@ -25,6 +31,32 @@ describe("integration tests Using Search APIs", () => {
 
 
         it("should allow submitting a search and getting results", () => splunk.search.createJob(standardQuery)
+            .then((sid) => splunk.search.getJob(sid))
+            .then(searchObj => { // Check the state of the job
+                expect(searchObj).to.have.property('sid');
+                expect(searchObj).to.have.property('dispatchState');
+                return splunk.search.waitForJob(searchObj.sid);
+            }).then(searchObj => { // Ensure we have events when done
+                expect(searchObj).to.have.property('dispatchState', 'DONE');
+                expect(searchObj).to.have.property('eventCount', 5);
+                return Promise.all([
+                    splunk.search.getResults(searchObj.sid)
+                        .then(resultResponse => {
+                            expect(resultResponse).to.have.property('results').with.lengthOf(5);
+                            expect(resultResponse).to.have.property('preview', false);
+                            expect(resultResponse).to.have.property('init_offset', 0);
+                        }),
+                    splunk.search.getEvents(searchObj.sid)
+                        .then(eventsResponse => {
+                            // TODO: determine why we have two endpoints that seem the same
+                            expect(eventsResponse).to.have.property('results').with.lengthOf(5);
+                            expect(eventsResponse).to.have.property('preview', false);
+                            expect(eventsResponse).to.have.property('init_offset', 0);
+                        })
+                ]);
+            }));
+
+        it("should allow submitting a search with module field and getting results", () => splunk.search.createJob(moduleQuery)
             .then((sid) => splunk.search.getJob(sid))
             .then(searchObj => { // Check the state of the job
                 expect(searchObj).to.have.property('sid');
