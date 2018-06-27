@@ -7,7 +7,7 @@
     "tslint": "tslint -p tsconfig.json",
     "tscBuild": "yarn tslint && tsc -p tsconfig.json",
     "tscTest": "yarn tscBuild && yarn test",
-    "tscTest:integration": "yarn tscBuild && yarn test",
+    "tscTest:integration": "yarn tscBuild && yarn test:integration",
     "build": "babel src -d .",
     "clean": "find src/ -name '*.js' | sed 's/src\\//./' | xargs rm",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
