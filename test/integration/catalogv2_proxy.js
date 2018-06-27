@@ -19,7 +19,7 @@ describe("catalog v2", () => {
             assert(dslist[0].kind === "index");
         }));
 
-        it("should allow create/delete of datasets", () => {
+        it("should create, update and delete the test dataset", () => {
             const name = "FooBar";
             const dataset = {
                 name,
@@ -31,9 +31,14 @@ describe("catalog v2", () => {
             return ssc.catalog.createDataset(dataset).then(ds => {
                 assert(ds.name === name);
                 assert(ds.kind === "index");
+                assert(ds.version === 1)
                 return ds.id;
-            }).then(id => ssc.catalog.deleteDataset(id));
-
+            }).then(id => ssc.catalog.updateDataset(id, {"version" : 2}).then(ds => {
+                assert(ds.name === name);
+                assert(ds.kind === "index");
+                assert(ds.version === 2)
+                return ds.id;
+            })).then(id => ssc.catalog.deleteDataset(id));
         });
 
         it("should allow delete of datasets by name", () => {
