@@ -4,9 +4,6 @@
     - name: stubby tests WITHOUT coverage - TypeScript
       service: ssc-client-js-with-stubby
       command: bash -c "yarn run tscTest"
-    - name: stubby integration tests WITHOUT coverage - TypeScript
-      service: ssc-client-js-with-stubby
-      command: bash -c "yarn run tscTest:integration"
 
     - type: serial
       name: integration - TypeScript
@@ -15,11 +12,11 @@
         service: ssc-sdk-shared-token-fetcher
         command: true
       - type: parallel
-        name: integration tests & examples - TypeSCript
+        name: integration tests & examples - TypeScript
         steps:
-          - name: integration tests - gated
-            service: ssc-client-js-against-playground
-            command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
+#          - name: integration tests - gated
+#            service: ssc-client-js-against-playground
+#            command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
           - name: run examples - gated
             service: ssc-client-js-against-playground
             command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
