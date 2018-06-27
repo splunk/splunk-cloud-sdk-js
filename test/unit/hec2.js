@@ -4,8 +4,8 @@ const { HEC2Service } = require("../../hec2");
 const { EventBatcher } = require("../../hec2_event_batcher");
 const { assert, expect } = require("chai");
 
-const splunk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
-const splunkBadToken = new SplunkSSC(`http://${config.host}:8882`, "BAD_TOKEN", 'TEST_TENANT');
+const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.authToken, 'TEST_TENANT');
+const splunkBadToken = new SplunkSSC(`http://${config.stubbyHost}:8882`, "BAD_TOKEN", 'TEST_TENANT');
 const successResponse = {'code':0,'text':'Success'};
 const event1 = {'sourcetype':'splunkd','source':'mysource','time':1524599658,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.251 -0700 INFO  ServerConfig - Will generate GUID, as none found on this server.'};
 const event2 = {'sourcetype':'splunkd','source':'mysource','time':1524599659,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.252 -0700 INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A'};
@@ -23,7 +23,7 @@ describe('Events Formation', () => {
     describe('Output', () => {
         it('should output to expected concatenated string of JSON', () => {
             const events = [event1, event2, event3];
-            const expectedJSONs = '{"sourcetype":"splunkd","source":"mysource","time":1524599658,"index":"main","fields":{"fieldkey1":"fieldval1","fieldkey2":"fieldkey2"},"host":"myhost","event":"04-24-2018 12:32:23.251 -0700 INFO  ServerConfig - Will generate GUID, as none found on this server."}{"sourcetype":"splunkd","source":"mysource","time":1524599659,"index":"main","fields":{"fieldkey1":"fieldval1","fieldkey2":"fieldkey2"},"host":"myhost","event":"04-24-2018 12:32:23.252 -0700 INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A"}{"sourcetype":"splunkd","source":"mysource","time":1524599660,"index":"main","fields":{"fieldkey1":"fieldval1","fieldkey2":"fieldkey2"},"host":"myhost","event":"04-24-2018 12:32:23.258 -0700 INFO  ServerConfig - My server name is \\"9765f1bebdb4\\"."}';
+            const expectedJSONs = '{"sourcetype":"splunkd","source":"mysource","time":1524599658,"index":"main","fields":{"fieldkey1":"fieldval1","fieldkey2":"fieldkey2"},"stubbyHost":"myhost","event":"04-24-2018 12:32:23.251 -0700 INFO  ServerConfig - Will generate GUID, as none found on this server."}{"sourcetype":"splunkd","source":"mysource","time":1524599659,"index":"main","fields":{"fieldkey1":"fieldval1","fieldkey2":"fieldkey2"},"stubbyHost":"myhost","event":"04-24-2018 12:32:23.252 -0700 INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A"}{"sourcetype":"splunkd","source":"mysource","time":1524599660,"index":"main","fields":{"fieldkey1":"fieldval1","fieldkey2":"fieldkey2"},"stubbyHost":"myhost","event":"04-24-2018 12:32:23.258 -0700 INFO  ServerConfig - My server name is \\"9765f1bebdb4\\"."}';
             assert.equal(HEC2Service.eventsToJSONs(events), expectedJSONs, 'HEC2Service.eventsToJSONs() output should match expected result');
         });
     });
@@ -164,7 +164,7 @@ describe('Metrics Endpoint', () => {
             'defaultUnit': 'MB'
         },
         'body': metrics,
-        'host': 'myhost',
+        'stubbyHost': 'myhost',
         'id': 'metric0001',
         'nanos': 1,
         'source': 'mysource',
