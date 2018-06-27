@@ -92,8 +92,10 @@ export class ServiceClient {
                     }
                 })
                 .join('&');
+            console.log("BuildURL", `${this.url}${path}?${queryEncoded}`);
             return `${this.url}${path}?${queryEncoded}`;
         }
+        console.log("BuildURL", `${this.url}${path}`);
         return `${this.url}${path}`;
     }
 

@@ -61,12 +61,12 @@ export class CatalogService extends BaseApiService {
 
     /**
      * Updates the supplied dataset
-     * @param datasetID
-     * * @param partial
+     * @param datasetId
+     * @param partial
      */
     // TODO: add lint check for xxxID vs. xxxId consistency
-    public updateDataset(datasetID: DatasetInfo["id"], partial: PartialDatasetInfo): Promise<DatasetInfo> {
-        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID]), partial)
+    public updateDataset(datasetId: DatasetInfo["id"], partial: PartialDatasetInfo): Promise<DatasetInfo> {
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]), partial)
             .then(response => response as DatasetInfo);
     }
 
@@ -96,6 +96,7 @@ export class CatalogService extends BaseApiService {
 
     /**
      * Return the Rule with the specified id
+     * @param ruleId
      */
     public getRule(ruleId: Rule["id"]): Promise<Rule> {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]))
@@ -104,6 +105,7 @@ export class CatalogService extends BaseApiService {
 
     /**
      * Delete the Rule and its dependencies with the specified id
+     * @param ruleId
      */
     public deleteRule(ruleId: Rule["id"]): Promise<any> { // TODO: can we add stricter return typing?
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]));
@@ -155,7 +157,6 @@ export class CatalogService extends BaseApiService {
      * Deletes the dataset field with the specified datasetID and datasetFieldID
      * @param datasetID
      * @param datasetFieldID
-     * @returns {Promise<object>}
      */
     public deleteDatasetField(datasetID: DatasetInfo["id"], datasetFieldID: Field["id"]): Promise<object> {
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]));
