@@ -4,7 +4,7 @@ const { HEC2Service } = require("../../hec2");
 const { EventBatcher } = require("../../hec2_event_batcher");
 const { assert, expect } = require("chai");
 
-const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.authToken, 'TEST_TENANT');
+const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, 'TEST_TENANT');
 const splunkBadToken = new SplunkSSC(`http://${config.stubbyHost}:8882`, "BAD_TOKEN", 'TEST_TENANT');
 const successResponse = {'code':0,'text':'Success'};
 const event1 = {'sourcetype':'splunkd','source':'mysource','time':1524599658,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.251 -0700 INFO  ServerConfig - Will generate GUID, as none found on this server.'};
