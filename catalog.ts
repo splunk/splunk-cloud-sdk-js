@@ -61,10 +61,12 @@ export class CatalogService extends BaseApiService {
 
     /**
      * Updates the supplied dataset
-     * @param {DatasetInfo} dataset
+     * @param datasetID
+     * * @param partial
      */
-    public updateDataset(dataset: DatasetInfo): Promise<DatasetInfo> {
-        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', dataset.id]), dataset)
+    // TODO: add lint check for xxxID vs. xxxId consistency
+    public updateDataset(datasetID: DatasetInfo["id"], partial: PartialDatasetInfo): Promise<DatasetInfo> {
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID]), partial)
             .then(response => response as DatasetInfo);
     }
 
@@ -72,7 +74,7 @@ export class CatalogService extends BaseApiService {
 
     /**
      * Create a new Rule
-     * @param {Rule} rule
+     * @param rule
      */
     public createRule(rule: Rule): Promise<Rule> {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), rule)
@@ -107,6 +109,57 @@ export class CatalogService extends BaseApiService {
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]));
     }
 
+    /**
+     * Get the list of dataset fields for the given datasetID
+     * @param datasetID
+     * @param [filter] An SPL filter string
+     */
+    public getDatasetFields(datasetID: DatasetInfo["id"], filter?: string): Promise<Field[]> {
+        const query = {filter};
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), query)
+            .then(response => response as Field[]);
+    }
+
+    /**
+     * Gets the Field with the specified datasetID and datasetFieldID
+     * @param datasetID
+     * @param datasetFieldID
+     */
+    public getDatasetField(datasetID: Field["id"], datasetFieldID: Field["id"]): Promise<Field> {
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]))
+            .then(response => response as Field);
+    }
+
+    /**
+     * Creates a new Dataset Field
+     * @param datasetID
+     * @param datasetField
+     */
+    public postDatasetField(datasetID: DatasetInfo["id"], datasetField: Field): Promise<Field> {
+        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), datasetField)
+            .then(response => response as Field);
+    }
+
+    /**
+     * Updates an existing dataset field
+     * @param datasetID
+     * @param datasetFieldID
+     * @param datasetField
+     */
+    public patchDatasetField(datasetID: DatasetInfo["id"], datasetFieldID: Field["id"], datasetField: Field): Promise<Field> {
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]), datasetField)
+            .then(response => response as Field);
+    }
+
+    /**
+     * Deletes the dataset field with the specified datasetID and datasetFieldID
+     * @param datasetID
+     * @param datasetFieldID
+     * @returns {Promise<object>}
+     */
+    public deleteDatasetField(datasetID: DatasetInfo["id"], datasetFieldID: Field["id"]): Promise<object> {
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]));
+    }
 }
 
 export interface DatasetInfo {
@@ -120,7 +173,23 @@ export interface DatasetInfo {
     modifiedBy?: string;
     capabilities?: string;
     version?: number;
+    readroles?: string[];
+    writeroles?: string[];
     fields: Field[];
+}
+
+export interface PartialDatasetInfo {
+    name?: string;
+    kind?: string;
+    owner?: string;
+    created?: string;
+    modified?: string;
+    createdBy?: string;
+    modifiedBy?: string;
+    capabilities?: string;
+    version?: number;
+    readroles?: string[];
+    writeroles?: string[];
 }
 
 export interface Field {
