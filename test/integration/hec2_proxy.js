@@ -1,6 +1,6 @@
 const config = require('../config');
 const {SplunkSSC} = require('../../splunk');
-const EventBatcher = require('../../hec2_event_batcher');
+const {EventBatcher} = require('../../hec2_event_batcher');
 const { assert, expect } = require('chai');
 
 const sscHost = config.playgroundHost;
@@ -205,6 +205,7 @@ describe('integration tests for HEC2 Endpoints', () => {
                 },
                 err => {
                     assert.equal(err.code, 400, 'response status should be 400');
+                    console.log("TODO: debug", err);
                     // {'code':'INVALID_DATA','message':'Invalid data format'}
                     expect(err).to.have.property('message').and.match(/INVALID_DATA/);
                 }
