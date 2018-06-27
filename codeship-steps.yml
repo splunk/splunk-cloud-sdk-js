@@ -19,11 +19,9 @@
         steps:
           - name: integration tests - gated
             service: ssc-client-js-against-playground
-            tag: ^(master|develop)$
             command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
           - name: run examples - gated
             service: ssc-client-js-against-playground
-            tag: ^(master|develop)$
             command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
 #    - name: stubby tests with coverage
 #      service: ssc-client-js-with-stubby
