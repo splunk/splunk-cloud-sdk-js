@@ -17,7 +17,7 @@ function handleResponse(response: Response): Promise<any> {
         return response.text().then(decodeJson);
     }
     return response.text().then(text => {
-        let err;
+        let err: Error;
         try {
             const json = JSON.parse(text);
             if (!json.message) {

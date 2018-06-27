@@ -1,3 +1,5 @@
+import { SplunkError } from "../../client";
+
 const config = require('../config');
 const {SplunkSSC} = require('../../splunk');
 const {EventBatcher} = require('../../hec2_event_batcher');
@@ -205,10 +207,15 @@ describe('integration tests for HEC2 Endpoints', () => {
                 },
                 err => {
                     assert.equal(err.code, 400, 'response status should be 400');
+
                     console.log("TODO: debug", err);
+
                     // {'code':'INVALID_DATA','message':'Invalid data format'}
-                    expect(err).to.have.property('message');
-                    expect(err).code.to.match(/INVALID_DATA/);
+                    const errorBody = err.source;
+                    expect(errorBody).to.have.property("code");
+                    expect(errorBody.code).to.match(/INVALID_DATA/);
+                    expect(errorBody).to.have.property("message");
+                    expect(errorBody.message).to.match(/Invalid/);
                 }
             ));
         });
