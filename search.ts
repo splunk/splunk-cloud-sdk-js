@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs/Observable';
 import BaseApiService from './baseapiservice';
 import { QueryArgs } from "./client";
-import { SEARCH_SERVICE_PREFIX } from './common/service_prefixes';
 import { Event } from "./hec2";
+import { SEARCH_SERVICE_PREFIX } from './service_prefixes';
 
 export class SplunkSearchCancelError extends Error {
 }

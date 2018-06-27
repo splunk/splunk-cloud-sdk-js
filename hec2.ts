@@ -1,6 +1,6 @@
 import BaseApiService from './baseapiservice';
 import { QueryArgs } from './client';
-import { HEC2_SERVICE_PREFIX } from './common/service_prefixes';
+import { HEC2_SERVICE_PREFIX } from './service_prefixes';
 
 /**
  * Encapsulates HEC2 endpoints

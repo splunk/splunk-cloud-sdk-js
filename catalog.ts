@@ -1,6 +1,6 @@
 import BaseApiService from "./baseapiservice";
 import { QueryArgs } from "./client";
-import { CATALOG_SERVICE_PREFIX } from "./common/service_prefixes";
+import { CATALOG_SERVICE_PREFIX } from "./service_prefixes";
 
 /**
  * Encapsulates catalog endpoints
