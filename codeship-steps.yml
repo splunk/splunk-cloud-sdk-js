@@ -14,9 +14,9 @@
       - type: parallel
         name: integration tests & examples - TypeScript
         steps:
-#          - name: integration tests - gated
-#            service: ssc-client-js-against-playground
-#            command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
+          - name: integration tests - gated
+            service: ssc-client-js-against-playground
+            command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
           - name: run examples - gated
             service: ssc-client-js-against-playground
             command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
