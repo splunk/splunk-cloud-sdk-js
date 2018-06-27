@@ -29,4 +29,5 @@ class SplunkSSC {
     }
 }
 
-module.exports = SplunkSSC;
+// TODO(shakeel): commented out TS refactor
+// module.exports = SplunkSSC;
