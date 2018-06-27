@@ -61,7 +61,7 @@ class CatalogService extends BaseApiService {
     /**
      * Updates the supplied dataset
      * @param {string} datasetId
-     * @param {Object|CatalogService~PartialDatasetInfo} partialDataset
+     * @param {CatalogService~PartialDatasetInfo} partialDataset
      * @returns {Promise<CatalogService~DatasetInfo>}
      */
     updateDataset(datasetId, partialDataset) {
