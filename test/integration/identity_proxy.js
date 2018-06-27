@@ -2,12 +2,13 @@ const config = require('../config');
 const {SplunkSSC} = require('../../splunk');
 const { assert } = require('chai');
 
-const token = process.env.BEARER_TOKEN;
-const tenantID = process.env.TENANT_ID;
-const sscHost = process.env.SSC_HOST;
+const sscHost = config.playgroundHost;
+const invalidToken = config.invalidAuthToken;
+const token = config.playgroundAuthToken;
+const tenantID = config.playgroundTenant;
 
 const splunk = new SplunkSSC(sscHost, token, tenantID);
-const splunkWithIncorrectCredentials = new SplunkSSC(sscHost, config.invalidAuthToken, config.testTenant);
+const splunkWithIncorrectCredentials = new SplunkSSC(sscHost, invalidToken, tenantID);
 
 // Scenario 1:
 // Integration test for Tenant User endpoints

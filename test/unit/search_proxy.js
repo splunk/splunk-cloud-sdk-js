@@ -3,7 +3,7 @@ const { SplunkSSC } = require("../../splunk");
 const { expect } = require("chai");
 
 describe("Using Search APIs", () => {
-    const splk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, 'TEST_TENANT');
+    const splk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
 
     it("should allow submission of a search", () => splk.search.createJob({ query: "search index=*" })
         .then((sid) => {

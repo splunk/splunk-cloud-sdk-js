@@ -1,10 +1,12 @@
+const config = require('../config');
 const {SplunkSSC} = require("../../splunk");
 const { assert, expect } = require("chai");
 
-const token = process.env.BEARER_TOKEN;
-const tenantID = process.env.TENANT_ID;
+const sscHost = config.playgroundHost;
+const token = config.playgroundAuthToken;
+const tenantID = config.playgroundTenant;
 
-const splunk = new SplunkSSC(process.env.SSC_HOST, token, tenantID);
+const splunk = new SplunkSSC(sscHost, token, tenantID);
 
 const standardQuery = {
     "query": "| from index:main | head 5",

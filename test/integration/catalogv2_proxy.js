@@ -2,10 +2,11 @@ const config = require("../config");
 const {SplunkSSC} = require("../../splunk");
 const {assert} = require("chai");
 
-const token = process.env.BEARER_TOKEN;
-const tenantID = process.env.TENANT_ID;
+const sscHost = config.playgroundHost;
+const token = config.playgroundAuthToken;
+const tenantID = config.playgroundTenant;
 
-const ssc = new SplunkSSC(process.env.SSC_HOST, token, tenantID);
+const ssc = new SplunkSSC(sscHost, token, tenantID);
 
 describe("catalog v2", () => {
     describe("datasets", () => {

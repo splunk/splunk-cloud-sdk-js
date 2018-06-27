@@ -9,7 +9,7 @@ chai.use(chaiAsPromised);
 const {expect} = chai;
 
 describe("Basic client functionality", () => {
-    const s = new ServiceClient(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, 'TEST_TENANT');
+    const s = new ServiceClient(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
     describe("GET", () => {
         it("should return a promise", () => {
             const promise = s.get("/basic");

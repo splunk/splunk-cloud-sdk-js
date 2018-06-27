@@ -3,12 +3,13 @@ const {SplunkSSC} = require('../../splunk');
 const EventBatcher = require('../../hec2_event_batcher');
 const { assert, expect } = require('chai');
 
-const token = process.env.BEARER_TOKEN;
-const tenantID = process.env.TENANT_ID;
-const sscHost = process.env.SSC_HOST;
+const sscHost = config.playgroundHost;
+const invalidToken = config.invalidAuthToken;
+const token = config.playgroundAuthToken;
+const tenantID = config.playgroundTenant;
 
 const splunk = new SplunkSSC(sscHost, token, tenantID);
-const splunkBadToken = new SplunkSSC(sscHost, config.invalidAuthToken, config.testTenant);
+const splunkBadToken = new SplunkSSC(sscHost, invalidToken, tenantID);
 
 describe('integration tests for HEC2 Endpoints', () => {
 
