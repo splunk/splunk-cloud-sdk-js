@@ -60,15 +60,15 @@ class CatalogService extends BaseApiService {
 
     /**
      * Updates the supplied dataset
-     * @param {Promise<CatalogService~DatasetInfo>} dataset
+     * @param {string} datasetId
+     * @param {CatalogService~PartialDatasetInfo} partialDataset
      * @returns {Promise<CatalogService~DatasetInfo>}
      */
-    updateDataset(dataset) {
-        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', dataset.id]), dataset);
+    updateDataset(datasetId, partialDataset) {
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]), partialDataset);
     }
 
     // rules
-
     /**
      * Create a new Rule
      * @param {CatalogService~Rule} rule
@@ -178,7 +178,25 @@ class CatalogService extends BaseApiService {
  * @property {string} [modifiedBy]
  * @property {string} [capabilities]
  * @property {number} [version]
+ * @property {Array<String>} [readroles]
+ * @property {Array<String>} [writeroles]
  * @property {Array<Field>} fields
+ */
+
+/**
+ * PartialDatasetInfo
+ * @typedef {object} CatalogService~PartialDatasetInfo
+ * @property {string} [name]
+ * @property {string} [kind]
+ * @property {string} [owner]
+ * @property {string} [created]
+ * @property {string} [modified]
+ * @property {string} [createdBy]
+ * @property {string} [modifiedBy]
+ * @property {string} [capabilities]
+ * @property {number} [version]
+ * @property {Array<String>} [readroles]
+ * @property {Array<String>} [writeroles]
  */
 
 /**
