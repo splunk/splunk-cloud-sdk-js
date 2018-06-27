@@ -72,6 +72,7 @@ describe("catalog v2", () => {
     }).timeout(10000);
 
     describe("dataset fields", () => {
+        const integrationTestField1 = "integ_test_field1";
         const integrationTestField2 = "integ_test_field2";
         it("should create a test dataset, its fields, list its fields and delete the test dataset", () => {
             ssc.catalog.createDataset({
@@ -82,14 +83,14 @@ describe("catalog v2", () => {
                 externalKind: "kvcollection",
                 externalName: "test_externalName"
             }).then((resultDataset) => ssc.catalog.postDatasetField(resultDataset.id, {
-                "name": "integ_test_field1",
+                "name": integrationTestField1,
                 "datasetid": resultDataset.id,
                 "datatype": "S",
                 "fieldtype": "D",
                 "prevalence": "A"
-            }).then(resultDatasetField1 => {
-                assert(resultDatasetField1.name);
-            }).then(() => ssc.catalog.postDatasetField(resultDataset.id, {
+            }).then(resultDatasetField1 => ssc.catalog.getDatasetField(resultDataset.id,resultDatasetField1.id).then((getResultDatasetField) => {
+                assert(getResultDatasetField.name, integrationTestField1);
+            })).then(() => ssc.catalog.postDatasetField(resultDataset.id, {
                 "name": integrationTestField2,
                 "datasetid": resultDataset.id,
                 "datatype": "S",
@@ -100,7 +101,7 @@ describe("catalog v2", () => {
             }).then(() => ssc.catalog.getDatasetFields(resultDataset.id).then((resultDatasetFields) => {
                 assert(resultDatasetFields.length === 2, "Two dataset fields should be created");
             })).then(() => ssc.catalog.getDatasetFields(resultDataset.id, "name==\"integ_test_field2\"").then((resultDatasetFields) => {
-                assert(resultDatasetFields.length === 1, "Two dataset fields should be created");
+                assert(resultDatasetFields.length === 1, "One dataset fields should be created");
                 assert(resultDatasetFields[0].name === integrationTestField2, "The name should match");
             })).then(() => ssc.catalog.patchDatasetField(resultDataset.id, resultDatasetField2.id, {"name" : "integ_test_field3"}).then((patchResultDatasetField) => {
                 assert(patchResultDatasetField.name === "integ_test_field3", "The name should match");

@@ -136,7 +136,7 @@ class CatalogService extends BaseApiService {
     /**
      * Creates a new Dataset Field
      * @param datasetID
-     * @param {Object|CatalogService~Field} datasetField
+     * @param {CatalogService~Field} datasetField
      * @returns {Promise<CatalogService~Field>}
      */
     postDatasetField(datasetID, datasetField) {
@@ -147,7 +147,7 @@ class CatalogService extends BaseApiService {
      * Updates an existing dataset field
      * @param datasetID
      * @param datasetFieldID
-     * @param {Promise<CatalogService~Field>} datasetField
+     * @param {CatalogService~Field} datasetField
      * @returns {Promise<CatalogService~Field>}
      */
     patchDatasetField(datasetID, datasetFieldID, datasetField) {
