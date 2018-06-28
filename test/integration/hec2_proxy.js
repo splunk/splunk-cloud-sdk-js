@@ -208,8 +208,6 @@ describe('integration tests for HEC2 Endpoints', () => {
                 err => {
                     assert.equal(err.code, 400, 'response status should be 400');
 
-                    console.log("TODO: debug", err);
-
                     // {'code':'INVALID_DATA','message':'Invalid data format'}
                     const errorBody = err.source;
                     expect(errorBody).to.have.property("code");
