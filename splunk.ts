@@ -1,8 +1,8 @@
 import "isomorphic-fetch";
 import { CatalogService } from "./catalog";
 import { ServiceClient } from "./client";
-import { IngestService } from "./ingest";
 import { IdentityService } from "./identity";
+import { IngestService } from "./ingest";
 import { SearchService } from "./search";
 
 /**
