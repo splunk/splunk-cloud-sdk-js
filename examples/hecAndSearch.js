@@ -63,7 +63,7 @@ function sendDataViaHec(splunk, index, host, source) {
     };
 
     // Use the HEC raw endpoint to send data
-    splunk.hec2.createRawEvent(event1).then(data => {
+    splunk.ingest.createRawEvent(event1).then(data => {
         console.log(data);
     }).catch(err => {
         console.log(`hecraw: ${err}`);
@@ -71,7 +71,7 @@ function sendDataViaHec(splunk, index, host, source) {
     });
 
     // Use the HEC endpoint to send one event
-    splunk.hec2.createEvent(event2).then(data => {
+    splunk.ingest.createEvent(event2).then(data => {
         console.log(data);
     }).catch(err => {
         console.log(`hec event1: ${err}`);
@@ -80,7 +80,7 @@ function sendDataViaHec(splunk, index, host, source) {
 
 
     // Use the HEC endpoint to send multiple events
-    splunk.hec2.createEvents([event1, event2, event3]).then(data => {
+    splunk.ingest.createEvents([event1, event2, event3]).then(data => {
         console.log(data);
     }).catch(err => {
         console.log(`hec events: ${err}`);
