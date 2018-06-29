@@ -10,7 +10,7 @@ import { SearchService } from "./search";
  * @property {SearchService} search - Proxies for the search APIs
  * @property {CatalogService} catalog - Proxies for the catalog APIs
  * @property {IdentityService} identity - Proxies for the identity APIs
- * @property {IngestService} ingest - Proxies for the HEC2 APIs
+ * @property {IngestService} ingest - Proxies for the ingest APIs
  */
 export class SplunkSSC {
     public search: SearchService;
