@@ -94,7 +94,7 @@ export class Search {
                     return self.client.getResults(self.sid, args)
                         .then(response => response.results);
                 }
-                const fetcher = (start: number) => self.client.getResults(self.sid, (Object as any).assign({}, args, { offset: start }));
+                const fetcher = (start: number) => self.client.getResults(self.sid,(Object as any).assign({}, args, { offset: start }));
                 const iterator = iterateBatches(fetcher, count, job.eventCount);
                 let results: object[] = [];
                 for (const batch of iterator) {
@@ -121,7 +121,7 @@ export class Search {
         const self = this;
         const pollInterval = args.pollInterval || 500; // Increasing the default
         return Observable.create((observable: any) => {
-            const promises: Array<Promise<any>> = [];
+            const promises: any[] = [];
             self.wait(pollInterval, (job: Job) => {
                 if (job.eventCount > 0) { // Passes through arguments, so has the same semantics of offset == window
                     promises.push(self.getResults(args).then(results => observable.next(results)));
@@ -168,7 +168,7 @@ export class Search {
     }
 
     public statusObservable(updateInterval: number): Observable<Job> {
-        return new Observable<Job>((o) => {
+        return new Observable<Job>((o: any) => {
             this.wait(updateInterval, (job: Job) => o.next(job))
                 .then(() => o.complete(), (err: Error) => o.error(err));
         });
@@ -277,6 +277,8 @@ export class SearchService extends BaseApiService {
     /**
      * Submits a search job and wraps the response in an object
      * for easier further processing.
+     *
+     * @param searchArgs arguments for a new search job
      */
     public submitSearch(searchArgs: PostJobsRequest): Promise<Search> {
         const self = this;
