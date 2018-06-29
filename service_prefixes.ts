@@ -6,7 +6,7 @@ export const CATALOG_SERVICE_PREFIX: string = "/catalog/v1";
 /**
  * @private
  */
-export const HEC2_SERVICE_PREFIX: string = "/ingest/v1";
+export const INGEST_SERVICE_PREFIX: string = "/ingest/v1";
 
 /**
  * @private

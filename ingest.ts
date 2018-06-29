@@ -1,27 +1,27 @@
 import BaseApiService from './baseapiservice';
 import { QueryArgs } from './client';
-import { HEC2_SERVICE_PREFIX } from './service_prefixes';
+import { INGEST_SERVICE_PREFIX } from './service_prefixes';
 
 /**
- * Encapsulates HEC2 endpoints
+ * Encapsulates Ingest service endpoints
  */
-export class HEC2Service extends BaseApiService {
+export class IngestService extends BaseApiService {
     /**
-     * Create a structured event to be ingested by Splunk SSC via HEC2.
+     * Create a structured event to be ingested by Splunk SSC via Ingest service.
      */
     public createEvent(event: Event): Promise<any> {
-        return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['events']), event);
+        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), event);
     }
 
     /**
-     * Create structured events to be ingested by Splunk SSC via HEC2.
+     * Create structured events to be ingested by Splunk SSC via Ingest service.
      */
     public createEvents(events: Event[]): Promise<any> {
-        return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['events']), HEC2Service.eventsToJSONs(events));
+        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), IngestService.eventsToJSONs(events));
     }
 
     /**
-     * Create unstructured event data to be ingested by Splunk SSC via HEC2.
+     * Create unstructured event data to be ingested by Splunk SSC via Ingest service.
      */
     public createRawEvent(event: Event): Promise<any> {
         const queryParams: QueryArgs = {};
@@ -32,7 +32,7 @@ export class HEC2Service extends BaseApiService {
                 queryParams[key] = event[key];
             }
         });
-        return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['raw']), event.event, queryParams);
+        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['raw']), event.event, queryParams);
     }
 
     /**
@@ -40,12 +40,12 @@ export class HEC2Service extends BaseApiService {
      * @param metrics
      */
     public createMetrics(metrics: MetricEvent[]): Promise<any> {
-        return this.client.post(this.client.buildPath(HEC2_SERVICE_PREFIX, ['metrics']), metrics);
+        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics']), metrics);
     }
 
     /**
-     * Create a HEC2-compatible string consisting of concatenated JSON events.
-     * @return Returns a HEC2-compatible string consisting of concatenated JSON events.
+     * Create anIngest service-compatible string consisting of concatenated JSON events.
+     * @return Returns an Ingest service-compatible string consisting of concatenated JSON events.
      */
     private static eventsToJSONs(events: Event[]): string {
         // Convert Objects to JSON strings and concatenate them together
@@ -54,7 +54,7 @@ export class HEC2Service extends BaseApiService {
 }
 
 /**
- * Event - a Splunk event accepted by HEC2.
+ * Event - a Splunk event accepted by Ingest service.
  */
 export interface Event {
     /**
@@ -90,7 +90,7 @@ export interface Event {
 }
 
 /**
- * Fields - key/value pairs for inclusion in HEC2 events.
+ * Fields - key/value pairs for inclusion in Ingest service events.
  */
 interface Fields {
     [key: string]: string;
@@ -98,9 +98,9 @@ interface Fields {
 
 /**
  * MetricEvent - Common payload to specify multiple related Splunk metrics.
- * @typedef {Object} HEC2Service~MetricEvent
- * @property {HEC2Service~MetricAttributes} attributes Default attributes for related Splunk metrics.
- * @property {HEC2Service~Metric[]} body Specify multiple related metrics e.g. Memory, CPU etc.
+ * @typedef {Object} IngestService~MetricEvent
+ * @property {IngestService~MetricAttributes} attributes Default attributes for related Splunk metrics.
+ * @property {IngestService~Metric[]} body Specify multiple related metrics e.g. Memory, CPU etc.
  * @property {string} host The host value to assign to the event data. This is typically the hostname of the client from which you're sending data.
  * @property {string} id Optional ID uniquely identifies the metric data. It is used to deduplicate the data if same data is set multiple times. If ID is not specified, it will be assigned by the system.
  * @property {number} nanos Optional nanoseconds part of the timestamp (integer).
@@ -121,7 +121,7 @@ interface MetricEvent {
 
 /**
  * MetricAttributes - Default attributes for related Splunk metrics.
- * @typedef {Object} HEC2Service~MetricAttributes
+ * @typedef {Object} IngestService~MetricAttributes
  * @property {Object} defaultDimensions Optional. If set, individual Metrics will inherit these dimensions and can override any/all of them.
  * @property {string} defaultType Optional. If set, individual Metrics will inherit this type and can optionally override.
  * @property {string} defaultUnit Optional. If set, individual Metrics will inherit this unit and can optionally override.
@@ -134,7 +134,7 @@ interface MetricAttributes {
 
 /**
  * Metric - Specify individual metric data.
- * @typedef {Object} HEC2Service~Metric
+ * @typedef {Object} IngestService~Metric
  * @property {Object} dimensions Dimensions allow metrics to be classified e.g. {"Server":"nginx", "Region":"us-west-1", ...}
  * @property {string} name Name of the metric e.g. CPU, Memory etc.
  * @property {string} type Type of metric. Default is g for gauge.

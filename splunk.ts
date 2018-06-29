@@ -1,8 +1,8 @@
 import "isomorphic-fetch";
 import { CatalogService } from "./catalog";
 import { ServiceClient } from "./client";
-import { HEC2Service } from "./hec2";
 import { IdentityService } from "./identity";
+import { IngestService } from "./ingest";
 import { SearchService } from "./search";
 
 /**
@@ -10,13 +10,13 @@ import { SearchService } from "./search";
  * @property search - Proxies for the search APIs
  * @property catalog - Proxies for the catalog APIs
  * @property identity - Proxies for the identity APIs
- * @property hec2 - Proxies for the HEC2 APIs
+ * @property ingest - Proxies for the ingest APIs
  */
 export class SplunkSSC {
     public search: SearchService;
     public catalog: CatalogService;
     public identity: IdentityService;
-    public hec2: HEC2Service;
+    public ingest: IngestService;
     /**
      * Build a Splunk SSC Client
      * @param url URL to Splunk SSC environment TODO: SSC name
@@ -28,6 +28,6 @@ export class SplunkSSC {
         this.search = new SearchService(client);
         this.catalog = new CatalogService(client);
         this.identity = new IdentityService(client);
-        this.hec2 = new HEC2Service(client);
+        this.ingest = new IngestService(client);
     }
 }

@@ -2,7 +2,7 @@ import { SplunkError } from "../../client";
 
 const config = require('../config');
 const {SplunkSSC} = require('../../splunk');
-const {EventBatcher} = require('../../hec2_event_batcher');
+const {EventBatcher} = require('../../ingest_event_batcher');
 const { assert, expect } = require('chai');
 
 const sscHost = config.playgroundHost;
@@ -13,7 +13,7 @@ const tenantID = config.playgroundTenant;
 const splunk = new SplunkSSC(sscHost, token, tenantID);
 const splunkBadToken = new SplunkSSC(sscHost, invalidToken, tenantID);
 
-describe('integration tests for HEC2 Endpoints', () => {
+describe('integration tests for Ingest Endpoints', () => {
 
     const successResponse = {'code':0,'text':'Success'};
     const event1 = {'sourcetype':'splunkd','source':'mysource','time':1524599658,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.251 -0700 INFO  ServerConfig - Will generate GUID, as none found on this server.'};
@@ -31,7 +31,7 @@ describe('integration tests for HEC2 Endpoints', () => {
 
         describe('Post event', () => {
             it('should return a successful response', () => {
-                return splunk.hec2.createEvent(event1).then(response => {
+                return splunk.ingest.createEvent(event1).then(response => {
                     assert.deepEqual(response, successResponse, 'response should be expected success response.');
                 });
             });
@@ -41,7 +41,7 @@ describe('integration tests for HEC2 Endpoints', () => {
             it('should return a successful response', () => {
                 const events = [event1, event2, event3];
 
-                return splunk.hec2.createEvents(events).then(response => {
+                return splunk.ingest.createEvents(events).then(response => {
                     assert.deepEqual(response, successResponse, 'response should be expected success response.');
                 });
             });
@@ -51,7 +51,7 @@ describe('integration tests for HEC2 Endpoints', () => {
             it('should return a 401 response', () => {
                 const events = [event1, event2, event3];
 
-                splunkBadToken.hec2.createEvents(events).then(response => {
+                splunkBadToken.ingest.createEvents(events).then(response => {
                     assert.fail('request with bad auth should not succeed');
                 }).catch(err => {
                     assert.equal(err.code, 401, 'response status should be 401');
@@ -65,7 +65,7 @@ describe('integration tests for HEC2 Endpoints', () => {
                 const events = [event1, event2, event3, event4, event5, event6, event7, event8, event9, event10];
 
                 // 10 total events, batch size 5, batch count 10, 3000 ms
-                let  eb = new EventBatcher(splunk.hec2, 5, 10, 3000);
+                let  eb = new EventBatcher(splunk.ingest, 5, 10, 3000);
                 try {
                     for (let i=0; i < events.length; i+=1) {
                         eb.add(events[i]).then(response => {
@@ -86,7 +86,7 @@ describe('integration tests for HEC2 Endpoints', () => {
                 const events = [event1, event2, event3, event4, event5, event6, event7];
 
                 // 7 total events, batch size 5, batch count 10, 3000 ms
-                let eb = new EventBatcher(splunk.hec2, 5, 10, 3000);
+                let eb = new EventBatcher(splunk.ingest, 5, 10, 3000);
                 try {
                     for (let i=0; i < events.length; i+=1) {
                         eb.add(events[i]).then(response => {
@@ -106,7 +106,7 @@ describe('integration tests for HEC2 Endpoints', () => {
             it('should create 1 batch event and wait for timer to send it', () => {
 
                 // 1 total events, batch size 50000, batch count 10, 3000 ms
-                let eb = new EventBatcher(splunk.hec2, 50000, 10, 3000);
+                let eb = new EventBatcher(splunk.ingest, 50000, 10, 3000);
                 try {
                     const result = eb.add(event1);
                     assert.isNull(result);
@@ -122,7 +122,7 @@ describe('integration tests for HEC2 Endpoints', () => {
 
         describe('Post raw event', () => {
             it('should return a successful response', () => {
-                return splunk.hec2.createRawEvent(event1).then(response => {
+                return splunk.ingest.createRawEvent(event1).then(response => {
                     assert.deepEqual(response, successResponse, 'response should be expected success response.');
                 }).catch(err => {
                     assert.fail(`request should not have failed ${err}`);
@@ -177,7 +177,7 @@ describe('integration tests for HEC2 Endpoints', () => {
         metricEvent2.nanos = 2;
 
         describe('Post metrics', () => {
-            it('should return a successful response', () => splunk.hec2.createMetrics([metricEvent1]).then(response => {
+            it('should return a successful response', () => splunk.ingest.createMetrics([metricEvent1]).then(response => {
                 expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
             }).catch(err => {
                 assert.fail(`request should not have failed ${err}`);
@@ -185,7 +185,7 @@ describe('integration tests for HEC2 Endpoints', () => {
         });
 
         describe('Post metrics with no defaults', () => {
-            it('should return a successful response', () => splunk.hec2.createMetrics([metricEventNoDefaults]).then(response => {
+            it('should return a successful response', () => splunk.ingest.createMetrics([metricEventNoDefaults]).then(response => {
                 expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
             }).catch(err => {
                 assert.fail(`request should not have failed ${err}`);
@@ -193,7 +193,7 @@ describe('integration tests for HEC2 Endpoints', () => {
         });
 
         describe('Post metrics, two events', () => {
-            it('should return a successful response', () => splunk.hec2.createMetrics([metricEvent1, metricEvent2]).then(response => {
+            it('should return a successful response', () => splunk.ingest.createMetrics([metricEvent1, metricEvent2]).then(response => {
                 expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
             }).catch(err => {
                 assert.fail(`request should not have failed ${err}`);
@@ -201,7 +201,7 @@ describe('integration tests for HEC2 Endpoints', () => {
         });
 
         describe('Post metrics bad format', () => {
-            it('should return a 400 response', () => splunk.hec2.createMetrics({'invalid': 'data format'}).then(
+            it('should return a 400 response', () => splunk.ingest.createMetrics({'invalid': 'data format'}).then(
                 () => {
                     assert.fail('request with bad data format should not succeed')
                 },
