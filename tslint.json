@@ -1,7 +1,11 @@
 {
     "defaultSeverity": "error",
     "extends": [
-        "tslint:recommended"
+        "tslint:recommended",
+        "tslint-eslint-rules",
+        "tslint-config-airbnb",
+        "tslint-config-prettier"
+
     ],
     "jsRules": {},
     "rules": {
@@ -12,7 +16,12 @@
       "no-console": false,
       "arrow-parens": false,
       "max-classes-per-file": false,
-      "max-line-length": false
+      "max-line-length": false,
+      "ter-indent": [true, 4, {"SwitchCase": 1, "VariableDeclarator": 1, "outerIIFEBody": 1 }],
+      "ter-no-tabs": true,
+      "import-name": false,
+      "no-this-assignment": false,
+      "curly": true
     },
     "rulesDirectory": []
 }

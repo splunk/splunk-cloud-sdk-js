@@ -7,10 +7,10 @@ import { SearchService } from "./search";
 
 /**
  * This class is a Splunk SSC client.
- * @property {SearchService} search - Proxies for the search APIs
- * @property {CatalogService} catalog - Proxies for the catalog APIs
- * @property {IdentityService} identity - Proxies for the identity APIs
- * @property {IngestService} ingest - Proxies for the ingest APIs
+ * @property search - Proxies for the search APIs
+ * @property catalog - Proxies for the catalog APIs
+ * @property identity - Proxies for the identity APIs
+ * @property ingest - Proxies for the ingest APIs
  */
 export class SplunkSSC {
     public search: SearchService;
