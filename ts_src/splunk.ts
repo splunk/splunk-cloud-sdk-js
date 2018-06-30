@@ -12,7 +12,7 @@ import { SearchService } from "./search";
  * @property identity - Proxies for the identity APIs
  * @property ingest - Proxies for the ingest APIs
  */
-export class SplunkSSC {
+class SplunkSSC {
     public search: SearchService;
     public catalog: CatalogService;
     public identity: IdentityService;
@@ -31,3 +31,5 @@ export class SplunkSSC {
         this.ingest = new IngestService(client);
     }
 }
+
+module.exports = SplunkSSC;

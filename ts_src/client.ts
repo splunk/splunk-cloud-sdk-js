@@ -24,10 +24,8 @@ function handleResponse(response: Response): Promise<any> {
                 // TODO: This shouldn't go to production
                 console.log(`Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`);
             }
-            // console.log(response);
             err = new SplunkError(json.message, response.status, json);
         } catch (ex) {
-            console.log(response);
             err = new SplunkError(`Unknown error: ${text}`, response.status);
         }
         throw err;
@@ -92,10 +90,8 @@ export class ServiceClient {
                     }
                 })
                 .join('&');
-            console.log("BuildURL", `${this.url}${path}?${queryEncoded}`);
             return `${this.url}${path}?${queryEncoded}`;
         }
-        console.log("BuildURL", `${this.url}${path}`);
         return `${this.url}${path}`;
     }
 
@@ -116,7 +112,6 @@ export class ServiceClient {
             throw new Error("No tenant specified");
         }
         const path = `/${effectiveTenant}${servicePrefix}/${pathname.join("/")}`;
-        console.log(path);
         for (const elem of pathname) {
             if (elem && elem.trim() === '') {
                 throw new Error(`Empty elements in path: ${path}`);

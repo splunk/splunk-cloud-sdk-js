@@ -1,6 +1,6 @@
 require('isomorphic-fetch');
 const config = require("../config");
-const { ServiceClient } = require("../../client");
+const { ServiceClient } = require("../../ts_src/client");
 const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
 

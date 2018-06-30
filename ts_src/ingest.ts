@@ -1,6 +1,6 @@
 import BaseApiService from './baseapiservice';
 import { QueryArgs } from './client';
-import { INGEST_SERVICE_PREFIX } from './service_prefixes';
+import { INGEST_SERVICE_PREFIX } from "./service_prefixes";
 
 /**
  * Encapsulates Ingest service endpoints

@@ -6,7 +6,7 @@
   "scripts": {
     "tslint": "tslint -p tsconfig.json",
     "tscBuild": "tsc -p tsconfig.json",
-    "tscTest": "yarn tscBuild && yarn test",
+    "tscTest": "yarn tscBuild && yarn cover",
     "tscTest:integration": "yarn tscBuild && mocha --timeout=1000 test/integration",
     "ts:docs": "rimraf docs && typedoc --tsconfig tsconfig.json --readme none --mode file --exclude 'service_prefixes' --out docs/ --module commonjs --theme minimal",
     "build": "babel src -d .",
@@ -50,6 +50,8 @@
     "mocha": "^5.0.4",
     "nyc": "^11.6.0",
     "rimraf": "^2.6.2",
+    "source-map-support": "^0.5.6",
+    "ts-node": "^7.0.0",
     "tslint": "^5.10.0",
     "tslint-config-airbnb": "^5.9.2",
     "tslint-config-prettier": "^1.13.0",
@@ -69,11 +71,16 @@
       "text-summary"
     ],
     "include": [
-      "**/**.js"
+      "ts_src/**.ts"
     ],
     "extension": [
       ".ts"
     ],
+    "require": [
+      "ts-node/register"
+    ],
+    "all": true,
+    "sourceMap": true,
     "exclude": [
       ".tmp",
       "ci",

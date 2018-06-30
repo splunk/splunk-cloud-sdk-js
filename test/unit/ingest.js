@@ -1,7 +1,7 @@
 const config = require("../config");
-const {SplunkSSC} = require("../../splunk");
-const { IngestService } = require("../../ingest");
-const { EventBatcher } = require("../../ingest_event_batcher");
+const SplunkSSC = require("../../ts_src/splunk");
+const { IngestService } = require("../../ts_src/ingest");
+const { EventBatcher } = require("../../ts_src/ingest_event_batcher");
 const { assert, expect } = require("chai");
 
 const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);

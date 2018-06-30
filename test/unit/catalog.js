@@ -1,5 +1,5 @@
 const config = require("../config");
-const {SplunkSSC} = require("../../splunk");
+const SplunkSSC = require("../../ts_src/splunk");
 const {assert} = require("chai");
 
 const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
@@ -18,7 +18,6 @@ describe('Datasets Endpoints', () => {
             });
         }));
         it('should return a dataset with given name', () => {
-            splunk.catalog.getRules()
             return splunk.catalog.getDataset('ds1').then(dataset => {
                 assert.typeOf(dataset, 'object', 'response data should be an object');
                 assert('id' in dataset, 'dataset should contain key: id');

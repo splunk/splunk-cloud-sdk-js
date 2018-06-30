@@ -1,5 +1,5 @@
 const config = require("../config");
-const { SplunkSSC } = require("../../splunk");
+const SplunkSSC = require("../../ts_src/splunk");
 const { expect } = require("chai");
 
 describe("Using Search APIs", () => {
