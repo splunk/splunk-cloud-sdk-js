@@ -1,13 +1,13 @@
 {
   "compilerOptions": {
     "lib": ["es5", "es2015.promise", "dom", "ScriptHost"],
-    "sourceRoot": "./ts_src",
     "outDir": "./out",
     "removeComments": false,
     "downlevelIteration": true,
     "strict": true,
     "types": ["node"],
-    "sourceMap": true
+    "sourceMap": true,
+    "sourceRoot": "./ts_src"
 
   },
   "include": ["./ts_src/*.ts"],
