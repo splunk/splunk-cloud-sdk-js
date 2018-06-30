@@ -2,7 +2,7 @@
 // ***** DESCRIPTION: This example show show to get data in using the Ingest Service in
 //              different ways, then runs a search to verify the data was added.
 require("babel-polyfill");
-const {SplunkSSC} = require("../splunk");
+const SplunkSSC = require("../out/splunk");
 
 
 const { SSC_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
