@@ -21,7 +21,8 @@
       "ter-no-tabs": true,
       "import-name": false,
       "no-this-assignment": false,
-      "curly": true
+      "curly": true,
+      "object-curly-spacing": [true, "always"]
     },
     "rulesDirectory": []
 }

@@ -1,5 +1,5 @@
 import BaseApiService from './baseapiservice';
-import {IDENTITY_SERVICE_PREFIX} from './service_prefixes';
+import { IDENTITY_SERVICE_PREFIX } from './service_prefixes';
 
 /**
  * Encapsulates Identity endpoints

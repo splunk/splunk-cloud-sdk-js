@@ -1,8 +1,6 @@
-import { SplunkError } from "../../client";
-
 const config = require('../config');
-const {SplunkSSC} = require('../../splunk');
-const {EventBatcher} = require('../../ingest_event_batcher');
+const SplunkSSC = require('../../ts_src/splunk');
+const {EventBatcher} = require('../../ts_src/ingest_event_batcher');
 const { assert, expect } = require('chai');
 
 const sscHost = config.playgroundHost;

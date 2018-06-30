@@ -117,7 +117,7 @@ export class CatalogService extends BaseApiService {
      * @param [filter] An SPL filter string
      */
     public getDatasetFields(datasetID: DatasetInfo["id"], filter?: string): Promise<Field[]> {
-        const query = {filter};
+        const query = { filter };
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), query)
             .then(response => response as Field[]);
     }

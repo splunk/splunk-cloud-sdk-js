@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import BaseApiService from './baseapiservice';
 import { QueryArgs } from "./client";
 import { Event } from "./ingest";
-import {SEARCH_SERVICE_PREFIX} from "./service_prefixes";
+import { SEARCH_SERVICE_PREFIX } from "./service_prefixes";
 
 export class SplunkSearchCancelError extends Error {
 }
@@ -153,11 +153,11 @@ export class Search {
      * @param [attrs.count] Number of events to fetch per call
      * @returns Observable
      */
-    public eventObservable(attrs: {count: number} = {count: 30}): Observable<any> { // TODO: eventObservableOptions interface
+    public eventObservable(attrs: {count: number} = { count: 30 }): Observable<any> { // TODO: eventObservableOptions interface
         const self = this;
         return Observable.create(async (observable: any) => {
             const job = await self.client.waitForJob(self.sid);
-            const fetchEvents = (start: number) => self.client.getEvents(self.sid, {count: attrs.count, offset: start});
+            const fetchEvents = (start: number) => self.client.getEvents(self.sid, { count: attrs.count, offset: start });
             const batchIterator = iterateBatches(fetchEvents, attrs.count, job.eventCount);
             for (const promise of batchIterator) {
                 const batch: any = await promise;
@@ -208,7 +208,7 @@ export class SearchService extends BaseApiService {
      */
     // TODO: support ttl value via JobControlActionRequest
     public createJobControlAction(jobId: string, action: string): Promise<object> {  // TODO: Flesh out what this returns
-        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), {action});
+        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), { action });
     }
 
     // TODO:(dp) response is undefined in yaml spec

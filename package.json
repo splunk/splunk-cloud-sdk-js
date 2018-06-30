@@ -5,10 +5,11 @@
   "main": "splunk.js",
   "scripts": {
     "tslint": "tslint -p tsconfig.json",
+    "tslint:fix": "tslint -p tsconfig.json --fix",
     "tscBuild": "tsc -p tsconfig.json",
     "tscTest": "yarn tscBuild && yarn cover",
     "tscTest:integration": "yarn tscBuild && mocha --timeout=1000 test/integration",
-    "ts:docs": "rimraf docs && typedoc --tsconfig tsconfig.json --readme none --mode file --exclude 'service_prefixes' --out docs/ --module commonjs --theme minimal",
+    "ts:docs": "rimraf docs && typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/ --module commonjs --theme minimal",
     "build": "babel src -d .",
     "clean": "find src/ -name '*.js' | sed 's/src\\//./' | xargs rm",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
@@ -79,7 +80,6 @@
     "require": [
       "ts-node/register"
     ],
-    "all": true,
     "sourceMap": true,
     "exclude": [
       ".tmp",
