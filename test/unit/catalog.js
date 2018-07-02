@@ -52,7 +52,7 @@ describe('Datasets Endpoints', () => {
                     "createdby": "Splunk",
                     "modifiedby": "Splunk",
                     "disabled": false
-                }
+                };
             return splunk.catalog.createDataset(postBody).then(response => {
                 assert.deepEqual(response, expectedResponse, 'response should contain the same dataset posted.')
             });
@@ -81,7 +81,7 @@ describe('Datasets Endpoints', () => {
                     "createdby": "Splunk",
                     "modifiedby": "Splunk",
                     "disabled": false
-                }
+                };
             return splunk.catalog.updateDataset("ds1", updateRequest).then(response => {
                 assert.deepEqual(response, expectedResponse, 'response should contain the same dataset posted.')
             });
