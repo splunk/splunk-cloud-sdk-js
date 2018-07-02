@@ -12,10 +12,8 @@ If you would like to contribute to this project, go here for more information:
 
 If you're seeing some unexpected behavior with this project, please create an [issue on GitHub][issues] with the following information:
 
-0. Version of this project you're using (ex: 1.5.0)
-0. Platform version (ex: Windows Server 2012 R2)
-0. Framework version (ex: Node.js 0.10.37) or Browser (ex: Chrome 43.0.2357.81)
-0. Other relevant information (ex: local/remote environment)
+0. Version of this project you're using (ex: 0.1.4)
+0. Framework version (ex: Node.js 8.11.3) or Browser (ex: Chrome 67.0.3396.99)
 
 Alternatively, if you have a Splunk question please ask on [Splunk Answers][answers]
 
