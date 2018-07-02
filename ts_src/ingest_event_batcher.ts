@@ -4,11 +4,6 @@ import Timer = NodeJS.Timer; // TODO: is this an okay import?
 /**
  * Provides the ability to keep a growing number of events queued up and sends them to HEC.
  * The events are flushed on a periodic interval or when the set capacity has been reached.
- *
- * @param ingest - Proxies for the HEC2 APIs
- * @param batchSize - Size of events in bytes
- * @param batchCount - Number of events
- * @param timeout - Interval (milliseconds) to send the events and flush the queue
  */
 export class EventBatcher {
     private ingest: IngestService;
@@ -18,6 +13,12 @@ export class EventBatcher {
     private queue: Event[];
     private timer: Timer;
 
+    /**
+     * @param ingest - Proxy for the Ingest API
+     * @param batchSize - Size of events in bytes
+     * @param batchCount - Number of events
+     * @param timeout - Interval (milliseconds) to send the events and flush the queue
+     */
     constructor(ingest: IngestService, batchSize: number, batchCount: number, timeout: number) {
         this.ingest = ingest;
         // TODO: set some sane defaults so these 3 can be optional

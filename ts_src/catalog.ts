@@ -7,8 +7,8 @@ import { CATALOG_SERVICE_PREFIX } from "./service_prefixes";
  */
 export class CatalogService extends BaseApiService {
     /**
-     * Returns a list of datasets, optionally filtered by the given query parameters.
-     * @param [filter] An SPL filter string
+     * Returns a list of datasets, optionally filtered by a filter string.
+     * @param filter An SPL filter string
      */
     public getDatasets(filter?: string): Promise<DatasetInfo[]> {
         const query: QueryArgs = {};
@@ -21,7 +21,7 @@ export class CatalogService extends BaseApiService {
 
     /**
      * Create a new dataset.
-     * @param dataset
+     * @param dataset The dataset to create
      */
     public createDataset(dataset: DatasetInfo): Promise<DatasetInfo> {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), dataset)
@@ -38,8 +38,8 @@ export class CatalogService extends BaseApiService {
     }
 
     /**
-     * Delete the DatasetInfo and its dependencies with the specified id
-     * @param datasetId id of the DatasetInfo to delete
+     * Delete the DatasetInfo and its dependencies with the specified `id`
+     * @param datasetId `id` of the dataset to delete
      */
     public deleteDataset(datasetId: DatasetInfo["id"]): Promise<any> { // TODO: can we add stricter return typing?
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]));
@@ -74,7 +74,7 @@ export class CatalogService extends BaseApiService {
 
     /**
      * Create a new Rule
-     * @param rule
+     * @param rule The rule to create
      */
     public createRule(rule: Rule): Promise<Rule> {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), rule)
@@ -83,7 +83,7 @@ export class CatalogService extends BaseApiService {
 
     /**
      * Get the matching list of Rules
-     * @param [filter] An SPL filter string
+     * @param filter An SPL filter string
      */
     public getRules(filter?: string): Promise<Rule> {
         const query: QueryArgs = {};
@@ -95,7 +95,7 @@ export class CatalogService extends BaseApiService {
     }
 
     /**
-     * Return the Rule with the specified id
+     * Return the Rule with the specified `id`
      * @param ruleId
      */
     public getRule(ruleId: Rule["id"]): Promise<Rule> {
@@ -104,7 +104,7 @@ export class CatalogService extends BaseApiService {
     }
 
     /**
-     * Delete the Rule and its dependencies with the specified id
+     * Delete the Rule and its dependencies with the specified `id`
      * @param ruleId
      */
     public deleteRule(ruleId: Rule["id"]): Promise<any> { // TODO: can we add stricter return typing?
@@ -112,9 +112,9 @@ export class CatalogService extends BaseApiService {
     }
 
     /**
-     * Get the list of dataset fields for the given datasetID
+     * Get the list of dataset fields for the given `id`
      * @param datasetID
-     * @param [filter] An SPL filter string
+     * @param filter An SPL filter string
      */
     public getDatasetFields(datasetID: DatasetInfo["id"], filter?: string): Promise<Field[]> {
         const query = { filter };
@@ -127,13 +127,13 @@ export class CatalogService extends BaseApiService {
      * @param datasetID
      * @param datasetFieldID
      */
-    public getDatasetField(datasetID: Field["id"], datasetFieldID: Field["id"]): Promise<Field> {
+    public getDatasetField(datasetID: DatasetInfo["id"], datasetFieldID: Field["id"]): Promise<Field> {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]))
             .then(response => response as Field);
     }
 
     /**
-     * Creates a new Dataset Field
+     * Creates a new dataset field
      * @param datasetID
      * @param datasetField
      */

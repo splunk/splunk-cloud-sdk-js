@@ -7,10 +7,10 @@ import { SearchService } from "./search";
 
 /**
  * This class is a Splunk SSC client.
- * @property search - Proxies for the search APIs
- * @property catalog - Proxies for the catalog APIs
- * @property identity - Proxies for the identity APIs
- * @property ingest - Proxies for the ingest APIs
+ * @property search Proxies for the search APIs
+ * @property catalog Proxies for the catalog APIs
+ * @property identity Proxies for the identity APIs
+ * @property ingest Proxies for the ingest APIs
  */
 class SplunkSSC {
     public search: SearchService;
@@ -21,7 +21,7 @@ class SplunkSSC {
      * Build a Splunk SSC Client
      * @param url URL to Splunk SSC environment TODO: SSC name
      * @param token Auth token
-     * @param [defaultTenant] Default tenant to use for requests
+     * @param defaultTenant Default tenant to use for requests
      */
     constructor(url: string, token: string, defaultTenant?: string) {
         const client = new ServiceClient(url, token, defaultTenant);

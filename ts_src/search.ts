@@ -24,12 +24,16 @@ function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchS
  */
 export class Search {
     private client: SearchService;
-    private sid: string;
+    private readonly sid: Job["sid"];
     private isCancelling: boolean;
+
     /**
+     *
+     * @param searchService
+     * @param sid
      */
-    constructor(service: SearchService, sid: string) {
-        this.client = service;
+    constructor(searchService: SearchService, sid: Job["sid"]) {
+        this.client = searchService;
         this.sid = sid;
         this.isCancelling = false;
     }
@@ -37,14 +41,16 @@ export class Search {
     /**
      * Returns the status of the search job
      */
-    public status(): Promise<object> {
+    public status(): Promise<Job> {
         return this.client.getJob(this.sid);
     }
 
     /**
      * Polls the job until it is done processing
+     * @param updateInterval
+     * @param statusCallback
      */
-    public wait(updateInterval: number, statusCallback: (job: Job) => any): Promise<any> {
+    public wait(updateInterval: number, statusCallback: (job: Job) => any): Promise<Job> {
         const self = this;
         return this.client.waitForJob(this.sid, updateInterval, statusCallback)
             .catch((err: Error) => {
@@ -82,6 +88,7 @@ export class Search {
      * Returns the results from a search as a (promised) array. If 'args.offset'
      * is supplied, a window of results will be returned.  If an offset is not
      * supplied, all results will be fetched and concatenated.
+     * @param args
      */
     // TODO: backwardsCompatibleCount
     public getResults(args: FetchResultsRequest = {}): Promise<object[]> {
@@ -111,13 +118,9 @@ export class Search {
      * args, this method will return that window of results.  If neither are
      * specified (or only count is specified), all results available will
      * be fetched.
-     * @param {object} [args]
-     * @param {number} [args.pollInterval]
-     * @param {number} [args.offset]
-     * @param {number} [args.count]
-     * @returns {Observable}
+     * @param args
      */
-    public resultObservable(args: any = {}): Observable<any> { // TODO: make resultObservableOptions interface
+    public resultObservable(args: ResultObservableOptions = {}): Observable<any> {
         const self = this;
         const pollInterval = args.pollInterval || 500; // Increasing the default
         return Observable.create((observable: any) => {
@@ -132,33 +135,17 @@ export class Search {
         });
     }
 
-    // TODO: Remove this misnamed function in next major release
-    // /**
-    //  * Returns an Rx.Observable that will return events from the
-    //  * job when it is done processing
-    //  * @deprecated
-    //  * @param {Object} [attrs]
-    //  * @param {string} [attrs.count] Number of events to fetch per call
-    //  * @returns Observable
-    //  */
-    // public eventObserver(attrs: object) {
-    //     console.log('eventObserver has been renamed to eventObservable.  This function will be removed in the next release');
-    //     return this.eventObservable(attrs);
-    // }
-
     /**
      * Returns an Rx.Observable that will return events from the
      * job when it is done processing
-     * @param [attrs]
-     * @param [attrs.count] Number of events to fetch per call
-     * @returns Observable
      */
-    public eventObservable(attrs: {count: number} = { count: 30 }): Observable<any> { // TODO: eventObservableOptions interface
+    public eventObservable(attrs: EventObservableOptions = {} ): Observable<any> {
         const self = this;
+        const count = attrs.count || 30;
         return Observable.create(async (observable: any) => {
             const job = await self.client.waitForJob(self.sid);
             const fetchEvents = (start: number) => self.client.getEvents(self.sid, { count: attrs.count, offset: start });
-            const batchIterator = iterateBatches(fetchEvents, attrs.count, job.eventCount);
+            const batchIterator = iterateBatches(fetchEvents, count, job.eventCount);
             for (const promise of batchIterator) {
                 const batch: any = await promise;
                 batch.results.forEach((e: Event) => observable.next(e));
@@ -167,6 +154,9 @@ export class Search {
         });
     }
 
+    /**
+     * @param updateInterval
+     */
     public statusObservable(updateInterval: number): Observable<Job> {
         return new Observable<Job>((o: any) => {
             this.wait(updateInterval, (job: Job) => o.next(job))
@@ -198,7 +188,6 @@ export class SearchService extends BaseApiService {
      * @return {Promise<string>}
      */
     public createJob(jobArgs?: object): Promise<Job["sid"]> {
-        const self = this;
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
             .then((sid: Job["sid"]) => sid);
     }
@@ -222,8 +211,11 @@ export class SearchService extends BaseApiService {
 
     // TODO:(dp) Handle other terminals other than DONE (when I figure out what they are)
     /**
+     * @param jobId
+     * @param pollInterval
+     * @param callback
      */
-    public waitForJob(jobId: string, pollInterval?: number, callback?: (job: Job) => object) {
+    public waitForJob(jobId: Job["sid"], pollInterval?: number, callback?: (job: Job) => object) {
         const self = this;
         const interval = pollInterval || 250;
         return new Promise<Job>((resolve: (job: Job) => void, reject: (error: Error) => void) => {
@@ -401,6 +393,19 @@ interface FetchResultsRequest {
     f?: string;
     search?: string;
     [key: string]: any;
+}
+
+interface ResultObservableOptions {
+    pollInterval?: number;
+    offset?: number;
+    count?: number;
+}
+
+interface EventObservableOptions {
+    /**
+     * Number of events to fetch per call
+     */
+    count?: number;
 }
 
 interface FetchEventsRequest {

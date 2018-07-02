@@ -124,6 +124,8 @@ export class ServiceClient {
      * Performs a GET on the Splunk SSC environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
+     * @param path Path portion of the URL to request from Splunk
+     * @param query Object that contains query parameters
      */
     public get(path: string, query?: QueryArgs): Promise<any> {
         return fetch(this.buildUrl(path, query), {
@@ -136,6 +138,9 @@ export class ServiceClient {
      * Performs a POST on the Splunk SSC environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
+     * @param path Path portion of the URL to request from Splunk
+     * @param data Data object (to be converted to JSON) to supply as POST body
+     * @param query Object that contains query parameters
      */
     public post(path: string, data: any, query?: QueryArgs): Promise<any> {
         return fetch(this.buildUrl(path, query), {
@@ -149,6 +154,8 @@ export class ServiceClient {
      * Performs a PUT on the splunk ssc environment with the supplied path.
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
+     * @param path Path portion of the url to request from splunk
+     * @param data Data object (to be converted to json) to supply as put body
      */
     public put(path: string, data: any): Promise<any> {
         return fetch(this.buildUrl(path), {
@@ -162,6 +169,8 @@ export class ServiceClient {
      * Performs a PATCH on the splunk ssc environment with the supplied path.
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
+     * @param path Path portion of the url to request from splunk
+     * @param data Data object (to be converted to json) to supply as patch body
      */
     public patch(path: string, data: object): Promise<any> {
         return fetch(this.buildUrl(path), {
@@ -175,6 +184,8 @@ export class ServiceClient {
      * Performs a DELETE on the Splunk SSC environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
+     * @param path Path portion of the URL to request from Splunk
+     * @param data Data object (to be converted to json) to supply as delete body
      */
     // FIXME: Why does delete have a body?
     public delete(path: string, data?: object): Promise<any> {
