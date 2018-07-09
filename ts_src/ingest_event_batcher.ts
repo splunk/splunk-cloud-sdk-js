@@ -1,5 +1,4 @@
 import { Event, IngestService } from './ingest';
-import Timer = NodeJS.Timer; // TODO: is this an okay import?
 
 /**
  * Provides the ability to keep a growing number of events queued up and sends them to HEC.
@@ -11,7 +10,7 @@ export class EventBatcher {
     private readonly batchCount: number;
     private readonly timeout: number;
     private queue: Event[];
-    private timer: Timer;
+    private timer: number;
 
     /**
      * @param ingest - Proxy for the Ingest API
@@ -19,6 +18,7 @@ export class EventBatcher {
      * @param batchCount - Number of events
      * @param timeout - Interval (milliseconds) to send the events and flush the queue
      */
+
     constructor(ingest: IngestService, batchSize: number, batchCount: number, timeout: number) {
         this.ingest = ingest;
         // TODO: set some sane defaults so these 3 can be optional
@@ -34,7 +34,7 @@ export class EventBatcher {
      *
      * @param event - a single event
      */
-    public add(event: Event): Promise<object>|null {
+    public add(event: Event): Promise<object> | null {
         this.queue.push(event);
         return this.run();
     }
@@ -44,7 +44,7 @@ export class EventBatcher {
      *
      * @return the timer created
      */
-    private setTimer(): Timer {
+    private setTimer(): number {
         return setTimeout(() => {
             if (this.queue.length > 0) {
                 this.flush();
@@ -77,10 +77,10 @@ export class EventBatcher {
      *
      * @return can return null if event has not been sent yet.
      */
-    private run(): Promise<any>|null {
+    private run(): Promise<any> | null {
         const maxCountReached = (this.queue.length >= this.batchCount);
         // TODO: is it okay to just import @types/node and call this good?
-        const eventByteSize = Buffer.byteLength(JSON.stringify(this.queue), "utf8");
+        const eventByteSize = JSON.stringify(this.queue).length;
 
         if (maxCountReached || eventByteSize >= this.batchSize) {
             return this.flush();

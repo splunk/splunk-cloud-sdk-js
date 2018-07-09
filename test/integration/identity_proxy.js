@@ -185,17 +185,17 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
     describe('Create a new tenant and validate - Good and Bad cases', () => {
         const testPostTenant1 =
-            {
-                "tenantId": integrationTestTenantID
-            }
+        {
+            "tenantId": integrationTestTenantID
+        }
 
         const testPostTenantError1 =
-            {
-                "tenantId1": integrationTestTenantID
-            }
+        {
+            "tenantId1": integrationTestTenantID
+        }
 
         it('should create a new tenant', () => splunk.identity.createTenant(testPostTenant1).then(response => {
-            assert(!response)
+            assert(response.status === 'provisioning');
         }));
 
         it('should return the list of newly added test tenant', () => splunk.identity.getUserProfile(integrationTestTenantID).then(data => {

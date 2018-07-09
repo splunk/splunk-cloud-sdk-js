@@ -1,15 +1,27 @@
 {
   "compilerOptions": {
-    "lib": ["es5", "es2015.promise", "dom", "ScriptHost"],
+    "lib": [
+      "es5",
+      "es2015.iterable",
+      "es2015.collection",
+      "es2015.promise",
+      "es2015.symbol",
+      "es2015.symbol.wellknown",
+      "dom"
+    ],
     "outDir": "./out",
     "removeComments": false,
     "downlevelIteration": true,
     "strict": true,
-    "types": ["node"],
+    "target": "es3",
+    "types": [],
     "sourceMap": true,
     "sourceRoot": "./ts_src"
-
   },
-  "include": ["./ts_src/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "./ts_src/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

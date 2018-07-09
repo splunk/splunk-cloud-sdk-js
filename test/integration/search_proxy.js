@@ -191,7 +191,7 @@ describe("integration tests Using Search APIs", () => {
             it("should allow retrieving result window", () => {
                 return splunk.search.submitSearch(standardQuery).then(search => {
                     return search.wait()
-                        .then(() => search.getResults({ offset: 0, batchSize: 2 }).then((results) => {
+                        .then(() => search.getResults({ offset: 0, count: 2 }).then((results) => {
                             expect(results).to.be.an('array').and.have.property('length', 2);
                         }));
                 });
@@ -219,7 +219,7 @@ describe("integration tests Using Search APIs", () => {
                 return splunk.search.submitSearch(standardQuery).then(search => {
                     return new Promise((resolve, reject) => {
                         let results = null;
-                        search.resultObservable({ offset: 0, batchSize: 2 }).subscribe(r => { results = r }, reject, () => {
+                        search.resultObservable({ offset: 0, count: 2 }).subscribe(r => { results = r }, reject, () => {
                             try {
                                 expect(results).to.be.an('array').and.have.property('length', 2);
                                 resolve();

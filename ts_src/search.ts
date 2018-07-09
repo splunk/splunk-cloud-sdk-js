@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import BaseApiService from './baseapiservice';
 import { QueryArgs } from "./client";
 import { Event } from "./ingest";
@@ -11,7 +11,7 @@ export class SplunkSearchCancelError extends Error {
  * @private
  */
 function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchSize: number, max: number)
-    : IterableIterator<Promise<any>> {
+    : Iterable<Promise<any>> {
     let start = 0;
     while (start < max) {
         yield func(start, batchSize);
@@ -101,7 +101,7 @@ export class Search {
                     return self.client.getResults(self.sid, args)
                         .then(response => response.results);
                 }
-                const fetcher = (start: number) => self.client.getResults(self.sid,(Object as any).assign({}, args, { offset: start }));
+                const fetcher = (start: number) => self.client.getResults(self.sid, (Object as any).assign({}, args, { offset: start }));
                 const iterator = iterateBatches(fetcher, count, job.eventCount);
                 let results: object[] = [];
                 for (const batch of iterator) {
@@ -139,7 +139,7 @@ export class Search {
      * Returns an Rx.Observable that will return events from the
      * job when it is done processing
      */
-    public eventObservable(attrs: EventObservableOptions = {} ): Observable<any> {
+    public eventObservable(attrs: EventObservableOptions = {}): Observable<any> {
         const self = this;
         const count = attrs.count || 30;
         return Observable.create(async (observable: any) => {
@@ -244,7 +244,7 @@ export class SearchService extends BaseApiService {
      * Returns results post-transform, if applicable.
      */
     // TODO: Flesh out the results type
-    public getResults(jobId: string, args?: FetchResultsRequest): Promise<{ results: object[] }> {
+    public getResults(jobId: string, args: FetchResultsRequest = {}): Promise<{ results: object[] }> {
         const queryArgs: QueryArgs = args || {};
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), queryArgs)
             .then((o: object) => o as { results: object[] });

@@ -42,6 +42,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.7.0",
     "is-guid": "^0.0.2",
+    "isomorphic-fetch": "^2.2.1",
     "istanbul": "^0.4.5",
     "js-yaml": "^3.11.0",
     "jsdoc": "^3.5.5",
@@ -58,10 +59,8 @@
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "@types/node": "^10.3.6",
-    "isomorphic-fetch": "^2.2.1",
     "js-base64": "^2.4.3",
-    "rxjs": "^5.5.8"
+    "rxjs": "^6.2.1"
   },
   "nyc": {
     "reporter": [

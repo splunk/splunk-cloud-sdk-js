@@ -32,4 +32,4 @@ class SplunkSSC {
     }
 }
 
-module.exports = SplunkSSC;
+export = SplunkSSC;
