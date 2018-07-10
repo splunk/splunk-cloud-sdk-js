@@ -13,5 +13,5 @@ WORKDIR /build
 COPY . ./
 
 # Install all Node.js dependencies, using yarn
-RUN yarn install --non-interactive 
+RUN yarn install --verbose
 RUN yarn build
