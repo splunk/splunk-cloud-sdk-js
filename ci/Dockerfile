@@ -11,3 +11,4 @@ WORKDIR /build
 
 # Copy the content of your repository into the image
 COPY . ./
+RUN yarn install --non-interactive && yarn build

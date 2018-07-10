@@ -1,9 +1,6 @@
 - type: serial
   name: stubby
   steps:
-    - name: install deps and build # Moved here from dockerfile to see errors
-      service: ssc-client-js-with-stubby
-      command: bash -c "yarn install --non-interactive && yarn build"
     - name: build docs - TypeScript
       service: ssc-client-js-with-stubby
       command: bash -c "yarn ts:docs"
