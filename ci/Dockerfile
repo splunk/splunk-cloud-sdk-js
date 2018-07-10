@@ -11,7 +11,3 @@ WORKDIR /build
 
 # Copy the content of your repository into the image
 COPY . ./
-
-# Install all Node.js dependencies, using yarn
-# RUN yarn install --verbose
-# RUN yarn build

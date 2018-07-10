@@ -6,7 +6,7 @@
   "scripts": {
     "tslint": "tslint -p tsconfig.json",
     "tslint:fix": "tslint -p tsconfig.json --fix",
-    "ts:docs": "rimraf docs && typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/ --inlineSourceMap --module commonjs --theme minimal",
+    "ts:docs": "rm -rf docs && typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/ --inlineSourceMap --module commonjs --theme minimal",
     "build": "tsc -p tsconfig.json",
     "clean": "find src/ -name '*.js' | sed 's/src\\//./' | xargs rm",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
