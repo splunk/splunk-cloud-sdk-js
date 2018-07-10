@@ -1,4 +1,4 @@
-- type: parallel
+- type: serial
   name: stubby
   steps:
     - name: stubby tests with coverage - TypeScript
