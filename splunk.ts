@@ -1,4 +1,3 @@
-import "isomorphic-fetch";
 import { CatalogService } from "./catalog";
 import { ServiceClient } from "./client";
 import { IdentityService } from "./identity";

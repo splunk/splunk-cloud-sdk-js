@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import BaseApiService from './baseapiservice';
-import { QueryArgs } from "./client";
+import { QueryArgs, SplunkError } from "./client";
 import { Event } from "./ingest";
 import { SEARCH_SERVICE_PREFIX } from "./service_prefixes";
 
@@ -54,8 +54,13 @@ export class Search {
         const self = this;
         return this.client.waitForJob(this.sid, updateInterval, statusCallback)
             .catch((err: Error) => {
-                if (self.isCancelling /* TODO: fix && job.sid. === 404 */) {
-                    throw new SplunkSearchCancelError("Search has been cancelled");
+                if (self.isCancelling && 'code' in err) {
+                    const splunkErr = err as SplunkError;
+                    if (splunkErr.code === 404) {
+                        throw new SplunkSearchCancelError("Search has been cancelled");
+                    } else {
+                        throw err;
+                    }
                 } else {
                     throw err;
                 }
@@ -192,9 +197,6 @@ export class SearchService extends BaseApiService {
             .then((sid: Job["sid"]) => sid);
     }
 
-    // TODO:(dp) response should not be a string
-    /**
-     */
     // TODO: support ttl value via JobControlActionRequest
     public createJobControlAction = (jobId: string, action: string): Promise<object> => {  // TODO: Flesh out what this returns
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), { action });
@@ -209,7 +211,6 @@ export class SearchService extends BaseApiService {
             .then(o => o as Job);
     }
 
-    // TODO:(dp) Handle other terminals other than DONE (when I figure out what they are)
     /**
      * @param jobId
      * @param pollInterval

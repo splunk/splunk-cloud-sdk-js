@@ -1,5 +1,6 @@
 require("babel-core/register");
 require("babel-polyfill");
+require("isomorphic-fetch")
 
 module.exports = {
     stubbyHost: process.env.CI ? "ssc-sdk-shared-stubby" : "localhost",

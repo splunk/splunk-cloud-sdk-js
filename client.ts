@@ -40,7 +40,6 @@ function handleResponse(response: Response): Promise<any> {
 // TODO(david): Should we throw if response is empty? We may get here on DELETE
 function decodeJson(text: string): any { // TODO: change to returning object
     if (text === '') {
-        // return {}; // TODO(Shakeel): removed for now, this is a breaking change
         return text;
     }
     try {
@@ -187,7 +186,6 @@ export class ServiceClient {
      * @param path Path portion of the URL to request from Splunk
      * @param data Data object (to be converted to json) to supply as delete body
      */
-    // FIXME: Why does delete have a body?
     public delete(path: string, data?: object): Promise<any> {
         let deleteData = data;
         if (data === undefined || data == null) {
@@ -202,5 +200,5 @@ export class ServiceClient {
 }
 
 export interface QueryArgs {
-    [key: string]: string|number|undefined;
+    [key: string]: string | number | undefined;
 }

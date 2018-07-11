@@ -16,7 +16,7 @@ export class CatalogService extends BaseApiService {
             query.filter = filter;
         }
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), query)
-            .catch(response => response as DatasetInfo[]);
+            .then(response => response as DatasetInfo[]);
     }
 
     /**

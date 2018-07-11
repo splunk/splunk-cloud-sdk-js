@@ -48,7 +48,6 @@ describe("integration tests Using Search APIs", () => {
                         }),
                     splunk.search.getEvents(searchObj.sid)
                         .then(eventsResponse => {
-                            // TODO: determine why we have two endpoints that seem the same
                             expect(eventsResponse).to.have.property('results').with.lengthOf(5);
                             expect(eventsResponse).to.have.property('preview', false);
                             expect(eventsResponse).to.have.property('init_offset', 0);
@@ -74,7 +73,6 @@ describe("integration tests Using Search APIs", () => {
                         }),
                     splunk.search.getEvents(searchObj.sid)
                         .then(eventsResponse => {
-                            // TODO: determine why we have two endpoints that seem the same
                             expect(eventsResponse).to.have.property('results').with.lengthOf(5);
                             expect(eventsResponse).to.have.property('preview', false);
                             expect(eventsResponse).to.have.property('init_offset', 0);
