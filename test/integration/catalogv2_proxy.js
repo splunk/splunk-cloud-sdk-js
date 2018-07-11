@@ -9,6 +9,16 @@ const tenantID = config.playgroundTenant;
 const ssc = new SplunkSSC(sscHost, token, tenantID);
 
 describe("catalog v2", () => {
+    const indexName = `idx_${Date.now()}`;
+    // Create an index to ensure there is something to return
+    before(() => ssc.catalog.createDataset({
+        name: indexName,
+        owner: "test@splunk.com",
+        kind: "index",
+        capabilities: "1101-00000:11010",
+        disabled: false
+    }));
+    after(() => ssc.catalog.deleteDatasetByName(indexName).catch(err => console.log("Error cleaning index: " + err)));
     describe("datasets", () => {
         it("should return datasets", () => ssc.catalog.getDatasets().then((dslist) => {
             assert(dslist.length > 0);

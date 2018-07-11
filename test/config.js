@@ -1,5 +1,3 @@
-require("babel-core/register");
-require("babel-polyfill");
 require("isomorphic-fetch")
 
 module.exports = {
