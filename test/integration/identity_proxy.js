@@ -1,5 +1,5 @@
 const config = require('../config');
-const SplunkSSC = require('../../ts_src/splunk');
+const SplunkSSC = require('../../splunk');
 const { assert } = require('chai');
 
 const sscHost = config.playgroundHost;

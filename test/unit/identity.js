@@ -1,6 +1,6 @@
 const config = require('../config');
-const SplunkSSC = require('../../ts_src/splunk');
-const {assert} = require('chai');
+const SplunkSSC = require('../../splunk');
+const { assert } = require('chai');
 
 const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
 
@@ -21,7 +21,7 @@ describe('Identity Endpoints', () => {
 
     describe('Post a new tenant', () => {
         it('should return no response body', () => {
-            const postBody = {tenantId: config.stubbyDevTestTenant};
+            const postBody = { tenantId: config.stubbyDevTestTenant };
             return splunk.identity.createTenant(postBody).then(response => {
                 assert(!response);
             });

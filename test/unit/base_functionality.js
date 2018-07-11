@@ -1,12 +1,12 @@
 require('isomorphic-fetch');
 const config = require("../config");
-const { ServiceClient } = require("../../ts_src/client");
+const { ServiceClient } = require("../../client");
 const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
 
 chai.use(chaiAsPromised);
 
-const {expect} = chai;
+const { expect } = chai;
 
 describe("Basic client functionality", () => {
     const s = new ServiceClient(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
@@ -22,7 +22,7 @@ describe("Basic client functionality", () => {
 
     describe("POST", () => {
         it("should return a promise", () => {
-            const promise = s.post("/basic", {robin: "hood"});
+            const promise = s.post("/basic", { robin: "hood" });
             expect(promise).to.be.a("promise");
             return promise.then((data) => {
                 expect(data).to.haveOwnProperty("friar", "tuck");
@@ -32,7 +32,7 @@ describe("Basic client functionality", () => {
 
     describe("PUT", () => {
         it("should return a promise", () => {
-            const promise = s.put("/basic", {walrus: "carpenter"});
+            const promise = s.put("/basic", { walrus: "carpenter" });
             expect(promise).to.be.a("promise");
             return promise.then((data) => {
                 expect(data).to.haveOwnProperty("oysters", "sad");

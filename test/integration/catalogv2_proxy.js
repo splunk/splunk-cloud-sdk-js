@@ -1,6 +1,6 @@
 const config = require("../config");
-const SplunkSSC = require("../../ts_src/splunk");
-const {assert} = require("chai");
+const SplunkSSC = require("../../splunk");
+const { assert } = require("chai");
 
 const sscHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
@@ -89,7 +89,7 @@ describe("catalog v2", () => {
                 "datatype": "S",
                 "fieldtype": "D",
                 "prevalence": "A"
-            }).then(resultDatasetField1 => ssc.catalog.getDatasetField(resultDataset.id,resultDatasetField1.id).then((getResultDatasetField) => {
+            }).then(resultDatasetField1 => ssc.catalog.getDatasetField(resultDataset.id, resultDatasetField1.id).then((getResultDatasetField) => {
                 assert(getResultDatasetField.name, integrationTestField1);
             })).then(() => ssc.catalog.postDatasetField(resultDataset.id, {
                 "name": integrationTestField2,
@@ -97,14 +97,14 @@ describe("catalog v2", () => {
                 "datatype": "S",
                 "fieldtype": "D",
                 "prevalence": "A"
-            })).then((resultDatasetField2) => ssc.catalog.getDatasetField(resultDataset.id,resultDatasetField2.id).then((getResultDatasetField) => {
+            })).then((resultDatasetField2) => ssc.catalog.getDatasetField(resultDataset.id, resultDatasetField2.id).then((getResultDatasetField) => {
                 assert(getResultDatasetField.name, integrationTestField2);
             }).then(() => ssc.catalog.getDatasetFields(resultDataset.id).then((resultDatasetFields) => {
                 assert(resultDatasetFields.length === 2, "Two dataset fields should be created");
             })).then(() => ssc.catalog.getDatasetFields(resultDataset.id, "name==\"integ_test_field2\"").then((resultDatasetFields) => {
                 assert(resultDatasetFields.length === 1, "One dataset fields should be created");
                 assert(resultDatasetFields[0].name === integrationTestField2, "The name should match");
-            })).then(() => ssc.catalog.patchDatasetField(resultDataset.id, resultDatasetField2.id, {"name" : "integ_test_field3"}).then((patchResultDatasetField) => {
+            })).then(() => ssc.catalog.patchDatasetField(resultDataset.id, resultDatasetField2.id, { "name": "integ_test_field3" }).then((patchResultDatasetField) => {
                 assert(patchResultDatasetField.name === "integ_test_field3", "The name should match");
             })).then(() => ssc.catalog.deleteDatasetField(resultDataset.id, resultDatasetField2.id).then((response) => {
                 assert(!response)
