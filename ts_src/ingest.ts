@@ -10,7 +10,7 @@ export class IngestService extends BaseApiService {
      * Create a structured event to be ingested by Splunk SSC via Ingest service.
      * @param event
      */
-    public createEvent(event: Event): Promise<any> {
+    public createEvent = (event: Event): Promise<any> => {
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), event);
     }
 
@@ -18,7 +18,7 @@ export class IngestService extends BaseApiService {
      * Create structured events to be ingested by Splunk SSC via Ingest service.
      * @param events
      */
-    public createEvents(events: Event[]): Promise<any> {
+    public createEvents = (events: Event[]): Promise<any> => {
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), IngestService.eventsToJSONs(events));
     }
 
@@ -26,7 +26,7 @@ export class IngestService extends BaseApiService {
      * Create unstructured event data to be ingested by Splunk SSC via Ingest service.
      * @param event
      */
-    public createRawEvent(event: Event): Promise<any> { // TODO: may want to support other types, like string and object
+    public createRawEvent = (event: Event): Promise<any> => { // TODO: may want to support other types, like string and object
         const queryParams: QueryArgs = {};
         // Convert event properties to a flat object of keys and JSON stringified values, omitting the "event"
         // key which will be the body of the POST
@@ -42,7 +42,7 @@ export class IngestService extends BaseApiService {
      * Create metrics to be ingested by Splunk SSC.
      * @param metrics
      */
-    public createMetrics(metrics: MetricEvent[]): Promise<any> {
+    public createMetrics = (metrics: MetricEvent[]): Promise<any> => {
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics']), metrics);
     }
 
@@ -86,7 +86,7 @@ export interface Event {
     /**
      * Event Object or string payload.
      */
-    event: string|object;
+    event: string | object;
 
     [key: string]: any;
 }

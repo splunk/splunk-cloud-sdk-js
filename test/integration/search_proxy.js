@@ -233,7 +233,10 @@ describe("integration tests Using Search APIs", () => {
         });
 
         it("should allow status subscription", () => {
-            return splunk.search.submitSearch(standardQuery).then(search => {
+            // Ensure we can pass functions around but they still have access to
+            // their embedded client.
+            const fun = splunk.search.submitSearch;
+            return fun(standardQuery).then(search => {
                 return new Promise((resolve, reject) => {
                     let count = 0;
                     search.statusObservable(10).subscribe(

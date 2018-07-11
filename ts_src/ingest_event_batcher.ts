@@ -34,7 +34,7 @@ export class EventBatcher {
      *
      * @param event - a single event
      */
-    public add(event: Event): Promise<object> | null {
+    public add = (event: Event): Promise<object> | null => {
         this.queue.push(event);
         return this.run();
     }
@@ -44,7 +44,7 @@ export class EventBatcher {
      *
      * @return the timer created
      */
-    private setTimer(): number {
+    private setTimer = (): number => {
         return setTimeout(() => {
             if (this.queue.length > 0) {
                 this.flush();
@@ -55,7 +55,7 @@ export class EventBatcher {
     /**
      * Reset the timer, update the timerId.
      */
-    private resetTimer() {
+    private resetTimer = () => {
         this.stop();
         this.timer = this.setTimer();
     }
@@ -63,7 +63,8 @@ export class EventBatcher {
     /**
      * Clean up the events and timer.
      */
-    public flush(): Promise<any> {
+    // TODO: This shouldn't be any
+    public flush = (): Promise<any> => {
         const data = this.queue;
         this.queue = [];
         this.resetTimer();
@@ -77,7 +78,7 @@ export class EventBatcher {
      *
      * @return can return null if event has not been sent yet.
      */
-    private run(): Promise<any> | null {
+    private run = (): Promise<any> | null => {
         const maxCountReached = (this.queue.length >= this.batchCount);
         // TODO: is it okay to just import @types/node and call this good?
         const eventByteSize = JSON.stringify(this.queue).length;
@@ -91,7 +92,7 @@ export class EventBatcher {
     /**
      * Stop the timer
      */
-    public stop() {
+    public stop = () => {
         clearTimeout(this.timer);
     }
 
