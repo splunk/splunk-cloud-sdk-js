@@ -20,7 +20,7 @@ describe("catalog v2", () => {
         }));
 
         it("should allow create/delete of datasets", () => {
-            const name = "FooBar";
+            const name = "foobar";
             const dataset = {
                 name,
                 owner: "test@splunk.com",
@@ -37,7 +37,7 @@ describe("catalog v2", () => {
         });
 
         it("should allow delete of datasets by name", () => {
-            const name = "FooBar1";
+            const name = "foobar1";
             const dataset = {
                 name,
                 owner: "test@splunk.com",
