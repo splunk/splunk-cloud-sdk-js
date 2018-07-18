@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es5",
+      "es2015.iterable",
+      "es2015.collection",
+      "es2015.promise",
+      "es2015.symbol",
+      "es2015.symbol.wellknown",
+      "dom"
+    ],
+    "outDir": ".",
+    "removeComments": false,
+    "downlevelIteration": true,
+    "strict": true,
+    "target": "es3",
+    "types": [],
+    "sourceMap": true,
+    "sourceRoot": "."
+  },
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

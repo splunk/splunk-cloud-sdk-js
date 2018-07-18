@@ -1,13 +1,14 @@
 const config = require('../config');
-const SplunkSSC = require('../../src/splunk');
+const SplunkSSC = require('../../splunk');
 const { assert } = require('chai');
 
-const token = process.env.BEARER_TOKEN;
-const tenantID = process.env.TENANT_ID;
-const sscHost = process.env.SSC_HOST;
+const sscHost = config.playgroundHost;
+const invalidToken = config.invalidAuthToken;
+const token = config.playgroundAuthToken;
+const tenantID = config.playgroundTenant;
 
 const splunk = new SplunkSSC(sscHost, token, tenantID);
-const splunkWithIncorrectCredentials = new SplunkSSC(sscHost, config.invalidAuthToken, config.testTenant);
+const splunkWithIncorrectCredentials = new SplunkSSC(sscHost, invalidToken, tenantID);
 
 // Scenario 1:
 // Integration test for Tenant User endpoints
@@ -184,17 +185,17 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
     describe('Create a new tenant and validate - Good and Bad cases', () => {
         const testPostTenant1 =
-            {
-                "tenantId": integrationTestTenantID
-            }
+        {
+            "tenantId": integrationTestTenantID
+        }
 
         const testPostTenantError1 =
-            {
-                "tenantId1": integrationTestTenantID
-            }
+        {
+            "tenantId1": integrationTestTenantID
+        }
 
         it('should create a new tenant', () => splunk.identity.createTenant(testPostTenant1).then(response => {
-            assert(!response)
+            assert(response.status === 'provisioning');
         }));
 
         it('should return the list of newly added test tenant', () => splunk.identity.getUserProfile(integrationTestTenantID).then(data => {
@@ -216,7 +217,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
         it('should return a user profile with test tenant deleted from the tenant memberships list', () => splunk.identity.getUserProfile(tenantID).then(data => {
             assert.typeOf(data, 'Object', 'response should be an object');
-            assert(!data.tenantMemberships.includes(integrationTestTenantID))
+            assert(!data.tenantMemberships.includes(integrationTestTenantID), `tenantMemberships (${data.tenantMemberships}) still includes removed tenant (${integrationTestTenantID})`)
         }));
 
         it('should throw a 422 Unprocessable Entity error response when deleting a tenant currently not present in a user profile', () => splunk.identity.deleteTenant(testDeleteTenant).then(success =>

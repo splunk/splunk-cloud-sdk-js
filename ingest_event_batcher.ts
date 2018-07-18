@@ -1,30 +1,40 @@
+import { Event, IngestService } from './ingest';
+
 /**
  * Provides the ability to keep a growing number of events queued up and sends them to HEC.
  * The events are flushed on a periodic interval or when the set capacity has been reached.
- *
- * @param {HEC2Service} hec2 - Proxies for the HEC2 APIs
- * @param {int} batchSize - Size of events in bytes
- * @param {int} batchCount - Number of events
- * @param {int} timeout - Interval (milliseconds) to send the events and flush the queue
  */
-class EventBatcher {
+export class EventBatcher {
+    private ingest: IngestService;
+    private readonly batchSize: number;
+    private readonly batchCount: number;
+    private readonly timeout: number;
+    private queue: Event[];
+    private timer: number;
 
-    constructor(hec2, batchSize, batchCount, timeout) {
-        this.hec2 = hec2;
+    /**
+     * @param ingest - Proxy for the Ingest API
+     * @param batchSize - Size of events in bytes
+     * @param batchCount - Number of events
+     * @param timeout - Interval (milliseconds) to send the events and flush the queue
+     */
+
+    constructor(ingest: IngestService, batchSize: number, batchCount: number, timeout: number) {
+        this.ingest = ingest;
+        // TODO: set some sane defaults so these 3 can be optional
         this.batchSize = batchSize;
         this.batchCount = batchCount;
         this.timeout = timeout;
         this.queue = [];
-        this.timerId = this.setTimer();
+        this.timer = this.setTimer();
     }
 
     /**
      * Add a new event to the array, sends all the events if the event limits are met.
      *
-     * @param {HEC2Service~Event} event - a single event or group of events
-     * @return {Promise<HEC2Service~Response>}
+     * @param event - a single event
      */
-    add(event) {
+    public add = (event: Event): Promise<object> | null => {
         this.queue.push(event);
         return this.run();
     }
@@ -32,36 +42,33 @@ class EventBatcher {
     /**
      * Creates a periodic task to send all the events.
      *
-     * @return {int} timerId - unique id of the timer created
-     * @private
+     * @return the timer created
      */
-    setTimer() {
+    private setTimer = (): number => {
         return setTimeout(() => {
             if (this.queue.length > 0) {
                 this.flush();
             }
-        }, this.timeout)
+        }, this.timeout);
     }
 
     /**
      * Reset the timer, update the timerId.
-     * @private
      */
-    resetTimer() {
+    private resetTimer = () => {
         this.stop();
-        this.timerId = this.setTimer();
+        this.timer = this.setTimer();
     }
 
     /**
      * Clean up the events and timer.
-     *
-     * @return {Promise<HEC2Service~Response>}
      */
-    flush() {
+    // TODO: This shouldn't be any
+    public flush = (): Promise<any> => {
         const data = this.queue;
         this.queue = [];
         this.resetTimer();
-        return this.hec2.createEvents(data);
+        return this.ingest.createEvents(data);
     }
 
     /**
@@ -69,12 +76,12 @@ class EventBatcher {
      * If the events are sent, a Promise will be returned otherwise the event will be queued until the limit is reached.
      * A timer will run periodically to ensure that events don't stay queued too long.
      *
-     * @return {Promise<HEC2Service~Response>} - can return null if event has not been sent yet.
-     * @private
+     * @return can return null if event has not been sent yet.
      */
-    run() {
+    private run = (): Promise<any> | null => {
         const maxCountReached = (this.queue.length >= this.batchCount);
-        const eventByteSize = Buffer.byteLength(JSON.stringify(this.queue), "utf8");
+        // TODO: is it okay to just import @types/node and call this good?
+        const eventByteSize = JSON.stringify(this.queue).length;
 
         if (maxCountReached || eventByteSize >= this.batchSize) {
             return this.flush();
@@ -85,10 +92,8 @@ class EventBatcher {
     /**
      * Stop the timer
      */
-    stop() {
-        clearTimeout(this.timerId);
+    public stop = () => {
+        clearTimeout(this.timer);
     }
 
 }
-
-module.exports = EventBatcher;

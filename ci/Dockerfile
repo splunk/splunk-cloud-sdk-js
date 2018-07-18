@@ -11,6 +11,4 @@ WORKDIR /build
 
 # Copy the content of your repository into the image
 COPY . ./
-
-# Install all Node.js dependencies, using yarn
-RUN yarn install --non-interactive --silent && yarn build
+RUN yarn install --non-interactive && yarn build

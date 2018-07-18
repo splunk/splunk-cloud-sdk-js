@@ -1,12 +1,12 @@
+const config = require('../config');
 const SplunkSSC = require("../../splunk");
+const { assert, expect } = require("chai");
 
-const { assert } = require("chai");
-const { expect } = require("chai");
+const sscHost = config.playgroundHost;
+const token = config.playgroundAuthToken;
+const tenantID = config.playgroundTenant;
 
-const token = process.env.BEARER_TOKEN;
-const tenantID = process.env.TENANT_ID;
-
-const splunk = new SplunkSSC(process.env.SSC_HOST, token, tenantID);
+const splunk = new SplunkSSC(sscHost, token, tenantID);
 
 const standardQuery = {
     "query": "| from index:main | head 5",
@@ -24,7 +24,7 @@ describe("integration tests Using Search APIs", () => {
         for (let i = 0; i < 10; i += 1) {
             events.push({ event: `Test event no ${i}` });
         }
-        splunk.hec2.createEvents(events);
+        splunk.ingest.createEvents(events);
     });
 
     describe("Search", () => {
@@ -48,7 +48,6 @@ describe("integration tests Using Search APIs", () => {
                         }),
                     splunk.search.getEvents(searchObj.sid)
                         .then(eventsResponse => {
-                            // TODO: determine why we have two endpoints that seem the same
                             expect(eventsResponse).to.have.property('results').with.lengthOf(5);
                             expect(eventsResponse).to.have.property('preview', false);
                             expect(eventsResponse).to.have.property('init_offset', 0);
@@ -74,7 +73,6 @@ describe("integration tests Using Search APIs", () => {
                         }),
                     splunk.search.getEvents(searchObj.sid)
                         .then(eventsResponse => {
-                            // TODO: determine why we have two endpoints that seem the same
                             expect(eventsResponse).to.have.property('results').with.lengthOf(5);
                             expect(eventsResponse).to.have.property('preview', false);
                             expect(eventsResponse).to.have.property('init_offset', 0);
@@ -166,7 +164,7 @@ describe("integration tests Using Search APIs", () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
                 return new Promise((resolve, reject) => {
                     let counter = 0;
-                    search.eventObservable({ batchSize: 2 }).subscribe(() => counter += 1, (err) => reject(err), () => {
+                    search.eventObservable({ count: 2 }).subscribe(() => counter += 1, (err) => reject(err), () => {
                         if (counter === 5) {
                             resolve(counter);
                         } else {
@@ -191,7 +189,7 @@ describe("integration tests Using Search APIs", () => {
             it("should allow retrieving result window", () => {
                 return splunk.search.submitSearch(standardQuery).then(search => {
                     return search.wait()
-                        .then(() => search.getResults({ offset: 0, batchSize: 2 }).then((results) => {
+                        .then(() => search.getResults({ offset: 0, count: 2 }).then((results) => {
                             expect(results).to.be.an('array').and.have.property('length', 2);
                         }));
                 });
@@ -219,7 +217,7 @@ describe("integration tests Using Search APIs", () => {
                 return splunk.search.submitSearch(standardQuery).then(search => {
                     return new Promise((resolve, reject) => {
                         let results = null;
-                        search.resultObservable({ offset: 0, batchSize: 2 }).subscribe(r => { results = r }, reject, () => {
+                        search.resultObservable({ offset: 0, count: 2 }).subscribe(r => { results = r }, reject, () => {
                             try {
                                 expect(results).to.be.an('array').and.have.property('length', 2);
                                 resolve();
@@ -233,7 +231,10 @@ describe("integration tests Using Search APIs", () => {
         });
 
         it("should allow status subscription", () => {
-            return splunk.search.submitSearch(standardQuery).then(search => {
+            // Ensure we can pass functions around but they still have access to
+            // their embedded client.
+            const fun = splunk.search.submitSearch;
+            return fun(standardQuery).then(search => {
                 return new Promise((resolve, reject) => {
                     let count = 0;
                     search.statusObservable(10).subscribe(
