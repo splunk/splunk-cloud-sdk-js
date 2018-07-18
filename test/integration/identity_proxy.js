@@ -217,7 +217,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
         it('should return a user profile with test tenant deleted from the tenant memberships list', () => splunk.identity.getUserProfile(tenantID).then(data => {
             assert.typeOf(data, 'Object', 'response should be an object');
-            assert(!data.tenantMemberships.includes(integrationTestTenantID))
+            assert(!data.tenantMemberships.includes(integrationTestTenantID), `tenantMemberships (${data.tenantMemberships}) still includes removed tenant (${integrationTestTenantID})`)
         }));
 
         it('should throw a 422 Unprocessable Entity error response when deleting a tenant currently not present in a user profile', () => splunk.identity.deleteTenant(testDeleteTenant).then(success =>
