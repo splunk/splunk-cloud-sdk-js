@@ -11,6 +11,7 @@
     ],
     "outDir": ".",
     "removeComments": false,
+    "declaration": true,
     "downlevelIteration": true,
     "strict": true,
     "target": "es3",
