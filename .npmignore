@@ -11,3 +11,6 @@ jsdoc.json
 .npmpignore
 .babelrc
 examples/
+CONTRIBUTING.md
+docs.manifest.json
+okta
