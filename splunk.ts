@@ -1,8 +1,9 @@
-import { CatalogService } from "./catalog";
-import { ServiceClient } from "./client";
-import { IdentityService } from "./identity";
-import { IngestService } from "./ingest";
-import { SearchService } from "./search";
+import { CatalogService } from './catalog';
+import { ServiceClient } from './client';
+import { IdentityService } from './identity';
+import { IngestService } from './ingest';
+import { KVStoreService } from './kvstore';
+import { SearchService } from './search';
 
 /**
  * This class is a Splunk SSC client.
@@ -16,6 +17,7 @@ class SplunkSSC {
     public catalog: CatalogService;
     public identity: IdentityService;
     public ingest: IngestService;
+    public kvstore: KVStoreService;
     /**
      * Build a Splunk SSC Client
      * @param url URL to Splunk SSC environment TODO: SSC name
@@ -28,6 +30,7 @@ class SplunkSSC {
         this.catalog = new CatalogService(client);
         this.identity = new IdentityService(client);
         this.ingest = new IngestService(client);
+        this.kvstore = new KVStoreService(client);
     }
 }
 
