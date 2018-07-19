@@ -43,8 +43,7 @@
     "js-yaml": "^3.11.0",
     "jsdoc": "^3.5.5",
     "mocha": "^5.0.4",
-    "nyc": "^11.6.0",
-    "babel-plugin-add-header-comment":"^1.0.3"
+    "nyc": "^11.6.0"
   },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
