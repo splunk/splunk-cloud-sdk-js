@@ -8,5 +8,7 @@ module.exports = {
     invalidAuthToken: "BAD_TOKEN",
     playgroundHost: process.env.SSC_HOST || "https://api.playground.splunkbeta.com",
     playgroundTenant: process.env.TENANT_ID,
-    playgroundAuthToken: process.env.BEARER_TOKEN
+    playgroundAuthToken: process.env.BEARER_TOKEN,
+    testNamespace: "testnamespace0",
+    testCollection: "testcollection0"
 };
