@@ -6,7 +6,7 @@ const sscHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
 const tenantID = config.playgroundTenant;
 
-const splunkSSCClient = new SplunkSSC(sscHost, token, tenantID);
+const client = new SplunkSSC(sscHost, token, tenantID);
 
 const namespace = config.testNamespace;
 const collection = config.testCollection;
@@ -14,7 +14,7 @@ const collection = config.testCollection;
 describe('Integration tests for KVStore Admin Endpoints', () => {
     describe('Ping Endpoint', () => {
         it('Should return a "healty" response', () => {
-            return splunkSSCClient.kvstore.getHealthStatus().then(response => {
+            return client.kvstore.getHealthStatus().then(response => {
                 assert.equal(response.status, 'healthy', 'response status should be `healthy`');
             });
         });
@@ -24,7 +24,7 @@ describe('Integration tests for KVStore Admin Endpoints', () => {
 describe('Integration tests for KVStore Collection Stats Endpoints', () => {
     describe('Get the stats of a new collections', () => {
         it('Should return expected defaults', () => {
-            splunkSSCClient.catalog
+            client.catalog
                 .createDataset({
                     name: collection,
                     kind: 'kvcollection',
@@ -33,18 +33,14 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
                     capabilities: '1101-00000:11010',
                 })
                 .then(resultDataset => {
-                    splunkSSCClient.kvstore
+                    client.kvstore
                         .getCollectionStats(namespace, collection)
                         .then(statsResponse => {
-                            assert.equal(response.count, 0, 'status cound should be 0');
-                            assert.equal(response.nindexes, 1, 'status index count should be 1');
-                            assert.equal(
-                                response.ns,
-                                namespace,
-                                `status namespace should be ${namespace}`
-                            );
+                            assert.equal(statsResponse.count, 0);
+                            assert.equal(statsResponse.nindexes, 1);
+                            assert.equal(statsResponse.ns, namespace);
 
-                            splunkSSCClient.catalog.deleteDataset(resultDataset.id);
+                            client.catalog.deleteDataset(resultDataset.id);
                         });
                 });
         });
