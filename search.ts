@@ -310,7 +310,7 @@ interface PostJobsRequest {
     maxTime?: number;
 
     /**
-     * The module setting for spl parser populate related configures.
+     * The Module to run the search in.
      */
     module?: string;
 

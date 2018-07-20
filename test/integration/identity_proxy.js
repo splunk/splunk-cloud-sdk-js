@@ -184,44 +184,74 @@ describe('integration tests for Identity Tenant Endpoints', () => {
     const integrationTestTenantID = `${Date.now()}-sdk-integration`;
 
     describe('Create a new tenant and validate - Good and Bad cases', () => {
-        const testPostTenant1 =
-        {
-            "tenantId": integrationTestTenantID
-        }
+        const testPostTenant1 = {
+            tenantId: integrationTestTenantID,
+        };
 
-        const testPostTenantError1 =
-        {
-            "tenantId1": integrationTestTenantID
-        }
+        const testPostTenantError1 = {
+            tenantId1: integrationTestTenantID,
+        };
 
-        it('should create a new tenant', () => splunk.identity.createTenant(testPostTenant1).then(response => {
-            assert(response.status === 'provisioning');
-        }));
+        it('should create a new tenant', () =>
+            splunk.identity.createTenant(testPostTenant1).then(response => {
+                assert(response.status === 'provisioning');
+            }));
 
-        it('should return the list of newly added test tenant', () => splunk.identity.getUserProfile(integrationTestTenantID).then(data => {
-            assert.typeOf(data, 'Object', 'response should be an object');
-            assert(data.tenantMemberships.includes(integrationTestTenantID))
-        }));
+        it('should return the list of newly added test tenant', () =>
+            splunk.identity.getUserProfile(integrationTestTenantID).then(data => {
+                assert.typeOf(data, 'Object', 'response should be an object');
+                assert(data.tenantMemberships.includes(integrationTestTenantID));
+            }));
 
-        it('should throw a 422 Unprocessable entry error response when the tenant creation request is in bad format', () => splunk.identity.createTenant(testPostTenantError1).then(success =>
-            assert.fail(success), err => assert.equal(err.code, "422")
-        ));
+        it('should throw a 422 Unprocessable entry error response when the tenant creation request is in bad format', () =>
+            splunk.identity
+                .createTenant(testPostTenantError1)
+                .then(success => assert.fail(success), err => assert.equal(err.code, '422')));
     });
 
     describe('Delete the test tenant and validate - Good and Bad cases', () => {
-        const testDeleteTenant = "integration_test_delete_tenant"
+        const testDeleteTenant = 'integration_test_delete_tenant';
 
-        it('should delete the selected test tenant from user', () => splunk.identity.deleteTenant(integrationTestTenantID).then(response => {
-            assert(!response)
-        }));
+        it('should delete the selected test tenant from user', () =>
+            splunk.identity.deleteTenant(integrationTestTenantID).then(response => {
+                assert(!response);
+            }));
 
-        it('should return a user profile with test tenant deleted from the tenant memberships list', () => splunk.identity.getUserProfile(tenantID).then(data => {
-            assert.typeOf(data, 'Object', 'response should be an object');
-            assert(!data.tenantMemberships.includes(integrationTestTenantID))
-        }));
+        it('should return a user profile with the test tenant in the "deleting" state', () =>
+            splunk.identity.getUserProfile(tenantID).then(data => {
+                assert.typeOf(data, 'Object', 'response should be an object');
 
-        it('should throw a 422 Unprocessable Entity error response when deleting a tenant currently not present in a user profile', () => splunk.identity.deleteTenant(testDeleteTenant).then(success =>
-            assert.fail(success), err => assert.equal(err.code, "422")
-        ));
+                let tenantDetails = data['tenantDetails'];
+
+                assert.typeOf(tenantDetails, 'Array', 'tenantDetails should be an array');
+
+                let matchingArray = tenantDetails.filter(element => {
+                    return element['tenantId'] == integrationTestTenantID;
+                });
+
+                assert.equal(
+                    matchingArray.length,
+                    1,
+                    `there should only be one ${integrationTestTenantID}`,
+                );
+
+                let testTenantDetails = matchingArray[0];
+
+                assert.typeOf(
+                    testTenantDetails,
+                    'Object',
+                    'the tenant information should be an object',
+                );
+                assert.equal(
+                    testTenantDetails['status'],
+                    'deleting',
+                    'the tenant should be in the process of deleting',
+                );
+            }));
+
+        it('should throw a 422 Unprocessable Entity error response when deleting a tenant currently not present in a user profile', () =>
+            splunk.identity
+                .deleteTenant(testDeleteTenant)
+                .then(success => assert.fail(success), err => assert.equal(err.code, '422')));
     });
 });

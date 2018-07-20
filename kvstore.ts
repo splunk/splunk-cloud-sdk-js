@@ -1,10 +1,19 @@
-import BaseApiService from "./baseapiservice";
-import {KVSTORE_SERVICE_PREFIX} from "./service_prefixes";
+import BaseApiService from './baseapiservice';
+import { KVSTORE_SERVICE_PREFIX } from './service_prefixes';
 
 /**
  * Encapsulates kvstore service endpoints
  */
-export class KvstoreService extends BaseApiService {
+export class KVStoreService extends BaseApiService {
+    /**
+     * Gets the the KVStore's status
+     * @returns A promise that contains the KVStore's response
+     */
+    public getHealthStatus = (): Promise<any> => {
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['ping']);
+        return this.client.get(url);
+    };
+
     /**
      * Retrieves all the indexes in a given namespace and collection.
      * @param namespace The namespace whose indexes should be listed

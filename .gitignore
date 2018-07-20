@@ -1,4 +1,5 @@
 /*.js
+/*.d.ts
 ./common/ # built dir
 !/.eslintrc.js
 

@@ -7,71 +7,42 @@ This is the SSC Client for JavaScript
 
 [![codecov](https://codecov.io/gh/splunk/ssc-client-js/branch/develop/graph/badge.svg?token=R5kexVYymt)](https://codecov.io/gh/splunk/ssc-client-js)
 
-# Code Styling and Conventions
-- Auto-formatters and Linters
-    - [eslint Documentation](https://eslint.org/)
-        - See [.eslintrc](.eslintrc.js)
-    - [Prettier Documentation](https://prettier.io/)
-        - See [.prettierrc](.prettierrc)
-- Documentation Generation
-    - [JSDoc Documentation](http://usejsdoc.org/)
-        - See [jsdoc.json](jsdoc.json)
 
-# Configurations
-## Development Environment
-### OSX
-- Install Homebrew
-    - [Homebrew installation documentation](https://brew.sh/)
-    - Command(s)
-        - `/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
-- Update Homebrew
-    - Command(s)
-        - `brew update`
-- Install node
-    - Command(s)
-        - `brew install node`
-- Install yarn
-    - [Yarn installation documentation](https://yarnpkg.com/lang/en/docs/install/)
-    - Command(s)
-        - `brew install yarn`
-- Install Docker
-    - [Docker for Mac installation documentation](https://docs.docker.com/docker-for-mac/install/)
-    - Command(s)
-        - See 'Docker for Mac installation documentation'
-- Install Codeship's JET CLI
-    - [Codeship JET CLI installation documentation](https://documentation.codeship.com/pro/jet-cli/installation/)
-    - Command(s)
-        - `brew cask install codeship/taps/jet`
+###Get the latest release from one of the following locations 
+- npm-solutions-local/@splunk/ssc-client/-/@splunk/ssc-client-0.1.4.tgz
+- https://github.com/splunk/ssc-client-js/archive/v0.1.4.tar.gz
 
-## Repository Environment
-### OSX
-- Install JavaScript dependencies
-    - Command(s)
-        - From the root of the repository
-        - `yarn`
 
-# Testing
-## Test Coverage
-The SDK team has decided to use stubby as a functional testing resource in lieu of making redundant unit tests.
+###From your project directory run
+```sh
+npm install ~/Downloads/ssc-client-js-0.1.4.tar.gz 
+```
 
-## Local Testing
-### Local With - Ad-Hoc Functional Testing
-To create a local stubby environment for testing
+###Using the service client to access all supported services
 
-- `yarn start:stubserver`
-    - This spins up a local stubby server
-- `yarn test`
-    - This will run the tests
-- `yarn stop:stubserver`
-    - This will terminate the stubby server
+```sh
+var ServiceClient = require('@splunk/ssc-client/src/splunk')
+ 
+var svc = new ServiceClient(ENDPOINT_URL, AUTH_TOKEN, TENANT)
+ 
+// Retreive this tenant's datasets from the catalog API 
+svc.catalog.getDatasets()
 
-### Local Testing - Run the Full Suite of Tests
+...
 
-- Go to `https://app.codeship.com/projects/283657/configure`
-- Download AES key from the codeship project 
-    - Save it as `codeship.aes`
-- Place the AES key in the root directory
-- From the root directory enter `jet steps`
+```
 
-# Documentation
-Enter the command `yarn apidocs` to automatically generate the documentation.
+###Using a specific client for only the service required
+
+```sh
+
+var IdentityService = require('@splunk/ssc-client/src/identity')
+
+var identity = new IdentityService(ENDPOINT_URL, AUTH_TOKEN, TENANT)
+
+// Get the user profile from the identity API
+identity.getUserProfile()
+
+...
+
+```
