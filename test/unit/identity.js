@@ -6,8 +6,8 @@ const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAu
 
 describe('Identity Endpoints', () => {
 
-    describe('Get user profile', () => {
-        it('should return a user profile', () => splunk.identity.getUserProfile(config.stubbyDevTestTenant).then(data => {
+    describe('Get user profile with tenantId', () => {
+        it('should return a user profile using tenantId scope', () => splunk.identity.getUserProfile(config.stubbyDevTestTenant).then(data => {
             assert.typeOf(data, 'object', 'response should be an object');
             assert('email' in data, 'devtest@splunk.com');
             assert('firstName' in data, 'Dev');
@@ -15,7 +15,20 @@ describe('Identity Endpoints', () => {
             assert('lastName' in data, 'Test');
             assert('locale' in data, 'en-US');
             assert('name' in data, 'Dev Test');
-            assert('tenantMemberships' in data, [config]);
+            assert('tenantMemberships' in data, "devtestTenant");
+        }));
+    });
+
+    describe('Get user profile with system', () => {
+        it('should return a user profile using system scope', () => splunk.identity.getUserProfile().then(data => {
+            assert.typeOf(data, 'object', 'response should be an object');
+            assert('email' in data, 'devtest@splunk.com');
+            assert('firstName' in data, 'Dev');
+            assert('id' in data, 'devtest@splunk.com');
+            assert('lastName' in data, 'Test');
+            assert('locale' in data, 'en-US');
+            assert('name' in data, 'Dev Test');
+            assert('tenantMemberships' in data, "devtestTenant");
         }));
     });
 
