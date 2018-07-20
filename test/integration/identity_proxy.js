@@ -197,14 +197,14 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 assert(response.status === 'provisioning');
             }));
 
-        it('should return the list of newly added test tenant', () =>
+        it('should return the list of newly added test tenant using the tenantId scope', () =>
             splunk.identity.getUserProfile(integrationTestTenantID).then(data => {
                 assert.typeOf(data, 'Object', 'response should be an object');
                 assert(data.tenantMemberships.includes(integrationTestTenantID));
             }));
 
-        it('should return the list of newly added test tenant', () =>
-            splunk.identity.getUserProfile("").then(data => {
+        it('should return the list of newly added test tenant using the system scope', () =>
+            splunk.identity.getUserProfile().then(data => {
                 assert.typeOf(data, 'Object', 'response should be an object');
                 assert(data.tenantMemberships.includes(integrationTestTenantID));
             }));
