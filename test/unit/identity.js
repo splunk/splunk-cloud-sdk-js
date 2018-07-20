@@ -19,6 +19,19 @@ describe('Identity Endpoints', () => {
         }));
     });
 
+    describe('Get user profile', () => {
+        it('should return a user profile', () => splunk.identity.getUserProfile("").then(data => {
+            assert.typeOf(data, 'object', 'response should be an object');
+            assert('email' in data, 'devtest@splunk.com');
+            assert('firstName' in data, 'Dev');
+            assert('id' in data, 'devtest@splunk.com');
+            assert('lastName' in data, 'Test');
+            assert('locale' in data, 'en-US');
+            assert('name' in data, 'Dev Test');
+            assert('tenantMemberships' in data, [config]);
+        }));
+    });
+
     describe('Post a new tenant', () => {
         it('should return no response body', () => {
             const postBody = { tenantId: config.stubbyDevTestTenant };

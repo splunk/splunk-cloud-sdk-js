@@ -203,6 +203,12 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 assert(data.tenantMemberships.includes(integrationTestTenantID));
             }));
 
+        it('should return the list of newly added test tenant', () =>
+            splunk.identity.getUserProfile("").then(data => {
+                assert.typeOf(data, 'Object', 'response should be an object');
+                assert(data.tenantMemberships.includes(integrationTestTenantID));
+            }));
+
         it('should throw a 422 Unprocessable entry error response when the tenant creation request is in bad format', () =>
             splunk.identity
                 .createTenant(testPostTenantError1)

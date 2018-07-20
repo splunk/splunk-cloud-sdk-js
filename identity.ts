@@ -11,8 +11,13 @@ export class IdentityService extends BaseApiService {
      * @param tenantId
      */
     public getUserProfile = (tenantId: Tenant["tenantId"]): Promise<UserProfile> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], tenantId))
+        if (tenantId) {
+            return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], tenantId))
+                .then(response => response as UserProfile);
+        }
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], 'system'))
             .then(response => response as UserProfile);
+
     }
 
     /**
