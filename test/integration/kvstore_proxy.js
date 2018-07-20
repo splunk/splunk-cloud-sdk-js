@@ -38,7 +38,11 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
                         .then(statsResponse => {
                             assert.equal(statsResponse.count, 0);
                             assert.equal(statsResponse.nindexes, 1);
-                            assert.equal(statsResponse.ns, namespace);
+                            // This is a bug, the `ns` property is actually the
+                            // collection and will need to be updated when kv 
+                            // store fixes it
+                            // See https://jira.splunk.com/browse/SSC-4205
+                            assert.equal(statsResponse.ns, collection);
 
                             client.catalog.deleteDataset(resultDataset.id);
                         });
