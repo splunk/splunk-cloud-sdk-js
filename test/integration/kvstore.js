@@ -53,7 +53,7 @@ describe('Integration tests for KVStore Index Endpoints', () => {
     });
 
     describe("index endpoints - Error scenarios", () => {
-        it('should throw 500 internal server error', () => ssc.kvstore.createIndex({
+        it('should throw 500 internal server error because the namespace or the collection does not exist', () => ssc.kvstore.createIndex({
             Name: testIndex,
             Collection: testcollection,
             Namespace: testnamespace,
@@ -62,7 +62,7 @@ describe('Integration tests for KVStore Index Endpoints', () => {
             assert.fail(response), err => assert.equal(err.code, "500")
         ));
 
-        it('should throw 404 index not found error', () => ssc.kvstore.deleteIndex("testIndex2", testnamespace, testcollection).then((response) =>
+        it('should throw 404 index not found error as index being deleted does not exist', () => ssc.kvstore.deleteIndex("testIndex2", testnamespace, testcollection).then((response) =>
             assert.fail(response), err => assert.equal(err.code, "404")
         ));
     });
