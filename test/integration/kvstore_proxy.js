@@ -24,7 +24,7 @@ describe('Integration tests for KVStore Admin Endpoints', () => {
 describe('Integration tests for KVStore Collection Stats Endpoints', () => {
     let testDataset;
 
-    before(() =>
+    beforeEach(() =>
         ssc.catalog
             .createDataset({
                 name: testCollection,
@@ -54,7 +54,7 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
         });
     });
 
-    after(() => {
+    afterEach(() => {
         ssc.catalog
             .deleteDatasetByName(testDataset.name)
             .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
