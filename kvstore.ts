@@ -15,11 +15,11 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-    * Gets the the KVStore collections stats
-    * @param the namespace of the collection to retrieve
-    * @param the collection to retrieve
-    * @returns A promise that contains the KVStore's response
-    */
+     * Gets the the KVStore collections stats
+     * @param the namespace of the collection to retrieve
+     * @param the collection to retrieve
+     * @returns A promise that contains the KVStore's response
+     */
     public getCollectionStats = (namespace: string, collection: string): Promise<any> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             namespace,
