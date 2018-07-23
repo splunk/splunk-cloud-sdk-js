@@ -13,7 +13,7 @@ const testCollection = config.testCollection;
 
 describe('Integration tests for KVStore Admin Endpoints', () => {
     describe('Ping Endpoint', () => {
-        it('Should return a "healty" response', () => {
+        it('Should return a "healthy" response', () => {
             return ssc.kvstore.getHealthStatus().then(response => {
                 assert.equal(response.status, 'healthy', 'response status should be `healthy`');
             });
