@@ -6,7 +6,7 @@ const sscHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
 const tenantID = config.playgroundTenant;
 
-const client = new SplunkSSC(sscHost, token, tenantID);
+const ssc = new SplunkSSC(sscHost, token, tenantID);
 
 const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
@@ -14,7 +14,7 @@ const testCollection = config.testCollection;
 describe('Integration tests for KVStore Admin Endpoints', () => {
     describe('Ping Endpoint', () => {
         it('Should return a "healty" response', () => {
-            return client.kvstore.getHealthStatus().then(response => {
+            return ssc.kvstore.getHealthStatus().then(response => {
                 assert.equal(response.status, 'healthy', 'response status should be `healthy`');
             });
         });
@@ -40,7 +40,7 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
 
     describe('Get the stats of a new collections', () => {
         it('Should return expected defaults', () => {
-            client.kvstore.getCollectionStats(testNamespace, testCollection).then(statsResponse => {
+            ssc.kvstore.getCollectionStats(testNamespace, testCollection).then(statsResponse => {
                 assert.equal(statsResponse.count, 0);
                 assert.equal(statsResponse.nindexes, 1);
                 // This is a bug, the `ns` property is actually the
@@ -49,7 +49,7 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
                 // See https://jira.splunk.com/browse/SSC-4205
                 assert.equal(statsResponse.ns, testCollection);
 
-                client.catalog.deleteDataset(resultDataset.id);
+                ssc.catalog.deleteDataset(resultDataset.id);
             });
         });
     });
