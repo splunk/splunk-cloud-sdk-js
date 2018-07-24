@@ -15,7 +15,7 @@
     "lint:fix": "eslint src/** examples/** --fix",
     "pretest": "yarn lint",
     "test": "mocha test/unit",
-    "test:integration": "mocha --timeout=10000 --require babel-polyfill test/integration/search_proxy.js",
+    "test:integration": "mocha --timeout=10000 --require babel-polyfill test/integration",
     "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",
     "docs": "jsdoc -r -c jsdoc.json -d docs --pedantic",
