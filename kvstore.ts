@@ -99,7 +99,7 @@ export class KVStoreService extends BaseApiService {
 
 export interface CollectionStats {
     count: number;
-    indexSizes: Object;
+    indexSizes: object;
     nIndexes: number;
     ns: string;
     size: number;
