@@ -42,7 +42,7 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
         it('Should return expected defaults', () => {
             ssc.kvstore.getCollectionStats(testNamespace, testCollection).then(statsResponse => {
                 assert.equal(statsResponse.count, 0);
-                assert.equal(statsResponse.nindexes, 1);
+                assert.equal(statsResponse.nIndexes, 1);
                 // This is a bug, the `ns` property is actually the
                 // collection and will need to be updated when kv
                 // store fixes it
@@ -53,8 +53,10 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
     });
 
     afterEach(() => {
-        ssc.catalog
-            .deleteDatasetByName(testDataset.name)
-            .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
+        if (testDataset != null) {
+            ssc.catalog
+                .deleteDatasetByName(testDataset.name)
+                .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
+        }
     });
 });
