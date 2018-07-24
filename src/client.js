@@ -20,7 +20,7 @@ function handleResponse(response) {
     if (response.ok) {
         return response.text().then(decodeJson);
     }
-    return response.text().then(function (text) {
+    return response.text().then(function(text) {
         var err;
         try {
             var json = JSON.parse(text);
@@ -28,9 +28,9 @@ function handleResponse(response) {
                 // TODO: This shouldn't go to production
                 console.log(`Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`);
             }
-            err = new SplunkError(json.message, response.status, source);
+            err = new SplunkError(json.message, response.status, response.url);
         } catch (ex) {
-            err = new SplunkError(`Unknown error: ${text}`, response.status);
+            err = new SplunkError(`Unknown error: ${text}`, response.status, response.url);
         }
         throw err;
     });

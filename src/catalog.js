@@ -45,16 +45,18 @@ class CatalogService extends BaseApiService {
     }
 
     /**
-     * Delete the DatasetInfo and its dependencies with the specified id
-     * @param {string} name of the DatasetInfo to delete
+     * Delete the Dataset
+     * @param {string} name of the Dataset to delete
      */
     deleteDatasetByName(name) {
         return this.getDatasets(`name=="${name}"`).then(
             ret => {
-                if (ret.length !== 1) {
+                if (ret.length > 1) {
                     throw new Error("There are more than 1 dataset with the input name");
+                } else if (ret.length === 1) {
+                    return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ["datasets", ret[0].id]));
                 }
-                return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ["datasets", ret[0].id]));
+                return null
             });
     }
 
