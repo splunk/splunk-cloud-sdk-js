@@ -48,8 +48,6 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
                 // store fixes it
                 // See https://jira.splunk.com/browse/SSC-4205
                 assert.equal(statsResponse.ns, testCollection);
-
-                ssc.catalog.deleteDataset(resultDataset.id);
             });
         });
     });
