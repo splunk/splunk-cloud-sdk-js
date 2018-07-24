@@ -211,8 +211,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should create a new tenant', () =>
             splunk.identity.createTenant(testPostTenant1).then(response => {
                 assert(response.status === 'provisioning');
-                return waitForStatusToEnd(response.tenantId, 'provisioning')
-                    .then(console.log);
+                return waitForStatusToEnd(response.tenantId, 'provisioning');
             }));
 
         it('should return the list of newly added test tenant using the tenantId scope', () =>
