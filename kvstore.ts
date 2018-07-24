@@ -20,7 +20,10 @@ export class KVStoreService extends BaseApiService {
      * @param the collection to retrieve
      * @returns A promise that contains the KVStore's response
      */
-    public getCollectionStats = (namespace: string, collection: string): Promise<any> => {
+    public getCollectionStats = (
+        namespace: string,
+        collection: string
+    ): Promise<CollectionStats> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             namespace,
             'collections',
@@ -28,7 +31,7 @@ export class KVStoreService extends BaseApiService {
             'stats',
         ]);
 
-        return this.client.get(url);
+        return this.client.get(url).then(response => response as CollectionStats);
     };
 
     /**
@@ -92,6 +95,15 @@ export class KVStoreService extends BaseApiService {
             ])
         );
     };
+}
+
+export interface CollectionStats {
+    count: number;
+    indexSizes: object;
+    nIndexes: number;
+    ns: string;
+    size: number;
+    totalIndexSize: number;
 }
 
 export interface IndexFieldDefinition {
