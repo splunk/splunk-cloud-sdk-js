@@ -1,10 +1,10 @@
 export class SplunkError extends Error {
     public code?: number;
-    public source?: object;
-    constructor(message: string, code?: number, source?: object) {
+    public url?: Response["url"];
+    constructor(message: string, code?: number, source?: Response["url"]) {
         super(message);
         this.code = code;
-        this.source = source;
+        this.url = source;
     }
 }
 
@@ -24,9 +24,9 @@ function handleResponse(response: Response): Promise<any> {
                 // TODO: This shouldn't go to production
                 console.log(`Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`);
             }
-            err = new SplunkError(json.message, response.status, json);
+            err = new SplunkError(json.message, response.status, response.url);
         } catch (ex) {
-            err = new SplunkError(`Unknown error: ${text}`, response.status);
+            err = new SplunkError(`Unknown error: ${text}`, response.status, response.url);
         }
         throw err;
     });
