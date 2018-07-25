@@ -110,6 +110,12 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
         }));
     });
 
+    describe('Delete all the records', () => {
+        it('should return no response body', () => splunk.kvstore.deleteRecords(testnamespace, testcollection).then(response => {
+            assert(!response);
+        }));
+    });
+
     describe('Delete a record based on the query', () => {
         it('should return no response body', () => splunk.kvstore.deleteRecords(testnamespace, testcollection, "{\"size\": \"tiny\", \"capacity_gb\": 8}").then(response => {
             assert(!response);
