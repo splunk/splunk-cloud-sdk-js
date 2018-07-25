@@ -10,11 +10,6 @@ const testcollection = config.testCollection;
 
 const ssc = new SplunkSSC(sscHost, token, tenantID);
 
-console.log('TESTING KVStore integration');
-console.log(`SSC Host: ${  sscHost}`);
-console.log(`Token: ${  token}`);
-console.log(`Tenant ID: ${  tenantID}`);
-
 describe('Integration tests for KVStore Endpoints', () => {
     const testIndex = "integtestindex";
     const fields = [
@@ -32,11 +27,30 @@ describe('Integration tests for KVStore Endpoints', () => {
         testDataset = response;
     }));
 
+
     describe('Integration tests for KVStore Admin Endpoints', () => {
         describe('Ping Endpoint', () => {
-            it('Should return a "healty" response', () => ssc.kvstore.getHealthStatus().then(response => {
-                assert.equal(response.status, 'healthy', 'response status should be `healthy`');
-            }));
+            it('Should return a "healthy" response', () => {
+                return ssc.kvstore.getHealthStatus().then(response => {
+                    assert.equal(response.status, 'healthy', 'response status should be `healthy`');
+                });
+            });
+        });
+    });
+
+    describe('Integration tests for KVStore Collection Stats Endpoints', () => {
+        describe('Get the stats of a new collections', () => {
+            it('Should return expected defaults', () => {
+                return ssc.kvstore.getCollectionStats(testnamespace, testcollection).then(statsResponse => {
+                    assert.equal(statsResponse.count, 0);
+                    assert.equal(statsResponse.nindexes, 1);
+                    // This is a bug, the `ns` property is actually the
+                    // collection and will need to be updated when kv
+                    // store fixes it
+                    // See https://jira.splunk.com/browse/SSC-4205
+                    assert.equal(statsResponse.ns, testcollection);
+                });
+            });
         });
     });
 
@@ -56,7 +70,7 @@ describe('Integration tests for KVStore Endpoints', () => {
             }));
 
             it('should delete the specified index', () => ssc.kvstore.deleteIndex(testIndex, testnamespace, testcollection).then((response) => {
-                assert(!response)
+                assert(!response);
             }));
 
             it('should not return any index', () => ssc.kvstore.listIndexes(testnamespace, testcollection).then(response => {
@@ -147,7 +161,7 @@ describe('Integration tests for KVStore Endpoints', () => {
             }));
 
             it("should delete all the records", () => ssc.kvstore.deleteRecords(testnamespace, testcollection).then(response => {
-                assert(!response)
+                assert(!response);
             }));
 
             it("validate that after calling deleteRecords(), no records should be returned", () => ssc.kvstore.queryRecords(testnamespace, testcollection).then(response => {
@@ -157,6 +171,11 @@ describe('Integration tests for KVStore Endpoints', () => {
     });
 
     after(() => {
-        ssc.catalog.deleteDatasetByName(testDataset.name).catch(err => console.log(`Error cleaning the test dataset: ${  err}`))
+        if (testDataset != null) {
+            ssc.catalog
+                .deleteDatasetByName(testDataset.name)
+                .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
+        }
     });
 });
+

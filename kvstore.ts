@@ -16,14 +16,42 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
+     * Gets the the KVStore collections stats
+     * @param the namespace of the collection to retrieve
+     * @param the collection to retrieve
+     * @returns A promise that contains the KVStore's response
+     */
+    public getCollectionStats = (
+        namespace: string,
+        collection: string
+    ): Promise<CollectionStats> => {
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+            namespace,
+            'collections',
+            collection,
+            'stats',
+        ]);
+
+        return this.client.get(url).then(response => response as CollectionStats);
+    };
+
+    /**
      * Retrieves all the indexes in a given namespace and collection.
      * @param namespace The namespace whose indexes should be listed
      * @param collection The collection whose indexes should be listed
      */
     public listIndexes = (namespace: string, collection: string): Promise<IndexDescription[]> => {
-        return this.client.get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [namespace, 'collections', collection, "indexes"]))
+        return this.client
+            .get(
+                this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+                    namespace,
+                    'collections',
+                    collection,
+                    'indexes',
+                ])
+            )
             .then(response => response as IndexDescription[]);
-    }
+    };
 
     /**
      * Creates a new index to be added to the collection.
@@ -31,10 +59,21 @@ export class KVStoreService extends BaseApiService {
      * @param namespace The namespace where the new index will be created
      * @param collection The collection where the new index will be created
      */
-    public createIndex = (index: IndexDescription, namespace: string, collection: string): Promise<any> => {
-        return this.client.post(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [namespace, 'collections', collection, "indexes"]), index)
-
-    }
+    public createIndex = (
+        index: IndexDescription,
+        namespace: string,
+        collection: string
+    ): Promise<any> => {
+        return this.client.post(
+            this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+                namespace,
+                'collections',
+                collection,
+                'indexes',
+            ]),
+            index
+        );
+    };
 
     /**
      * Deletes the specified index in a given namespace and collection.
@@ -42,9 +81,21 @@ export class KVStoreService extends BaseApiService {
      * @param namespace The namespace where the new index will be created
      * @param collection The collection where the new index will be created
      */
-    public deleteIndex = (indexName: string, namespace: string, collection: string): Promise<any> => {
-        return this.client.delete(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [namespace, 'collections', collection, "indexes", indexName]));
-    }
+    public deleteIndex = (
+        indexName: string,
+        namespace: string,
+        collection: string
+    ): Promise<any> => {
+        return this.client.delete(
+            this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+                namespace,
+                'collections',
+                collection,
+                'indexes',
+                indexName,
+            ])
+        );
+    };
 
     /**
      * Inserts new records to the collection.
@@ -105,6 +156,15 @@ export class KVStoreService extends BaseApiService {
     public deleteRecordByKey = (namespace: string, collection: string, key: string): Promise<any> => {
         return this.client.delete(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [namespace, 'collections', collection, key]));
     }
+}
+
+export interface CollectionStats {
+    count: number;
+    indexSizes: object;
+    nindexes: number;
+    ns: string;
+    size: number;
+    totalIndexSize: number;
 }
 
 export interface IndexFieldDefinition {

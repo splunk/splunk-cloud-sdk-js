@@ -9,7 +9,7 @@ else
     exit 1
 fi
 
-yarn tscBuild
+yarn build
 
 if [ "$allow_failures" -eq "1" ]; then
     echo "Running examples but not gating on failures..."

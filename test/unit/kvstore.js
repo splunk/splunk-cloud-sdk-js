@@ -122,4 +122,3 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
         }));
     });
 });
-
