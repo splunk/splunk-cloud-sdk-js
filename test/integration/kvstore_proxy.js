@@ -25,24 +25,28 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
     let testDataset;
 
     beforeEach(() =>
-        ssc.catalog
-            .createDataset({
-                name: testCollection,
-                owner: 'splunk',
-                kind: 'kvcollection',
-                capabilities: '1101-00000:11010',
-                module: testNamespace,
-            })
-            .then(response => {
-                testDataset = response;
-            })
+        ssc.catalog.getDataset(testDataset)
+            .then(ds => ssc.catalog.deleteDataset(testDataset))
+            .catch(err => { })
+            .then(() => ssc.catalog
+                .createDataset({
+                    name: testCollection,
+                    owner: 'splunk',
+                    kind: 'kvcollection',
+                    capabilities: '1101-00000:11010',
+                    module: testNamespace,
+                })
+                .then(response => {
+                    testDataset = response;
+                })
+            )
     );
 
     describe('Get the stats of a new collections', () => {
         it('Should return expected defaults', () => {
-            ssc.kvstore.getCollectionStats(testNamespace, testCollection).then(statsResponse => {
+            return ssc.kvstore.getCollectionStats(testNamespace, testCollection).then(statsResponse => {
                 assert.equal(statsResponse.count, 0);
-                assert.equal(statsResponse.nIndexes, 1);
+                assert.equal(statsResponse.nindexes, 1);
                 // This is a bug, the `ns` property is actually the
                 // collection and will need to be updated when kv
                 // store fixes it
