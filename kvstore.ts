@@ -12,7 +12,7 @@ export class KVStoreService extends BaseApiService {
      */
     public getHealthStatus = (): Promise<any> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['ping']);
-        return this.client.get(url);
+        return this.client.get(url).then(response => response as PingOKBody);
     };
 
     /**
@@ -156,6 +156,11 @@ export class KVStoreService extends BaseApiService {
     public deleteRecordByKey = (namespace: string, collection: string, key: string): Promise<any> => {
         return this.client.delete(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [namespace, 'collections', collection, key]));
     }
+}
+
+export interface PingOKBody {
+    errorMessage?: string;
+    status: string;
 }
 
 export interface CollectionStats {
