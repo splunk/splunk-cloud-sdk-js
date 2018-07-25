@@ -1,6 +1,7 @@
 export class SplunkError extends Error {
     public code?: number;
     public source?: object;
+
     constructor(message: string, code?: number, source?: object) {
         super(message);
         this.code = code;
@@ -185,13 +186,14 @@ export class ServiceClient {
      * case an API endpoint is unsupported by the SDK.
      * @param path Path portion of the URL to request from Splunk
      * @param data Data object (to be converted to json) to supply as delete body
+     * @param query Object that contains query parameters
      */
-    public delete(path: string, data?: object): Promise<any> {
+    public delete(path: string, data?: object, query?: QueryArgs): Promise<any> {
         let deleteData = data;
         if (data === undefined || data == null) {
             deleteData = {};
         }
-        return fetch(this.buildUrl(path), {
+        return fetch(this.buildUrl(path, query), {
             method: 'DELETE',
             body: JSON.stringify(deleteData),
             headers: this.buildHeaders(),
