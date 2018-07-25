@@ -25,14 +25,33 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
     let testDataset;
 
     beforeEach(() => {
+        console.log('BEFORE EACH');
+        // Gets the datasets
         ssc.catalog
-            .createDataset({
-                name: testCollection,
-                owner: 'splunk',
-                kind: 'kvcollection',
-                capabilities: '1101-00000:11010',
-                module: testNamespace,
+            .getDatasets()
+            // Filters the data set
+            .then(datasets => {
+                return datasets.filter(element => {
+                    element['module'] == testNamespace && element['name'] == testCollection;
+                    return element;
+                });
             })
+            // Deletes the dataset should only be one data set
+            .then(datasets => {
+                dataset = datasets[0];
+                return ssc.catalog.deleteDataset(dataset.id);
+            })
+            // Creates the data sets
+            .then(() => {
+                return ssc.catalog.createDataset({
+                    name: testCollection,
+                    owner: 'splunk',
+                    kind: 'kvcollection',
+                    capabilities: '1101-00000:11010',
+                    module: testNamespace,
+                });
+            })
+            // Finally set the dataset for testing
             .then(response => {
                 testDataset = response;
             });
@@ -54,6 +73,9 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
         });
     });
 
+    // BUG: this is broken and doesn't run because for some reason the `beforeEach`
+    //      is not running to completion before executing the test, so when this
+    //      gets called the `testDataset` is null
     afterEach(() => {
         if (testDataset != null) {
             ssc.catalog
