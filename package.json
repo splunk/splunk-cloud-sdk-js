@@ -16,7 +16,7 @@
     "cover:report": "nyc report",
     "pretest": "yarn tslint && yarn build",
     "test": "mocha test/unit",
-    "test:integration": "mocha --timeout=10000 test/integration",
+    "test:integration": "mocha --timeout=900000 test/integration",
     "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",
     "publish:docs": "yarn ts:docs && yarn add -D @splunk/cicd-tools && yarn cicd-publish-docs",
