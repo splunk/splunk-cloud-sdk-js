@@ -78,9 +78,6 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
         });
     });
 
-    // BUG: this is broken and doesn't run because for some reason the `beforeEach`
-    //      is not running to completion before executing the test, so when this
-    //      gets called the `testDataset` is null
     afterEach(() => {
         if (testDataset != null) {
             ssc.catalog
