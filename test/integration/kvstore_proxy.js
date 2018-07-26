@@ -25,17 +25,45 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
     let testDataset;
 
     beforeEach(() => {
-        ssc.catalog
-            .createDataset({
-                name: testCollection,
-                owner: 'splunk',
-                kind: 'kvcollection',
-                capabilities: '1101-00000:11010',
-                module: testNamespace,
-            })
-            .then(response => {
-                testDataset = response;
-            });
+        // Gets the datasets
+        return (
+            ssc.catalog
+                .getDatasets()
+                // Filters the data set
+                .then(datasets => {
+                    return datasets.filter(element => {
+                        if (
+                            element['module'] == testNamespace &&
+                            element['name'] == testCollection
+                        ) {
+                            return element;
+                        }
+                    });
+                })
+                // Deletes the dataset should only be one data set
+                .then(datasets => {
+                    if (datasets.length > 0) {
+                        dataset = datasets[0];
+                        return ssc.catalog.deleteDataset(dataset.id);
+                    } else {
+                        // do nothing
+                    }
+                })
+                // Creates the data sets
+                .then(() => {
+                    return ssc.catalog.createDataset({
+                        name: testCollection,
+                        owner: 'splunk',
+                        kind: 'kvcollection',
+                        capabilities: '1101-00000:11010',
+                        module: testNamespace,
+                    });
+                })
+                // Finally set the dataset for testing
+                .then(response => {
+                    testDataset = response;
+                })
+        );
     });
 
     describe('Get the stats of a new collections', () => {
