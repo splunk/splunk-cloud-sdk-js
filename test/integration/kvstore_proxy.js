@@ -32,8 +32,12 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
                 // Filters the data set
                 .then(datasets => {
                     return datasets.filter(element => {
-                        element['module'] == testNamespace && element['name'] == testCollection;
-                        return element;
+                        if (
+                            element['module'] == testNamespace &&
+                            element['name'] == testCollection
+                        ) {
+                            return element;
+                        }
                     });
                 })
                 // Deletes the dataset should only be one data set
