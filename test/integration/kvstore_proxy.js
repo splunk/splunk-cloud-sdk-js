@@ -42,9 +42,11 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
                 })
                 // Deletes the dataset should only be one data set
                 .then(datasets => {
-                    datasets.map(dataset => {
-                        return ssc.catalog.deleteDataset(dataset.id);
-                    });
+                    return Promise.all(
+                        datasets.map(dataset => {
+                            return ssc.catalog.deleteDataset(dataset.id);
+                        })
+                    );
                 })
                 // Creates the data sets
                 .then(() => {
