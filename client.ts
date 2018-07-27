@@ -1,3 +1,5 @@
+import 'isomorphic-fetch';
+
 export class SplunkError extends Error {
     public code?: number;
     public url?: Response["url"];
