@@ -12,13 +12,11 @@ const ssc = new SplunkSSC(sscHost, token, tenantID);
 
 function createDataset(namespace, collection) {
     // Gets the datasets
-    console.log('GETTING DATASETS');
     return (
         ssc.catalog
             .getDatasets()
             // Filters the data set
             .then(datasets => {
-                console.log('FILTERING DATASETS');
                 return datasets.filter(element => {
                     if (element['module'] == testNamespace && element['name'] == testCollection) {
                         return element;
@@ -27,8 +25,6 @@ function createDataset(namespace, collection) {
             })
             // Deletes the dataset should only be one data set
             .then(datasets => {
-                console.log('DELETING DATASETS');
-                console.log(datasets);
                 return Promise.all(
                     datasets.map(dataset => {
                         return ssc.catalog.deleteDataset(dataset.id);
@@ -37,7 +33,6 @@ function createDataset(namespace, collection) {
             })
             // Creates the data sets
             .then(() => {
-                console.log('CREATING DATASETS');
                 return ssc.catalog.createDataset({
                     name: testCollection,
                     owner: 'splunk',
@@ -48,7 +43,6 @@ function createDataset(namespace, collection) {
             })
             // Finally set the dataset for testing
             .then(response => {
-                console.log('ASSIGNING VARIABLE');
                 testDataset = response;
             })
             .catch(error => {
