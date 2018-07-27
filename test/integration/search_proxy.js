@@ -80,21 +80,6 @@ describe("integration tests Using Search APIs", () => {
                 ]);
             }));
 
-        it("should allow control of a job", () => splunk.search.createJob(standardQuery)
-            .then(sid => splunk.search.getJob(sid)
-                .then((job) => {
-                    assert(job.dispatchState !== 'PAUSED');
-                    return splunk.search.createJobControlAction(sid, 'pause');
-                }).then((response) => {
-                    expect(response).to.have.property('messages'); // DP: I expect this one to change
-                    assert(response.messages[0].text === 'Search job paused.');
-                    return splunk.search.createJobControlAction(sid, 'cancel');
-                }).then((response) => {
-                    expect(response).to.have.property('messages'); // DP: I expect this one to change
-                    assert(response.messages[0].text === 'Search job cancelled.');
-                    return splunk.search.getJob(sid);
-                }).then(() => assert.fail("Should have thrown"), err => assert(err.code === 404, "Job should not exist"))));
-
         it("should allow pagination of results", () => splunk.search.createJob(standardQuery)
             .then(sid => splunk.search.waitForJob(sid)
                 .then(job => { // As a child to keep sid in the closure
