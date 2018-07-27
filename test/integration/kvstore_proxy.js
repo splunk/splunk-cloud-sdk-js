@@ -42,12 +42,9 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
                 })
                 // Deletes the dataset should only be one data set
                 .then(datasets => {
-                    if (datasets.length > 0) {
-                        dataset = datasets[0];
+                    datasets.map(dataset => {
                         return ssc.catalog.deleteDataset(dataset.id);
-                    } else {
-                        // do nothing
-                    }
+                    });
                 })
                 // Creates the data sets
                 .then(() => {
@@ -62,6 +59,10 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
                 // Finally set the dataset for testing
                 .then(response => {
                     testDataset = response;
+                })
+                .catch(error => {
+                    console.log('An error was encountered while cleaning up datasests');
+                    console.log(error);
                 })
         );
     });
