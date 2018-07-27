@@ -158,6 +158,9 @@ async function main() {
                         if (!ret) {
                             process.exit(1);
                         }
+                    })
+                    .catch(() => {
+                        process.exit(1);
                     });
             } else if (!ret) {
                 process.exit(1);
