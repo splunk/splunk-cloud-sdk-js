@@ -1,6 +1,7 @@
 const config = require('../config');
 const SplunkSSC = require('../../splunk');
 const { assert } = require('chai');
+const { createDataset } = require('./kvstore');
 
 const sscHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
@@ -25,48 +26,7 @@ describe('Integration tests for KVStore Collection Stats Endpoints', () => {
     let testDataset;
 
     beforeEach(() => {
-        // Gets the datasets
-        return (
-            ssc.catalog
-                .getDatasets()
-                // Filters the data set
-                .then(datasets => {
-                    return datasets.filter(element => {
-                        if (
-                            element['module'] == testNamespace &&
-                            element['name'] == testCollection
-                        ) {
-                            return element;
-                        }
-                    });
-                })
-                // Deletes the dataset should only be one data set
-                .then(datasets => {
-                    return Promise.all(
-                        datasets.map(dataset => {
-                            return ssc.catalog.deleteDataset(dataset.id);
-                        })
-                    );
-                })
-                // Creates the data sets
-                .then(() => {
-                    return ssc.catalog.createDataset({
-                        name: testCollection,
-                        owner: 'splunk',
-                        kind: 'kvcollection',
-                        capabilities: '1101-00000:11010',
-                        module: testNamespace,
-                    });
-                })
-                // Finally set the dataset for testing
-                .then(response => {
-                    testDataset = response;
-                })
-                .catch(error => {
-                    console.log('An error was encountered while cleaning up datasests');
-                    console.log(error);
-                })
-        );
+        return createDataset(testNamespace, testCollection);
     });
 
     describe('Get the stats of a new collections', () => {
