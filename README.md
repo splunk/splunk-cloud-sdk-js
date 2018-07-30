@@ -9,13 +9,13 @@ This is the SSC Client for JavaScript
 
 
 ###Get the latest release from one of the following locations 
-- npm-solutions-local/@splunk/ssc-client/-/@splunk/ssc-client-0.1.4.tgz
-- https://github.com/splunk/ssc-client-js/archive/v0.1.4.tar.gz
+- npm-solutions-local/@splunk/ssc-client/-/@splunk/ssc-client-X.Y.Z.tgz
+- https://github.com/splunk/ssc-client-js/archive/vX.Y.Z.tar.gz
 
 
 ###From your project directory run
 ```sh
-npm install ~/Downloads/ssc-client-js-0.1.4.tar.gz 
+npm install ~/Downloads/ssc-client-js-X.Y.Z.tar.gz 
 ```
 
 ###Using the service client to access all supported services
