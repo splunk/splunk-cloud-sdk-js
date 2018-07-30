@@ -57,7 +57,7 @@ export class CatalogService extends BaseApiService {
                 } else if (ret.length === 1) {
                     return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ["datasets", ret[0].id]));
                 } else {
-                    return null;
+                    return Promise.reject(new Error(`No dataset found with name: ${name}`));
                 }
             });
     }
