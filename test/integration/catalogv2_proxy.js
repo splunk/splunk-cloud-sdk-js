@@ -61,6 +61,11 @@ describe("catalog v2", () => {
                 assert(ds.kind === "index");
             }).then(() => ssc.catalog.deleteDatasetByName(name));
         });
+
+        it("should throw an error when deleting a dataset that doesn't exist", () => {
+            return ssc.catalog.deleteDatasetByName("queequeg")
+                .then(() => assert.fail("Should have thrown"), () => true /* success */)
+        });
     }).timeout(10000);
 
     describe("rules", () => {
