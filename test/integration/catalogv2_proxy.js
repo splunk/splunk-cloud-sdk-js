@@ -1,13 +1,24 @@
 const config = require("../config");
-const SplunkSSC = require("../../src/splunk");
-const {assert} = require("chai");
+const SplunkSSC = require("../../splunk");
+const { assert } = require("chai");
 
-const token = process.env.BEARER_TOKEN;
-const tenantID = process.env.TENANT_ID;
+const sscHost = config.playgroundHost;
+const token = config.playgroundAuthToken;
+const tenantID = config.playgroundTenant;
 
-const ssc = new SplunkSSC(process.env.SSC_HOST, token, tenantID);
+const ssc = new SplunkSSC(sscHost, token, tenantID);
 
 describe("catalog v2", () => {
+    const indexName = `idx_${Date.now()}`;
+    // Create an index to ensure there is something to return
+    before(() => ssc.catalog.createDataset({
+        name: indexName,
+        owner: "test@splunk.com",
+        kind: "index",
+        capabilities: "1101-00000:11010",
+        disabled: false
+    }));
+    after(() => ssc.catalog.deleteDatasetByName(indexName).catch(err => console.log("Error cleaning index: " + err)));
     describe("datasets", () => {
         it("should return datasets", () => ssc.catalog.getDatasets().then((dslist) => {
             assert(dslist.length > 0);
@@ -50,6 +61,11 @@ describe("catalog v2", () => {
                 assert(ds.kind === "index");
             }).then(() => ssc.catalog.deleteDatasetByName(name));
         });
+
+        it("should throw an error when deleting a dataset that doesn't exist", () => {
+            return ssc.catalog.deleteDatasetByName("queequeg")
+                .then(() => assert.fail("Should have thrown"), () => true /* success */)
+        });
     }).timeout(10000);
 
     describe("rules", () => {
@@ -88,7 +104,7 @@ describe("catalog v2", () => {
                 "datatype": "S",
                 "fieldtype": "D",
                 "prevalence": "A"
-            }).then(resultDatasetField1 => ssc.catalog.getDatasetField(resultDataset.id,resultDatasetField1.id).then((getResultDatasetField) => {
+            }).then(resultDatasetField1 => ssc.catalog.getDatasetField(resultDataset.id, resultDatasetField1.id).then((getResultDatasetField) => {
                 assert(getResultDatasetField.name, integrationTestField1);
             })).then(() => ssc.catalog.postDatasetField(resultDataset.id, {
                 "name": integrationTestField2,
@@ -96,14 +112,14 @@ describe("catalog v2", () => {
                 "datatype": "S",
                 "fieldtype": "D",
                 "prevalence": "A"
-            })).then((resultDatasetField2) => ssc.catalog.getDatasetField(resultDataset.id,resultDatasetField2.id).then((getResultDatasetField) => {
+            })).then((resultDatasetField2) => ssc.catalog.getDatasetField(resultDataset.id, resultDatasetField2.id).then((getResultDatasetField) => {
                 assert(getResultDatasetField.name, integrationTestField2);
             }).then(() => ssc.catalog.getDatasetFields(resultDataset.id).then((resultDatasetFields) => {
                 assert(resultDatasetFields.length === 2, "Two dataset fields should be created");
             })).then(() => ssc.catalog.getDatasetFields(resultDataset.id, "name==\"integ_test_field2\"").then((resultDatasetFields) => {
                 assert(resultDatasetFields.length === 1, "One dataset fields should be created");
                 assert(resultDatasetFields[0].name === integrationTestField2, "The name should match");
-            })).then(() => ssc.catalog.patchDatasetField(resultDataset.id, resultDatasetField2.id, {"name" : "integ_test_field3"}).then((patchResultDatasetField) => {
+            })).then(() => ssc.catalog.patchDatasetField(resultDataset.id, resultDatasetField2.id, { "name": "integ_test_field3" }).then((patchResultDatasetField) => {
                 assert(patchResultDatasetField.name === "integ_test_field3", "The name should match");
             })).then(() => ssc.catalog.deleteDatasetField(resultDataset.id, resultDatasetField2.id).then((response) => {
                 assert(!response)

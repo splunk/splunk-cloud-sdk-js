@@ -1,13 +1,13 @@
 const config = require('../config');
-const SplunkSSC = require('../../src/splunk');
-const {assert} = require('chai');
+const SplunkSSC = require('../../splunk');
+const { assert } = require('chai');
 
-const splunk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
+const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
 
 describe('Identity Endpoints', () => {
 
-    describe('Get user profile', () => {
-        it('should return a user profile', () => splunk.identity.getUserProfile('devtestTenant').then(data => {
+    describe('Get user profile with tenantId', () => {
+        it('should return a user profile using tenantId scope', () => splunk.identity.getUserProfile(config.stubbyDevTestTenant).then(data => {
             assert.typeOf(data, 'object', 'response should be an object');
             assert('email' in data, 'devtest@splunk.com');
             assert('firstName' in data, 'Dev');
@@ -15,13 +15,26 @@ describe('Identity Endpoints', () => {
             assert('lastName' in data, 'Test');
             assert('locale' in data, 'en-US');
             assert('name' in data, 'Dev Test');
-            assert('tenantMemberships' in data, ['devtestTenant']);
+            assert('tenantMemberships' in data, "devtestTenant");
+        }));
+    });
+
+    describe('Get user profile with system', () => {
+        it('should return a user profile using system scope', () => splunk.identity.getUserProfile().then(data => {
+            assert.typeOf(data, 'object', 'response should be an object');
+            assert('email' in data, 'devtest@splunk.com');
+            assert('firstName' in data, 'Dev');
+            assert('id' in data, 'devtest@splunk.com');
+            assert('lastName' in data, 'Test');
+            assert('locale' in data, 'en-US');
+            assert('name' in data, 'Dev Test');
+            assert('tenantMemberships' in data, "devtestTenant");
         }));
     });
 
     describe('Post a new tenant', () => {
         it('should return no response body', () => {
-            const postBody = {tenantId: 'devtestTenant'};
+            const postBody = { tenantId: config.stubbyDevTestTenant };
             return splunk.identity.createTenant(postBody).then(response => {
                 assert(!response);
             });
@@ -29,13 +42,13 @@ describe('Identity Endpoints', () => {
     });
 
     describe('Delete a tenant', () => {
-        it('should return no response body', () => splunk.identity.deleteTenant('devtestTenant').then(response => {
+        it('should return no response body', () => splunk.identity.deleteTenant(config.stubbyDevTestTenant).then(response => {
             assert(!response);
         }));
     });
 
     describe('Get a list of users in tenant', () => {
-        it('should return a list of users', () => splunk.identity.getTenantUsers('devtestTenant').then(data => {
+        it('should return a list of users', () => splunk.identity.getTenantUsers(config.stubbyDevTestTenant).then(data => {
             assert.typeOf(data, 'Array', 'response should be an array');
             assert('id' in data[0], 'devtest1@splunk.com');
         }));
@@ -57,7 +70,7 @@ describe('Identity Endpoints', () => {
                     "id": "devtest5@splunk.com"
                 }
             ];
-            return splunk.identity.replaceTenantUsers('devtestTenant', usersList).then(response => {
+            return splunk.identity.replaceTenantUsers(config.stubbyDevTestTenant, usersList).then(response => {
                 assert(!response);
             });
         });
@@ -73,7 +86,7 @@ describe('Identity Endpoints', () => {
                     "id": "devtest8@splunk.com"
                 }
             ];
-            return splunk.identity.addTenantUsers('devtestTenant', usersList).then(response => {
+            return splunk.identity.addTenantUsers(config.stubbyDevTestTenant, usersList).then(response => {
                 assert(!response);
             });
         });
@@ -89,7 +102,7 @@ describe('Identity Endpoints', () => {
                     "id": "devtest5@splunk.com"
                 }
             ];
-            return splunk.identity.deleteTenantUsers('devtestTenant', usersList).then(response => {
+            return splunk.identity.deleteTenantUsers(config.stubbyDevTestTenant, usersList).then(response => {
                 assert(!response);
             });
         });

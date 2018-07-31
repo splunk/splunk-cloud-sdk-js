@@ -1,22 +1,22 @@
 const config = require("../config");
-const SplunkSSC = require("../../src/splunk");
-const { HEC2Service } = require("../../src/hec2");
-const EventBatcher = require("../../src/hec2_event_batcher");
+const SplunkSSC = require("../../splunk");
+const { IngestService } = require("../../ingest");
+const { EventBatcher } = require("../../ingest_event_batcher");
 const { assert, expect } = require("chai");
 
-const splunk = new SplunkSSC(`http://${config.host}:8882`, config.authToken, 'TEST_TENANT');
-const splunkBadToken = new SplunkSSC(`http://${config.host}:8882`, "BAD_TOKEN", 'TEST_TENANT');
-const successResponse = {'code':0,'text':'Success'};
-const event1 = {'sourcetype':'splunkd','source':'mysource','time':1524599658,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.251 -0700 INFO  ServerConfig - Will generate GUID, as none found on this server.'};
-const event2 = {'sourcetype':'splunkd','source':'mysource','time':1524599659,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.252 -0700 INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A'};
-const event3 = {'sourcetype':'splunkd','source':'mysource','time':1524599660,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.258 -0700 INFO  ServerConfig - My server name is "9765f1bebdb4".'};
-const event4 = {'sourcetype':'splunkd','source':'mysource','time':1524599661,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.259 -0700 INFO  ServerConfig - My server name is "9765f1bebdb5".'};
-const event5 = {'sourcetype':'splunkd','source':'mysource','time':1524599662,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.260 -0700 INFO  ServerConfig - My server name is "9765f1bebdb6".'};
-const event6 = {'sourcetype':'splunkd','source':'mysource','time':1524599663,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.261 -0700 INFO  ServerConfig - My server name is "9765f1bebdb7".'};
-const event7 = {'sourcetype':'splunkd','source':'mysource','time':1524599664,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.262 -0700 INFO  ServerConfig - My server name is "9765f1bebdb8".'};
-const event8 = {'sourcetype':'splunkd','source':'mysource','time':1524599665,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.263 -0700 INFO  ServerConfig - My server name is "9765f1bebdb9".'};
-const event9 = {'sourcetype':'splunkd','source':'mysource','time':1524599666,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.264 -0700 INFO  ServerConfig - My server name is "9765f1bebdc0".'};
-const event10 = {'sourcetype':'splunkd','source':'mysource','time':1524599667,'index':'main','fields':{'fieldkey1':'fieldval1','fieldkey2':'fieldkey2'},'host':'myhost','event':'04-24-2018 12:32:23.265 -0700 INFO  ServerConfig - My server name is "9765f1bebdc1".'};
+const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
+const splunkBadToken = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.invalidAuthToken, config.stubbyTenant);
+const successResponse = { 'code': 0, 'text': 'Success' };
+const event1 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599658, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.251 -0700 INFO  ServerConfig - Will generate GUID, as none found on this server.' };
+const event2 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599659, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.252 -0700 INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A' };
+const event3 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599660, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.258 -0700 INFO  ServerConfig - My server name is "9765f1bebdb4".' };
+const event4 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599661, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.259 -0700 INFO  ServerConfig - My server name is "9765f1bebdb5".' };
+const event5 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599662, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.260 -0700 INFO  ServerConfig - My server name is "9765f1bebdb6".' };
+const event6 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599663, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.261 -0700 INFO  ServerConfig - My server name is "9765f1bebdb7".' };
+const event7 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599664, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.262 -0700 INFO  ServerConfig - My server name is "9765f1bebdb8".' };
+const event8 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599665, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.263 -0700 INFO  ServerConfig - My server name is "9765f1bebdb9".' };
+const event9 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599666, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.264 -0700 INFO  ServerConfig - My server name is "9765f1bebdc0".' };
+const event10 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599667, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.265 -0700 INFO  ServerConfig - My server name is "9765f1bebdc1".' };
 
 describe('Events Formation', () => {
 
@@ -24,7 +24,7 @@ describe('Events Formation', () => {
         it('should output to expected concatenated string of JSON', () => {
             const events = [event1, event2, event3];
             const expectedJSONs = '{"sourcetype":"splunkd","source":"mysource","time":1524599658,"index":"main","fields":{"fieldkey1":"fieldval1","fieldkey2":"fieldkey2"},"host":"myhost","event":"04-24-2018 12:32:23.251 -0700 INFO  ServerConfig - Will generate GUID, as none found on this server."}{"sourcetype":"splunkd","source":"mysource","time":1524599659,"index":"main","fields":{"fieldkey1":"fieldval1","fieldkey2":"fieldkey2"},"host":"myhost","event":"04-24-2018 12:32:23.252 -0700 INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A"}{"sourcetype":"splunkd","source":"mysource","time":1524599660,"index":"main","fields":{"fieldkey1":"fieldval1","fieldkey2":"fieldkey2"},"host":"myhost","event":"04-24-2018 12:32:23.258 -0700 INFO  ServerConfig - My server name is \\"9765f1bebdb4\\"."}';
-            assert.equal(HEC2Service.eventsToJSONs(events), expectedJSONs, 'HEC2Service.eventsToJSONs() output should match expected result');
+            assert.equal(IngestService.eventsToJSONs(events), expectedJSONs, 'IngestService.eventsToJSONs() output should match expected result');
         });
     });
 
@@ -34,7 +34,7 @@ describe('Events Endpoint', () => {
 
     describe('Post event', () => {
         it('should return a successful response', () => {
-            return splunk.hec2.createEvent(event1).then(response => {
+            return splunk.ingest.createEvent(event1).then(response => {
                 assert.deepEqual(response, successResponse, 'response should be expected success response.');
             });
         });
@@ -44,7 +44,7 @@ describe('Events Endpoint', () => {
         it('should return a successful response', () => {
             const events = [event1, event2, event3];
 
-            return splunk.hec2.createEvents(events).then(response => {
+            return splunk.ingest.createEvents(events).then(response => {
                 assert.deepEqual(response, successResponse, 'response should be expected success response.');
             });
         });
@@ -54,7 +54,7 @@ describe('Events Endpoint', () => {
         it('should return a 401 response', () => {
             const events = [event1, event2, event3];
 
-            splunkBadToken.hec2.createEvents(events).then(response => {
+            splunkBadToken.ingest.createEvents(events).then(response => {
                 assert.fail('request with bad auth should not succeed');
             }).catch(err => {
                 assert.equal(err.code, 401, 'response status should be 401');
@@ -68,9 +68,9 @@ describe('Events Endpoint', () => {
             const events = [event1, event2, event3, event4, event5, event6, event7, event8, event9, event10];
 
             // 10 total events, batch size 5, batch count 10, 3000 ms
-            let  eb = new EventBatcher(splunk.hec2, 5, 10, 3000);
+            let eb = new EventBatcher(splunk.ingest, 5, 10, 3000);
             try {
-                for (let i=0; i < events.length; i+=1) {
+                for (let i = 0; i < events.length; i += 1) {
                     eb.add(events[i]).then(response => {
                         assert.deepEqual(response, successResponse, 'response should be expected success response.');
                     });
@@ -89,9 +89,9 @@ describe('Events Endpoint', () => {
             const events = [event1, event2, event3, event4, event5, event6, event7];
 
             // 7 total events, batch size 5, batch count 10, 3000 ms
-            let eb = new EventBatcher(splunk.hec2, 5, 10, 3000);
+            let eb = new EventBatcher(splunk.ingest, 5, 10, 3000);
             try {
-                for (let i=0; i < events.length; i+=1) {
+                for (let i = 0; i < events.length; i += 1) {
                     eb.add(events[i]).then(response => {
                         assert.deepEqual(response, successResponse, 'response should be expected success response.');
                     });
@@ -109,7 +109,7 @@ describe('Events Endpoint', () => {
         it('should create 1 batch event and wait for timer to send it', () => {
 
             // 1 total events, batch size 50000, batch count 10, 3000 ms
-            let eb = new EventBatcher(splunk.hec2, 50000, 10, 3000);
+            let eb = new EventBatcher(splunk.ingest, 50000, 10, 3000);
             try {
                 const result = eb.add(event1);
                 assert.isNull(result);
@@ -125,7 +125,7 @@ describe('Raw Endpoint', () => {
 
     describe('Post raw event', () => {
         it('should return a successful response', () => {
-            return splunk.hec2.createRawEvent(event1).then(response => {
+            return splunk.ingest.createRawEvent(event1).then(response => {
                 assert.deepEqual(response, successResponse, 'response should be expected success response.');
             }).catch(err => {
                 assert.fail('request should not have failed');
@@ -139,13 +139,13 @@ describe('Metrics Endpoint', () => {
 
     const metrics = [
         {
-            'dimensions': {'Server': 'ubuntu'},
+            'dimensions': { 'Server': 'ubuntu' },
             'name': 'CPU',
             'unit': 'percentage',
             'value': 33.89
         },
         {
-            'dimensions': {'Region': 'us-east-1'},
+            'dimensions': { 'Region': 'us-east-1' },
             'name': 'Memory',
             'type': 'g',
             'value': 2.27
@@ -156,7 +156,7 @@ describe('Metrics Endpoint', () => {
             'value': 10.444
         }
     ];
-    
+
     const metricEvent1 = {
         'attributes': {
             'defaultDimensions': {},
@@ -173,7 +173,7 @@ describe('Metrics Endpoint', () => {
     };
 
     describe('Post metrics', () => {
-        it('should return a successful response', () => splunk.hec2.createMetrics([metricEvent1]).then(response => {
+        it('should return a successful response', () => splunk.ingest.createMetrics([metricEvent1]).then(response => {
             expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
         }).catch(err => {
             assert.fail(`request should not have failed ${err}`);
