@@ -1,6 +1,6 @@
 import BaseApiService from './baseapiservice';
-import {KVSTORE_SERVICE_PREFIX} from './service_prefixes';
-import {QueryArgs} from "./client";
+import { QueryArgs } from "./client";
+import { KVSTORE_SERVICE_PREFIX } from './service_prefixes';
 
 /**
  * Encapsulates kvstore service endpoints
@@ -103,7 +103,7 @@ export class KVStoreService extends BaseApiService {
      * @param collection The collection where the new index will be created
      * @param records The data tuples to insert
      */
-    public insertRecords = (namespace: string, collection: string, records: Map<string, string>[]): Promise<string[]> => {
+    public insertRecords = (namespace: string, collection: string, records: Array<Map<string, string>>): Promise<string[]> => {
         return this.client.post(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [namespace, 'collections', collection, "batch"]), records);
     }
 
@@ -113,13 +113,13 @@ export class KVStoreService extends BaseApiService {
      * @param collection The collection whose indexes should be listed
      * @param filter Filter string to target specific records
      */
-    public queryRecords = (namespace: string, collection: string, filter?: string): Promise<Map<string, string>[]> => {
+    public queryRecords = (namespace: string, collection: string, filter?: string): Promise<Array<Map<string, string>>> => {
         const queryArgs: QueryArgs = {};
         if (filter) {
             queryArgs.query = filter;
         }
         return this.client.get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [namespace, 'collections', collection, "query"]), queryArgs)
-            .then(response => response as Map<string, string>[]);
+            .then(response => response as Array<Map<string, string>>);
     }
 
     /**
