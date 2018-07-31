@@ -1,5 +1,6 @@
 const config = require('../config');
 const SplunkSSC = require('../../splunk');
+const ServicePrefixes = require('../../service_prefixes');
 const { EventBatcher } = require('../../ingest_event_batcher');
 const { assert, expect } = require('chai');
 
@@ -206,12 +207,20 @@ describe('integration tests for Ingest Endpoints', () => {
                 err => {
                     assert.equal(err.code, 400, 'response status should be 400');
 
-                    // {'code':'INVALID_DATA','message':'Invalid data format'}
-                    const errorBody = err.source;
-                    expect(errorBody).to.have.property("code");
-                    expect(errorBody.code).to.match(/INVALID_DATA/);
-                    expect(errorBody).to.have.property("message");
-                    expect(errorBody.message).to.match(/Invalid/);
+                    /**
+                     * {
+                     *   code: '400',
+                     *   message: 'Invalid data format',
+                     *   url: 'https://HOST/TENANT/ingest/vX/metrics'
+                     * }
+                     */
+                    expect(err).to.have.property('code');
+                    expect(err.code).to.equal(400);
+                    expect(err).to.have.property('message');
+                    expect(err.message).to.match(/Invalid/);
+                    expect(err).to.have.property('url');
+                    expect(err.url).to.match(new RegExp(ServicePrefixes.INGEST_SERVICE_PREFIX, 'i'));
+                    expect(err.url).to.match(/metrics/);
                 }
             ));
         });

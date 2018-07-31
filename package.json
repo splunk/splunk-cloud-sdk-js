@@ -1,6 +1,6 @@
 {
   "name": "@splunk/ssc-client",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Splunk SSC SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
@@ -48,6 +48,7 @@
     "typescript": "^2.9.2"
   },
   "dependencies": {
+    "@types/isomorphic-fetch": "^0.0.34",
     "js-base64": "^2.4.3",
     "rxjs": "^6.2.1"
   },
