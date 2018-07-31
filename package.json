@@ -1,25 +1,25 @@
 {
   "name": "@splunk/ssc-client",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Splunk SSC SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
-    "build": "babel src -d .",
-    "clean": "find src/ -name '*.js' | sed 's/src\\//./' | xargs rm",
+    "tslint": "tslint -p tsconfig.json",
+    "tslint:fix": "tslint -p tsconfig.json --fix",
+    "ts:docs": "rm -rf docs && typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/ --inlineSourceMap --module commonjs --theme minimal --excludePrivate",
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm *.js *.map",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
     "codecov:integration": "yarn cover:integration && codecov -f ./coverage-integration/lcov.info -F integration",
     "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test && yarn run cover:report",
     "cover:integration": "NODE_ENV=coverage nyc --reporter=lcov --report-dir coverage-integration yarn test:integration && yarn run cover:report",
     "cover:report": "nyc report",
-    "lint": "eslint src/** examples/** ",
-    "lint:fix": "eslint src/** examples/** --fix",
-    "pretest": "yarn lint",
+    "pretest": "yarn tslint && yarn build",
     "test": "mocha test/unit",
-    "test:integration": "mocha --timeout=10000 --require babel-polyfill test/integration",
+    "test:integration": "mocha --timeout=900000 test/integration",
     "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",
-    "docs": "jsdoc -r -c jsdoc.json -d docs --pedantic",
-    "publish:docs": "yarn docs && yarn add -D @splunk/cicd-tools && yarn cicd-publish-docs",
+    "publish:docs": "yarn ts:docs && yarn add -D @splunk/cicd-tools && yarn cicd-publish-docs",
     "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
     "stop:swagger": "docker rm -f swagger",
     "example": "node examples/*.js"
@@ -27,28 +27,30 @@
   "author": "Splunk, Inc.",
   "license": "UNLICENSED",
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "codecov": "^3.0.0",
-    "eslint": "^4.19.1",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-import": "^2.7.0",
+    "codecov": "^3.0.2",
     "is-guid": "^0.0.2",
+    "isomorphic-fetch": "^2.2.1",
     "istanbul": "^0.4.5",
     "js-yaml": "^3.11.0",
     "jsdoc": "^3.5.5",
     "mocha": "^5.0.4",
-    "nyc": "^11.6.0"
+    "nyc": "^11.6.0",
+    "rimraf": "^2.6.2",
+    "source-map-support": "^0.5.6",
+    "ts-node": "^7.0.0",
+    "tslint": "^5.10.0",
+    "tslint-config-airbnb": "^5.9.2",
+    "tslint-config-prettier": "^1.13.0",
+    "tslint-eslint-rules": "^5.3.1",
+    "typedoc": "^0.11.1",
+    "typescript": "^2.9.2"
   },
   "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
+    "@types/isomorphic-fetch": "^0.0.34",
     "js-base64": "^2.4.3",
-    "rxjs": "^5.5.8"
+    "rxjs": "^6.2.1"
   },
   "nyc": {
     "reporter": [
@@ -56,8 +58,16 @@
       "text-summary"
     ],
     "include": [
-      "**/**.js"
+      "ts_src/*.ts"
     ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "all": true,
+    "sourceMap": true,
     "exclude": [
       ".tmp",
       "ci",
@@ -66,7 +76,10 @@
       "node_modules",
       "test",
       "tmp",
-      ".eslintrc.js"
+      ".eslintrc.js",
+      "tslint.json",
+      "tsconfig.json",
+      "docs"
     ]
   }
 }

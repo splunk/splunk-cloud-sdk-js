@@ -1,14 +1,31 @@
 const config = require('../config');
-const SplunkSSC = require('../../src/splunk');
+const SplunkSSC = require('../../splunk');
 const { assert } = require('chai');
 
-const token = process.env.BEARER_TOKEN;
-const tenantID = process.env.TENANT_ID;
-const sscHost = process.env.SSC_HOST;
+const sscHost = config.playgroundHost;
+const invalidToken = config.invalidAuthToken;
+const token = config.playgroundAuthToken;
+const tenantID = config.playgroundTenant;
 
 const splunk = new SplunkSSC(sscHost, token, tenantID);
-const splunkWithIncorrectCredentials = new SplunkSSC(sscHost, config.invalidAuthToken, config.testTenant);
+const splunkWithIncorrectCredentials = new SplunkSSC(sscHost, invalidToken, tenantID);
 
+function waitForStatusToEnd(tenant, currentStatus) {
+    return new Promise((resolve, reject) => {
+        try {
+            splunk.identity.getUserProfile().then((profile) => {
+                tenantStatus = profile.tenantDetails.find((obj) => obj.tenantId == tenant)
+                if (tenantStatus.status === currentStatus) {
+                    setTimeout(() => resolve(waitForStatusToEnd(tenant, currentStatus)), 500);
+                } else {
+                    resolve(tenantStatus);
+                }
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
 // Scenario 1:
 // Integration test for Tenant User endpoints
 // 1. Add new users to the tenant using addTenantUsers() method
@@ -194,10 +211,17 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should create a new tenant', () =>
             splunk.identity.createTenant(testPostTenant1).then(response => {
                 assert(response.status === 'provisioning');
+                return waitForStatusToEnd(response.tenantId, 'provisioning');
             }));
 
-        it('should return the list of newly added test tenant', () =>
+        it('should return the list of newly added test tenant using the tenantId scope', () =>
             splunk.identity.getUserProfile(integrationTestTenantID).then(data => {
+                assert.typeOf(data, 'Object', 'response should be an object');
+                assert(data.tenantMemberships.includes(integrationTestTenantID));
+            }));
+
+        it('should return the list of newly added test tenant using the system scope', () =>
+            splunk.identity.getUserProfile().then(data => {
                 assert.typeOf(data, 'Object', 'response should be an object');
                 assert(data.tenantMemberships.includes(integrationTestTenantID));
             }));
