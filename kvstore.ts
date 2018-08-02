@@ -110,7 +110,7 @@ export class KVStoreService extends BaseApiService {
         collection: string,
         record: Map<string, string>
     ): Promise<any> => {
-        let insertRecordURL = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+        const insertRecordURL = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             namespace,
             'collections',
             collection,
