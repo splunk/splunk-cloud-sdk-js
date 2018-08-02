@@ -164,27 +164,28 @@ describe('Integration tests for KVStore Endpoints', () => {
                 assert(!response);
             }));
 
-            it("validate that after calling deleteRecordbyKey(), only 3 records are left", () => ssc.kvstore.queryRecords(testNamespace, testCollection).then(response => {
+            it("validate that after calling deleteRecordbyKey(), only 3 records are left", () => ssc.kvstore.listRecords(testNamespace, testCollection).then(response => {
                 assert.equal(response.length, 3, "The total number of remaining records after deletion process should be 3");
                 assert.equal(response[0]._key, keys[1], "The '_key' value in response is incorrect");
                 assert.equal(response[1]._key, keys[2], "The '_key' value in response is incorrect");
                 assert.equal(response[2]._key, keys[3], "The '_key' value in response is incorrect");
             }));
 
-            it("should retrieve the records based on a query", () => ssc.kvstore.queryRecords(testNamespace, testCollection, "{\"name\": \"test_record\",\"count_of_fields\": 3}").then(response => {
-                assert(response.length === 2);
-                assert.equal(response[0].type, "A", "The field 'type' should contain the value 'A'");
-                assert.equal(response[1].type, "B", "The field 'type' should contain the value 'B'");
+            it("should retrieve the records based on a query", () => ssc.kvstore.listRecords(testNamespace, testCollection, {"fields": "type"}).then(response => {
+                console.log("RESPONSE")
+                console.log(response)
+                assert.equal(response.length, 3);
             }));
 
-            it("should delete the records based on a query", () => ssc.kvstore.deleteRecords(testNamespace, testCollection, "{\"name\": \"test_record\",\"count_of_fields\": 3}").then(response => {
+            it("should delete the records based on a query", () => ssc.kvstore.deleteRecords(testNamespace, testCollection, {"name": "test_record","count_of_fields": 3}).then(response => {
                 assert(!response);
             }));
 
-            it("validate that after calling deleteRecords() based on query, only 1 record is left", () => ssc.kvstore.queryRecords(testNamespace, testCollection).then(response => {
-                assert(response.length === 1);
-                assert.equal(response[0].capacity_gb, 16, "The field 'capacity_gb' should contain the value '16'");
-            }));
+            it("validate that after calling deleteRecords() based on query, no record is left", () => {
+                return ssc.kvstore.listRecords(testNamespace, testCollection).then(response => {
+                    assert.equal(response.length, 0);
+                });
+            });
 
             it("should delete all the records", () => ssc.kvstore.deleteRecords(testNamespace, testCollection).then(response => {
                 assert(!response);

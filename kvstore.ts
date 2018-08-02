@@ -149,23 +149,16 @@ export class KVStoreService extends BaseApiService {
     public queryRecords = (
         namespace: string,
         collection: string,
-        filter?: string
-    ): Promise<Array<Map<string, string>>> => {
-        const queryArgs: QueryArgs = {};
-        if (filter) {
-            queryArgs.query = filter;
-        }
-        return this.client
-            .get(
-                this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+        filter: QueryArgs = {},
+    ): Promise<Map<string, string>> => {
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
                     namespace,
                     'collections',
                     collection,
                     'query',
-                ]),
-                queryArgs
-            )
-            .then(response => response as Array<Map<string, string>>);
+                ]);
+        return this.client
+            .get(url, filter).then(response => response as Map<string, string>);
     };
 
     /**
@@ -202,7 +195,7 @@ export class KVStoreService extends BaseApiService {
         namespace: string,
         collection: string,
         filter: QueryArgs = {}
-    ): Promise<any> => {
+    ): Promise<Map<string, string>> => {
         const url: string = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             namespace,
             'collections',
