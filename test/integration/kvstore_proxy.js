@@ -256,8 +256,6 @@ function createRecord(namespace, collection, record) {
             return response;
         })
         .catch(error => {
-            // console.log('An error was encountered while creating the record');
-            // console.log(error);
             throw error;
         });
 }
