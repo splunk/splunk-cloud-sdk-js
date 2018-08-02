@@ -100,9 +100,9 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
     });
 
     describe('Get all the records based on the given query', () => {
-        it('should return all the records present in the given collection and namespace that matches the given query', () => splunk.kvstore.queryRecords(testnamespace, testcollection, "{\"size\": \"tiny\", \"capacity_gb\": 8}").then(records => {
+        it('should return all the records present in the given collection and namespace that matches the given query', () => splunk.kvstore.queryRecords(testnamespace, testcollection).then(records => {
             assert.typeOf(records, 'array', 'response data should be an array');
-            assert.equal(records.length, 1, 'One record should be returned');
+            assert.equal(records.length, 2);
             assert.equal(records[0]._key, "TEST_RECORD_KEY_01", 'The field \'_key\' should contain the value \'TEST_RECORD_KEY_01\'');
             assert.equal(records[0].capacity_gb, 8, 'The field \'capacity_gb\' should contain the value \'8\'');
             assert.equal(records[0].description, "This is a tiny amount of GB", 'The field \'description\' should contain the value \'This is a tiny amount of GB\'');
