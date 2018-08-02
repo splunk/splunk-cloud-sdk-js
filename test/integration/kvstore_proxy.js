@@ -246,3 +246,23 @@ function createDataset(namespace, collection) {
             })
     );
 }
+
+function createRecord(namespace, collection, record) {
+    return ssc.kvstore
+        .insertRecord(namespace, collection, record)
+        .then(response => {
+            assert.notEqual(response['_key'], null);
+            assert.typeOf(response['_key'], 'string');
+            return response;
+        })
+        .catch(error => {
+            // console.log('An error was encountered while creating the record');
+            // console.log(error);
+            throw error;
+        });
+}
+
+module.exports = {
+    createDataset: createDataset,
+    createRecord: createRecord,
+};

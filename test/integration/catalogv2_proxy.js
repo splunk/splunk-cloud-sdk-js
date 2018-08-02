@@ -91,7 +91,7 @@ describe("catalog v2", () => {
         const integrationTestField1 = "integ_test_field1";
         const integrationTestField2 = "integ_test_field2";
         it("should create a test dataset, its fields, list its fields and delete the test dataset", () => {
-            ssc.catalog.createDataset({
+            return ssc.catalog.createDataset({
                 name: "integ_dataset_1000",
                 owner: "Splunk",
                 kind: "lookup",
