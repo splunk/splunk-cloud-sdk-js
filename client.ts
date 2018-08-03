@@ -8,8 +8,8 @@ import 'isomorphic-fetch';
 
 export class SplunkError extends Error {
     public code?: number;
-    public url?: Response["url"];
-    constructor(message: string, code?: number, source?: Response["url"]) {
+    public url?: Response['url'];
+    constructor(message: string, code?: number, source?: Response['url']) {
         super(message);
         this.code = code;
         this.url = source;
@@ -30,7 +30,9 @@ function handleResponse(response: Response): Promise<any> {
             const json = JSON.parse(text);
             if (!json.message) {
                 // TODO: This shouldn't go to production
-                console.log(`Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`);
+                console.log(
+                    `Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`
+                );
             }
             err = new SplunkError(json.message, response.status, response.url);
         } catch (ex) {
@@ -46,7 +48,8 @@ function handleResponse(response: Response): Promise<any> {
  * @private
  */
 // TODO(david): Should we throw if response is empty? We may get here on DELETE
-function decodeJson(text: string): any { // TODO: change to returning object
+function decodeJson(text: string): any {
+    // TODO: change to returning object
     if (text === '') {
         return text;
     }
@@ -116,9 +119,9 @@ export class ServiceClient {
     public buildPath(servicePrefix: string, pathname: string[], overrideTenant?: string): string {
         const effectiveTenant = overrideTenant || this.tenant;
         if (!effectiveTenant) {
-            throw new Error("No tenant specified");
+            throw new Error('No tenant specified');
         }
-        const path = `/${effectiveTenant}${servicePrefix}/${pathname.join("/")}`;
+        const path = `/${effectiveTenant}${servicePrefix}/${pathname.join('/')}`;
         for (const elem of pathname) {
             if (elem && elem.trim() === '') {
                 throw new Error(`Empty elements in path: ${path}`);
@@ -151,8 +154,8 @@ export class ServiceClient {
      */
     public post(path: string, data: any, query?: QueryArgs): Promise<any> {
         return fetch(this.buildUrl(path, query), {
-            method: "POST",
-            body: typeof data !== "string" ? JSON.stringify(data) : data,
+            method: 'POST',
+            body: typeof data !== 'string' ? JSON.stringify(data) : data,
             headers: this.buildHeaders(),
         }).then((response: Response) => handleResponse(response));
     }
