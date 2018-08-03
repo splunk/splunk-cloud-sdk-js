@@ -150,7 +150,7 @@ export class KVStoreService extends BaseApiService {
         if (filter) {
             queryArgs.query = filter;
         }
-        return this.client.delete(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [namespace, 'collections', collection, "query"]), {}, queryArgs);
+        return this.client.delete(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [namespace, 'collections', collection, "query"]), queryArgs);
     }
 
     /**
