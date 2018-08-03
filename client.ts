@@ -28,7 +28,6 @@ function handleResponse(response: Response): Promise<any> {
             }
             err = new SplunkError(json.message, response.status, response.url);
         } catch (ex) {
-            console.log(ex)
             err = new SplunkError(`Unknown error: ${text}`, response.status, response.url);
         }
         throw err;

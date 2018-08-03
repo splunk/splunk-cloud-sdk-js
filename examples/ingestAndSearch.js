@@ -19,7 +19,6 @@ async function createIndex(splunk, index) {
         "version": 1,
         "name": index,
         "kind": "index",
-        "module": "splunk",
         "disabled": false
     };
 
