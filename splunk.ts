@@ -4,6 +4,7 @@ import { IdentityService } from './identity';
 import { IngestService } from './ingest';
 import { KVStoreService } from './kvstore';
 import { SearchService } from './search';
+import { Action, ActionService } from "./action";
 
 /**
  * This class is a Splunk SSC client.
@@ -18,6 +19,8 @@ class SplunkSSC {
     public identity: IdentityService;
     public ingest: IngestService;
     public kvstore: KVStoreService;
+    public action: ActionService;
+
     /**
      * Build a Splunk SSC Client
      * @param url URL to Splunk SSC environment TODO: SSC name
@@ -31,6 +34,7 @@ class SplunkSSC {
         this.identity = new IdentityService(client);
         this.ingest = new IngestService(client);
         this.kvstore = new KVStoreService(client);
+        this.action = new ActionService(client);
     }
 }
 
