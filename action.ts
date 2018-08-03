@@ -10,18 +10,64 @@ export class ActionService extends BaseApiService {
      * Create a structured event to be ingested by Splunk SSC via Ingest service.
      * @param event
      */
-    public getActions = (): Promise<any> => {
-        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']));
+    public getActions = (): Promise<Action[]> => {
+        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
+            .then(response => response as Action[]);
+    }
+
+    /**
+     * Create a structured event to be ingested by Splunk SSC via Ingest service.
+     * @param event
+     */
+    public getAction = (id: Action["Name"]): Promise<Action> => {
+        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]))
+            .then(response => response as Action);
+    }
+
+    /**
+     * Create a structured event to be ingested by Splunk SSC via Ingest service.
+     * @param event
+     */
+    public deleteAction = (id: Action["Name"]): Promise<any> => {
+        return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]));
+    }
+
+
+    /**
+     * Create structured events to be ingested by Splunk SSC via Ingest service.
+     * @param events
+     */
+    public createAction = (action: Action): Promise<Action> => {
+        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
+            .then(response => response as Action);
     }
 
     /**
      * Create structured events to be ingested by Splunk SSC via Ingest service.
      * @param events
      */
-    public createAction = (action: Action): Promise<any> => {
-        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action);
+    public updateAction = (id: Action["Name"], action: ActionUpdateFields): Promise<Action> => {
+        return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), action)
+            .then(response => response as Action);
     }
 
+    /**
+     * Create structured events to be ingested by Splunk SSC via Ingest service.
+     * @param events
+     */
+    public triggerAction = (id: Action["Name"], notification: ActionNotification): Promise<ActionTriggerResponse> => {
+        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), notification)
+            .then(response => response as ActionTriggerResponse);
+    }
+
+    /**
+     * Create structured events to be ingested by Splunk SSC via Ingest service.
+     * @param events
+     */
+    public getActionStatus = (id: Action["Name"], statusId: string): Promise<ActionStatus> => {
+        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id, "status", statusId]))
+            .then(response => response as ActionStatus);
+    }
 }
 
 
@@ -83,6 +129,13 @@ interface ActionStatus {
     Message: string;
 }
 
+// ActionTriggerResponse for returning status url and parsed statusID (if possible)
+interface ActionTriggerResponse {
+    StatusID?:  string;
+    StatusURL: string;
+}
+
+
 // ActionError defines format for returned errors
 interface ActionError {
     Code: string;
@@ -113,4 +166,30 @@ interface SplunkEventPayload {
     Sourcetype: string;
     Raw: string;
     Time: string;
+}
+
+// ActionUpdateFields defines the fields that may be updated for an existing Action
+interface ActionUpdateFields {
+    // ID of action assigned by action service, all actions have this field
+    ID: string;
+    // Email action fields:
+    // HTMLPart to send via Email action
+    HTMLPart: string;
+    // SubjectPart to send via Email action
+    SubjectPart: string;
+    // TextPart to send via Email action
+    TextPart: string;
+    // TemplateName to send via Email action
+    TemplateName: string;
+    // Addresses to send to when Email action triggered
+    Addresses: string[];
+    // SNS action fields:
+    // Topic to trigger SNS action
+    Topic: string;
+    // Message to send via SNS or Webhook action
+    Message: string;
+    // Webhook action fields:
+    // WebhookURL to trigger Webhook action
+    WebhookURL: string;
+    // Message string `json:"message" binding:"required"` (defined above)
 }
