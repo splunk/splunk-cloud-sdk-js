@@ -165,7 +165,7 @@ describe('integration tests for Ingest Endpoints', () => {
             'nanos': 1,
             'source': 'mysource',
             'sourcetype': 'mysourcetype',
-            'timestamp': 1529020697
+            'timestamp': Date.now() // Millis since epoch
         };
 
         const metricEventNoDefaults = JSON.parse(JSON.stringify(metricEvent1));
