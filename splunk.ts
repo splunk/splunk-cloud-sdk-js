@@ -1,10 +1,10 @@
+import { ActionService } from "./action";
 import { CatalogService } from './catalog';
 import { ServiceClient } from './client';
 import { IdentityService } from './identity';
 import { IngestService } from './ingest';
 import { KVStoreService } from './kvstore';
 import { SearchService } from './search';
-import { Action, ActionService } from "./action";
 
 /**
  * This class is a Splunk SSC client.

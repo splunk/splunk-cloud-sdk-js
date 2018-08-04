@@ -77,13 +77,13 @@ describe("integration tests using action service", () => {
             "message":"some user msg",
         };
 
-        // it("should create action", () => ssc.action.createAction(webhookAction).then(response => {
-        //     assert.equal(response["name"],webhookAction.name);
-        //     assert.equal(response["kind"],webhookAction.kind);
-        //     assert.equal(response["webhookUrl"],webhookAction.webhookUrl);
-        //     assert.equal(response["message"],webhookAction.message);
-        //
-        // }));
+        it("should create action", () => ssc.action.createAction(webhookAction).then(response => {
+            assert.equal(response["name"],webhookAction.name);
+            assert.equal(response["kind"],webhookAction.kind);
+            assert.equal(response["webhookUrl"],webhookAction.webhookUrl);
+            assert.equal(response["message"],webhookAction.message);
+
+        }));
 
         const notification = {
             "kind": "rawJSON",
@@ -95,23 +95,17 @@ describe("integration tests using action service", () => {
         it("should trigger actions", () => ssc.action.triggerAction(webhookAction.name, notification).then(response => {
             console.log(response.headers)
             console.log(response)
-            // assert(!response);
+            assert(response.StatusID != null);
+            assert(response.StatusURL != null);
+
+            it("should get actions status", () => ssc.action.getActionStatus(webhookAction.name, response.StatusID).then(response => {
+                console.log(response);
+            }));
         }));
 
-        // it("should get actions status", () => ssc.action.getActionStatus(webhookAction.name,{"subjectPart":"new subject"}).then(response => {
-        //     console.log(response)
-        //     assert.equal(response["name"],emailAction.name);
-        //     assert.equal(response["kind"],emailAction.kind);
-        //     assert.equal(response["htmlPart"],emailAction.HTMLPart);
-        //     assert.equal(response["subjectPart"],"new subject");
-        //     assert.equal(response["textPart"],emailAction.TextPart);
-        //     assert.equal(response["templateName"],emailAction.TemplateName);
-        //     assert.deepEqual(response["addresses"],emailAction.Addresses);
-        // }));
-
-        // it("should delete actions", () => ssc.action.deleteAction(webhookAction.name).then(response=>{
-        //     assert (!response)
-        // }));
+        it("should delete actions", () => ssc.action.deleteAction(webhookAction.name).then(response=>{
+            assert (!response)
+        }));
 
     });
 

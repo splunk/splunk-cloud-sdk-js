@@ -57,8 +57,20 @@ export class ActionService extends BaseApiService {
      */
     public triggerAction = (id: Action["Name"], notification: ActionNotification): Promise<ActionTriggerResponse> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), notification)
-            .then(response => response as ActionTriggerResponse);
-    }
+            .then(response => {
+                const responseStr = response.toString();
+                if (responseStr.includes("/status/")) {
+                    const parts = responseStr.split("/status/")
+                    if (parts.length === 2) {
+                        return Promise.resolve({
+                            "StatusID": parts[1],
+                            "StatusURL": responseStr
+                        } as ActionTriggerResponse)
+                    }
+                }
+                return response as ActionTriggerResponse;
+            });
+    };
 
     /**
      * Create structured events to be ingested by Splunk SSC via Ingest service.

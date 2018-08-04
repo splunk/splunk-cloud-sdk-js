@@ -16,6 +16,12 @@ export class SplunkError extends Error {
  */
 function handleResponse(response: Response): Promise<any> {
     if (response.ok) {
+        if (response.headers) {
+            const location = response.headers.get("location")
+            if (location != null) {
+                return Promise.resolve(location)
+            }
+        }
         return response.text().then(decodeJson);
     }
     return response.text().then(text => {

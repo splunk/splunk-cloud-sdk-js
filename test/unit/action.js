@@ -103,11 +103,12 @@ describe("Action Endpoints", () => {
                 "name": "bean bag"
             }
         };
+        const expectResult = {"StatusID":"5f718aaf-f205-4af6-995f-54a3ba059b59",
+            "StatusURL":"/TEST_TENANT/action/v1/actions/test10/status/5f718aaf-f205-4af6-995f-54a3ba059b59" }
 
         it("should trigger the action", () => {
             return splunk.action.triggerAction("test10", notification).then(response => {
-
-                assert(!response);
+                assert.deepEqual(response, expectResult);
             });
         });
     });
