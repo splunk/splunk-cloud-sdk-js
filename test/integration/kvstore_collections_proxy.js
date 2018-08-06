@@ -13,6 +13,8 @@ const { createKVCollectionDataset, createRecord } = require('./catalogv2_proxy.j
 
 const ssc = new SplunkSSC(sscHost, token, tenantID);
 
+const kvCollectionName = testNamespace + '.' + testCollection;
+
 describe('Integration tests for KVStore Collection Endpoints', () => {
     // Required for `createKVCollectionDataset` helper
     let testDataset;
@@ -36,6 +38,13 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     beforeEach(() => {
         return createKVCollectionDataset(testNamespace, testCollection);
     });
+    afterEach(() => {
+        if (testDataset != null) {
+            return ssc.catalog
+                .deleteDatasetByName(testDataset.name)
+                .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
+        }
+    });
 
     // -------------------------------------------------------------------------
     // GET
@@ -43,16 +52,14 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     describe('Test GET Requests', () => {
         it('Should return no records on dataset creation', () => {
             // The data set should be created by the `beforeEach` hook
-            return ssc.kvstore
-                .listRecords(testNamespace, testCollection)
-                .then(listRecordsResponse => {
-                    assert.equal(listRecordsResponse.length, 0);
-                });
+            return ssc.kvstore.listRecords(kvCollectionName).then(listRecordsResponse => {
+                assert.equal(listRecordsResponse.length, 0);
+            });
         });
         it('Should return the record that was created', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
-                    return ssc.kvstore.listRecords(testNamespace, testCollection);
+                    return ssc.kvstore.listRecords(kvCollectionName);
                 })
                 .then(listRecordsResponse => {
                     const firstRecord = listRecordsResponse[0];
@@ -70,10 +77,10 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     // -------------------------------------------------------------------------
     describe('Test GET ?fields= parameter Requests', () => {
         it('Should return the correct record after single record insert when using empty filter', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
                     const queryParameters = '';
-                    return ssc.kvstore.listRecords(testNamespace, testCollection, '');
+                    return ssc.kvstore.listRecords(kvCollectionName, '');
                 })
                 .then(listRecordsResponse => {
                     const firstRecord = listRecordsResponse[0];
@@ -85,11 +92,11 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                 });
         });
         it('Should filter records correctly using the fields parameter for include selection', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
                     const queryParameters = { fields: 'TEST_KEY_01' };
 
-                    return ssc.kvstore.listRecords(testNamespace, testCollection, queryParameters);
+                    return ssc.kvstore.listRecords(kvCollectionName, queryParameters);
                 })
                 .then(listRecordsResponse => {
                     const firstRecord = listRecordsResponse[0];
@@ -99,16 +106,16 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                 });
         });
         it('Should filter records correctly using the fields parameter for exclude selection', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordTwo);
+                    return createRecord(kvCollectionName, recordTwo);
                 })
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordThree);
+                    return createRecord(kvCollectionName, recordThree);
                 })
                 .then(createRecordResponse => {
                     const queryParameters = { fields: 'TEST_KEY_01:0' };
-                    return ssc.kvstore.listRecords(testNamespace, testCollection, queryParameters);
+                    return ssc.kvstore.listRecords(kvCollectionName, queryParameters);
                 })
                 .then(listRecordsResponse => {
                     const firstRecord = listRecordsResponse[0];
@@ -121,17 +128,17 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                 });
         });
         it('Should error when trying filter records using the fields parameter and both the include/exclude selection', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordTwo);
+                    return createRecord(kvCollectionName, recordTwo);
                 })
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordThree);
+                    return createRecord(kvCollectionName, recordThree);
                 })
                 .then(createRecordResponse => {
                     const queryParameters = { fields: 'TEST_KEY_01,TEST_KEY_02:0' };
                     return ssc.kvstore
-                        .listRecords(testNamespace, testCollection, queryParameters)
+                        .listRecords(kvCollectionName, queryParameters)
                         .then(listRecordsResponse => {
                             assert.fail(
                                 listRecordsResponse,
@@ -156,27 +163,27 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     // -------------------------------------------------------------------------
     describe('Test GET ?count= parameter Requests', () => {
         it('Should successfully return the correct count after record insertion', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordTwo);
+                    return createRecord(kvCollectionName, recordTwo);
                 })
                 .then(createRecordResponse => {
                     const queryParameters = { count: '1' };
-                    return ssc.kvstore.listRecords(testNamespace, testCollection, queryParameters);
+                    return ssc.kvstore.listRecords(kvCollectionName, queryParameters);
                 })
                 .then(listRecordsResponse => {
                     assert.equal(listRecordsResponse.length, 1);
                 });
         });
         it('Should error on when a negative out of bounds count is specified', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordTwo);
+                    return createRecord(kvCollectionName, recordTwo);
                 })
                 .then(createRecordResponse => {
                     const queryParameters = { count: '-1' };
                     return ssc.kvstore
-                        .listRecords(testNamespace, testCollection, queryParameters)
+                        .listRecords(kvCollectionName, queryParameters)
                         .then(listRecordsResponse => {
                             assert.fail(
                                 listRecordsResponse,
@@ -197,13 +204,13 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                 });
         });
         it('Should return the full list of records when a positive out of bounds value is specified', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordTwo);
+                    return createRecord(kvCollectionName, recordTwo);
                 })
                 .then(createRecordResponse => {
                     const queryParameters = { count: '1000000' };
-                    return ssc.kvstore.listRecords(testNamespace, testCollection, queryParameters);
+                    return ssc.kvstore.listRecords(kvCollectionName, queryParameters);
                 })
                 .then(listRecordsResponse => {
                     assert.equal(listRecordsResponse.length, 2);
@@ -216,27 +223,27 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     // -------------------------------------------------------------------------
     describe('Test GET ?offset= parameter Requests', () => {
         it('Should successfully return the correct count after an offset is specified', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordTwo);
+                    return createRecord(kvCollectionName, recordTwo);
                 })
                 .then(createRecordResponse => {
                     const queryParameters = { offset: '1' };
-                    return ssc.kvstore.listRecords(testNamespace, testCollection, queryParameters);
+                    return ssc.kvstore.listRecords(kvCollectionName, queryParameters);
                 })
                 .then(listRecordsResponse => {
                     assert.equal(listRecordsResponse.length, 1);
                 });
         });
         it('Should error on when a negative out of bounds offset is specified', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordTwo);
+                    return createRecord(kvCollectionName, recordTwo);
                 })
                 .then(createRecordResponse => {
                     const queryParameters = { offset: '-1' };
                     return ssc.kvstore
-                        .listRecords(testNamespace, testCollection, queryParameters)
+                        .listRecords(kvCollectionName, queryParameters)
                         .then(listRecordsResponse => {
                             assert.fail(
                                 listRecordsResponse,
@@ -257,13 +264,13 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                 });
         });
         it('Should return an empty list of records when a positive out of bounds value is specified', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordTwo);
+                    return createRecord(kvCollectionName, recordTwo);
                 })
                 .then(createRecordResponse => {
                     const queryParameters = { offset: '1000000' };
-                    return ssc.kvstore.listRecords(testNamespace, testCollection, queryParameters);
+                    return ssc.kvstore.listRecords(kvCollectionName, queryParameters);
                 })
                 .then(listRecordsResponse => {
                     assert.equal(listRecordsResponse.length, 0);
@@ -276,16 +283,16 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     // -------------------------------------------------------------------------
     describe('Test GET ?orderby= parameter Requests', () => {
         it('Should successfully return the correct order of records', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordTwo);
+                    return createRecord(kvCollectionName, recordTwo);
                 })
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordThree);
+                    return createRecord(kvCollectionName, recordThree);
                 })
                 .then(createRecordResponse => {
                     const queryParameters = { orderby: 'TEST_KEY_02' };
-                    return ssc.kvstore.listRecords(testNamespace, testCollection, queryParameters);
+                    return ssc.kvstore.listRecords(kvCollectionName, queryParameters);
                 })
                 .then(listRecordsResponse => {
                     assert.equal(listRecordsResponse.length, 3);
@@ -295,16 +302,16 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                 });
         });
         it('Should successfully return the records in default order when a non-existent key is specified', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordTwo);
+                    return createRecord(kvCollectionName, recordTwo);
                 })
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordThree);
+                    return createRecord(kvCollectionName, recordThree);
                 })
                 .then(createRecordResponse => {
                     const queryParameters = { orderby: 'thisdoesntexistasakey' };
-                    return ssc.kvstore.listRecords(testNamespace, testCollection, queryParameters);
+                    return ssc.kvstore.listRecords(kvCollectionName, queryParameters);
                 })
                 .then(listRecordsResponse => {
                     assert.equal(listRecordsResponse.length, 3);
@@ -320,12 +327,12 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     // --------
     describe('Test GET ?fields=count=offset=orderby= parameters together', () => {
         it('Should successfully return the correct order of records', () => {
-            return createRecord(testNamespace, testCollection, recordOne)
+            return createRecord(kvCollectionName, recordOne)
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordTwo);
+                    return createRecord(kvCollectionName, recordTwo);
                 })
                 .then(createRecordResponse => {
-                    return createRecord(testNamespace, testCollection, recordThree);
+                    return createRecord(kvCollectionName, recordThree);
                 })
                 .then(createRecordResponse => {
                     const queryParameters = {
@@ -334,7 +341,7 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                         offset: '1',
                         orderby: 'TEST_KEY_02',
                     };
-                    return ssc.kvstore.listRecords(testNamespace, testCollection, queryParameters);
+                    return ssc.kvstore.listRecords(kvCollectionName, queryParameters);
                 })
                 .then(listRecordsResponse => {
                     assert.equal(listRecordsResponse.length, 1);
@@ -349,7 +356,7 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     describe('Test POST Requests', () => {
         it('Should successfully create a record', () => {
             // Testing happens in `createRecord function`
-            return createRecord(testNamespace, testCollection, recordOne);
+            return createRecord(kvCollectionName, recordOne);
         });
 
         // A namespace AND collection are required to create a kvcollection
@@ -359,18 +366,10 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                 assert.notEqual(
                     error,
                     null,
-                    `the listRecords endpoint requires a namespace and a 
+                    `the listRecords endpoint requires a namespace and a
                         collection to be provided on record creation`
                 );
             });
         });
-    });
-
-    afterEach(() => {
-        if (testDataset != null) {
-            return ssc.catalog
-                .deleteDatasetByName(testDataset.name)
-                .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
-        }
     });
 });
