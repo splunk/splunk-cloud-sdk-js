@@ -41,15 +41,12 @@ export class KVStoreService extends BaseApiService {
      * @param collection The collection whose indexes should be listed
      */
     public listIndexes = (collection: string): Promise<IndexDescription[]> => {
-        return this.client
-            .get(
-                this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-                    'collections',
-                    collection,
-                    'indexes',
-                ])
-            )
-            .then(response => response as IndexDescription[]);
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+            'collections',
+            collection,
+            'indexes',
+        ]);
+        return this.client.get(url).then(response => response as IndexDescription[]);
     };
 
     /**
@@ -58,14 +55,12 @@ export class KVStoreService extends BaseApiService {
      * @param collection The collection where the new index will be created
      */
     public createIndex = (index: IndexDescription, collection: string): Promise<any> => {
-        return this.client.post(
-            this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-                'collections',
-                collection,
-                'indexes',
-            ]),
-            index
-        );
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+            'collections',
+            collection,
+            'indexes',
+        ]);
+        return this.client.post(url, index);
     };
 
     /**
