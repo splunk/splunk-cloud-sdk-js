@@ -21,15 +21,15 @@ describe("catalog v2", () => {
     }));
     after(() => ssc.catalog.deleteDatasetByName(indexName).catch(err => console.log("Error cleaning index: " + err)));
     describe("datasets", () => {
-        // it("should return datasets", () => ssc.catalog.getDatasets().then((dslist) => {
-        //     assert(dslist.length > 0);
-        //     assert(dslist[0].kind);
-        // }));
-        //
-        // it("should return datasets with filter", () => ssc.catalog.getDatasets('kind=="index"').then((dslist) => {
-        //     assert(dslist.length > 0);
-        //     assert(dslist[0].kind === "index");
-        // }));
+        it("should return datasets", () => ssc.catalog.getDatasets().then((dslist) => {
+            assert(dslist.length > 0);
+            assert(dslist[0].kind);
+        }));
+
+        it("should return datasets with filter", () => ssc.catalog.getDatasets('kind=="index"').then((dslist) => {
+            assert(dslist.length > 0);
+            assert(dslist[0].kind === "index");
+        }));
 
         it("should allow create/delete of datasets", () => {
             const name = "foobar_test1";

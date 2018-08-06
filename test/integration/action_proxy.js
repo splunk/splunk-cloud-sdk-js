@@ -97,4 +97,25 @@ describe("integration tests using action service", () => {
             assert(!response);
         }));
     });
+
+    describe("Create/delete SNS actions", () => {
+        const action = {
+            "name": `snsAction`,
+            "kind": "sns",
+            "topic": "sns topic",
+            "message": "sns user msg"
+        };
+
+        it("should create action", () => ssc.action.createAction(action).then(response => {
+            assert.equal(response["name"], action.name);
+            assert.equal(response["kind"], action.kind);
+            assert.equal(response["topic"], action.topic);
+            assert.equal(response["message"], action.message);
+
+        }));
+
+        it("should delete actions", () => ssc.action.deleteAction(action.name).then(response => {
+            assert(!response);
+        }));
+    });
 });
