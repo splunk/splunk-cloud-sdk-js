@@ -32,9 +32,9 @@ describe("catalog v2", () => {
         }));
 
         it("should allow create/delete of datasets", () => {
-            const name = "foobar_test1";
+            const name = "foobar";
             const dataset = {
-                name: name,
+                name,
                 owner: "test@splunk.com",
                 kind: "index",
                 capabilities: "1101-00000:11010",
@@ -61,7 +61,7 @@ describe("catalog v2", () => {
 
     describe("rules", () => {
         it("should allow creation, listing, deletion of rules", () => {
-            const ruleName = "testRule_1";
+            const ruleName = "testRule";
             return ssc.catalog.createRule({
                 name: ruleName,
                 owner: "dponcelow@splunk.com",
