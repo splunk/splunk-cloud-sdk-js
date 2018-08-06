@@ -1,5 +1,4 @@
 import BaseApiService from './baseapiservice';
-import { QueryArgs } from './client';
 import { ACTION_SERVICE_PREFIX, INGEST_SERVICE_PREFIX } from "./service_prefixes";
 
 /**
