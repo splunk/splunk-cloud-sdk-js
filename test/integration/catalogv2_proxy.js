@@ -6,7 +6,6 @@ const sscHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
 const tenantID = config.playgroundTenant;
 
-
 const ssc = new SplunkSSC(sscHost, token, tenantID);
 
 describe("catalog v2", () => {
