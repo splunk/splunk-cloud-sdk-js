@@ -144,7 +144,7 @@ interface ActionStatus {
 // ActionTriggerResponse for returning status url and parsed statusID (if possible)
 interface ActionTriggerResponse {
     StatusID?:  string;
-    StatusURL: string;
+    StatusURL?: string;
 }
 
 
