@@ -11,7 +11,7 @@ const ssc = new SplunkSSC(sscHost, token, tenantID);
 describe("integration tests using action service", () => {
     describe("CRUD email actions", () => {
         const emailAction = {
-            "name": `actionTest1`,
+            "name": `crudemail_${Date.now()}`,
             "kind": "email",
             "htmlPart": "<html><h1>The HTML</h1></html>",
             "subjectPart": "The Subject",
@@ -59,7 +59,7 @@ describe("integration tests using action service", () => {
 
     describe("Trigger webhook actions", () => {
         const webhookAction = {
-            "name": `triggerWebhookAction`,
+            "name": `WebhookAction_${Date.now()}`,
             "kind": "webhook",
             "webhookUrl": "https://locahost:9999/test",
             "message": "some user msg"
@@ -100,7 +100,7 @@ describe("integration tests using action service", () => {
 
     describe("Create/delete SNS actions", () => {
         const action = {
-            "name": `snsAction`,
+            "name": `snsAction_${Date.now()}`,
             "kind": "sns",
             "topic": "sns topic",
             "message": "sns user msg"
