@@ -18,7 +18,7 @@ export class ActionService extends BaseApiService {
      * Create a structured event to be ingested by Splunk SSC via Ingest service.
      * @param event
      */
-    public getAction = (id: Action["Name"]): Promise<Action> => {
+    public getAction = (id: Action["name"]): Promise<Action> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]))
             .then(response => response as Action);
     }
@@ -27,7 +27,7 @@ export class ActionService extends BaseApiService {
      * Create a structured event to be ingested by Splunk SSC via Ingest service.
      * @param event
      */
-    public deleteAction = (id: Action["Name"]): Promise<any> => {
+    public deleteAction = (id: Action["name"]): Promise<any> => {
         return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]));
     }
 
@@ -45,7 +45,7 @@ export class ActionService extends BaseApiService {
      * Create structured events to be ingested by Splunk SSC via Ingest service.
      * @param events
      */
-    public updateAction = (id: Action["Name"], action: ActionUpdateFields): Promise<Action> => {
+    public updateAction = (id: Action["name"], action: ActionUpdateFields): Promise<Action> => {
         return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), action)
             .then(response => response as Action);
     }
@@ -54,7 +54,7 @@ export class ActionService extends BaseApiService {
      * Create structured events to be ingested by Splunk SSC via Ingest service.
      * @param events
      */
-    public triggerAction = (id: Action["Name"], notification: ActionNotification): Promise<ActionTriggerResponse> => {
+    public triggerAction = (id: Action["name"], notification: ActionNotification): Promise<ActionTriggerResponse> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), notification)
             .then(response => {
                 const responseStr = response.toString();
@@ -75,7 +75,7 @@ export class ActionService extends BaseApiService {
      * Create structured events to be ingested by Splunk SSC via Ingest service.
      * @param events
      */
-    public getActionStatus = (id: Action["Name"], statusId: string): Promise<ActionStatus> => {
+    public getActionStatus = (id: Action["name"], statusId: string): Promise<ActionStatus> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id, "status", statusId]))
             .then(response => response as ActionStatus);
     }
@@ -95,30 +95,30 @@ enum ActionKind {
 export interface Action {
     // Common action fields:
     // Name of action, all actions have this field
-    Name: string ;
+    name: string ;
     // Kind of action (email, webhook, or sns), all actions have this field
-    Kind: ActionKind ;
+    kind: ActionKind;
     // ID of action assigned by action service, all actions have this field
-    ID: string ;
+    id: string ;
     // Email action fields:
     // HTMLPart to send via Email action
-    HTMLPart :string ;
+    htmlPart :string ;
     // SubjectPart to send via Email action
-    SubjectPart: string ;
+    subjectPart: string ;
     // TextPart to send via Email action
-    TextPart: string ;
+    textPart: string ;
     // TemplateName to send via Email action
-    TemplateName: string ;
+    templateName: string ;
     // Addresses to send to when Email action triggered
-    Addresses :string[] ;
+    addresses :string[] ;
     // SNS action fields:
     // Topic to trigger SNS action
-    Topic: string ;
+    topic: string ;
     // Message to send via SNS or Webhook action
-    Message: string ;
+    message: string ;
     // Webhook action fields:
     // WebhookURL to trigger Webhook action
-    WebhookURL: string ;
+    webhookUrl: string ;
     // Message string ;message" binding:"required"` (defined above)
 }
 
@@ -135,72 +135,72 @@ enum ActionStatusState {
 
 // ActionStatus defines the state information
 interface ActionStatus {
-    State: ActionStatusState;
-    ID: string;
-    Message: string;
+    state: ActionStatusState;
+    id: string;
+    message: string;
 }
 
 // ActionTriggerResponse for returning status url and parsed statusID (if possible)
 interface ActionTriggerResponse {
-    StatusID?:  string;
-    StatusURL?: string;
+    statusId?:  string;
+    statusUrl?: string;
 }
 
 
 // ActionError defines format for returned errors
 interface ActionError {
-    Code: string;
-    Message: string;
+    code: string;
+    message: string;
 }
 
 // ActionNotificationKind defines the types of notifications
 enum ActionNotificationKind {
-    splunkEvent,
-    rawJSON,
+    splunkEvent = "splunkEvent",
+    rawJSON = "rawJSON",
 }
 
 // ActionNotification defines the action notification format
 interface ActionNotification {
-    EmailImmediately: boolean;
-    Severity: number;
-    Kind: ActionNotificationKind;
-    Tenant: string;
-    UserID: string;
-    Payload: any;
+    emailImmediately: boolean;
+    severity: number;
+    kind: ActionNotificationKind;
+    tenant: string;
+    userId: string;
+    payload: any;
 }
 
 // SplunkEventPayload is the payload for a notification coming from Splunk
 interface SplunkEventPayload {
-    Index: string;
-    Host: string;
-    Source: string;
-    Sourcetype: string;
-    Raw: string;
-    Time: string;
+    index: string;
+    host: string;
+    source: string;
+    sourcetype: string;
+    raw: string;
+    time: string;
 }
 
 // ActionUpdateFields defines the fields that may be updated for an existing Action
 interface ActionUpdateFields {
     // ID of action assigned by action service, all actions have this field
-    ID: string;
+    id: string;
     // Email action fields:
     // HTMLPart to send via Email action
-    HTMLPart: string;
+    htmlPart: string;
     // SubjectPart to send via Email action
-    SubjectPart: string;
+    subjectPart: string;
     // TextPart to send via Email action
-    TextPart: string;
+    textPart: string;
     // TemplateName to send via Email action
-    TemplateName: string;
+    templateName: string;
     // Addresses to send to when Email action triggered
-    Addresses: string[];
+    addresses: string[];
     // SNS action fields:
     // Topic to trigger SNS action
-    Topic: string;
+    topic: string;
     // Message to send via SNS or Webhook action
-    Message: string;
+    message: string;
     // Webhook action fields:
     // WebhookURL to trigger Webhook action
-    WebhookURL: string;
+    webhookUrl: string;
     // Message string `json:"message" binding:"required"` (defined above)
 }
