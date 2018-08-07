@@ -7,6 +7,7 @@ const token = config.playgroundAuthToken;
 const tenantID = config.playgroundTenant;
 const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
+const testKVCollectionName = testNamespace + '.' + testCollection;
 
 const { createKVCollectionDataset, createRecord } = require('./catalogv2_proxy.js');
 
@@ -39,17 +40,15 @@ describe('Integration tests for KVStore Endpoints', () => {
     describe('Integration tests for KVStore Collection Stats Endpoints', () => {
         describe('Get the stats of a new collections', () => {
             it('Should return expected defaults', () => {
-                return ssc.kvstore
-                    .getCollectionStats(testNamespace + '.' + testCollection)
-                    .then(statsResponse => {
-                        assert.equal(statsResponse.count, 0);
-                        assert.equal(statsResponse.nindexes, 1);
-                        // This is a bug, the `ns` property is actually the
-                        // collection and will need to be updated when kv
-                        // store fixes it
-                        // See https://jira.splunk.com/browse/SSC-4205
-                        assert.equal(statsResponse.ns, testNamespace + '.' + testCollection);
-                    });
+                return ssc.kvstore.getCollectionStats(testKVCollectionName).then(statsResponse => {
+                    assert.equal(statsResponse.count, 0);
+                    assert.equal(statsResponse.nindexes, 1);
+                    // This is a bug, the `ns` property is actually the
+                    // collection and will need to be updated when kv
+                    // store fixes it
+                    // See https://jira.splunk.com/browse/SSC-4205
+                    assert.equal(statsResponse.ns, testKVCollectionName);
+                });
             });
         });
     });
@@ -74,26 +73,24 @@ describe('Integration tests for KVStore Endpoints', () => {
                                 Namespace: testNamespace,
                                 Fields: fields,
                             },
-                            testNamespace + '.' + testCollection
+                            testKVCollectionName
                         )
                         .then(response => {
                             assert(response.name === testIndex);
                         }));
 
                 it('should return the newly created index', () =>
-                    ssc.kvstore.listIndexes(testNamespace + '.' + testCollection).then(response => {
+                    ssc.kvstore.listIndexes(testKVCollectionName).then(response => {
                         assert(response.length === 1);
                     }));
 
                 it('should delete the specified index', () =>
-                    ssc.kvstore
-                        .deleteIndex(testIndex, testNamespace + '.' + testCollection)
-                        .then(response => {
-                            assert(!response);
-                        }));
+                    ssc.kvstore.deleteIndex(testIndex, testKVCollectionName).then(response => {
+                        assert(!response);
+                    }));
 
                 it('should not return any index', () =>
-                    ssc.kvstore.listIndexes(testNamespace + '.' + testCollection).then(response => {
+                    ssc.kvstore.listIndexes(testKVCollectionName).then(response => {
                         assert(response.length === 0);
                     }));
             });
@@ -116,7 +113,7 @@ describe('Integration tests for KVStore Endpoints', () => {
 
             it('should throw 404 index not found error as index being deleted does not exist', () =>
                 ssc.kvstore
-                    .deleteIndex('testIndex2', testNamespace + '.' + testCollection)
+                    .deleteIndex('testIndex2', testKVCollectionName)
                     .then(response => assert.fail(response), err => assert.equal(err.code, '404')));
         });
 
@@ -159,7 +156,7 @@ describe('Integration tests for KVStore Endpoints', () => {
             let keys;
             it('should create a new record', () =>
                 ssc.kvstore
-                    .insertRecords(testNamespace + '.' + testCollection, integrationTestRecord)
+                    .insertRecords(testKVCollectionName, integrationTestRecord)
                     .then(response => {
                         assert.equal(
                             response.length,
@@ -170,36 +167,32 @@ describe('Integration tests for KVStore Endpoints', () => {
                     }));
 
             it('should retrieve the newly created record by key', () =>
-                ssc.kvstore
-                    .getRecordByKey(testNamespace + '.' + testCollection, keys[0])
-                    .then(response => {
-                        assert(response._key.length !== 0);
-                        assert.equal(
-                            response.capacity_gb,
-                            8,
-                            "The field 'capacity_gb' should contain the value '8'"
-                        );
-                        assert.equal(
-                            response.description,
-                            'This is a tiny amount of GB',
-                            "The field 'description' should contain the value 'This is a tiny amount of GB'"
-                        );
-                        assert.equal(
-                            response.size,
-                            'tiny',
-                            "The field 'size' should contain the value 'tiny'"
-                        );
-                    }));
+                ssc.kvstore.getRecordByKey(testKVCollectionName, keys[0]).then(response => {
+                    assert(response._key.length !== 0);
+                    assert.equal(
+                        response.capacity_gb,
+                        8,
+                        "The field 'capacity_gb' should contain the value '8'"
+                    );
+                    assert.equal(
+                        response.description,
+                        'This is a tiny amount of GB',
+                        "The field 'description' should contain the value 'This is a tiny amount of GB'"
+                    );
+                    assert.equal(
+                        response.size,
+                        'tiny',
+                        "The field 'size' should contain the value 'tiny'"
+                    );
+                }));
 
             it('should delete the newly created record by key', () =>
-                ssc.kvstore
-                    .deleteRecordByKey(testNamespace + '.' + testCollection, keys[0])
-                    .then(response => {
-                        assert(!response);
-                    }));
+                ssc.kvstore.deleteRecordByKey(testKVCollectionName, keys[0]).then(response => {
+                    assert(!response);
+                }));
 
             it('validate that after calling deleteRecordbyKey(), only 3 records are left', () =>
-                ssc.kvstore.listRecords(testNamespace + '.' + testCollection).then(response => {
+                ssc.kvstore.listRecords(testKVCollectionName).then(response => {
                     assert.equal(
                         response.length,
                         3,
@@ -223,15 +216,13 @@ describe('Integration tests for KVStore Endpoints', () => {
                 }));
 
             it('should retrieve the records based on a query', () =>
-                ssc.kvstore
-                    .listRecords(testNamespace + '.' + testCollection, { fields: 'type' })
-                    .then(response => {
-                        assert.equal(response.length, 3);
-                    }));
+                ssc.kvstore.listRecords(testKVCollectionName, { fields: 'type' }).then(response => {
+                    assert.equal(response.length, 3);
+                }));
 
             it('should delete the records based on a query', () =>
                 ssc.kvstore
-                    .deleteRecords(testNamespace + '.' + testCollection, {
+                    .deleteRecords(testKVCollectionName, {
                         name: 'test_record',
                         count_of_fields: 3,
                     })
@@ -240,20 +231,18 @@ describe('Integration tests for KVStore Endpoints', () => {
                     }));
 
             it('validate that after calling deleteRecords() based on query, no record is left', () => {
-                return ssc.kvstore
-                    .listRecords(testNamespace + '.' + testCollection)
-                    .then(response => {
-                        assert.equal(response.length, 0);
-                    });
+                return ssc.kvstore.listRecords(testKVCollectionName).then(response => {
+                    assert.equal(response.length, 0);
+                });
             });
 
             it('should delete all the records', () =>
-                ssc.kvstore.deleteRecords(testNamespace + '.' + testCollection).then(response => {
+                ssc.kvstore.deleteRecords(testKVCollectionName).then(response => {
                     assert(!response);
                 }));
 
             it('validate that after calling deleteRecords(), no records should be returned', () =>
-                ssc.kvstore.queryRecords(testNamespace + '.' + testCollection).then(response => {
+                ssc.kvstore.queryRecords(testKVCollectionName).then(response => {
                     assert.equal(response.length, 0, 'No records should be returned');
                 }));
         });
