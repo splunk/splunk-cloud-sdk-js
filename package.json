@@ -6,7 +6,7 @@
   "scripts": {
     "tslint": "tslint -p tsconfig.json",
     "tslint:fix": "tslint -p tsconfig.json --fix",
-    "ts:docs": "rm -rf docs && typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/ --inlineSourceMap --module commonjs --theme minimal --excludePrivate",
+    "docs": "rm -rf docs && typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/ --inlineSourceMap --module commonjs --theme minimal --excludePrivate",
     "build": "tsc -p tsconfig.json",
     "clean": "rm *.js *.map",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
@@ -19,7 +19,7 @@
     "test:integration": "mocha --timeout=900000 test/integration",
     "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",
-    "publish:docs": "yarn ts:docs && yarn add -D @splunk/cicd-tools && yarn cicd-publish-docs",
+    "publish:docs": "yarn docs && yarn add -D @splunk/cicd-tools && yarn cicd-publish-docs",
     "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
     "stop:swagger": "docker rm -f swagger",
     "example": "node examples/*.js"
