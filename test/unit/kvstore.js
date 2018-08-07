@@ -79,37 +79,17 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
         it('should return an array of keys of the newly created records in the given collection and namespace', () =>
             splunk.kvstore.insertRecords(testCollection, testRecords).then(keys => {
                 assert.typeOf(keys, 'array', 'response data should be an array');
-                assert.equal(
-                    keys.length,
-                    3,
-                    'Three keys should be returned corresponding to the three newly created records'
-                );
+                assert.equal(keys.length, 3);
             }));
     });
 
     describe('Get record by key', () => {
         it('should return a record corresponding to the given key', () =>
             splunk.kvstore.getRecordByKey(testCollection, 'TEST_RECORD_KEY_01').then(record => {
-                assert.equal(
-                    record._key,
-                    'TEST_RECORD_KEY_01',
-                    "The field '_key' should contain the value 'TEST_RECORD_KEY_01'"
-                );
-                assert.equal(
-                    record.capacity_gb,
-                    8,
-                    "The field 'capacity_gb' should contain the value '8'"
-                );
-                assert.equal(
-                    record.description,
-                    'This is a tiny amount of GB',
-                    "The field 'description' should contain the value 'This is a tiny amount of GB'"
-                );
-                assert.equal(
-                    record.size,
-                    'tiny',
-                    "The field 'size' should contain the value 'tiny'"
-                );
+                assert.equal(record._key, 'TEST_RECORD_KEY_01');
+                assert.equal(record.capacity_gb, 8);
+                assert.equal(record.description, 'This is a tiny amount of GB');
+                assert.equal(record.size, 'tiny');
             }));
     });
 
@@ -127,16 +107,8 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
             splunk.kvstore.queryRecords(testCollection).then(records => {
                 assert.typeOf(records, 'array', 'response data should be an array');
                 assert.deepEqual(records.length, 2, 'Two records should be returned');
-                assert.equal(
-                    records[0]._key,
-                    'TEST_RECORD_KEY_01',
-                    "The field '_key' should contain the value 'TEST_RECORD_KEY_01'"
-                );
-                assert.equal(
-                    records[1]._key,
-                    'TEST_RECORD_KEY_02',
-                    "The field '_key' should contain the value 'TEST_RECORD_KEY_02'"
-                );
+                assert.equal(records[0]._key, 'TEST_RECORD_KEY_01');
+                assert.equal(records[1]._key, 'TEST_RECORD_KEY_02');
             }));
     });
 
@@ -145,26 +117,10 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
             splunk.kvstore.queryRecords(testCollection).then(records => {
                 assert.typeOf(records, 'array', 'response data should be an array');
                 assert.equal(records.length, 2);
-                assert.equal(
-                    records[0]._key,
-                    'TEST_RECORD_KEY_01',
-                    "The field '_key' should contain the value 'TEST_RECORD_KEY_01'"
-                );
-                assert.equal(
-                    records[0].capacity_gb,
-                    8,
-                    "The field 'capacity_gb' should contain the value '8'"
-                );
-                assert.equal(
-                    records[0].description,
-                    'This is a tiny amount of GB',
-                    "The field 'description' should contain the value 'This is a tiny amount of GB'"
-                );
-                assert.equal(
-                    records[0].size,
-                    'tiny',
-                    "The field 'size' should contain the value 'tiny'"
-                );
+                assert.equal(records[0]._key, 'TEST_RECORD_KEY_01');
+                assert.equal(records[0].capacity_gb, 8);
+                assert.equal(records[0].description, 'This is a tiny amount of GB');
+                assert.equal(records[0].size, 'tiny');
             }));
     });
 
