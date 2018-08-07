@@ -13,42 +13,42 @@ describe("integration tests using action service", () => {
         const emailAction = {
             "name": `actionTest1`,
             "kind": "email",
-            "HTMLPart": "<html><h1>The HTML</h1></html>",
-            "SubjectPart": "The Subject",
-            "TextPart": "The Text",
-            "TemplateName": "template1000",
-            "Addresses": ["test1@splunk.com", "test2@splunk.com"]
+            "htmlPart": "<html><h1>The HTML</h1></html>",
+            "subjectPart": "The Subject",
+            "textPart": "The Text",
+            "templateName": "template1000",
+            "addresses": ["test1@splunk.com", "test2@splunk.com"]
         };
 
         it("should create action", () => ssc.action.createAction(emailAction).then(response => {
             assert.equal(response["name"], emailAction.name);
             assert.equal(response["kind"], emailAction.kind);
-            assert.equal(response["htmlPart"], emailAction.HTMLPart);
-            assert.equal(response["subjectPart"], emailAction.SubjectPart);
-            assert.equal(response["textPart"], emailAction.TextPart);
-            assert.equal(response["templateName"], emailAction.TemplateName);
-            assert.deepEqual(response["addresses"], emailAction.Addresses);
+            assert.equal(response["htmlPart"], emailAction.htmlPart);
+            assert.equal(response["subjectPart"], emailAction.subjectPart);
+            assert.equal(response["textPart"], emailAction.textPart);
+            assert.equal(response["templateName"], emailAction.templateName);
+            assert.deepEqual(response["addresses"], emailAction.addresses);
 
         }));
 
         it("should get actions", () => ssc.action.getAction(emailAction.name).then(response => {
             assert.equal(response["name"], emailAction.name);
             assert.equal(response["kind"], emailAction.kind);
-            assert.equal(response["htmlPart"], emailAction.HTMLPart);
-            assert.equal(response["subjectPart"], emailAction.SubjectPart);
-            assert.equal(response["textPart"], emailAction.TextPart);
-            assert.equal(response["templateName"], emailAction.TemplateName);
-            assert.deepEqual(response["addresses"], emailAction.Addresses);
+            assert.equal(response["htmlPart"], emailAction.htmlPart);
+            assert.equal(response["subjectPart"], emailAction.subjectPart);
+            assert.equal(response["textPart"], emailAction.textPart);
+            assert.equal(response["templateName"], emailAction.templateName);
+            assert.deepEqual(response["addresses"], emailAction.addresses);
         }));
 
         it("should update actions", () => ssc.action.updateAction(emailAction.name, { "subjectPart": "new subject" }).then(response => {
             assert.equal(response["name"], emailAction.name);
             assert.equal(response["kind"], emailAction.kind);
-            assert.equal(response["htmlPart"], emailAction.HTMLPart);
+            assert.equal(response["htmlPart"], emailAction.htmlPart);
             assert.equal(response["subjectPart"], "new subject");
-            assert.equal(response["textPart"], emailAction.TextPart);
-            assert.equal(response["templateName"], emailAction.TemplateName);
-            assert.deepEqual(response["addresses"], emailAction.Addresses);
+            assert.equal(response["textPart"], emailAction.textPart);
+            assert.equal(response["templateName"], emailAction.templateName);
+            assert.deepEqual(response["addresses"], emailAction.addresses);
         }));
 
         it("should delete actions", () => ssc.action.deleteAction(emailAction.name).then(response => {
