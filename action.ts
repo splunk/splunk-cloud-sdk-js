@@ -12,8 +12,7 @@ import { ACTION_SERVICE_PREFIX } from './service_prefixes';
  */
 export class ActionService extends BaseApiService {
     /**
-     * Get actions in action service.
-     * @param Action[]
+     * Get all actions in action service.
      */
     public getActions = (): Promise<Action[]> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
@@ -22,6 +21,7 @@ export class ActionService extends BaseApiService {
 
     /**
      * Get an action by name
+     * @param name of the action
      */
     public getAction = (id: Action['name']): Promise<Action> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]))
@@ -30,6 +30,7 @@ export class ActionService extends BaseApiService {
 
     /**
      * Delete an action by name
+     * @param name of the action
      */
     public deleteAction = (id: Action['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]));
@@ -38,6 +39,7 @@ export class ActionService extends BaseApiService {
 
     /**
      * Create an action
+     * @param input action
      */
     public createAction = (action: Action): Promise<Action> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
@@ -46,6 +48,7 @@ export class ActionService extends BaseApiService {
 
     /**
      * Update an action
+     * @param name of the action
      */
     public updateAction = (id: Action['name'], action: ActionUpdateFields): Promise<Action> => {
         return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), action)
@@ -54,6 +57,7 @@ export class ActionService extends BaseApiService {
 
     /**
      * Trigger an action
+     * @param name of the action
      */
     public triggerAction = (id: Action['name'], notification: ActionNotification): Promise<ActionTriggerResponse> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), notification)
@@ -74,6 +78,7 @@ export class ActionService extends BaseApiService {
 
     /**
      * Get action status
+     * @param name of the action
      */
     public getActionStatus = (id: Action['name'], statusId: string): Promise<ActionStatus> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id, 'status', statusId]))
@@ -84,10 +89,9 @@ export class ActionService extends BaseApiService {
 
 // ActionKind reflects the kinds of actions supported by the Action service
 enum ActionKind {
-
-    email,
-    webhook,
-    sns,
+    email = 'email',
+    webhook = 'webhook',
+    sns = 'sns',
 }
 
 // Action defines the fields for email, sns, and webhooks as one aggregated model
@@ -124,7 +128,6 @@ export interface Action {
 
 // ActionStatusState reflects the status of the action
 enum ActionStatusState {
-
     queue = 'QUEUED',
     running = 'RUNNING',
     done = 'DONE',

@@ -64,7 +64,7 @@ describe('catalog v2', () => {
                         );
                     })
                     .then(() =>
-                        ssc.catalog.getRules(`name=='${rule.name}"`).then(rules => {
+                        ssc.catalog.getRules(`name=="${rule.name}"`).then(rules => {
                             assert(
                                 rules.length >= 1,
                                 'We should have a rule with the name we just created'
