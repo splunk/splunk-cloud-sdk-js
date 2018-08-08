@@ -13,6 +13,7 @@ import { ACTION_SERVICE_PREFIX } from './service_prefixes';
 export class ActionService extends BaseApiService {
     /**
      * Get all actions in action service.
+     * @return(s) Promise of all actions
      */
     public getActions = (): Promise<Action[]> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
@@ -21,7 +22,8 @@ export class ActionService extends BaseApiService {
 
     /**
      * Get an action by name
-     * @param name of the action
+     * @param id name of the action
+     * @return Promise of an action
      */
     public getAction = (id: Action['name']): Promise<Action> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]))
@@ -30,7 +32,8 @@ export class ActionService extends BaseApiService {
 
     /**
      * Delete an action by name
-     * @param name of the action
+     * @param id name of the action
+     * @return Promise of object
      */
     public deleteAction = (id: Action['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]));
@@ -39,7 +42,8 @@ export class ActionService extends BaseApiService {
 
     /**
      * Create an action
-     * @param input action
+     * @param action input action
+     * @return Promise of an action
      */
     public createAction = (action: Action): Promise<Action> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
@@ -48,7 +52,9 @@ export class ActionService extends BaseApiService {
 
     /**
      * Update an action
-     * @param name of the action
+     * @param id name of the action
+     * @param action action updates
+     * @return Promise of an action
      */
     public updateAction = (id: Action['name'], action: ActionUpdateFields): Promise<Action> => {
         return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), action)
@@ -57,7 +63,9 @@ export class ActionService extends BaseApiService {
 
     /**
      * Trigger an action
-     * @param name of the action
+     * @param id name of the action
+     * @param notification action notification
+     * @return Promise of actionTriggerResponse
      */
     public triggerAction = (id: Action['name'], notification: ActionNotification): Promise<ActionTriggerResponse> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), notification)
@@ -78,7 +86,9 @@ export class ActionService extends BaseApiService {
 
     /**
      * Get action status
-     * @param name of the action
+     * @param id name of the action
+     * @param statusId statusId
+     * @return Promise of actionStatus
      */
     public getActionStatus = (id: Action['name'], statusId: string): Promise<ActionStatus> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id, 'status', statusId]))
