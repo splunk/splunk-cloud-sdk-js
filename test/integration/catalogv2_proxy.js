@@ -1,6 +1,6 @@
-const config = require("../config");
-const SplunkSSC = require("../../splunk");
-const { assert } = require("chai");
+const config = require('../config');
+const SplunkSSC = require('../../splunk');
+const { assert } = require('chai');
 
 const sscHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
@@ -8,7 +8,7 @@ const tenantID = config.playgroundTenant;
 
 const ssc = new SplunkSSC(sscHost, token, tenantID);
 
-describe("catalog v2", () => {
+describe('catalog v2', () => {
     const indexName = `idx_${Date.now()}`;
 
     // Create an index to ensure there is something to return
@@ -64,7 +64,7 @@ describe("catalog v2", () => {
                         );
                     })
                     .then(() =>
-                        ssc.catalog.getRules(`name=="${rule.name}"`).then(rules => {
+                        ssc.catalog.getRules(`name=='${rule.name}"`).then(rules => {
                             assert(
                                 rules.length >= 1,
                                 'We should have a rule with the name we just created'
