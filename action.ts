@@ -1,5 +1,11 @@
-import BaseApiService from "./baseapiservice";
-import { ACTION_SERVICE_PREFIX } from "./service_prefixes";
+/*
+Copyright © 2018 Splunk Inc.
+SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
+without a valid written license from Splunk Inc. is PROHIBITED.
+*/
+
+import BaseApiService from './baseapiservice';
+import { ACTION_SERVICE_PREFIX } from './service_prefixes';
 
 /**
  * Encapsulates Action service endpoints
@@ -10,23 +16,23 @@ export class ActionService extends BaseApiService {
      * @param Action[]
      */
     public getActions = (): Promise<Action[]> => {
-        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ["actions"]))
+        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
             .then(response => response as Action[]);
     };
 
     /**
      * Get an action by name
      */
-    public getAction = (id: Action["name"]): Promise<Action> => {
-        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ["actions", id]))
+    public getAction = (id: Action['name']): Promise<Action> => {
+        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]))
             .then(response => response as Action);
     };
 
     /**
      * Delete an action by name
      */
-    public deleteAction = (id: Action["name"]): Promise<any> => {
-        return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ["actions", id]));
+    public deleteAction = (id: Action['name']): Promise<any> => {
+        return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]));
     };
 
 
@@ -34,31 +40,31 @@ export class ActionService extends BaseApiService {
      * Create an action
      */
     public createAction = (action: Action): Promise<Action> => {
-        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ["actions"]), action)
+        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
             .then(response => response as Action);
     };
 
     /**
      * Update an action
      */
-    public updateAction = (id: Action["name"], action: ActionUpdateFields): Promise<Action> => {
-        return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ["actions", id]), action)
+    public updateAction = (id: Action['name'], action: ActionUpdateFields): Promise<Action> => {
+        return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), action)
             .then(response => response as Action);
     };
 
     /**
      * Trigger an action
      */
-    public triggerAction = (id: Action["name"], notification: ActionNotification): Promise<ActionTriggerResponse> => {
-        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ["actions", id]), notification)
+    public triggerAction = (id: Action['name'], notification: ActionNotification): Promise<ActionTriggerResponse> => {
+        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), notification)
             .then(response => {
                 const responseStr = response.toString();
-                if (responseStr.includes("/status/")) {
-                    const parts = responseStr.split("/status/");
+                if (responseStr.includes('/status/')) {
+                    const parts = responseStr.split('/status/');
                     if (parts.length === 2) {
                         return Promise.resolve({
-                            "StatusID": parts[1],
-                            "StatusURL": responseStr
+                            'StatusID': parts[1],
+                            'StatusURL': responseStr
                         } as ActionTriggerResponse);
                     }
                 }
@@ -69,8 +75,8 @@ export class ActionService extends BaseApiService {
     /**
      * Get action status
      */
-    public getActionStatus = (id: Action["name"], statusId: string): Promise<ActionStatus> => {
-        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ["actions", id, "status", statusId]))
+    public getActionStatus = (id: Action['name'], statusId: string): Promise<ActionStatus> => {
+        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id, 'status', statusId]))
             .then(response => response as ActionStatus);
     };
 }
@@ -119,10 +125,10 @@ export interface Action {
 // ActionStatusState reflects the status of the action
 enum ActionStatusState {
 
-    queue = "QUEUED",
-    inProgress = "IN PROGRESS",
-    done = "DONE",
-    failed = "FAILED",
+    queue = 'QUEUED',
+    inProgress = 'IN PROGRESS',
+    done = 'DONE',
+    failed = 'FAILED',
 }
 
 // ActionStatus defines the state information
@@ -147,8 +153,8 @@ interface ActionError {
 
 // ActionNotificationKind defines the types of notifications
 enum ActionNotificationKind {
-    splunkEvent = "splunkEvent",
-    rawJSON = "rawJSON",
+    splunkEvent = 'splunkEvent',
+    rawJSON = 'rawJSON',
 }
 
 // ActionNotification defines the action notification format

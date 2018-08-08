@@ -4,7 +4,7 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
-import { ActionService } from "./action";
+import { ActionService } from './action';
 import { CatalogService } from './catalog';
 import { ServiceClient } from './client';
 import { IdentityService } from './identity';
