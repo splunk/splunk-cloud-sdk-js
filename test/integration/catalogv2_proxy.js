@@ -10,7 +10,6 @@ const ssc = new SplunkSSC(sscHost, token, tenantID);
 
 describe('catalog v2', () => {
     const indexName = `idx_${Date.now()}`;
-
     // Create an index to ensure there is something to return
     before(() => createIndexDataset(indexName));
     after(() =>
@@ -76,7 +75,6 @@ describe('catalog v2', () => {
                     )
             );
         });
-
     }).timeout(10000);
 
     describe("dataset fields", () => {
