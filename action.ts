@@ -126,7 +126,7 @@ export interface Action {
 enum ActionStatusState {
 
     queue = 'QUEUED',
-    inProgress = 'IN PROGRESS',
+    running = 'RUNNING',
     done = 'DONE',
     failed = 'FAILED',
 }
@@ -159,22 +159,20 @@ enum ActionNotificationKind {
 
 // ActionNotification defines the action notification format
 interface ActionNotification {
-    emailImmediately: boolean;
-    severity: number;
     kind: ActionNotificationKind;
     tenant: string;
-    userId: string;
     payload: any;
 }
 
 // SplunkEventPayload is the payload for a notification coming from Splunk
 interface SplunkEventPayload {
-    index: string;
+    event: any;
+    fields: any;
     host: string;
+    index: string;
     source: string;
     sourcetype: string;
-    raw: string;
-    time: string;
+    time: number;
 }
 
 // ActionUpdateFields defines the fields that may be updated for an existing Action
