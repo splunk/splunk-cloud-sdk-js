@@ -64,7 +64,7 @@ describe("catalog v2", () => {
             return ssc.catalog.createRule({
                 name: ruleName,
                 owner: "dponcelow@splunk.com",
-                match: "host::192.168.0.1"
+                match: "sourcetype::access_combined",
             }).then((rule) => ssc.catalog.getRules().then(ruleList => {
                 assert(ruleList.length >= 1, "We should have at least one rule after creating one");
             }).then(() => ssc.catalog.getRules(`name=="${rule.name}"`).then((rules) => {
