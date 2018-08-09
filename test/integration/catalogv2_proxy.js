@@ -242,7 +242,7 @@ function createRule(ruleName) {
                 return ssc.catalog.createRule({
                     name: ruleName,
                     owner: 'SSCSDKJSTEST@splunk.com',
-                    match: 'host::192.168.0.1',
+                    match: 'sourcetype::192.168.0.1',
                 });
             })
             // Return the rule testing
