@@ -5,6 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import 'isomorphic-fetch';
+import {RequestHeaders} from "./kvstore";
 
 export class SplunkError extends Error {
     public code?: number;
@@ -22,7 +23,11 @@ export class SplunkError extends Error {
  */
 function handleResponse(response: Response): Promise<any> {
     if (response.ok) {
-        return response.text().then(decodeJson);
+        if (response.headers.get('Content-Type') === 'text/csv' || response.headers.get('Content-Type') === 'application/gzip') {
+            return response.text();
+        } else {
+            return response.text().then(decodeJson);
+        }
     }
     return response.text().then(text => {
         let err: Error;
@@ -108,12 +113,18 @@ export class ServiceClient {
     /**
      * Builds headers required for request to Splunk SSC (auth, content-type, etc)
      */
-    private buildHeaders(): Headers {
+    private buildHeaders(headers?: RequestHeaders): Headers {
         // TODO: Cache
-        return new Headers({
+        var requestParamHeaders: Headers = new Headers({
             'Authorization': `Bearer ${this.token}`,
-            'Content-Type': 'application/json',
-        });
+            'Content-Type': 'application/json',});
+
+        if (headers != undefined && headers != {}) {
+            Object.keys(headers).forEach(key => {
+                requestParamHeaders.append(key, headers[key])
+            })
+        }
+        return requestParamHeaders;
     }
 
     public buildPath(servicePrefix: string, pathname: string[], overrideTenant?: string): string {
@@ -137,10 +148,10 @@ export class ServiceClient {
      * @param path Path portion of the URL to request from Splunk
      * @param query Object that contains query parameters
      */
-    public get(path: string, query?: QueryArgs): Promise<any> {
+    public get(path: string, query?: QueryArgs, headers?: RequestHeaders): Promise<any> {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
-            headers: this.buildHeaders(),
+            headers: this.buildHeaders(headers),
         }).then((response: Response) => handleResponse(response));
     }
 

@@ -37,6 +37,40 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
+     * Gets all the collections.
+     */
+    public getCollections = (): Promise<CollectionDefinition[]> => {
+        return this.client
+            .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+                'collections'
+            ]))
+            .then(response => response as CollectionDefinition[]);
+    };
+
+    /**
+     * Exports the specified collection records to an external file.
+     * @param collection The collection whose records should be exported
+     * @param contentType The contentType (csv or gzip) of the records file to be exported
+     */
+    public exportCollection = (collection: string, contentType: ExportCollectionContentType): Promise<string> => {
+        console.log(contentType)
+        var requestHeaders: RequestHeaders = {}
+        if (contentType == ExportCollectionContentType.CSV) {
+            requestHeaders = {'Accept': 'text/csv'}
+        } else {
+            requestHeaders = {'Accept': 'application/gzip'}
+        }
+
+        return this.client
+            .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+                'collections',
+                collection,
+                'export',
+            ]), {}, requestHeaders)
+            .then(response => response as string);
+    };
+
+    /**
      * Retrieves all the indexes in a given namespace and collection.
      * @param collection The collection whose indexes should be listed
      */
@@ -185,7 +219,6 @@ export interface PingOKBody {
 
 export interface CollectionDefinition {
     collection: string;
-    namespace: string;
 }
 
 export interface CollectionDescription {
@@ -213,4 +246,13 @@ export interface IndexDescription {
     fields: IndexFieldDefinition[];
     name?: string;
     namespace?: string;
+}
+
+export enum ExportCollectionContentType {
+    CSV,
+    GZIP,
+}
+
+export interface RequestHeaders {
+    [key: string]: string;
 }
