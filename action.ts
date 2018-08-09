@@ -13,7 +13,7 @@ import { ACTION_SERVICE_PREFIX } from './service_prefixes';
 export class ActionService extends BaseApiService {
     /**
      * Get all actions in action service.
-     * @return(s) Promise of all actions
+     * @returns Promise of all actions
      */
     public getActions = (): Promise<Action[]> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
@@ -132,7 +132,6 @@ export interface Action {
     // Webhook action fields:
     // WebhookURL to trigger Webhook action
     webhookUrl?: string;
-    // Message string ;message" binding:"required"` (defined above)
 }
 
 
@@ -211,5 +210,4 @@ interface ActionUpdateFields {
     // Webhook action fields:
     // WebhookURL to trigger Webhook action
     webhookUrl?: string;
-    // Message string `json:"message" binding:"required"` (defined above)
 }
