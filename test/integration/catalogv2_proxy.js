@@ -10,7 +10,6 @@ const ssc = new SplunkSSC(sscHost, token, tenantID);
 
 describe('catalog v2', () => {
     const indexName = `idx_${Date.now()}`;
-    
     // Create an index to ensure there is something to return
     before(() => createIndexDataset(indexName));
     after(() =>
@@ -242,7 +241,7 @@ function createRule(ruleName) {
                 return ssc.catalog.createRule({
                     name: ruleName,
                     owner: 'SSCSDKJSTEST@splunk.com',
-                    match: 'host::192.168.0.1',
+                    match: 'sourcetype::newtype',
                 });
             })
             // Return the rule testing
