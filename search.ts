@@ -6,9 +6,9 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 
 import { Observable } from 'rxjs';
 import BaseApiService from './baseapiservice';
-import { QueryArgs, SplunkError } from "./client";
-import { Event } from "./ingest";
-import { SEARCH_SERVICE_PREFIX } from "./service_prefixes";
+import { QueryArgs, SplunkError } from './client';
+import { Event } from './ingest';
+import { SEARCH_SERVICE_PREFIX } from './service_prefixes';
 
 export class SplunkSearchCancelError extends Error {
 }
@@ -30,7 +30,7 @@ function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchS
  */
 export class Search {
     private client: SearchService;
-    private readonly sid: Job["sid"];
+    private readonly sid: Job['sid'];
     private isCancelling: boolean;
 
     /**
@@ -38,7 +38,7 @@ export class Search {
      * @param searchService
      * @param sid
      */
-    constructor(searchService: SearchService, sid: Job["sid"]) {
+    constructor(searchService: SearchService, sid: Job['sid']) {
         this.client = searchService;
         this.sid = sid;
         this.isCancelling = false;
@@ -63,7 +63,7 @@ export class Search {
                 if (self.isCancelling && 'code' in err) {
                     const splunkErr = err as SplunkError;
                     if (splunkErr.code === 404) {
-                        throw new SplunkSearchCancelError("Search has been cancelled");
+                        throw new SplunkSearchCancelError('Search has been cancelled');
                     } else {
                         throw err;
                     }
@@ -198,9 +198,9 @@ export class SearchService extends BaseApiService {
      * @param jobArgs {PostJobsRequest}
      * @return {Promise<string>}
      */
-    public createJob = (jobArgs?: object): Promise<Job["sid"]> => {
+    public createJob = (jobArgs?: object): Promise<Job['sid']> => {
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
-            .then((sid: Job["sid"]) => sid);
+            .then((sid: Job['sid']) => sid);
     }
 
     // TODO: support ttl value via JobControlActionRequest
@@ -222,7 +222,7 @@ export class SearchService extends BaseApiService {
      * @param pollInterval
      * @param callback
      */
-    public waitForJob = (jobId: Job["sid"], pollInterval?: number, callback?: (job: Job) => object) => {
+    public waitForJob = (jobId: Job['sid'], pollInterval?: number, callback?: (job: Job) => object) => {
         const self = this;
         const interval = pollInterval || 250;
         return new Promise<Job>((resolve: (job: Job) => void, reject: (error: Error) => void) => {
@@ -233,7 +233,7 @@ export class SearchService extends BaseApiService {
                 if (job.dispatchState === DispatchState.DONE) {
                     resolve(job);
                 } else if (job.dispatchState === DispatchState.FAILED) {
-                    const error = new Error("Job failed");
+                    const error = new Error('Job failed');
                     // error.job = job; // TODO: Make this a better error where we can highlight what went wrong.
                     reject(error);
                 } else {
@@ -348,9 +348,9 @@ interface PostJobsRequest {
 }
 
 export enum SearchLevel {
-    VERBOSE = "verbose",
-    FAST = "fast",
-    SMART = "smart",
+    VERBOSE = 'verbose',
+    FAST = 'fast',
+    SMART = 'smart',
 }
 
 export interface Job { // TODO: not in spec
@@ -383,15 +383,15 @@ interface JobControlActionRequest {
 }
 
 enum Action {
-    PAUSE = "pause",
-    UNPAUSE = "unpause",
-    FINALIZE = "finalize",
-    CANCEL = "cancel",
-    TOUCH = "touch",
-    SETTTL = "setttl",
-    SETPRIORITY = "setpriority", // TODO: this should need a priority level for JobControlActionRequest
-    ENABLEPREVIEW = "enablepreview",
-    DISABLEPREVIEW = "disablepreview",
+    PAUSE = 'pause',
+    UNPAUSE = 'unpause',
+    FINALIZE = 'finalize',
+    CANCEL = 'cancel',
+    TOUCH = 'touch',
+    SETTTL = 'setttl',
+    SETPRIORITY = 'setpriority', // TODO: this should need a priority level for JobControlActionRequest
+    ENABLEPREVIEW = 'enablepreview',
+    DISABLEPREVIEW = 'disablepreview',
 }
 
 interface FetchResultsRequest {

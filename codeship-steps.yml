@@ -3,7 +3,7 @@
   steps:
     - name: build docs - TypeScript
       service: ssc-client-js-with-stubby
-      command: bash -c "yarn ts:docs"
+      command: bash -c "yarn docs"
     - name: stubby tests with coverage - TypeScript
       service: ssc-client-js-with-stubby
       command: bash -c "yarn codecov"

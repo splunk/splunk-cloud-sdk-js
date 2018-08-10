@@ -23,16 +23,11 @@ export class KVStoreService extends BaseApiService {
 
     /**
      * Gets the the KVStore collections stats
-     * @param the namespace of the collection to retrieve
      * @param the collection to retrieve
      * @returns A promise that contains the KVStore's response
      */
-    public getCollectionStats = (
-        namespace: string,
-        collection: string
-    ): Promise<CollectionStats> => {
+    public getCollectionStats = (collection: string): Promise<CollectionStats> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-            namespace,
             'collections',
             collection,
             'stats',
@@ -43,58 +38,39 @@ export class KVStoreService extends BaseApiService {
 
     /**
      * Retrieves all the indexes in a given namespace and collection.
-     * @param namespace The namespace whose indexes should be listed
      * @param collection The collection whose indexes should be listed
      */
-    public listIndexes = (namespace: string, collection: string): Promise<IndexDescription[]> => {
-        return this.client
-            .get(
-                this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-                    namespace,
-                    'collections',
-                    collection,
-                    'indexes',
-                ])
-            )
-            .then(response => response as IndexDescription[]);
+    public listIndexes = (collection: string): Promise<IndexDescription[]> => {
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+            'collections',
+            collection,
+            'indexes',
+        ]);
+        return this.client.get(url).then(response => response as IndexDescription[]);
     };
 
     /**
      * Creates a new index to be added to the collection.
      * @param index The index to create
-     * @param namespace The namespace where the new index will be created
      * @param collection The collection where the new index will be created
      */
-    public createIndex = (
-        index: IndexDescription,
-        namespace: string,
-        collection: string
-    ): Promise<any> => {
-        return this.client.post(
-            this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-                namespace,
-                'collections',
-                collection,
-                'indexes',
-            ]),
-            index
-        );
+    public createIndex = (index: IndexDescription, collection: string): Promise<any> => {
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+            'collections',
+            collection,
+            'indexes',
+        ]);
+        return this.client.post(url, index);
     };
 
     /**
      * Deletes the specified index in a given namespace and collection.
-     * @param indexName The name of the index to be deleted
-     * @param namespace The namespace where the new index will be created
+     * @param indexName the name of the index to delete
      * @param collection The collection where the new index will be created
      */
-    public deleteIndex = (
-        indexName: string,
-        namespace: string,
-        collection: string
-    ): Promise<any> => {
+    public deleteIndex = (indexName: string, collection: string): Promise<any> => {
         return this.client.delete(
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-                namespace,
                 'collections',
                 collection,
                 'indexes',
@@ -105,19 +81,13 @@ export class KVStoreService extends BaseApiService {
 
     /**
      * Inserts new records to the collection.
-     * @param namespace The namespace to insert the record to
      * @param collection The collection to insert the record to
      * @param record The data tuples to insert
      * Returns a promise that contains an object with the unique _key of the added record
      */
     // TODO: Change return type
-    public insertRecord = (
-        namespace: string,
-        collection: string,
-        record: Map<string, string>
-    ): Promise<any> => {
+    public insertRecord = (collection: string, record: Map<string, string>): Promise<any> => {
         const insertRecordURL = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-            namespace,
             'collections',
             collection,
         ]);
@@ -126,39 +96,29 @@ export class KVStoreService extends BaseApiService {
 
     /**
      * Inserts new records to the collection.
-     * @param namespace The namespace where the new index will be created
      * @param collection The collection where the new index will be created
      * @param records The data tuples to insert
      */
     public insertRecords = (
-        namespace: string,
         collection: string,
         records: Array<Map<string, string>>
     ): Promise<string[]> => {
         return this.client.post(
-            this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-                namespace,
-                'collections',
-                collection,
-                'batch',
-            ]),
+            this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'batch']),
             records
         );
     };
 
     /**
      * Queries records present in a given collection.
-     * @param namespace The namespace whose indexes should be listed
      * @param collection The collection whose indexes should be listed
      * @param filter Filter string to target specific records
      */
     public queryRecords = (
-        namespace: string,
         collection: string,
         filter: QueryArgs = {}
     ): Promise<Map<string, string>> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-            namespace,
             'collections',
             collection,
             'query',
@@ -168,41 +128,26 @@ export class KVStoreService extends BaseApiService {
 
     /**
      * Queries a particular record present in a given collection based on the key value provided by the user.
-     * @param namespace The namespace whose indexes should be listed
      * @param collection The collection whose indexes should be listed
      * @param key The record key used to query a specific record
      */
-    public getRecordByKey = (
-        namespace: string,
-        collection: string,
-        key: string
-    ): Promise<Map<string, string>> => {
+    public getRecordByKey = (collection: string, key: string): Promise<Map<string, string>> => {
         return this.client
-            .get(
-                this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-                    namespace,
-                    'collections',
-                    collection,
-                    key,
-                ])
-            )
+            .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, key]))
             .then(response => response as Map<string, string>);
     };
 
     /**
      * Lists the records present in a given collection based on the provided
-     * @param namespace The namespace to retrieve the records from
      * @param collection The collection to retrieve the records from
      * @param filter Filter string to target specific records
      * Returns a promise that is a list of the records
      */
     public listRecords = (
-        namespace: string,
         collection: string,
         filter: QueryArgs = {}
     ): Promise<Map<string, string>> => {
         const url: string = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-            namespace,
             'collections',
             collection,
         ]);
@@ -211,48 +156,24 @@ export class KVStoreService extends BaseApiService {
 
     /**
      * Deletes records present in a given collection based on the provided query.
-     * @param namespace The namespace where the new index will be created
      * @param collection The collection where the new index will be created
      * @param filter Filter string to target specific records
      */
-    public deleteRecords = (
-        namespace: string,
-        collection: string,
-        filter?: string
-    ): Promise<any> => {
-        const queryArgs: QueryArgs = {};
-        if (filter) {
-            queryArgs.query = filter;
-        }
+    public deleteRecords = (collection: string, filter?: QueryArgs): Promise<any> => {
         return this.client.delete(
-            this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-                namespace,
-                'collections',
-                collection,
-                'query',
-            ]),
-            queryArgs
+            this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query']),
+            filter
         );
     };
 
     /**
      * Deletes a particular record present in a given collection based on the key value provided by the user.
-     * @param namespace The namespace where the new index will be created
      * @param collection The collection where the new index will be created
      * @param key The key of the record used for deletion
      */
-    public deleteRecordByKey = (
-        namespace: string,
-        collection: string,
-        key: string
-    ): Promise<any> => {
+    public deleteRecordByKey = (collection: string, key: string): Promise<any> => {
         return this.client.delete(
-            this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-                namespace,
-                'collections',
-                collection,
-                key,
-            ])
+            this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, key])
         );
     };
 }
