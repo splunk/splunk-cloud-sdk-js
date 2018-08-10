@@ -218,7 +218,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should create a new tenant', () =>
             splunk.identity.createTenant(testPostTenant1).then(response => {
                 assert(response.status === 'provisioning');
-                return waitForStatusToEnd(response.tenantId, 'provisioning');
+                return waitForStatusToEnd(response.tenantId, 'ready');
             }));
 
         it('should return the list of newly added test tenant using the tenantId scope', () =>
@@ -238,7 +238,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 .createTenant(testPostTenantError1)
                 .then(success => assert.fail(success), err => assert.equal(err.code, '422')));
     });
-    
+
     describe('Test Roles and Permissions Management', () => {
         const testPermissions = [integrationTestTenantID + "-mytest", integrationTestTenantID + "-inttest"];
 
@@ -255,8 +255,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should return the roles for the tenant', () =>
             splunk.identity.getRoles(integrationTestTenantID).then(roles => {
                 assert.typeOf(roles, 'Array', 'data should be an array');
-                const role = roles.pop();
-                assert.equal(role, testRole);
+                assert(roles.indexOf(testRole) > -1);
             }));
 
         it('should return the role for the tenant and role name', () =>
@@ -270,8 +269,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should return the permissions for the tenant and role name', () =>
             splunk.identity.getRolePermissions(integrationTestTenantID, testRole).then(perms => {
                 assert.typeOf(perms, 'Array', 'data should be an array');
-                const permName = perms.pop();
-                assert.typeOf(permName, 'String', 'permission should be a string')
+                assert(perms.indexOf(testPermission) > -1)
             }));
 
         it('should return the permission for the tenant, role name, and permissionName', () =>
@@ -361,8 +359,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should retrieve all the Members from the Group', () =>
             splunk.identity.getGroupMembers(integrationTestTenantID, testGroupName).then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
-                const member = data.pop();
-                assert.typeOf(member, 'String', 'group member should be a string')
+                assert(data.indexOf(testMember) > -1)
             }));
 
     });
