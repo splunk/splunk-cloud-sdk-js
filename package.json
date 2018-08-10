@@ -27,6 +27,7 @@
   "author": "Splunk, Inc.",
   "license": "UNLICENSED",
   "devDependencies": {
+    "@types/isomorphic-fetch": "^0.0.34",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.0.2",
@@ -45,7 +46,6 @@
     "tslint-config-prettier": "^1.13.0",
     "tslint-eslint-rules": "^5.3.1",
     "typedoc": "^0.11.1",
-    "@types/isomorphic-fetch": "^0.0.34",
     "typescript": "^2.9.2"
   },
   "dependencies": {
@@ -56,17 +56,9 @@
       "lcov",
       "text-summary"
     ],
-    "include": [
-      "ts_src/*.ts"
-    ],
     "extension": [
       ".ts"
     ],
-    "require": [
-      "ts-node/register"
-    ],
-    "all": true,
-    "sourceMap": true,
     "exclude": [
       ".tmp",
       "ci",
