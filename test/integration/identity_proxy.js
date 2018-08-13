@@ -88,11 +88,11 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                     assert(data.tenantMemberships.includes(integrationTestTenantID));
                 }));
 
-        it('should throw a 422 Unprocessable entry error response when the tenant creation request is in bad format', () =>
-            splunk.identity
-                .createTenant(testPostTenantError1)
-                .then(success => assert.fail(success), err => assert.equal(err.errorParams.httpStatusCode, '422')));
-        });
+            it('should throw a 422 Unprocessable entry error response when the tenant creation request is in bad format', () =>
+                splunk.identity
+                    .createTenant(testPostTenantError1)
+                    .then(success => assert.fail(success), err => assert.equal(err.errorParams.httpStatusCode, '422')));
+            });
 
         describe('Test Roles and Permissions Management', () => {
             const testPermissions = [integrationTestTenantID + "-mytest", integrationTestTenantID + "-inttest"];
@@ -116,9 +116,9 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             it('should return the role for the tenant and role name', () =>
                 splunk.identity.getRole(integrationTestTenantID, testRole).then(role => {
                     assert.typeOf(role, 'Object', 'role should be an object');
-                    assert.equal(role["name"], testRole);
-                    assert.equal(role["kind"],'identity.role');
-                    assert.equal(role["tenant"], integrationTestTenantID);
+                    assert.equal(role.name, testRole);
+                    assert.equal(role.kind,'identity.role');
+                    assert.equal(role.tenant, integrationTestTenantID);
                 }));
 
             it('should return the permissions for the tenant and role name', () =>
@@ -130,16 +130,19 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             it('should return the permission for the tenant, role name, and permissionName', () =>
                 splunk.identity.getRolePermission(integrationTestTenantID, testRole, testPermission).then(perm => {
                     assert.typeOf(perm, 'Object', 'data should be an object');
-                    assert.equal(perm["name"], testPermission);
-                    assert.equal(perm["addedAt"], null);
-                    assert.equal(perm["addedBy"], null);
+                    assert.equal(perm.name, testPermission);
+                    assert.equal(perm.addedAt, null);
+                    assert.equal(perm.addedBy, null);
                 }));
 
             it('should create new permissions for an existing role', () =>
                 splunk.identity.createRolePermissons(integrationTestTenantID, testRole, testPermissions).then(response => {
                     assert.lengthOf(response, 3, 'response has a length of 3 permissions');
+                    assert(response.indexOf(testPermission) > -1);
+                    assert(response.indexOf(testPermissions[0]) > -1);
+                    assert(response.indexOf(testPermissions[1]) > -1);
                 }));
-        });
+    });
 
         describe('Test Groups Management', () => {
             const groupInput = {
@@ -160,9 +163,9 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             it('should return the Group for the tenant and groupName', () =>
                 splunk.identity.getGroup(integrationTestTenantID, testGroupName).then(data => {
                     assert.typeOf(data, 'Object', 'data should be an object');
-                    assert.equal(data["name"], testGroupName);
-                    assert.equal(data["kind"], "identity.group");
-                    assert.equal(data["tenant"], integrationTestTenantID);
+                    assert.equal(data.name, testGroupName);
+                    assert.equal(data.kind, "identity.group");
+                    assert.equal(data.tenant, integrationTestTenantID);
                 }));
 
             it('should return the Groups for the tenant', () =>
@@ -175,17 +178,17 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             it('should add a Role to the Group', () =>
                 splunk.identity.createGroupRole(integrationTestTenantID, testGroupName, {"name": "somerole"}).then(data => {
                     assert.typeOf(data, 'Object', 'data should be an object');
-                    assert.equal(data["group"], testGroupName);
-                    assert.equal(data["role"], "somerole");
-                    assert.equal(data["tenant"], integrationTestTenantID)
+                    assert.equal(data.group, testGroupName);
+                    assert.equal(data.role, "somerole");
+                    assert.equal(data.tenant, integrationTestTenantID)
                 }));
 
             it('should return the Group for the tenant and groupName', () =>
                 splunk.identity.getGroupRole(integrationTestTenantID, testGroupName, "somerole").then(data => {
                     assert.typeOf(data, 'Object', 'data should be an object');
-                    assert.equal(data["group"], testGroupName);
-                    assert.equal(data["role"], "somerole");
-                    assert.equal(data["tenant"], integrationTestTenantID)
+                    assert.equal(data.group, testGroupName);
+                    assert.equal(data.role, "somerole");
+                    assert.equal(data.tenant, integrationTestTenantID)
                 }));
 
             it('should return the Groups for the tenant', () =>
@@ -198,17 +201,17 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             it('should add a Member to the Group', () =>
                 splunk.identity.createGroupMember(integrationTestTenantID, testGroupName, {"name": "int_test_user"}).then(data => {
                     assert.typeOf(data, 'Object', 'data should be an object');
-                    assert.equal(data["group"], testGroupName);
-                    assert.equal(data["name"], "int_test_user");
-                    assert.equal(data["tenant"], integrationTestTenantID)
+                    assert.equal(data.group, testGroupName);
+                    assert.equal(data.name, "int_test_user");
+                    assert.equal(data.tenant, integrationTestTenantID)
                 }));
 
             it('should retrieve the Member from the Group', () =>
                 splunk.identity.getGroupMember(integrationTestTenantID, testGroupName, testMember).then(data => {
                     assert.typeOf(data, 'Object', 'data should be an object');
-                    assert.equal(data["group"], testGroupName);
-                    assert.equal(data["name"], testMember);
-                    assert.equal(data["tenant"], integrationTestTenantID)
+                    assert.equal(data.group, testGroupName);
+                    assert.equal(data.name, testMember);
+                    assert.equal(data.tenant, integrationTestTenantID)
                 }));
 
             it('should retrieve all the Members from the Group', () =>
@@ -217,7 +220,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                     assert(data.indexOf(testMember) > -1)
                 }));
 
-        });
+    });
 
 
         describe('Delete the test roles, permissions, group, tenant and validate - Good and Bad cases', () => {
@@ -290,10 +293,10 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                     );
                 }));
 
-                it('should throw a 422 Unprocessable Entity error response when deleting a tenant currently not present in a user profile', () =>
-                    splunk.identity
-                        .deleteTenant(testDeleteTenant)
-                        .then(success => assert.fail(success), err => assert.equal(err.errorParams.httpStatusCode, '422')));
+            it('should throw a 422 Unprocessable Entity error response when deleting a tenant currently not present in a user profile', () =>
+                splunk.identity
+                    .deleteTenant(testDeleteTenant)
+                    .then(success => assert.fail(success), err => assert.equal(err.errorParams.httpStatusCode, '422')));
         });
     } else {
         describe.skip('Tenant creation tests were skipped, to turn them on set the TENANT_CREATION env to 1', () => {});
