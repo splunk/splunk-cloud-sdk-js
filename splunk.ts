@@ -1,3 +1,10 @@
+/*
+Copyright © 2018 Splunk Inc.
+SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
+without a valid written license from Splunk Inc. is PROHIBITED.
+*/
+
+import { ActionService } from './action';
 import { CatalogService } from './catalog';
 import { ServiceClient } from './client';
 import { IdentityService } from './identity';
@@ -18,6 +25,8 @@ class SplunkSSC {
     public identity: IdentityService;
     public ingest: IngestService;
     public kvstore: KVStoreService;
+    public action: ActionService;
+
     /**
      * Build a Splunk SSC Client
      * @param url URL to Splunk SSC environment TODO: SSC name
@@ -31,6 +40,7 @@ class SplunkSSC {
         this.identity = new IdentityService(client);
         this.ingest = new IngestService(client);
         this.kvstore = new KVStoreService(client);
+        this.action = new ActionService(client);
     }
 }
 
