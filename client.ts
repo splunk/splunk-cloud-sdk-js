@@ -23,7 +23,7 @@ export class SplunkError extends Error {
  */
 function handleResponse(response: Response): Promise<any> {
     if (response.ok) {
-        if (response.headers.get('Content-Type') === 'text/csv' || response.headers.get('Content-Type') === 'application/gzip') {
+        if (response.headers.get('Content-Type') === ExportCollectionContentType.CSV || response.headers.get('Content-Type') === ExportCollectionContentType.GZIP) {
             return response.text();
         } else {
             return response.text().then(decodeJson);
@@ -224,4 +224,9 @@ export class ServiceClient {
 
 export interface QueryArgs {
     [key: string]: string | number | undefined;
+}
+
+export enum ExportCollectionContentType {
+    CSV = "text/csv",
+    GZIP = "application/gzip",
 }

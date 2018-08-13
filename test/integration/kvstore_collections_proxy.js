@@ -1,7 +1,6 @@
 const { assert } = require('chai');
 const config = require('../config');
 const SplunkSSC = require('../../splunk');
-const { ExportCollectionContentType } = require('../../kvstore');
 
 const sscHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
@@ -10,6 +9,7 @@ const tenantID = config.playgroundTenant;
 const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
 
+const { ExportCollectionContentType } = require('../../client.ts');
 const { createKVCollectionDataset, createRecord } = require('./catalogv2_proxy.js');
 
 const ssc = new SplunkSSC(sscHost, token, tenantID);

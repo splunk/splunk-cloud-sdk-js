@@ -5,7 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import BaseApiService from './baseapiservice';
-import { QueryArgs } from './client';
+import { ExportCollectionContentType, QueryArgs } from './client';
 import { KVSTORE_SERVICE_PREFIX } from './service_prefixes';
 
 /**
@@ -56,9 +56,9 @@ export class KVStoreService extends BaseApiService {
         console.log(contentType)
         var requestHeaders: RequestHeaders = {}
         if (contentType == ExportCollectionContentType.CSV) {
-            requestHeaders = {'Accept': 'text/csv'}
+            requestHeaders = {'Accept': ExportCollectionContentType.CSV}
         } else {
-            requestHeaders = {'Accept': 'application/gzip'}
+            requestHeaders = {'Accept': ExportCollectionContentType.GZIP}
         }
 
         return this.client
@@ -246,11 +246,6 @@ export interface IndexDescription {
     fields: IndexFieldDefinition[];
     name?: string;
     namespace?: string;
-}
-
-export enum ExportCollectionContentType {
-    CSV,
-    GZIP,
 }
 
 export interface RequestHeaders {
