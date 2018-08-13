@@ -10,6 +10,6 @@ module.exports = {
     playgroundHost: process.env.SSC_HOST || 'https://api.playground.splunkbeta.com',
     playgroundTenant: process.env.TENANT_ID,
     playgroundAuthToken: process.env.BEARER_TOKEN,
-    testNamespace: 'jstestnamespace0',
-    testCollection: 'jstestcollection0',
+    testNamespace: `jsnmspace${Date.now()}`,
+    testCollection: `jscollecn${Date.now()}`,
 };
