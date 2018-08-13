@@ -15,8 +15,7 @@
     "strict": true,
     "target": "es3",
     "types": [],
-    "sourceMap": true,
-    "sourceRoot": "."
+    "sourceMap": true
   },
   "include": [
     "**/*.ts"
