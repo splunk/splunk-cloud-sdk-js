@@ -54,11 +54,11 @@ export class KVStoreService extends BaseApiService {
      */
     public exportCollection = (collection: string, contentType: ExportCollectionContentType): Promise<string> => {
         console.log(contentType)
-        var requestHeaders: RequestHeaders = {}
-        if (contentType == ExportCollectionContentType.CSV) {
-            requestHeaders = {'Accept': ExportCollectionContentType.CSV}
+        let requestHeaders: RequestHeaders = {}
+        if (contentType === ExportCollectionContentType.CSV) {
+            requestHeaders = { 'Accept': ExportCollectionContentType.CSV }
         } else {
-            requestHeaders = {'Accept': ExportCollectionContentType.GZIP}
+            requestHeaders = { 'Accept': ExportCollectionContentType.GZIP }
         }
 
         return this.client
