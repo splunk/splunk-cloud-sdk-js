@@ -7,12 +7,17 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 import 'isomorphic-fetch';
 
 export class SplunkError extends Error {
-    public code?: number;
-    public url?: Response['url'];
-    constructor(message: string, code?: number, source?: Response['url']) {
+    public code?: string;
+    public httpStatusCode?:number;
+    public details?:object;
+    public moreInfo?:string;
+
+    constructor(message: string, code?: string, moreInfo?: string, httpStatusCode?:number, details?:object) {
         super(message);
         this.code = code;
-        this.url = source;
+        this.moreInfo = moreInfo;
+        this.httpStatusCode = httpStatusCode;
+        this.details = details;
     }
 }
 
@@ -21,6 +26,7 @@ export class SplunkError extends Error {
  * @private
  */
 function handleResponse(response: Response): Promise<any> {
+
     if (response.ok) {
         return response.text().then(decodeJson);
     }
@@ -28,15 +34,16 @@ function handleResponse(response: Response): Promise<any> {
         let err: Error;
         try {
             const json = JSON.parse(text);
+
             if (!json.message) {
                 // TODO: This shouldn't go to production
                 console.log(
                     `Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`
                 );
             }
-            err = new SplunkError(json.message, response.status, response.url);
+            err = new SplunkError(json.message, json.code, json.moreInfo, response.status, json.details);
         } catch (ex) {
-            err = new SplunkError(`Unknown error: ${text}`, response.status, response.url);
+            err = new SplunkError(`Unknown error: ${text}`, undefined, undefined, response.status, undefined);
         }
         throw err;
     });
