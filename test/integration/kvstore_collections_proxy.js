@@ -9,7 +9,7 @@ const tenantID = config.playgroundTenant;
 const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
 
-const { ExportCollectionContentType } = require('../../client.ts');
+const { ContentType } = require('../../client.ts');
 const { createKVCollectionDataset, createRecord } = require('./catalogv2_proxy.js');
 
 const ssc = new SplunkSSC(sscHost, token, tenantID);
@@ -393,7 +393,7 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                     return createRecord(testKVCollectionName, recordThree);
                 })
                 .then(createRecordResponse => {
-                    return ssc.kvstore.exportCollection(testKVCollectionName, ExportCollectionContentType.CSV);
+                    return ssc.kvstore.exportCollection(testKVCollectionName, ContentType.CSV);
                 })
                 .then(exportCollectionResponse => {
                     assert.isNotEmpty(exportCollectionResponse);
@@ -409,7 +409,7 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                     return createRecord(testKVCollectionName, recordThree);
                 })
                 .then(createRecordResponse => {
-                    return ssc.kvstore.exportCollection(testKVCollectionName, ExportCollectionContentType.GZIP);
+                    return ssc.kvstore.exportCollection(testKVCollectionName, ContentType.GZIP);
                 })
                 .then(exportCollectionResponse => {
                     assert.isNotEmpty(exportCollectionResponse);

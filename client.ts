@@ -5,7 +5,6 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import 'isomorphic-fetch';
-import { RequestHeaders } from './kvstore';
 
 export class SplunkError extends Error {
     public code?: number;
@@ -23,7 +22,7 @@ export class SplunkError extends Error {
  */
 function handleResponse(response: Response): Promise<any> {
     if (response.ok) {
-        if (response.headers.get('Content-Type') === ExportCollectionContentType.CSV || response.headers.get('Content-Type') === ExportCollectionContentType.GZIP) {
+        if (response.headers.get('Content-Type') === ContentType.CSV || response.headers.get('Content-Type') === ContentType.GZIP) {
             return response.text();
         }
         return response.text().then(decodeJson);
@@ -116,7 +115,7 @@ export class ServiceClient {
         // TODO: Cache
         const requestParamHeaders: Headers = new Headers({
             'Authorization': `Bearer ${this.token}`,
-            'Content-Type': 'application/json',});
+            'Content-Type': ContentType.JSON,});
 
         if (headers !== undefined && headers !== {}) {
             Object.keys(headers).forEach(key => {
@@ -225,7 +224,12 @@ export interface QueryArgs {
     [key: string]: string | number | undefined;
 }
 
-export enum ExportCollectionContentType {
+export enum ContentType {
     CSV = 'text/csv',
     GZIP = 'application/gzip',
+    JSON = 'application/json',
+}
+
+export interface RequestHeaders {
+    [key: string]: string;
 }
