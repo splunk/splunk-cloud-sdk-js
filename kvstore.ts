@@ -5,7 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import BaseApiService from './baseapiservice';
-import {ContentType, QueryArgs, RequestHeaders} from './client';
+import { ContentType, QueryArgs, RequestHeaders } from './client';
 import { KVSTORE_SERVICE_PREFIX } from './service_prefixes';
 
 /**
