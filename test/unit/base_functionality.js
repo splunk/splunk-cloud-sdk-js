@@ -49,7 +49,7 @@ describe("Basic client functionality", () => {
     });
 
     describe("Errors", () => {
-        it("should throw on an error response", () => expect(s.get("/error")).to.be.rejectedWith(Error, "Something exploded"));
+        it("should throw on an error response", () => expect(s.get("/error")).to.be.rejectedWith(Error, "error response"));
     });
 
     describe("Path building", () => {
