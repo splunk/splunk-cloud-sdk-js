@@ -378,7 +378,7 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
         it('Should successfully return all the collections present in the given tenant', () => {
             return ssc.kvstore.getCollections()
                 .then(getCollectionsResponse => {
-                    assert(getCollectionsResponse.length);
+                    assert.equal(getCollectionsResponse.length, 1);
                 });
         });
     });
