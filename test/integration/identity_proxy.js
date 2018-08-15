@@ -165,7 +165,7 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
 
     describe('Get the current users from the tenant - Error case, unauthorized user', () => {
         it('should throw a 401 Unauthorized response when retrieving users list due to invalid auth Token', () => splunkWithIncorrectCredentials.identity.getTenantUsers(tenantID).then(success =>
-            assert.fail(success), err => assert.equal(err.code, "401")
+            assert.fail(success), err => assert.equal(err.httpStatusCode, "401")
         ));
     });
 
@@ -180,7 +180,7 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
                 }
             ];
         it('should throw a 500 Internal server error when trying to replace current tenant user list with a list containing duplicate records', () => splunk.identity.replaceTenantUsers(tenantID, testReplaceUserListError1).then(success =>
-            assert.fail(success), err => assert.equal(err.code, "500")
+            assert.fail(success), err => assert.equal(err.httpStatusCode, "500")
         ));
     });
 
@@ -229,7 +229,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should throw a 422 Unprocessable entry error response when the tenant creation request is in bad format', () =>
             splunk.identity
                 .createTenant(testPostTenantError1)
-                .then(success => assert.fail(success), err => assert.equal(err.code, '422')));
+                .then(success => assert.fail(success), err => assert.equal(err.httpStatusCode, '422')));
     });
 
     describe('Delete the test tenant and validate - Good and Bad cases', () => {
@@ -275,6 +275,6 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should throw a 422 Unprocessable Entity error response when deleting a tenant currently not present in a user profile', () =>
             splunk.identity
                 .deleteTenant(testDeleteTenant)
-                .then(success => assert.fail(success), err => assert.equal(err.code, '422')));
+                .then(success => assert.fail(success), err => assert.equal(err.httpStatusCode, '422')));
     });
 });
