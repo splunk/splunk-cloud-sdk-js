@@ -5,7 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import BaseApiService from './baseapiservice';
-import { QueryArgs } from './client';
+import { ContentType, QueryArgs, RequestHeaders } from './client';
 import { KVSTORE_SERVICE_PREFIX } from './service_prefixes';
 
 /**
@@ -34,6 +34,40 @@ export class KVStoreService extends BaseApiService {
         ]);
 
         return this.client.get(url).then(response => response as CollectionStats);
+    };
+
+    /**
+     * Gets all the collections.
+     */
+    public getCollections = (): Promise<CollectionDefinition[]> => {
+        return this.client
+            .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+                'collections'
+            ]))
+            .then(response => response as CollectionDefinition[]);
+    };
+
+    /**
+     * Exports the specified collection records to an external file.
+     * @param collection The collection whose records should be exported
+     * @param contentType The contentType (csv or gzip) of the records file to be exported
+     */
+    public exportCollection = (collection: string, contentType: ContentType): Promise<string> => {
+        console.log(contentType)
+        let requestHeaders: RequestHeaders = {}
+        if (contentType === ContentType.CSV) {
+            requestHeaders = { 'Accept': ContentType.CSV }
+        } else {
+            requestHeaders = { 'Accept': ContentType.GZIP }
+        }
+
+        return this.client
+            .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+                'collections',
+                collection,
+                'export',
+            ]), {}, requestHeaders)
+            .then(response => response as string);
     };
 
     /**
@@ -185,7 +219,6 @@ export interface PingOKBody {
 
 export interface CollectionDefinition {
     collection: string;
-    namespace: string;
 }
 
 export interface CollectionDescription {

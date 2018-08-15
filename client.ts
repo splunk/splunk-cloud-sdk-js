@@ -31,6 +31,9 @@ export class SplunkError extends Error {
 function handleResponse(response: Response): Promise<any> {
 
     if (response.ok) {
+        if (response.headers.get('Content-Type') === ContentType.CSV || response.headers.get('Content-Type') === ContentType.GZIP) {
+            return response.text();
+        }
         return response.text().then(decodeJson);
     }
     return response.text().then(text => {
@@ -120,12 +123,18 @@ export class ServiceClient {
     /**
      * Builds headers required for request to Splunk SSC (auth, content-type, etc)
      */
-    private buildHeaders(): Headers {
+    private buildHeaders(headers?: RequestHeaders): Headers {
         // TODO: Cache
-        return new Headers({
+        const requestParamHeaders: Headers = new Headers({
             'Authorization': `Bearer ${this.token}`,
-            'Content-Type': 'application/json',
-        });
+            'Content-Type': ContentType.JSON,});
+
+        if (headers !== undefined && headers !== {}) {
+            Object.keys(headers).forEach(key => {
+                requestParamHeaders.append(key, headers[key])
+            })
+        }
+        return requestParamHeaders;
     }
 
     public buildPath(servicePrefix: string, pathname: string[], overrideTenant?: string): string {
@@ -149,10 +158,10 @@ export class ServiceClient {
      * @param path Path portion of the URL to request from Splunk
      * @param query Object that contains query parameters
      */
-    public get(path: string, query?: QueryArgs): Promise<any> {
+    public get(path: string, query?: QueryArgs, headers?: RequestHeaders): Promise<any> {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
-            headers: this.buildHeaders(),
+            headers: this.buildHeaders(headers),
         }).then((response: Response) => handleResponse(response));
     }
 
@@ -225,4 +234,14 @@ export class ServiceClient {
 
 export interface QueryArgs {
     [key: string]: string | number | undefined;
+}
+
+export enum ContentType {
+    CSV = 'text/csv',
+    GZIP = 'application/gzip',
+    JSON = 'application/json',
+}
+
+export interface RequestHeaders {
+    [key: string]: string;
 }
