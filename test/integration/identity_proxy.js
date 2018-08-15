@@ -244,8 +244,8 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                     console.warn(`Failed to delete tenant during test, err: ${err}`);
                 });
             })
-        ).timeout(5*60*1000); // give tenants up to 5 minutes to move from 'provisioning' to 'ready'
-
+        );
+        
         it('should return a user profile with the test tenant in the "deleting" state', () =>
             splunk.identity.getUserProfile(tenantID).then(data => {
                 assert.typeOf(data, 'Object', 'response should be an object');
