@@ -28,8 +28,6 @@ describe("integration tests Using Search APIs", () => {
     });
 
     describe("Search", () => {
-
-
         it("should allow submitting a search and getting results", () => splunk.search.createJob(standardQuery)
             .then((sid) => splunk.search.getJob(sid))
             .then(searchObj => { // Check the state of the job
