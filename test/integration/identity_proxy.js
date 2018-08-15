@@ -128,7 +128,7 @@ describe('integration tests for Identity Tenant User Endpoints', () => {
         it('should return a list of users excluding the deleted records', () => splunk.identity.getTenantUsers(tenantID).then(data => {
             assert.typeOf(data, 'Array', 'response should be an array');
             assert.isAtLeast(data.length, 2);
-            data.forEach(user => {  
+            data.forEach(user => {
                 assert('id' in user, 'Returned user should contain an ID')
             });
         }));
@@ -237,7 +237,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
         it('should delete the selected test tenant from user', () => 
             waitForStatusToEnd(integrationTestTenantID, 'provisioning').then((tenantStatus) => {
-                assert.equal(tenantStatus, 'provisioning');
+                assert.notEqual(tenantStatus, 'provisioning');
                 splunk.identity.deleteTenant(integrationTestTenantID).then(response => {
                     assert(!response);
                 }, (err) => {
