@@ -7,12 +7,17 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 import 'isomorphic-fetch';
 
 export class SplunkError extends Error {
-    public code?: number;
-    public url?: Response['url'];
-    constructor(message: string, code?: number, source?: Response['url']) {
+    public code?: string;
+    public httpStatusCode?:number;
+    public details?:object;
+    public moreInfo?:string;
+
+    constructor(message: string, code?: string, moreInfo?: string, httpStatusCode?:number, details?:object) {
         super(message);
         this.code = code;
-        this.url = source;
+        this.moreInfo = moreInfo;
+        this.httpStatusCode = httpStatusCode;
+        this.details = details;
     }
 }
 
@@ -21,22 +26,27 @@ export class SplunkError extends Error {
  * @private
  */
 function handleResponse(response: Response): Promise<any> {
+
     if (response.ok) {
+        if (response.headers.get('Content-Type') === ContentType.CSV || response.headers.get('Content-Type') === ContentType.GZIP) {
+            return response.text();
+        }
         return response.text().then(decodeJson);
     }
     return response.text().then(text => {
         let err: Error;
         try {
             const json = JSON.parse(text);
+
             if (!json.message) {
                 // TODO: This shouldn't go to production
                 console.log(
                     `Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`
                 );
             }
-            err = new SplunkError(json.message, response.status, response.url);
+            err = new SplunkError(json.message, json.code, json.moreInfo, response.status, json.details);
         } catch (ex) {
-            err = new SplunkError(`Unknown error: ${text}`, response.status, response.url);
+            err = new SplunkError(`Unknown error: ${text}`, undefined, undefined, response.status, undefined);
         }
         throw err;
     });
@@ -108,12 +118,18 @@ export class ServiceClient {
     /**
      * Builds headers required for request to Splunk SSC (auth, content-type, etc)
      */
-    private buildHeaders(): Headers {
+    private buildHeaders(headers?: RequestHeaders): Headers {
         // TODO: Cache
-        return new Headers({
+        const requestParamHeaders: Headers = new Headers({
             'Authorization': `Bearer ${this.token}`,
-            'Content-Type': 'application/json',
-        });
+            'Content-Type': ContentType.JSON,});
+
+        if (headers !== undefined && headers !== {}) {
+            Object.keys(headers).forEach(key => {
+                requestParamHeaders.append(key, headers[key])
+            })
+        }
+        return requestParamHeaders;
     }
 
     public buildPath(servicePrefix: string, pathname: string[], overrideTenant?: string): string {
@@ -137,10 +153,10 @@ export class ServiceClient {
      * @param path Path portion of the URL to request from Splunk
      * @param query Object that contains query parameters
      */
-    public get(path: string, query?: QueryArgs): Promise<any> {
+    public get(path: string, query?: QueryArgs, headers?: RequestHeaders): Promise<any> {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
-            headers: this.buildHeaders(),
+            headers: this.buildHeaders(headers),
         }).then((response: Response) => handleResponse(response));
     }
 
@@ -213,4 +229,14 @@ export class ServiceClient {
 
 export interface QueryArgs {
     [key: string]: string | number | undefined;
+}
+
+export enum ContentType {
+    CSV = 'text/csv',
+    GZIP = 'application/gzip',
+    JSON = 'application/json',
+}
+
+export interface RequestHeaders {
+    [key: string]: string;
 }
