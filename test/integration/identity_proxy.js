@@ -238,7 +238,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should delete the selected test tenant from user', () => 
             waitForStatusToEnd(integrationTestTenantID, 'provisioning').then((tenantStatus) => {
                 assert.notEqual(tenantStatus, 'provisioning');
-                splunk.identity.deleteTenant(integrationTestTenantID).then(response => {
+                return splunk.identity.deleteTenant(integrationTestTenantID).then(response => {
                     assert(!response);
                 }, (err) => {
                     console.warn(`Failed to delete tenant during test, err: ${err}`);
