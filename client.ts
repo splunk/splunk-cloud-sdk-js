@@ -6,7 +6,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 
 import 'isomorphic-fetch';
 
-export interface ErrorParams {
+export interface SplunkErrorParams {
     message: string;
     code?: string;
     httpStatusCode?:number;
@@ -14,11 +14,11 @@ export interface ErrorParams {
     moreInfo?:string;
 }
 
-export class SplunkError extends Error {
+export class SplunkError extends Error implements SplunkErrorParams{
 
-    public errorParams:ErrorParams;
+    public errorParams:SplunkErrorParams;
 
-    constructor(errorParams: ErrorParams) {
+    constructor(errorParams: SplunkErrorParams) {
         super(errorParams.message);
         this.errorParams = errorParams;
     }
