@@ -129,7 +129,7 @@ describe("integration tests Using Search APIs", () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
                 search.cancel()
                     .then(() => splunk.search.getJob(search.sid))
-                    .then(() => assert.fail("Should have thrown"), (err) => expect(err).to.have.property('code', 404));
+                    .then(() => assert.fail("Should have thrown"), (err) => expect(err).to.have.property('httpStatusCode', 404));
             });
         });
 
