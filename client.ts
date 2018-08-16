@@ -47,11 +47,11 @@ function handleResponse(response: Response): Promise<any> {
                     `Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`
                 );
             }
-            err = new SplunkError({ message:json.message, code:json.code, moreInfo:json.moreInfo, httpStatusCode:response.status, details:json.details } );
+            err = new SplunkError({ message:json.message,code:json.code,moreInfo:json.moreInfo,httpStatusCode:response.status,details:json.details } );
         } catch (ex) {
             const message = `${response.statusText} - unable to process response`;
             console.error(message, ex);
-            err = new SplunkError( { message, httpStatusCode:response.status,details: { response: text } } );
+            err = new SplunkError( { message,httpStatusCode:response.status,details: { response: text } } );
         }
         throw err;
     });
