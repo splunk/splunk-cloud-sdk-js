@@ -43,7 +43,7 @@ describe('Integration tests for KVStore Endpoints', () => {
                 return ssc.kvstore.getCollectionStats(testKVCollectionName).then(statsResponse => {
                     assert.equal(statsResponse.count, 0);
                     assert.equal(statsResponse.nindexes, 1);
-                    assert.equal(statsResponse.collection, testCollection);
+                    assert.equal(statsResponse.collection, testKVCollectionName);
                 });
             });
         });
@@ -72,7 +72,7 @@ describe('Integration tests for KVStore Endpoints', () => {
                             testKVCollectionName
                         )
                         .then(response => {
-                            assert(response.name === testIndex);
+                            assert.strictEqual(response.name, testIndex);
                         }));
 
                 it('should return the newly created index', () =>
