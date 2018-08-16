@@ -107,7 +107,6 @@ export class ServiceClient {
                 .filter(k => query[k] != null) // filter out undefined and null
                 .map(k => `${encoder(k)}=${encoder(String(query[k]))}`)
                 .join('&');
-            debugger;
             return `${this.url}${path}?${queryEncoded}`;
         }
         return `${this.url}${path}`;
