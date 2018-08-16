@@ -109,11 +109,8 @@ export class ServiceClient {
         if (query && Object.keys(query).length > 0) {
             const encoder = encodeURIComponent;
             const queryEncoded = Object.keys(query)
-                .map(k => {
-                    if (query[k]) {
-                        return `${encoder(k)}=${encoder(String(query[k]))}`;
-                    }
-                })
+                .filter(k => query[k] != null) // filter out undefined and null
+                .map(k => `${encoder(k)}=${encoder(String(query[k]))}`)
                 .join('&');
             return `${this.url}${path}?${queryEncoded}`;
         }
