@@ -27,7 +27,7 @@ describe('Integration tests for KVStore Endpoints', () => {
         }
     });
 
-    describe('Integration tests for KVStore Admin Endpoints', () => {
+    describe('Admin Endpoints', () => {
         describe('Ping Endpoint', () => {
             it('Should return a "healthy" response', () => {
                 return ssc.kvstore.getHealthStatus().then(response => {
@@ -37,23 +37,19 @@ describe('Integration tests for KVStore Endpoints', () => {
         });
     });
 
-    describe('Integration tests for KVStore Collection Stats Endpoints', () => {
+    describe('Stats Endpoints', () => {
         describe('Get the stats of a new collections', () => {
             it('Should return expected defaults', () => {
                 return ssc.kvstore.getCollectionStats(testKVCollectionName).then(statsResponse => {
                     assert.equal(statsResponse.count, 0);
                     assert.equal(statsResponse.nindexes, 1);
-                    // This is a bug, the `ns` property is actually the
-                    // collection and will need to be updated when kv
-                    // store fixes it
-                    // See https://jira.splunk.com/browse/SSC-4205
-                    assert.equal(statsResponse.ns, testKVCollectionName);
+                    assert.equal(statsResponse.collection, testKVCollectionName);
                 });
             });
         });
     });
 
-    describe('Integration tests for KVStore Index Endpoints', () => {
+    describe('Index Endpoints', () => {
         const testIndex = 'integtestindex';
         const fields = [{ Direction: -1, Field: 'integ_testField1' }];
         let testDataset;
@@ -76,7 +72,7 @@ describe('Integration tests for KVStore Endpoints', () => {
                             testKVCollectionName
                         )
                         .then(response => {
-                            assert(response.name === testIndex);
+                            assert.strictEqual(response.name, testIndex);
                         }));
 
                 it('should return the newly created index', () =>
@@ -109,7 +105,7 @@ describe('Integration tests for KVStore Endpoints', () => {
                         'testnamespace1',
                         'testcollection1'
                     )
-                    .then(response => assert.fail(response), err => assert.equal(err.httpStatusCode, 404)));
+                    .then(response => assert.fail(response), err => assert.equal(err.errorParams.httpStatusCode, 404)));
 
             /* TODO: (Commenting for now) Delete on a non-existing index is yielding a 200OK response. kvstore service updated codes at their end and this would be 204 (Being tracked here: SSC-3101)
             it('should throw 404 index not found error as index being deleted does not exist', () =>
@@ -128,7 +124,7 @@ describe('Integration tests for KVStore Endpoints', () => {
         });
     });
 
-    describe('Integration tests for KVStore Record endpoints', () => {
+    describe('Record endpoints', () => {
         const integrationTestRecord = [
             {
                 capacity_gb: 8,
