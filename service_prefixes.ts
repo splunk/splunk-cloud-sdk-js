@@ -22,7 +22,7 @@ export const INGEST_SERVICE_PREFIX: string = '/ingest/v1';
 /**
  * @private
  */
-export const IDENTITY_SERVICE_PREFIX: string = '/identity/v2';
+export const IDENTITY_SERVICE_PREFIX: string = '/identity/v1';
 
 /**
  * @private
