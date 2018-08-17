@@ -311,6 +311,42 @@ export class IdentityService extends BaseApiService {
     public deleteGroupMember = (tenantId: Tenant['tenantId'], groupName: Group['name'], groupMemberName: GroupMemberName['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members', groupMemberName], tenantId));
     }
+
+    /**
+     * Create a new principal
+     * @param principalInput
+     * @returns a Principal object
+     */
+    public createPrincipal = (principalInput: PrincipalInput): Promise<any> => {
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals'], 'system'), principalInput);
+    }
+
+    /**
+     * Returns the principal details
+     * @param principalName
+     * @returns a Principal object
+     */
+    public getPrincipal = (principalName: PrincipalInput['name']): Promise<any> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals', principalName], 'system'));
+    }
+
+    /**
+     * Returns the list of principals known to IAC
+     * @returns a list of principals
+     */
+    public getPrincipals = (): Promise<any> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals'], 'system'));
+    }
+
+    /**
+     * Deletes a principal
+     * @param principalName
+     * @returns Empty response upon success
+     */
+    public deletePrincipal = (principalName: PrincipalInput['name']): Promise<any> => {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals', principalName], 'system'));
+    }
+
 }
 
 /**
@@ -419,4 +455,24 @@ interface GroupRole {
  */
 interface GroupMemberName {
     name: string
+}
+
+/**
+ * PrincipalInput - Input object for creating a new Principal
+ */
+interface PrincipalInput {
+    name: string
+    kind: string
+}
+
+/**
+ * Principal - Principal member
+ */
+interface Principal {
+    name: string
+    kind: string
+    tenants: string[]
+    createdAt: Date
+    createdBy: Date
+    profile: {}
 }
