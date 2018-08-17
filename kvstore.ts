@@ -13,8 +13,8 @@ import { KVSTORE_SERVICE_PREFIX } from './service_prefixes';
  */
 export class KVStoreService extends BaseApiService {
     /**
-     * Gets the the KVStore's status
-     * @returns A promise that contains the KVStore's response
+     * Gets the health status from the database.
+     * @returns A Promise that contains the KVStore's response
      */
     public getHealthStatus = (): Promise<any> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['ping']);
@@ -22,9 +22,9 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Gets the the KVStore collections stats
+     * Gets the the KVStore collections stats.
      * @param collection the collection to retrieve
-     * @returns A promise that contains the KVStore's response
+     * @returns A Promise that contains the KVStore's response
      */
     public getCollectionStats = (collection: string): Promise<CollectionStats> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
@@ -37,9 +37,10 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Gets all the collections.
+     * Lists all the collections.
+     * @returns A Promise of all collections
      */
-    public getCollections = (): Promise<CollectionDefinition[]> => {
+    public listCollections = (): Promise<CollectionDefinition[]> => {
         return this.client
             .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
                 'collections'
@@ -48,9 +49,10 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Exports the specified collection records to an external file.
-     * @param collection The collection whose records should be exported
+     * Gets all the records of the collection in a file.
+     * @param collection The name of the collection whose records need to be exported
      * @param contentType The contentType (csv or gzip) of the records file to be exported
+     * @returns A Promise of a string
      */
     public exportCollection = (collection: string, contentType: ContentType): Promise<string> => {
         let requestHeaders: RequestHeaders = {};
@@ -70,8 +72,9 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Retrieves all the indexes in a given namespace and collection.
-     * @param collection The collection whose indexes should be listed
+     * Lists all the indexes in a given collection.
+     * @param collection The name of the collection whose indexes should be listed
+     * @returns A Promise of a list of indexes
      */
     public listIndexes = (collection: string): Promise<IndexDescription[]> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
@@ -85,7 +88,8 @@ export class KVStoreService extends BaseApiService {
     /**
      * Creates a new index to be added to the collection.
      * @param index The index to create
-     * @param collection The collection where the new index will be created
+     * @param collection The name of the collection where the new index will be created
+     * @returns A Promise object
      */
     public createIndex = (index: IndexDescription, collection: string): Promise<any> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
@@ -97,9 +101,10 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Deletes the specified index in a given namespace and collection.
-     * @param indexName the name of the index to delete
-     * @param collection The collection where the new index will be created
+     * Deletes an index in a given collection.
+     * @param indexName The name of the index to delete
+     * @param collection The name of the collection where the new index will be created
+     * @returns A Promise object
      */
     public deleteIndex = (indexName: string, collection: string): Promise<any> => {
         return this.client.delete(
@@ -113,12 +118,11 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Inserts new records to the collection.
-     * @param collection The collection to insert the record to
-     * @param record The data tuples to insert
-     * Returns a promise that contains an object with the unique _key of the added record
+     * Inserts a new record to the collection.
+     * @param collection The name of the collection to insert the record to
+     * @param record The record to add to the collection, formatted as a JSON object
+     * @returns A promise that contains an object with the unique _key of the added record
      */
-    // TODO: Change return type
     public insertRecord = (collection: string, record: Map<string, string>): Promise<any> => {
         const insertRecordURL = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
@@ -128,9 +132,10 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Inserts new records to the collection.
+     * Inserts multiple new records to the collection in a single request.
      * @param collection The collection where the new index will be created
      * @param records The data tuples to insert
+     * @returns A Promise of a list of keys of the inserted records
      */
     public insertRecords = (
         collection: string,
@@ -143,9 +148,10 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Queries records present in a given collection.
+     * Queries records present in a given collection based on the query parameters provided by the user.
      * @param collection The collection whose indexes should be listed
      * @param filter Filter string to target specific records
+     * @retruns A Promise of a list of records
      */
     public queryRecords = (
         collection: string,
@@ -160,9 +166,10 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Queries a particular record present in a given collection based on the key value provided by the user.
+     * Gets the record present in a given collection based on the key value provided by the user.
      * @param collection The collection whose indexes should be listed
      * @param key The record key used to query a specific record
+     * @returns A Promise of a record
      */
     public getRecordByKey = (collection: string, key: string): Promise<Map<string, string>> => {
         return this.client
@@ -171,10 +178,10 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Lists the records present in a given collection based on the provided
+     * Lists the records present in a given collection based on the provided query parameters.
      * @param collection The collection to retrieve the records from
      * @param filter Filter string to target specific records
-     * @return a promise that is a list of the records
+     * @return A Promise that is a list of the records
      */
     public listRecords = (
         collection: string,
@@ -188,9 +195,10 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Deletes records present in a given collection based on the provided query.
+     * Deletes records present in a given collection based on the provided query parameters.
      * @param collection The collection where the new index will be created
-     * @param filter Filter string to target specific records
+     * @param filter Query to target specific records in JSON format
+     * @returns A Promise object
      */
     public deleteRecords = (collection: string, filter?: QueryArgs): Promise<any> => {
         return this.client.delete(
@@ -200,9 +208,10 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Deletes a particular record present in a given collection based on the key value provided by the user.
-     * @param collection The collection where the new index will be created
+     * Deletes a record present in a given collection based on the key value provided by the user.
+     * @param collection The name of the collection where the new index will be created
      * @param key The key of the record used for deletion
+     * @returns A Promise object
      */
     public deleteRecordByKey = (collection: string, key: string): Promise<any> => {
         return this.client.delete(
