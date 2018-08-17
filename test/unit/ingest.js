@@ -57,7 +57,7 @@ describe('Events Endpoint', () => {
             splunkBadToken.ingest.createEvents(events).then(response => {
                 assert.fail('request with bad auth should not succeed');
             }).catch(err => {
-                assert.equal(err.code, 401, 'response status should be 401');
+                assert.equal(err.errorParams.httpStatusCode, 401, 'response status should be 401');
             });
         });
     });
