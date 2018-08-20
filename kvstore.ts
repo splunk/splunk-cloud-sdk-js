@@ -89,7 +89,7 @@ export class KVStoreService extends BaseApiService {
      * Creates a new index to be added to the collection.
      * @param index The index to create
      * @param collection The name of the collection where the new index will be created
-     * @returns A Promise object returned as a result of createIndex REST call
+     * @returns A Promise object
      */
     public createIndex = (index: IndexDescription, collection: string): Promise<any> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
@@ -104,7 +104,7 @@ export class KVStoreService extends BaseApiService {
      * Deletes an index in a given collection.
      * @param indexName The name of the index to delete
      * @param collection The name of the collection whose index should be deleted
-     * @returns A Promise object returned as a result of deleteIndex REST call
+     * @returns A Promise object
      */
     public deleteIndex = (indexName: string, collection: string): Promise<any> => {
         return this.client.delete(
@@ -198,7 +198,7 @@ export class KVStoreService extends BaseApiService {
      * Deletes records present in a given collection based on the query parameters provided by the user.
      * @param collection The name of the collection whose records should be deleted
      * @param filter Query JSON expression to target specific records
-     * @returns A Promise object returned as a result of deleteRecords REST call
+     * @returns A Promise object
      */
     public deleteRecords = (collection: string, filter?: QueryArgs): Promise<any> => {
         return this.client.delete(
@@ -211,7 +211,7 @@ export class KVStoreService extends BaseApiService {
      * Deletes a record present in a given collection based on the key value provided by the user.
      * @param collection The name of the collection whose record should be deleted
      * @param key The key of the record used for deletion
-     * @returns A Promise object returned as a result of deleteRecordByKey REST call
+     * @returns A Promise object
      */
     public deleteRecordByKey = (collection: string, key: string): Promise<any> => {
         return this.client.delete(
