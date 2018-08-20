@@ -114,8 +114,8 @@ describe('Identity Endpoints', () => {
             return splunk.identity.createMember(config.stubbyTEST_TENANT, memberName).then(data => {
                 assert.equal(data.tenant,'TEST_TENANT', 'tenant should be TEST_TENANT');
                 assert.equal(data.name,'mem1', 'member should be mem1');
-                assert.equal(data.addedAt,'2006-01-02T15:04:05.999999999Z', 'createdAt should be 2006-01-02T15:04:05.999999999Z');
-                assert.equal(data.addedBy,'test1', 'createdBy should be test1');
+                assert.equal(data.addedAt,'2018-08-15T22:04:17.915Z', 'addedAt should be 2018-08-15T22:04:17.915Z');
+                assert.equal(data.addedBy,'test1@splunk.com', 'addedBy should be test1@splunk.com');
             });
         });
     });
@@ -125,8 +125,8 @@ describe('Identity Endpoints', () => {
             return splunk.identity.getMember(config.stubbyTEST_TENANT, 'mem1').then(data => {
                 assert.equal(data.tenant,'TEST_TENANT', 'tenant should be TEST_TENANT');
                 assert.equal(data.name,'mem1', 'member should be mem1');
-                assert.equal(data.addedAt,'2006-01-02T15:04:05.999999999Z', 'createdAt should be 2006-01-02T15:04:05.999999999Z');
-                assert.equal(data.addedBy,'test1', 'createdBy should be test1');
+                assert.equal(data.addedAt,'2006-01-02T15:04:05.999999999Z', 'addedAt should be 2006-01-02T15:04:05.999999999Z');
+                assert.equal(data.addedBy,'test1', 'addedBy should be test1');
             });
         });
     });
@@ -206,8 +206,8 @@ describe('Identity Endpoints', () => {
             assert.equal(data.tenant, 'TEST_TENANT', 'tenant should be TEST_TENANT');
             assert.equal(data.role, 'role2', 'role name should be role2');
             assert.equal(data.permission, 'perm2', 'perm2 name should be perm2');
-            assert.equal(data.addedAt, '2018-08-15T17:56:19.079Z', 'createdAt should be 2018-08-15T17:56:19.079Z');
-            assert.equal(data.addedBy, 'test1', 'createdBy should be test1');
+            assert.equal(data.addedAt, '2018-08-15T17:56:19.079Z', 'addedAt should be 2018-08-15T17:56:19.079Z');
+            assert.equal(data.addedBy, 'test1', 'addedBy should be test1');
         }));
     });
 
@@ -296,8 +296,8 @@ describe('Identity Endpoints', () => {
                 assert.equal(data.tenant, 'TEST_TENANT', 'tenant should be TEST_TENANT');
                 assert.equal(data.group, 'sdk-group', 'group name should be sdk-group');
                 assert.equal(data.principal, 'sdk-int-test@splunk.com', 'principal should be sdk-int-test@splunk.com');
-                assert.equal(data.addedAt, '2018-08-15T22:13:16.536Z', 'createdAt should be 2018-08-15T22:13:16.536Z');
-                assert.equal(data.addedBy, 'test1@splunk.com', 'createdBy should be test1@splunk.com');
+                assert.equal(data.addedAt, '2018-08-15T22:13:16.536Z', 'addedAt should be 2018-08-15T22:13:16.536Z');
+                assert.equal(data.addedBy, 'test1@splunk.com', 'addedBy should be test1@splunk.com');
             });
         });
     });
@@ -307,7 +307,7 @@ describe('Identity Endpoints', () => {
             assert.equal(data.tenant, 'TEST_TENANT', 'tenant should be TEST_TENANT');
             assert.equal(data.group, 'grp1', 'group name should be grp1');
             assert.equal(data.principal, 'mem1', 'group member name should be mem1');
-            assert.equal(data.addedAt, '2018-08-15T18:13:00.453Z', 'createdAt should be 2018-08-15T18:13:00.453Z');
+            assert.equal(data.addedAt, '2018-08-15T18:13:00.453Z', 'addedAt should be 2018-08-15T18:13:00.453Z');
             assert.equal(data.addedBy, 'test1', 'addedBy should be test1');
         }));
     });
