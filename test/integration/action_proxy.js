@@ -75,7 +75,7 @@ describe("integration tests using action service", () => {
 
         // const notification = {
         //     "kind": "rawJSON",
-        //     "tenant": "sdktest_tenant",
+        //     "tenant": tenantID,
         //     "payload": {
         //         "name": "user payload"
         //     }
