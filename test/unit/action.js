@@ -15,7 +15,6 @@ describe("Action Endpoints", () => {
         const expectResult = {
             "name": "test10",
             "kind": "webhook",
-            "id": "be7ab21a-995c-4392-9834-66f4a2aec48a",
             "webhookUrl": "http://webhook.site/40fa145b-43d7-48f9-a391-aa7558042fa6",
             "message": "{{ .name }} is a {{ .species }}"
         };
@@ -31,7 +30,6 @@ describe("Action Endpoints", () => {
         const expectResult = {
             "name": "test10",
             "kind": "webhook",
-            "id": "bf7747e0-e964-410a-988a-8a3aef2cc814",
             "webhookUrl": "http://webhook.site/40fa145b-43d7-48f9-a391-aa7558042fa6",
             "message": "{{ .name }} is a {{ .species }}"
         };
@@ -48,14 +46,12 @@ describe("Action Endpoints", () => {
                 {
                     "name": "test0",
                     "kind": "webhook",
-                    "id": "aeae0a90-e24e-407b-b698-73084d140994",
                     "webhookUrl": "http://webhook.site/40fa145b-43d7-48f9-a391-aa7558042fa6",
                     "message": "{{ .name }} is a {{ .species }}"
                 },
                 {
                     "name": "test10",
                     "kind": "webhook",
-                    "id": "bf7747e0-e964-410a-988a-8a3aef2cc814",
                     "webhookUrl": "http://webhook.site/40fa145b-43d7-48f9-a391-aa7558042fa6",
                     "message": "{{ .name }} is a {{ .species }}"
                 }
@@ -83,7 +79,6 @@ describe("Action Endpoints", () => {
         const expectResult = {
             "name": "test10",
             "kind": "webhook",
-            "id": "bf7747e0-e964-410a-988a-8a3aef2cc814",
             "webhookUrl": "http://webhook.site/40fa145b-43d7-48f9-a391-aa7558042fa6",
             "message": "updated message"
         };
@@ -99,7 +94,7 @@ describe("Action Endpoints", () => {
     // describe("Trigger an action", () => {
     //     const notification = {
     //         "kind": "rawJSON",
-    //         "tenant": "tenantId",
+    //         "tenant": "TEST_TENANT",
     //         "payload": {
     //             "name": "bean bag"
     //         }
