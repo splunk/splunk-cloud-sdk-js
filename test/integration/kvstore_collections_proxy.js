@@ -374,11 +374,11 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
         });
     });
 
-    describe('Test ListCollections', () => {
+    describe('Test GetCollections', () => {
         it('Should successfully return all the collections present in the given tenant', () => {
-            return ssc.kvstore.listCollections()
-                .then(listCollectionsResponse => {
-                    assert(listCollectionsResponse.length >= 1, "Atleast one collection should be returned");
+            return ssc.kvstore.getCollections()
+                .then(getCollectionsResponse => {
+                    assert(getCollectionsResponse.length >= 1, "Atleast one collection should be returned");
                 });
         });
     });

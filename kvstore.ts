@@ -13,8 +13,8 @@ import { KVSTORE_SERVICE_PREFIX } from './service_prefixes';
  */
 export class KVStoreService extends BaseApiService {
     /**
-     * Gets the health status from the database.
-     * @returns A Promise that contains the KVStore's response
+     * Gets the KVStore's status.
+     * @returns A Promise of KVStore's response
      */
     public getHealthStatus = (): Promise<any> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['ping']);
@@ -24,7 +24,7 @@ export class KVStoreService extends BaseApiService {
     /**
      * Gets the the KVStore collections stats.
      * @param collection the collection to retrieve
-     * @returns A Promise that contains the KVStore's response
+     * @returns A Promise of KVStore's response
      */
     public getCollectionStats = (collection: string): Promise<CollectionStats> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
@@ -37,10 +37,10 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Lists all the collections.
-     * @returns A Promise of all collections
+     * Gets all the collections.
+     * @returns A Promise of an array of collections
      */
-    public listCollections = (): Promise<CollectionDefinition[]> => {
+    public getCollections = (): Promise<CollectionDefinition[]> => {
         return this.client
             .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
                 'collections'
@@ -52,7 +52,7 @@ export class KVStoreService extends BaseApiService {
      * Gets all the records of the collection in a file.
      * @param collection The name of the collection whose records need to be exported
      * @param contentType The contentType (csv or gzip) of the records file to be exported
-     * @returns A Promise of a string
+     * @returns A Promise of all the records present in the collection in string format
      */
     public exportCollection = (collection: string, contentType: ContentType): Promise<string> => {
         let requestHeaders: RequestHeaders = {};
@@ -74,7 +74,7 @@ export class KVStoreService extends BaseApiService {
     /**
      * Lists all the indexes in a given collection.
      * @param collection The name of the collection whose indexes should be listed
-     * @returns A Promise of a list of indexes
+     * @returns A Promise of an array of indexes
      */
     public listIndexes = (collection: string): Promise<IndexDescription[]> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
@@ -89,7 +89,7 @@ export class KVStoreService extends BaseApiService {
      * Creates a new index to be added to the collection.
      * @param index The index to create
      * @param collection The name of the collection where the new index will be created
-     * @returns A Promise object
+     * @returns A Promise object returned as a result of createIndex REST call
      */
     public createIndex = (index: IndexDescription, collection: string): Promise<any> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
@@ -103,8 +103,8 @@ export class KVStoreService extends BaseApiService {
     /**
      * Deletes an index in a given collection.
      * @param indexName The name of the index to delete
-     * @param collection The name of the collection where the new index will be created
-     * @returns A Promise object
+     * @param collection The name of the collection whose index should be deleted
+     * @returns A Promise object returned as a result of deleteIndex REST call
      */
     public deleteIndex = (indexName: string, collection: string): Promise<any> => {
         return this.client.delete(
@@ -119,7 +119,7 @@ export class KVStoreService extends BaseApiService {
 
     /**
      * Inserts a new record to the collection.
-     * @param collection The name of the collection to insert the record to
+     * @param collection The name of the collection where the record should be inserted
      * @param record The record to add to the collection, formatted as a JSON object
      * @returns A promise that contains an object with the unique _key of the added record
      */
@@ -133,9 +133,9 @@ export class KVStoreService extends BaseApiService {
 
     /**
      * Inserts multiple new records to the collection in a single request.
-     * @param collection The collection where the new index will be created
+     * @param collection The name of the collection where the new records should be inserted
      * @param records The data tuples to insert
-     * @returns A Promise of a list of keys of the inserted records
+     * @returns A Promise of an array of keys of the inserted records
      */
     public insertRecords = (
         collection: string,
@@ -149,9 +149,9 @@ export class KVStoreService extends BaseApiService {
 
     /**
      * Queries records present in a given collection based on the query parameters provided by the user.
-     * @param collection The collection whose indexes should be listed
+     * @param collection The name of the collection whose records should be fetched
      * @param filter Filter string to target specific records
-     * @retruns A Promise of a list of records
+     * @returns A Promise of an array of records
      */
     public queryRecords = (
         collection: string,
@@ -167,7 +167,7 @@ export class KVStoreService extends BaseApiService {
 
     /**
      * Gets the record present in a given collection based on the key value provided by the user.
-     * @param collection The collection whose indexes should be listed
+     * @param collection The name of the collection whose record should be fetched
      * @param key The record key used to query a specific record
      * @returns A Promise of a record
      */
@@ -178,10 +178,10 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Lists the records present in a given collection based on the provided query parameters.
-     * @param collection The collection to retrieve the records from
+     * Lists the records present in a given collection based on the query parameters provided by the user.
+     * @param collection The name of the collection whose records should be fetched
      * @param filter Filter string to target specific records
-     * @return A Promise that is a list of the records
+     * @return A Promise of an array of records
      */
     public listRecords = (
         collection: string,
@@ -195,10 +195,10 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Deletes records present in a given collection based on the provided query parameters.
-     * @param collection The collection where the new index will be created
-     * @param filter Query to target specific records in JSON format
-     * @returns A Promise object
+     * Deletes records present in a given collection based on the query parameters provided by the user.
+     * @param collection The name of the collection whose records should be deleted
+     * @param filter Query JSON expression to target specific records
+     * @returns A Promise object returned as a result of deleteRecords REST call
      */
     public deleteRecords = (collection: string, filter?: QueryArgs): Promise<any> => {
         return this.client.delete(
@@ -209,9 +209,9 @@ export class KVStoreService extends BaseApiService {
 
     /**
      * Deletes a record present in a given collection based on the key value provided by the user.
-     * @param collection The name of the collection where the new index will be created
+     * @param collection The name of the collection whose record should be deleted
      * @param key The key of the record used for deletion
-     * @returns A Promise object
+     * @returns A Promise object returned as a result of deleteRecordByKey REST call
      */
     public deleteRecordByKey = (collection: string, key: string): Promise<any> => {
         return this.client.delete(
