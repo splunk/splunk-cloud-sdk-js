@@ -62,7 +62,7 @@ export class Search {
             .catch((err: Error) => {
                 if (self.isCancelling && 'code' in err) {
                     const splunkErr = err as SplunkError;
-                    if (splunkErr.code === 404) {
+                    if (splunkErr.errorParams.httpStatusCode === 404) {
                         throw new SplunkSearchCancelError('Search has been cancelled');
                     } else {
                         throw err;

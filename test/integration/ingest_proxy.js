@@ -53,7 +53,7 @@ describe('integration tests for Ingest Endpoints', () => {
                 splunkBadToken.ingest.createEvents(events).then(response => {
                     assert.fail('request with bad auth should not succeed');
                 }).catch(err => {
-                    assert.equal(err.code, 401, 'response status should be 401');
+                    assert.equal(err.errorParams.httpStatusCode, 401, 'response httpStatusCode should be 401');
                 });
             });
         });
@@ -205,22 +205,25 @@ describe('integration tests for Ingest Endpoints', () => {
                     assert.fail('request with bad data format should not succeed')
                 },
                 err => {
-                    assert.equal(err.code, 400, 'response status should be 400');
+                    assert.equal(err.errorParams.httpStatusCode, 400, 'response httpStatusCode should be 400');
 
                     /**
                      * {
-                     *   code: '400',
-                     *   message: 'Invalid data format',
-                     *   url: 'https://HOST/TENANT/ingest/vX/metrics'
+                     *  code: 'INVALID_DATA',
+                     *  moreInfo: undefined,
+                     *  httpStatusCode: 400,
+                     *  details: undefined
                      * }
                      */
-                    expect(err).to.have.property('code');
-                    expect(err.code).to.equal(400);
-                    expect(err).to.have.property('message');
-                    expect(err.message).to.match(/Invalid/);
+                    expect(err.errorParams).to.have.property('code');
+                    expect(err.errorParams.httpStatusCode).to.equal(400);
+                    expect(err.errorParams).to.have.property('message');
+                    expect(err.errorParams.message).to.match(/Invalid/);
+                    /* TODO: New error response doesn't contain url details, check with the services
                     expect(err).to.have.property('url');
                     expect(err.url).to.match(new RegExp(ServicePrefixes.INGEST_SERVICE_PREFIX, 'i'));
                     expect(err.url).to.match(/metrics/);
+                    */
                 }
             ));
         });

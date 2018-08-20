@@ -5,7 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import BaseApiService from './baseapiservice';
-import { QueryArgs } from './client';
+import { ContentType, QueryArgs, RequestHeaders } from './client';
 import { KVSTORE_SERVICE_PREFIX } from './service_prefixes';
 
 /**
@@ -23,7 +23,7 @@ export class KVStoreService extends BaseApiService {
 
     /**
      * Gets the the KVStore collections stats
-     * @param the collection to retrieve
+     * @param collection the collection to retrieve
      * @returns A promise that contains the KVStore's response
      */
     public getCollectionStats = (collection: string): Promise<CollectionStats> => {
@@ -34,6 +34,39 @@ export class KVStoreService extends BaseApiService {
         ]);
 
         return this.client.get(url).then(response => response as CollectionStats);
+    };
+
+    /**
+     * Gets all the collections.
+     */
+    public getCollections = (): Promise<CollectionDefinition[]> => {
+        return this.client
+            .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+                'collections'
+            ]))
+            .then(response => response as CollectionDefinition[]);
+    };
+
+    /**
+     * Exports the specified collection records to an external file.
+     * @param collection The collection whose records should be exported
+     * @param contentType The contentType (csv or gzip) of the records file to be exported
+     */
+    public exportCollection = (collection: string, contentType: ContentType): Promise<string> => {
+        let requestHeaders: RequestHeaders = {};
+        if (contentType === ContentType.CSV) {
+            requestHeaders = { 'Accept': ContentType.CSV }
+        } else {
+            requestHeaders = { 'Accept': ContentType.GZIP }
+        }
+
+        return this.client
+            .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+                'collections',
+                collection,
+                'export',
+            ]), {}, requestHeaders)
+            .then(response => response as string);
     };
 
     /**
@@ -141,7 +174,7 @@ export class KVStoreService extends BaseApiService {
      * Lists the records present in a given collection based on the provided
      * @param collection The collection to retrieve the records from
      * @param filter Filter string to target specific records
-     * Returns a promise that is a list of the records
+     * @return a promise that is a list of the records
      */
     public listRecords = (
         collection: string,
@@ -185,7 +218,6 @@ export interface PingOKBody {
 
 export interface CollectionDefinition {
     collection: string;
-    namespace: string;
 }
 
 export interface CollectionDescription {
@@ -198,7 +230,7 @@ export interface CollectionStats {
     count: number;
     indexSizes: object;
     nindexes: number;
-    ns: string;
+    collection: string;
     size: number;
     totalIndexSize: number;
 }
