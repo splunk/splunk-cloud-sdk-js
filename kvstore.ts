@@ -120,7 +120,7 @@ export class KVStoreService extends BaseApiService {
     /**
      * Inserts a new record to the collection.
      * @param collection The name of the collection where the record should be inserted
-     * @param record The record to add to the collection, formatted as a JSON object
+     * @param record The record to add to the collection
      * @returns A promise that contains an object with the unique _key of the added record
      */
     public insertRecord = (collection: string, record: Map<string, string>): Promise<any> => {
