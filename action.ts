@@ -111,7 +111,7 @@ export interface Action {
     name: string;
     // Kind of action (email, webhook, or sns), all actions have this field
     kind: ActionKind;
-    
+
     // Email action fields:
     // HTMLPart to send via Email action
     htmlPart?: string;
@@ -201,13 +201,13 @@ interface ActionUpdateFields {
     templateName?: string;
     // Addresses to send to when Email action triggered
     addresses: string[];
-    
+
     // SNS action fields:
     // Topic to trigger SNS action
     topic?: string;
     // Message to send via SNS or Webhook action
     message?: string;
-    
+
     // Webhook action fields:
     // WebhookURL to trigger Webhook action
     webhookUrl?: string;
