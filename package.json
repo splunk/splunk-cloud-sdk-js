@@ -34,7 +34,6 @@
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.0.2",
-    "is-guid": "^0.0.2",
     "isomorphic-fetch": "^2.2.1",
     "istanbul": "^0.4.5",
     "js-yaml": "^3.11.0",
