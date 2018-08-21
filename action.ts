@@ -17,7 +17,8 @@ export class ActionService extends BaseApiService {
      */
     public getActions = (): Promise<Action[]> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
-            .then(response => response as Action[]);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Action[]);
     };
 
     /**
@@ -27,7 +28,8 @@ export class ActionService extends BaseApiService {
      */
     public getAction = (id: Action['name']): Promise<Action> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]))
-            .then(response => response as Action);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Action);
     };
 
     /**
@@ -36,7 +38,9 @@ export class ActionService extends BaseApiService {
      * @return Promise of object
      */
     public deleteAction = (id: Action['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]));
+        return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     };
 
 
@@ -47,7 +51,8 @@ export class ActionService extends BaseApiService {
      */
     public createAction = (action: Action): Promise<Action> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
-            .then(response => response as Action);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Action);
     };
 
     /**
@@ -58,7 +63,8 @@ export class ActionService extends BaseApiService {
      */
     public updateAction = (id: Action['name'], action: ActionUpdateFields): Promise<Action> => {
         return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), action)
-            .then(response => response as Action);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Action);
     };
 
     /**
@@ -69,8 +75,9 @@ export class ActionService extends BaseApiService {
      */
     public triggerAction = (id: Action['name'], notification: ActionNotification): Promise<ActionTriggerResponse> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), notification)
-            .then(response => {
-                const responseStr = response.toString();
+            .then(response => response.Body)
+            .then(responseBody => {
+                const responseStr = responseBody.toString();
                 if (responseStr.includes('/status/')) {
                     const parts = responseStr.split('/status/');
                     if (parts.length === 2) {
@@ -80,7 +87,7 @@ export class ActionService extends BaseApiService {
                         } as ActionTriggerResponse);
                     }
                 }
-                return response as ActionTriggerResponse;
+                return responseBody as ActionTriggerResponse;
             });
     };
 
@@ -92,7 +99,8 @@ export class ActionService extends BaseApiService {
      */
     public getActionStatus = (id: Action['name'], statusId: string): Promise<ActionStatus> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id, 'status', statusId]))
-            .then(response => response as ActionStatus);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as ActionStatus);
     };
 }
 
