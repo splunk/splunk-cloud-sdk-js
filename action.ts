@@ -23,26 +23,25 @@ export class ActionService extends BaseApiService {
 
     /**
      * Get an action by name
-     * @param id name of the action
+     * @param name name of the action
      * @return Promise of an action
      */
-    public getAction = (id: Action['name']): Promise<Action> => {
-        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]))
+    public getAction = (name: Action['name']): Promise<Action> => {
+        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
             .then(response => response.Body)
             .then(responseBody => responseBody as Action);
     };
 
     /**
      * Delete an action by name
-     * @param id name of the action
+     * @param name name of the action
      * @return Promise of object
      */
-    public deleteAction = (id: Action['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]))
+    public deleteAction = (name: Action['name']): Promise<any> => {
+        return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
             .then(response => response.Body)
             .then(responseBody => responseBody);
     };
-
 
     /**
      * Create an action
@@ -57,24 +56,24 @@ export class ActionService extends BaseApiService {
 
     /**
      * Update an action
-     * @param id name of the action
+     * @param name name of the action
      * @param action action updates
      * @return Promise of an action
      */
-    public updateAction = (id: Action['name'], action: ActionUpdateFields): Promise<Action> => {
-        return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), action)
+    public updateAction = (name: Action['name'], action: ActionUpdateFields): Promise<Action> => {
+        return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
             .then(response => response.Body)
             .then(responseBody => responseBody as Action);
     };
 
     /**
      * Trigger an action
-     * @param id name of the action
+     * @param name name of the action
      * @param notification action notification
      * @return Promise of actionTriggerResponse
      */
-    public triggerAction = (id: Action['name'], notification: ActionNotification): Promise<ActionTriggerResponse> => {
-        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id]), notification)
+    public triggerAction = (name: Action['name'], notification: ActionNotification): Promise<ActionTriggerResponse> => {
+        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), notification)
             .then(response => response.Body)
             .then(responseBody => {
                 const responseStr = responseBody.toString();
@@ -93,12 +92,12 @@ export class ActionService extends BaseApiService {
 
     /**
      * Get action status
-     * @param id name of the action
+     * @param name name of the action
      * @param statusId statusId
      * @return Promise of actionStatus
      */
-    public getActionStatus = (id: Action['name'], statusId: string): Promise<ActionStatus> => {
-        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', id, 'status', statusId]))
+    public getActionStatus = (name: Action['name'], statusId: string): Promise<ActionStatus> => {
+        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
             .then(response => response.Body)
             .then(responseBody => responseBody as ActionStatus);
     };
@@ -119,8 +118,7 @@ export interface Action {
     name: string;
     // Kind of action (email, webhook, or sns), all actions have this field
     kind: ActionKind;
-    // ID of action assigned by action service, all actions have this field
-    id?: string;
+
     // Email action fields:
     // HTMLPart to send via Email action
     htmlPart?: string;
@@ -132,11 +130,13 @@ export interface Action {
     templateName?: string;
     // Addresses to send to when Email action triggered
     addresses: string[];
+
     // SNS action fields:
     // Topic to trigger SNS action
     topic?: string;
     // Message to send via SNS or Webhook action
     message: string;
+
     // Webhook action fields:
     // WebhookURL to trigger Webhook action
     webhookUrl?: string;
@@ -154,7 +154,7 @@ enum ActionStatusState {
 // ActionStatus defines the state information
 interface ActionStatus {
     state: ActionStatusState;
-    id: string;
+    statusId: string;
     message: string;
 }
 
@@ -197,8 +197,6 @@ interface SplunkEventPayload {
 
 // ActionUpdateFields defines the fields that may be updated for an existing Action
 interface ActionUpdateFields {
-    // ID of action assigned by action service, all actions have this field
-    id?: string;
     // Email action fields:
     // HTMLPart to send via Email action
     htmlPart?: string;
@@ -210,11 +208,13 @@ interface ActionUpdateFields {
     templateName?: string;
     // Addresses to send to when Email action triggered
     addresses: string[];
+
     // SNS action fields:
     // Topic to trigger SNS action
     topic?: string;
     // Message to send via SNS or Webhook action
     message?: string;
+
     // Webhook action fields:
     // WebhookURL to trigger Webhook action
     webhookUrl?: string;
