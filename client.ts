@@ -248,5 +248,5 @@ export interface RequestHeaders {
 
 export interface HTTPResponse {
     Body?: Promise<string>;
-    Headers?: Headers;
+    Headers: Headers;
 }

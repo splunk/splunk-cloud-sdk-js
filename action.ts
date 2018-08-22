@@ -74,19 +74,21 @@ export class ActionService extends BaseApiService {
      */
     public triggerAction = (name: Action['name'], notification: ActionNotification): Promise<ActionTriggerResponse> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), notification)
-            .then(response => response.Body)
-            .then(responseBody => {
-                const responseStr = responseBody.toString();
-                if (responseStr.includes('/status/')) {
-                    const parts = responseStr.split('/status/');
-                    if (parts.length === 2) {
-                        return Promise.resolve({
-                            'StatusID': parts[1],
-                            'StatusURL': responseStr
-                        } as ActionTriggerResponse);
+            .then(response => {
+                const key = 'location';
+                if ((key in response.Headers._headers)) {
+                    const responseStr = response.Headers._headers[key].toString();
+                    if (responseStr.includes('/status/')) {
+                        const parts = responseStr.split('/status/');
+                        if (parts.length === 2) {
+                            return Promise.resolve({
+                                'StatusID': parts[1],
+                                'StatusURL': responseStr
+                            } as ActionTriggerResponse);
+                        }
                     }
                 }
-                return responseBody as ActionTriggerResponse;
+                return response.Body as ActionTriggerResponse;
             });
     };
 
