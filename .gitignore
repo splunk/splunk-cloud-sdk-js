@@ -88,3 +88,5 @@ common/
 # Hide the token file created by token-fetcher
 okta/.token
 *.js.map
+
+version.ts
