@@ -1,39 +1,45 @@
 - type: serial
-  name: stubby
+  name: Tests
+  steps:
+  - name: Fetch Okta Token
+    service: ssc-sdk-shared-token-fetcher
+    command: true
+  - name: Functional Tests With Code Coverage
+    service: ssc-client-js-with-stubby
+    command: bash -c "yarn codecov"
+  - type: parallel
+    name: Integration Tests And Example Tests
+    steps:
+        # Integration Tests
+      - name: Integration Tests - Not Gated
+        service: ssc-client-js-against-playground
+        exclude: ^(master|develop)$
+        command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
+      - name: Integration Tests - Gated
+        service: ssc-client-js-against-playground
+        tag: ^(master|develop)$
+        command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
+        # Example Tests
+      - name: Example Tests - Not Gated
+        service: ssc-client-js-against-playground
+        exclude: ^(master|develop)$
+        command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
+      - name: Example Tests - Gated
+        service: ssc-client-js-against-playground
+        tag: ^(master|develop)$
+        command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
+
+- type: serial
+  name: Documentation
   steps:
     - name: build docs - TypeScript
       service: ssc-client-js-with-stubby
       command: bash -c "yarn docs"
-    - name: stubby tests with coverage - TypeScript
-      service: ssc-client-js-with-stubby
-      command: bash -c "yarn codecov"
+
+# TODO: Add Whitesource tests here
 
 - type: serial
-  name: integration - TypeScript
-  steps:
-  - name: fetch Okta token
-    service: ssc-sdk-shared-token-fetcher
-    command: true
-  - type: parallel
-    name: integration tests & examples - TypeScript
-    steps:
-      - name: integration tests - not gated
-        service: ssc-client-js-against-playground
-        exclude: ^(master|develop)$
-        command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
-      - name: integration tests - gated
-        service: ssc-client-js-against-playground
-        tag: ^(master|develop)$
-        command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
-      - name: run examples - not gated
-        service: ssc-client-js-against-playground
-        exclude: ^(master|develop)$
-        command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
-      - name: run examples - gated
-        service: ssc-client-js-against-playground
-        tag: ^(master|develop)$
-        command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
-  - name: deploy
+  - name: Deploy
     service: ssc-client-js-with-stubby
     tag: master
     command: ./ci/publish.sh
