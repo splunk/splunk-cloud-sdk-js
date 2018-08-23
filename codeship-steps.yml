@@ -1,4 +1,11 @@
 - type: serial
+  name: Documentation
+  steps:
+    - name: Build Docs
+      service: ssc-client-js-with-stubby
+      command: bash -c "yarn docs"
+
+- type: serial
   name: Testing
   steps:
   - name: Fetch Okta Token
@@ -30,13 +37,6 @@
         command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
 
 # TODO: Add Whitesource here
-
-- type: serial
-  name: Documentation
-  steps:
-    - name: Build Docs
-      service: ssc-client-js-with-stubby
-      command: bash -c "yarn docs"
 
 - type: serial
   name: Deploy
