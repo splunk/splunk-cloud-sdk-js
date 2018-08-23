@@ -70,7 +70,8 @@
       ".eslintrc.js",
       "tslint.json",
       "tsconfig.json",
-      "docs"
+      "docs",
+      ".template"
     ]
   }
 }
