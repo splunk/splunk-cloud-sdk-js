@@ -17,7 +17,9 @@ export class IngestService extends BaseApiService {
      * @param event
      */
     public createEvent = (event: Event): Promise<any> => {
-        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), event);
+        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), event)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -25,7 +27,9 @@ export class IngestService extends BaseApiService {
      * @param events
      */
     public createEvents = (events: Event[]): Promise<any> => {
-        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), IngestService.eventsToJSONs(events));
+        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), IngestService.eventsToJSONs(events))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -41,7 +45,9 @@ export class IngestService extends BaseApiService {
                 queryParams[key] = event[key];
             }
         });
-        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['raw']), event.event, queryParams);
+        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['raw']), event.event, queryParams)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -49,7 +55,9 @@ export class IngestService extends BaseApiService {
      * @param metrics
      */
     public createMetrics = (metrics: MetricEvent[]): Promise<any> => {
-        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics']), metrics);
+        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics']), metrics)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
