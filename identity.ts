@@ -15,6 +15,7 @@ export class IdentityService extends BaseApiService {
      * Authenticate the user by the access token obtained from authorization header and return user profile data,
      * including tenant memberships
      * @param tenantId
+     * @return UserProfile for the current user (as defined by the submitted Bearer token)
      */
     public getUserProfile = (tenantId: Tenant['tenantId'] = 'system'): Promise<UserProfile> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], tenantId))
@@ -24,6 +25,7 @@ export class IdentityService extends BaseApiService {
     /**
      * Adds a tenant
      * @param tenantId
+     * @return promise that will be resolved when the tenant creation request is accepted
      */
     public createTenant = (tenantId: Tenant['tenantId']): Promise<any> => {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenantId);
@@ -32,6 +34,7 @@ export class IdentityService extends BaseApiService {
     /**
      * Deletes a tenant
      * @param tenantId
+     * @return promise that will be resolved when the tenant deletion request is accepted
      */
     public deleteTenant = (tenantId: Tenant['tenantId']): Promise<any> => {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId], 'system'));
@@ -40,6 +43,7 @@ export class IdentityService extends BaseApiService {
     /**
      * Reads a list of users in the given tenant
      * @param tenantId
+     * @return a list of users with access to the tenant
      */
     public getTenantUsers = (tenantId: Tenant['tenantId']): Promise<User[]> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId))
@@ -50,6 +54,7 @@ export class IdentityService extends BaseApiService {
      * Replaces current tenant users with new users
      * @param tenantId
      * @param users
+     * @return promise that will be resolved when the user replacement request is accepted
      */
     public replaceTenantUsers = (tenantId: Tenant['tenantId'], users: User[]): Promise<any> => {
         return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
@@ -59,6 +64,7 @@ export class IdentityService extends BaseApiService {
      * Adds a list of users to the tenant
      * @param tenantId
      * @param users
+     * @return promise that will be resolved when the request has been accepted
      */
     public addTenantUsers = (tenantId: Tenant['tenantId'], users: User[]): Promise<any> => {
         return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
@@ -68,6 +74,7 @@ export class IdentityService extends BaseApiService {
      * Deletes a list of users from the tenant
      * @param tenantId
      * @param users
+     * @return promise that will be resolved when the request has been accepted
      */
     public deleteTenantUsers = (tenantId: Tenant['tenantId'], users: User[]): Promise<any> => {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);

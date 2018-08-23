@@ -46,6 +46,7 @@ export class Search {
 
     /**
      * Returns the status of the search job
+     * @return search job status description
      */
     public status = (): Promise<Job> => {
         return this.client.getJob(this.sid);
@@ -55,6 +56,7 @@ export class Search {
      * Polls the job until it is done processing
      * @param updateInterval
      * @param statusCallback
+     * @return search job status description
      */
     public wait = (updateInterval: number, statusCallback: (job: Job) => any): Promise<Job> => {
         const self = this;
@@ -71,7 +73,7 @@ export class Search {
                     throw err;
                 }
             });
-    }
+    };
 
     /**
      * Submits a cancel job against this search job
@@ -79,7 +81,7 @@ export class Search {
     public cancel = (): Promise<object> => {
         this.isCancelling = true;
         return this.client.createJobControlAction(this.sid, Action.CANCEL);
-    }
+    };
 
     /**
      * Pauses this search job
