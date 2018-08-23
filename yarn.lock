@@ -1167,10 +1167,6 @@ is-fullwidth-code-point@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/is-fullwidth-code-point/-/is-fullwidth-code-point-2.0.0.tgz#a3b30a5c4f199183167aaab93beefae3ddfb654f"
 
-is-guid@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/is-guid/-/is-guid-0.0.2.tgz#da2ed3d59b3fa9e7bafc923b3536a18bb638d5ef"
-
 is-number@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/is-number/-/is-number-3.0.0.tgz#24fd6201a4782cf50561c810276afc7d12d71195"
