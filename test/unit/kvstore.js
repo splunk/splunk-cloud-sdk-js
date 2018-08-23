@@ -2,8 +2,8 @@ const { assert } = require('chai');
 const config = require('../config');
 const SplunkSSC = require('../../splunk');
 
-const testNamespace = config.testNamespace;
-const testCollection = config.testCollection;
+const stubbyTestNamespace = config.stubbyTestNamespace;
+const stubbyTestCollection = config.stubbyTestCollection;
 
 const splunk = new SplunkSSC(
     `http://${config.stubbyHost}:8882`,
@@ -13,8 +13,8 @@ const splunk = new SplunkSSC(
 
 describe('Stubby tests for Kvstore Index Endpoints', () => {
     describe('Get all indexes', () => {
-        it('should return all the indexes present in the given collection and namespace', () => {
-            return splunk.kvstore.listIndexes(testCollection).then(indexes => {
+        it('should return all the indexes present in the given collection', () => {
+            return splunk.kvstore.listIndexes(stubbyTestCollection).then(indexes => {
                 assert.typeOf(indexes, 'array', 'response data should be an array');
                 indexes.forEach(index => {
                     assert('name' in index, 'index should contain key: name');
@@ -31,8 +31,6 @@ describe('Stubby tests for Kvstore Index Endpoints', () => {
         it('should create a new index', () => {
             const testIndex = {
                 name: 'TEST_INDEX_02',
-                namespace: testNamespace,
-                collection: testCollection,
                 fields: [
                     {
                         field: 'TEST_FIELD_01',
@@ -40,7 +38,7 @@ describe('Stubby tests for Kvstore Index Endpoints', () => {
                     },
                 ],
             };
-            return splunk.kvstore.createIndex(testIndex, testCollection).then(response => {
+            return splunk.kvstore.createIndex(testIndex, stubbyTestCollection).then(response => {
                 assert.notEqual(response, null);
             });
         });
@@ -48,7 +46,7 @@ describe('Stubby tests for Kvstore Index Endpoints', () => {
 
     describe('Delete an index', () => {
         it('should return no response body', () => {
-            return splunk.kvstore.deleteIndex('TEST_INDEX_01', testCollection).then(response => {
+            return splunk.kvstore.deleteIndex('TEST_INDEX_01', stubbyTestCollection).then(response => {
                 assert.notEqual(response, null);
             });
         });
@@ -76,8 +74,8 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
                 count_of_fields: 3,
             },
         ];
-        it('should return an array of keys of the newly created records in the given collection and namespace', () =>
-            splunk.kvstore.insertRecords(testCollection, testRecords).then(keys => {
+        it('should return an array of keys of the newly created records in the given collection', () =>
+            splunk.kvstore.insertRecords(stubbyTestCollection, testRecords).then(keys => {
                 assert.typeOf(keys, 'array', 'response data should be an array');
                 assert.equal(keys.length, 3);
             }));
@@ -85,7 +83,7 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
 
     describe('Get record by key', () => {
         it('should return a record corresponding to the given key', () =>
-            splunk.kvstore.getRecordByKey(testCollection, 'TEST_RECORD_KEY_01').then(record => {
+            splunk.kvstore.getRecordByKey(stubbyTestCollection, 'TEST_RECORD_KEY_01').then(record => {
                 assert.equal(record._key, 'TEST_RECORD_KEY_01');
                 assert.equal(record.capacity_gb, 8);
                 assert.equal(record.description, 'This is a tiny amount of GB');
@@ -96,15 +94,15 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
     describe('Delete a record by key', () => {
         it('should return no response body', () =>
             splunk.kvstore
-                .deleteRecordByKey(testCollection, 'TEST_RECORD_KEY_01')
+                .deleteRecordByKey(stubbyTestCollection, 'TEST_RECORD_KEY_01')
                 .then(response => {
                     assert(!response);
                 }));
     });
 
     describe('Get all the records', () => {
-        it('should return all the records present in the given collection and namespace', () =>
-            splunk.kvstore.queryRecords(testCollection).then(records => {
+        it('should return all the records present in the given collection ', () =>
+            splunk.kvstore.queryRecords(stubbyTestCollection).then(records => {
                 assert.typeOf(records, 'array', 'response data should be an array');
                 assert.deepEqual(records.length, 2, 'Two records should be returned');
                 assert.equal(records[0]._key, 'TEST_RECORD_KEY_01');
@@ -113,8 +111,8 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
     });
 
     describe('Get all the records based on the given query', () => {
-        it('should return all the records present in the given collection and namespace that matches the given query', () =>
-            splunk.kvstore.queryRecords(testCollection).then(records => {
+        it('should return all the records present in the given collection that matches the given query', () =>
+            splunk.kvstore.queryRecords(stubbyTestCollection).then(records => {
                 assert.typeOf(records, 'array', 'response data should be an array');
                 assert.equal(records.length, 2);
                 assert.equal(records[0]._key, 'TEST_RECORD_KEY_01');
@@ -126,7 +124,7 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
 
     describe('Delete all the records', () => {
         it('should return no response body', () =>
-            splunk.kvstore.deleteRecords(testCollection).then(response => {
+            splunk.kvstore.deleteRecords(stubbyTestCollection).then(response => {
                 assert(!response);
             }));
     });
@@ -134,7 +132,7 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
     describe('Delete a record based on the query', () => {
         it('should return no response body', () =>
             splunk.kvstore
-                .deleteRecords(testCollection, '{"size": "tiny", "capacity_gb": 8}')
+                .deleteRecords(stubbyTestCollection, '{"size": "tiny", "capacity_gb": 8}')
                 .then(response => {
                     assert(!response);
                 }));
