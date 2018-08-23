@@ -76,7 +76,7 @@ export class ActionService extends BaseApiService {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), notification)
             .then(response => {
                 const key = 'location';
-                if ((key in response.Headers._headers)) {
+                if (key in response.Headers._headers) {
                     const responseStr = response.Headers._headers[key].toString();
                     if (responseStr.includes('/status/')) {
                         const parts = responseStr.split('/status/');
