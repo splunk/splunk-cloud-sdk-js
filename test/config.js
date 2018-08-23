@@ -12,4 +12,5 @@ module.exports = {
     playgroundAuthToken: process.env.BEARER_TOKEN,
     testNamespace: `jsnmspace${Date.now()}`,
     testCollection: `jscollecn${Date.now()}`,
+    tenantCreationOn: (process.env.TENANT_CREATION === "1"),
 };
