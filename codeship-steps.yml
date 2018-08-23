@@ -39,7 +39,9 @@
 # TODO: Add Whitesource tests here
 
 - type: serial
-  - name: Deploy
-    service: ssc-client-js-with-stubby
-    tag: master
-    command: ./ci/publish.sh
+  name: Deploy
+  steps:
+    - name: Deploy to NPM
+      service: ssc-client-js-with-stubby
+      tag: master
+      command: ./ci/publish.sh
