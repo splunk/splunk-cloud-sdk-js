@@ -164,7 +164,6 @@ export class ServiceClient {
             headers: this.buildHeaders(headers),
         }).catch( e => {throw new SplunkError({ message: e.message })})
           .then((response: Response) => handleResponse(response));
-
     }
 
     /**
@@ -181,8 +180,7 @@ export class ServiceClient {
             body: typeof data !== 'string' ? JSON.stringify(data) : data,
             headers: this.buildHeaders(),
         }).catch( e => {throw new SplunkError({ message: e.message })})
-          .then((response: Response) => handleResponse(response))
-
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -199,7 +197,6 @@ export class ServiceClient {
             headers: this.buildHeaders(),
         }).catch( e => {throw new SplunkError({ message: e.message })})
           .then((response: Response) => handleResponse(response));
-
     }
 
     /**
@@ -216,7 +213,6 @@ export class ServiceClient {
             headers: this.buildHeaders(),
         }).catch( e => {throw new SplunkError({ message: e.message })})
           .then((response: Response) => handleResponse(response));
-
     }
 
     /**
@@ -238,7 +234,6 @@ export class ServiceClient {
             headers: this.buildHeaders(),
         }).catch( e => {throw new SplunkError({ message: e.message })})
           .then((response: Response) => handleResponse(response));
-
     }
 }
 
