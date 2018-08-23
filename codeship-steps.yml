@@ -1,5 +1,5 @@
 - type: serial
-  name: Tests
+  name: Testing
   steps:
   - name: Fetch Okta Token
     service: ssc-sdk-shared-token-fetcher
@@ -32,7 +32,7 @@
 - type: serial
   name: Documentation
   steps:
-    - name: build docs - TypeScript
+    - name: Build Docs
       service: ssc-client-js-with-stubby
       command: bash -c "yarn docs"
 
