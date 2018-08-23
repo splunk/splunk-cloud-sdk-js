@@ -159,8 +159,9 @@ export class ServiceClient {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
             headers: this.buildHeaders(headers),
-        }).then((response: Response) => handleResponse(response))
-          .catch( e => {throw new SplunkError({ message: e.message })});
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
+
     }
 
     /**
@@ -176,8 +177,9 @@ export class ServiceClient {
             method: 'POST',
             body: typeof data !== 'string' ? JSON.stringify(data) : data,
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response))
-          .catch( e => {throw new SplunkError({ message: e.message })});
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response))
+
     }
 
     /**
@@ -192,8 +194,9 @@ export class ServiceClient {
             method: 'PUT',
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response))
-          .catch( e => {throw new SplunkError({ message: e.message })});
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
+
     }
 
     /**
@@ -208,8 +211,9 @@ export class ServiceClient {
             method: 'PATCH',
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response))
-          .catch( e => {throw new SplunkError({ message: e.message })});
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
+
     }
 
     /**
@@ -229,8 +233,9 @@ export class ServiceClient {
             method: 'DELETE',
             body: JSON.stringify(deleteData),
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response))
-          .catch( e => {throw new SplunkError({ message: e.message })});
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
+
     }
 }
 
