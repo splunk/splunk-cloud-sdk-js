@@ -9,6 +9,7 @@ const branch = child_process.execSync('git rev-parse --abbrev-ref HEAD', {encodi
 const commit = child_process.execSync('git rev-parse --short HEAD', {encoding: 'utf-8'}).trim();
 
 const versionFileData = template({
+    useragent: 'ssc-js-sdk',
     version: package.version || 'unknown',
     branch: branch || 'unknown',
     commit: commit || 'unknown',
