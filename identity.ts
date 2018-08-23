@@ -19,7 +19,8 @@ export class IdentityService extends BaseApiService {
      */
     public getUserProfile = (tenantId: Tenant['tenantId'] = 'system'): Promise<UserProfile> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], tenantId))
-            .then(response => response as UserProfile);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as UserProfile);
     }
 
     /**
@@ -28,7 +29,9 @@ export class IdentityService extends BaseApiService {
      * @return promise that will be resolved when the tenant creation request is accepted
      */
     public createTenant = (tenantId: Tenant['tenantId']): Promise<any> => {
-        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenantId);
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenantId)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -37,7 +40,9 @@ export class IdentityService extends BaseApiService {
      * @return promise that will be resolved when the tenant deletion request is accepted
      */
     public deleteTenant = (tenantId: Tenant['tenantId']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId], 'system'));
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId], 'system'))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -47,7 +52,8 @@ export class IdentityService extends BaseApiService {
      */
     public getTenantUsers = (tenantId: Tenant['tenantId']): Promise<User[]> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId))
-            .then(response => response as User[]);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as User[]);
     }
 
     /**
@@ -57,7 +63,9 @@ export class IdentityService extends BaseApiService {
      * @return promise that will be resolved when the user replacement request is accepted
      */
     public replaceTenantUsers = (tenantId: Tenant['tenantId'], users: User[]): Promise<any> => {
-        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
+        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -67,7 +75,9 @@ export class IdentityService extends BaseApiService {
      * @return promise that will be resolved when the request has been accepted
      */
     public addTenantUsers = (tenantId: Tenant['tenantId'], users: User[]): Promise<any> => {
-        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
+        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -77,7 +87,9 @@ export class IdentityService extends BaseApiService {
      * @return promise that will be resolved when the request has been accepted
      */
     public deleteTenantUsers = (tenantId: Tenant['tenantId'], users: User[]): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 }
 
