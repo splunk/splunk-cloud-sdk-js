@@ -17,7 +17,8 @@ export class ActionService extends BaseApiService {
      */
     public getActions = (): Promise<Action[]> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
-            .then(response => response as Action[]);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Action[]);
     };
 
     /**
@@ -27,7 +28,8 @@ export class ActionService extends BaseApiService {
      */
     public getAction = (name: Action['name']): Promise<Action> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
-            .then(response => response as Action);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Action);
     };
 
     /**
@@ -36,9 +38,10 @@ export class ActionService extends BaseApiService {
      * @return Promise of object
      */
     public deleteAction = (name: Action['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]));
+        return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     };
-
 
     /**
      * Create an action
@@ -47,7 +50,8 @@ export class ActionService extends BaseApiService {
      */
     public createAction = (action: Action): Promise<Action> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
-            .then(response => response as Action);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Action);
     };
 
     /**
@@ -58,7 +62,8 @@ export class ActionService extends BaseApiService {
      */
     public updateAction = (name: Action['name'], action: ActionUpdateFields): Promise<Action> => {
         return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
-            .then(response => response as Action);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Action);
     };
 
     /**
@@ -70,17 +75,20 @@ export class ActionService extends BaseApiService {
     public triggerAction = (name: Action['name'], notification: ActionNotification): Promise<ActionTriggerResponse> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), notification)
             .then(response => {
-                const responseStr = response.toString();
-                if (responseStr.includes('/status/')) {
-                    const parts = responseStr.split('/status/');
-                    if (parts.length === 2) {
-                        return Promise.resolve({
-                            'StatusID': parts[1],
-                            'StatusURL': responseStr
-                        } as ActionTriggerResponse);
+                const key = 'location';
+                if (key in response.Headers._headers) {
+                    const responseStr = response.Headers._headers[key].toString();
+                    if (responseStr.includes('/status/')) {
+                        const parts = responseStr.split('/status/');
+                        if (parts.length === 2) {
+                            return Promise.resolve({
+                                'StatusID': parts[1],
+                                'StatusURL': responseStr
+                            } as ActionTriggerResponse);
+                        }
                     }
                 }
-                return response as ActionTriggerResponse;
+                return response.Body as ActionTriggerResponse;
             });
     };
 
@@ -92,7 +100,8 @@ export class ActionService extends BaseApiService {
      */
     public getActionStatus = (name: Action['name'], statusId: string): Promise<ActionStatus> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
-            .then(response => response as ActionStatus);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as ActionStatus);
     };
 }
 

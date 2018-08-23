@@ -186,6 +186,7 @@ export class SearchService extends BaseApiService {
      */
     public getJobs = (jobArgs: any = {}): Promise<Job[]> => { // TODO: Flesh out JobsRequest
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
+            .then(response => response.Body)
             .then((o: object) => o as Job[]);
     }
 
@@ -200,12 +201,15 @@ export class SearchService extends BaseApiService {
      */
     public createJob = (jobArgs?: object): Promise<Job['sid']> => {
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
+            .then(response => response.Body)
             .then((sid: Job['sid']) => sid);
     }
 
     // TODO: support ttl value via JobControlActionRequest
     public createJobControlAction = (jobId: string, action: string): Promise<object> => {  // TODO: Flesh out what this returns
-        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), { action });
+        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), { action })
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     // TODO:(dp) response is undefined in yaml spec
@@ -214,6 +218,7 @@ export class SearchService extends BaseApiService {
      */
     public getJob = (jobId: string): Promise<Job> => {
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]))
+            .then(response => response.Body)
             .then(o => o as Job);
     }
 
@@ -254,6 +259,7 @@ export class SearchService extends BaseApiService {
     public getResults = (jobId: string, args: FetchResultsRequest = {}): Promise<{ results: object[] }> => {
         const queryArgs: QueryArgs = args || {};
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), queryArgs)
+            .then(response => response.Body)
             .then((o: object) => o as { results: object[] });
     }
 
@@ -263,14 +269,18 @@ export class SearchService extends BaseApiService {
      */
     public getEvents = (jobId: string, args?: { offset?: number, count?: number }): Promise<any> => {
         const queryArgs: QueryArgs = args || {};
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'events']), queryArgs);
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'events']), queryArgs)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
      * Delete the search job with the given `id`, cancelling the search if it is running.
      */
     public deleteJob = (jobId: string): Promise<object> => {
-        return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
+        return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
