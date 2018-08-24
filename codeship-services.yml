@@ -31,6 +31,13 @@ ssc-sdk-shared-stubby:
   image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest
   dockercfg_service: aws-generator
 
+ssc-client-js-whitesource:
+  build:
+      context: .
+      dockerfile: ci/whitesource/Dockerfile
+      image: splunk/ssc-client-js-whitesource
+  encrypted_env_file: ci/env.encrypted
+
 aws-generator:
   add_docker: true
   image: codeship/aws-ecr-dockercfg-generator

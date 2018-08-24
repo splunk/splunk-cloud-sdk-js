@@ -35,8 +35,14 @@
         service: ssc-client-js-against-playground
         tag: ^(master|develop)$
         command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
-
-# TODO: Add Whitesource here
+  - name: WhiteSource Testing
+    service: ssc-client-js-whitesource
+    command: bash -c "java -jar /opt/whitesource/whitesource-fs-agent.jar \
+                      -c /opt/splunk/ssc-client-js/ci/whitesource/whitesource-fs-agent.config \
+                      -d /opt/splunk/ssc-client-js \
+                      -apiKey $WHITESOURCE_API_KEY \
+                      -productToken $WHITESOURCE_PRODUCT_TOKEN \
+                      -userKey $WHITESOURCE_USER_KEY"
 
 - type: serial
   name: Deploy
