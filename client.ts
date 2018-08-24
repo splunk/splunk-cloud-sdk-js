@@ -15,9 +15,9 @@ export interface SplunkErrorParams {
     moreInfo?:string;
 }
 
-export class SplunkError extends Error implements SplunkErrorParams{
+export class SplunkError extends Error implements SplunkErrorParams {
 
-    public errorParams:SplunkErrorParams;
+    public errorParams: SplunkErrorParams;
 
     constructor(errorParams: SplunkErrorParams) {
         super(errorParams.message);
@@ -32,10 +32,13 @@ export class SplunkError extends Error implements SplunkErrorParams{
 function handleResponse(response: Response): Promise<any> {
 
     if (response.ok) {
+        let httpResponse: HTTPResponse
         if (response.headers.get('Content-Type') === ContentType.CSV || response.headers.get('Content-Type') === ContentType.GZIP) {
-            return response.text();
+            httpResponse = { Body: response.text(), Headers: response.headers }
+            return Promise.resolve(httpResponse);
         }
-        return response.text().then(decodeJson);
+        httpResponse = { Body: response.text().then(decodeJson), Headers: response.headers }
+        return Promise.resolve(httpResponse);
     }
     return response.text().then(text => {
         let err: Error;
@@ -162,7 +165,8 @@ export class ServiceClient {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
             headers: this.buildHeaders(headers),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -178,7 +182,8 @@ export class ServiceClient {
             method: 'POST',
             body: typeof data !== 'string' ? JSON.stringify(data) : data,
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -193,7 +198,8 @@ export class ServiceClient {
             method: 'PUT',
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -208,7 +214,8 @@ export class ServiceClient {
             method: 'PATCH',
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -228,7 +235,8 @@ export class ServiceClient {
             method: 'DELETE',
             body: JSON.stringify(deleteData),
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 }
 
@@ -244,4 +252,9 @@ export enum ContentType {
 
 export interface RequestHeaders {
     [key: string]: string;
+}
+
+export interface HTTPResponse {
+    Body?: Promise<string>;
+    Headers: Headers;
 }
