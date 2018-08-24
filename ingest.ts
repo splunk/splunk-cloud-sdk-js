@@ -128,7 +128,7 @@ interface MetricEvent {
     body: Metric[];
     host: string;
     source: string;
-    sourceType: string;
+    sourcetype: string;
     timestamp: number;
     id?: string;
     nanos?: number;
