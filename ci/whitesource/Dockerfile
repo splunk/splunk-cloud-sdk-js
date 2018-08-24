@@ -1,4 +1,4 @@
-FROM 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-whitesource:temporary
+FROM 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-whitesource:latest
 
 RUN apk update && \
     apk upgrade && \
