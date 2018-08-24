@@ -1,13 +1,16 @@
 {
   "name": "@splunk/ssc-client",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Splunk SSC SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
     "tslint": "tslint -p tsconfig.json",
     "tslint:fix": "tslint -p tsconfig.json --fix",
-    "ts:docs": "rm -rf docs && typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/ --inlineSourceMap --module commonjs --theme minimal --excludePrivate",
-    "build": "tsc -p tsconfig.json",
+    "ts:docs": "rm -rf docs && yarn ts:docs:html && yarn ts:docs:md",
+    "ts:docs:html": "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/html/ --inlineSourceMap --module commonjs --theme minimal --excludePrivate",
+    "ts:docs:md": "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/md/ --inlineSourceMap --module commonjs --theme markdown --excludePrivate --mdHideSources --mdEngine github",
+    "docs": "yarn ts:docs",
+    "build": "node ci/extract_version.js && tsc -p tsconfig.json",
     "clean": "rm *.js *.map",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
     "codecov:integration": "yarn cover:integration && codecov -f ./coverage-integration/lcov.info -F integration",
@@ -19,7 +22,7 @@
     "test:integration": "mocha --timeout=900000 test/integration",
     "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",
-    "publish:docs": "yarn ts:docs && yarn add -D @splunk/cicd-tools && yarn cicd-publish-docs",
+    "publish:docs": "yarn ts:docs && npm add -D @splunk/cicd-tools --registry https://repo.splunk.com/artifactory/api/npm/npm && yarn cicd-publish-docs docs/html",
     "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
     "stop:swagger": "docker rm -f swagger",
     "example": "node examples/*.js"
@@ -27,10 +30,10 @@
   "author": "Splunk, Inc.",
   "license": "UNLICENSED",
   "devDependencies": {
+    "@types/isomorphic-fetch": "^0.0.34",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.0.2",
-    "is-guid": "^0.0.2",
     "isomorphic-fetch": "^2.2.1",
     "istanbul": "^0.4.5",
     "js-yaml": "^3.11.0",
@@ -45,11 +48,10 @@
     "tslint-config-prettier": "^1.13.0",
     "tslint-eslint-rules": "^5.3.1",
     "typedoc": "^0.11.1",
+    "typedoc-plugin-markdown": "^1.1.13",
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "@types/isomorphic-fetch": "^0.0.34",
-    "js-base64": "^2.4.3",
     "rxjs": "^6.2.1"
   },
   "nyc": {
@@ -57,17 +59,9 @@
       "lcov",
       "text-summary"
     ],
-    "include": [
-      "ts_src/*.ts"
-    ],
     "extension": [
       ".ts"
     ],
-    "require": [
-      "ts-node/register"
-    ],
-    "all": true,
-    "sourceMap": true,
     "exclude": [
       ".tmp",
       "ci",
@@ -79,7 +73,8 @@
       ".eslintrc.js",
       "tslint.json",
       "tsconfig.json",
-      "docs"
+      "docs",
+      ".template"
     ]
   }
 }

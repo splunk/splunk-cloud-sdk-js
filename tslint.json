@@ -8,7 +8,10 @@
     ],
     "jsRules": {},
     "rules": {
-        "quotemark": false,
+        "quotemark": [
+            true,
+            "single"
+        ],
         "interface-name": false,
         "member-ordering": false,
         "object-literal-sort-keys": false,

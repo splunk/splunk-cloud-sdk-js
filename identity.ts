@@ -1,3 +1,9 @@
+/*
+Copyright © 2018 Splunk Inc.
+SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
+without a valid written license from Splunk Inc. is PROHIBITED.
+*/
+
 import BaseApiService from './baseapiservice';
 import { IDENTITY_SERVICE_PREFIX } from './service_prefixes';
 
@@ -10,34 +16,40 @@ export class IdentityService extends BaseApiService {
      * including tenant memberships
      * @param tenantId
      */
-    public getUserProfile = (tenantId: Tenant["tenantId"] = 'system'): Promise<UserProfile> => {
+    public getUserProfile = (tenantId: Tenant['tenantId'] = 'system'): Promise<UserProfile> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['userprofile'], tenantId))
-            .then(response => response as UserProfile);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as UserProfile);
     }
 
     /**
      * Adds a tenant
      * @param tenantId
      */
-    public createTenant = (tenantId: Tenant["tenantId"]): Promise<any> => {
-        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenantId);
+    public createTenant = (tenantId: Tenant['tenantId']): Promise<any> => {
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenantId)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
      * Deletes a tenant
      * @param tenantId
      */
-    public deleteTenant = (tenantId: Tenant["tenantId"]): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId], 'system'));
+    public deleteTenant = (tenantId: Tenant['tenantId']): Promise<any> => {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantId], 'system'))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
      * Reads a list of users in the given tenant
      * @param tenantId
      */
-    public getTenantUsers = (tenantId: Tenant["tenantId"]): Promise<User[]> => {
+    public getTenantUsers = (tenantId: Tenant['tenantId']): Promise<User[]> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId))
-            .then(response => response as User[]);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as User[]);
     }
 
     /**
@@ -45,8 +57,10 @@ export class IdentityService extends BaseApiService {
      * @param tenantId
      * @param users
      */
-    public replaceTenantUsers = (tenantId: Tenant["tenantId"], users: User[]): Promise<any> => {
-        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
+    public replaceTenantUsers = (tenantId: Tenant['tenantId'], users: User[]): Promise<any> => {
+        return this.client.put(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -54,8 +68,10 @@ export class IdentityService extends BaseApiService {
      * @param tenantId
      * @param users
      */
-    public addTenantUsers = (tenantId: Tenant["tenantId"], users: User[]): Promise<any> => {
-        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
+    public addTenantUsers = (tenantId: Tenant['tenantId'], users: User[]): Promise<any> => {
+        return this.client.patch(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -63,8 +79,10 @@ export class IdentityService extends BaseApiService {
      * @param tenantId
      * @param users
      */
-    public deleteTenantUsers = (tenantId: Tenant["tenantId"], users: User[]): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users);
+    public deleteTenantUsers = (tenantId: Tenant['tenantId'], users: User[]): Promise<any> => {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['users'], tenantId), users)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 }
 

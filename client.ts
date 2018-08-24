@@ -1,12 +1,26 @@
+/*
+Copyright © 2018 Splunk Inc.
+SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
+without a valid written license from Splunk Inc. is PROHIBITED.
+*/
+
 import 'isomorphic-fetch';
 
-export class SplunkError extends Error {
-    public code?: number;
-    public url?: Response["url"];
-    constructor(message: string, code?: number, source?: Response["url"]) {
-        super(message);
-        this.code = code;
-        this.url = source;
+export interface SplunkErrorParams {
+    message: string;
+    code?: string;
+    httpStatusCode?:number;
+    details?:object;
+    moreInfo?:string;
+}
+
+export class SplunkError extends Error implements SplunkErrorParams {
+
+    public errorParams: SplunkErrorParams;
+
+    constructor(errorParams: SplunkErrorParams) {
+        super(errorParams.message);
+        this.errorParams = errorParams;
     }
 }
 
@@ -15,20 +29,32 @@ export class SplunkError extends Error {
  * @private
  */
 function handleResponse(response: Response): Promise<any> {
+
     if (response.ok) {
-        return response.text().then(decodeJson);
+        let httpResponse: HTTPResponse
+        if (response.headers.get('Content-Type') === ContentType.CSV || response.headers.get('Content-Type') === ContentType.GZIP) {
+            httpResponse = { Body: response.text(), Headers: response.headers }
+            return Promise.resolve(httpResponse);
+        }
+        httpResponse = { Body: response.text().then(decodeJson), Headers: response.headers }
+        return Promise.resolve(httpResponse);
     }
     return response.text().then(text => {
         let err: Error;
         try {
             const json = JSON.parse(text);
+
             if (!json.message) {
                 // TODO: This shouldn't go to production
-                console.log(`Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`);
+                console.log(
+                    `Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`
+                );
             }
-            err = new SplunkError(json.message, response.status, response.url);
+            err = new SplunkError({ message:json.message,code:json.code,moreInfo:json.moreInfo,httpStatusCode:response.status,details:json.details } );
         } catch (ex) {
-            err = new SplunkError(`Unknown error: ${text}`, response.status, response.url);
+            const message = `${response.statusText} - unable to process response`;
+            console.error(message, ex);
+            err = new SplunkError( { message,httpStatusCode:response.status,details: { response: text } } );
         }
         throw err;
     });
@@ -40,7 +66,8 @@ function handleResponse(response: Response): Promise<any> {
  * @private
  */
 // TODO(david): Should we throw if response is empty? We may get here on DELETE
-function decodeJson(text: string): any { // TODO: change to returning object
+function decodeJson(text: string): any {
+    // TODO: change to returning object
     if (text === '') {
         return text;
     }
@@ -85,11 +112,8 @@ export class ServiceClient {
         if (query && Object.keys(query).length > 0) {
             const encoder = encodeURIComponent;
             const queryEncoded = Object.keys(query)
-                .map(k => {
-                    if (query[k]) {
-                        return `${encoder(k)}=${encoder(String(query[k]))}`;
-                    }
-                })
+                .filter(k => query[k] != null) // filter out undefined and null
+                .map(k => `${encoder(k)}=${encoder(String(query[k]))}`)
                 .join('&');
             return `${this.url}${path}?${queryEncoded}`;
         }
@@ -99,20 +123,26 @@ export class ServiceClient {
     /**
      * Builds headers required for request to Splunk SSC (auth, content-type, etc)
      */
-    private buildHeaders(): Headers {
+    private buildHeaders(headers?: RequestHeaders): Headers {
         // TODO: Cache
-        return new Headers({
+        const requestParamHeaders: Headers = new Headers({
             'Authorization': `Bearer ${this.token}`,
-            'Content-Type': 'application/json',
-        });
+            'Content-Type': ContentType.JSON,});
+
+        if (headers !== undefined && headers !== {}) {
+            Object.keys(headers).forEach(key => {
+                requestParamHeaders.append(key, headers[key])
+            })
+        }
+        return requestParamHeaders;
     }
 
     public buildPath(servicePrefix: string, pathname: string[], overrideTenant?: string): string {
         const effectiveTenant = overrideTenant || this.tenant;
         if (!effectiveTenant) {
-            throw new Error("No tenant specified");
+            throw new Error('No tenant specified');
         }
-        const path = `/${effectiveTenant}${servicePrefix}/${pathname.join("/")}`;
+        const path = `/${effectiveTenant}${servicePrefix}/${pathname.join('/')}`;
         for (const elem of pathname) {
             if (elem && elem.trim() === '') {
                 throw new Error(`Empty elements in path: ${path}`);
@@ -128,11 +158,12 @@ export class ServiceClient {
      * @param path Path portion of the URL to request from Splunk
      * @param query Object that contains query parameters
      */
-    public get(path: string, query?: QueryArgs): Promise<any> {
+    public get(path: string, query?: QueryArgs, headers?: RequestHeaders): Promise<any> {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
-            headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+            headers: this.buildHeaders(headers),
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -145,10 +176,11 @@ export class ServiceClient {
      */
     public post(path: string, data: any, query?: QueryArgs): Promise<any> {
         return fetch(this.buildUrl(path, query), {
-            method: "POST",
-            body: typeof data !== "string" ? JSON.stringify(data) : data,
+            method: 'POST',
+            body: typeof data !== 'string' ? JSON.stringify(data) : data,
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -163,7 +195,8 @@ export class ServiceClient {
             method: 'PUT',
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -178,7 +211,8 @@ export class ServiceClient {
             method: 'PATCH',
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -198,10 +232,26 @@ export class ServiceClient {
             method: 'DELETE',
             body: JSON.stringify(deleteData),
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 }
 
 export interface QueryArgs {
     [key: string]: string | number | undefined;
+}
+
+export enum ContentType {
+    CSV = 'text/csv',
+    GZIP = 'application/gzip',
+    JSON = 'application/json',
+}
+
+export interface RequestHeaders {
+    [key: string]: string;
+}
+
+export interface HTTPResponse {
+    Body?: Promise<string>;
+    Headers: Headers;
 }

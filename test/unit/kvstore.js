@@ -1,50 +1,55 @@
-const {assert} = require("chai");
-const config = require("../config");
-const SplunkSSC = require("../../splunk");
+const { assert } = require('chai');
+const config = require('../config');
+const SplunkSSC = require('../../splunk');
 
-const testnamespace = config.testNamespace;
-const testcollection = config.testCollection;
+const stubbyTestNamespace = config.stubbyTestNamespace;
+const stubbyTestCollection = config.stubbyTestCollection;
 
-const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
+const splunk = new SplunkSSC(
+    `http://${config.stubbyHost}:8882`,
+    config.stubbyAuthToken,
+    config.stubbyTenant
+);
 
 describe('Stubby tests for Kvstore Index Endpoints', () => {
     describe('Get all indexes', () => {
-        it('should return all the indexes present in the given collection and namespace', () => splunk.kvstore.listIndexes(testnamespace, testcollection).then(indexes => {
-            assert.typeOf(indexes, 'array', 'response data should be an array');
-            indexes.forEach(index => {
-                assert('name' in index, 'index should contain key: name');
-                index.fields.forEach(field => {
-                    assert('field' in field, 'index field should contain key: field');
-                    assert('direction' in field, 'index field should contain key: direction');
-                })
+        it('should return all the indexes present in the given collection', () => {
+            return splunk.kvstore.listIndexes(stubbyTestCollection).then(indexes => {
+                assert.typeOf(indexes, 'array', 'response data should be an array');
+                indexes.forEach(index => {
+                    assert('name' in index, 'index should contain key: name');
+                    index.fields.forEach(field => {
+                        assert('field' in field, 'index field should contain key: field');
+                        assert('direction' in field, 'index field should contain key: direction');
+                    });
+                });
             });
-        }));
+        });
     });
 
     describe('Post a new index', () => {
         it('should create a new index', () => {
-            const testIndex =
-                {
-                    "name": "TEST_INDEX_02",
-                    "namespace": testnamespace,
-                    "collection": testcollection,
-                    "fields": [
-                        {
-                            "field": "TEST_FIELD_01",
-                            "direction": -1
-                        }
-                    ]
-                };
-            return splunk.kvstore.createIndex(testIndex, testnamespace, testcollection).then(response => {
-                assert(!response)
+            const testIndex = {
+                name: 'TEST_INDEX_02',
+                fields: [
+                    {
+                        field: 'TEST_FIELD_01',
+                        direction: -1,
+                    },
+                ],
+            };
+            return splunk.kvstore.createIndex(testIndex, stubbyTestCollection).then(response => {
+                assert.notEqual(response, null);
             });
         });
     });
 
     describe('Delete an index', () => {
-        it('should return no response body', () => splunk.kvstore.deleteIndex('TEST_INDEX_01', testnamespace, testcollection).then(response => {
-            assert(!response);
-        }));
+        it('should return no response body', () => {
+            return splunk.kvstore.deleteIndex('TEST_INDEX_01', stubbyTestCollection).then(response => {
+                assert.notEqual(response, null);
+            });
+        });
     });
 });
 
@@ -52,73 +57,84 @@ describe('Stubby tests for Kvstore Record Endpoints', () => {
     describe('Insert new records', () => {
         const testRecords = [
             {
-                "capacity_gb": 8,
-                "size": "tiny",
-                "description": "This is a tiny amount of GB",
-                "_raw": ""
+                capacity_gb: 8,
+                size: 'tiny',
+                description: 'This is a tiny amount of GB',
+                _raw: '',
             },
             {
-                "capacity_gb": 16,
-                "size": "small",
-                "description": "This is a small amount of GB",
-                "_raw": ""
+                capacity_gb: 16,
+                size: 'small',
+                description: 'This is a small amount of GB',
+                _raw: '',
             },
             {
-                "type": "A",
-                "name": "test_record",
-                "count_of_fields": 3
-            }
+                type: 'A',
+                name: 'test_record',
+                count_of_fields: 3,
+            },
         ];
-        it('should return an array of keys of the newly created records in the given collection and namespace', () => splunk.kvstore.insertRecords(testnamespace, testcollection, testRecords).then(keys => {
-            assert.typeOf(keys, 'array', 'response data should be an array');
-            assert.equal(keys.length, 3, 'Three keys should be returned corresponding to the three newly created records')
-        }));
+        it('should return an array of keys of the newly created records in the given collection', () =>
+            splunk.kvstore.insertRecords(stubbyTestCollection, testRecords).then(keys => {
+                assert.typeOf(keys, 'array', 'response data should be an array');
+                assert.equal(keys.length, 3);
+            }));
     });
 
     describe('Get record by key', () => {
-        it('should return a record corresponding to the given key', () => splunk.kvstore.getRecordByKey(testnamespace, testcollection, "TEST_RECORD_KEY_01").then(record => {
-            assert.equal(record._key, "TEST_RECORD_KEY_01", 'The field \'_key\' should contain the value \'TEST_RECORD_KEY_01\'');
-            assert.equal(record.capacity_gb, 8, 'The field \'capacity_gb\' should contain the value \'8\'');
-            assert.equal(record.description, "This is a tiny amount of GB", 'The field \'description\' should contain the value \'This is a tiny amount of GB\'');
-            assert.equal(record.size, "tiny", 'The field \'size\' should contain the value \'tiny\'');
-        }));
+        it('should return a record corresponding to the given key', () =>
+            splunk.kvstore.getRecordByKey(stubbyTestCollection, 'TEST_RECORD_KEY_01').then(record => {
+                assert.equal(record._key, 'TEST_RECORD_KEY_01');
+                assert.equal(record.capacity_gb, 8);
+                assert.equal(record.description, 'This is a tiny amount of GB');
+                assert.equal(record.size, 'tiny');
+            }));
     });
 
     describe('Delete a record by key', () => {
-        it('should return no response body', () => splunk.kvstore.deleteRecordByKey(testnamespace, testcollection, "TEST_RECORD_KEY_01").then(response => {
-            assert(!response);
-        }));
+        it('should return no response body', () =>
+            splunk.kvstore
+                .deleteRecordByKey(stubbyTestCollection, 'TEST_RECORD_KEY_01')
+                .then(response => {
+                    assert(!response);
+                }));
     });
 
     describe('Get all the records', () => {
-        it('should return all the records present in the given collection and namespace', () => splunk.kvstore.queryRecords(testnamespace, testcollection).then(records => {
-            assert.typeOf(records, 'array', 'response data should be an array');
-            assert.deepEqual(records.length, 2, 'Two records should be returned');
-            assert.equal(records[0]._key, "TEST_RECORD_KEY_01", 'The field \'_key\' should contain the value \'TEST_RECORD_KEY_01\'');
-            assert.equal(records[1]._key, "TEST_RECORD_KEY_02", 'The field \'_key\' should contain the value \'TEST_RECORD_KEY_02\'');
-        }));
+        it('should return all the records present in the given collection ', () =>
+            splunk.kvstore.queryRecords(stubbyTestCollection).then(records => {
+                assert.typeOf(records, 'array', 'response data should be an array');
+                assert.deepEqual(records.length, 2, 'Two records should be returned');
+                assert.equal(records[0]._key, 'TEST_RECORD_KEY_01');
+                assert.equal(records[1]._key, 'TEST_RECORD_KEY_02');
+            }));
     });
 
     describe('Get all the records based on the given query', () => {
-        it('should return all the records present in the given collection and namespace that matches the given query', () => splunk.kvstore.queryRecords(testnamespace, testcollection, "{\"size\": \"tiny\", \"capacity_gb\": 8}").then(records => {
-            assert.typeOf(records, 'array', 'response data should be an array');
-            assert.equal(records.length, 1, 'One record should be returned');
-            assert.equal(records[0]._key, "TEST_RECORD_KEY_01", 'The field \'_key\' should contain the value \'TEST_RECORD_KEY_01\'');
-            assert.equal(records[0].capacity_gb, 8, 'The field \'capacity_gb\' should contain the value \'8\'');
-            assert.equal(records[0].description, "This is a tiny amount of GB", 'The field \'description\' should contain the value \'This is a tiny amount of GB\'');
-            assert.equal(records[0].size, "tiny", 'The field \'size\' should contain the value \'tiny\'');
-        }));
+        it('should return all the records present in the given collection that matches the given query', () =>
+            splunk.kvstore.queryRecords(stubbyTestCollection).then(records => {
+                assert.typeOf(records, 'array', 'response data should be an array');
+                assert.equal(records.length, 2);
+                assert.equal(records[0]._key, 'TEST_RECORD_KEY_01');
+                assert.equal(records[0].capacity_gb, 8);
+                assert.equal(records[0].description, 'This is a tiny amount of GB');
+                assert.equal(records[0].size, 'tiny');
+            }));
     });
 
     describe('Delete all the records', () => {
-        it('should return no response body', () => splunk.kvstore.deleteRecords(testnamespace, testcollection).then(response => {
-            assert(!response);
-        }));
+        it('should return no response body', () =>
+            splunk.kvstore.deleteRecords(stubbyTestCollection).then(response => {
+                assert(!response);
+            }));
     });
 
     describe('Delete a record based on the query', () => {
-        it('should return no response body', () => splunk.kvstore.deleteRecords(testnamespace, testcollection, "{\"size\": \"tiny\", \"capacity_gb\": 8}").then(response => {
-            assert(!response);
-        }));
+        it('should return no response body', () =>
+            splunk.kvstore
+                .deleteRecords(stubbyTestCollection, '{"size": "tiny", "capacity_gb": 8}')
+                .then(response => {
+                    assert(!response);
+                }));
     });
 });

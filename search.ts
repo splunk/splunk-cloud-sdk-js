@@ -1,8 +1,14 @@
+/*
+Copyright © 2018 Splunk Inc.
+SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
+without a valid written license from Splunk Inc. is PROHIBITED.
+*/
+
 import { Observable } from 'rxjs';
 import BaseApiService from './baseapiservice';
-import { QueryArgs, SplunkError } from "./client";
-import { Event } from "./ingest";
-import { SEARCH_SERVICE_PREFIX } from "./service_prefixes";
+import { QueryArgs, SplunkError } from './client';
+import { Event } from './ingest';
+import { SEARCH_SERVICE_PREFIX } from './service_prefixes';
 
 export class SplunkSearchCancelError extends Error {
 }
@@ -24,7 +30,7 @@ function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchS
  */
 export class Search {
     private client: SearchService;
-    private readonly sid: Job["sid"];
+    private readonly sid: Job['sid'];
     private isCancelling: boolean;
 
     /**
@@ -32,7 +38,7 @@ export class Search {
      * @param searchService
      * @param sid
      */
-    constructor(searchService: SearchService, sid: Job["sid"]) {
+    constructor(searchService: SearchService, sid: Job['sid']) {
         this.client = searchService;
         this.sid = sid;
         this.isCancelling = false;
@@ -56,8 +62,8 @@ export class Search {
             .catch((err: Error) => {
                 if (self.isCancelling && 'code' in err) {
                     const splunkErr = err as SplunkError;
-                    if (splunkErr.code === 404) {
-                        throw new SplunkSearchCancelError("Search has been cancelled");
+                    if (splunkErr.errorParams.httpStatusCode === 404) {
+                        throw new SplunkSearchCancelError('Search has been cancelled');
                     } else {
                         throw err;
                     }
@@ -180,6 +186,7 @@ export class SearchService extends BaseApiService {
      */
     public getJobs = (jobArgs: any = {}): Promise<Job[]> => { // TODO: Flesh out JobsRequest
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
+            .then(response => response.Body)
             .then((o: object) => o as Job[]);
     }
 
@@ -192,14 +199,17 @@ export class SearchService extends BaseApiService {
      * @param jobArgs {PostJobsRequest}
      * @return {Promise<string>}
      */
-    public createJob = (jobArgs?: object): Promise<Job["sid"]> => {
+    public createJob = (jobArgs?: object): Promise<Job['sid']> => {
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
-            .then((sid: Job["sid"]) => sid);
+            .then(response => response.Body)
+            .then((sid: Job['sid']) => sid);
     }
 
     // TODO: support ttl value via JobControlActionRequest
     public createJobControlAction = (jobId: string, action: string): Promise<object> => {  // TODO: Flesh out what this returns
-        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), { action });
+        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), { action })
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     // TODO:(dp) response is undefined in yaml spec
@@ -208,6 +218,7 @@ export class SearchService extends BaseApiService {
      */
     public getJob = (jobId: string): Promise<Job> => {
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]))
+            .then(response => response.Body)
             .then(o => o as Job);
     }
 
@@ -216,7 +227,7 @@ export class SearchService extends BaseApiService {
      * @param pollInterval
      * @param callback
      */
-    public waitForJob = (jobId: Job["sid"], pollInterval?: number, callback?: (job: Job) => object) => {
+    public waitForJob = (jobId: Job['sid'], pollInterval?: number, callback?: (job: Job) => object) => {
         const self = this;
         const interval = pollInterval || 250;
         return new Promise<Job>((resolve: (job: Job) => void, reject: (error: Error) => void) => {
@@ -227,7 +238,7 @@ export class SearchService extends BaseApiService {
                 if (job.dispatchState === DispatchState.DONE) {
                     resolve(job);
                 } else if (job.dispatchState === DispatchState.FAILED) {
-                    const error = new Error("Job failed");
+                    const error = new Error('Job failed');
                     // error.job = job; // TODO: Make this a better error where we can highlight what went wrong.
                     reject(error);
                 } else {
@@ -248,6 +259,7 @@ export class SearchService extends BaseApiService {
     public getResults = (jobId: string, args: FetchResultsRequest = {}): Promise<{ results: object[] }> => {
         const queryArgs: QueryArgs = args || {};
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), queryArgs)
+            .then(response => response.Body)
             .then((o: object) => o as { results: object[] });
     }
 
@@ -257,14 +269,18 @@ export class SearchService extends BaseApiService {
      */
     public getEvents = (jobId: string, args?: { offset?: number, count?: number }): Promise<any> => {
         const queryArgs: QueryArgs = args || {};
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'events']), queryArgs);
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'events']), queryArgs)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
      * Delete the search job with the given `id`, cancelling the search if it is running.
      */
     public deleteJob = (jobId: string): Promise<object> => {
-        return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]));
+        return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -342,9 +358,9 @@ interface PostJobsRequest {
 }
 
 export enum SearchLevel {
-    VERBOSE = "verbose",
-    FAST = "fast",
-    SMART = "smart",
+    VERBOSE = 'verbose',
+    FAST = 'fast',
+    SMART = 'smart',
 }
 
 export interface Job { // TODO: not in spec
@@ -377,15 +393,15 @@ interface JobControlActionRequest {
 }
 
 enum Action {
-    PAUSE = "pause",
-    UNPAUSE = "unpause",
-    FINALIZE = "finalize",
-    CANCEL = "cancel",
-    TOUCH = "touch",
-    SETTTL = "setttl",
-    SETPRIORITY = "setpriority", // TODO: this should need a priority level for JobControlActionRequest
-    ENABLEPREVIEW = "enablepreview",
-    DISABLEPREVIEW = "disablepreview",
+    PAUSE = 'pause',
+    UNPAUSE = 'unpause',
+    FINALIZE = 'finalize',
+    CANCEL = 'cancel',
+    TOUCH = 'touch',
+    SETTTL = 'setttl',
+    SETPRIORITY = 'setpriority', // TODO: this should need a priority level for JobControlActionRequest
+    ENABLEPREVIEW = 'enablepreview',
+    DISABLEPREVIEW = 'disablepreview',
 }
 
 interface FetchResultsRequest {
