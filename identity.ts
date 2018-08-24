@@ -99,7 +99,8 @@ export class IdentityService extends BaseApiService {
      */
     public createMember = (tenantId: Tenant['tenantId'], memberName: MemberName): Promise<any> => {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members'], tenantId), memberName)
-            .then(response => response as Member);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Member);
     }
 
     /**
@@ -110,7 +111,8 @@ export class IdentityService extends BaseApiService {
      */
     public getMember = (tenantId: Tenant['tenantId'], memberName: MemberName['name']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName], tenantId))
-            .then(response => response as Member);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Member);
     }
 
     /**
@@ -120,7 +122,8 @@ export class IdentityService extends BaseApiService {
      */
     public getMembers = (tenantId: Tenant['tenantId']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members'], tenantId))
-            .then(response => response as string[]);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as string[]);
     }
 
     /**
@@ -130,7 +133,9 @@ export class IdentityService extends BaseApiService {
      * @returns  Empty response upon success
      */
     public deleteMember = (tenantId: Tenant['tenantId'], memberName: MemberName['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName], tenantId));
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName], tenantId))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -141,7 +146,8 @@ export class IdentityService extends BaseApiService {
      */
     public createRole = (tenantId: Tenant['tenantId'], roleInput: RoleInput): Promise<any> => {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles'], tenantId), roleInput)
-            .then(response => response as Role);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Role);
     }
 
     /**
@@ -151,7 +157,8 @@ export class IdentityService extends BaseApiService {
      */
     public getRoles = (tenantId: Tenant['tenantId']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles'], tenantId))
-            .then(response => response as string[]);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as string[]);
     }
 
     /**
@@ -162,7 +169,8 @@ export class IdentityService extends BaseApiService {
      */
     public getRole = (tenantId: Tenant['tenantId'], roleName: Role['name']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName], tenantId))
-            .then(response => response as Role);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Role);
     }
 
     /**
@@ -172,7 +180,9 @@ export class IdentityService extends BaseApiService {
      * @returns Empty response on success
      */
     public deleteRole = (tenantId: Tenant['tenantId'], roleName: Role['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName], tenantId));
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName], tenantId))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -183,19 +193,21 @@ export class IdentityService extends BaseApiService {
      */
     public getRolePermissions = (tenantId: Tenant['tenantId'], roleName: Role['name']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions'], tenantId))
-            .then(response => response as string[]);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as string[]);
     }
 
     /**
      * Adds permissions to an existing role in this tenant
      * @param tenantId The unique identifier of the tenant
      * @param roleName String name of a role
-     * @param permissions A list of permissions
+     * @param permission String name of a permission
      * @returns Empty response upon success
      */
-    public createRolePermissons = (tenantId: Tenant['tenantId'], roleName: Role['name'], permissions: string[]): Promise<any> => {
-        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions'], tenantId), permissions)
-            .then(response => response as RolePermission);
+    public createRolePermissions = (tenantId: Tenant['tenantId'], roleName: Role['name'], permission: string): Promise<any> => {
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions'], tenantId), JSON.stringify(permission))
+            .then(response => response.Body)
+            .then(responseBody => responseBody as RolePermission);
     }
 
     /**
@@ -207,7 +219,8 @@ export class IdentityService extends BaseApiService {
      */
     public getRolePermission = (tenantId: Tenant['tenantId'], roleName: Role['name'], permissionName: Permission['name']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions', permissionName], tenantId))
-            .then(response => response as RolePermission);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as RolePermission);
     }
 
     /**
@@ -218,7 +231,9 @@ export class IdentityService extends BaseApiService {
      * @returns Empty response upon success
      */
     public deleteRolePermission = (tenantId: Tenant['tenantId'], roleName: Role['name'], permissionName: Permission['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions', permissionName], tenantId));
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions', permissionName], tenantId))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -228,7 +243,9 @@ export class IdentityService extends BaseApiService {
      * @returns Empty response upon success
      */
     public deleteAllRolePermissions = (tenantId: Tenant['tenantId'], roleName: Role['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions'], tenantId));
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions'], tenantId))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -239,7 +256,8 @@ export class IdentityService extends BaseApiService {
      */
     public createGroup = (tenantId: Tenant['tenantId'], groupInput: GroupInput): Promise<any> => {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups'], tenantId), groupInput)
-            .then(response => response as Group);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Group);
     }
 
     /**
@@ -250,7 +268,8 @@ export class IdentityService extends BaseApiService {
      */
     public getGroup = (tenantId: Tenant['tenantId'], groupName: Group['name']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName], tenantId))
-            .then(response => response as Group);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Group);
     }
 
     /**
@@ -260,7 +279,8 @@ export class IdentityService extends BaseApiService {
      */
     public getGroups = (tenantId: Tenant['tenantId']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups'], tenantId))
-            .then(response => response as string[]);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as string[]);
     }
 
     /**
@@ -270,7 +290,9 @@ export class IdentityService extends BaseApiService {
      * @returns Empty response upon success
      */
     public deleteGroup = (tenantId: Tenant['tenantId'], groupName: Group['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName], tenantId));
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName], tenantId))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -282,7 +304,8 @@ export class IdentityService extends BaseApiService {
      */
     public createGroupRole = (tenantId: Tenant['tenantId'], groupName: Group['name'], roleName: RoleName): Promise<any> => {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles'], tenantId), roleName)
-            .then(response => response as GroupRole);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as GroupRole);
     }
 
     /**
@@ -294,7 +317,8 @@ export class IdentityService extends BaseApiService {
      */
     public getGroupRole = (tenantId: Tenant['tenantId'], groupName: Group['name'], roleName: Role['name']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles', roleName], tenantId))
-            .then(response => response as GroupRole);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as GroupRole);
     }
 
     /**
@@ -305,7 +329,8 @@ export class IdentityService extends BaseApiService {
      */
     public getGroupRoles = (tenantId: Tenant['tenantId'], groupName: Group['name']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles'], tenantId))
-            .then(response => response as string[]);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as string[]);
     }
 
     /**
@@ -316,7 +341,9 @@ export class IdentityService extends BaseApiService {
      * @returns Empty response upon success
      */
     public deleteGroupRole = (tenantId: Tenant['tenantId'], groupName: Group['name'], roleName: Role['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles', roleName], tenantId));
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles', roleName], tenantId))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -328,7 +355,8 @@ export class IdentityService extends BaseApiService {
      */
     public createGroupMember = (tenantId: Tenant['tenantId'], groupName: Group['name'], groupMemberName: GroupMemberName): Promise<any> => {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members'], tenantId), groupMemberName)
-            .then(response => response as GroupMember);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as GroupMember);
     }
 
     /**
@@ -340,7 +368,8 @@ export class IdentityService extends BaseApiService {
      */
     public getGroupMember = (tenantId: Tenant['tenantId'], groupName: Group['name'], groupMemberName: GroupMemberName['name']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members', groupMemberName], tenantId))
-            .then(response => response as GroupMember);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as GroupMember);
     }
 
     /**
@@ -351,7 +380,8 @@ export class IdentityService extends BaseApiService {
      */
     public getGroupMembers = (tenantId: Tenant['tenantId'], groupName: Group['name']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members'], tenantId))
-            .then(response => response as string[]);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as string[]);
     }
 
     /**
@@ -362,7 +392,9 @@ export class IdentityService extends BaseApiService {
      * @returns Empty response upon success
      */
     public deleteGroupMember = (tenantId: Tenant['tenantId'], groupName: Group['name'], groupMemberName: GroupMemberName['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members', groupMemberName], tenantId));
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members', groupMemberName], tenantId))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -372,7 +404,8 @@ export class IdentityService extends BaseApiService {
      */
     public createPrincipal = (principalInput: PrincipalInput): Promise<any> => {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals'], 'system'), principalInput)
-            .then(response => response as Principal);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Principal);
     }
 
     /**
@@ -382,7 +415,8 @@ export class IdentityService extends BaseApiService {
      */
     public getPrincipal = (principalName: PrincipalInput['name']): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals', principalName], 'system'))
-            .then(response => response as Principal);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as Principal);
     }
 
     /**
@@ -391,7 +425,8 @@ export class IdentityService extends BaseApiService {
      */
     public getPrincipals = (): Promise<any> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals'], 'system'))
-            .then(response => response as string[]);
+            .then(response => response.Body)
+            .then(responseBody => responseBody as string[]);
     }
 
     /**
@@ -400,7 +435,9 @@ export class IdentityService extends BaseApiService {
      * @returns Empty response upon success
      */
     public deletePrincipal = (principalName: PrincipalInput['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals', principalName], 'system'));
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals', principalName], 'system'))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
     }
 
 }
@@ -436,10 +473,10 @@ interface User {
  * Role - A unique role associated with a tenant within the Identity Service
  */
 interface Role {
-    tenant: string
-    name: string
     createdAt: Date
     createdBy: string
+    name: string
+    tenant: string
 }
 
 /**

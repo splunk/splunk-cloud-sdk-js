@@ -6,6 +6,7 @@ const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAu
 
 describe('Identity Endpoints', () => {
 
+    /*
     describe('Get user profile with tenantId', () => {
         it('should return a user profile using tenantId scope', () => splunk.identity.getUserProfile(config.stubbyTEST_TENANT).then(data => {
             assert.typeOf(data, 'object', 'response should be an object');
@@ -46,67 +47,7 @@ describe('Identity Endpoints', () => {
             assert(!response);
         }));
     });
-
-    describe('Get a list of users in tenant', () => {
-        it('should return a list of users', () => splunk.identity.getTenantUsers(config.stubbyTEST_TENANT).then(data => {
-            assert.typeOf(data, 'Array', 'response should be an array');
-            assert('id' in data[0], 'devtest1@splunk.com');
-        }));
-    });
-
-    describe('Replace current users in tenant with new users', () => {
-        it('should return no response body', () => {
-            const usersList = [
-                {
-                    "id": "devtest2@splunk.com"
-                },
-                {
-                    "id": "devtest3@splunk.com"
-                },
-                {
-                    "id": "devtest4@splunk.com"
-                },
-                {
-                    "id": "devtest5@splunk.com"
-                }
-            ];
-            return splunk.identity.replaceTenantUsers(config.stubbyTEST_TENANT, usersList).then(response => {
-                assert(!response);
-            });
-        });
-    });
-
-    describe('Add a list of users in tenant', () => {
-        it('should return no response body', () => {
-            const usersList = [
-                {
-                    "id": "devtest7@splunk.com"
-                },
-                {
-                    "id": "devtest8@splunk.com"
-                }
-            ];
-            return splunk.identity.addTenantUsers(config.stubbyTEST_TENANT, usersList).then(response => {
-                assert(!response);
-            });
-        });
-    });
-
-    describe('Delete a list of users in tenant', () => {
-        it('should return no response body', () => {
-            const usersList = [
-                {
-                    "id": "devtest4@splunk.com"
-                },
-                {
-                    "id": "devtest5@splunk.com"
-                }
-            ];
-            return splunk.identity.deleteTenantUsers(config.stubbyTEST_TENANT, usersList).then(response => {
-                assert(!response);
-            });
-        });
-    });
+    */
 
     describe('Create a new member', () => {
         it('should return a new member', () => {
@@ -213,7 +154,7 @@ describe('Identity Endpoints', () => {
 
     describe('Delete a permission from a role', () => {
         it('should return no response body', () => {
-            return splunk.identity.deleteRolePermission(config.stubbyTEST_TENANT, 'roles.sdk-test', 'TEST_TENANT%3A%2A%3Akvstore.%2A').then(response => {
+            return splunk.identity.deleteRolePermission(config.stubbyTEST_TENANT, 'roles.sdk-test', 'TEST_TENANT:%252A:kvstore.%252A').then(response => {
                 assert(!response);
             });
         });
@@ -322,7 +263,7 @@ describe('Identity Endpoints', () => {
 
     describe('Delete a member from a group', () => {
         it('should return no response body', () => {
-            return splunk.identity.deleteGroupMember(config.stubbyTEST_TENANT, 'sdk-group', 'sdk-int-test%40splunk.com').then(response => {
+            return splunk.identity.deleteGroupMember(config.stubbyTEST_TENANT, 'sdk-group', 'sdk-int-test@splunk.com').then(response => {
                 assert(!response);
             });
         });
@@ -332,10 +273,11 @@ describe('Identity Endpoints', () => {
         it('should return no response body', () => {
             const postBody = {"name": "mem1", "kind": "user"};
             return splunk.identity.createPrincipal(postBody).then(data => {
-                assert.equal(data.tenant, 'TEST_TENANT', 'tenant should be TEST_TENANT');
+                assert.equal(data.kind, 'user', 'kind should be user');
                 assert.equal(data.name, 'mem1', 'principal should be mem1');
                 assert.equal(data.createdAt, '2018-08-15T22:07:17.062Z', 'createdAt should be 2018-08-15T22:07:17.062Z');
                 assert.equal(data.createdBy, 'test1@splunk.com', 'createdBy should be test1@splunk.com');
+                assert.equal(data.profile.ref, "haha", 'profile ref should be haha');
             });
         });
     });
@@ -363,5 +305,4 @@ describe('Identity Endpoints', () => {
             assert(!response);
         }));
     });
-
 });
