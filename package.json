@@ -1,6 +1,6 @@
 {
   "name": "@splunk/ssc-client",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Splunk SSC SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
@@ -10,7 +10,6 @@
     "ts:docs:html": "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/html/ --inlineSourceMap --module commonjs --theme minimal --excludePrivate",
     "ts:docs:md": "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/md/ --inlineSourceMap --module commonjs --theme markdown --excludePrivate --mdHideSources --mdEngine github",
     "docs": "yarn ts:docs",
-    "build": "tsc -p tsconfig.json",
     "build": "node ci/extract_version.js && tsc -p tsconfig.json",
     "clean": "rm *.js *.map",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
