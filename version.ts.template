@@ -3,4 +3,4 @@ export default {
     version: '{{version}}',
     branch: '{{branch}}',
     commit: '{{commit}}',
-}
+};
