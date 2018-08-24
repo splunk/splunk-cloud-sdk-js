@@ -244,10 +244,10 @@ export class SearchService extends BaseApiService {
                 } else {
                     setTimeout(() => {
                         // Resolving with a promise which will then resolve- recursion with the event loop
-                        self.waitForJob(jobId, interval, callback).then(j => resolve(j));
+                        self.waitForJob(jobId, interval, callback).then(resolve);
                     }, interval);
                 }
-            }).catch(err => reject(err));
+            }).catch(reject);
         });
     }
 
