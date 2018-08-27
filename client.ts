@@ -5,6 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import 'isomorphic-fetch';
+import agent from './version';
 
 export interface SplunkErrorParams {
     message: string;
@@ -125,9 +126,11 @@ export class ServiceClient {
      */
     private buildHeaders(headers?: RequestHeaders): Headers {
         // TODO: Cache
+
         const requestParamHeaders: Headers = new Headers({
             'Authorization': `Bearer ${this.token}`,
-            'Content-Type': ContentType.JSON,});
+            'Content-Type': ContentType.JSON,
+            'splunk-client':`${agent.useragent}/${agent.version}`,});
 
         if (headers !== undefined && headers !== {}) {
             Object.keys(headers).forEach(key => {
