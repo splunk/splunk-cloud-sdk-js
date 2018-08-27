@@ -36,6 +36,7 @@ ssc-client-js-whitesource:
       context: .
       dockerfile: ci/whitesource/Dockerfile
       image: splunk/ssc-client-js-whitesource
+  dockercfg_service: aws-generator
   encrypted_env_file: ci/env.encrypted
 
 aws-generator:
