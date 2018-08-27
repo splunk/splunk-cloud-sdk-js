@@ -5,6 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import 'isomorphic-fetch';
+import agent from './version';
 
 export interface SplunkErrorParams {
     message: string;
@@ -125,9 +126,11 @@ export class ServiceClient {
      */
     private buildHeaders(headers?: RequestHeaders): Headers {
         // TODO: Cache
+
         const requestParamHeaders: Headers = new Headers({
             'Authorization': `Bearer ${this.token}`,
-            'Content-Type': ContentType.JSON,});
+            'Content-Type': ContentType.JSON,
+            'splunk-client':`${agent.useragent}/${agent.version}`,});
 
         if (headers !== undefined && headers !== {}) {
             Object.keys(headers).forEach(key => {
@@ -162,7 +165,8 @@ export class ServiceClient {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
             headers: this.buildHeaders(headers),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -178,7 +182,8 @@ export class ServiceClient {
             method: 'POST',
             body: typeof data !== 'string' ? JSON.stringify(data) : data,
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -193,7 +198,8 @@ export class ServiceClient {
             method: 'PUT',
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -208,7 +214,8 @@ export class ServiceClient {
             method: 'PATCH',
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -228,7 +235,8 @@ export class ServiceClient {
             method: 'DELETE',
             body: JSON.stringify(deleteData),
             headers: this.buildHeaders(),
-        }).then((response: Response) => handleResponse(response));
+        }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then((response: Response) => handleResponse(response));
     }
 }
 
