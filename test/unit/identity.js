@@ -262,7 +262,7 @@ describe('Identity Endpoints', () => {
 
     describe('Get all principals', () => {
         it('should return principals', () => splunk.identity.getPrincipals().then(data => {
-            assert.typeOf(data, 'Array', 'tenants should be an array');
+            assert.typeOf(data, 'Array', 'principals should be an array');
             assert.equal(data[0], 'mem1', 'principals should contain mem1');
         }));
     });
