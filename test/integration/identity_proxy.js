@@ -18,15 +18,15 @@ const splunk = new SplunkSSC(sscHost, token, tenantID);
 // 7. Delete a tenant which is currently not present in the user-profile and validate that a 404 error is thrown
 describe('integration tests for Identity Tenant Endpoints', () => {
 
-    const testRole = 'jssdk_role';
-    const testPerm1 = 'jssdk_perm';
+    const testRole = `jssdk_role_${Date.now()}`;
+    const testPerm1 = `jssdk_perm_${Date.now()}`;
 
     const testPermissions = [
         tenantID + 'catalog',
         tenantID + 'ingest',
         tenantID + 'search'
     ];
-    const testGroupName = 'mygroup';
+    const testGroupName = `mygroup_${Date.now()}`;
     const testPrincipal = 'test1@splunk.com';
     const testMember = 'test2@splunk.com';
 
