@@ -4,6 +4,8 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
+import agent from './version';
+
 export interface SplunkErrorParams {
     message: string;
     code?: string;
@@ -123,9 +125,11 @@ export class ServiceClient {
      */
     private buildHeaders(headers?: RequestHeaders): Headers {
         // TODO: Cache
+
         const requestParamHeaders: Headers = new Headers({
             'Authorization': `Bearer ${this.token}`,
-            'Content-Type': ContentType.JSON,});
+            'Content-Type': ContentType.JSON,
+            'splunk-client':`${agent.useragent}/${agent.version}`,});
 
         if (headers !== undefined && headers !== {}) {
             Object.keys(headers).forEach(key => {
