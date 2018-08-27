@@ -61,7 +61,7 @@ export class IdentityService extends BaseApiService {
      * Removes a member from the given tenant
      * @param tenantId The unique identifier of the tenant
      * @param memberName input object of a member
-     * @returns  A Promise object upon completion
+     * @returns  A promise that resolves upon deletion
      */
     public deleteMember = (tenantId: Tenant['tenantId'], memberName: MemberName['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName], tenantId))
@@ -120,7 +120,7 @@ export class IdentityService extends BaseApiService {
      * Delete an authorization role in the given tenant
      * @param tenantId The unique identifier of the tenant
      * @param roleName String name of a role
-     * @returns Empty response on success
+     * @returns A promise that resolves upon deletion
      */
     public deleteRole = (tenantId: Tenant['tenantId'], roleName: Role['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName], tenantId))
@@ -145,7 +145,7 @@ export class IdentityService extends BaseApiService {
      * @param tenantId The unique identifier of the tenant
      * @param roleName String name of a role
      * @param permission String name of a permission
-     * @returns A Promise object upon completion
+     * @returns A promise that resolves upon deletion
      */
     public addRolePermissions = (tenantId: Tenant['tenantId'], roleName: Role['name'], permission: string): Promise<RolePermission> => {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions'], tenantId), JSON.stringify(permission))
@@ -171,7 +171,7 @@ export class IdentityService extends BaseApiService {
      * @param tenantId The unique identifier of the tenant
      * @param roleName String name of a role
      * @param permissionName
-     * @returns A Promise object upon completion
+     * @returns A promise that resolves upon deletion
      */
     public deleteRolePermission = (tenantId: Tenant['tenantId'], roleName: Role['name'], permissionName: Permission['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions', permissionName], tenantId))
@@ -183,7 +183,7 @@ export class IdentityService extends BaseApiService {
      * Creates a new group in the given tenant
      * @param tenantId The unique identifier of the tenant
      * @param groupInput The group params for creating a new group
-     * @returns A Promise object upon completion
+     * @returns A promise that resolves upon deletion
      */
     public createGroup = (tenantId: Tenant['tenantId'], groupInput: GroupInput): Promise<Group> => {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups'], tenantId), groupInput)
@@ -218,7 +218,7 @@ export class IdentityService extends BaseApiService {
      * Deletes a group in the given tenant
      * @param tenantId The unique identifier of the tenant
      * @param groupName String name of a group
-     * @returns A Promise object upon completion
+     * @returns A promise that resolves upon deletion
      */
     public deleteGroup = (tenantId: Tenant['tenantId'], groupName: Group['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName], tenantId))
@@ -269,7 +269,7 @@ export class IdentityService extends BaseApiService {
      * @param tenantId The unique identifier of the tenant
      * @param groupName String name of a group
      * @param roleName String name of a role
-     * @returns A Promise object upon completion
+     * @returns A promise that resolves upon deletion
      */
     public deleteGroupRole = (tenantId: Tenant['tenantId'], groupName: Group['name'], roleName: Role['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles', roleName], tenantId))
@@ -320,7 +320,7 @@ export class IdentityService extends BaseApiService {
      * @param  tenantId The unique identifier of the tenant
      * @param  groupName String name of a group
      * @param  groupMemberName String name of group member
-     * @returns A Promise object upon completion
+     * @returns A promise that resolves upon deletion
      */
     public deleteGroupMember = (tenantId: Tenant['tenantId'], groupName: Group['name'], groupMemberName: GroupMemberName['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members', groupMemberName], tenantId))
@@ -363,7 +363,7 @@ export class IdentityService extends BaseApiService {
     /**
      * Deletes a principal
      * @param principalName
-     * @returns A Promise object upon completion
+     * @returns A promise that resolves upon deletion
      */
     public deletePrincipal = (principalName: PrincipalInput['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals', principalName], 'system'))
