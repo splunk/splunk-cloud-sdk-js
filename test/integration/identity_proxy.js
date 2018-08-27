@@ -9,13 +9,10 @@ const splunk = new SplunkSSC(sscHost, token, tenantID);
 
 // Scenario:
 // Integration test for Tenant endpoints
-// 1. Create a new test tenant using createTenant() method and validate using getUserProfile() method
-// 2. Post a tenant in invalid format and validate that a 422 error is thrown
-// 3. Create Roles and Permissions
-// 4. Create Groups and Members
-// 5. Deletes Roles, Groups, Members
-// 6. Delete the newly created test tenant using deleteTenant() method and validate using getUserProfile() method
-// 7. Delete a tenant which is currently not present in the user-profile and validate that a 404 error is thrown
+// 1. Create Roles and Permissions
+// 2. Create Groups and Members
+// 3. Deletes Roles, Permissions, Groups, Members
+// 4. Delete the newly created test tenant using deleteTenant() method and validate using getUserProfile() method
 describe('integration tests for Identity Tenant Endpoints', () => {
 
     const testRole = `jssdk_role_${Date.now()}`;
