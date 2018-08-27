@@ -6,6 +6,7 @@ const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAu
 
 describe('Identity Endpoints', () => {
 
+    // v2 endpoints will be deprecated
     /*
     describe('Get user profile with tenantId', () => {
         it('should return a user profile using tenantId scope', () => splunk.identity.getUserProfile(config.stubbyTEST_TENANT).then(data => {
@@ -49,10 +50,20 @@ describe('Identity Endpoints', () => {
     });
     */
 
+    describe('Validate a member', () => {
+        it('should return a validate info object', () => {
+            return splunk.identity.validate(config.stubbyTEST_TENANT).then(data => {
+                assert.equal(data.name,'TEST_TENANT', 'tenant should be TEST_TENANT');
+                assert.equal(data.tenants[0],'mem1', 'member should be mem1');
+                assert.equal(data.tenants[1],'mem2', 'member should be mem2');
+            });
+        });
+    });
+
     describe('Create a new member', () => {
         it('should return a new member', () => {
             const memberName = {"name": "mem1"};
-            return splunk.identity.createMember(config.stubbyTEST_TENANT, memberName).then(data => {
+            return splunk.identity.addMember(config.stubbyTEST_TENANT, memberName).then(data => {
                 assert.equal(data.tenant,'TEST_TENANT', 'tenant should be TEST_TENANT');
                 assert.equal(data.name,'mem1', 'member should be mem1');
                 assert.equal(data.addedAt,'2018-08-15T22:04:17.915Z', 'addedAt should be 2018-08-15T22:04:17.915Z');
@@ -160,14 +171,6 @@ describe('Identity Endpoints', () => {
         });
     });
 
-    describe('Delete all permissions from a role', () => {
-        it('should return no response body', () => {
-            return splunk.identity.deleteAllRolePermissions(config.stubbyTEST_TENANT, 'roles.sdk-test').then(response => {
-                assert(!response);
-            });
-        });
-    });
-
     describe('Create a new group', () => {
         it('should return no response body', () => {
             const postBody = {"name": "sdk-group"};
@@ -233,7 +236,7 @@ describe('Identity Endpoints', () => {
     describe('Create a new group member', () => {
         it('should return no response body', () => {
             const postBody = {"name": "sdk-int-test@splunk.com",};
-            return splunk.identity.createGroupMember(config.stubbyTEST_TENANT, 'sdk-group', postBody).then(data => {
+            return splunk.identity.addGroupMember(config.stubbyTEST_TENANT, 'sdk-group', postBody).then(data => {
                 assert.equal(data.tenant, 'TEST_TENANT', 'tenant should be TEST_TENANT');
                 assert.equal(data.group, 'sdk-group', 'group name should be sdk-group');
                 assert.equal(data.principal, 'sdk-int-test@splunk.com', 'principal should be sdk-int-test@splunk.com');
@@ -258,6 +261,14 @@ describe('Identity Endpoints', () => {
             assert.typeOf(data, 'Array', 'response should be an array');
             assert.equal(data[0], 'mem1', 'mem1 should be in the list');
             assert.equal(data[1], 'mem2', 'mem2 should be in the list');
+        }));
+    });
+
+    describe('Get member groups for a tenant', () => {
+        it('should return a list of members', () => splunk.identity.getMemberGroups(config.stubbyTEST_TENANT, 'mem1').then(data => {
+            assert.typeOf(data, 'Array', 'response should be an array');
+            assert.equal(data[0], 'group1', 'group1 should be in the list');
+            assert.equal(data[1], 'group2', 'group2 should be in the list');
         }));
     });
 
