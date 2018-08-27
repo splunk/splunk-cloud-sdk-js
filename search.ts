@@ -77,6 +77,7 @@ export class Search {
 
     /**
      * Submits a cancel job against this search job
+     * @return A promise that will be resolved when the cancel action is accepted by the service
      */
     public cancel = (): Promise<object> => {
         this.isCancelling = true;
@@ -85,6 +86,7 @@ export class Search {
 
     /**
      * Pauses this search job
+     * @return A promise that will be resolved when the pause action is accepted by the service
      */
     public pause = (): Promise<object> => {
         return this.client.createJobControlAction(this.sid, Action.PAUSE);
@@ -92,6 +94,7 @@ export class Search {
 
     /**
      * Resets the time to live on this search job
+     * @return A promise that will be resolved when the touch action is accepted by the service
      */
     public touch = (): Promise<object> => {
         return this.client.createJobControlAction(this.sid, Action.TOUCH);
@@ -102,6 +105,7 @@ export class Search {
      * is supplied, a window of results will be returned.  If an offset is not
      * supplied, all results will be fetched and concatenated.
      * @param args
+     * @return A list of event objects
      */
     // TODO: backwardsCompatibleCount
     public getResults = (args: FetchResultsRequest = {}): Promise<object[]> => {
@@ -132,6 +136,7 @@ export class Search {
      * specified (or only count is specified), all results available will
      * be fetched.
      * @param args
+     * @return An observable that will pass each result object as it is received
      */
     public resultObservable = (args: ResultObservableOptions = {}): Observable<any> => {
         const self = this;
@@ -151,6 +156,7 @@ export class Search {
     /**
      * Returns an Rx.Observable that will return events from the
      * job when it is done processing
+     * @return An observable that will pass each event object as it is received
      */
     public eventObservable = (attrs: EventObservableOptions = {}): Observable<any> => {
         const self = this;
@@ -168,7 +174,8 @@ export class Search {
     }
 
     /**
-     * @param updateInterval
+     * @param updateInterval interval (in ms) at which to poll
+     * @return An observable that will periodically poll for status on a job until it is complete
      */
     public statusObservable = (updateInterval: number): Observable<Job> => {
         return new Observable<Job>((o: any) => {
@@ -182,7 +189,6 @@ export class Search {
  * Encapsulates search endpoints
  */
 export class SearchService extends BaseApiService {
-    // TODO:(dp) this should _not_ be an object return type.
     /**
      * Get details of all current searches.
      */
@@ -207,16 +213,16 @@ export class SearchService extends BaseApiService {
             .then((sid: Job['sid']) => sid);
     }
 
-    // TODO: support ttl value via JobControlActionRequest
     public createJobControlAction = (jobId: string, action: string): Promise<object> => {  // TODO: Flesh out what this returns
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'control']), { action })
             .then(response => response.Body)
             .then(responseBody => responseBody);
     }
 
-    // TODO:(dp) response is undefined in yaml spec
     /**
      * Returns the job resource with the given `id`.
+     * @param jobId
+     * @return Description of job
      */
     public getJob = (jobId: string): Promise<Job> => {
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]))
@@ -226,10 +232,10 @@ export class SearchService extends BaseApiService {
 
     /**
      * @param jobId
-     * @param pollInterval
-     * @param callback
+     * @param pollInterval in ms
+     * @param callback optional function that will be called on every poll result
      */
-    public waitForJob = (jobId: Job['sid'], pollInterval?: number, callback?: (job: Job) => object) => {
+    public waitForJob = (jobId: Job['sid'], pollInterval?: number, callback?: (job: Job) => object): Promise<Job> => {
         const self = this;
         const interval = pollInterval || 250;
         return new Promise<Job>((resolve: (job: Job) => void, reject: (error: Error) => void) => {
@@ -268,6 +274,7 @@ export class SearchService extends BaseApiService {
     /**
      * Returns events for the search job corresponding to "id".
      *         Returns results post-transform, if applicable.
+     * @return an array of event objects
      */
     public getEvents = (jobId: string, args?: { offset?: number, count?: number }): Promise<any> => {
         const queryArgs: QueryArgs = args || {};
@@ -278,6 +285,7 @@ export class SearchService extends BaseApiService {
 
     /**
      * Delete the search job with the given `id`, cancelling the search if it is running.
+     * @return Promise that will be resolved when the job has been deleted
      */
     public deleteJob = (jobId: string): Promise<object> => {
         return this.client.delete(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]))
@@ -290,6 +298,7 @@ export class SearchService extends BaseApiService {
      * for easier further processing.
      *
      * @param searchArgs arguments for a new search job
+     * @return a wrapper utility object for the search
      */
     public submitSearch = (searchArgs: PostJobsRequest): Promise<Search> => {
         const self = this;

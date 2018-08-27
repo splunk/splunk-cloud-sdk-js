@@ -4,8 +4,6 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
-import 'isomorphic-fetch';
-
 export interface SplunkErrorParams {
     message: string;
     code?: string;
@@ -28,7 +26,7 @@ export class SplunkError extends Error implements SplunkErrorParams {
  * Interrogates the response, decodes if successful and throws if error
  * @private
  */
-function handleResponse(response: Response): Promise<any> {
+function handleResponse(response: Response): Promise<HTTPResponse> {
 
     if (response.ok) {
         let httpResponse: HTTPResponse
@@ -137,6 +135,13 @@ export class ServiceClient {
         return requestParamHeaders;
     }
 
+    /**
+     * Builds a path for a given service call
+     * @param servicePrefix The name of the service, with version (search/v1)
+     * @param pathname An array of path elements that will be checked and added to the path (['jobs', jobId])
+     * @param overrideTenant If supplied, this tenant will be used instead of the tenant associated with this client object
+     * @return A fully qualified path to the resource
+     */
     public buildPath(servicePrefix: string, pathname: string[], overrideTenant?: string): string {
         const effectiveTenant = overrideTenant || this.tenant;
         if (!effectiveTenant) {
@@ -157,8 +162,9 @@ export class ServiceClient {
      * case an API endpoint is unsupported by the SDK.
      * @param path Path portion of the URL to request from Splunk
      * @param query Object that contains query parameters
+     * @return
      */
-    public get(path: string, query?: QueryArgs, headers?: RequestHeaders): Promise<any> {
+    public get(path: string, query?: QueryArgs, headers?: RequestHeaders): Promise<HTTPResponse> {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
             headers: this.buildHeaders(headers),
@@ -173,6 +179,7 @@ export class ServiceClient {
      * @param path Path portion of the URL to request from Splunk
      * @param data Data object (to be converted to JSON) to supply as POST body
      * @param query Object that contains query parameters
+     * @return
      */
     public post(path: string, data: any, query?: QueryArgs): Promise<any> {
         return fetch(this.buildUrl(path, query), {
@@ -189,8 +196,9 @@ export class ServiceClient {
      * case an api endpoint is unsupported by the sdk.
      * @param path Path portion of the url to request from splunk
      * @param data Data object (to be converted to json) to supply as put body
+     * @return
      */
-    public put(path: string, data: any): Promise<any> {
+    public put(path: string, data: any): Promise<HTTPResponse> {
         return fetch(this.buildUrl(path), {
             method: 'PUT',
             body: JSON.stringify(data),
@@ -205,8 +213,9 @@ export class ServiceClient {
      * case an api endpoint is unsupported by the sdk.
      * @param path Path portion of the url to request from splunk
      * @param data Data object (to be converted to json) to supply as patch body
+     * @return
      */
-    public patch(path: string, data: object): Promise<any> {
+    public patch(path: string, data: object): Promise<HTTPResponse> {
         return fetch(this.buildUrl(path), {
             method: 'PATCH',
             body: JSON.stringify(data),
@@ -222,8 +231,9 @@ export class ServiceClient {
      * @param path Path portion of the URL to request from Splunk
      * @param data Data object (to be converted to json) to supply as delete body
      * @param query Object that contains query parameters
+     * @return
      */
-    public delete(path: string, data?: object, query?: QueryArgs): Promise<any> {
+    public delete(path: string, data?: object, query?: QueryArgs): Promise<HTTPResponse> {
         let deleteData = data;
         if (data === undefined || data == null) {
             deleteData = {};
@@ -252,6 +262,6 @@ export interface RequestHeaders {
 }
 
 export interface HTTPResponse {
-    Body?: Promise<string>;
+    Body?: Promise<any>;
     Headers: Headers;
 }
