@@ -3,28 +3,11 @@ const SplunkSSC = require('../../splunk');
 const { assert } = require('chai');
 
 const sscHost = config.playgroundHost;
-const invalidToken = config.invalidAuthToken;
 const token = config.playgroundAuthToken;
 const tenantID = config.playgroundTenant;
 const splunk = new SplunkSSC(sscHost, token, tenantID);
 
-// Scenario 1:
-// Integration test for Tenant User endpoints
-// 1. Add new users to the tenant using addTenantUsers() method
-// 2. Get and validate the newly added users using getTenantUsers() method
-// 3. Add an already present user to the tenant, should throw 405 Method Not Allowed error
-// 4. Add a user list with duplicate entries, should throw 405 Method Not Allowed error
-// 5. Delete one of the users and validate the deletion process using deleteTenantUsers() method
-// 6. Delete a user that is currently not present in the tenant, should throw 405 Method Not Allowed error
-// 7. Replace the existing list with new list of users
-// 8. Get and validate the replaced set of users
-// 9. Retrieve user list with an invalid token, should throw 401 Unauthorized error
-// 10. Replace current tenant user list with a list containing duplicate records, should throw 500 Internal error
-describe('integration tests for Identity Tenant User Endpoints', () => {
-    describe.skip('Identity service migration to v1 and shim v2 has broken these tests', () => {});
-});
-
-// Scenario 2:
+// Scenario:
 // Integration test for Tenant endpoints
 // 1. Create a new test tenant using createTenant() method and validate using getUserProfile() method
 // 2. Post a tenant in invalid format and validate that a 422 error is thrown

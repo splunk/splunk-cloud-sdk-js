@@ -6,50 +6,6 @@ const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAu
 
 describe('Identity Endpoints', () => {
 
-    // v2 endpoints will be deprecated
-    /*
-    describe('Get user profile with tenantId', () => {
-        it('should return a user profile using tenantId scope', () => splunk.identity.getUserProfile(config.stubbyTEST_TENANT).then(data => {
-            assert.typeOf(data, 'object', 'response should be an object');
-            assert('email' in data, 'devtest@splunk.com');
-            assert('firstName' in data, 'Dev');
-            assert('id' in data, 'devtest@splunk.com');
-            assert('lastName' in data, 'Test');
-            assert('locale' in data, 'en-US');
-            assert('name' in data, 'Dev Test');
-            assert('tenantMemberships' in data, "TEST_TENANT");
-        }));
-    });
-
-    describe('Get user profile with system', () => {
-        it('should return a user profile using system scope', () => splunk.identity.getUserProfile().then(data => {
-            assert.typeOf(data, 'object', 'response should be an object');
-            assert('email' in data, 'devtest@splunk.com');
-            assert('firstName' in data, 'Dev');
-            assert('id' in data, 'devtest@splunk.com');
-            assert('lastName' in data, 'Test');
-            assert('locale' in data, 'en-US');
-            assert('name' in data, 'Dev Test');
-            assert('tenantMemberships' in data, "TEST_TENANT");
-        }));
-    });
-
-    describe('Post a new tenant', () => {
-        it('should return no response body', () => {
-            const postBody = { tenantId: config.stubbyTEST_TENANT };
-            return splunk.identity.createTenant(postBody).then(response => {
-                assert(!response);
-            });
-        });
-    });
-
-    describe('Delete a tenant', () => {
-        it('should return no response body', () => splunk.identity.deleteTenant(config.stubbyTEST_TENANT).then(response => {
-            assert(!response);
-        }));
-    });
-    */
-
     describe('Validate a member', () => {
         it('should return a validate info object', () => {
             return splunk.identity.validate(config.stubbyTEST_TENANT).then(data => {
