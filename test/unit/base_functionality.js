@@ -14,7 +14,7 @@ describe("Basic client functionality", () => {
         it("should return a promise", () => {
             const promise = s.get("/basic");
             expect(promise).to.be.a("promise");
-            return promise.then((data) => data.Body).then(body => {
+            return promise.then((data) => data.body).then(body => {
                 expect(body).to.haveOwnProperty("foo");
             });
         });
@@ -24,7 +24,7 @@ describe("Basic client functionality", () => {
         it("should return a promise", () => {
             const promise = s.post("/basic", { robin: "hood" });
             expect(promise).to.be.a("promise");
-            return promise.then((data) => data.Body).then(body => {
+            return promise.then((data) => data.body).then(body => {
                 expect(body).to.haveOwnProperty("friar", "tuck");
             });
         })
@@ -34,7 +34,7 @@ describe("Basic client functionality", () => {
         it("should return a promise", () => {
             const promise = s.put("/basic", { walrus: "carpenter" });
             expect(promise).to.be.a("promise");
-            return promise.then((data) => data.Body).then(body => {
+            return promise.then((data) => data.body).then(body => {
                 expect(body).to.haveOwnProperty("oysters", "sad");
             });
         })
