@@ -121,7 +121,7 @@ describe('Identity Endpoints', () => {
 
     describe('Delete a permission from a role', () => {
         it('should return no response body', () => {
-            return splunk.identity.deleteRolePermission(config.stubbyTEST_TENANT, 'roles.sdk-test', 'TEST_TENANT:%252A:kvstore.%252A').then(response => {
+            return splunk.identity.removeRolePermission(config.stubbyTEST_TENANT, 'roles.sdk-test', 'TEST_TENANT:%252A:kvstore.%252A').then(response => {
                 assert(!response);
             });
         });
@@ -174,7 +174,7 @@ describe('Identity Endpoints', () => {
 
     describe('Remove a role from a group', () => {
         it('should return no response body', () => {
-            return splunk.identity.deleteGroupRole(config.stubbyTEST_TENANT, 'sdk-group', 'roles.sdk-test').then(response => {
+            return splunk.identity.removeGroupRole(config.stubbyTEST_TENANT, 'sdk-group', 'roles.sdk-test').then(response => {
                 assert(!response);
             });
         });
@@ -230,7 +230,7 @@ describe('Identity Endpoints', () => {
 
     describe('Delete a member from a group', () => {
         it('should return no response body', () => {
-            return splunk.identity.deleteGroupMember(config.stubbyTEST_TENANT, 'sdk-group', 'sdk-int-test@splunk.com').then(response => {
+            return splunk.identity.removeGroupMember(config.stubbyTEST_TENANT, 'sdk-group', 'sdk-int-test@splunk.com').then(response => {
                 assert(!response);
             });
         });

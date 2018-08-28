@@ -196,7 +196,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
     describe('Delete the test roles, permissions, group, tenant and validate - Good and Bad cases', () => {
 
         it('should delete the member from the tenant and group', () =>
-            splunk.identity.deleteGroupMember(tenantID, testGroupName, testPrincipal).then(response => {
+            splunk.identity.removeGroupMember(tenantID, testGroupName, testPrincipal).then(response => {
                 assert(!response);
             }));
 
@@ -206,12 +206,12 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should delete the selected test permission from the role', () =>
-            splunk.identity.deleteRolePermission(tenantID, testRole, testPerm1).then(response => {
+            splunk.identity.removeRolePermission(tenantID, testRole, testPerm1).then(response => {
                 assert(!response);
             }));
 
         it('should delete the role for the tenant and group', () =>
-            splunk.identity.deleteGroupRole(tenantID, testGroupName, testRole).then(response => {
+            splunk.identity.removeGroupRole(tenantID, testGroupName, testRole).then(response => {
                 assert(!response);
             }));
 

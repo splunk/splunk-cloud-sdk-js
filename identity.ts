@@ -13,317 +13,350 @@ import { IDENTITY_SERVICE_PREFIX } from './service_prefixes';
 export class IdentityService extends BaseApiService {
     /**
      * Validates the access token obtained from authorization header and returns the principal name and tenant memberships
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @returns a ValidateInfo object
      */
-    public validate = (tenantId: Tenant['tenantId']) : Promise<ValidateInfo> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['validate'], tenantId))
+    public validate = (tenantName: Tenant['name']) : Promise<ValidateInfo> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['validate'], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as ValidateInfo);
     }
 
     /**
+     * Creates a tenant and default roles/groups
+     * @param tenantName unique identifier of the tenant
+     * @returns a Tenant object
+     */
+    public createTenant = (tenantName: Tenant['name']): Promise<Tenant> => {
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenantName)
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
+    }
+
+    /**
+     * Returns the tenant details
+     * @param tenantName unique identifier of the tenant
+     * @returns a Tenant object
+     */
+    public getTenant = (tenantName: Tenant['name']): Promise<Tenant> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantName], 'system'))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
+    }
+
+    /**
+     * Returns the list of tenants in the system
+     * @param tenantName unique identifier of the tenant
+     * @returns a list of tenant names
+     */
+    public getTenants = (tenantName: Tenant['name']): Promise<string[]> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'))
+            .then(response => response.Body)
+            .then(responseBody => responseBody);
+    }
+
+    /**
      * Adds a member to the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param memberName input object of a member
      * @returns a Member object
      */
-    public addMember = (tenantId: Tenant['tenantId'], memberName: MemberName): Promise<Member> => {
-        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members'], tenantId), memberName)
+    public addMember = (tenantName: Tenant['name'], memberName: MemberName): Promise<Member> => {
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members'], tenantName), memberName)
             .then(response => response.Body)
             .then(responseBody => responseBody as Member);
     }
 
     /**
      * Get a member of the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param memberName input object of a member
      * @returns a Member object
      */
-    public getMember = (tenantId: Tenant['tenantId'], memberName: MemberName['name']): Promise<Member> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName], tenantId))
+    public getMember = (tenantName: Tenant['name'], memberName: MemberName['name']): Promise<Member> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as Member);
     }
 
     /**
      * Returns the list of members in the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @returns a list of Members
      */
-    public getMembers = (tenantId: Tenant['tenantId']): Promise<string[]> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members'], tenantId))
+    public getMembers = (tenantName: Tenant['name']): Promise<string[]> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members'], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as string[]);
     }
 
     /**
      * Removes a member from the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param memberName input object of a member
      * @returns  A promise that resolves upon deletion
      */
-    public deleteMember = (tenantId: Tenant['tenantId'], memberName: MemberName['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName], tenantId))
+    public deleteMember = (tenantName: Tenant['name'], memberName: MemberName['name']): Promise<any> => {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody);
     }
 
     /**
      * Returns the list of the member's groups in the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param memberName input object of a member
      * @returns a list of Groups
      */
-    public getMemberGroups = (tenantId: Tenant['tenantId'], memberName: MemberName['name']): Promise<string[]> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName, 'groups'], tenantId))
+    public getMemberGroups = (tenantName: Tenant['name'], memberName: MemberName['name']): Promise<string[]> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName, 'groups'], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as string[]);
     }
 
     /**
      * Creates a new authorization role in the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param roleInput The role params for creating a new role
      * @returns a Role object
      */
-    public createRole = (tenantId: Tenant['tenantId'], roleInput: RoleInput): Promise<Role> => {
-        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles'], tenantId), roleInput)
+    public createRole = (tenantName: Tenant['name'], roleInput: RoleInput): Promise<Role> => {
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles'], tenantName), roleInput)
             .then(response => response.Body)
             .then(responseBody => responseBody as Role);
     }
 
     /**
      * Get all roles for the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @returns A list of roles
      */
-    public getRoles = (tenantId: Tenant['tenantId']): Promise<string[]> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles'], tenantId))
+    public getRoles = (tenantName: Tenant['name']): Promise<string[]> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles'], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as string[]);
     }
 
     /**
      * Get a role for the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param roleName String name of a role
      * @returns a Role object
      */
-    public getRole = (tenantId: Tenant['tenantId'], roleName: Role['name']): Promise<Role> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName], tenantId))
+    public getRole = (tenantName: Tenant['name'], roleName: Role['name']): Promise<Role> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as Role);
     }
 
     /**
      * Delete an authorization role in the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param roleName String name of a role
      * @returns A promise that resolves upon deletion
      */
-    public deleteRole = (tenantId: Tenant['tenantId'], roleName: Role['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName], tenantId))
+    public deleteRole = (tenantName: Tenant['name'], roleName: Role['name']): Promise<any> => {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody);
     }
 
     /**
      * Get all the permissions for a given tenant and role name
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param roleName String name of a role
      * @returns A list of permissions
      */
-    public getRolePermissions = (tenantId: Tenant['tenantId'], roleName: Role['name']): Promise<string[]> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions'], tenantId))
+    public getRolePermissions = (tenantName: Tenant['name'], roleName: Role['name']): Promise<string[]> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions'], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as string[]);
     }
 
     /**
      * Adds permissions to an existing role in this tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param roleName String name of a role
      * @param permission String name of a permission
      * @returns A promise that resolves upon deletion
      */
-    public addRolePermissions = (tenantId: Tenant['tenantId'], roleName: Role['name'], permission: string): Promise<RolePermission> => {
-        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions'], tenantId), JSON.stringify(permission))
+    public addRolePermissions = (tenantName: Tenant['name'], roleName: Role['name'], permission: string): Promise<RolePermission> => {
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions'], tenantName), JSON.stringify(permission))
             .then(response => response.Body)
             .then(responseBody => responseBody as RolePermission);
     }
 
     /**
      * Get a permission for the given tenant, role name, and permission name
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param roleName String name of a role
      * @param permissionName String name of a permission
      * @returns a RolePermission object
      */
-    public getRolePermission = (tenantId: Tenant['tenantId'], roleName: Role['name'], permissionName: Permission['name']): Promise<RolePermission> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions', permissionName], tenantId))
+    public getRolePermission = (tenantName: Tenant['name'], roleName: Role['name'], permissionName: Permission['name']): Promise<RolePermission> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions', permissionName], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as RolePermission);
     }
 
     /**
-     * Delete an authorization role in the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * Remove an authorization role in the given tenant
+     * @param tenantName unique identifier of the tenant
      * @param roleName String name of a role
      * @param permissionName
      * @returns A promise that resolves upon deletion
      */
-    public deleteRolePermission = (tenantId: Tenant['tenantId'], roleName: Role['name'], permissionName: Permission['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions', permissionName], tenantId))
+    public removeRolePermission = (tenantName: Tenant['name'], roleName: Role['name'], permissionName: Permission['name']): Promise<any> => {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions', permissionName], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody);
     }
 
     /**
      * Creates a new group in the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param groupInput The group params for creating a new group
      * @returns A promise that resolves upon deletion
      */
-    public createGroup = (tenantId: Tenant['tenantId'], groupInput: GroupInput): Promise<Group> => {
-        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups'], tenantId), groupInput)
+    public createGroup = (tenantName: Tenant['name'], groupInput: GroupInput): Promise<Group> => {
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups'], tenantName), groupInput)
             .then(response => response.Body)
             .then(responseBody => responseBody as Group);
     }
 
     /**
      * Defines a group in the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param groupName String name of a group
      * @returns a Group object
      */
-    public getGroup = (tenantId: Tenant['tenantId'], groupName: Group['name']): Promise<Group> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName], tenantId))
+    public getGroup = (tenantName: Tenant['name'], groupName: Group['name']): Promise<Group> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as Group);
     }
 
     /**
      * Lists the groups in the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @returns a list of groups
      */
-    public getGroups = (tenantId: Tenant['tenantId']): Promise<string[]> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups'], tenantId))
+    public getGroups = (tenantName: Tenant['name']): Promise<string[]> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups'], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as string[]);
     }
 
     /**
      * Deletes a group in the given tenant
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param groupName String name of a group
      * @returns A promise that resolves upon deletion
      */
-    public deleteGroup = (tenantId: Tenant['tenantId'], groupName: Group['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName], tenantId))
+    public deleteGroup = (tenantName: Tenant['name'], groupName: Group['name']): Promise<any> => {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody);
     }
 
     /**
      * Adds a role to the group
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param groupName String name of a group
      * @param roleName String name of a role
      * @returns GroupRole
      */
-    public addGroupRole = (tenantId: Tenant['tenantId'], groupName: Group['name'], roleName: RoleName): Promise<GroupRole> => {
-        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles'], tenantId), roleName)
+    public addGroupRole = (tenantName: Tenant['name'], groupName: Group['name'], roleName: RoleName): Promise<GroupRole> => {
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles'], tenantName), roleName)
             .then(response => response.Body)
             .then(responseBody => responseBody as GroupRole);
     }
 
     /**
      * Returns group-role relationship details
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param groupName String name of a group
      * @param roleName String name of a role
      * @returns a GroupRole object
      */
-    public getGroupRole = (tenantId: Tenant['tenantId'], groupName: Group['name'], roleName: Role['name']): Promise<GroupRole> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles', roleName], tenantId))
+    public getGroupRole = (tenantName: Tenant['name'], groupName: Group['name'], roleName: Role['name']): Promise<GroupRole> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles', roleName], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as GroupRole);
     }
 
     /**
      * Lists the roles attached to the group
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param groupName String name of a group
      * @returns a list of groupRoles
      */
-    public getGroupRoles = (tenantId: Tenant['tenantId'], groupName: Group['name']): Promise<string[]> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles'], tenantId))
+    public getGroupRoles = (tenantName: Tenant['name'], groupName: Group['name']): Promise<string[]> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles'], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as string[]);
     }
 
     /**
      * Removes the role from the group
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param groupName String name of a group
      * @param roleName String name of a role
      * @returns A promise that resolves upon deletion
      */
-    public deleteGroupRole = (tenantId: Tenant['tenantId'], groupName: Group['name'], roleName: Role['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles', roleName], tenantId))
+    public removeGroupRole = (tenantName: Tenant['name'], groupName: Group['name'], roleName: Role['name']): Promise<any> => {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles', roleName], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody);
     }
 
     /**
      * Adds a member to the group
-     * @param tenantId The unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @param groupName String name of a group
      * @param groupMemberName String name of group member
      * @returns a GroupMember object
      */
-    public addGroupMember = (tenantId: Tenant['tenantId'], groupName: Group['name'], groupMemberName: GroupMemberName): Promise<GroupMember> => {
-        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members'], tenantId), groupMemberName)
+    public addGroupMember = (tenantName: Tenant['name'], groupName: Group['name'], groupMemberName: GroupMemberName): Promise<GroupMember> => {
+        return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members'], tenantName), groupMemberName)
             .then(response => response.Body)
             .then(responseBody => responseBody as GroupMember);
     }
 
     /**
      * Returns group-member relationship details
-     * @param  tenantId The unique identifier of the tenant
+     * @param  tenantName unique identifier of the tenant
      * @param  groupName String name of a group
      * @param  groupMemberName String name of group member
      * @returns a GroupMember object
      */
-    public getGroupMember = (tenantId: Tenant['tenantId'], groupName: Group['name'], groupMemberName: GroupMemberName['name']): Promise<GroupMember> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members', groupMemberName], tenantId))
+    public getGroupMember = (tenantName: Tenant['name'], groupName: Group['name'], groupMemberName: GroupMemberName['name']): Promise<GroupMember> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members', groupMemberName], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as GroupMember);
     }
 
     /**
      * Lists the members in the given group
-     * @param  tenantId The unique identifier of the tenant
+     * @param  tenantName unique identifier of the tenant
      * @param  groupName String name of a group
      * @returns a list of group members
      */
-    public getGroupMembers = (tenantId: Tenant['tenantId'], groupName: Group['name']): Promise<string[]> => {
-        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members'], tenantId))
+    public getGroupMembers = (tenantName: Tenant['name'], groupName: Group['name']): Promise<string[]> => {
+        return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members'], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody as string[]);
     }
 
     /**
      * Removes the member from the group
-     * @param  tenantId The unique identifier of the tenant
+     * @param  tenantName unique identifier of the tenant
      * @param  groupName String name of a group
      * @param  groupMemberName String name of group member
      * @returns A promise that resolves upon deletion
      */
-    public deleteGroupMember = (tenantId: Tenant['tenantId'], groupName: Group['name'], groupMemberName: GroupMemberName['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members', groupMemberName], tenantId))
+    public removeGroupMember = (tenantName: Tenant['name'], groupName: Group['name'], groupMemberName: GroupMemberName['name']): Promise<any> => {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members', groupMemberName], tenantName))
             .then(response => response.Body)
             .then(responseBody => responseBody);
     }
@@ -374,30 +407,13 @@ export class IdentityService extends BaseApiService {
 }
 
 /**
- * UserProfile - Represents the User recognized by the Identity Service.
- */
-interface UserProfile {
-    email: string;
-    firstName: string;
-    id: string;
-    lastName: string;
-    locale: string;
-    name: string;
-    tenantMemberships?: string[];
-}
-
-/**
  * Tenant - The unique tenant account within the Identity Service
  */
 interface Tenant {
-    tenantId: string;
-}
-
-/**
- * User - The unique user within the Identity Service
- */
-interface User {
-    id: string;
+    name: string
+    status: string
+    createdAt: Date
+    createdBy: string
 }
 
 /**
