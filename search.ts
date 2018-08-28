@@ -174,6 +174,8 @@ export class Search {
     }
 
     /**
+     * A utility method that will return an Rx.Observable which will supply
+     * status updates at a supplied interval until the job is ready.
      * @param updateInterval interval (in ms) at which to poll
      * @return An observable that will periodically poll for status on a job until it is complete
      */
@@ -231,6 +233,8 @@ export class SearchService extends BaseApiService {
     }
 
     /**
+     * Polls the service until the job is ready, then resolves returned promise
+     * with the final job description (as found from `getJob`).
      * @param jobId
      * @param pollInterval in ms
      * @param callback optional function that will be called on every poll result

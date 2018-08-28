@@ -185,7 +185,7 @@ export class ServiceClient {
      * @param query Object that contains query parameters
      * @return
      */
-    public post(path: string, data: any, query?: QueryArgs): Promise<any> {
+    public post(path: string, data: any, query?: QueryArgs): Promise<HTTPResponse> {
         return fetch(this.buildUrl(path, query), {
             method: 'POST',
             body: typeof data !== 'string' ? JSON.stringify(data) : data,
