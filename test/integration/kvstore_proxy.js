@@ -18,7 +18,10 @@ describe('Integration tests for KVStore Endpoints', () => {
     const fields = [{ Direction: -1, Field: 'integ_testField1' }];
     let testDataset;
 
-    before(() => createKVCollectionDataset(testNamespace, testCollection));
+    before(async () => {
+        testDataset = await createKVCollectionDataset(testNamespace, testCollection);
+        return testDataset;
+    });
     after(() => {
         if (testDataset != null) {
             ssc.catalog

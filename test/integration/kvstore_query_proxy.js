@@ -35,8 +35,9 @@ describe('Integration tests for KVStore Query Endpoints', () => {
         TEST_KEY_03: 'B',
     };
 
-    beforeEach(() => {
-        return createKVCollectionDataset(testNamespace, testCollection);
+    beforeEach(async () => {
+        testDataset = await createKVCollectionDataset(testNamespace, testCollection);
+        return testDataset;
     });
     afterEach(() => {
         if (testDataset != null) {
