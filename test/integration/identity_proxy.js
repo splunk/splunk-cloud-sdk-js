@@ -60,7 +60,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should create new permissions for an existing role', () =>
-            splunk.identity.addRolePermissions(testRole, testPerm1).then(rolePermission => {
+            splunk.identity.addRolePermission(testRole, testPerm1).then(rolePermission => {
                 assert.typeOf(rolePermission,'Object', 'response should be an object');
                 assert.equal(rolePermission.permission, testPerm1);
                 assert.equal(rolePermission.role, testRole);
@@ -117,7 +117,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should add a Role to the Group', () =>
-            splunk.identity.addGroupRole(testGroupName, {'name': testRole}).then(data => {
+            splunk.identity.addRoleToGroup(testGroupName, {'name': testRole}).then(data => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.group, testGroupName);
                 assert.equal(data.role, testRole);

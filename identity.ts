@@ -167,7 +167,7 @@ export class IdentityService extends BaseApiService {
      * @param permission String name of a permission
      * @returns A promise that resolves upon deletion
      */
-    public addRolePermissions = (roleName: Role['name'], permission: string): Promise<RolePermission> => {
+    public addRolePermission = (roleName: Role['name'], permission: string): Promise<RolePermission> => {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions']), JSON.stringify(permission))
             .then(response => response.Body)
             .then(responseBody => responseBody as RolePermission);
@@ -246,7 +246,7 @@ export class IdentityService extends BaseApiService {
      * @param roleName String name of a role
      * @returns GroupRole
      */
-    public addGroupRole = (groupName: Group['name'], roleName: RoleName): Promise<GroupRole> => {
+    public addRoleToGroup = (groupName: Group['name'], roleName: RoleName): Promise<GroupRole> => {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles']), roleName)
             .then(response => response.Body)
             .then(responseBody => responseBody as GroupRole);
@@ -471,7 +471,6 @@ interface GroupRole {
 interface MemberName {
     name: string
 }
-
 
 /**
  * Represents a member that belongs to a tenant.
