@@ -1,4 +1,4 @@
-# TODO: Refactor to leverage volume usage idiomatically
+# TODO: Refactor to leverage volume usage idiomatically 
 ssc-sdk-shared-token-fetcher:
   image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-token-fetcher:latest
   dockercfg_service: aws-generator
