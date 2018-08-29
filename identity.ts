@@ -90,7 +90,7 @@ export class IdentityService extends BaseApiService {
      * @param memberName input object of a member
      * @returns  A promise that resolves upon deletion
      */
-    public deleteMember = (memberName: MemberName['name']): Promise<any> => {
+    public removeMember = (memberName: MemberName['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName]))
             .then(response => response.Body)
             .then(responseBody => responseBody);

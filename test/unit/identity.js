@@ -51,7 +51,7 @@ describe('Identity Endpoints', () => {
 
     describe('Delete a member', () => {
         it('should delete a member', () => {
-            return splunk.identity.deleteMember('mem1').then(response => {
+            return splunk.identity.removeMember('mem1').then(response => {
                assert(!response);
             });
         });

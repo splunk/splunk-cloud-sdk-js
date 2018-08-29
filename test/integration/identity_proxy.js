@@ -201,7 +201,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should delete the selected test member', () =>
-            splunk.identity.deleteMember(testMember).then(response => {
+            splunk.identity.removeMember(testMember).then(response => {
                 assert(!response);
             }));
 
