@@ -68,6 +68,7 @@ export class EventBatcher {
 
     /**
      * Clean up the events and timer.
+     * @return Promise that will be completed when events are accepted by service
      */
     // TODO: This shouldn't be any
     public flush = (): Promise<any> => {

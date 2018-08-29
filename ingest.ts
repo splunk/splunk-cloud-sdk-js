@@ -15,6 +15,7 @@ export class IngestService extends BaseApiService {
     /**
      * Create a structured event to be ingested by Splunk SSC via Ingest service.
      * @param event
+     * @return promise that will be resolved when the ingest service has accepted the event for indexing
      */
     public createEvent = (event: Event): Promise<any> => {
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), event)
@@ -24,6 +25,7 @@ export class IngestService extends BaseApiService {
     /**
      * Create structured events to be ingested by Splunk SSC via Ingest service.
      * @param events
+     * @return promise that will be resolved when the ingest service has accepted the events for indexing
      */
     public createEvents = (events: Event[]): Promise<any> => {
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), IngestService.eventsToJSONs(events))
@@ -33,6 +35,7 @@ export class IngestService extends BaseApiService {
     /**
      * Create unstructured event data to be ingested by Splunk SSC via Ingest service.
      * @param event
+     * @return promise that will be resolved when the ingest service has accepted the event for indexing
      */
     public createRawEvent = (event: Event): Promise<any> => { // TODO: may want to support other types, like string and object
         const queryParams: QueryArgs = {};
@@ -50,6 +53,7 @@ export class IngestService extends BaseApiService {
     /**
      * Create metrics to be ingested by Splunk SSC.
      * @param metrics
+     * @return promise that will be resolved when the ingest service has accepted the metrics for indexing
      */
     public createMetrics = (metrics: MetricEvent[]): Promise<any> => {
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics']), metrics)

@@ -71,9 +71,9 @@ export class ActionService extends BaseApiService {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), notification)
             .then(response => {
                 const key = 'location';
-                if (key in response.Headers._headers) {
-                    const responseStr = response.Headers._headers[key].toString();
-                    if (responseStr.includes('/status/')) {
+                if (response.headers.has(key)) {
+                    const responseStr = response.headers.get(key);
+                    if (responseStr != null && responseStr.match('\/status\/')) {
                         const parts = responseStr.split('/status/');
                         if (parts.length === 2) {
                             return Promise.resolve({
@@ -83,7 +83,7 @@ export class ActionService extends BaseApiService {
                         }
                     }
                 }
-                return response.Body as ActionTriggerResponse;
+                return response.body as ActionTriggerResponse;
             });
     };
 
