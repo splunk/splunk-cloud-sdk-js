@@ -19,8 +19,7 @@ export class IngestService extends BaseApiService {
      */
     public createEvent = (event: Event): Promise<any> => {
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), event)
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     }
 
     /**
@@ -30,8 +29,7 @@ export class IngestService extends BaseApiService {
      */
     public createEvents = (events: Event[]): Promise<any> => {
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), IngestService.eventsToJSONs(events))
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     }
 
     /**
@@ -49,8 +47,7 @@ export class IngestService extends BaseApiService {
             }
         });
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['raw']), event.event, queryParams)
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     }
 
     /**
@@ -60,8 +57,7 @@ export class IngestService extends BaseApiService {
      */
     public createMetrics = (metrics: MetricEvent[]): Promise<any> => {
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics']), metrics)
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     }
 
     /**

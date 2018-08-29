@@ -19,8 +19,7 @@ export class KVStoreService extends BaseApiService {
     public getHealthStatus = (): Promise<any> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['ping']);
         return this.client.get(url)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as PingOKBody);
+            .then(response => response.body as PingOKBody);
     };
 
     /**
@@ -36,8 +35,7 @@ export class KVStoreService extends BaseApiService {
         ]);
 
         return this.client.get(url)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as CollectionStats);
+            .then(response => response.body as CollectionStats);
     };
 
     /**
@@ -49,8 +47,7 @@ export class KVStoreService extends BaseApiService {
             .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
                 'collections'
             ]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody as CollectionDefinition[]);
+            .then(response => response.body as CollectionDefinition[]);
     };
 
     /**
@@ -73,8 +70,7 @@ export class KVStoreService extends BaseApiService {
                 collection,
                 'export',
             ]), {}, requestHeaders)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as string);
+            .then(response => response.body as string);
     };
 
     /**
@@ -89,8 +85,7 @@ export class KVStoreService extends BaseApiService {
             'indexes',
         ]);
         return this.client.get(url)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as IndexDescription[]);
+            .then(response => response.body as IndexDescription[]);
     };
 
     /**
@@ -106,8 +101,7 @@ export class KVStoreService extends BaseApiService {
             'indexes',
         ]);
         return this.client.post(url, index)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as IndexDescription);
+            .then(response => response.body as IndexDescription);
     };
 
     /**
@@ -125,8 +119,7 @@ export class KVStoreService extends BaseApiService {
                 indexName,
             ])
         )
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     };
 
     /**
@@ -141,8 +134,7 @@ export class KVStoreService extends BaseApiService {
             collection,
         ]);
         return this.client.post(insertRecordURL, record)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Key);
+            .then(response => response.body as Key);
     };
 
     /**
@@ -159,8 +151,7 @@ export class KVStoreService extends BaseApiService {
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'batch']),
             records
         )
-            .then(response => response.Body)
-            .then(responseBody => responseBody as string[]);
+            .then(response => response.body as string[]);
     };
 
     /**
@@ -179,8 +170,7 @@ export class KVStoreService extends BaseApiService {
             'query',
         ]);
         return this.client.get(url, filter)
-            .then(response => response.Body)
-            .then(responseBody => responseBody  as Map<string, string>);
+            .then(response => response.body as Map<string, string>);
     };
 
     /**
@@ -192,8 +182,7 @@ export class KVStoreService extends BaseApiService {
     public getRecordByKey = (collection: string, key: string): Promise<Map<string, string>> => {
         return this.client
             .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, key]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody  as Map<string, string>);
+            .then(response => response.body as Map<string, string>);
     };
 
     /**
@@ -211,8 +200,7 @@ export class KVStoreService extends BaseApiService {
             collection,
         ]);
         return this.client.get(url, filter)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Map<string, string>);
+            .then(response => response.body as Map<string, string>);
     };
 
     /**
@@ -226,8 +214,7 @@ export class KVStoreService extends BaseApiService {
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query']),
             filter
         )
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     };
 
     /**
@@ -240,8 +227,7 @@ export class KVStoreService extends BaseApiService {
         return this.client.delete(
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, key])
         )
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     };
 }
 

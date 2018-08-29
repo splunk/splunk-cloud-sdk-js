@@ -23,8 +23,7 @@ export class CatalogService extends BaseApiService {
             query.filter = filter;
         }
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), query)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as DatasetInfo[]);
+            .then(response => response.body as DatasetInfo[]);
     }
 
     /**
@@ -34,8 +33,7 @@ export class CatalogService extends BaseApiService {
      */
     public createDataset = (dataset: DatasetInfo): Promise<DatasetInfo> => {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), dataset)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as DatasetInfo);
+            .then(response => response.body as DatasetInfo);
     }
 
     /**
@@ -45,8 +43,7 @@ export class CatalogService extends BaseApiService {
      */
     public getDataset = (datasetId: DatasetInfo['id']): Promise<DatasetInfo> => {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody as DatasetInfo);
+            .then(response => response.body as DatasetInfo);
     }
 
     /**
@@ -56,8 +53,7 @@ export class CatalogService extends BaseApiService {
      */
     public deleteDataset = (datasetId: DatasetInfo['id']): Promise<any> => { // TODO: can we add stricter return typing?
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     }
 
     /**
@@ -72,8 +68,7 @@ export class CatalogService extends BaseApiService {
                     throw new Error('There are more than 1 dataset with the input name');
                 } else if (ret.length === 1) {
                     return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', ret[0].id]))
-                        .then(response => response.Body)
-                        .then(responseBody => responseBody);
+                        .then(response => response.body);
                 } else {
                     return Promise.reject(new Error(`No dataset found with name: ${name}`));
                 }
@@ -89,8 +84,7 @@ export class CatalogService extends BaseApiService {
     // TODO: add lint check for xxxID vs. xxxId consistency
     public updateDataset = (datasetId: DatasetInfo['id'], partial: PartialDatasetInfo): Promise<DatasetInfo> => {
         return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]), partial)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as DatasetInfo);
+            .then(response => response.body as DatasetInfo);
     }
 
     // rules
@@ -102,8 +96,7 @@ export class CatalogService extends BaseApiService {
      */
     public createRule = (rule: Rule): Promise<Rule> => {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), rule)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Rule);
+            .then(response => response.body as Rule);
     }
 
     /**
@@ -117,8 +110,7 @@ export class CatalogService extends BaseApiService {
             query.filter = filter;
         }
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), query)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Rule);
+            .then(response => response.body as Rule);
     }
 
     /**
@@ -128,8 +120,7 @@ export class CatalogService extends BaseApiService {
      */
     public getRule = (ruleId: Rule['id']): Promise<Rule> => {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Rule);
+            .then(response => response.body as Rule);
     }
 
     /**
@@ -139,8 +130,7 @@ export class CatalogService extends BaseApiService {
      */
     public deleteRule = (ruleId: Rule['id']): Promise<any> => { // TODO: can we add stricter return typing?
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     }
 
     /**
@@ -152,8 +142,7 @@ export class CatalogService extends BaseApiService {
     public getDatasetFields = (datasetID: DatasetInfo['id'], filter?: string): Promise<Field[]> => {
         const query = { filter };
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), query)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Field[]);
+            .then(response => response.body as Field[]);
     }
 
     /**
@@ -164,8 +153,7 @@ export class CatalogService extends BaseApiService {
      */
     public getDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id']): Promise<Field> => {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Field);
+            .then(response => response.body as Field);
     }
 
     /**
@@ -176,8 +164,7 @@ export class CatalogService extends BaseApiService {
      */
     public postDatasetField = (datasetID: DatasetInfo['id'], datasetField: Field): Promise<Field> => {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), datasetField)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Field);
+            .then(response => response.body as Field);
     }
 
     /**
@@ -189,8 +176,7 @@ export class CatalogService extends BaseApiService {
      */
     public patchDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id'], datasetField: Field): Promise<Field> => {
         return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]), datasetField)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Field);
+            .then(response => response.body as Field);
     }
 
     /**
@@ -201,8 +187,7 @@ export class CatalogService extends BaseApiService {
      */
     public deleteDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id']): Promise<object> => {
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body as object);
     }
 }
 

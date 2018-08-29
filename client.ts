@@ -4,6 +4,7 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
+import 'isomorphic-fetch';
 import agent from './version';
 
 export interface SplunkErrorParams {
@@ -31,14 +32,14 @@ export class SplunkError extends Error implements SplunkErrorParams {
 function handleResponse(response: Response): Promise<HTTPResponse> {
 
     if (response.ok) {
-        let httpResponse: HTTPResponse
         if (response.headers.get('Content-Type') === ContentType.CSV || response.headers.get('Content-Type') === ContentType.GZIP) {
-            httpResponse = { Body: response.text(), Headers: response.headers }
-            return Promise.resolve(httpResponse);
-        }
-        httpResponse = { Body: response.text().then(decodeJson), Headers: response.headers }
-        return Promise.resolve(httpResponse);
-    }
+            return response.text()
+                .then(text => ({ body: text, headers: response.headers }));
+        } // else
+        return response.text()
+            .then(decodeJson)
+            .then(json => ({ body: json, headers: response.headers }));
+    } // else
     return response.text().then(text => {
         let err: Error;
         try {
@@ -266,6 +267,6 @@ export interface RequestHeaders {
 }
 
 export interface HTTPResponse {
-    Body?: Promise<any>;
-    Headers: Headers;
+    body?: string | object;
+    headers: Headers;
 }
