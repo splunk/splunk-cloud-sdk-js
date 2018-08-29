@@ -193,7 +193,6 @@ function createKVCollectionDataset(namespace, collection) {
             })
             // Finally set the dataset for testing
             .then(response => {
-                testDataset = response;
                 return response;
             })
             .catch(error => {
