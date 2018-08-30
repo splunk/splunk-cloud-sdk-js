@@ -10,13 +10,13 @@ RUN apk update && \
                        jq \
                        openssh
 
-RUN mkdir -p /opt/splunk/splunk-cloud-client-js
+RUN mkdir -p /opt/splunk/splunk-cloud-sdk-js
 
 # Copy the content of your repository into the image
-COPY . /opt/splunk/splunk-cloud-client-js
+COPY . /opt/splunk/splunk-cloud-sdk-js
 
-WORKDIR /opt/splunk/splunk-cloud-client-js
+WORKDIR /opt/splunk/splunk-cloud-sdk-js
 
 RUN yarn install --non-interactive && yarn build
 
-VOLUME /opt/splunk/splunk-cloud-client-js
+VOLUME /opt/splunk/splunk-cloud-sdk-js

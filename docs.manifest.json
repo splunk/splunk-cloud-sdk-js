@@ -1,5 +1,5 @@
 {
     "category": "sdks",
-    "name": "Splunk Cloud Client for JavaScript",
+    "name": "Splunk Cloud SDK for JavaScript",
     "description": "A Javascript client for making requests to Splunk Self Service Cloud hosted services."
 }
