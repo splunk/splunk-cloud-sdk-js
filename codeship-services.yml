@@ -1,51 +1,51 @@
 # TODO: Refactor to leverage volume usage idiomatically 
-ssc-sdk-shared-token-fetcher:
-  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-token-fetcher:latest
+splunk-cloud-sdk-shared-token-fetcher:
+  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/splunk-cloud-sdk-shared-token-fetcher:latest
   dockercfg_service: aws-generator
   encrypted_env_file: ci/env.encrypted
   volumes:
     - ./okta:/okta
 
-ssc-client-js-build:
+splunk-cloud-client-js-build:
   build:
-    image: splunk/ssc-client-js-build
+    image: splunk/splunk-cloud-client-js-build
     dockerfile: ci/Dockerfile
   encrypted_env_file: ci/env.encrypted
 
-ssc-client-js-with-stubby:
+splunk-cloud-client-js-with-stubby:
   build:
-    image: splunk/ssc-client-js-with-stubby
+    image: splunk/splunk-cloud-client-js-with-stubby
     dockerfile: ci/Dockerfile
   encrypted_env_file: ci/env.encrypted
   environment:
     - CI=true
   depends_on:
-    - ssc-sdk-shared-stubby
+    - splunk-cloud-sdk-shared-stubby
 
-ssc-client-js-against-playground:
+splunk-cloud-client-js-against-playground:
   build:
-    image: splunk/ssc-client-js-against-playground
+    image: splunk/splunk-cloud-client-js-against-playground
     dockerfile: ci/Dockerfile
   encrypted_env_file: ci/env.encrypted
   depends_on:
-    - ssc-sdk-shared-token-fetcher
+    - splunk-cloud-sdk-shared-token-fetcher
   volumes_from:
-    - ssc-sdk-shared-token-fetcher
+    - splunk-cloud-sdk-shared-token-fetcher
   environment:
     - CI=true
 
-ssc-sdk-shared-stubby:
-  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest
+splunk-cloud-sdk-shared-stubby:
+  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/splunk-cloud-sdk-shared-stubby:latest
   dockercfg_service: aws-generator
 
-ssc-client-js-whitesource:
+splunk-cloud-client-js-whitesource:
   depends_on:
-    - ssc-client-js-build
+    - splunk-cloud-client-js-build
   dockercfg_service: aws-generator
   encrypted_env_file: ci/env.encrypted
-  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-whitesource:latest
+  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/splunk-cloud-sdk-shared-whitesource:latest
   volumes_from:
-    - ssc-client-js-build
+    - splunk-cloud-client-js-build
 
 aws-generator:
   add_docker: true
