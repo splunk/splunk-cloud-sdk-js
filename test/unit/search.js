@@ -48,11 +48,4 @@ describe("Using Search APIs", () => {
         })
     );
 
-    it("should allow job control", () => splk.search.createJobControlAction('SEARCH_ID', 'pause')
-        .then(result => {
-            expect(result).to.have.property('messages').and.be.an('array');
-            expect(result.messages[0]).to.have.property('type', 'INFO');
-            expect(result.messages[0]).to.have.property('text').and.match(/paused/);
-        })
-    );
 });
