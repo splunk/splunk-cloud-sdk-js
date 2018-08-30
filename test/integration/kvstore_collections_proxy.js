@@ -10,7 +10,7 @@ const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
 
 const { ContentType } = require('../../client.ts');
-const { createKVCollectionDataset, createRecord } = require('./catalogv2_proxy.js');
+const { createKVCollectionDataset, createRecord } = require('./catalog_proxy.js');
 
 const ssc = new SplunkSSC(sscHost, token, tenantID);
 

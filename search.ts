@@ -85,14 +85,6 @@ export class Search {
     };
 
     /**
-     * Pauses this search job
-     * @return A promise that will be resolved when the pause action is accepted by the service
-     */
-    public pause = (): Promise<object> => {
-        return this.client.createJobControlAction(this.sid, Action.PAUSE);
-    }
-
-    /**
      * Resets the time to live on this search job
      * @return A promise that will be resolved when the touch action is accepted by the service
      */
@@ -401,8 +393,6 @@ interface JobControlActionRequest {
 }
 
 enum Action {
-    PAUSE = 'pause',
-    UNPAUSE = 'unpause',
     FINALIZE = 'finalize',
     CANCEL = 'cancel',
     TOUCH = 'touch',
