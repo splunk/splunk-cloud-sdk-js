@@ -1,16 +1,12 @@
 // ***** TITLE: Get data in using Ingest Service
 // ***** DESCRIPTION: This example show show to get data in using the Ingest Service in
 //              different ways, then runs a search to verify the data was added.
-const SplunkSSC = require("../splunk");
+require('isomorphic-fetch');
 
+const SplunkSSC = require("../splunk");
+const { sleep, searchResults } = require('./exampleHelperFunctions.js');
 
 const { SSC_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
-
-// define helper functions
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 async function createIndex(splunk, index) {
     const regex1 = {
@@ -21,7 +17,6 @@ async function createIndex(splunk, index) {
         "kind": "index",
         "disabled": false
     };
-
 
     if (index !== "main") {
         splunk.catalog.createDataset(regex1)
@@ -35,7 +30,6 @@ async function createIndex(splunk, index) {
 };
 
 function sendDataViaIngest(splunk, index, host, source) {
-
     const event1 = {
         "sourcetype": "splunkd",
         "source": source,
@@ -76,7 +70,6 @@ function sendDataViaIngest(splunk, index, host, source) {
         process.exit(1);
     });
 
-
     // Use the Ingest endpoint to send multiple events
     splunk.ingest.createEvents([event1, event2, event3]).then(data => {
         console.log(data);
@@ -86,41 +79,6 @@ function sendDataViaIngest(splunk, index, host, source) {
 
     });
 };
-
-
-async function searchResults(splunk, start, timeout, query, expected) {
-
-    if (Date.now() - start > timeout) {
-        console.log(`TIMEOUT!!!! Search is taking more than ${timeout}ms. Terminate!`);
-        return false;
-    }
-
-    // sleep 5 seconds before to retry the search
-    await sleep(5000);
-
-    return splunk.search.createJob({ "query": query })
-        .then(sid => splunk.search.waitForJob(sid))
-        .then(searchObj => splunk.search.getResults(searchObj.sid)
-            .then(resultResponse => {
-                const retNum = resultResponse.results.length;
-                console.log(`got ${retNum} results`);
-                if (retNum < expected) {
-                    return searchResults(splunk, start, timeout, query, expected);
-                } else if (retNum > expected) {
-                    console.log(retNum);
-                    console.log(`find moreyar events than expected for query ${query}`);
-                    return false;
-                }
-                console.log(`Successfully found ${retNum} events for query ${query}, total spent ${Date.now() - start}ms`);
-                return true;
-            })
-        )
-        .catch(err => {
-            console.log(err);
-            return false;
-        });
-};
-
 
 // define the main workflow
 async function main() {
