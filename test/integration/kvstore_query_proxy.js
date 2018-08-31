@@ -9,7 +9,7 @@ const tenantID = config.playgroundTenant;
 const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
 
-const { createKVCollectionDataset, createRecord } = require('./catalogv2_proxy.js');
+const { createKVCollectionDataset, createRecord } = require('./catalog_proxy.js');
 
 const ssc = new SplunkSSC(sscHost, token, tenantID);
 
@@ -35,8 +35,9 @@ describe('Integration tests for KVStore Query Endpoints', () => {
         TEST_KEY_03: 'B',
     };
 
-    beforeEach(() => {
-        return createKVCollectionDataset(testNamespace, testCollection);
+    beforeEach(async () => {
+        testDataset = await createKVCollectionDataset(testNamespace, testCollection);
+        return testDataset;
     });
     afterEach(() => {
         if (testDataset != null) {

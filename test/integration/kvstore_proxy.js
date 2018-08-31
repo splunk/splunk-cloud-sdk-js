@@ -9,7 +9,7 @@ const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
 const testKVCollectionName = testNamespace + '.' + testCollection;
 
-const { createKVCollectionDataset, createRecord } = require('./catalogv2_proxy.js');
+const { createKVCollectionDataset, createRecord } = require('./catalog_proxy.js');
 
 const ssc = new SplunkSSC(sscHost, token, tenantID);
 
@@ -18,7 +18,10 @@ describe('Integration tests for KVStore Endpoints', () => {
     const fields = [{ Direction: -1, Field: 'integ_testField1' }];
     let testDataset;
 
-    before(() => createKVCollectionDataset(testNamespace, testCollection));
+    before(async () => {
+        testDataset = await createKVCollectionDataset(testNamespace, testCollection);
+        return testDataset;
+    });
     after(() => {
         if (testDataset != null) {
             ssc.catalog
