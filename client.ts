@@ -130,7 +130,9 @@ export class ServiceClient {
         const requestParamHeaders: Headers = new Headers({
             'Authorization': `Bearer ${this.token}`,
             'Content-Type': ContentType.JSON,
-            'splunk-client':`${agent.useragent}/${agent.version}`,});
+            // Disabled until we sort out CORS issue
+            // 'splunk-client':`${agent.useragent}/${agent.version}`,
+        });
 
         if (headers !== undefined && headers !== {}) {
             Object.keys(headers).forEach(key => {
