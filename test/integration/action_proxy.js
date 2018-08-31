@@ -61,7 +61,7 @@ describe("integration tests using action service", () => {
         const webhookAction = {
             "name": `WebhookAction_${Date.now()}`,
             "kind": "webhook",
-            "webhookUrl": "https://locahost:9999/test",
+            "webhookUrl": "https://foo.slack.com/test",
             "message": "some user msg"
         };
 
