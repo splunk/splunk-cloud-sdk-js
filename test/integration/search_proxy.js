@@ -60,6 +60,17 @@ describe("integration tests Using Search APIs", () => {
                     })
             }));
 
+        it("should return a wait request if the job is not ready", () => splunk.search.createJob(moduleQuery)
+            .then(searchObj => { // Check the state of the job
+                expect(searchObj).to.have.property('sid');
+                expect(searchObj).to.have.property('status');
+                return splunk.search.getResults(searchObj.sid)
+                    .then(resultResponse => {
+                        expect(resultResponse).to.have.property('nextLink');
+                        expect(resultResponse).to.have.property('wait');
+                    })
+            }));
+
         it("should allow pagination of results", () => splunk.search.createJob(standardQuery)
             .then(job => splunk.search.waitForJob(job.sid)
                 .then(job => { // As a child to keep sid in the closure
