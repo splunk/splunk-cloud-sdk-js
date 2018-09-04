@@ -1,9 +1,9 @@
-# - type: serial
-#   name: Documentation
-#   steps:
-#     - name: Build Docs
-#       service: ssc-client-js-with-stubby
-#       command: bash -c "yarn docs"
+- type: serial
+  name: Documentation
+  steps:
+    - name: Build Docs
+      service: ssc-client-js-with-stubby
+      command: bash -c "yarn docs"
 
 - type: serial
   name: Testing
