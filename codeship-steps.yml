@@ -18,19 +18,19 @@
     name: Integration Tests And Example Tests
     steps:
         # Integration Tests
-      - name: Integration Tests - Not Gated
-        service: ssc-client-js-against-playground
+     - name: Integration Tests - Not Gated
+       service: ssc-client-js-against-playground
        exclude: ^(master|develop)$
-        command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
+       command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
      - name: Integration Tests - Gated
        service: ssc-client-js-against-playground
        tag: ^(master|develop)$
        command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
         # Example Tests
-      - name: Example Tests - Not Gated
-        service: ssc-client-js-against-playground
+     - name: Example Tests - Not Gated
+       service: ssc-client-js-against-playground
        exclude: ^(master|develop)$
-        command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
+       command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
      - name: Example Tests - Gated
        service: ssc-client-js-against-playground
        tag: ^(master|develop)$
