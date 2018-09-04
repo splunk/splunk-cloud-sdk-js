@@ -7,7 +7,7 @@ module.exports = {
     stubbyDevTestTenant: 'devtestTenant',
     stubbyTestCollection: 'testcollection0',
     invalidAuthToken: 'BAD_TOKEN',
-    playgroundHost: process.env.SSC_HOST || 'https://api.playground.splunkbeta.com',
+    playgroundHost: process.env.SPLUNK_CLOUD_HOST || 'https://api.playground.splunkbeta.com',
     playgroundTenant: process.env.TENANT_ID,
     playgroundAuthToken: process.env.BEARER_TOKEN,
     testNamespace: `jsnmspace${Date.now()}`,
