@@ -41,7 +41,7 @@ var IdentityService = require('@splunk/splunk-cloud-src/identity')
 var identity = new IdentityService(ENDPOINT_URL, AUTH_TOKEN, TENANT)
 
 // Get the user profile from the identity API
-identity.getUserProfile()
+identity.getTenants()
 
 ...
 
