@@ -2,53 +2,53 @@
   name: Documentation
   steps:
     - name: Build Docs
-      service: splunk-cloud-sdk-js-with-stubby
+      service: ssc-client-js-with-stubby
       command: bash -c "yarn docs"
 
 - type: serial
   name: Testing
   steps:
   - name: Fetch Okta Token
-    service: splunk-cloud-sdk-shared-token-fetcher
+    service: ssc-sdk-shared-token-fetcher
     command: true
   - name: Functional Tests With Code Coverage
-    service: splunk-cloud-sdk-js-with-stubby
+    service: ssc-client-js-with-stubby
     command: bash -c "yarn codecov"
   - type: parallel
     name: Integration Tests And Example Tests
     steps:
         # Integration Tests
       - name: Integration Tests - Not Gated
-        service: splunk-cloud-sdk-js-against-playground
-        exclude: ^(master|develop)$
+        service: ssc-client-js-against-playground
+       exclude: ^(master|develop)$
         command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
-      - name: Integration Tests - Gated
-        service: splunk-cloud-sdk-js-against-playground
-        tag: ^(master|develop)$
-        command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
+     - name: Integration Tests - Gated
+       service: ssc-client-js-against-playground
+       tag: ^(master|develop)$
+       command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
         # Example Tests
       - name: Example Tests - Not Gated
-        service: splunk-cloud-sdk-js-against-playground
-        exclude: ^(master|develop)$
+        service: ssc-client-js-against-playground
+       exclude: ^(master|develop)$
         command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
-      - name: Example Tests - Gated
-        service: splunk-cloud-sdk-js-against-playground
-        tag: ^(master|develop)$
-        command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
-      - name: WhiteSource Testing
-        service: splunk-cloud-sdk-js-whitesource
-        command: bash -c "java -jar /opt/whitesource/whitesource-fs-agent.jar \
-                          -c /opt/splunk/splunk-cloud-sdk-js/ci/whitesource/whitesource-fs-agent.config \
-                          -d /opt/splunk/splunk-cloud-sdk-js \
-                          -apiKey $WHITESOURCE_API_KEY \
-                          -productToken $WHITESOURCE_PRODUCT_TOKEN \
-                          -userKey $WHITESOURCE_USER_KEY"
-        tag: ^(master|develop)$
+     - name: Example Tests - Gated
+       service: ssc-client-js-against-playground
+       tag: ^(master|develop)$
+       command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
+     - name: WhiteSource Testing
+       service: ssc-client-js-whitesource
+       command: bash -c "java -jar /opt/whitesource/whitesource-fs-agent.jar \
+                         -c /opt/splunk/ssc-client-js/ci/whitesource/whitesource-fs-agent.config \
+                         -d /opt/splunk/ssc-client-js \
+                         -apiKey $WHITESOURCE_API_KEY \
+                         -productToken $WHITESOURCE_PRODUCT_TOKEN \
+                         -userKey $WHITESOURCE_USER_KEY"
+       tag: ^(master|develop)$
 
 - type: serial
   name: Deploy
   steps:
     - name: Deploy to NPM
-      service: splunk-cloud-sdk-js-with-stubby
+      service: ssc-client-js-with-stubby
       tag: master
       command: ./ci/publish.sh
