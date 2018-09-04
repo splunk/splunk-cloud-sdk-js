@@ -3,7 +3,7 @@
 echo "Writing .npmrc file to allow access to internal Splunk npm ..."
 echo $NPM_TOKEN >> .npmrc
 
-echo "Publishing ssc-client package to npm ..."
+echo "Publishing splunk-cloud-sdk-javascript package to npm ..."
 npm publish
 
 echo "Publishing docs to docshub ..."

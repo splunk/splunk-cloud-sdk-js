@@ -13,7 +13,7 @@ import { INGEST_SERVICE_PREFIX } from './service_prefixes';
  */
 export class IngestService extends BaseApiService {
     /**
-     * Create a structured event to be ingested by Splunk SSC via Ingest service.
+     * Create a structured event to be ingested by Splunk Cloud via Ingest service.
      * @param event
      * @return promise that will be resolved when the ingest service has accepted the event for indexing
      */
@@ -23,7 +23,7 @@ export class IngestService extends BaseApiService {
     }
 
     /**
-     * Create structured events to be ingested by Splunk SSC via Ingest service.
+     * Create structured events to be ingested by Splunk Cloud via Ingest service.
      * @param events
      * @return promise that will be resolved when the ingest service has accepted the events for indexing
      */
@@ -33,7 +33,7 @@ export class IngestService extends BaseApiService {
     }
 
     /**
-     * Create unstructured event data to be ingested by Splunk SSC via Ingest service.
+     * Create unstructured event data to be ingested by Splunk Cloud via Ingest service.
      * @param event
      * @return promise that will be resolved when the ingest service has accepted the event for indexing
      */
@@ -51,7 +51,7 @@ export class IngestService extends BaseApiService {
     }
 
     /**
-     * Create metrics to be ingested by Splunk SSC.
+     * Create metrics to be ingested by Splunk Cloud.
      * @param metrics
      * @return promise that will be resolved when the ingest service has accepted the metrics for indexing
      */

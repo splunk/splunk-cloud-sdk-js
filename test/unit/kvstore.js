@@ -1,11 +1,11 @@
 const { assert } = require('chai');
 const config = require('../config');
-const SplunkSSC = require('../../splunk');
+const SplunkCloud = require('../../splunk');
 
 const stubbyTestNamespace = config.stubbyTestNamespace;
 const stubbyTestCollection = config.stubbyTestCollection;
 
-const splunk = new SplunkSSC(
+const splunk = new SplunkCloud(
     `http://${config.stubbyHost}:8882`,
     config.stubbyAuthToken,
     config.stubbyTenant
