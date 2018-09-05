@@ -100,20 +100,6 @@ describe('Events Endpoint', () => {
     });
 });
 
-describe('Raw Endpoint', () => {
-
-    describe('Post raw event', () => {
-        it('should return a successful response', () => {
-            return splunk.ingest.createRawEvent(event1).then(response => {
-                assert.deepEqual(response, successResponse, 'response should be expected success response.');
-            }).catch(err => {
-                assert.fail('request should not have failed');
-            });
-        });
-    });
-
-});
-
 describe('Metrics Endpoint', () => {
 
     const metrics = [
