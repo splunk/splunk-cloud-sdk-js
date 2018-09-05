@@ -3,8 +3,8 @@
 ./common/ # built dir
 !/.eslintrc.js
 
-# Don't check in docs or built docs packages
-docs/
+# Don't check in HTML docs or built docs packages
+docs/html
 build/
 out/
 
