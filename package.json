@@ -28,7 +28,7 @@
     "example": "node examples/*.js"
   },
   "author": "Splunk, Inc.",
-  "license": "UNLICENSED",
+  "license": "SEE LICENSE IN LICENSE.txt",
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.34",
     "chai": "^4.1.2",

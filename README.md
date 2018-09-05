@@ -8,17 +8,17 @@ This is the Splunk Cloud SDK for JavaScript
 [![codecov](https://codecov.io/gh/splunk/splunk-cloud-sdk-js/branch/develop/graph/badge.svg?token=R5kexVYymt)](https://codecov.io/gh/splunk/splunk-cloud-sdk-js)
 
 
-###Get the latest release from one of the following locations 
+### Get the latest release from one of the following locations 
 - npm-solutions-local/@splunk/splunk-cloud-sdk-js/@splunk/splunk-cloud-sdk-js-X.Y.Z.tgz
 - https://github.com/splunk/splunk-cloud-sdk-js/archive/vX.Y.Z.tar.gz
 
 
-###From your project directory run
+### From your project directory run
 ```sh
 npm install ~/Downloads/splunk-cloud-sdk-js-X.Y.Z.tar.gz 
 ```
 
-###Using the service client to access all supported services
+### Using the service client to access all supported services
 
 ```sh
 var ServiceClient = require('@splunk/splunk-cloud-src/splunk')
@@ -32,7 +32,7 @@ svc.catalog.getDatasets()
 
 ```
 
-###Using a specific client for only the service required
+### Using a specific client for only the service required
 
 ```sh
 
