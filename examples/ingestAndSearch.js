@@ -1,10 +1,10 @@
 // ***** TITLE: Get data in using Ingest Service
 // ***** DESCRIPTION: This example show show to get data in using the Ingest Service in
 //              different ways, then runs a search to verify the data was added.
-const SplunkSSC = require("../splunk");
+const SplunkCloud = require("../splunk");
 
 
-const { SSC_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
+const { SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 // define helper functions
 
@@ -109,9 +109,9 @@ async function searchResults(splunk, start, timeout, query, expected) {
 async function main() {
     // todo: should be a non-main index, but playground now still have issues for sending data to non-main index
     const index = `test_${new Date().getSeconds()}`;
-    // ***** STEP 1: Get Splunk SSC client
-    // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
-    const splunk = new SplunkSSC(SSC_HOST, BEARER_TOKEN, TENANT_ID);
+    // ***** STEP 1: Get Splunk Cloud client
+    // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authenticatin token.
+    const splunk = new SplunkCloud(SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID);
 
     // ***** STEP 2: Define a new index
     // ***** DESCRIPTION: Define a new index in the Metadata Catalog so that we can send events to the new index.
