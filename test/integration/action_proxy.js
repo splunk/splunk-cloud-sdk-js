@@ -1,12 +1,12 @@
 const config = require('../config');
-const SplunkSSC = require('../../splunk');
+const SplunkCloud = require('../../splunk');
 const { assert, expect } = require('chai');
 
-const sscHost = config.playgroundHost;
+const splunkCloudHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
 const tenantID = config.playgroundTenant;
 
-const ssc = new SplunkSSC(sscHost, token, tenantID);
+const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
 
 describe("integration tests using action service", () => {
     describe("CRUD email actions", () => {
@@ -20,7 +20,7 @@ describe("integration tests using action service", () => {
             "addresses": ["test1@splunk.com", "test2@splunk.com"]
         };
 
-        it("should create action", () => ssc.action.createAction(emailAction).then(response => {
+        it("should create action", () => splunkCloud.action.createAction(emailAction).then(response => {
             assert.equal(response["name"], emailAction.name);
             assert.equal(response["kind"], emailAction.kind);
             assert.equal(response["htmlPart"], emailAction.htmlPart);
@@ -31,7 +31,7 @@ describe("integration tests using action service", () => {
 
         }));
 
-        it("should get actions", () => ssc.action.getAction(emailAction.name).then(response => {
+        it("should get actions", () => splunkCloud.action.getAction(emailAction.name).then(response => {
             assert.equal(response["name"], emailAction.name);
             assert.equal(response["kind"], emailAction.kind);
             assert.equal(response["htmlPart"], emailAction.htmlPart);
@@ -41,7 +41,7 @@ describe("integration tests using action service", () => {
             assert.deepEqual(response["addresses"], emailAction.addresses);
         }));
 
-        it("should update actions", () => ssc.action.updateAction(emailAction.name, { "subjectPart": "new subject" }).then(response => {
+        it("should update actions", () => splunkCloud.action.updateAction(emailAction.name, { "subjectPart": "new subject" }).then(response => {
             assert.equal(response["name"], emailAction.name);
             assert.equal(response["kind"], emailAction.kind);
             assert.equal(response["htmlPart"], emailAction.htmlPart);
@@ -51,7 +51,7 @@ describe("integration tests using action service", () => {
             assert.deepEqual(response["addresses"], emailAction.addresses);
         }));
 
-        it("should delete actions", () => ssc.action.deleteAction(emailAction.name).then(response => {
+        it("should delete actions", () => splunkCloud.action.deleteAction(emailAction.name).then(response => {
             assert(!response);
         }));
 
@@ -61,11 +61,11 @@ describe("integration tests using action service", () => {
         const webhookAction = {
             "name": `WebhookAction_${Date.now()}`,
             "kind": "webhook",
-            "webhookUrl": "https://locahost:9999/test",
+            "webhookUrl": "https://foo.slack.com/test",
             "message": "some user msg"
         };
 
-        it("should create action", () => ssc.action.createAction(webhookAction).then(response => {
+        it("should create action", () => splunkCloud.action.createAction(webhookAction).then(response => {
             assert.equal(response["name"], webhookAction.name);
             assert.equal(response["kind"], webhookAction.kind);
             assert.equal(response["webhookUrl"], webhookAction.webhookUrl);
@@ -81,17 +81,17 @@ describe("integration tests using action service", () => {
             }
         };
 
-        it("should trigger action and get status", () => ssc.action.triggerAction(webhookAction.name, notification).then(response => {
+        it("should trigger action and get status", () => splunkCloud.action.triggerAction(webhookAction.name, notification).then(response => {
             assert(response.StatusID != null);
             assert(response.StatusURL != null);
 
-            ssc.action.getActionStatus(webhookAction.name, response.StatusID).then(res => {
+            splunkCloud.action.getActionStatus(webhookAction.name, response.StatusID).then(res => {
                 // expect(['RUNNING', 'FAILED']).to.include(res.state) TODO: Whether the action succeeds or not, depends on the action definition
                 assert.equal(res.statusId, response.StatusID);
             });
         }));
 
-        it("should delete actions", () => ssc.action.deleteAction(webhookAction.name).then(response => {
+        it("should delete actions", () => splunkCloud.action.deleteAction(webhookAction.name).then(response => {
             assert(!response);
         }));
     });
@@ -104,7 +104,7 @@ describe("integration tests using action service", () => {
             "message": "sns user msg"
         };
 
-        it("should create action", () => ssc.action.createAction(action).then(response => {
+        it("should create action", () => splunkCloud.action.createAction(action).then(response => {
             assert.equal(response["name"], action.name);
             assert.equal(response["kind"], action.kind);
             assert.equal(response["topic"], action.topic);
@@ -112,7 +112,7 @@ describe("integration tests using action service", () => {
 
         }));
 
-        it("should delete actions", () => ssc.action.deleteAction(action.name).then(response => {
+        it("should delete actions", () => splunkCloud.action.deleteAction(action.name).then(response => {
             assert(!response);
         }));
     });

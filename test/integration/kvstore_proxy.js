@@ -1,27 +1,30 @@
 const { assert } = require('chai');
 const config = require('../config');
-const SplunkSSC = require('../../splunk');
+const SplunkCloud = require('../../splunk');
 
-const sscHost = config.playgroundHost;
+const splunkCloudHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
 const tenantID = config.playgroundTenant;
 const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
 const testKVCollectionName = testNamespace + '.' + testCollection;
 
-const { createKVCollectionDataset, createRecord } = require('./catalogv2_proxy.js');
+const { createKVCollectionDataset, createRecord } = require('./catalog_proxy.js');
 
-const ssc = new SplunkSSC(sscHost, token, tenantID);
+const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
 
 describe('Integration tests for KVStore Endpoints', () => {
     const testIndex = 'integtestindex';
     const fields = [{ Direction: -1, Field: 'integ_testField1' }];
     let testDataset;
 
-    before(() => createKVCollectionDataset(testNamespace, testCollection));
+    before(async () => {
+        testDataset = await createKVCollectionDataset(testNamespace, testCollection);
+        return testDataset;
+    });
     after(() => {
         if (testDataset != null) {
-            ssc.catalog
+            splunkCloud.catalog
                 .deleteDatasetByName(testDataset.name)
                 .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
         }
@@ -30,7 +33,7 @@ describe('Integration tests for KVStore Endpoints', () => {
     describe('Admin Endpoints', () => {
         describe('Ping Endpoint', () => {
             it('Should return a "healthy" response', () => {
-                return ssc.kvstore.getHealthStatus().then(response => {
+                return splunkCloud.kvstore.getHealthStatus().then(response => {
                     assert.equal(response.status, 'healthy', 'response status should be `healthy`');
                 });
             });
@@ -40,7 +43,7 @@ describe('Integration tests for KVStore Endpoints', () => {
     describe('Stats Endpoints', () => {
         describe('Get the stats of a new collections', () => {
             it('Should return expected defaults', () => {
-                return ssc.kvstore.getCollectionStats(testKVCollectionName).then(statsResponse => {
+                return splunkCloud.kvstore.getCollectionStats(testKVCollectionName).then(statsResponse => {
                     assert.equal(statsResponse.count, 0);
                     assert.equal(statsResponse.nindexes, 1);
                     assert.equal(statsResponse.collection, testKVCollectionName);
@@ -61,7 +64,7 @@ describe('Integration tests for KVStore Endpoints', () => {
         describe('index endpoints', () => {
             describe('Validate creation and deletion of an index', () => {
                 it('should create a new index', () =>
-                    ssc.kvstore
+                    splunkCloud.kvstore
                         .createIndex(
                             {
                                 Name: testIndex,
@@ -76,17 +79,17 @@ describe('Integration tests for KVStore Endpoints', () => {
                         }));
 
                 it('should return the newly created index', () =>
-                    ssc.kvstore.listIndexes(testKVCollectionName).then(response => {
+                    splunkCloud.kvstore.listIndexes(testKVCollectionName).then(response => {
                         assert(response.length === 1);
                     }));
 
                 it('should delete the specified index', () =>
-                    ssc.kvstore.deleteIndex(testIndex, testKVCollectionName).then(response => {
+                    splunkCloud.kvstore.deleteIndex(testIndex, testKVCollectionName).then(response => {
                         assert(!response);
                     }));
 
                 it('should not return any index', () =>
-                    ssc.kvstore.listIndexes(testKVCollectionName).then(response => {
+                    splunkCloud.kvstore.listIndexes(testKVCollectionName).then(response => {
                         assert(response.length === 0);
                     }));
             });
@@ -94,7 +97,7 @@ describe('Integration tests for KVStore Endpoints', () => {
 
         describe('index endpoints - Error scenarios', () => {
             it('should throw 404 Not Found error because the namespace or the collection does not exist', () =>
-                ssc.kvstore
+                splunkCloud.kvstore
                     .createIndex(
                         {
                             Name: testIndex,
@@ -107,9 +110,9 @@ describe('Integration tests for KVStore Endpoints', () => {
                     )
                     .then(response => assert.fail(response), err => assert.equal(err.errorParams.httpStatusCode, 404)));
 
-            /* TODO: (Commenting for now) Delete on a non-existing index is yielding a 200OK response. kvstore service updated codes at their end and this would be 204 (Being tracked here: SSC-3101)
+            /* TODO: (Commenting for now) Delete on a non-existing index is yielding a 200OK response. kvstore service updated codes at their end and this would be 204 (Being tracked here: splunkCloud-3101)
             it('should throw 404 index not found error as index being deleted does not exist', () =>
-                ssc.kvstore
+                splunkCloud.kvstore
                     .deleteIndex('testIndex2', testKVCollectionName)
                     .then(response => assert.fail(response), err => assert.equal(err.code, '404')));
             */
@@ -117,7 +120,7 @@ describe('Integration tests for KVStore Endpoints', () => {
 
         after(() => {
             if (testDataset != null) {
-                ssc.catalog
+                splunkCloud.catalog
                     .deleteDatasetByName(testDataset.name)
                     .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
             }
@@ -153,7 +156,7 @@ describe('Integration tests for KVStore Endpoints', () => {
         describe('Test insertion, retrieval and deletion of the records', () => {
             let keys;
             it('should create a new record', () =>
-                ssc.kvstore
+                splunkCloud.kvstore
                     .insertRecords(testKVCollectionName, integrationTestRecord)
                     .then(response => {
                         assert.equal(
@@ -165,7 +168,7 @@ describe('Integration tests for KVStore Endpoints', () => {
                     }));
 
             it('should retrieve the newly created record by key', () =>
-                ssc.kvstore.getRecordByKey(testKVCollectionName, keys[0]).then(response => {
+                splunkCloud.kvstore.getRecordByKey(testKVCollectionName, keys[0]).then(response => {
                     assert(response._key.length !== 0);
                     assert.equal(
                         response.capacity_gb,
@@ -185,12 +188,12 @@ describe('Integration tests for KVStore Endpoints', () => {
                 }));
 
             it('should delete the newly created record by key', () =>
-                ssc.kvstore.deleteRecordByKey(testKVCollectionName, keys[0]).then(response => {
+                splunkCloud.kvstore.deleteRecordByKey(testKVCollectionName, keys[0]).then(response => {
                     assert(!response);
                 }));
 
             it('validate that after calling deleteRecordbyKey(), only 3 records are left', () =>
-                ssc.kvstore.listRecords(testKVCollectionName).then(response => {
+                splunkCloud.kvstore.listRecords(testKVCollectionName).then(response => {
                     assert.equal(
                         response.length,
                         3,
@@ -214,12 +217,12 @@ describe('Integration tests for KVStore Endpoints', () => {
                 }));
 
             it('should retrieve the records based on a query', () =>
-                ssc.kvstore.listRecords(testKVCollectionName, { fields: 'type' }).then(response => {
+                splunkCloud.kvstore.listRecords(testKVCollectionName, { fields: 'type' }).then(response => {
                     assert.equal(response.length, 3);
                 }));
 
             it('should delete the records based on a query', () =>
-                ssc.kvstore
+                splunkCloud.kvstore
                     .deleteRecords(testKVCollectionName, {
                         name: 'test_record',
                         count_of_fields: 3,
@@ -229,18 +232,18 @@ describe('Integration tests for KVStore Endpoints', () => {
                     }));
 
             it('validate that after calling deleteRecords() based on query, no record is left', () => {
-                return ssc.kvstore.listRecords(testKVCollectionName).then(response => {
+                return splunkCloud.kvstore.listRecords(testKVCollectionName).then(response => {
                     assert.equal(response.length, 0);
                 });
             });
 
             it('should delete all the records', () =>
-                ssc.kvstore.deleteRecords(testKVCollectionName).then(response => {
+                splunkCloud.kvstore.deleteRecords(testKVCollectionName).then(response => {
                     assert(!response);
                 }));
 
             it('validate that after calling deleteRecords(), no records should be returned', () =>
-                ssc.kvstore.queryRecords(testKVCollectionName).then(response => {
+                splunkCloud.kvstore.queryRecords(testKVCollectionName).then(response => {
                     assert.equal(response.length, 0, 'No records should be returned');
                 }));
         });
