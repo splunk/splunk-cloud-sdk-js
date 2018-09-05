@@ -1,11 +1,11 @@
 const config = require("../config");
-const SplunkSSC = require("../../splunk");
+const SplunkCloud = require("../../splunk");
 const { IngestService } = require("../../ingest");
 const { EventBatcher } = require("../../ingest_event_batcher");
 const { assert, expect } = require("chai");
 
-const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
-const splunkBadToken = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.invalidAuthToken, config.stubbyTenant);
+const splunk = new SplunkCloud(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
+const splunkBadToken = new SplunkCloud(`http://${config.stubbyHost}:8882`, config.invalidAuthToken, config.stubbyTenant);
 const successResponse = { 'code': 'SUCCESS', 'message': 'Success' };
 const event1 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774569, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - Will generate GUID, as none found on this server.' };
 const event2 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774570, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A' };
