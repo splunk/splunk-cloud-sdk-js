@@ -73,7 +73,7 @@ export class Search {
                     throw err;
                 }
             });
-    };
+    }
 
     /**
      * Submits a cancel job against this search job
@@ -82,7 +82,7 @@ export class Search {
     public cancel = (): Promise<object> => {
         this.isCancelling = true;
         return this.client.createJobControlAction(this.sid, Action.CANCEL);
-    };
+    }
 
     /**
      * Resets the time to live on this search job
