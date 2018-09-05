@@ -10,7 +10,6 @@
 Download the latest release of the Splunk Cloud SDK for JavaScript from one of the following locations: 
 - GitHub: https://github.com/splunk/splunk-cloud-sdk-js/releases
 - Splunk Developer Cloud Portal: https://dev.staging.splunkbeta.com/tools
-- Splunk Pre-release Program: https://www.splunk.com/page/preview/ssc-client-js
 
 To install the SDK, run the following command from your project directory:
 ```sh
