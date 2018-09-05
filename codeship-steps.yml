@@ -4,6 +4,7 @@
     - name: Build Docs
       service: splunk-cloud-sdk-js-with-stubby
       command: bash -c "yarn docs"
+      encrypted_dockercfg_path: ci/dockercfg.encrypted
 
 - type: serial
   name: Testing
