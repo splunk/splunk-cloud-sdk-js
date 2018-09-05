@@ -12,10 +12,11 @@
   - name: Fetch Okta Token
     service: splunk-cloud-sdk-shared-token-fetcher
     command: true
+    encrypted_dockercfg_path: ci/dockercfg.encrypted
   - name: Functional Tests With Code Coverage
     service: splunk-cloud-sdk-js-with-stubby
     command: bash -c "yarn codecov"
-    # encrypted_dockercfg_path: ci/dockercfg.encrypted
+    encrypted_dockercfg_path: ci/dockercfg.encrypted
   - type: parallel
     name: Integration Tests And Example Tests
     steps:
@@ -24,19 +25,23 @@
         service: splunk-cloud-sdk-js-against-playground
 #        exclude: ^(master|develop)$
         command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
+        encrypted_dockercfg_path: ci/dockercfg.encrypted
 #      - name: Integration Tests - Gated
 #        service: splunk-cloud-sdk-js-against-playground
 #        tag: ^(master|develop)$
 #        command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
+#        encrypted_dockercfg_path: ci/dockercfg.encrypted
         # Example Tests
       - name: Example Tests - Not Gated
         service: splunk-cloud-sdk-js-against-playground
 #        exclude: ^(master|develop)$
         command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
+#       encrypted_dockercfg_path: ci/dockercfg.encrypted
 #      - name: Example Tests - Gated
 #        service: splunk-cloud-sdk-js-against-playground
 #        tag: ^(master|develop)$
 #        command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
+#        encrypted_dockercfg_path: ci/dockercfg.encrypted
       - name: WhiteSource Testing
         service: splunk-cloud-sdk-js-whitesource
         command: bash -c "java -jar /opt/whitesource/whitesource-fs-agent.jar \
@@ -46,6 +51,7 @@
                          -productToken $WHITESOURCE_PRODUCT_TOKEN \
                          -userKey $WHITESOURCE_USER_KEY"
         tag: ^(master|develop)$
+        encrypted_dockercfg_path: ci/dockercfg.encrypted
 
 - type: serial
   name: Deploy
@@ -54,3 +60,4 @@
       service: splunk-cloud-sdk-js-with-stubby
       tag: master
       command: ./ci/publish.sh
+      encrypted_dockercfg_path: ci/dockercfg.encrypted
