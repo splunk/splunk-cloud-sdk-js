@@ -10,9 +10,9 @@ This is the Splunk Cloud SDK for JavaScript
 ## Usage
 
 ### Get the latest release from one of the following locations 
-- Splunk Pre-release Program Page: https://www.splunk.com/page/preview/ssc-client-js
-- Splunk Developer Cloud page: https://dev.staging.splunkbeta.com/tools
 - Github Releases: https://github.com/splunk/splunk-cloud-sdk-js/releases
+- Splunk Developer Cloud page: https://dev.staging.splunkbeta.com/tools
+- Splunk Pre-release Program Page: https://www.splunk.com/page/preview/ssc-client-js
 
 ### From your project directory run
 ```sh
