@@ -60,23 +60,6 @@ function sendDataViaIngest(splunk, index, host, source) {
         "event": `04-24-2018 12:32:23.258 -0700 INFO device_id:aa2 device_id=[code]error3: haha2 "9765f1bebdb4".  ${host},${source}`
     };
 
-    // Use the Ingest Service raw endpoint to send data
-    splunk.ingest.createRawEvent(event1).then(data => {
-        console.log(data);
-    }).catch(err => {
-        console.log(`ingest event failed with err: ${err}`);
-        process.exit(1);
-    });
-
-    // Use the Ingest Service endpoint to send one event
-    splunk.ingest.createEvent(event2).then(data => {
-        console.log(data);
-    }).catch(err => {
-        console.log(`ingest event1 failed with err: ${err}`);
-        process.exit(1);
-    });
-
-
     // Use the Ingest endpoint to send multiple events
     splunk.ingest.createEvents([event1, event2, event3]).then(data => {
         console.log(data);
