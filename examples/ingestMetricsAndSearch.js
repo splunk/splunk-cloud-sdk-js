@@ -1,57 +1,57 @@
 // ***** TITLE: Get metrics data in using Ingest Service
 // ***** DESCRIPTION: This example shows ingestion of metrics data through ingestion service
 //              and a search on the ingested data to verify the data.
-require('isomorphic-fetch')
+require("isomorphic-fetch");
 
 const SplunkSSC = require("../splunk");
-const { searchResults } = require('./exampleHelperFunctions.js');
+const { searchResults } = require("../utils/exampleHelperFunctions");
 
 const { SSC_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 // Call to the ingest service to insert data
-function sendDataViaIngest(splunk, index, host, source) {
+function sendDataViaIngest(splunk, host, source) {
     const metrics = [
         {
-            'dimensions': { 'Server': 'ubuntu' },
-            'name': 'CPU',
-            'unit': 'percentage',
-            'value': 33.89
+            "dimensions": { "Server": "ubuntu" },
+            "name": "CPU",
+            "unit": "percentage",
+            "value": 33.89
         },
         {
-            'dimensions': { 'Region': 'us-east-1' },
-            'name': 'Memory',
-            'type': 'g',
-            'value': 2.27
+            "dimensions": { "Region": "us-east-1" },
+            "name": "Memory",
+            "type": "g",
+            "value": 2.27
         },
         {
-            'name': 'Disk3',
-            'unit': 'GB',
-            'value': 10.444
+            "name": "Disk",
+            "unit": "GB",
+            "value": 10.444
         }
     ];
 
     const metricEvent1 = {
-        'attributes': {
-            'defaultDimensions': {},
-            'defaultType': 'g',
-            'defaultUnit': 'MB'
+        "attributes": {
+            "defaultDimensions": {},
+            "defaultType": "g",
+            "defaultUnit": "MB"
         },
-        'body': metrics,
-        'host': host,
-        'id': 'metric0001',
-        'nanos': 1,
-        'source': source,
-        'sourcetype': 'mysourcetype',
-        'timestamp': Date.now() // Millis since epoch
+        "body": metrics,
+        "host": host,
+        "id": "metric0001",
+        "nanos": 1,
+        "source": source,
+        "sourcetype": "mysourcetype",
+        "timestamp": Date.now() // Millis since epoch
     };
 
     const metricEvent2 = JSON.parse(JSON.stringify(metricEvent1));
-    metricEvent2.id = 'metric0002';
+    metricEvent2.id = "metric0002";
     metricEvent2.nanos = 2;
     metricEvent2.body = [{
-        'name': 'External',
-        'unit': 'GB',
-        'value': 10.444
+        "name": "External",
+        "unit": "GB",
+        "value": 10.444
     }];
 
     // Use the Ingest Service metrics endpoint to send the metrics data
@@ -79,7 +79,7 @@ async function main() {
     // ***** STEP 3: Verify the data
     // ***** DESCRIPTION: Search the data to ensure the metrics data was ingested.
     const timeout = 90 * 1000;
-    const query = `| mcatalog values(metric_name) as metrics where index=metrics`;
+    const query = `| from metric:metrics group by host SELECT sum(CPU) as cpu,host |search host=\"${host}\" AND cpu > 0`;
     console.log(query);
     searchResults(splunk, Date.now(), timeout, query, 1).then(
         (ret) => {

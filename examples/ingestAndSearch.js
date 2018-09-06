@@ -1,10 +1,10 @@
 // ***** TITLE: Get data in using Ingest Service
 // ***** DESCRIPTION: This example show show to get data in using the Ingest Service in
 //              different ways, then runs a search to verify the data was added.
-require('isomorphic-fetch');
+require("isomorphic-fetch");
 
 const SplunkSSC = require("../splunk");
-const { sleep, searchResults } = require('./exampleHelperFunctions.js');
+const { sleep, searchResults } = require("../utils/exampleHelperFunctions");
 
 const { SSC_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
@@ -104,7 +104,7 @@ async function main() {
     const timeout = 90 * 1000;
     const query = `|from  index:${index} where host="${host}" and source="${source}"`;
     console.log(query);
-    searchResults(splunk, Date.now(), timeout, query, 5).then(
+    searchResults(splunk, Date.now(), timeout, query, 10).then(
         (ret) => {
             if (index !== "main") {
                 console.log("delete index");

@@ -25,7 +25,7 @@
     "publish:docs": "yarn ts:docs && npm add -D @splunk/cicd-tools --registry https://repo.splunk.com/artifactory/api/npm/npm && yarn cicd-publish-docs docs/html",
     "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
     "stop:swagger": "docker rm -f swagger",
-    "example": "node examples/*.js"
+    "example": "node examples/ingestMetricsAndSearch.js && node examples/ingestAndSearch.js"
   },
   "author": "Splunk, Inc.",
   "license": "UNLICENSED",
