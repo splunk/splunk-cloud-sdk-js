@@ -13,13 +13,13 @@ import { KVStoreService } from './kvstore';
 import { SearchService } from './search';
 
 /**
- * This class is a Splunk SSC client.
+ * This class is a Splunk Cloud client.
  * @property search Proxies for the search APIs
  * @property catalog Proxies for the catalog APIs
  * @property identity Proxies for the identity APIs
  * @property ingest Proxies for the ingest APIs
  */
-class SplunkSSC {
+class SplunkCloud {
     public search: SearchService;
     public catalog: CatalogService;
     public identity: IdentityService;
@@ -28,8 +28,8 @@ class SplunkSSC {
     public action: ActionService;
 
     /**
-     * Build a Splunk SSC Client
-     * @param url URL to Splunk SSC environment TODO: SSC name
+     * Build a Splunk Cloud Client
+     * @param url URL to Splunk Cloud environment
      * @param token Auth token
      * @param defaultTenant Default tenant to use for requests
      */
@@ -44,4 +44,4 @@ class SplunkSSC {
     }
 }
 
-export = SplunkSSC;
+export = SplunkCloud;

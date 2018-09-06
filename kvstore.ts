@@ -14,20 +14,18 @@ import { KVSTORE_SERVICE_PREFIX } from './service_prefixes';
 export class KVStoreService extends BaseApiService {
     /**
      * Gets the KVStore's status.
-     * @returns A Promise of KVStore's response
+     * @returns KVStore health status
      */
     public getHealthStatus = (): Promise<any> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['ping']);
         return this.client.get(url)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as PingOKBody);
-
+            .then(response => response.body as PingOKBody);
     };
 
     /**
      * Gets the the KVStore collections stats.
      * @param collection the collection to retrieve
-     * @returns A Promise of KVStore's response
+     * @returns Statistics for the collection
      */
     public getCollectionStats = (collection: string): Promise<CollectionStats> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
@@ -37,28 +35,26 @@ export class KVStoreService extends BaseApiService {
         ]);
 
         return this.client.get(url)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as CollectionStats);
+            .then(response => response.body as CollectionStats);
     };
 
     /**
      * Gets all the collections.
-     * @returns A Promise of an array of collections
+     * @returns A list of defined collections
      */
     public getCollections = (): Promise<CollectionDefinition[]> => {
         return this.client
             .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
                 'collections'
             ]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody as CollectionDefinition[]);
+            .then(response => response.body as CollectionDefinition[]);
     };
 
     /**
      * Gets all the records of the collection in a file.
      * @param collection The name of the collection whose records need to be exported
-     * @param contentType The contentType (csv or gzip) of the records file to be exported
-     * @returns A Promise of all the records present in the collection in string format
+     * @param contentType The contentType ('text/csv' or 'application/gzip') of the records file to be exported
+     * @returns The records in the collection in string format
      */
     public exportCollection = (collection: string, contentType: ContentType): Promise<string> => {
         let requestHeaders: RequestHeaders = {};
@@ -74,14 +70,13 @@ export class KVStoreService extends BaseApiService {
                 collection,
                 'export',
             ]), {}, requestHeaders)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as string);
+            .then(response => response.body as string);
     };
 
     /**
      * Lists all the indexes in a given collection.
      * @param collection The name of the collection whose indexes should be listed
-     * @returns A Promise of an array of indexes
+     * @returns A list of indexes on the specified collection
      */
     public listIndexes = (collection: string): Promise<IndexDescription[]> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
@@ -90,15 +85,14 @@ export class KVStoreService extends BaseApiService {
             'indexes',
         ]);
         return this.client.get(url)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as IndexDescription[]);
+            .then(response => response.body as IndexDescription[]);
     };
 
     /**
      * Creates a new index to be added to the collection.
      * @param index The index to create
      * @param collection The name of the collection where the new index will be created
-     * @returns A Promise of an index
+     * @returns A definition of the created index
      */
     public createIndex = (index: IndexDescription, collection: string): Promise<IndexDescription> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
@@ -107,15 +101,14 @@ export class KVStoreService extends BaseApiService {
             'indexes',
         ]);
         return this.client.post(url, index)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as IndexDescription);
+            .then(response => response.body as IndexDescription);
     };
 
     /**
      * Deletes an index in a given collection.
      * @param indexName The name of the index to delete
      * @param collection The name of the collection whose index should be deleted
-     * @returns A Promise object
+     * @returns A promise that will be resolved when the index is deleted
      */
     public deleteIndex = (indexName: string, collection: string): Promise<any> => {
         return this.client.delete(
@@ -126,15 +119,14 @@ export class KVStoreService extends BaseApiService {
                 indexName,
             ])
         )
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     };
 
     /**
      * Inserts a new record to the collection.
      * @param collection The name of the collection where the record should be inserted
      * @param record The record to add to the collection
-     * @returns A promise that contains an object with the unique _key of the added record
+     * @returns An object with the unique _key of the added record
      */
     public insertRecord = (collection: string, record: Map<string, string>): Promise<Key> => {
         const insertRecordURL = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
@@ -142,15 +134,14 @@ export class KVStoreService extends BaseApiService {
             collection,
         ]);
         return this.client.post(insertRecordURL, record)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Key);
+            .then(response => response.body as Key);
     };
 
     /**
      * Inserts multiple new records to the collection in a single request.
      * @param collection The name of the collection where the new records should be inserted
      * @param records The data tuples to insert
-     * @returns A Promise of an array of keys of the inserted records
+     * @returns A list of keys of the inserted records
      */
     public insertRecords = (
         collection: string,
@@ -160,8 +151,7 @@ export class KVStoreService extends BaseApiService {
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'batch']),
             records
         )
-            .then(response => response.Body)
-            .then(responseBody => responseBody as string[]);
+            .then(response => response.body as string[]);
     };
 
     /**
@@ -180,28 +170,26 @@ export class KVStoreService extends BaseApiService {
             'query',
         ]);
         return this.client.get(url, filter)
-            .then(response => response.Body)
-            .then(responseBody => responseBody  as Map<string, string>);
+            .then(response => response.body as Map<string, string>);
     };
 
     /**
      * Gets the record present in a given collection based on the key value provided by the user.
      * @param collection The name of the collection whose record should be fetched
      * @param key The record key used to query a specific record
-     * @returns A Promise of a record
+     * @returns the record associated with the given key
      */
     public getRecordByKey = (collection: string, key: string): Promise<Map<string, string>> => {
         return this.client
             .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, key]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody  as Map<string, string>);
+            .then(response => response.body as Map<string, string>);
     };
 
     /**
      * Lists the records present in a given collection based on the query parameters provided by the user.
      * @param collection The name of the collection whose records should be fetched
      * @param filter Filter string to target specific records
-     * @return A Promise of an array of records
+     * @return A list of records in the collection
      */
     public listRecords = (
         collection: string,
@@ -212,37 +200,34 @@ export class KVStoreService extends BaseApiService {
             collection,
         ]);
         return this.client.get(url, filter)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Map<string, string>);
+            .then(response => response.body as Map<string, string>);
     };
 
     /**
      * Deletes records present in a given collection based on the query parameters provided by the user.
      * @param collection The name of the collection whose records should be deleted
      * @param filter Query JSON expression to target specific records
-     * @returns A Promise object
+     * @returns A promise that will be resolved when the matching records are deleted
      */
     public deleteRecords = (collection: string, filter?: QueryArgs): Promise<any> => {
         return this.client.delete(
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query']),
             filter
         )
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     };
 
     /**
      * Deletes a record present in a given collection based on the key value provided by the user.
      * @param collection The name of the collection whose record should be deleted
      * @param key The key of the record used for deletion
-     * @returns A Promise object
+     * @returns A promise that will be resolved when the record matching the supplied key is deleted
      */
     public deleteRecordByKey = (collection: string, key: string): Promise<any> => {
         return this.client.delete(
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, key])
         )
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     };
 }
 

@@ -15,6 +15,7 @@ export class CatalogService extends BaseApiService {
     /**
      * Returns a list of datasets, optionally filtered by a filter string.
      * @param filter An SPL filter string
+     * @return Array of dataset descriptors
      */
     public getDatasets = (filter?: string): Promise<DatasetInfo[]> => {
         const query: QueryArgs = {};
@@ -22,43 +23,43 @@ export class CatalogService extends BaseApiService {
             query.filter = filter;
         }
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), query)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as DatasetInfo[]);
+            .then(response => response.body as DatasetInfo[]);
     }
 
     /**
      * Create a new dataset.
      * @param dataset The dataset to create
+     * @return description of the new dataset
      */
     public createDataset = (dataset: DatasetInfo): Promise<DatasetInfo> => {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), dataset)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as DatasetInfo);
+            .then(response => response.body as DatasetInfo);
     }
 
     /**
      * Returns the dataset resource with the specified `id`.
      * @param datasetId
+     * @return description of the dataset
      */
     public getDataset = (datasetId: DatasetInfo['id']): Promise<DatasetInfo> => {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody as DatasetInfo);
+            .then(response => response.body as DatasetInfo);
     }
 
     /**
      * Delete the DatasetInfo and its dependencies with the specified `id`
      * @param datasetId `id` of the dataset to delete
+     * @return A promise that will be resolved when deletion is complete
      */
     public deleteDataset = (datasetId: DatasetInfo['id']): Promise<any> => { // TODO: can we add stricter return typing?
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     }
 
     /**
      * Delete the Dataset
      * @param name of the Dataset to delete
+     * @return A promise that will be resolved when deletion is complete
      */
     public deleteDatasetByName = (name: DatasetInfo['name']): Promise<any> => { // TODO: can we add stricter return typing?
         return this.getDatasets(`name=="${name}"`).then(
@@ -67,8 +68,7 @@ export class CatalogService extends BaseApiService {
                     throw new Error('There are more than 1 dataset with the input name');
                 } else if (ret.length === 1) {
                     return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', ret[0].id]))
-                        .then(response => response.Body)
-                        .then(responseBody => responseBody);
+                        .then(response => response.body);
                 } else {
                     return Promise.reject(new Error(`No dataset found with name: ${name}`));
                 }
@@ -79,12 +79,12 @@ export class CatalogService extends BaseApiService {
      * Updates the supplied dataset
      * @param datasetId
      * @param partial
+     * @return information about the updated dataset
      */
     // TODO: add lint check for xxxID vs. xxxId consistency
     public updateDataset = (datasetId: DatasetInfo['id'], partial: PartialDatasetInfo): Promise<DatasetInfo> => {
         return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]), partial)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as DatasetInfo);
+            .then(response => response.body as DatasetInfo);
     }
 
     // rules
@@ -92,16 +92,17 @@ export class CatalogService extends BaseApiService {
     /**
      * Create a new Rule
      * @param rule The rule to create
+     * @return a description of the new rule
      */
     public createRule = (rule: Rule): Promise<Rule> => {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), rule)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Rule);
+            .then(response => response.body as Rule);
     }
 
     /**
      * Get the matching list of Rules
      * @param filter An SPL filter string
+     * @return description of defined rules (optionally matching SPL query)
      */
     public getRules = (filter?: string): Promise<Rule> => {
         const query: QueryArgs = {};
@@ -109,62 +110,61 @@ export class CatalogService extends BaseApiService {
             query.filter = filter;
         }
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), query)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Rule);
+            .then(response => response.body as Rule);
     }
 
     /**
      * Return the Rule with the specified `id`
      * @param ruleId
+     * @return description of the rule
      */
     public getRule = (ruleId: Rule['id']): Promise<Rule> => {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Rule);
+            .then(response => response.body as Rule);
     }
 
     /**
      * Delete the Rule and its dependencies with the specified `id`
      * @param ruleId
+     * @return Promise that will be resolved when the rule is deleted
      */
     public deleteRule = (ruleId: Rule['id']): Promise<any> => { // TODO: can we add stricter return typing?
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body);
     }
 
     /**
      * Get the list of dataset fields for the given `id`
      * @param datasetID
      * @param filter An SPL filter string
+     * @return array of field descriptions for fields defined on the dataset
      */
     public getDatasetFields = (datasetID: DatasetInfo['id'], filter?: string): Promise<Field[]> => {
         const query = { filter };
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), query)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Field[]);
+            .then(response => response.body as Field[]);
     }
 
     /**
      * Gets the Field with the specified datasetID and datasetFieldID
      * @param datasetID
      * @param datasetFieldID
+     * @return field description
      */
     public getDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id']): Promise<Field> => {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Field);
+            .then(response => response.body as Field);
     }
 
     /**
      * Creates a new dataset field
      * @param datasetID
      * @param datasetField
+     * @return description of the new field defined on the dataset
      */
     public postDatasetField = (datasetID: DatasetInfo['id'], datasetField: Field): Promise<Field> => {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), datasetField)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Field);
+            .then(response => response.body as Field);
     }
 
     /**
@@ -172,22 +172,22 @@ export class CatalogService extends BaseApiService {
      * @param datasetID
      * @param datasetFieldID
      * @param datasetField
+     * @return updated description of the field
      */
     public patchDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id'], datasetField: Field): Promise<Field> => {
         return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]), datasetField)
-            .then(response => response.Body)
-            .then(responseBody => responseBody as Field);
+            .then(response => response.body as Field);
     }
 
     /**
      * Deletes the dataset field with the specified datasetID and datasetFieldID
      * @param datasetID
      * @param datasetFieldID
+     * @return promise that will be resolved when field is deleted
      */
     public deleteDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id']): Promise<object> => {
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]))
-            .then(response => response.Body)
-            .then(responseBody => responseBody);
+            .then(response => response.body as object);
     }
 }
 
