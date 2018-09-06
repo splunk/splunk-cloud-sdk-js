@@ -13,7 +13,7 @@ Download the latest release of the Splunk Cloud SDK for JavaScript from one of t
 
 To install the SDK, run the following command from your project directory:
 ```sh
-npm install <path_to_downloaded_splunk-cloud-sdk-js-X.Y.Z.tar.gz>
+yarn add <path_to_downloaded_splunk-cloud-sdk-js-X.Y.Z.tar.gz>
 ```
 Installing this SDK allows your project to interact with services in the Splunk Developer Cloud, such as authorization, identity control, data ingest, search, and so forth.
 
@@ -21,7 +21,7 @@ Installing this SDK allows your project to interact with services in the Splunk 
 
 This example shows how to use one service client to access all supported services:
 
-```sh
+```js
 var ServiceClient = require('@splunk/splunk-cloud-src/splunk')
  
 var svc = new ServiceClient(ENDPOINT_URL, AUTH_TOKEN, TENANT)
@@ -38,7 +38,7 @@ svc.search.createJob({ "query": "| from index:main | head 5" })
 
 If your application needs to work with one specific service, you can use a specific client for only the required service as follows: 
 
-```sh
+```js
 
 var IdentityService = require('@splunk/splunk-cloud-src/identity')
 
@@ -60,11 +60,11 @@ For the API reference for the Splunk Cloud SDK for JavaScript, see:
 
 The API reference contains detailed information about all classes and functions, with clearly-defined parameters and return types.
     
-## Get started developing
+## Get Started Developing
 To get the SDK up and running in your project: 
 1. Fork your repo.
 2. Git Clone your fork: `git clone {your repo}`
-3. Install all dependencies: `npm install / yarn`
-4. Build the project: `npm build / yarn build`
-5. Run the examples: `npm run example / yarn run example`
-6. Generate the docs: `npm run docs / yarn run docs`
+3. Install all dependencies: `yarn`
+4. Build the project: `yarn build`
+5. Run the examples: `yarn run example`
+6. Generate the docs: `yarn run docs`
