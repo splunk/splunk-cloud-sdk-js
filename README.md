@@ -38,14 +38,14 @@ svc.search.createJob({ "query": "| from index:main | head 5" })
 
 If your application needs to work with one specific service, you can use a specific client for only the required service as follows: 
 
-```js
+```javascript
 
 var IdentityService = require('@splunk/splunk-cloud-src/identity')
 
 var identity = new IdentityService(ENDPOINT_URL, AUTH_TOKEN, TENANT)
 
-// Get the user profile from the Identity service
-identity.getUserProfile()
+// Get the user profile from the Identity API
+identity.getPrincipal(PRINCIPAL_NAME)
 
 ...
 
