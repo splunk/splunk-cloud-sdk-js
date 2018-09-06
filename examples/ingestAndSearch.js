@@ -3,10 +3,10 @@
 //              different ways, then runs a search to verify the data was added.
 require("isomorphic-fetch");
 
-const SplunkSSC = require("../splunk");
+const SplunkCloud = require("../splunk");
 const { sleep, searchResults } = require("../utils/exampleHelperFunctions");
 
-const { SSC_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
+const { SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 async function createIndex(splunk, index) {
     const regex1 = {
@@ -54,22 +54,6 @@ function sendDataViaIngest(splunk, index, host, source) {
         "event": `04-24-2018 12:32:23.258 -0700 INFO device_id:aa2 device_id=[code]error3: haha2 "9765f1bebdb4".  ${host},${source}`
     };
 
-    // Use the Ingest Service raw endpoint to send data
-    splunk.ingest.createRawEvent(event1).then(data => {
-        console.log(data);
-    }).catch(err => {
-        console.log(`ingest event failed with err: ${err}`);
-        process.exit(1);
-    });
-
-    // Use the Ingest Service endpoint to send one event
-    splunk.ingest.createEvent(event2).then(data => {
-        console.log(data);
-    }).catch(err => {
-        console.log(`ingest event1 failed with err: ${err}`);
-        process.exit(1);
-    });
-
     // Use the Ingest endpoint to send multiple events
     splunk.ingest.createEvents([event1, event2, event3]).then(data => {
         console.log(data);
@@ -83,9 +67,9 @@ function sendDataViaIngest(splunk, index, host, source) {
 // define the main workflow
 async function main() {
     const index = `test_${new Date().getSeconds()}`;
-    // ***** STEP 1: Get Splunk SSC client
-    // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authenticatin token.
-    const splunk = new SplunkSSC(SSC_HOST, BEARER_TOKEN, TENANT_ID);
+    // ***** STEP 1: Get Splunk Cloud client
+    // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authenticatin token.
+    const splunk = new SplunkCloud(SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID);
 
     // ***** STEP 2: Define a new index
     // ***** DESCRIPTION: Define a new index in the Metadata Catalog so that we can send events to the new index.
@@ -104,7 +88,7 @@ async function main() {
     const timeout = 90 * 1000;
     const query = `|from  index:${index} where host="${host}" and source="${source}"`;
     console.log(query);
-    searchResults(splunk, Date.now(), timeout, query, 10).then(
+    searchResults(splunk, Date.now(), timeout, query, 6).then(
         (ret) => {
             if (index !== "main") {
                 console.log("delete index");

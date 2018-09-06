@@ -38,6 +38,8 @@ You can reach Splunk support at _support@splunk.com_ if you have Splunk related 
 
 You can reach the Developer Platform team at _devinfo@splunk.com_.
 
+# TODO CHANGE THESE FOR CORRECT URLS
+
 [contributions]:            http://dev.splunk.com/view/opensource/SP-CAAAEDM
 [indivcontrib]:             http://dev.splunk.com/goto/individualcontributions
 [companycontrib]:           http://dev.splunk.com/view/companycontributions/SP-CAAAEDR

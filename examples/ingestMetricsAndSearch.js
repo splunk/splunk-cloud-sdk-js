@@ -3,10 +3,10 @@
 //              and a search on the ingested data to verify the data.
 require("isomorphic-fetch");
 
-const SplunkSSC = require("../splunk");
+const SplunkCloud = require("../splunk");
 const { searchResults } = require("../utils/exampleHelperFunctions");
 
-const { SSC_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
+const { SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 // Call to the ingest service to insert data
 function sendDataViaIngest(splunk, host, source) {
@@ -67,7 +67,7 @@ function sendDataViaIngest(splunk, host, source) {
 async function main() {
     // ***** STEP 1: Get Splunk SSC client
     // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authentication token.
-    const splunk = new SplunkSSC(SSC_HOST, BEARER_TOKEN, TENANT_ID);
+    const splunk = new SplunkCloud(SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID);
 
     // ***** STEP 2: Get metrics data in using Ingest Service
     // ***** DESCRIPTION: Send two metrics events containing the metrics data using Ingest Service.
