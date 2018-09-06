@@ -6,40 +6,19 @@ const { assert, expect } = require("chai");
 
 const splunk = new SplunkCloud(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
 const splunkBadToken = new SplunkCloud(`http://${config.stubbyHost}:8882`, config.invalidAuthToken, config.stubbyTenant);
-const successResponse = { 'code': 0, 'text': 'Success' };
-const event1 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599658, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.251 -0700 INFO  ServerConfig - Will generate GUID, as none found on this server.' };
-const event2 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599659, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.252 -0700 INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A' };
-const event3 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599660, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.258 -0700 INFO  ServerConfig - My server name is "9765f1bebdb4".' };
-const event4 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599661, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.259 -0700 INFO  ServerConfig - My server name is "9765f1bebdb5".' };
-const event5 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599662, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.260 -0700 INFO  ServerConfig - My server name is "9765f1bebdb6".' };
-const event6 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599663, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.261 -0700 INFO  ServerConfig - My server name is "9765f1bebdb7".' };
-const event7 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599664, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.262 -0700 INFO  ServerConfig - My server name is "9765f1bebdb8".' };
-const event8 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599665, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.263 -0700 INFO  ServerConfig - My server name is "9765f1bebdb9".' };
-const event9 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599666, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.264 -0700 INFO  ServerConfig - My server name is "9765f1bebdc0".' };
-const event10 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'time': 1524599667, 'index': 'main', 'fields': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'event': '04-24-2018 12:32:23.265 -0700 INFO  ServerConfig - My server name is "9765f1bebdc1".' };
-
-describe('Events Formation', () => {
-
-    describe('Output', () => {
-        it('should output to expected concatenated string of JSON', () => {
-            const events = [event1, event2, event3];
-            const expectedJSONs = '{"sourcetype":"splunkd","source":"mysource","time":1524599658,"index":"main","fields":{"fieldkey1":"fieldval1","fieldkey2":"fieldkey2"},"host":"myhost","event":"04-24-2018 12:32:23.251 -0700 INFO  ServerConfig - Will generate GUID, as none found on this server."}{"sourcetype":"splunkd","source":"mysource","time":1524599659,"index":"main","fields":{"fieldkey1":"fieldval1","fieldkey2":"fieldkey2"},"host":"myhost","event":"04-24-2018 12:32:23.252 -0700 INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A"}{"sourcetype":"splunkd","source":"mysource","time":1524599660,"index":"main","fields":{"fieldkey1":"fieldval1","fieldkey2":"fieldkey2"},"host":"myhost","event":"04-24-2018 12:32:23.258 -0700 INFO  ServerConfig - My server name is \\"9765f1bebdb4\\"."}';
-            assert.equal(IngestService.eventsToJSONs(events), expectedJSONs, 'IngestService.eventsToJSONs() output should match expected result');
-        });
-    });
-
-});
+const successResponse = { 'code': 'SUCCESS', 'message': 'Success' };
+const event1 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774569, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - Will generate GUID, as none found on this server.' };
+const event2 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774570, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A' };
+const event3 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774571, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb4".' };
+const event4 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774572, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb5".' };
+const event5 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774573, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb6".' };
+const event6 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774574, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb7".' };
+const event7 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774575, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb8".' };
+const event8 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774576, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb9".' };
+const event9 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774577, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdc0".' };
+const event10 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774578, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdc1".' };
 
 describe('Events Endpoint', () => {
-
-    describe('Post event', () => {
-        it('should return a successful response', () => {
-            return splunk.ingest.createEvent(event1).then(response => {
-                assert.deepEqual(response, successResponse, 'response should be expected success response.');
-            });
-        });
-    });
-
     describe('Post events', () => {
         it('should return a successful response', () => {
             const events = [event1, event2, event3];
@@ -119,20 +98,6 @@ describe('Events Endpoint', () => {
             }
         });
     });
-});
-
-describe('Raw Endpoint', () => {
-
-    describe('Post raw event', () => {
-        it('should return a successful response', () => {
-            return splunk.ingest.createRawEvent(event1).then(response => {
-                assert.deepEqual(response, successResponse, 'response should be expected success response.');
-            }).catch(err => {
-                assert.fail('request should not have failed');
-            });
-        });
-    });
-
 });
 
 describe('Metrics Endpoint', () => {
