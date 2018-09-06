@@ -62,7 +62,7 @@ The API reference contains detailed information about all classes and functions,
     
 ## Get Started Developing
 To get the SDK up and running in your project: 
-1. Fork your repo.
+1. Fork this repo.
 2. Git Clone your fork: `git clone {your repo}`
 3. Install all dependencies: `yarn`
 4. Build the project: `yarn build`
