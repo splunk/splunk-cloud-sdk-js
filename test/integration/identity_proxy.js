@@ -141,6 +141,10 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should create a Member', () =>
+
+            // ignore response
+            splunk.identity.removeMember(testMember).then(response => {}),
+
             splunk.identity.addMember({'name': testMember}).then(data => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.name, testMember);
