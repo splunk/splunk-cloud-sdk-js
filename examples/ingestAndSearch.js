@@ -64,6 +64,7 @@ function sendDataViaIngest(splunk, index, host, source) {
     });
 };
 
+// TODO Contact the ingest team for duplicate data ingestion, currently actual results count is 6, expected is 3
 // define the main workflow
 async function main() {
     const index = `test_${new Date().getSeconds()}`;
@@ -84,7 +85,7 @@ async function main() {
 
     // ***** STEP 4: Verify the data
     // ***** DESCRIPTION: Search the data to ensure the data was ingested and field extractions are present.
-    // Search for all 5 events that were sent using Ingest Service
+    // Search for all 3 events that were sent using Ingest Service
     const timeout = 90 * 1000;
     const query = `|from  index:${index} where host="${host}" and source="${source}"`;
     console.log(query);
