@@ -9,7 +9,10 @@
       "es2015.symbol.wellknown",
       "dom"
     ],
+    "sourceRoot": "src",
     "outDir": ".",
+    "declaration": true,
+//    "declarationDir": "types",
     "removeComments": false,
     "downlevelIteration": true,
     "strict": true,
@@ -18,7 +21,7 @@
     "sourceMap": true
   },
   "include": [
-    "**/*.ts"
+    "src"
   ],
   "exclude": [
     "node_modules"

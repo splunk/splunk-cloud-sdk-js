@@ -19,7 +19,7 @@ import { SearchService } from './search';
  * @property identity Proxies for the identity APIs
  * @property ingest Proxies for the ingest APIs
  */
-class SplunkCloud {
+export class SplunkCloud {
     public search: SearchService;
     public catalog: CatalogService;
     public identity: IdentityService;
@@ -44,4 +44,3 @@ class SplunkCloud {
     }
 }
 
-export = SplunkCloud;
