@@ -25,7 +25,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
     ];
     const testGroupName = `mygroup_${Date.now()}`;
     const testPrincipal = 'test1@splunk.com';
-    const testMember = 'test3@splunk.com';
+    const testMember = 'test2@splunk.com';
 
     describe('Test Roles and Permissions Management', () => {
 
@@ -141,10 +141,6 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should create a Member', () =>
-
-            // ignore response
-            splunk.identity.removeMember(testMember).then(response => {}),
-
             splunk.identity.addMember({'name': testMember}).then(data => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.name, testMember);
@@ -164,6 +160,11 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             splunk.identity.getMembers().then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
                 assert(data.indexOf(testMember) > -1);
+            }));
+
+        it('should delete the member from the tenant and group ignore response', () =>
+            splunk.identity.removeGroupMember(testGroupName, testPrincipal).then(response => {
+                assert(true);
             }));
 
         it('should add a Member to the Group', () =>
