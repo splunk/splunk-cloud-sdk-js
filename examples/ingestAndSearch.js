@@ -35,12 +35,16 @@ function sendDataViaIngest(splunk, index, host, source) {
         "source": source,
         "host": host,
         "event": `device_id=aa1 haha0 my new event ${host},${source}`,
-        "index": index
+        "attributes": {
+            "index": index
+        }
     };
     const event2 = {
         "sourcetype": "splunkd",
         "source": source,
-        "index": index,
+        "attributes": {
+            "index": index
+        },
         "fields": { "fieldkey1": "fieldval1", "fieldkey2": "fieldkey2" },
         "host": host,
         "event": `04-24-2018 12:32:23.252 -0700 INFO  device_id=[www]401:sdfsf haha1 ${host},${source}`
@@ -48,7 +52,9 @@ function sendDataViaIngest(splunk, index, host, source) {
     const event3 = {
         "sourcetype": "splunkd",
         "source": source,
-        "index": index,
+        "attributes": {
+            "index": index
+        },
         "fields": { "fieldkey1": "fieldval1", "fieldkey2": "fieldkey2" },
         "host": host,
         "event": `04-24-2018 12:32:23.258 -0700 INFO device_id:aa2 device_id=[code]error3: haha2 "9765f1bebdb4".  ${host},${source}`
