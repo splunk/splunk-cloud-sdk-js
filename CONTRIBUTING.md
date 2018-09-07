@@ -44,7 +44,7 @@ You can reach the Developer Platform team at _devinfo@splunk.com_.
 [indivcontrib]:             http://dev.splunk.com/goto/individualcontributions
 [companycontrib]:           http://dev.splunk.com/view/companycontributions/SP-CAAAEDR
 [answers]:                  http://answers.splunk.com/
-[repo]:                     https://github.com/splunk/ssc-client-js
-[issues]:                   https://github.com/splunk/ssc-client-js/issues
-[pulls]:                    https://github.com/splunk/ssc-client-js/pulls
-[wiki]:                     https://github.com/splunk/ssc-client-js/wiki/Development
+[repo]:                     https://github.com/splunk/splunk-cloud-sdk-js
+[issues]:                   https://github.com/splunk/splunk-cloud-sdk-js/issues
+[pulls]:                    https://github.com/splunk/splunk-cloud-sdk-js/pulls
+[wiki]:                     https://github.com/splunk/splunk-cloud-sdk-js/wiki/Development
