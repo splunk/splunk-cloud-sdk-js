@@ -61,7 +61,7 @@ function sendDataViaIngest(splunk, index, host, source) {
     };
 
     // Use the Ingest endpoint to send multiple events
-    splunk.ingest.createEvents([event1, event2, event3]).then(data => {
+    splunk.ingest.postEvents([event1, event2, event3]).then(data => {
         console.log(data);
     }).catch(err => {
         console.log(`ingest events failed with err: ${err}`);

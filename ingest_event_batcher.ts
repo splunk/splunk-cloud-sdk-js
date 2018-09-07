@@ -75,7 +75,7 @@ export class EventBatcher {
         const data = this.queue;
         this.queue = [];
         this.resetTimer();
-        return this.ingest.createEvents(data);
+        return this.ingest.postEvents(data);
     }
 
     /**

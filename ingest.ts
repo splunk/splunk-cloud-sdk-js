@@ -12,21 +12,21 @@ import { INGEST_SERVICE_PREFIX } from './service_prefixes';
  */
 export class IngestService extends BaseApiService {
     /**
-     * Create structured events to be ingested by Splunk Cloud via Ingest service.
+     * Post structured events to be ingested by Splunk Cloud via Ingest service.
      * @param events
      * @return promise that will be resolved when the ingest service has accepted the events for indexing
      */
-    public createEvents = (events: Event[]): Promise<any> => {
+    public postEvents = (events: Event[]): Promise<any> => {
         return this.client.post(this.client.buildPath('/ingest/v2', ['events']), events)
             .then(response => response.body);
     }
 
     /**
-     * Create metrics to be ingested by Splunk Cloud.
+     * Post metrics to be ingested by Splunk Cloud.
      * @param metrics
      * @return promise that will be resolved when the ingest service has accepted the metrics for indexing
      */
-    public createMetrics = (metrics: MetricEvent[]): Promise<any> => {
+    public postMetrics = (metrics: MetricEvent[]): Promise<any> => {
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics']), metrics)
             .then(response => response.body);
     }
