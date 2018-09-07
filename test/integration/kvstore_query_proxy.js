@@ -11,7 +11,7 @@ const testCollection = config.testCollection;
 
 const { createKVCollectionDataset, createRecord } = require('./catalog_proxy.js');
 
-const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
+const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID).SplunkCloud;
 
 const testKVCollectionName = testNamespace + '.' + testCollection;
 

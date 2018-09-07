@@ -1,5 +1,5 @@
 const config = require('../config');
-const SplunkCloud = require('../../splunk');
+const SplunkCloud = require('../../splunk').SplunkCloud;
 const { assert } = require('chai');
 
 const splunk = new SplunkCloud(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);

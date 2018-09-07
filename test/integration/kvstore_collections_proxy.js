@@ -1,6 +1,6 @@
 const { assert } = require('chai');
 const config = require('../config');
-const SplunkCloud = require('../../splunk');
+const SplunkCloud = require('../../splunk').SplunkCloud;
 
 const splunkCloudHost = config.playgroundHost;
 const token = config.playgroundAuthToken;

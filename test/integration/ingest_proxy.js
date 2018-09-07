@@ -1,5 +1,5 @@
 const config = require('../config');
-const SplunkCloud = require('../../splunk');
+const SplunkCloud = require('../../splunk').SplunkCloud;
 const ServicePrefixes = require('../../service_prefixes');
 const { EventBatcher } = require('../../ingest_event_batcher');
 const { assert, expect } = require('chai');
