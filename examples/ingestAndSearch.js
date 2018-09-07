@@ -95,7 +95,7 @@ async function main() {
     const timeout = 90 * 1000;
     const query = `|from  index:${index} where host="${host}" and source="${source}"`;
     console.log(query);
-    searchResults(splunk, Date.now(), timeout, query, 6).then(
+    searchResults(splunk, Date.now(), timeout, query, 3).then(
         (ret) => {
             if (index !== "main") {
                 console.log("delete index");
