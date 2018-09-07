@@ -5,7 +5,6 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import BaseApiService from './baseapiservice';
-import { QueryArgs } from './client';
 import { INGEST_SERVICE_PREFIX } from './service_prefixes';
 
 /**
@@ -13,59 +12,23 @@ import { INGEST_SERVICE_PREFIX } from './service_prefixes';
  */
 export class IngestService extends BaseApiService {
     /**
-     * Create a structured event to be ingested by Splunk SSC via Ingest service.
-     * @param event
-     * @return promise that will be resolved when the ingest service has accepted the event for indexing
-     */
-    public createEvent = (event: Event): Promise<any> => {
-        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), event)
-            .then(response => response.body);
-    }
-
-    /**
-     * Create structured events to be ingested by Splunk SSC via Ingest service.
+     * Create structured events to be ingested by Splunk Cloud via Ingest service.
      * @param events
      * @return promise that will be resolved when the ingest service has accepted the events for indexing
      */
     public createEvents = (events: Event[]): Promise<any> => {
-        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), IngestService.eventsToJSONs(events))
+        return this.client.post(this.client.buildPath('/ingest/v2', ['events']), events)
             .then(response => response.body);
     }
 
     /**
-     * Create unstructured event data to be ingested by Splunk SSC via Ingest service.
-     * @param event
-     * @return promise that will be resolved when the ingest service has accepted the event for indexing
-     */
-    public createRawEvent = (event: Event): Promise<any> => { // TODO: may want to support other types, like string and object
-        const queryParams: QueryArgs = {};
-        // Convert event properties to a flat object of keys and JSON stringified values, omitting the "event"
-        // key which will be the body of the POST
-        Object.keys(event).forEach((key: string) => {
-            if (key !== 'event') {
-                queryParams[key] = event[key];
-            }
-        });
-        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['raw']), event.event, queryParams)
-            .then(response => response.body);
-    }
-
-    /**
-     * Create metrics to be ingested by Splunk SSC.
+     * Create metrics to be ingested by Splunk Cloud.
      * @param metrics
      * @return promise that will be resolved when the ingest service has accepted the metrics for indexing
      */
     public createMetrics = (metrics: MetricEvent[]): Promise<any> => {
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics']), metrics)
             .then(response => response.body);
-    }
-
-    /**
-     * Create an Ingest service-compatible string consisting of concatenated JSON events.
-     */
-    private static eventsToJSONs(events: Event[]): string {
-        // Convert Objects to JSON strings and concatenate them together
-        return events.map(evt => JSON.stringify(evt)).join('');
     }
 }
 
@@ -74,41 +37,45 @@ export class IngestService extends BaseApiService {
  */
 export interface Event {
     /**
-     * Epoch time in seconds.
+     * Epoch time in milliseconds.
      */
-    time?: number;
+    timestamp?: number;
     /**
-     * A sourcetype determines how Splunk formats data during the indexing process.
+     * The sourcetype value assigned to the event data.
      */
     sourcetype?: string;
     /**
-     * A source identifies where the event originated.
+     * The source value to assign to the event data. For example, if you are sending data from an app that you are developing,
+     * set this key to the name of the app.
      */
     source?: string;
     /**
-     * The host name or IP address of the network device that generated the event.
+     * The host value assigned to the event data. Typically, this is the hostname of the client from which you are sending data.
      */
     host?: string;
     /**
-     * Index where the event is to be stored.
+     * Optional nanoseconds part of the timestamp.
      */
-    index?: string;
+    nanos?: number;
     /**
-     * Key/value pairs to associate with the event.
+     * Specifies a JSON object that contains explicit custom fields to be defined at index time.
      */
-    fields?: Fields;
+    attributes?: EventAttributes;
     /**
-     * Event Object or string payload.
+     * JSON object for the event.
      */
-    event: string | object;
-
-    [key: string]: any;
+    body: string | object;
+    /**
+     * An optional ID that uniquely identifies the event data. It is used to deduplicate the data if same data is set multiple times.
+     * If ID is not specified, it will be assigned by the system.
+     */
+    id?: string
 }
 
 /**
- * Fields - key/value pairs for inclusion in Ingest service events.
+ * Attributes - a JSON object that contains explicit custom fields to be defined at index time.
  */
-interface Fields {
+interface EventAttributes {
     [key: string]: string;
 }
 
@@ -124,13 +91,39 @@ interface Fields {
  * @property timestamp Epoch time in milliseconds (integer).
  */
 interface MetricEvent {
+    /**
+     * Default attributes for related Splunk metrics.
+     */
     attributes: MetricAttributes;
+    /**
+     * Specifies multiple related metrics e.g. Memory, CPU etc.
+     */
     body: Metric[];
+    /**
+     * The host value assigned to the event data. Typically, this is the hostname of the client from which you are sending data.
+     */
     host: string;
+    /**
+     * The source value to assign to the event data. For example, if you are sending data from an app that you are developing,
+     * set this key to the name of the app.
+     */
     source: string;
+    /**
+     * The sourcetype value assigned to the event data.
+     */
     sourceType: string;
+    /**
+     * Epoch time in milliseconds.
+     */
     timestamp: number;
+    /**
+     * An optional ID that uniquely identifies the metric data. It is used to deduplicate the data if same data is set multiple times.
+     * If ID is not specified, it will be assigned by the system.
+     */
     id?: string;
+    /**
+     * Optional nanoseconds part of the timestamp.
+     */
     nanos?: number;
 }
 
@@ -141,8 +134,17 @@ interface MetricEvent {
  * @property If set, individual Metrics will inherit this unit and can optionally override.
  */
 interface MetricAttributes {
+    /**
+     * Optional. If set, individual metrics inherit these dimensions and can override any and/or all of them.
+     */
     defaultDimension?: object;
+    /**
+     * Optional. If set, individual metrics inherit this type and can optionally override.
+     */
     defaultType?: string;
+    /**
+     * Optional. If set, individual metrics inherit this unit and can optionally override.
+     */
     defaultUnit?: string;
 }
 
@@ -155,9 +157,24 @@ interface MetricAttributes {
  * @property Value of the metric.
  */
 interface Metric {
+    /**
+     * Dimensions allow metrics to be classified e.g. {"Server":"nginx", "Region":"us-west-1", ...}
+     */
     dimensions: object;
+    /**
+     * Name of the metric e.g. CPU, Memory etc.
+     */
     name: string;
+    /**
+     * Type of metric. Default is g for gauge.
+     */
     type: string;
+    /**
+     * Unit of the metric e.g. percent, megabytes, seconds etc.
+     */
     unit: string;
+    /**
+     * Value of the metric.
+     */
     value: number;
 }

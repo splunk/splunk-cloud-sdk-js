@@ -1,53 +1,44 @@
-# TODO: Refactor to leverage volume usage idiomatically 
-ssc-sdk-shared-token-fetcher:
-  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-token-fetcher:latest
-  dockercfg_service: aws-generator
+splunk-cloud-sdk-shared-token-fetcher:
+  image: cloudrepo-docker-playground.jfrog.io/sdk/shared/token-fetcher:latest
   encrypted_env_file: ci/env.encrypted
   volumes:
     - ./okta:/okta
 
-ssc-client-js-build:
+splunk-cloud-sdk-js-build:
   build:
-    image: splunk/ssc-client-js-build
+    image: splunk/splunk-cloud-sdk-js-build
     dockerfile: ci/Dockerfile
   encrypted_env_file: ci/env.encrypted
 
-ssc-client-js-with-stubby:
+splunk-cloud-sdk-js-with-stubby:
   build:
-    image: splunk/ssc-client-js-with-stubby
+    image: splunk/splunk-cloud-sdk-js-with-stubby
     dockerfile: ci/Dockerfile
   encrypted_env_file: ci/env.encrypted
   environment:
     - CI=true
   depends_on:
-    - ssc-sdk-shared-stubby
+    - splunk-cloud-sdk-shared-stubby
 
-ssc-client-js-against-playground:
+splunk-cloud-sdk-js-against-playground:
   build:
-    image: splunk/ssc-client-js-against-playground
+    image: splunk/splunk-cloud-sdk-js-against-playground
     dockerfile: ci/Dockerfile
   encrypted_env_file: ci/env.encrypted
   depends_on:
-    - ssc-sdk-shared-token-fetcher
+    - splunk-cloud-sdk-shared-token-fetcher
   volumes_from:
-    - ssc-sdk-shared-token-fetcher
+    - splunk-cloud-sdk-shared-token-fetcher
   environment:
     - CI=true
 
-ssc-sdk-shared-stubby:
-  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest
-  dockercfg_service: aws-generator
+splunk-cloud-sdk-shared-stubby:
+  image: cloudrepo-docker-playground.jfrog.io/sdk/shared/stubby:latest
 
-ssc-client-js-whitesource:
+splunk-cloud-sdk-js-whitesource:
   depends_on:
-    - ssc-client-js-build
-  dockercfg_service: aws-generator
+    - splunk-cloud-sdk-js-build
   encrypted_env_file: ci/env.encrypted
-  image: 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-whitesource:latest
+  image: cloudrepo-docker-playground.jfrog.io/sdk/shared/whitesource:latest
   volumes_from:
-    - ssc-client-js-build
-
-aws-generator:
-  add_docker: true
-  image: codeship/aws-ecr-dockercfg-generator
-  encrypted_env_file: ci/shared/env.encrypted
+    - splunk-cloud-sdk-js-build

@@ -1,12 +1,12 @@
 const config = require('../config');
-const SplunkSSC = require("../../splunk");
+const SplunkCloud = require("../../splunk");
 const { assert, expect } = require("chai");
 
-const sscHost = config.playgroundHost;
+const splunkCloudHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
 const tenantID = config.playgroundTenant;
 
-const splunk = new SplunkSSC(sscHost, token, tenantID);
+const splunk = new SplunkCloud(splunkCloudHost, token, tenantID);
 
 const standardQuery = {
     "query": "| from index:main | head 5",
