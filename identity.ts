@@ -25,7 +25,7 @@ export class IdentityService extends BaseApiService {
      * @param tenantName unique identifier of the tenant
      * @returns a Tenant object
      */
-    public createTenant = (tenantName: Tenant['name']): Promise<Tenant> => {
+    public createTenant = (tenantName: TenantName): Promise<Tenant> => {
         return this.client.post(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenantName)
             .then(response => response.body as Tenant);
     }
@@ -47,6 +47,16 @@ export class IdentityService extends BaseApiService {
     public getTenants = (): Promise<string[]> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'))
             .then(response => response.body as string[]);
+    }
+
+    /**
+     * Delete the tenant
+     * @param tenantName unique identifier of the tenant
+     * @returns A promise that resolves upon deletion
+     */
+    public deleteTenant = (tenantName: Tenant['name']): Promise<any> => {
+        return this.client.delete(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantName], 'system'))
+            .then(response => response.body);
     }
 
     /**
@@ -344,6 +354,13 @@ export class IdentityService extends BaseApiService {
             .then(response => response.body);
     }
 
+}
+
+/**
+ * TenantName - Name of a Tenant
+ */
+interface TenantName {
+    name: string
 }
 
 /**

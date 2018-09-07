@@ -162,6 +162,11 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 assert(data.indexOf(testMember) > -1);
             }));
 
+        it('should delete the member from the tenant and group ignore response', () =>
+            splunk.identity.removeGroupMember(testGroupName, testPrincipal).then(response => {
+                assert(true);
+            }));
+
         it('should add a Member to the Group', () =>
             splunk.identity.addGroupMember(testGroupName, {'name': testPrincipal}).then(data => {
                 assert.typeOf(data, 'Object', 'data should be an object');
