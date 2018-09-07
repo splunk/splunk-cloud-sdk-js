@@ -100,7 +100,7 @@ export class Search {
      * @return A list of event objects
      */
         // TODO: backwardsCompatibleCount
-    public getResults = (args: FetchResultsRequest = {}): Promise<object> => {
+    public getResults = (args: {count?:number, offset?:number} = {}): Promise<object> => {
         const count = args.count = args.count || 30;
         args.offset = args.offset || 0;
         const self = this;
@@ -197,9 +197,9 @@ export class SearchService extends BaseApiService {
      * @param jobId
      * @param update
      */
-    public patchJob = (jobId: string, update: PatchJob): Promise<object> => {
+    public patchJob = (jobId: string, update: PatchJob): Promise<PatchJobResponse> => {
         return this.client.patch(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]), update)
-            .then(response => response.body as object);
+            .then(response => response.body as PatchJobResponse);
     };
 
     /**
@@ -236,11 +236,20 @@ export class SearchService extends BaseApiService {
     /**
      * Get {search_id} search results.
      */
-        // TODO: Flesh out the results type
-    public getResults = (jobId: string, args: FetchResultsRequest = {}): Promise<object> => {
+    public getResults = (jobId: string, args: FetchResultsRequest = {}): Promise<SearchResults | ResultsNotReadyResponse> => {
         const queryArgs: QueryArgs = args || {};
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), queryArgs)
-            .then(response => response.body as object);
+            .then(response => {
+                if (typeof response.body === 'object') {
+                    if ('results' in response.body) {
+                        return response.body as SearchResults;
+                    } else {
+                        return response.body as ResultsNotReadyResponse;
+                    }
+                } else {
+                    throw new SplunkError({message: `Unexpected response: ${response.body}`});
+                }
+            });
     };
 
     /**
@@ -381,5 +390,42 @@ interface PatchJob {
      * Action to be taken on an existing search job.
      */
     action: 'cancel' | 'finalize' | 'touch' | 'save';
+}
+
+interface PatchJobResponse {
+    messages: SearchJobMessage[]
+}
+/**
+ * Response when job results are not yet ready.
+ */
+interface ResultsNotReadyResponse {
+    /**
+     * URL for job results
+     */
+    nextLink: string;
+    /**
+     * Number of milliseconds to wait before retrying
+     */
+    wait: number;
+}
+
+enum messageTypes {
+   Info="INFO",
+   Debug="INFO",
+   Fatal="FATAL",
+   Error="ERROR"
+}
+
+interface SearchJobMessage {
+    text: string;
+    type: messageTypes;
+}
+
+interface SearchResults {
+    preview: boolean;
+    init_offset: number;
+    messages: SearchJobMessage[];
+    results: object[];
+    fields: string[];
 }
 
