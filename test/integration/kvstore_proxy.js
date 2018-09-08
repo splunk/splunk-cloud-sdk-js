@@ -66,13 +66,13 @@ describe('Integration tests for KVStore Endpoints', () => {
                 it('should create a new index', () =>
                     splunkCloud.kvstore
                         .createIndex(
+                            testKVCollectionName,
                             {
                                 Name: testIndex,
                                 Collection: testCollection,
                                 Namespace: testNamespace,
                                 Fields: fields,
-                            },
-                            testKVCollectionName
+                            }
                         )
                         .then(response => {
                             assert.strictEqual(response.name, testIndex);
@@ -84,7 +84,7 @@ describe('Integration tests for KVStore Endpoints', () => {
                     }));
 
                 it('should delete the specified index', () =>
-                    splunkCloud.kvstore.deleteIndex(testIndex, testKVCollectionName).then(response => {
+                    splunkCloud.kvstore.deleteIndex(testKVCollectionName, testIndex).then(response => {
                         assert(!response);
                     }));
 
@@ -99,21 +99,20 @@ describe('Integration tests for KVStore Endpoints', () => {
             it('should throw 404 Not Found error because the namespace or the collection does not exist', () =>
                 splunkCloud.kvstore
                     .createIndex(
+                        'testcollection1',
                         {
                             Name: testIndex,
                             Collection: testCollection,
                             Namespace: testNamespace,
                             Fields: fields,
-                        },
-                        'testnamespace1',
-                        'testcollection1'
+                        }
                     )
                     .then(response => assert.fail(response), err => assert.equal(err.errorParams.httpStatusCode, 404)));
 
             /* TODO: (Commenting for now) Delete on a non-existing index is yielding a 200OK response. kvstore service updated codes at their end and this would be 204 (Being tracked here: splunkCloud-3101)
             it('should throw 404 index not found error as index being deleted does not exist', () =>
                 splunkCloud.kvstore
-                    .deleteIndex('testIndex2', testKVCollectionName)
+                    .deleteIndex(testKVCollectionName, 'testIndex2')
                     .then(response => assert.fail(response), err => assert.equal(err.code, '404')));
             */
         });
