@@ -6,6 +6,44 @@ const splunk = new SplunkCloud(`http://${config.stubbyHost}:8882`, config.stubby
 
 describe('Identity Endpoints', () => {
 
+    describe('Create a new tenant', () => {
+        it('should return a new tenant', () => {
+            return splunk.identity.createTenant({name: 'devtestTenant'}).then(data => {
+                assert.equal(data.name,'devtestTenant', 'tenant should be devtestTenant');
+                assert.equal(data.status,'provisioning', 'status should be provisioning');
+            });
+        });
+    });
+
+    describe('Get tenant', () => {
+        it('should return a tenant', () => {
+            return splunk.identity.getTenant('devtestTenant').then(data => {
+                assert.equal(data.name,'devtestTenant', 'tenant should be devtestTenant');
+                assert.equal(data.status,'provisioning', 'status should be provisioning');
+                assert.equal(data.createdBy, 'test1', 'createdBy should be test1');
+            });
+        });
+    });
+
+    describe('Get all tenants', () => {
+        it('should return all tenants', () => {
+            return splunk.identity.getTenants().then(data => {
+                assert.typeOf(data, 'Array', 'response should be an array');
+                assert.equal(data[0], 'devtestTenant', 'tenants should contain devtestTenant');
+                assert.equal(data[1], 'tenant2', 'tenantss should contain tenant2');
+            });
+        });
+    });
+
+
+    describe('Delete a tenant', () => {
+        it('should delete a tenant', () => {
+            return splunk.identity.deleteTenant('devtestTenant').then(response => {
+                assert(!response);
+            });
+        });
+    });
+
     describe('Validate a member', () => {
         it('should return a validate info object', () => {
             return splunk.identity.validate().then(data => {
