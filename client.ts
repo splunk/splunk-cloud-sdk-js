@@ -79,6 +79,8 @@ function decodeJson(text: string): any {
     }
 }
 
+export type ResponseHook = (response: Response) => Response | any;
+
 /**
  * This class acts as a raw proxy for Splunk Cloud, implementing
  * authorization for requests, setting the proper headers,
@@ -91,6 +93,7 @@ export class ServiceClient {
     private readonly token: string;
     private readonly url: string;
     private readonly tenant?: string;
+    private responseHooks: Array<ResponseHook> = [];
 
     /**
      * Create a ServiceClient with the given URL and an auth token
@@ -103,6 +106,29 @@ export class ServiceClient {
         this.token = token;
         this.url = url;
         this.tenant = tenant;
+    }
+
+    /**
+     * Adds a response hook to the list of response handlers. Each will be called with a response for each request
+     * in defining order- if the callback returns a Response object, it will be substituted for the argument it was
+     * called with.  This can be used for several things- logging requests (if it returns null it will not affect
+     * the result), retrying failed requests (retry the request, and if successful, return the successful response),
+     * etc.
+     * @param hook
+     */
+    public addResponseHook(hook: ResponseHook) {
+        this.responseHooks.push(hook);
+    }
+
+    private invokeHooks(response: Response) {
+        let toReturn = response;
+        this.responseHooks.forEach(h => {
+            let result = h(toReturn);
+            if (result instanceof Response) {
+                toReturn = result;
+            }
+        });
+        return toReturn;
     }
 
     /**
@@ -174,6 +200,7 @@ export class ServiceClient {
             method: 'GET',
             headers: this.buildHeaders(headers),
         }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then(response => this.invokeHooks(response))
           .then((response: Response) => handleResponse(response));
     }
 
@@ -192,6 +219,7 @@ export class ServiceClient {
             body: typeof data !== 'string' ? JSON.stringify(data) : data,
             headers: this.buildHeaders(),
         }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then(response => this.invokeHooks(response))
           .then((response: Response) => handleResponse(response));
     }
 
@@ -209,6 +237,7 @@ export class ServiceClient {
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
         }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then(response => this.invokeHooks(response))
           .then((response: Response) => handleResponse(response));
     }
 
@@ -226,6 +255,7 @@ export class ServiceClient {
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
         }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then(response => this.invokeHooks(response))
           .then((response: Response) => handleResponse(response));
     }
 
@@ -248,6 +278,7 @@ export class ServiceClient {
             body: JSON.stringify(deleteData),
             headers: this.buildHeaders(),
         }).catch( e => {throw new SplunkError({ message: e.message })})
+          .then(response => this.invokeHooks(response))
           .then((response: Response) => handleResponse(response));
     }
 }
