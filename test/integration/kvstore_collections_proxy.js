@@ -9,8 +9,8 @@ const tenantID = config.playgroundTenant;
 const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
 
-const { ContentType } = require('../../client.ts');
-const { createKVCollectionDataset, createRecord } = require('./catalog_proxy.js');
+const { ContentType } = require('../../client');
+const { createKVCollectionDataset, createRecord } = require('./catalog_proxy');
 
 const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
 

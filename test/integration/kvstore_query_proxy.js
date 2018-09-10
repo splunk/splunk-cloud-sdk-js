@@ -1,6 +1,6 @@
 const { assert } = require('chai');
 const config = require('../config');
-const SplunkCloud = require('../../splunk');
+const SplunkCloud = require('../../splunk').SplunkCloud;;
 
 const splunkCloudHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
@@ -9,9 +9,9 @@ const tenantID = config.playgroundTenant;
 const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
 
-const { createKVCollectionDataset, createRecord } = require('./catalog_proxy.js');
+const { createKVCollectionDataset, createRecord } = require('./catalog_proxy');
 
-const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID).SplunkCloud;
+const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID)
 
 const testKVCollectionName = testNamespace + '.' + testCollection;
 
