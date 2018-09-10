@@ -56,7 +56,7 @@ For general documentation about the Splunk Cloud SDK for JavaScript, see:
 - https://dev.staging.splunkbeta.com/docs/aboutdevtools/jssdk
 
 For the API reference for the Splunk Cloud SDK for JavaScript, see:
-- https://dev.staging.splunkbeta.com/apiref/sdks/ssc-client-js/README.md
+- https://dev.staging.splunkbeta.com/apiref/sdks/splunk-cloud-sdk-js/README.md
 
 The API reference contains detailed information about all classes and functions, with clearly-defined parameters and return types.
     

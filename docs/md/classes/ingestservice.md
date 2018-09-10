@@ -23,8 +23,8 @@ Encapsulates Ingest service endpoints
 ### Methods
 
 * [createEvent](ingestservice.md#createevent)
-* [createEvents](ingestservice.md#createevents)
-* [createMetrics](ingestservice.md#createmetrics)
+* [postEvents](ingestservice.md#createevents)
+* [postMetrics](ingestservice.md#createmetrics)
 * [createRawEvent](ingestservice.md#createrawevent)
 
 ---
@@ -80,9 +80,9 @@ Create a structured event to be ingested by Splunk SSC via Ingest service.
 ___
 <a id="createevents"></a>
 
-###  createEvents
+###  postEvents
 
-▸ **createEvents**(events: *[Event](../interfaces/event.md)[]*): `Promise`<`any`>
+▸ **postEvents**(events: *[Event](../interfaces/event.md)[]*): `Promise`<`any`>
 
 Create structured events to be ingested by Splunk SSC via Ingest service.
 
@@ -97,9 +97,9 @@ Create structured events to be ingested by Splunk SSC via Ingest service.
 ___
 <a id="createmetrics"></a>
 
-###  createMetrics
+###  postMetrics
 
-▸ **createMetrics**(metrics: *[MetricEvent](../interfaces/metricevent.md)[]*): `Promise`<`any`>
+▸ **postMetrics**(metrics: *[MetricEvent](../interfaces/metricevent.md)[]*): `Promise`<`any`>
 
 Create metrics to be ingested by Splunk SSC.
 
