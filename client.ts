@@ -303,9 +303,18 @@ export class ServiceClient {
 
 type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
+
+/**
+ * Optional arguments for the HTTP request
+ */
 export interface RequestOptions {
-    skipOutputProcessing?: boolean;
+    /**
+     * key-value pairs that will be URL encoded and added to the URL query string
+     */
     query?: QueryArgs;
+    /**
+     * Additional headers (beyond auth) to add for the request
+     */
     headers?: RequestHeaders;
 }
 
