@@ -92,7 +92,7 @@ export class ServiceClient {
     private readonly token: string;
     private readonly url: string;
     private readonly tenant?: string;
-    private responseHooks: Array<ResponseHook> = [];
+    private responseHooks: ResponseHook[] = [];
 
     /**
      * Create a ServiceClient with the given URL and an auth token
@@ -126,29 +126,12 @@ export class ServiceClient {
         this.responseHooks = [];
     }
 
-    private invokeHook(responsePromise: Promise<Response>, hook: ResponseHook) : Promise<Response> {
-        return responsePromise.then(response => {
-            let hookResult = hook.call(null, response);
-            if (hookResult instanceof Promise) {
-                return hookResult.then(maybeResponse => {
-                    if (typeof maybeResponse.ok !== undefined) {
-                        return maybeResponse;
-                    } else {
-                        return response;
-                    }
-                });
-            } else {
-                return response;
-            }
-        })
-    }
-
     private invokeHooks(response: Response): Promise<Response> {
         return this.responseHooks.reduce((result: Promise<Response>, cb: ResponseHook) : Promise<Response> => {
             // Result starts as a known good Promise<Result>
             return result.then((chainResponse) => {
                 // Call the callback, get the result
-                let cbResult = cb.call(null, chainResponse);
+                const cbResult = cb.call(null, chainResponse);
                 // If the callback is a Promise, then it may be a Promise<Result>
                 // if it isn't, then just return the last known good promise.
                 // It may also be a Promise of something else.  If that's the
@@ -157,15 +140,13 @@ export class ServiceClient {
                     return cbResult.then(output => {
                         if (output.ok !== undefined) {
                             return output;
-                        } else {
-                            // If it's not a response, substitute our last known
-                            // good response.
-                            return chainResponse;
                         }
+                        // If it's not a response, substitute our last known
+                        // good response.
+                        return chainResponse;
                     });
-                } else {
-                    return chainResponse;
                 }
+                return chainResponse;
             });
         }, Promise.resolve(response));
     }
@@ -235,10 +216,10 @@ export class ServiceClient {
      * @param data Body data (will be stringified if an object)
      */
     public fetch(method: HTTPMethod, path: string, opts: RequestOptions, data?: any) : Promise<Response> {
-        opts = opts || {};
-        return fetch(this.buildUrl(path, opts.query),{
-            method: method,
-            headers: this.buildHeaders(opts.headers),
+        const nonNullOpts = opts || {};
+        return fetch(this.buildUrl(path, nonNullOpts.query),{
+            method,
+            headers: this.buildHeaders(nonNullOpts.headers),
             body: typeof data !== 'string' ? JSON.stringify(data) : data,
         })
         .then(response => this.invokeHooks(response));
@@ -254,7 +235,7 @@ export class ServiceClient {
      * @return
      */
     public get(path: string, opts: RequestOptions = {}): Promise<HTTPResponse> {
-        return this.fetch("GET", path, opts)
+        return this.fetch('GET', path, opts)
             .then((response: Response) => handleResponse(response));
     }
 
@@ -268,7 +249,7 @@ export class ServiceClient {
      * @return
      */
     public post(path: string, data: any, opts: RequestOptions={}): Promise<HTTPResponse> {
-        return this.fetch("POST", path, opts, data)
+        return this.fetch('POST', path, opts, data)
             .then((response: Response) => handleResponse(response));
     }
 
@@ -282,7 +263,7 @@ export class ServiceClient {
      * @return
      */
     public put(path: string, data: any, opts: RequestOptions={}): Promise<HTTPResponse> {
-        return this.fetch("PUT", path, opts, data)
+        return this.fetch('PUT', path, opts, data)
             .then((response: Response) => handleResponse(response));
     }
 
@@ -296,7 +277,7 @@ export class ServiceClient {
      * @return
      */
     public patch(path: string, data: object, opts: RequestOptions={}): Promise<HTTPResponse> {
-        return this.fetch("PATCH", path, opts, data)
+        return this.fetch('PATCH', path, opts, data)
             .then((response: Response) => handleResponse(response));
     }
 
@@ -310,12 +291,12 @@ export class ServiceClient {
      * @return
      */
     public delete(path: string, data: object={}, opts: RequestOptions={}): Promise<HTTPResponse> {
-        return this.fetch("DELETE", path, opts, data)
+        return this.fetch('DELETE', path, opts, data)
             .then((response: Response) => handleResponse(response));
     }
 }
 
-type HTTPMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 export interface RequestOptions {
     skipOutputProcessing?: boolean;

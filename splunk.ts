@@ -6,7 +6,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 
 import { ActionService } from './action';
 import { CatalogService } from './catalog';
-import { ServiceClient, ResponseHook } from './client';
+import { ResponseHook, ServiceClient } from './client';
 import { IdentityService } from './identity';
 import { IngestService } from './ingest';
 import { KVStoreService } from './kvstore';
