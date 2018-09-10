@@ -33,10 +33,10 @@ describe('Events Endpoint', () => {
         it('should return a 401 response', () => {
             const events = [event1, event2, event3];
 
-            splunkBadToken.ingest.postEvents(events).then(response => {
+            return splunkBadToken.ingest.postEvents(events).then(response => {
                 assert.fail('request with bad auth should not succeed');
             }).catch(err => {
-                assert.equal(err.errorParams.httpStatusCode, 401, 'response status should be 401');
+                assert.equal(err.httpStatusCode, 401, 'response status should be 401');
             });
         });
     });
