@@ -24,7 +24,7 @@ describe("integration tests Using Search APIs", () => {
         for (let i = 0; i < 10; i += 1) {
             events.push({ event: `Test event no ${i}` });
         }
-        return splunk.ingest.createEvents(events);
+        return splunk.ingest.postEvents(events);
     });
 
     describe("Search", () => {

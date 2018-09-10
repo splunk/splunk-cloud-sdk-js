@@ -1,16 +1,12 @@
 // ***** TITLE: Get data in using Ingest Service
 // ***** DESCRIPTION: This example show show to get data in using the Ingest Service in
 //              different ways, then runs a search to verify the data was added.
-const SplunkCloud = require("../splunk");
+require("isomorphic-fetch");
 
+const SplunkCloud = require("../splunk");
+const { sleep, searchResults } = require("../utils/exampleHelperFunctions");
 
 const { SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
-
-// define helper functions
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 async function createIndex(splunk, index) {
     const regex1 = {
@@ -21,7 +17,6 @@ async function createIndex(splunk, index) {
         "kind": "index",
         "disabled": false
     };
-
 
     if (index !== "main") {
         splunk.catalog.createDataset(regex1)
@@ -35,18 +30,21 @@ async function createIndex(splunk, index) {
 };
 
 function sendDataViaIngest(splunk, index, host, source) {
-
     const event1 = {
         "sourcetype": "splunkd",
         "source": source,
         "host": host,
         "event": `device_id=aa1 haha0 my new event ${host},${source}`,
-        "index": index
+        "attributes": {
+            "index": index
+        }
     };
     const event2 = {
         "sourcetype": "splunkd",
         "source": source,
-        "index": index,
+        "attributes": {
+            "index": index
+        },
         "fields": { "fieldkey1": "fieldval1", "fieldkey2": "fieldkey2" },
         "host": host,
         "event": `04-24-2018 12:32:23.252 -0700 INFO  device_id=[www]401:sdfsf haha1 ${host},${source}`
@@ -54,14 +52,16 @@ function sendDataViaIngest(splunk, index, host, source) {
     const event3 = {
         "sourcetype": "splunkd",
         "source": source,
-        "index": index,
+        "attributes": {
+            "index": index
+        },
         "fields": { "fieldkey1": "fieldval1", "fieldkey2": "fieldkey2" },
         "host": host,
         "event": `04-24-2018 12:32:23.258 -0700 INFO device_id:aa2 device_id=[code]error3: haha2 "9765f1bebdb4".  ${host},${source}`
     };
 
     // Use the Ingest endpoint to send multiple events
-    splunk.ingest.createEvents([event1, event2, event3]).then(data => {
+    splunk.ingest.postEvents([event1, event2, event3]).then(data => {
         console.log(data);
     }).catch(err => {
         console.log(`ingest events failed with err: ${err}`);
@@ -70,44 +70,9 @@ function sendDataViaIngest(splunk, index, host, source) {
     });
 };
 
-
-async function searchResults(splunk, start, timeout, query, expected) {
-
-    if (Date.now() - start > timeout) {
-        console.log(`TIMEOUT!!!! Search is taking more than ${timeout}ms. Terminate!`);
-        return false;
-    }
-
-    // sleep 5 seconds before to retry the search
-    await sleep(5000);
-
-    return splunk.search.createJob({ "query": query })
-        .then(sid => splunk.search.waitForJob(sid))
-        .then(searchObj => splunk.search.getResults(searchObj.sid)
-            .then(resultResponse => {
-                const retNum = resultResponse.results.length;
-                console.log(`got ${retNum} results`);
-                if (retNum < expected) {
-                    return searchResults(splunk, start, timeout, query, expected);
-                } else if (retNum > expected) {
-                    console.log(retNum);
-                    console.log(`find moreyar events than expected for query ${query}`);
-                    return false;
-                }
-                console.log(`Successfully found ${retNum} events for query ${query}, total spent ${Date.now() - start}ms`);
-                return true;
-            })
-        )
-        .catch(err => {
-            console.log(err);
-            return false;
-        });
-};
-
-
+// TODO Contact the ingest team for duplicate data ingestion, currently actual results count is 6, expected is 3
 // define the main workflow
 async function main() {
-    // todo: should be a non-main index, but playground now still have issues for sending data to non-main index
     const index = `test_${new Date().getSeconds()}`;
     // ***** STEP 1: Get Splunk Cloud client
     // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authenticatin token.
@@ -126,11 +91,11 @@ async function main() {
 
     // ***** STEP 4: Verify the data
     // ***** DESCRIPTION: Search the data to ensure the data was ingested and field extractions are present.
-    // Search for all 5 events that were sent using Ingest Service
+    // Search for all 3 events that were sent using Ingest Service
     const timeout = 90 * 1000;
     const query = `|from  index:${index} where host="${host}" and source="${source}"`;
     console.log(query);
-    searchResults(splunk, Date.now(), timeout, query, 5).then(
+    searchResults(splunk, Date.now(), timeout, query, 3).then(
         (ret) => {
             if (index !== "main") {
                 console.log("delete index");

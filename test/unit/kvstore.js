@@ -38,7 +38,7 @@ describe('Stubby tests for Kvstore Index Endpoints', () => {
                     },
                 ],
             };
-            return splunk.kvstore.createIndex(testIndex, stubbyTestCollection).then(response => {
+            return splunk.kvstore.createIndex(stubbyTestCollection, testIndex).then(response => {
                 assert.notEqual(response, null);
             });
         });
@@ -46,7 +46,7 @@ describe('Stubby tests for Kvstore Index Endpoints', () => {
 
     describe('Delete an index', () => {
         it('should return no response body', () => {
-            return splunk.kvstore.deleteIndex('TEST_INDEX_01', stubbyTestCollection).then(response => {
+            return splunk.kvstore.deleteIndex(stubbyTestCollection, 'TEST_INDEX_01').then(response => {
                 assert.notEqual(response, null);
             });
         });
