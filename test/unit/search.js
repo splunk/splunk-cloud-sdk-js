@@ -20,15 +20,6 @@ describe("Using Search APIs", () => {
         })
     );
 
-    it("should allow retrieval of events", () => splk.search.getEvents("SEARCH_ID")
-        .then(results => {
-            expect(results).to.have.property('fields');
-            expect(results).to.have.property('results');
-            expect(results).to.have.property('init_offset'); // Canary- I expect this to change
-            expect(results).to.have.property('preview', false);
-        })
-    );
-
     it("should allow retrieval of a job status", () => splk.search.getJob("SEARCH_ID")
         .then(results => {
             expect(results).to.have.property('sid', 'SEARCH_ID');
