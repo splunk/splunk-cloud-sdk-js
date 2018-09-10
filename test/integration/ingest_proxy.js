@@ -32,7 +32,7 @@ describe('integration tests for Ingest Endpoints', () => {
             it('should return a successful response', () => {
                 const events = [event1, event2, event3];
 
-                return splunk.ingest.createEvents(events).then(response => {
+                return splunk.ingest.postEvents(events).then(response => {
                     assert.deepEqual(response, successResponse, 'response should be expected success response.');
                 });
             });
@@ -42,7 +42,7 @@ describe('integration tests for Ingest Endpoints', () => {
             it('should return a 401 response', () => {
                 const events = [event1, event2, event3];
 
-                splunkBadToken.ingest.createEvents(events).then(response => {
+                splunkBadToken.ingest.postEvents(events).then(response => {
                     assert.fail('request with bad auth should not succeed');
                 }).catch(err => {
                     assert.equal(err.errorParams.httpStatusCode, 401, 'response httpStatusCode should be 401');
@@ -154,7 +154,7 @@ describe('integration tests for Ingest Endpoints', () => {
         metricEvent2.nanos = 2;
 
         describe('Post metrics', () => {
-            it('should return a successful response', () => splunk.ingest.createMetrics([metricEvent1]).then(response => {
+            it('should return a successful response', () => splunk.ingest.postMetrics([metricEvent1]).then(response => {
                 expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
             }).catch(err => {
                 assert.fail(`request should not have failed ${err}`);
@@ -162,7 +162,7 @@ describe('integration tests for Ingest Endpoints', () => {
         });
 
         describe('Post metrics with no defaults', () => {
-            it('should return a successful response', () => splunk.ingest.createMetrics([metricEventNoDefaults]).then(response => {
+            it('should return a successful response', () => splunk.ingest.postMetrics([metricEventNoDefaults]).then(response => {
                 expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
             }).catch(err => {
                 assert.fail(`request should not have failed ${err}`);
@@ -170,7 +170,7 @@ describe('integration tests for Ingest Endpoints', () => {
         });
 
         describe('Post metrics, two events', () => {
-            it('should return a successful response', () => splunk.ingest.createMetrics([metricEvent1, metricEvent2]).then(response => {
+            it('should return a successful response', () => splunk.ingest.postMetrics([metricEvent1, metricEvent2]).then(response => {
                 expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
             }).catch(err => {
                 assert.fail(`request should not have failed ${err}`);
@@ -178,7 +178,7 @@ describe('integration tests for Ingest Endpoints', () => {
         });
 
         describe('Post metrics bad format', () => {
-            it('should return a 400 response', () => splunk.ingest.createMetrics({ 'invalid': 'data format' }).then(
+            it('should return a 400 response', () => splunk.ingest.postMetrics({ 'invalid': 'data format' }).then(
                 () => {
                     assert.fail('request with bad data format should not succeed')
                 },

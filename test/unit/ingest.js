@@ -23,7 +23,7 @@ describe('Events Endpoint', () => {
         it('should return a successful response', () => {
             const events = [event1, event2, event3];
 
-            return splunk.ingest.createEvents(events).then(response => {
+            return splunk.ingest.postEvents(events).then(response => {
                 assert.deepEqual(response, successResponse, 'response should be expected success response.');
             });
         });
@@ -33,7 +33,7 @@ describe('Events Endpoint', () => {
         it('should return a 401 response', () => {
             const events = [event1, event2, event3];
 
-            splunkBadToken.ingest.createEvents(events).then(response => {
+            splunkBadToken.ingest.postEvents(events).then(response => {
                 assert.fail('request with bad auth should not succeed');
             }).catch(err => {
                 assert.equal(err.errorParams.httpStatusCode, 401, 'response status should be 401');
@@ -138,7 +138,7 @@ describe('Metrics Endpoint', () => {
     };
 
     describe('Post metrics', () => {
-        it('should return a successful response', () => splunk.ingest.createMetrics([metricEvent1]).then(response => {
+        it('should return a successful response', () => splunk.ingest.postMetrics([metricEvent1]).then(response => {
             expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
         }).catch(err => {
             assert.fail(`request should not have failed ${err}`);
