@@ -67,4 +67,32 @@ describe("Basic client functionality", () => {
         });
     });
 
+    describe("Middleware", () => {
+        it("should allow a callback to execute without affecting flow", () => {
+            let extractedUrl = null;
+            s.addResponseHook((response) => extractedUrl = response.url);
+            return s.get("/basic")
+                .then(httpResponse => {
+                    expect(httpResponse.body).to.have.own.property("foo");
+                    expect(extractedUrl).matches(/\/basic$/);
+                })
+                .finally(() => s.clearResponseHooks());
+        });
+
+        it("should allow changing of a response inflight", () => {
+            s.addResponseHook(response => {
+                console.log("hook was called");
+                if (!response.ok) {
+                    return s.fetch("GET", "/basic", {});
+                }
+            }); // Totally different URL
+            return s.get("/something_that_does_not_exist")
+                .then(httpResponse => {
+                    expect(httpResponse.body).to.have.own.property("foo");
+                })
+                .finally(() => s.clearResponseHooks());
+
+        });
+    });
+
 });
