@@ -80,6 +80,16 @@ describe("Basic client functionality", () => {
                 });
         });
 
+        it("should allow multiple callbacks that don't change response", () => {
+            for (let i=0; i<5; i++) {
+                s.addResponseHook(() => {});
+            }
+            return s.get("/basic")
+                .then(httpResponse => {
+                    expect(httpResponse.body).to.have.own.property("foo");
+                });
+        });
+
         it("should allow changing of a response inflight", () => {
             s.addResponseHook(response => {
                 if (!response.ok) {
