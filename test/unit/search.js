@@ -29,7 +29,7 @@ describe("Using Search APIs", () => {
         })
     );
 
-    it("should allow retrieval of the list of jobs", () => splk.search.getJobs()
+    it("should allow retrieval of the list of jobs", () => splk.search.listJobs()
         .then(results => {
             expect(results).to.be.an("array");
             expect(results[0].content).to.have.property('sid', 'SEARCH_ID');

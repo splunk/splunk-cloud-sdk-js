@@ -30,17 +30,17 @@ function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchS
  */
 export class Search {
     private client: SearchService;
-    private readonly sid: string;
+    private readonly jobId: string;
     private isCancelling: boolean;
 
     /**
      *
      * @param searchService
-     * @param sid
+     * @param jobId
      */
-    constructor(searchService: SearchService, sid: string) {
+    constructor(searchService: SearchService, jobId: string) {
         this.client = searchService;
-        this.sid = sid;
+        this.jobId = jobId;
         this.isCancelling = false;
     }
 
@@ -49,7 +49,7 @@ export class Search {
      * @return search job status description
      */
     public status = (): Promise<SearchJob> => {
-        return this.client.getJob(this.sid);
+        return this.client.getJob(this.jobId);
     };
 
     /**
@@ -60,11 +60,11 @@ export class Search {
      */
     public wait = (updateInterval: number, statusCallback: (job: SearchJob) => any): Promise<SearchJob> => {
         const self = this;
-        return this.client.waitForJob(this.sid, updateInterval, statusCallback)
+        return this.client.waitForJob(this.jobId, updateInterval, statusCallback)
             .catch((err: Error) => {
                 if (self.isCancelling && 'code' in err) {
                     const splunkErr = err as SplunkError;
-                    if (splunkErr.errorParams.httpStatusCode === 404) {
+                    if (splunkErr.httpStatusCode === 404) {
                         throw new SplunkSearchCancelError('Search has been cancelled');
                     } else {
                         throw err;
@@ -81,7 +81,7 @@ export class Search {
      */
     public cancel = (): Promise<object> => {
         this.isCancelling = true;
-        return this.client.patchJob(this.sid, { action: 'cancel' });
+        return this.client.updateJob(this.jobId, { action: 'cancel' });
     };
 
     /**
@@ -89,7 +89,7 @@ export class Search {
      * @return A promise that will be resolved when the touch action is accepted by the service
      */
     public touch = (): Promise<object> => {
-        return this.client.patchJob(this.sid, { action: 'touch' });
+        return this.client.updateJob(this.jobId, { action: 'touch' });
     };
 
     /**
@@ -107,10 +107,10 @@ export class Search {
         return self.status()
             .then(async (job: any) => {
                 if (args.offset != null) {
-                    return self.client.getResults(self.sid, args);
+                    return self.client.getResults(self.jobId, args);
                     // .then(response => response.results);
                 }
-                const fetcher = (start: number) => self.client.getResults(self.sid, (Object as any).assign({}, args, { offset: start }));
+                const fetcher = (start: number) => self.client.getResults(self.jobId, (Object as any).assign({}, args, { offset: start }));
                 const iterator = iterateBatches(fetcher, count, job.eventCount);
                 let results: object[] = [];
                 for (const batch of iterator) {
@@ -166,7 +166,7 @@ export class SearchService extends BaseApiService {
     /**
      * Get the matching list of search jobs.
      */
-    public getJobs = (jobArgs: any = {}): Promise<SearchJob[]> => { // TODO: Flesh out JobsRequest
+    public listJobs = (jobArgs: any = {}): Promise<SearchJob[]> => { // TODO: Flesh out JobsRequest
         return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
             .then(response => response.body as SearchJob[]);
     };
@@ -197,7 +197,7 @@ export class SearchService extends BaseApiService {
      * @param jobId
      * @param update
      */
-    public patchJob = (jobId: string, update: PatchJob): Promise<PatchJobResponse> => {
+    public updateJob = (jobId: string, update: PatchJob): Promise<PatchJobResponse> => {
         return this.client.patch(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]), update)
             .then(response => response.body as PatchJobResponse);
     };
@@ -209,7 +209,7 @@ export class SearchService extends BaseApiService {
      * @param pollInterval in ms
      * @param callback optional function that will be called on every poll result
      */
-    public waitForJob = (jobId: SearchJob['sid'], pollInterval?: number, callback?: (job: SearchJob) => object): Promise<SearchJob> => {
+    public waitForJob = (jobId: SearchJob['jobId'], pollInterval?: number, callback?: (job: SearchJob) => object): Promise<SearchJob> => {
         const self = this;
         const interval = pollInterval || 250;
         return new Promise<SearchJob>((resolve: (job: SearchJob) => void, reject: (error: Error) => void) => {

@@ -87,7 +87,7 @@ describe("integration tests Using Search APIs", () => {
                 })));
 
 
-        it("should allow retrieval of jobs", () => splunk.search.getJobs()
+        it("should allow retrieval of jobs", () => splunk.search.listJobs()
             .then(results => {
                 expect(results).to.be.an('array');
                 expect(results[0]).to.have.property('sid');
