@@ -12,7 +12,6 @@
     "sourceRoot": "src",
     "outDir": ".",
     "declaration": true,
-//    "declarationDir": "types",
     "removeComments": false,
     "downlevelIteration": true,
     "strict": true,
