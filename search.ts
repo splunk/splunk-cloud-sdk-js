@@ -4,11 +4,11 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
-import {Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import BaseApiService from './baseapiservice';
-import {QueryArgs, SplunkError} from './client';
-import {Event} from './ingest';
-import {SEARCH_SERVICE_PREFIX} from './service_prefixes';
+import { QueryArgs, SplunkError } from './client';
+import { Event } from './ingest';
+import { SEARCH_SERVICE_PREFIX } from './service_prefixes';
 
 export class SplunkSearchCancelError extends Error {
 }
@@ -81,7 +81,7 @@ export class Search {
      */
     public cancel = (): Promise<object> => {
         this.isCancelling = true;
-        return this.client.patchJob(this.sid, {action: 'cancel'});
+        return this.client.patchJob(this.sid, { action: 'cancel' });
     };
 
     /**
@@ -89,7 +89,7 @@ export class Search {
      * @return A promise that will be resolved when the touch action is accepted by the service
      */
     public touch = (): Promise<object> => {
-        return this.client.patchJob(this.sid, {action: 'touch'});
+        return this.client.patchJob(this.sid, { action: 'touch' });
     };
 
     /**
@@ -110,7 +110,7 @@ export class Search {
                     return self.client.getResults(self.sid, args);
                     // .then(response => response.results);
                 }
-                const fetcher = (start: number) => self.client.getResults(self.sid, (Object as any).assign({}, args, {offset: start}));
+                const fetcher = (start: number) => self.client.getResults(self.sid, (Object as any).assign({}, args, { offset: start }));
                 const iterator = iterateBatches(fetcher, count, job.eventCount);
                 let results: object[] = [];
                 for (const batch of iterator) {
@@ -243,12 +243,10 @@ export class SearchService extends BaseApiService {
                 if (typeof response.body === 'object') {
                     if ('results' in response.body) {
                         return response.body as SearchResults;
-                    } else {
-                        return response.body as ResultsNotReadyResponse;
                     }
-                } else {
-                    throw new SplunkError({message: `Unexpected response: ${response.body}`});
+                    return response.body as ResultsNotReadyResponse;
                 }
+                throw new SplunkError({ message: `Unexpected response: ${response.body}` });
             });
     };
 
@@ -410,10 +408,10 @@ interface ResultsNotReadyResponse {
 }
 
 enum messageTypes {
-   Info="INFO",
-   Debug="INFO",
-   Fatal="FATAL",
-   Error="ERROR"
+   Info='INFO',
+   Debug='INFO',
+   Fatal='FATAL',
+   Error='ERROR'
 }
 
 interface SearchJobMessage {
