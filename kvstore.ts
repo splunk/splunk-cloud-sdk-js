@@ -69,7 +69,7 @@ export class KVStoreService extends BaseApiService {
                 'collections',
                 collection,
                 'export',
-            ]), {}, requestHeaders)
+            ]), {headers: requestHeaders})
             .then(response => response.body as string);
     };
 
