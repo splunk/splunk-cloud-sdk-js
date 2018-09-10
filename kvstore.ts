@@ -94,7 +94,7 @@ export class KVStoreService extends BaseApiService {
      * @param collection The name of the collection where the new index will be created
      * @returns A definition of the created index
      */
-    public createIndex = (index: IndexDescription, collection: string): Promise<IndexDescription> => {
+    public createIndex = (collection: string, index: IndexDescription): Promise<IndexDescription> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
@@ -110,7 +110,7 @@ export class KVStoreService extends BaseApiService {
      * @param collection The name of the collection whose index should be deleted
      * @returns A promise that will be resolved when the index is deleted
      */
-    public deleteIndex = (indexName: string, collection: string): Promise<any> => {
+    public deleteIndex = (collection: string, indexName: string): Promise<any> => {
         return this.client.delete(
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
                 'collections',
@@ -243,7 +243,6 @@ export interface CollectionDefinition {
 export interface CollectionDescription {
     indexes: IndexDescription[];
     name: string;
-    namespace: string;
 }
 
 export interface CollectionStats {
