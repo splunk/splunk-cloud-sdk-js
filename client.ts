@@ -131,7 +131,12 @@ export class ServiceClient {
             // Result starts as a known good Promise<Result>
             return result.then((chainResponse) => {
                 // Call the callback, get the result
-                const cbResult = cb.call(null, chainResponse);
+                let cbResult;
+                try {
+                    cbResult = cb.call(null, chainResponse);
+                } catch(err) {
+                    cbResult = null;
+                }
                 // If the callback is a Promise, then it may be a Promise<Result>
                 // if it isn't, then just return the last known good promise.
                 // It may also be a Promise of something else.  If that's the
@@ -210,7 +215,7 @@ export class ServiceClient {
     /**
      * Proxy for fetch that builds URL, applies headers and query string, and invokes hooks
      * before returning a `Response`
-     * @param method "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+     * @param method HTTP Verb
      * @param path Path to the resource being requested
      * @param opts Request opts
      * @param data Body data (will be stringified if an object)

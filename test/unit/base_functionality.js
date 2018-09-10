@@ -82,7 +82,6 @@ describe("Basic client functionality", () => {
 
         it("should allow changing of a response inflight", () => {
             s.addResponseHook(response => {
-                console.log("hook was called");
                 if (!response.ok) {
                     return s.fetch("GET", "/basic", {});
                 }
@@ -92,6 +91,17 @@ describe("Basic client functionality", () => {
                     expect(httpResponse.body).to.have.own.property("foo");
                 });
         });
+
+        it("should handle exceptions", () => {
+            s.addResponseHook(response => {
+                throw(new Error("unexpected error"));
+            });
+            return s.get("/basic")
+                .then(httpResponse => {
+                    expect(httpResponse.body).to.have.own.property("foo");
+                });
+
+        })
     });
 
 });
