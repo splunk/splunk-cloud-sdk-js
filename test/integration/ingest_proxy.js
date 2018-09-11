@@ -45,7 +45,7 @@ describe('integration tests for Ingest Endpoints', () => {
                 splunkBadToken.ingest.postEvents(events).then(response => {
                     assert.fail('request with bad auth should not succeed');
                 }).catch(err => {
-                    assert.equal(err.errorParams.httpStatusCode, 401, 'response httpStatusCode should be 401');
+                    assert.equal(err.httpStatusCode, 401, 'response httpStatusCode should be 401');
                 });
             });
         });
@@ -183,7 +183,7 @@ describe('integration tests for Ingest Endpoints', () => {
                     assert.fail('request with bad data format should not succeed')
                 },
                 err => {
-                    assert.equal(err.errorParams.httpStatusCode, 400, 'response httpStatusCode should be 400');
+                    assert.equal(err.httpStatusCode, 400, 'response httpStatusCode should be 400');
 
                     /**
                      * {
@@ -193,10 +193,10 @@ describe('integration tests for Ingest Endpoints', () => {
                      *  details: undefined
                      * }
                      */
-                    expect(err.errorParams).to.have.property('code');
-                    expect(err.errorParams.httpStatusCode).to.equal(400);
-                    expect(err.errorParams).to.have.property('message');
-                    expect(err.errorParams.message).to.match(/Invalid/);
+                    expect(err).to.have.property('code');
+                    expect(err.httpStatusCode).to.equal(400);
+                    expect(err).to.have.property('message');
+                    expect(err.message).to.match(/Invalid/);
                     /* TODO: New error response doesn't contain url details, check with the services
                     expect(err).to.have.property('url');
                     expect(err.url).to.match(new RegExp(ServicePrefixes.INGEST_SERVICE_PREFIX, 'i'));
