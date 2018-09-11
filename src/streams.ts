@@ -42,7 +42,7 @@ export class StreamsService extends BaseApiService {
             includeData?:  boolean
         }
     ): Promise<PaginatedPipelineResponse> => {
-        const queryArgs: QueryArgs = args || {}
+        const queryArgs: QueryArgs = args || {};
         const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']);
         return this.client.get(url, queryArgs)
             .then(response => response.body as PaginatedPipelineResponse);

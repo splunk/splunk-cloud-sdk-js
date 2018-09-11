@@ -20,7 +20,7 @@ import { StreamsService } from './streams';
  * @property identity Proxies for the identity APIs
  * @property ingest Proxies for the ingest APIs
  */
-class SplunkCloud {
+export class SplunkCloud {
     public search: SearchService;
     public catalog: CatalogService;
     public identity: IdentityService;
@@ -28,6 +28,7 @@ class SplunkCloud {
     public kvstore: KVStoreService;
     public action: ActionService;
     public streams: StreamsService;
+    public client: ServiceClient;
 
     /**
      * Build a Splunk Cloud Client
@@ -36,15 +37,14 @@ class SplunkCloud {
      * @param defaultTenant Default tenant to use for requests
      */
     constructor(url: string, token: string, defaultTenant?: string) {
-        const client = new ServiceClient(url, token, defaultTenant);
-        this.search = new SearchService(client);
-        this.catalog = new CatalogService(client);
-        this.identity = new IdentityService(client);
-        this.ingest = new IngestService(client);
-        this.kvstore = new KVStoreService(client);
-        this.action = new ActionService(client);
-        this.streams = new StreamsService(client);
+        this.client = new ServiceClient(url, token, defaultTenant);
+        this.search = new SearchService(this.client);
+        this.catalog = new CatalogService(this.client);
+        this.identity = new IdentityService(this.client);
+        this.ingest = new IngestService(this.client);
+        this.kvstore = new KVStoreService(this.client);
+        this.action = new ActionService(this.client);
+        this.streams = new StreamsService(this.client);
     }
 }
 
-export = SplunkCloud;
