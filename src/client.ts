@@ -10,9 +10,9 @@ import agent from './version';
 export interface SplunkErrorParams {
     message: string;
     code?: string;
-    httpStatusCode?:number;
-    details?:object;
-    moreInfo?:string;
+    httpStatusCode?: number;
+    details?: object;
+    moreInfo?: string;
 }
 
 export class SplunkError extends Error implements SplunkErrorParams {
@@ -51,10 +51,10 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
                     `Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`
                 );
             }
-            err = new SplunkError({ message:json.message,code:json.code,moreInfo:json.moreInfo,httpStatusCode:response.status,details:json.details } );
+            err = new SplunkError({ message: json.message, code: json.code, moreInfo: json.moreInfo, httpStatusCode: response.status, details: json.details });
         } catch (ex) {
             const message = `${response.statusText} - unable to process response`;
-            err = new SplunkError( { message,httpStatusCode:response.status,details: { response: text } } );
+            err = new SplunkError({ message, httpStatusCode: response.status, details: { response: text } });
         }
         throw err;
     });
@@ -127,14 +127,14 @@ export class ServiceClient {
     }
 
     private invokeHooks(response: Response): Promise<Response> {
-        return this.responseHooks.reduce((result: Promise<Response>, cb: ResponseHook) : Promise<Response> => {
+        return this.responseHooks.reduce((result: Promise<Response>, cb: ResponseHook): Promise<Response> => {
             // Result starts as a known good Promise<Result>
             return result.then((chainResponse) => {
                 // Call the callback, get the result
                 let cbResult;
                 try {
                     cbResult = cb.call(null, chainResponse);
-                } catch(err) {
+                } catch (err) {
                     cbResult = null;
                 }
                 // If the callback is a Promise, then it may be a Promise<Result>
@@ -181,7 +181,8 @@ export class ServiceClient {
         const requestParamHeaders: Headers = new Headers({
             'Authorization': `Bearer ${this.token}`,
             'Content-Type': ContentType.JSON,
-            'Splunk-Client':`${agent.useragent}/${agent.version}`,});
+            'Splunk-Client': `${agent.useragent}/${agent.version}`,
+        });
 
         if (headers !== undefined && headers !== {}) {
             Object.keys(headers).forEach(key => {
@@ -220,14 +221,13 @@ export class ServiceClient {
      * @param opts Request opts
      * @param data Body data (will be stringified if an object)
      */
-    public fetch(method: HTTPMethod, path: string, opts: RequestOptions, data?: any) : Promise<Response> {
-        const nonNullOpts = opts || {};
-        return fetch(this.buildUrl(path, nonNullOpts.query),{
+    public fetch(method: HTTPMethod, path: string, opts: RequestOptions = {}, data?: any): Promise<Response> {
+        return fetch(this.buildUrl(path, opts.query), {
             method,
-            headers: this.buildHeaders(nonNullOpts.headers),
+            headers: this.buildHeaders(opts.headers),
             body: typeof data !== 'string' ? JSON.stringify(data) : data,
         })
-        .then(response => this.invokeHooks(response));
+            .then(response => this.invokeHooks(response));
 
     }
 
@@ -253,7 +253,7 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public post(path: string, data: any, opts: RequestOptions={}): Promise<HTTPResponse> {
+    public post(path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> {
         return this.fetch('POST', path, opts, data)
             .then((response: Response) => handleResponse(response));
     }
@@ -267,7 +267,7 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public put(path: string, data: any, opts: RequestOptions={}): Promise<HTTPResponse> {
+    public put(path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> {
         return this.fetch('PUT', path, opts, data)
             .then((response: Response) => handleResponse(response));
     }
@@ -281,7 +281,7 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public patch(path: string, data: object, opts: RequestOptions={}): Promise<HTTPResponse> {
+    public patch(path: string, data: object, opts: RequestOptions = {}): Promise<HTTPResponse> {
         return this.fetch('PATCH', path, opts, data)
             .then((response: Response) => handleResponse(response));
     }
@@ -295,7 +295,7 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public delete(path: string, data: object={}, opts: RequestOptions={}): Promise<HTTPResponse> {
+    public delete(path: string, data: object = {}, opts: RequestOptions = {}): Promise<HTTPResponse> {
         return this.fetch('DELETE', path, opts, data)
             .then((response: Response) => handleResponse(response));
     }
