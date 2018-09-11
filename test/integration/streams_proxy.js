@@ -35,7 +35,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return splunkCloud.streams.createPipeline(createPipelineRequestResponse1);
                 })
                 .then(createPipelineResponse1 => {
-                    assert.notEqual(createPipelineResponse1, null);
+                    assert.isNotNull(createPipelineResponse1);
                     assert.equal(createPipelineResponse1["status"], "CREATED");
                     assert.equal(createPipelineResponse1["name"], TestPipelineName1);
                     assert.equal(createPipelineResponse1["description"], TestPipelineDescription);
@@ -47,7 +47,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return splunkCloud.streams.createPipeline(createPipelineRequestResponse2);
                 })
                 .then(createPipelineResponse2 => {
-                    assert.notEqual(createPipelineResponse2, null);
+                    assert.isNotNull(createPipelineResponse2);
                     assert.equal(createPipelineResponse2["status"], "CREATED");
                     assert.equal(createPipelineResponse2["name"], TestPipelineName2);
                     assert.equal(createPipelineResponse2["description"], TestPipelineDescription);
@@ -56,7 +56,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return splunkCloud.streams.getPipelines();
                 })
                 .then(getPipelinesResponse1 => {
-                    assert.notEqual(getPipelinesResponse1, null);
+                    assert.isNotNull(getPipelinesResponse1);
 
                     const ids = {
                         "ids": [
@@ -66,14 +66,14 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return splunkCloud.streams.activatePipeline(ids);
                 })
                 .then(activatePipelineResponse => {
-                    assert.notEqual(activatePipelineResponse, null);
+                    assert.isNotNull(activatePipelineResponse);
                     assert.equal(activatePipelineResponse["activated"], pipelineId2);
 
                     const queryParams = { name: TestPipelineName2 };
                     return splunkCloud.streams.getPipelines(queryParams);
                 })
                 .then(getPipelinesResponse2 => {
-                    assert.notEqual(getPipelinesResponse2, null);
+                    assert.isNotNull(getPipelinesResponse2);
                     assert.equal(getPipelinesResponse2["items"].length, 1);
                     assert.equal(getPipelinesResponse2["items"][0]["name"], TestPipelineName2);
                 });
@@ -87,14 +87,14 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return splunkCloud.streams.createPipeline(createPipelineRequestResponse1);
                 })
                 .then(createPipelineResponse1 => {
-                    assert.notEqual(createPipelineResponse1, null);
+                    assert.isNotNull(createPipelineResponse1);
                     assert.equal(createPipelineResponse1['status'], 'CREATED');
                     assert.equal(createPipelineResponse1["name"], TestPipelineName1);
                     assert.equal(createPipelineResponse1["description"], TestPipelineDescription);
                     pipelineId1 = createPipelineResponse1["id"];
-                    assert.notEqual(createPipelineResponse1["data"], null);
+                    assert.isNotNull(createPipelineResponse1["data"]);
 
-                    assert.notEqual(createPipelineResponse1["data"]["nodes"], null);
+                    assert.isNotNull(createPipelineResponse1["data"]["nodes"]);
                     assert.typeOf(createPipelineResponse1["data"]["nodes"], "array", "Nodes response data should be an array");
                     assert.equal(createPipelineResponse1["data"]["nodes"].length, 4);
 
@@ -103,7 +103,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                         assert("op" in node, "node should contain key: op");
                     });
 
-                    assert.notEqual(createPipelineResponse1["data"]["edges"], null);
+                    assert.isNotNull(createPipelineResponse1["data"]["edges"]);
                     assert.typeOf(createPipelineResponse1["data"]["edges"], "array", "Edges response data should be an array");
                     assert.equal(createPipelineResponse1["data"]["edges"].length, 3);
                     createPipelineResponse1["data"]["edges"].forEach(edge => {
@@ -116,7 +116,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return splunkCloud.streams.getPipeline(pipelineId1);
                 })
                 .then(getPipelineResponse => {
-                    assert.notEqual(getPipelineResponse, null);
+                    assert.isNotNull(getPipelineResponse);
                     assert.equal(getPipelineResponse["name"], TestPipelineName1);
                     assert.equal(getPipelineResponse["description"], TestPipelineDescription);
                 });
@@ -130,7 +130,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return splunkCloud.streams.createPipeline(createPipelineRequestResponse1);
                 })
                 .then(createPipelineResponse1 => {
-                    assert.notEqual(createPipelineResponse1, null);
+                    assert.isNotNull(createPipelineResponse1);
                     //assert.equal(createPipelineResponse1['status'], PipelineStatus.CREATED);
                     assert.equal(createPipelineResponse1["name"], TestPipelineName1);
                     assert.equal(createPipelineResponse1["description"], TestPipelineDescription);
@@ -144,12 +144,12 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return splunkCloud.streams.activatePipeline(ids);
                 })
                 .then(activatePipelineResponse => {
-                    assert.notEqual(activatePipelineResponse, null);
+                    assert.isNotNull(activatePipelineResponse);
                     assert.equal(activatePipelineResponse["activated"], pipelineId1);
 
                     return splunkCloud.streams.getPipeline(pipelineId1);
                 }).then(getPipelineResponse => {
-                    assert.notEqual(getPipelineResponse, null);
+                    assert.isNotNull(getPipelineResponse);
                     assert.equal(getPipelineResponse["name"], TestPipelineName1);
                     assert.equal(getPipelineResponse["description"], TestPipelineDescription);
                     assert.equal(getPipelineResponse["status"], "ACTIVATED");
@@ -164,7 +164,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return splunkCloud.streams.createPipeline(createPipelineRequestResponse1);
                 })
                 .then(createPipelineResponse1 => {
-                    assert.notEqual(createPipelineResponse1, null);
+                    assert.isNotNull(createPipelineResponse1);
                     //assert.equal(createPipelineResponse1['status'], PipelineStatus.CREATED);
                     assert.equal(createPipelineResponse1["name"], TestPipelineName1);
                     assert.equal(createPipelineResponse1["description"], TestPipelineDescription);
@@ -178,7 +178,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return splunkCloud.streams.activatePipeline(ids);
                 })
                 .then(activatePipelineResponse => {
-                    assert.notEqual(activatePipelineResponse, null);
+                    assert.isNotNull(activatePipelineResponse);
                     assert.equal(activatePipelineResponse["activated"], pipelineId1);
 
                     const ids = {
@@ -188,13 +188,13 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     };
                     return splunkCloud.streams.deactivatePipeline(ids);
                 }).then(deactivatePipelineResponse => {
-                    assert.notEqual(deactivatePipelineResponse, null);
-                    assert.notEqual(deactivatePipelineResponse, null);
+                    assert.isNotNull(deactivatePipelineResponse);
+                    assert.isNotNull(deactivatePipelineResponse);
                     assert.equal(deactivatePipelineResponse["deactivated"], pipelineId1);
 
                     return splunkCloud.streams.getPipeline(pipelineId1);
                 }).then(getPipelineResponse => {
-                    assert.notEqual(getPipelineResponse, null);
+                    assert.isNotNull(getPipelineResponse);
                     assert.equal(getPipelineResponse["name"], TestPipelineName1);
                     assert.equal(getPipelineResponse["description"], TestPipelineDescription);
                     assert.equal(getPipelineResponse["statusMessage"], "Deactivated");
@@ -209,21 +209,21 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return splunkCloud.streams.createPipeline(createPipelineRequestResponse1);
                 })
                 .then(createPipelineResponse1 => {
-                    assert.notEqual(createPipelineResponse1, null);
+                    assert.isNotNull(createPipelineResponse1);
                     //assert.equal(createPipelineResponse1['status'], PipelineStatus.CREATED);
                     assert.equal(createPipelineResponse1["name"], TestPipelineName1);
                     assert.equal(createPipelineResponse1["description"], TestPipelineDescription);
                     pipelineId1 = createPipelineResponse1["id"];
-                    assert.notEqual(createPipelineResponse1["data"], null);
+                    assert.isNotNull(createPipelineResponse1["data"]);
 
                     return createPipelineRequest(TestUpdatedPipelineName, "Updated Integration Test Pipeline");
                 })
                 .then(createPipelineRequestResponse2 => {
-                    assert.notEqual(createPipelineRequestResponse2, null);
+                    assert.isNotNull(createPipelineRequestResponse2);
                     return splunkCloud.streams.updatePipeline(pipelineId1, createPipelineRequestResponse2);
                 })
                 .then(updatePipelineResponse => {
-                    assert.notEqual(updatePipelineResponse, null);
+                    assert.isNotNull(updatePipelineResponse);
 
                     assert.equal(updatePipelineResponse["id"], pipelineId1);
                     assert.equal(updatePipelineResponse["name"], TestUpdatedPipelineName);
@@ -232,7 +232,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return splunkCloud.streams.getPipeline(pipelineId1);
                 })
                 .then(getPipelineResponse => {
-                    assert.notEqual(getPipelineResponse, null);
+                    assert.isNotNull(getPipelineResponse);
                     assert.equal(getPipelineResponse["name"], TestUpdatedPipelineName);
                     assert.equal(getPipelineResponse["description"], "Updated Integration Test Pipeline");
                 });
@@ -248,7 +248,7 @@ function createPipelineRequest(name, description) {
     return splunkCloud.streams
         .compileDslToUpl(dsl)
         .then(response => {
-            assert.notEqual(response, null);
+            assert.isNotNull(response);
             const TestPipelineRequest = {
                 bypassValidation: true,
                 name: name,

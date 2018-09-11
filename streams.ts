@@ -44,7 +44,6 @@ export class StreamsService extends BaseApiService {
             includeData?:  boolean
         }
     ): Promise<PaginatedPipelineResponse> => {
-        console.log(args)
         const queryArgs: QueryArgs = args || {}
         const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, [
             'pipelines',
