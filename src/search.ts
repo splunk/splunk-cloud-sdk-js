@@ -99,8 +99,8 @@ export class Search {
      * @param args
      * @return A list of event objects
      */
-        // TODO: backwardsCompatibleCount
-    public getResults = (args: {count?:number, offset?:number} = {}): Promise<object> => {
+    // TODO: backwardsCompatibleCount
+    public getResults = (args: { count?: number, offset?: number } = {}): Promise<object> => {
         const count = args.count = args.count || 30;
         args.offset = args.offset || 0;
         const self = this;
@@ -209,7 +209,7 @@ export class SearchService extends BaseApiService {
      * @param pollInterval in ms
      * @param callback optional function that will be called on every poll result
      */
-    public waitForJob = (jobId: SearchJob['jobId'], pollInterval?: number, callback?: (job: SearchJob) => object): Promise<SearchJob> => {
+    public waitForJob = (jobId: string, pollInterval?: number, callback?: (job: SearchJob) => object): Promise<SearchJob> => {
         const self = this;
         const interval = pollInterval || 250;
         return new Promise<SearchJob>((resolve: (job: SearchJob) => void, reject: (error: Error) => void) => {
@@ -408,10 +408,10 @@ interface ResultsNotReadyResponse {
 }
 
 enum messageTypes {
-   Info='INFO',
-   Debug='INFO',
-   Fatal='FATAL',
-   Error='ERROR'
+    Info = 'INFO',
+    Debug = 'INFO',
+    Fatal = 'FATAL',
+    Error = 'ERROR'
 }
 
 interface SearchJobMessage {

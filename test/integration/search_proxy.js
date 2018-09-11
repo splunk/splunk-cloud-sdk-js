@@ -103,16 +103,16 @@ describe("integration tests Using Search APIs", () => {
     describe("Search composite", () => {
         it("should allow for easy job status", () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
-                search.status()
+                return search.status()
                     .then(status => expect(status).to.have.property('status'));
             });
         });
 
         it("should allow for easy cancellation", () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
-                search.cancel()
+                return search.cancel()
                     .then(() => splunk.search.getJob(search.sid))
-                    .then(() => assert.fail("Should have thrown"), (err) => expect(err.errorParams).to.have.property('httpStatusCode', 404));
+                    .then(() => assert.fail("Should have thrown"), (err) => expect(err).to.have.property('httpStatusCode', 404));
             });
         });
 
@@ -121,7 +121,7 @@ describe("integration tests Using Search APIs", () => {
                 return search.cancel()
                     .then(() => search.wait())
                     .then(() => assert.fail("should have received error"), (err) => {
-                        expect(err.errorParams).to.have.property('message').and.match(/404 Not Found/);
+                        expect(err).to.have.property('message').and.match(/404 Not Found/);
                     })
             });
         });
