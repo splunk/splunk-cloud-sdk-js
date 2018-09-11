@@ -74,7 +74,7 @@ describe("Stubby tests for Streams Pipeline Endpoints", () => {
                 ]
             };
             return splunk.streams.compileDslToUpl(dsl).then(uplPipeline => {
-                assert.notEqual(uplPipeline, null);
+                assert.isNotNull(uplPipeline);
                 assert.deepEqual(uplPipeline, expectedResponse, "response doesnot match the posted DSL.");
                 assert.typeOf(uplPipeline.nodes, "array", "Nodes response data should be an array");
                 uplPipeline.nodes.forEach(node => {
@@ -98,7 +98,7 @@ describe("Stubby tests for Streams Pipeline Endpoints", () => {
     describe("Get all pipelines", () => {
         it("should return all the pipelines", () => {
             return splunk.streams.getPipelines().then(pipelines => {
-                assert.notEqual(pipelines, null);
+                assert.isNotNull(pipelines);
                 assert.typeOf(pipelines.items, "array", "Pipeline items should be an array");
                 assert.equal(pipelines.items.length, 1);
                 assert.equal(pipelines.total, 1);
@@ -175,13 +175,13 @@ describe("Stubby tests for Streams Pipeline Endpoints", () => {
                 }
             };
             return splunk.streams.createPipeline(testPipelineRequest).then(pipeline => {
-                assert.notEqual(pipeline, null);
+                assert.isNotNull(pipeline);
 
                 assert.equal(pipeline.id, TestPipelineID);
                 assert.equal(pipeline.name, TestPipelineName);
                 assert.equal(pipeline.createUserId, config.stubbyTenant);
                 assert.equal(pipeline.version, 1);
-                assert.notEqual(pipeline.data, null);
+                assert.isNotNull(pipeline.data);
 
                 assert.typeOf(pipeline.data.nodes, "array", "Nodes response data should be an array");
                 pipeline.data.nodes.forEach(node => {
@@ -208,10 +208,8 @@ describe("Stubby tests for Streams Pipeline Endpoints", () => {
                 "ids": ["TEST_PIPELINE_01"]
             };
             return splunk.streams.activatePipeline(testActivatePipelineRequest).then(response => {
-                assert.notEqual(response, null);
+                assert.isNotNull(response);
                 assert.equal(response["activated"][0], TestPipelineID);
-
-
             });
         });
     });
@@ -223,10 +221,8 @@ describe("Stubby tests for Streams Pipeline Endpoints", () => {
                 "ids": ids
             };
             return splunk.streams.deactivatePipeline(testDeactivatePipelineRequest).then(response => {
-                assert.notEqual(response, null);
+                assert.isNotNull(response);
                 assert.equal(response["deactivated"][0], TestPipelineID);
-
-
             });
         });
     });
@@ -234,12 +230,12 @@ describe("Stubby tests for Streams Pipeline Endpoints", () => {
     describe("Get a pipeline", () => {
         it("should return the pipeline based on the id provided by the user", () => {
             return splunk.streams.getPipeline(TestPipelineID).then(pipeline => {
-                assert.notEqual(pipeline, null);
+                assert.isNotNull(pipeline);
 
                 assert.equal(pipeline.id, TestPipelineID);
                 assert.equal(pipeline.name, TestPipelineName);
                 assert.equal(pipeline.createUserId, config.stubbyTenant);
-                assert.notEqual(pipeline.data, null);
+                assert.isNotNull(pipeline.data);
 
                 assert.typeOf(pipeline.data.nodes, "array", "Nodes response data should be an array");
                 pipeline.data.nodes.forEach(node => {
@@ -326,14 +322,14 @@ describe("Stubby tests for Streams Pipeline Endpoints", () => {
                 }
             };
             return splunk.streams.updatePipeline(TestPipelineID, testPipelineRequest).then(pipeline => {
-                assert.notEqual(pipeline, null);
+                assert.isNotNull(pipeline);
 
                 assert.equal(pipeline.id, TestPipelineID);
                 assert.equal(pipeline.name, "UPDATED_TEST_PIPELINE");
                 assert.equal(pipeline.description, "Updated Stubby Test Pipeline");
                 assert.equal(pipeline.createUserId, config.stubbyTenant);
                 assert.equal(pipeline.version, 1);
-                assert.notEqual(pipeline.data, null);
+                assert.isNotNull(pipeline.data);
 
                 assert.typeOf(pipeline.data.nodes, "array", "Nodes response data should be an array");
                 pipeline.data.nodes.forEach(node => {
@@ -357,7 +353,7 @@ describe("Stubby tests for Streams Pipeline Endpoints", () => {
     describe("Delete a pipeline", () => {
         it("should return a pipelineDeleteResponse", () => {
             return splunk.streams.deletePipeline(TestPipelineID).then(response => {
-                assert.notEqual(response, null);
+                assert.isNotNull(response);
 
                 assert.equal(response["couldDeactivate"], true);
                 assert.equal(response["running"], true);

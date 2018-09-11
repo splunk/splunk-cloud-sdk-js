@@ -8,6 +8,7 @@ const tenantID = config.playgroundTenant;
 
 const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
 
+// TODO: Replace strings 'CREATED', 'ACTIVATED' with enum PipelineStatus values
 describe("Integration tests for Streams Pipeline Endpoints", () => {
     const TestPipelineName1 = `testPipeline01${Date.now()}`;
     const TestPipelineName2 = `testPipeline02${Date.now()}`;
@@ -36,7 +37,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                 })
                 .then(createPipelineResponse1 => {
                     assert.isNotNull(createPipelineResponse1);
-                    assert.equal(createPipelineResponse1["status"], "CREATED");
+                    assert.equal(createPipelineResponse1["status"], 'CREATED');
                     assert.equal(createPipelineResponse1["name"], TestPipelineName1);
                     assert.equal(createPipelineResponse1["description"], TestPipelineDescription);
                     pipelineId1 = createPipelineResponse1["id"];
@@ -48,7 +49,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                 })
                 .then(createPipelineResponse2 => {
                     assert.isNotNull(createPipelineResponse2);
-                    assert.equal(createPipelineResponse2["status"], "CREATED");
+                    assert.equal(createPipelineResponse2["status"], 'CREATED');
                     assert.equal(createPipelineResponse2["name"], TestPipelineName2);
                     assert.equal(createPipelineResponse2["description"], TestPipelineDescription);
                     pipelineId2 = createPipelineResponse2["id"];
@@ -131,7 +132,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                 })
                 .then(createPipelineResponse1 => {
                     assert.isNotNull(createPipelineResponse1);
-                    //assert.equal(createPipelineResponse1['status'], PipelineStatus.CREATED);
+                    assert.equal(createPipelineResponse1['status'], 'CREATED');
                     assert.equal(createPipelineResponse1["name"], TestPipelineName1);
                     assert.equal(createPipelineResponse1["description"], TestPipelineDescription);
                     pipelineId1 = createPipelineResponse1["id"];
@@ -165,7 +166,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                 })
                 .then(createPipelineResponse1 => {
                     assert.isNotNull(createPipelineResponse1);
-                    //assert.equal(createPipelineResponse1['status'], PipelineStatus.CREATED);
+                    assert.equal(createPipelineResponse1['status'], 'CREATED');
                     assert.equal(createPipelineResponse1["name"], TestPipelineName1);
                     assert.equal(createPipelineResponse1["description"], TestPipelineDescription);
                     pipelineId1 = createPipelineResponse1["id"];
@@ -210,7 +211,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                 })
                 .then(createPipelineResponse1 => {
                     assert.isNotNull(createPipelineResponse1);
-                    //assert.equal(createPipelineResponse1['status'], PipelineStatus.CREATED);
+                    assert.equal(createPipelineResponse1['status'], 'CREATED');
                     assert.equal(createPipelineResponse1["name"], TestPipelineName1);
                     assert.equal(createPipelineResponse1["description"], TestPipelineDescription);
                     pipelineId1 = createPipelineResponse1["id"];
@@ -245,9 +246,7 @@ function createPipelineRequest(name, description) {
     const dsl = {
         "dsl": "kafka-brokers=\"localhost:9092\";input-topic = \"intopic\";output-topic-1 = \"output-topic-1\";events = deserialize-events(read-kafka(kafka-brokers, input-topic, {}));write-kafka(serialize-events(events, output-topic-1), kafka-brokers, {});"
     };
-    return splunkCloud.streams
-        .compileDslToUpl(dsl)
-        .then(response => {
+    return splunkCloud.streams.compileDslToUpl(dsl).then(response => {
             assert.isNotNull(response);
             const TestPipelineRequest = {
                 bypassValidation: true,

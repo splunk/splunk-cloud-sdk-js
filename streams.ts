@@ -21,9 +21,7 @@ export class StreamsService extends BaseApiService {
         dsl: DslCompilationRequest
     ): Promise<UplPipeline> => {
         return this.client.post(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'compile-dsl']),
-            dsl
-        )
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'compile-dsl']), dsl)
             .then(response => response.body as UplPipeline);
     };
 
@@ -45,9 +43,7 @@ export class StreamsService extends BaseApiService {
         }
     ): Promise<PaginatedPipelineResponse> => {
         const queryArgs: QueryArgs = args || {}
-        const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, [
-            'pipelines',
-        ]);
+        const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']);
         return this.client.get(url, queryArgs)
             .then(response => response.body as PaginatedPipelineResponse);
     };
@@ -55,59 +51,51 @@ export class StreamsService extends BaseApiService {
     /**
      * Creates a new pipeline.
      * @param pipeline The new pipeline data to be created
-     * @returns A promise of a pipeline object
+     * @returns A promise of a new pipeline object
      */
     public createPipeline = (
         pipeline: PipelineRequest
     ): Promise<Pipeline> => {
         return this.client.post(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']),
-            pipeline
-        )
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']), pipeline)
             .then(response => response.body as Pipeline);
     };
 
     /**
      * Activates a pipeline.
      * @param activatePipelineRequest The activate pipeline request containing the ids of pipeline to be activated
-     * @returns A promise of the additional properties defining the current status of the pipelines TODO: Revisit
+     * @returns A promise of the additional properties defining the current status of the pipelines
      */
     public activatePipeline = (
         activatePipelineRequest: ActivatePipelineRequest
     ): Promise<AdditionalProperties> => {
         return this.client.post(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'activate']),
-            activatePipelineRequest
-        )
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'activate']), activatePipelineRequest)
             .then(response => response.body as AdditionalProperties);
     };
 
     /**
      * Deactivates a pipeline.
      * @param deactivatePipelineRequest The deactivate pipeline request containing the ids of pipeline to be deactivated
-     * @returns A promise of the additional properties defining the current status of the pipelines TODO: Revisit
+     * @returns A promise of the additional properties defining the current status of the pipelines
      */
     public deactivatePipeline = (
         deactivatePipelineRequest: ActivatePipelineRequest
     ): Promise<AdditionalProperties> => {
         return this.client.post(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'deactivate']),
-            deactivatePipelineRequest
-        )
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'deactivate']), deactivatePipelineRequest)
             .then(response => response.body as AdditionalProperties);
     };
 
     /**
      * Get the pipeline based on the pipeline ID provided by the user.
      * @param id The ID of the pipeline that should be fetched
-     * @returns A Promise of a pipeline
+     * @returns A Promise of an individual pipeline
      */
     public getPipeline = (
         id: string
     ): Promise<Pipeline> => {
-        const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, [
-            'pipelines', id
-        ]);
+        const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]);
         return this.client.get(url)
             .then(response => response.body as Pipeline);
     };
@@ -116,23 +104,21 @@ export class StreamsService extends BaseApiService {
      * Updates an existing pipeline.
      * @param id The ID of the pipeline that should be updated
      * @param pipeline The updated pipeline data
-     * @returns A promise of a pipeline object
+     * @returns A promise of an updated pipeline object
      */
     public updatePipeline = (
         id: string,
         pipeline: PipelineRequest
     ): Promise<Pipeline> => {
         return this.client.put(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]),
-            pipeline
-        )
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]), pipeline)
             .then(response => response.body as Pipeline);
     };
 
     /**
      * Deletes the pipeline based on the ID provided by the user.
      * @param id The ID of the pipeline that should be deleted
-     * @returns A promise pf a pipeline delete response containing details on the deleted pipeline TODO: Revisit
+     * @returns A promise pf a pipeline delete response containing details on the deleted pipeline
      */
     public deletePipeline = (id: string): Promise<PipelineDeleteResponse> => {
         return this.client.delete(
@@ -178,7 +164,7 @@ export interface Pipeline {
     jobId: string
     lastUpdateDate: number
     lastUpdateUserId: string
-    name: Date
+    name: string
     status: PipelineStatus
     statusMessage: string
     streamingConfigurationId: number
@@ -188,7 +174,7 @@ export interface Pipeline {
 }
 
 /**
- * PaginatedPipelineResponse - The pipeline response
+ * PaginatedPipelineResponse - The pipeline response containing a list of all the pipelines associated with the tenant and the total count
  */
 export interface PaginatedPipelineResponse{
     items: Pipeline[]
@@ -219,8 +205,8 @@ export interface PipelineRequest {
  * PipelineStatus - The status of a pipeline
  */
 export enum PipelineStatus {
-    CREATED,
-    ACTIVATED
+    Created = 'CREATED',
+    Activated = 'ACTIVATED'
 }
 
 /**
