@@ -7,7 +7,6 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 import { Observable } from 'rxjs';
 import BaseApiService from './baseapiservice';
 import { QueryArgs, SplunkError } from './client';
-import { Event } from './ingest';
 import { SEARCH_SERVICE_PREFIX } from './service_prefixes';
 
 export class SplunkSearchCancelError extends Error {
@@ -264,12 +263,12 @@ export class SearchService extends BaseApiService {
     }
 }
 
-enum DispatchState {
+export enum DispatchState {
     DONE = 'done',
     FAILED = 'failed',
 }
 
-interface FetchResultsRequest {
+export interface FetchResultsRequest {
     offset?: number;
     count?: number;
     f?: string;
@@ -278,7 +277,7 @@ interface FetchResultsRequest {
     [key: string]: any;
 }
 
-interface ResultObservableOptions {
+export interface ResultObservableOptions {
     pollInterval?: number;
     offset?: number;
     count?: number;
@@ -358,7 +357,7 @@ What is the result format of patch job?
 /**
  * Fully constructed search job including readonly fields.
  */
-interface SearchJob extends SearchJobBase {
+export interface SearchJob extends SearchJobBase {
     /**
      * An estimate of how far through the job is complete
      */
@@ -383,20 +382,20 @@ interface SearchJob extends SearchJobBase {
 /**
  * Patch a search job with an action.
  */
-interface PatchJob {
+export interface PatchJob {
     /**
      * Action to be taken on an existing search job.
      */
     action: 'cancel' | 'finalize' | 'touch' | 'save';
 }
 
-interface PatchJobResponse {
+export interface PatchJobResponse {
     messages: SearchJobMessage[]
 }
 /**
  * Response when job results are not yet ready.
  */
-interface ResultsNotReadyResponse {
+export interface ResultsNotReadyResponse {
     /**
      * URL for job results
      */
@@ -407,19 +406,19 @@ interface ResultsNotReadyResponse {
     wait: number;
 }
 
-enum messageTypes {
+export enum messageTypes {
     Info = 'INFO',
     Debug = 'INFO',
     Fatal = 'FATAL',
     Error = 'ERROR'
 }
 
-interface SearchJobMessage {
+export interface SearchJobMessage {
     text: string;
     type: messageTypes;
 }
 
-interface SearchResults {
+export interface SearchResults {
     preview: boolean;
     init_offset: number;
     messages: SearchJobMessage[];

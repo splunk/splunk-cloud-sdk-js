@@ -15,7 +15,7 @@ export class IdentityService extends BaseApiService {
      * Validates the access token obtained from authorization header and returns the principal name and tenant memberships
      * @returns a ValidateInfo object
      */
-    public validate = () : Promise<ValidateInfo> => {
+    public validate = (): Promise<ValidateInfo> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['validate']))
             .then(response => response.body as ValidateInfo);
     }
@@ -359,14 +359,14 @@ export class IdentityService extends BaseApiService {
 /**
  * TenantName - Name of a Tenant
  */
-interface TenantName {
+export interface TenantName {
     name: string
 }
 
 /**
  * Tenant - The unique tenant account within the Identity Service
  */
-interface Tenant {
+export interface Tenant {
     name: string
     status: string
     createdAt: Date
@@ -376,7 +376,7 @@ interface Tenant {
 /**
  * Role - A unique role associated with a tenant within the Identity Service
  */
-interface Role {
+export interface Role {
     createdAt: Date
     createdBy: string
     name: string
@@ -386,7 +386,7 @@ interface Role {
 /**
  * RoleInput - The input object for creating a new Role
  */
-interface RoleInput{
+export interface RoleInput {
     name: string
     permissions: string[]
 
@@ -395,14 +395,14 @@ interface RoleInput{
 /**
  * RoleName - Name of a Role to add to Group
  */
-interface RoleName {
+export interface RoleName {
     name: string
 }
 
 /**
  * RolePermission - The object that represents a tenant role permission
  */
-interface RolePermission {
+export interface RolePermission {
     tenant: string
     role: string
     permission: string
@@ -413,7 +413,7 @@ interface RolePermission {
 /**
  * Permission - Permission on a Role
  */
-interface Permission {
+export interface Permission {
     name: string
     addedAt: Date
     addedBy: string
@@ -422,7 +422,7 @@ interface Permission {
 /**
  * GroupInput - Inputs for a Group
  */
-interface GroupInput {
+export interface GroupInput {
     name: string
     roles: string[]
     members: string[]
@@ -431,7 +431,7 @@ interface GroupInput {
 /**
  * Group - Association of tenants, members
  */
-interface Group {
+export interface Group {
     tenant: string
     name: string
     createdAt: Date
@@ -441,7 +441,7 @@ interface Group {
 /**
  * GroupRole - Represents a role that is assigned to a group
  */
-interface GroupRole {
+export interface GroupRole {
     tenant: string
     group: string
     role: string
@@ -452,14 +452,14 @@ interface GroupRole {
 /**
  * MemberName - Member name
  */
-interface MemberName {
+export interface MemberName {
     name: string
 }
 
 /**
  * Represents a member that belongs to a tenant.
  */
-interface Member {
+export interface Member {
     tenant: string
     name: string
     addedAt: Date
@@ -469,14 +469,14 @@ interface Member {
 /**
  * GroupMemberName - Group member name
  */
-interface GroupMemberName {
+export interface GroupMemberName {
     name: string
 }
 
 /**
  * Represents a member that belongs to a group
  */
-interface GroupMember {
+export interface GroupMember {
     tenant: string
     group: string
     principal: string
@@ -487,7 +487,7 @@ interface GroupMember {
 /**
  * PrincipalInput - Input object for creating a new Principal
  */
-interface PrincipalInput {
+export interface PrincipalInput {
     name: string
     kind: string
 }
@@ -495,7 +495,7 @@ interface PrincipalInput {
 /**
  * Principal - Principal member
  */
-interface Principal {
+export interface Principal {
     name: string
     kind: string
     tenants: string[]
@@ -507,7 +507,7 @@ interface Principal {
 /**
  * ValidateInfo - Info object for a valid member
  */
-interface ValidateInfo {
+export interface ValidateInfo {
     name: string
     tenants: string[]
 }
