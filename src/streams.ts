@@ -31,20 +31,10 @@ export class StreamsService extends BaseApiService {
      * @returns A Promise of a paginated pipeline response (consists of the pipelines and total count)
      */
     public getPipelines = (
-        args?: {
-            offset?:       number,
-            pageSize?:     number,
-            sortField?:    string,
-            sortDir?:      string,
-            activated?:    boolean,
-            createUserId?: string,
-            name?:         string,
-            includeData?:  boolean
-        }
+        queryArgs: PipelineQueryParams = {}
     ): Promise<PaginatedPipelineResponse> => {
-        const queryArgs: QueryArgs = args || {};
         const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']);
-        return this.client.get(url, queryArgs)
+        return this.client.get(url, queryArgs as QueryArgs)
             .then(response => response.body as PaginatedPipelineResponse);
     };
 
@@ -127,17 +117,24 @@ export class StreamsService extends BaseApiService {
     };
 }
 
+// TODO (Parul): Find more details on other fields and include comments and optional fiel information
 /**
  * ActivatePipelineRequest -  Request to activate the pipeline
  */
 export interface ActivatePipelineRequest {
-    ids: string[]
+    /**
+     * A list of pipeline IDs.
+     */
+    ids: string[];
 }
 
 /**
  * AdditionalProperties - Properties in an activate/deactivate response
  */
 export interface AdditionalProperties {
+    /**
+     * A list of pipeline IDs.
+     */
     [key: string]: string[];
 }
 
@@ -145,60 +142,93 @@ export interface AdditionalProperties {
  * DslCompilationRequest - The DSL that needs to be compiled into a valid UPL JSON
  */
 export interface DslCompilationRequest {
-    dsl: string
+    /**
+     * DSL script text.
+     */
+    dsl: string;
 }
 
 /**
  * Pipeline - A pipeline object
  */
 export interface Pipeline {
-    activatedDate: number
-    activatedUserId: string
-    activatedVersion: number
-    createDate: number
-    createUserId: string
-    currentVersion: number
-    data: UplPipeline
-    description: string
-    id: string
-    jobId: string
-    lastUpdateDate: number
-    lastUpdateUserId: string
-    name: string
-    status: PipelineStatus
-    statusMessage: string
-    streamingConfigurationId: number
-    tenantId: string
-    validationMessages: string[]
-    version: number
+    /**
+     * Epoch time in milliseconds.
+     */
+    activatedDate: number;
+    activatedUserId: string;
+    activatedVersion: number;
+    /**
+     * Epoch time in milliseconds.
+     */
+    createDate: number;
+    createUserId: string;
+    currentVersion: number;
+    data: UplPipeline;
+    description: string;
+    id: string;
+    jobId: string;
+    /**
+     * Epoch time in milliseconds.
+     */
+    lastUpdateDate: number;
+    lastUpdateUserId: string;
+    /**
+     * Name of the pipeline.
+     */
+    name: string;
+    /**
+     * Current status of the pipeline (Created, Activated, etc).
+     */
+    status: PipelineStatus;
+    statusMessage: string;
+    streamingConfigurationId: number;
+    tenantId: string;
+    validationMessages: string[];
+    version: number;
 }
 
 /**
  * PaginatedPipelineResponse - The pipeline response containing a list of all the pipelines associated with the tenant and the total count
  */
 export interface PaginatedPipelineResponse{
-    items: Pipeline[]
-    total: number
+    /**
+     * A list of all the pipelines associated with the tenant.
+     */
+    items: Pipeline[];
+    /**
+     * The total count of the pipelines.
+     */
+    total: number;
 }
 
 /**
  * PipelineDeleteResponse - The response returned as a result of a delete pipeline call
  */
 export interface PipelineDeleteResponse {
-    couldDeactivate: boolean
-    running: boolean
+    couldDeactivate: boolean;
+    running: boolean;
 }
 
 /**
  * PipelineRequest - The pipeline data
  */
 export interface PipelineRequest {
-    bypassValidation: boolean
-    createUserId: string
-    data: UplPipeline
-    description: string
-    name: string
-    streamingConfigurationId?: number
+    bypassValidation: boolean;
+    createUserId: string;
+    /**
+     * Upl Pipeline data containing the nodes and edges of the pipeline.
+     */
+    data: UplPipeline;
+    /**
+     * Description of the pipeline.
+     */
+    description: string;
+    /**
+     * Name of the pipeline.
+     */
+    name: string;
+    streamingConfigurationId?: number;
 }
 
 /**
@@ -213,28 +243,42 @@ export enum PipelineStatus {
  * UplPipeline - Pipeline Data
  */
 export interface UplPipeline {
-    edges: UplEdge[]
-    nodes: UplNode[]
-    'root-node': string[]
-    version: number
+    edges: UplEdge[];
+    nodes: UplNode[];
+    'root-node': string[];
+    version: number;
 }
 
 /**
  * UplNode - Nodes forming a pipeline
  */
 interface UplNode {
-    attributes: {}
-    id: string[]
-    op: string[]
+    attributes: {};
+    id: string[];
+    op: string[];
 }
 
 /**
  * UplEdge - Edges between two pipeline nodes
  */
 export interface UplEdge {
-    attributes: {}
-    sourceNode: string
-    sourcePort: string
-    targetNode: string
-    targetPort: string
+    attributes: {};
+    sourceNode: string;
+    sourcePort: string;
+    targetNode: string;
+    targetPort: string;
+}
+
+/**
+ * PipelineQueryParams - Query parameters for Pipeline
+ */
+export interface PipelineQueryParams {
+    offset?:       number;
+    pageSize?:     number;
+    sortField?:    string;
+    sortDir?:      string;
+    activated?:    boolean;
+    createUserId?: string;
+    name?:         string;
+    includeData?:  boolean;
 }
