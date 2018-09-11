@@ -19,7 +19,7 @@ import { SearchService } from './search';
  * @property identity Proxies for the identity APIs
  * @property ingest Proxies for the ingest APIs
  */
-class SplunkCloud {
+export class SplunkCloud {
     public search: SearchService;
     public catalog: CatalogService;
     public identity: IdentityService;
@@ -43,10 +43,5 @@ class SplunkCloud {
         this.kvstore = new KVStoreService(this.client);
         this.action = new ActionService(this.client);
     }
-
-    public addResponseHook(responseHook: ResponseHook) {
-        this.client.addResponseHook(responseHook);
-    }
 }
 
-export = SplunkCloud;
