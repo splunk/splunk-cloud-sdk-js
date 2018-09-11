@@ -73,7 +73,7 @@ export class Search {
                     throw err;
                 }
             });
-    };
+    }
 
     /**
      * Submits a cancel job against this search job
@@ -82,7 +82,7 @@ export class Search {
     public cancel = (): Promise<object> => {
         this.isCancelling = true;
         return this.client.createJobControlAction(this.sid, Action.CANCEL);
-    };
+    }
 
     /**
      * Resets the time to live on this search job
@@ -244,10 +244,10 @@ export class SearchService extends BaseApiService {
                 } else {
                     setTimeout(() => {
                         // Resolving with a promise which will then resolve- recursion with the event loop
-                        self.waitForJob(jobId, interval, callback).then(j => resolve(j));
+                        self.waitForJob(jobId, interval, callback).then(resolve);
                     }, interval);
                 }
-            }).catch(err => reject(err));
+            }).catch(reject);
         });
     }
 
