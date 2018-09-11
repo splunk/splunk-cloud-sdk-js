@@ -386,7 +386,7 @@ export interface PatchJob {
     /**
      * Action to be taken on an existing search job.
      */
-    action: 'cancel' | 'finalize' | 'touch' | 'save';
+    action: 'cancel' | 'finalize'
 }
 
 export interface PatchJobResponse {
