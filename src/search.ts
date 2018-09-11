@@ -84,14 +84,6 @@ export class Search {
     };
 
     /**
-     * Resets the time to live on this search job
-     * @return A promise that will be resolved when the touch action is accepted by the service
-     */
-    public touch = (): Promise<object> => {
-        return this.client.updateJob(this.jobId, { action: 'touch' });
-    };
-
-    /**
      * Returns the results from a search as a (promised) array. If 'args.offset'
      * is supplied, a window of results will be returned.  If an offset is not
      * supplied, all results will be fetched and concatenated.
@@ -344,15 +336,6 @@ export interface SearchJobBase {
     timeOfSearch?: string;
 
 }
-
-/*
-FIXME: questions
-Will all defined fields be supplied in a SearchJob response?
-What are the valid fields for status?
-What is the format of the response for /results?
-What is the result format of patch job?
- */
-
 
 /**
  * Fully constructed search job including readonly fields.
