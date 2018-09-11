@@ -19,12 +19,10 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
 
     afterEach(() => {
         if (pipelineId1 != null) {
-            console.log(pipelineId1);
             return splunkCloud.streams.deletePipeline(pipelineId1)
                 .catch(err => console.log(`Error cleaning the test pipeline1: ${err}`));
         }
         if (pipelineId2 != null) {
-            console.log(pipelineId2);
             return splunkCloud.streams.deletePipeline(pipelineId2)
                 .catch(err => console.log(`Error cleaning the test pipeline2: ${err}`));
         }
@@ -46,7 +44,6 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     return createPipelineRequest(TestPipelineName2, TestPipelineDescription);
                 })
                 .then(createPipelineRequestResponse2 => {
-                    //console.log(createPipelineRequestResponse2)
                     return splunkCloud.streams.createPipeline(createPipelineRequestResponse2);
                 })
                 .then(createPipelineResponse2 => {
@@ -102,7 +99,6 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     assert.equal(createPipelineResponse1["data"]["nodes"].length, 4);
 
                     createPipelineResponse1["data"]["nodes"].forEach(node => {
-                        console.log(node)
                         assert("id" in node, "node should contain key: id");
                         assert("op" in node, "node should contain key: op");
                     });
