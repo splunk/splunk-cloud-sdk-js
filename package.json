@@ -1,5 +1,5 @@
 {
-  "name": "@splunk/splunk-cloud-sdk-js",
+  "name": "@splunk/splunk-cloud-sdk",
   "version": "0.4.1",
   "description": "Splunk Cloud SDK for Javascript",
   "main": "splunk.js",
@@ -52,7 +52,7 @@
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "rxjs": "^6.2.1"
+    "rxjs": "^6.3.2"
   },
   "nyc": {
     "reporter": [
