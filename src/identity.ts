@@ -360,7 +360,7 @@ export class IdentityService extends BaseApiService {
  * TenantName - Name of a Tenant
  */
 interface TenantName {
-    name: string
+    name: string;
 }
 
 /**

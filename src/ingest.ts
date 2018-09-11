@@ -71,7 +71,7 @@ export interface Event {
      * An optional ID that uniquely identifies the event data. It is used to deduplicate the data if same data is set multiple times.
      * If ID is not specified, it will be assigned by the system.
      */
-    id?: string
+    id?: string;
 }
 
 /**
