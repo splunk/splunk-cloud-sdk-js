@@ -11,7 +11,7 @@ export interface SplunkErrorParams {
     message: string;
     code?: string;
     httpStatusCode?: number;
-    details?: object|Array<any>;
+    details?: object | any[];
     moreInfo?: string;
 }
 
@@ -19,7 +19,7 @@ export class SplunkError extends Error implements SplunkErrorParams {
 
     public code?: string;
     public httpStatusCode?: number;
-    public details?: object | Array<any>;
+    public details?: object | any[];
     public moreInfo?: string;
 
     constructor(errorParams: SplunkErrorParams) {
@@ -27,7 +27,7 @@ export class SplunkError extends Error implements SplunkErrorParams {
         this.code = errorParams.code;
         this.details = errorParams.details;
         this.moreInfo = errorParams.moreInfo;
-        this.httpStatusCode = errorParams.httpStatusCode; 
+        this.httpStatusCode = errorParams.httpStatusCode;
     }
 }
 
@@ -57,11 +57,11 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
                     `Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`
                 );
             }
-            err = new SplunkError({ message:json.message,code:json.code,moreInfo:json.moreInfo,httpStatusCode:response.status,details:json.details } );
+            err = new SplunkError({ message: json.message, code: json.code, moreInfo: json.moreInfo, httpStatusCode: response.status, details: json.details });
         } catch (ex) {
             const message = `${response.statusText} - unable to process response`;
             console.error(message, ex);
-            err = new SplunkError( { message,httpStatusCode:response.status,details: { response: text } } );
+            err = new SplunkError({ message, httpStatusCode: response.status, details: { response: text } });
         }
         throw err;
     });
@@ -136,7 +136,8 @@ export class ServiceClient {
         const requestParamHeaders: Headers = new Headers({
             'Authorization': `Bearer ${this.token}`,
             'Content-Type': ContentType.JSON,
-            'Splunk-Client':`${agent.useragent}/${agent.version}`,});
+            'Splunk-Client': `${agent.useragent}/${agent.version}`,
+        });
 
         if (headers !== undefined && headers !== {}) {
             Object.keys(headers).forEach(key => {
@@ -179,8 +180,8 @@ export class ServiceClient {
         return fetch(this.buildUrl(path, query), {
             method: 'GET',
             headers: this.buildHeaders(headers),
-        }).catch( e => {throw new SplunkError({ message: e.message })})
-          .then((response: Response) => handleResponse(response));
+        }).catch(e => { throw new SplunkError({ message: e.message }) })
+            .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -197,8 +198,8 @@ export class ServiceClient {
             method: 'POST',
             body: typeof data !== 'string' ? JSON.stringify(data) : data,
             headers: this.buildHeaders(),
-        }).catch( e => {throw new SplunkError({ message: e.message })})
-          .then((response: Response) => handleResponse(response));
+        }).catch(e => { throw new SplunkError({ message: e.message }) })
+            .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -214,8 +215,8 @@ export class ServiceClient {
             method: 'PUT',
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
-        }).catch( e => {throw new SplunkError({ message: e.message })})
-          .then((response: Response) => handleResponse(response));
+        }).catch(e => { throw new SplunkError({ message: e.message }) })
+            .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -231,8 +232,8 @@ export class ServiceClient {
             method: 'PATCH',
             body: JSON.stringify(data),
             headers: this.buildHeaders(),
-        }).catch( e => {throw new SplunkError({ message: e.message })})
-          .then((response: Response) => handleResponse(response));
+        }).catch(e => { throw new SplunkError({ message: e.message }) })
+            .then((response: Response) => handleResponse(response));
     }
 
     /**
@@ -253,8 +254,8 @@ export class ServiceClient {
             method: 'DELETE',
             body: JSON.stringify(deleteData),
             headers: this.buildHeaders(),
-        }).catch( e => {throw new SplunkError({ message: e.message })})
-          .then((response: Response) => handleResponse(response));
+        }).catch(e => { throw new SplunkError({ message: e.message }) })
+            .then((response: Response) => handleResponse(response));
     }
 }
 
