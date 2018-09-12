@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [HTTPResponse](../interfaces/httpresponse.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [HTTPResponse](../interfaces/httpresponse.md)
 
 # Interface: HTTPResponse
 
@@ -10,8 +10,8 @@
 
 ### Properties
 
-* [Body](httpresponse.md#body)
-* [Headers](httpresponse.md#headers)
+* [body](httpresponse.md#body)
+* [headers](httpresponse.md#headers)
 
 ---
 
@@ -19,16 +19,17 @@
 
 <a id="body"></a>
 
-### `<Optional>` Body
+### `<Optional>` body
 
-**● Body**: *`Promise`<`string`>*
+**● body**: * `string` &#124; `any`
+*
 
 ___
 <a id="headers"></a>
 
-###  Headers
+###  headers
 
-**● Headers**: *`Headers`*
+**● headers**: *`Headers`*
 
 ___
 

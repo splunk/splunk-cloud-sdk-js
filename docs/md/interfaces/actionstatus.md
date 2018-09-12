@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [ActionStatus](../interfaces/actionstatus.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [ActionStatus](../interfaces/actionstatus.md)
 
 # Interface: ActionStatus
 

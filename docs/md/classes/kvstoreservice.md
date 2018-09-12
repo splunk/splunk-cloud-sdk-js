@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [KVStoreService](../classes/kvstoreservice.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [KVStoreService](../classes/kvstoreservice.md)
 
 # Class: KVStoreService
 
@@ -75,7 +75,7 @@ ___
 
 ###  createIndex
 
-▸ **createIndex**(index: *[IndexDescription](../interfaces/indexdescription.md)*, collection: *`string`*): `Promise`<[IndexDescription](../interfaces/indexdescription.md)>
+▸ **createIndex**(collection: *`string`*, index: *[IndexDescription](../interfaces/indexdescription.md)*): `Promise`<[IndexDescription](../interfaces/indexdescription.md)>
 
 Creates a new index to be added to the collection.
 
@@ -83,18 +83,18 @@ Creates a new index to be added to the collection.
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| index | [IndexDescription](../interfaces/indexdescription.md) |  The index to create |
 | collection | `string` |  The name of the collection where the new index will be created |
+| index | [IndexDescription](../interfaces/indexdescription.md) |  The index to create |
 
 **Returns:** `Promise`<[IndexDescription](../interfaces/indexdescription.md)>
-A Promise of an index
+A definition of the created index
 
 ___
 <a id="deleteindex"></a>
 
 ###  deleteIndex
 
-▸ **deleteIndex**(indexName: *`string`*, collection: *`string`*): `Promise`<`any`>
+▸ **deleteIndex**(collection: *`string`*, indexName: *`string`*): `Promise`<`any`>
 
 Deletes an index in a given collection.
 
@@ -102,11 +102,11 @@ Deletes an index in a given collection.
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| indexName | `string` |  The name of the index to delete |
 | collection | `string` |  The name of the collection whose index should be deleted |
+| indexName | `string` |  The name of the index to delete |
 
 **Returns:** `Promise`<`any`>
-A Promise object
+A promise that will be resolved when the index is deleted
 
 ___
 <a id="deleterecordbykey"></a>
@@ -125,7 +125,7 @@ Deletes a record present in a given collection based on the key value provided b
 | key | `string` |  The key of the record used for deletion |
 
 **Returns:** `Promise`<`any`>
-A Promise object
+A promise that will be resolved when the record matching the supplied key is deleted
 
 ___
 <a id="deleterecords"></a>
@@ -144,7 +144,7 @@ Deletes records present in a given collection based on the query parameters prov
 | `Optional` filter | [QueryArgs](../interfaces/queryargs.md) |  Query JSON expression to target specific records |
 
 **Returns:** `Promise`<`any`>
-A Promise object
+A promise that will be resolved when the matching records are deleted
 
 ___
 <a id="exportcollection"></a>
@@ -160,10 +160,10 @@ Gets all the records of the collection in a file.
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection whose records need to be exported |
-| contentType | [ContentType](../enums/contenttype.md) |  The contentType (csv or gzip) of the records file to be exported |
+| contentType | [ContentType](../enums/contenttype.md) |  The contentType ('text/csv' or 'application/gzip') of the records file to be exported |
 
 **Returns:** `Promise`<`string`>
-A Promise of all the records present in the collection in string format
+The records in the collection in string format
 
 ___
 <a id="getcollectionstats"></a>
@@ -181,7 +181,7 @@ Gets the the KVStore collections stats.
 | collection | `string` |  the collection to retrieve |
 
 **Returns:** `Promise`<[CollectionStats](../interfaces/collectionstats.md)>
-A Promise of KVStore's response
+Statistics for the collection
 
 ___
 <a id="getcollections"></a>
@@ -193,7 +193,7 @@ ___
 Gets all the collections.
 
 **Returns:** `Promise`<[CollectionDefinition](../interfaces/collectiondefinition.md)[]>
-A Promise of an array of collections
+A list of defined collections
 
 ___
 <a id="gethealthstatus"></a>
@@ -205,7 +205,7 @@ ___
 Gets the KVStore's status.
 
 **Returns:** `Promise`<`any`>
-A Promise of KVStore's response
+KVStore health status
 
 ___
 <a id="getrecordbykey"></a>
@@ -224,7 +224,7 @@ Gets the record present in a given collection based on the key value provided by
 | key | `string` |  The record key used to query a specific record |
 
 **Returns:** `Promise`<`Map`<`string`, `string`>>
-A Promise of a record
+the record associated with the given key
 
 ___
 <a id="insertrecord"></a>
@@ -243,7 +243,7 @@ Inserts a new record to the collection.
 | record | `Map`<`string`, `string`> |  The record to add to the collection |
 
 **Returns:** `Promise`<[Key](../interfaces/key.md)>
-A promise that contains an object with the unique _key of the added record
+An object with the unique _key of the added record
 
 ___
 <a id="insertrecords"></a>
@@ -262,7 +262,7 @@ Inserts multiple new records to the collection in a single request.
 | records | `Array`<`Map`<`string`, `string`>> |  The data tuples to insert |
 
 **Returns:** `Promise`<`string`[]>
-A Promise of an array of keys of the inserted records
+A list of keys of the inserted records
 
 ___
 <a id="listindexes"></a>
@@ -280,7 +280,7 @@ Lists all the indexes in a given collection.
 | collection | `string` |  The name of the collection whose indexes should be listed |
 
 **Returns:** `Promise`<[IndexDescription](../interfaces/indexdescription.md)[]>
-A Promise of an array of indexes
+A list of indexes on the specified collection
 
 ___
 <a id="listrecords"></a>
@@ -299,7 +299,7 @@ Lists the records present in a given collection based on the query parameters pr
 | `Default value` filter | [QueryArgs](../interfaces/queryargs.md) |  {} |  Filter string to target specific records |
 
 **Returns:** `Promise`<`Map`<`string`, `string`>>
-A Promise of an array of records
+A list of records in the collection
 
 ___
 <a id="queryrecords"></a>

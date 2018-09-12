@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [CollectionDefinition](../interfaces/collectiondefinition.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [CollectionDefinition](../interfaces/collectiondefinition.md)
 
 # Interface: CollectionDefinition
 

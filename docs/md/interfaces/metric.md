@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [Metric](../interfaces/metric.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [Metric](../interfaces/metric.md)
 
 # Interface: Metric
 
@@ -37,12 +37,16 @@ Metric - Specify individual metric data.
 
 **● dimensions**: *`object`*
 
+Dimensions allow metrics to be classified e.g. {"Server":"nginx", "Region":"us-west-1", ...}
+
 ___
 <a id="name"></a>
 
 ###  name
 
 **● name**: *`string`*
+
+Name of the metric e.g. CPU, Memory etc.
 
 ___
 <a id="type"></a>
@@ -51,6 +55,8 @@ ___
 
 **● type**: *`string`*
 
+Type of metric. Default is g for gauge.
+
 ___
 <a id="unit"></a>
 
@@ -58,12 +64,16 @@ ___
 
 **● unit**: *`string`*
 
+Unit of the metric e.g. percent, megabytes, seconds etc.
+
 ___
 <a id="value"></a>
 
 ###  value
 
 **● value**: *`number`*
+
+Value of the metric.
 
 ___
 

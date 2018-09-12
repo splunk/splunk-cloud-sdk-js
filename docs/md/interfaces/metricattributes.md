@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [MetricAttributes](../interfaces/metricattributes.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [MetricAttributes](../interfaces/metricattributes.md)
 
 # Interface: MetricAttributes
 
@@ -32,6 +32,8 @@ MetricAttributes - Default attributes for related Splunk metrics.
 **● defaultDimension**: * `undefined` &#124; `object`
 *
 
+Optional. If set, individual metrics inherit these dimensions and can override any and/or all of them.
+
 ___
 <a id="defaulttype"></a>
 
@@ -40,6 +42,8 @@ ___
 **● defaultType**: * `undefined` &#124; `string`
 *
 
+Optional. If set, individual metrics inherit this type and can optionally override.
+
 ___
 <a id="defaultunit"></a>
 
@@ -47,6 +51,8 @@ ___
 
 **● defaultUnit**: * `undefined` &#124; `string`
 *
+
+Optional. If set, individual metrics inherit this unit and can optionally override.
 
 ___
 
