@@ -22,7 +22,7 @@ describe("integration tests Using Search APIs", () => {
     before(() => {
         const events = [];
         for (let i = 0; i < 10; i += 1) {
-            events.push({ event: `Test event no ${i}` });
+            events.push({ body: `Test event no ${i}` });
         }
         splunk.ingest.postEvents(events);
     });
@@ -138,7 +138,7 @@ describe("integration tests Using Search APIs", () => {
                 return search.cancel()
                     .then(() => search.wait())
                     .then(() => assert.fail("should have received error"), (err) => {
-                        expect(err.errorParams).to.have.property('message').and.match(/404 Not Found/);
+                        expect(err).to.have.property('message');
                     })
             });
         });

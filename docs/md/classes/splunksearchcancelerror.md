@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [SplunkSearchCancelError](../classes/splunksearchcancelerror.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [SplunkSearchCancelError](../classes/splunksearchcancelerror.md)
 
 # Class: SplunkSearchCancelError
 

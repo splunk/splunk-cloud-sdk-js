@@ -299,7 +299,7 @@ export class SearchService extends BaseApiService {
 /**
  * create a new search
  */
-interface PostJobsRequest {
+export interface PostJobsRequest {
     /**
      * Use one of the following search modes.
      */
@@ -370,18 +370,18 @@ export interface Job { // TODO: not in spec
     status: string; // TODO: ??
 }
 
-enum DispatchState {
+export enum DispatchState {
     DONE = 'DONE',
     FAILED = 'FAILED',
 }
 
-interface PostJobsRequest {
+export interface PostJobsRequest {
     count?: number;
     offset?: number;
     search?: string;
 }
 
-interface JobControlActionRequest {
+export interface JobControlActionRequest {
     /**
      * Action The control action to execute
      */
@@ -392,7 +392,7 @@ interface JobControlActionRequest {
     ttl?: number;
 }
 
-enum Action {
+export enum Action {
     FINALIZE = 'finalize',
     CANCEL = 'cancel',
     TOUCH = 'touch',
@@ -402,7 +402,7 @@ enum Action {
     DISABLEPREVIEW = 'disablepreview',
 }
 
-interface FetchResultsRequest {
+export interface FetchResultsRequest {
     offset?: number;
     count?: number;
     f?: string;
@@ -410,20 +410,20 @@ interface FetchResultsRequest {
     [key: string]: any;
 }
 
-interface ResultObservableOptions {
+export interface ResultObservableOptions {
     pollInterval?: number;
     offset?: number;
     count?: number;
 }
 
-interface EventObservableOptions {
+export interface EventObservableOptions {
     /**
      * Number of events to fetch per call
      */
     count?: number;
 }
 
-interface FetchEventsRequest {
+export interface FetchEventsRequest {
     /**
      * The maximum number of results to return. If value is set to 0, then all available results are returned.
      */

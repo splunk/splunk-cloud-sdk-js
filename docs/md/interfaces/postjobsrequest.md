@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [PostJobsRequest](../interfaces/postjobsrequest.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [PostJobsRequest](../interfaces/postjobsrequest.md)
 
 # Interface: PostJobsRequest
 

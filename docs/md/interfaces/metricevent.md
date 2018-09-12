@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [MetricEvent](../interfaces/metricevent.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [MetricEvent](../interfaces/metricevent.md)
 
 # Interface: MetricEvent
 
@@ -46,6 +46,8 @@ MetricEvent - Common payload to specify multiple related Splunk metrics.
 
 **● attributes**: *[MetricAttributes](metricattributes.md)*
 
+Default attributes for related Splunk metrics.
+
 ___
 <a id="body"></a>
 
@@ -53,12 +55,16 @@ ___
 
 **● body**: *[Metric](metric.md)[]*
 
+Specifies multiple related metrics e.g. Memory, CPU etc.
+
 ___
 <a id="host"></a>
 
 ###  host
 
 **● host**: *`string`*
+
+The host value assigned to the event data. Typically, this is the hostname of the client from which you are sending data.
 
 ___
 <a id="id"></a>
@@ -68,6 +74,8 @@ ___
 **● id**: * `undefined` &#124; `string`
 *
 
+An optional ID that uniquely identifies the metric data. It is used to deduplicate the data if same data is set multiple times. If ID is not specified, it will be assigned by the system.
+
 ___
 <a id="nanos"></a>
 
@@ -76,12 +84,16 @@ ___
 **● nanos**: * `undefined` &#124; `number`
 *
 
+Optional nanoseconds part of the timestamp.
+
 ___
 <a id="source"></a>
 
 ###  source
 
 **● source**: *`string`*
+
+The source value to assign to the event data. For example, if you are sending data from an app that you are developing, set this key to the name of the app.
 
 ___
 <a id="sourcetype"></a>
@@ -90,12 +102,16 @@ ___
 
 **● sourceType**: *`string`*
 
+The sourcetype value assigned to the event data.
+
 ___
 <a id="timestamp"></a>
 
 ###  timestamp
 
 **● timestamp**: *`number`*
+
+Epoch time in milliseconds.
 
 ___
 

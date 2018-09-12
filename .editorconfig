@@ -2,8 +2,6 @@
 # coding styles between different editors and IDEs
 # http://editorconfig.org
 
-root = true
-
 [*]
 
 # Change these settings to your own preference

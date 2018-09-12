@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [EventObservableOptions](../interfaces/eventobservableoptions.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [EventObservableOptions](../interfaces/eventobservableoptions.md)
 
 # Interface: EventObservableOptions
 

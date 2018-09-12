@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [CatalogService](../classes/catalogservice.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [CatalogService](../classes/catalogservice.md)
 
 # Class: CatalogService
 
@@ -87,6 +87,7 @@ Create a new dataset.
 | dataset | [DatasetInfo](../interfaces/datasetinfo.md) |  The dataset to create |
 
 **Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
+description of the new dataset
 
 ___
 <a id="createrule"></a>
@@ -104,6 +105,7 @@ Create a new Rule
 | rule | [Rule](../interfaces/rule.md) |  The rule to create |
 
 **Returns:** `Promise`<[Rule](../interfaces/rule.md)>
+a description of the new rule
 
 ___
 <a id="deletedataset"></a>
@@ -121,6 +123,7 @@ Delete the DatasetInfo and its dependencies with the specified `id`
 | datasetId | `string` |  \`id\` of the dataset to delete |
 
 **Returns:** `Promise`<`any`>
+A promise that will be resolved when deletion is complete
 
 ___
 <a id="deletedatasetbyname"></a>
@@ -138,6 +141,7 @@ Delete the Dataset
 | name | `string` |  of the Dataset to delete |
 
 **Returns:** `Promise`<`any`>
+A promise that will be resolved when deletion is complete
 
 ___
 <a id="deletedatasetfield"></a>
@@ -153,9 +157,10 @@ Deletes the dataset field with the specified datasetID and datasetFieldID
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | datasetID | `string` |  - |
-| datasetFieldID | `string` |   |
+| datasetFieldID | `string` |  - |
 
 **Returns:** `Promise`<`any`>
+promise that will be resolved when field is deleted
 
 ___
 <a id="deleterule"></a>
@@ -170,9 +175,10 @@ Delete the Rule and its dependencies with the specified `id`
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| ruleId | `string` |   |
+| ruleId | `string` |  - |
 
 **Returns:** `Promise`<`any`>
+Promise that will be resolved when the rule is deleted
 
 ___
 <a id="getdataset"></a>
@@ -187,9 +193,10 @@ Returns the dataset resource with the specified `id`.
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| datasetId | `string` |   |
+| datasetId | `string` |  - |
 
 **Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
+description of the dataset
 
 ___
 <a id="getdatasetfield"></a>
@@ -205,9 +212,10 @@ Gets the Field with the specified datasetID and datasetFieldID
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | datasetID | `string` |  - |
-| datasetFieldID | `string` |   |
+| datasetFieldID | `string` |  - |
 
 **Returns:** `Promise`<[Field](../interfaces/field.md)>
+field description
 
 ___
 <a id="getdatasetfields"></a>
@@ -226,6 +234,7 @@ Get the list of dataset fields for the given `id`
 | `Optional` filter |  `undefined` &#124; `string`|  An SPL filter string |
 
 **Returns:** `Promise`<[Field](../interfaces/field.md)[]>
+array of field descriptions for fields defined on the dataset
 
 ___
 <a id="getdatasets"></a>
@@ -243,6 +252,7 @@ Returns a list of datasets, optionally filtered by a filter string.
 | `Optional` filter |  `undefined` &#124; `string`|  An SPL filter string |
 
 **Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)[]>
+Array of dataset descriptors
 
 ___
 <a id="getrule"></a>
@@ -257,9 +267,10 @@ Return the Rule with the specified `id`
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| ruleId | `string` |   |
+| ruleId | `string` |  - |
 
 **Returns:** `Promise`<[Rule](../interfaces/rule.md)>
+description of the rule
 
 ___
 <a id="getrules"></a>
@@ -277,6 +288,7 @@ Get the matching list of Rules
 | `Optional` filter |  `undefined` &#124; `string`|  An SPL filter string |
 
 **Returns:** `Promise`<[Rule](../interfaces/rule.md)>
+description of defined rules (optionally matching SPL query)
 
 ___
 <a id="patchdatasetfield"></a>
@@ -293,9 +305,10 @@ Updates an existing dataset field
 | ------ | ------ | ------ |
 | datasetID | `string` |  - |
 | datasetFieldID | `string` |  - |
-| datasetField | [Field](../interfaces/field.md) |   |
+| datasetField | [Field](../interfaces/field.md) |  - |
 
 **Returns:** `Promise`<[Field](../interfaces/field.md)>
+updated description of the field
 
 ___
 <a id="postdatasetfield"></a>
@@ -311,9 +324,10 @@ Creates a new dataset field
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | datasetID | `string` |  - |
-| datasetField | [Field](../interfaces/field.md) |   |
+| datasetField | [Field](../interfaces/field.md) |  - |
 
 **Returns:** `Promise`<[Field](../interfaces/field.md)>
+description of the new field defined on the dataset
 
 ___
 <a id="updatedataset"></a>
@@ -329,9 +343,10 @@ Updates the supplied dataset
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | datasetId | `string` |  - |
-| partial | [PartialDatasetInfo](../interfaces/partialdatasetinfo.md) |   |
+| partial | [PartialDatasetInfo](../interfaces/partialdatasetinfo.md) |  - |
 
 **Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
+information about the updated dataset
 
 ___
 

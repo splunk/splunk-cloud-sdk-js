@@ -77,7 +77,7 @@ export interface Event {
 /**
  * Attributes - a JSON object that contains explicit custom fields to be defined at index time.
  */
-interface EventAttributes {
+export interface EventAttributes {
     [key: string]: string;
 }
 
@@ -92,7 +92,7 @@ interface EventAttributes {
  * @property sourcetype The sourcetype value to assign to the event data.
  * @property timestamp Epoch time in milliseconds (integer).
  */
-interface MetricEvent {
+export interface MetricEvent {
     /**
      * Default attributes for related Splunk metrics.
      */
@@ -135,7 +135,7 @@ interface MetricEvent {
  * @property If set, individual Metrics will inherit this type and can optionally override.
  * @property If set, individual Metrics will inherit this unit and can optionally override.
  */
-interface MetricAttributes {
+export interface MetricAttributes {
     /**
      * Optional. If set, individual metrics inherit these dimensions and can override any and/or all of them.
      */
@@ -158,7 +158,7 @@ interface MetricAttributes {
  * @property Unit of the metric e.g. percent, megabytes, seconds etc.
  * @property Value of the metric.
  */
-interface Metric {
+export interface Metric {
     /**
      * Dimensions allow metrics to be classified e.g. {"Server":"nginx", "Region":"us-west-1", ...}
      */

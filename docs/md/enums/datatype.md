@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [DataType](../enums/datatype.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [DataType](../enums/datatype.md)
 
 # Enumeration: DataType
 

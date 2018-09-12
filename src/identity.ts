@@ -359,155 +359,155 @@ export class IdentityService extends BaseApiService {
 /**
  * TenantName - Name of a Tenant
  */
-interface TenantName {
-    name: string;
+export interface TenantName {
+    name: string
 }
 
 /**
  * Tenant - The unique tenant account within the Identity Service
  */
-interface Tenant {
-    name: string;
-    status: string;
-    createdAt: Date;
-    createdBy: string;
+export interface Tenant {
+    name: string
+    status: string
+    createdAt: Date
+    createdBy: string
 }
 
 /**
  * Role - A unique role associated with a tenant within the Identity Service
  */
-interface Role {
-    createdAt: Date;
-    createdBy: string;
-    name: string;
-    tenant: string;
+export interface Role {
+    createdAt: Date
+    createdBy: string
+    name: string
+    tenant: string
 }
 
 /**
  * RoleInput - The input object for creating a new Role
  */
-interface RoleInput{
-    name: string;
-    permissions: string[];
+export interface RoleInput{
+    name: string
+    permissions: string[]
 
 }
 
 /**
  * RoleName - Name of a Role to add to Group
  */
-interface RoleName {
-    name: string;
+export interface RoleName {
+    name: string
 }
 
 /**
  * RolePermission - The object that represents a tenant role permission
  */
-interface RolePermission {
-    tenant: string;
-    role: string;
-    permission: string;
-    addedAt: Date;
-    addedBy: string;
+export interface RolePermission {
+    tenant: string
+    role: string
+    permission: string
+    addedAt: Date
+    addedBy: string
 }
 
 /**
  * Permission - Permission on a Role
  */
-interface Permission {
-    name: string;
-    addedAt: Date;
-    addedBy: string;
+export interface Permission {
+    name: string
+    addedAt: Date
+    addedBy: string
 }
 
 /**
  * GroupInput - Inputs for a Group
  */
-interface GroupInput {
-    name: string;
-    roles: string[];
-    members: string[];
+export interface GroupInput {
+    name: string
+    roles: string[]
+    members: string[]
 }
 
 /**
  * Group - Association of tenants, members
  */
-interface Group {
-    tenant: string;
-    name: string;
-    createdAt: Date;
-    createdBy: string;
+export interface Group {
+    tenant: string
+    name: string
+    createdAt: Date
+    createdBy: string
 }
 
 /**
  * GroupRole - Represents a role that is assigned to a group
  */
-interface GroupRole {
-    tenant: string;
-    group: string;
-    role: string;
-    addedAt: Date;
-    addedBy: string;
+export interface GroupRole {
+    tenant: string
+    group: string
+    role: string
+    addedAt: Date
+    addedBy: string
 }
 
 /**
  * MemberName - Member name
  */
-interface MemberName {
-    name: string;
+export interface MemberName {
+    name: string
 }
 
 /**
  * Represents a member that belongs to a tenant.
  */
-interface Member {
-    tenant: string;
-    name: string;
-    addedAt: Date;
-    addedBy: string;
+export interface Member {
+    tenant: string
+    name: string
+    addedAt: Date
+    addedBy: string
 }
 
 /**
  * GroupMemberName - Group member name
  */
-interface GroupMemberName {
-    name: string;
+export interface GroupMemberName {
+    name: string
 }
 
 /**
  * Represents a member that belongs to a group
  */
-interface GroupMember {
-    tenant: string;
-    group: string;
-    principal: string;
-    addedAt: string;
-    addedBy: string;
+export interface GroupMember {
+    tenant: string
+    group: string
+    principal: string
+    addedAt: string
+    addedBy: string
 }
 
 /**
  * PrincipalInput - Input object for creating a new Principal
  */
-interface PrincipalInput {
-    name: string;
-    kind: string;
+export interface PrincipalInput {
+    name: string
+    kind: string
 }
 
 /**
  * Principal - Principal member
  */
-interface Principal {
-    name: string;
-    kind: string;
-    tenants: string[];
-    createdAt: Date;
-    createdBy: Date;
-    profile: {};
+export interface Principal {
+    name: string
+    kind: string
+    tenants: string[]
+    createdAt: Date
+    createdBy: Date
+    profile: {}
 }
 
 /**
  * ValidateInfo - Info object for a valid member
  */
-interface ValidateInfo {
-    name: string;
-    tenants: string[];
+export interface ValidateInfo {
+    name: string
+    tenants: string[]
 }

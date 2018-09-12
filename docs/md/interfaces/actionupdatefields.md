@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [ActionUpdateFields](../interfaces/actionupdatefields.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [ActionUpdateFields](../interfaces/actionupdatefields.md)
 
 # Interface: ActionUpdateFields
 

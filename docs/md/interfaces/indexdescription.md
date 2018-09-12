@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [IndexDescription](../interfaces/indexdescription.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [IndexDescription](../interfaces/indexdescription.md)
 
 # Interface: IndexDescription
 

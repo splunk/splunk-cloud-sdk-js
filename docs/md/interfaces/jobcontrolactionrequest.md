@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [JobControlActionRequest](../interfaces/jobcontrolactionrequest.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [JobControlActionRequest](../interfaces/jobcontrolactionrequest.md)
 
 # Interface: JobControlActionRequest
 

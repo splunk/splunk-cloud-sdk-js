@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [ActionService](../classes/actionservice.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [ActionService](../classes/actionservice.md)
 
 # Class: ActionService
 

@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [CollectionStats](../interfaces/collectionstats.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [CollectionStats](../interfaces/collectionstats.md)
 
 # Interface: CollectionStats
 
