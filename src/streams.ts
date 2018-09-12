@@ -191,7 +191,7 @@ export interface Pipeline {
 /**
  * PaginatedPipelineResponse - The pipeline response containing a list of all the pipelines associated with the tenant and the total count
  */
-export interface PaginatedPipelineResponse{
+export interface PaginatedPipelineResponse {
     /**
      * A list of all the pipelines associated with the tenant.
      */
@@ -252,7 +252,7 @@ export interface UplPipeline {
 /**
  * UplNode - Nodes forming a pipeline
  */
-interface UplNode {
+export interface UplNode {
     attributes: {};
     id: string[];
     op: string[];
@@ -273,12 +273,12 @@ export interface UplEdge {
  * PipelineQueryParams - Query parameters for Pipeline
  */
 export interface PipelineQueryParams {
-    offset?:       number;
-    pageSize?:     number;
-    sortField?:    string;
-    sortDir?:      string;
-    activated?:    boolean;
+    offset?: number;
+    pageSize?: number;
+    sortField?: string;
+    sortDir?: string;
+    activated?: boolean;
     createUserId?: string;
-    name?:         string;
-    includeData?:  boolean;
+    name?: string;
+    includeData?: boolean;
 }
