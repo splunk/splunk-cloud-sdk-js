@@ -101,7 +101,7 @@ export class ActionService extends BaseApiService {
 
 
 // ActionKind reflects the kinds of actions supported by the Action service
-enum ActionKind {
+export enum ActionKind {
     email = 'email',
     webhook = 'webhook',
     sns = 'sns',
@@ -125,7 +125,7 @@ export interface Action {
     // TemplateName to send via Email action
     templateName?: string;
     // Addresses to send to when Email action triggered
-    addresses: string[];
+    addresses?: string[];
 
     // SNS action fields:
     // Topic to trigger SNS action
@@ -140,7 +140,7 @@ export interface Action {
 
 
 // ActionStatusState reflects the status of the action
-enum ActionStatusState {
+export enum ActionStatusState {
     queue = 'QUEUED',
     running = 'RUNNING',
     done = 'DONE',
@@ -148,40 +148,40 @@ enum ActionStatusState {
 }
 
 // ActionStatus defines the state information
-interface ActionStatus {
+export interface ActionStatus {
     state: ActionStatusState;
     statusId: string;
     message: string;
 }
 
 // ActionTriggerResponse for returning status url and parsed statusID (if possible)
-interface ActionTriggerResponse {
+export interface ActionTriggerResponse {
     statusId?: string;
     statusUrl?: string;
 }
 
 
 // ActionError defines format for returned errors
-interface ActionError {
+export interface ActionError {
     code: string;
     message: string;
 }
 
 // ActionNotificationKind defines the types of notifications
-enum ActionNotificationKind {
+export enum ActionNotificationKind {
     splunkEvent = 'splunkEvent',
     rawJSON = 'rawJSON',
 }
 
 // ActionNotification defines the action notification format
-interface ActionNotification {
+export interface ActionNotification {
     kind: ActionNotificationKind;
     tenant: string;
     payload: any;
 }
 
 // SplunkEventPayload is the payload for a notification coming from Splunk
-interface SplunkEventPayload {
+export interface SplunkEventPayload {
     event: any;
     fields: any;
     host: string;
@@ -192,7 +192,7 @@ interface SplunkEventPayload {
 }
 
 // ActionUpdateFields defines the fields that may be updated for an existing Action
-interface ActionUpdateFields {
+export interface ActionUpdateFields {
     // Email action fields:
     // HTMLPart to send via Email action
     htmlPart?: string;
