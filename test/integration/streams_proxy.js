@@ -18,11 +18,19 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
     var pipelineId1;
     var pipelineId2;
 
+    beforeEach(() => {
+        pipelineId1 = null;
+        pipelineId2 = null;
+    });
+
     afterEach(() => {
         if (pipelineId1 != null) {
             return splunkCloud.streams.deletePipeline(pipelineId1)
                 .catch(err => console.log(`Error cleaning the test pipeline1: ${err}`));
         }
+    });
+
+    afterEach(() => {
         if (pipelineId2 != null) {
             return splunkCloud.streams.deletePipeline(pipelineId2)
                 .catch(err => console.log(`Error cleaning the test pipeline2: ${err}`));
