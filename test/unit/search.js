@@ -1,9 +1,9 @@
 const config = require("../config");
-const SplunkSSC = require("../../splunk");
+const SplunkCloud = require("../../splunk").SplunkCloud;
 const { expect } = require("chai");
 
 describe("Using Search APIs", () => {
-    const splk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
+    const splk = new SplunkCloud(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
 
     it("should allow submission of a search", () => splk.search.createJob({ query: "search index=*" })
         .then((sid) => {

@@ -1,8 +1,8 @@
 const config = require("../config");
-const SplunkSSC = require("../../splunk");
+const SplunkCloud = require("../../splunk").SplunkCloud;
 const { assert } = require("chai");
 
-const splunk = new SplunkSSC(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
+const splunk = new SplunkCloud(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
 
 describe("Action Endpoints", () => {
     describe("Create an action", () => {

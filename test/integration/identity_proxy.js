@@ -1,11 +1,11 @@
 const config = require('../config');
-const SplunkSSC = require('../../splunk');
+const SplunkCloud = require('../../splunk').SplunkCloud;
 const { assert } = require('chai');
 
-const sscHost = config.playgroundHost;
+const splunkCloudHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
 const tenantID = config.playgroundTenant;
-const splunk = new SplunkSSC(sscHost, token, tenantID);
+const splunk = new SplunkCloud(splunkCloudHost, token, tenantID);
 
 // Scenario:
 // Integration test for Tenant endpoints
@@ -160,6 +160,11 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             splunk.identity.getMembers().then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
                 assert(data.indexOf(testMember) > -1);
+            }));
+
+        it('should delete the member from the tenant and group ignore response', () =>
+            splunk.identity.removeGroupMember(testGroupName, testPrincipal).then(response => {
+                assert(true);
             }));
 
         it('should add a Member to the Group', () =>

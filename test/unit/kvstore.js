@@ -1,11 +1,11 @@
 const { assert } = require('chai');
 const config = require('../config');
-const SplunkSSC = require('../../splunk');
+const SplunkCloud = require('../../splunk').SplunkCloud;
 
 const stubbyTestNamespace = config.stubbyTestNamespace;
 const stubbyTestCollection = config.stubbyTestCollection;
 
-const splunk = new SplunkSSC(
+const splunk = new SplunkCloud(
     `http://${config.stubbyHost}:8882`,
     config.stubbyAuthToken,
     config.stubbyTenant
@@ -38,7 +38,7 @@ describe('Stubby tests for Kvstore Index Endpoints', () => {
                     },
                 ],
             };
-            return splunk.kvstore.createIndex(testIndex, stubbyTestCollection).then(response => {
+            return splunk.kvstore.createIndex(stubbyTestCollection, testIndex).then(response => {
                 assert.notEqual(response, null);
             });
         });
@@ -46,7 +46,7 @@ describe('Stubby tests for Kvstore Index Endpoints', () => {
 
     describe('Delete an index', () => {
         it('should return no response body', () => {
-            return splunk.kvstore.deleteIndex('TEST_INDEX_01', stubbyTestCollection).then(response => {
+            return splunk.kvstore.deleteIndex(stubbyTestCollection, 'TEST_INDEX_01').then(response => {
                 assert.notEqual(response, null);
             });
         });

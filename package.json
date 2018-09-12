@@ -1,7 +1,7 @@
 {
-  "name": "@splunk/ssc-client",
-  "version": "0.4.1",
-  "description": "Splunk SSC SDK for Javascript",
+  "name": "@splunk/splunk-cloud-sdk",
+  "version": "0.5.0",
+  "description": "Splunk Cloud SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
     "tslint": "tslint -p tsconfig.json",
@@ -11,7 +11,7 @@
     "ts:docs:md": "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/md/ --inlineSourceMap --module commonjs --theme markdown --excludePrivate --mdHideSources --mdEngine github",
     "docs": "yarn ts:docs",
     "build": "node ci/extract_version.js && tsc -p tsconfig.json",
-    "clean": "rm *.js *.map",
+    "clean": "rm *.js *.map src/*.js",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
     "codecov:integration": "yarn cover:integration && codecov -f ./coverage-integration/lcov.info -F integration",
     "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test && yarn run cover:report",
@@ -20,15 +20,15 @@
     "pretest": "yarn tslint && yarn build",
     "test": "mocha test/unit",
     "test:integration": "mocha --timeout=900000 test/integration",
-    "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/ssc-sdk-shared-stubby:latest",
+    "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/splunk-cloud-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",
     "publish:docs": "yarn ts:docs && npm add -D @splunk/cicd-tools --registry https://repo.splunk.com/artifactory/api/npm/npm && yarn cicd-publish-docs docs/html",
     "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
     "stop:swagger": "docker rm -f swagger",
-    "example": "node examples/*.js"
+    "example": "node examples/ingestMetricsAndSearch.js && node examples/ingestAndSearch.js"
   },
   "author": "Splunk, Inc.",
-  "license": "UNLICENSED",
+  "license": "SEE LICENSE IN LICENSE.txt",
   "devDependencies": {
     "@types/isomorphic-fetch": "^0.0.34",
     "chai": "^4.1.2",
@@ -52,7 +52,7 @@
     "typescript": "^2.9.2"
   },
   "dependencies": {
-    "rxjs": "^6.2.1"
+    "rxjs": "^6.3.2"
   },
   "nyc": {
     "reporter": [

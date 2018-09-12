@@ -1,12 +1,12 @@
 const config = require('../config');
-const SplunkSSC = require("../../splunk");
+const SplunkCloud = require("../../splunk").SplunkCloud;
 const { assert, expect } = require("chai");
 
-const sscHost = config.playgroundHost;
+const splunkCloudHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
 const tenantID = config.playgroundTenant;
 
-const splunk = new SplunkSSC(sscHost, token, tenantID);
+const splunk = new SplunkCloud(splunkCloudHost, token, tenantID);
 
 const standardQuery = {
     "query": "| from index:main | head 5",
@@ -22,9 +22,9 @@ describe("integration tests Using Search APIs", () => {
     before(() => {
         const events = [];
         for (let i = 0; i < 10; i += 1) {
-            events.push({ event: `Test event no ${i}` });
+            events.push({ body: `Test event no ${i}` });
         }
-        splunk.ingest.createEvents(events);
+        splunk.ingest.postEvents(events);
     });
 
     describe("Search", () => {
@@ -138,7 +138,7 @@ describe("integration tests Using Search APIs", () => {
                 return search.cancel()
                     .then(() => search.wait())
                     .then(() => assert.fail("should have received error"), (err) => {
-                        expect(err.errorParams).to.have.property('message').and.match(/404 Not Found/);
+                        expect(err).to.have.property('message');
                     })
             });
         });
