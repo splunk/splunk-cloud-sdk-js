@@ -67,4 +67,51 @@ describe("Basic client functionality", () => {
         });
     });
 
+    describe("Middleware", () => {
+        afterEach(() => s.clearResponseHooks());
+
+        it("should allow a callback to execute without affecting flow", () => {
+            let extractedUrl = null;
+            s.addResponseHook((response) => extractedUrl = response.url);
+            return s.get("/basic")
+                .then(httpResponse => {
+                    expect(httpResponse.body).to.have.own.property("foo");
+                    expect(extractedUrl).matches(/\/basic$/);
+                });
+        });
+
+        it("should allow multiple callbacks that don't change response", () => {
+            for (let i=0; i<5; i++) {
+                s.addResponseHook(() => {});
+            }
+            return s.get("/basic")
+                .then(httpResponse => {
+                    expect(httpResponse.body).to.have.own.property("foo");
+                });
+        });
+
+        it("should allow changing of a response inflight", () => {
+            s.addResponseHook(response => {
+                if (!response.ok) {
+                    return s.fetch("GET", "/basic", {});
+                }
+            }); // Totally different URL
+            return s.get("/something_that_does_not_exist")
+                .then(httpResponse => {
+                    expect(httpResponse.body).to.have.own.property("foo");
+                });
+        });
+
+        it("should handle exceptions", () => {
+            s.addResponseHook(response => {
+                throw(new Error("unexpected error"));
+            });
+            return s.get("/basic")
+                .then(httpResponse => {
+                    expect(httpResponse.body).to.have.own.property("foo");
+                });
+
+        })
+    });
+
 });
