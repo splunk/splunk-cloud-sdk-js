@@ -253,7 +253,7 @@ export class ServiceClient {
 }
 
 export interface QueryArgs {
-    [key: string]: string | number | undefined;
+    [key: string]: string | number | undefined | boolean;
 }
 
 export enum ContentType {

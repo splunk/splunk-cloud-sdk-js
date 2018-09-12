@@ -11,6 +11,7 @@ import { IdentityService } from './identity';
 import { IngestService } from './ingest';
 import { KVStoreService } from './kvstore';
 import { SearchService } from './search';
+import { StreamsService } from './streams';
 
 /**
  * This class is a Splunk Cloud client.
@@ -26,6 +27,7 @@ export class SplunkCloud {
     public ingest: IngestService;
     public kvstore: KVStoreService;
     public action: ActionService;
+    public streams: StreamsService;
     public client: ServiceClient;
 
     /**
@@ -42,6 +44,7 @@ export class SplunkCloud {
         this.ingest = new IngestService(this.client);
         this.kvstore = new KVStoreService(this.client);
         this.action = new ActionService(this.client);
+        this.streams = new StreamsService(this.client);
     }
 }
 
