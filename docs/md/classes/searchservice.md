@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [SearchService](../classes/searchservice.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [SearchService](../classes/searchservice.md)
 
 # Class: SearchService
 
@@ -114,6 +114,7 @@ Delete the search job with the given `id`, cancelling the search if it is runnin
 | jobId | `string` |
 
 **Returns:** `Promise`<`any`>
+Promise that will be resolved when the job has been deleted
 
 ___
 <a id="getevents"></a>
@@ -132,6 +133,7 @@ Returns events for the search job corresponding to "id". Returns results post-tr
 | `Optional` args |  `undefined` &#124; `object`|
 
 **Returns:** `Promise`<`any`>
+an array of event objects
 
 ___
 <a id="getjob"></a>
@@ -144,11 +146,12 @@ Returns the job resource with the given `id`.
 
 **Parameters:**
 
-| Param | Type |
-| ------ | ------ |
-| jobId | `string` |
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| jobId | `string` |  - |
 
 **Returns:** `Promise`<[Job](../interfaces/job.md)>
+Description of job
 
 ___
 <a id="getjobs"></a>
@@ -201,6 +204,7 @@ Submits a search job and wraps the response in an object for easier further proc
 | searchArgs | [PostJobsRequest](../interfaces/postjobsrequest.md) |  arguments for a new search job |
 
 **Returns:** `Promise`<[Search](search.md)>
+a wrapper utility object for the search
 
 ___
 <a id="waitforjob"></a>
@@ -209,13 +213,15 @@ ___
 
 ▸ **waitForJob**(jobId: *`string`*, pollInterval?: * `undefined` &#124; `number`*, callback?: * `undefined` &#124; `function`*): `Promise`<[Job](../interfaces/job.md)>
 
+Polls the service until the job is ready, then resolves returned promise with the final job description (as found from `getJob`).
+
 **Parameters:**
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | jobId | `string` |  - |
-| `Optional` pollInterval |  `undefined` &#124; `number`|  - |
-| `Optional` callback |  `undefined` &#124; `function`|   |
+| `Optional` pollInterval |  `undefined` &#124; `number`|  in ms |
+| `Optional` callback |  `undefined` &#124; `function`|  optional function that will be called on every poll result |
 
 **Returns:** `Promise`<[Job](../interfaces/job.md)>
 

@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [Action](../enums/action.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [Action](../enums/action.md)
 
 # Enumeration: Action
 
@@ -10,11 +10,9 @@
 * [DISABLEPREVIEW](action.md#disablepreview)
 * [ENABLEPREVIEW](action.md#enablepreview)
 * [FINALIZE](action.md#finalize)
-* [PAUSE](action.md#pause)
 * [SETPRIORITY](action.md#setpriority)
 * [SETTTL](action.md#setttl)
 * [TOUCH](action.md#touch)
-* [UNPAUSE](action.md#unpause)
 
 ### Properties
 
@@ -69,13 +67,6 @@ ___
 **FINALIZE**:  = "finalize"
 
 ___
-<a id="pause"></a>
-
-###  PAUSE
-
-**PAUSE**:  = "pause"
-
-___
 <a id="setpriority"></a>
 
 ###  SETPRIORITY
@@ -97,19 +88,12 @@ ___
 **TOUCH**:  = "touch"
 
 ___
-<a id="unpause"></a>
-
-###  UNPAUSE
-
-**UNPAUSE**:  = "unpause"
-
-___
 
 ## Properties
 
 <a id="addresses"></a>
 
-###  addresses
+### `<Optional>` addresses
 
 **● addresses**: *`string`[]*
 

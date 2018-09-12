@@ -1,8 +1,8 @@
-[@splunk/ssc-client](../README.md) > [SplunkSSC](../classes/splunkssc.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [SplunkCloud](../classes/splunkcloud.md)
 
-# Class: SplunkSSC
+# Class: SplunkCloud
 
-This class is a Splunk SSC client.
+This class is a Splunk Cloud client.
 *__property__*: search Proxies for the search APIs
 
 *__property__*: catalog Proxies for the catalog APIs
@@ -13,22 +13,24 @@ This class is a Splunk SSC client.
 
 ## Hierarchy
 
-**SplunkSSC**
+**SplunkCloud**
 
 ## Index
 
 ### Constructors
 
-* [constructor](splunkssc.md#constructor)
+* [constructor](splunkcloud.md#constructor)
 
 ### Properties
 
-* [action](splunkssc.md#action)
-* [catalog](splunkssc.md#catalog)
-* [identity](splunkssc.md#identity)
-* [ingest](splunkssc.md#ingest)
-* [kvstore](splunkssc.md#kvstore)
-* [search](splunkssc.md#search)
+* [action](splunkcloud.md#action)
+* [catalog](splunkcloud.md#catalog)
+* [client](splunkcloud.md#client)
+* [identity](splunkcloud.md#identity)
+* [ingest](splunkcloud.md#ingest)
+* [kvstore](splunkcloud.md#kvstore)
+* [search](splunkcloud.md#search)
+* [streams](splunkcloud.md#streams)
 
 ---
 
@@ -38,19 +40,19 @@ This class is a Splunk SSC client.
 
 ###  constructor
 
-⊕ **new SplunkSSC**(url: *`string`*, token: *`string`*, defaultTenant?: * `undefined` &#124; `string`*): [SplunkSSC](splunkssc.md)
+⊕ **new SplunkCloud**(url: *`string`*, token: *`string`*, defaultTenant?: * `undefined` &#124; `string`*): [SplunkCloud](splunkcloud.md)
 
-Build a Splunk SSC Client
+Build a Splunk Cloud Client
 
 **Parameters:**
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| url | `string` |  URL to Splunk SSC environment TODO: SSC name |
+| url | `string` |  URL to Splunk Cloud environment |
 | token | `string` |  Auth token |
 | `Optional` defaultTenant |  `undefined` &#124; `string`|  Default tenant to use for requests |
 
-**Returns:** [SplunkSSC](splunkssc.md)
+**Returns:** [SplunkCloud](splunkcloud.md)
 
 ___
 
@@ -68,6 +70,13 @@ ___
 ###  catalog
 
 **● catalog**: *[CatalogService](catalogservice.md)*
+
+___
+<a id="client"></a>
+
+###  client
+
+**● client**: *[ServiceClient](serviceclient.md)*
 
 ___
 <a id="identity"></a>
@@ -96,6 +105,13 @@ ___
 ###  search
 
 **● search**: *[SearchService](searchservice.md)*
+
+___
+<a id="streams"></a>
+
+###  streams
+
+**● streams**: *[StreamsService](streamsservice.md)*
 
 ___
 

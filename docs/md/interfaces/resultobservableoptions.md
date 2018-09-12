@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [ResultObservableOptions](../interfaces/resultobservableoptions.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [ResultObservableOptions](../interfaces/resultobservableoptions.md)
 
 # Interface: ResultObservableOptions
 

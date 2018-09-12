@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [FetchEventsRequest](../interfaces/fetcheventsrequest.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [FetchEventsRequest](../interfaces/fetcheventsrequest.md)
 
 # Interface: FetchEventsRequest
 

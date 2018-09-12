@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [Event](../interfaces/event.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [Event](../interfaces/event.md)
 
 # Interface: Event
 
@@ -8,44 +8,40 @@ Event - a Splunk event accepted by Ingest service.
 
 **Event**
 
-## Indexable
-
-\[key: `string`\]:&nbsp;`any`
-Event - a Splunk event accepted by Ingest service.
-
 ## Index
 
 ### Properties
 
-* [event](event.md#event-1)
-* [fields](event.md#fields)
+* [attributes](event.md#attributes)
+* [body](event.md#body)
 * [host](event.md#host)
-* [index](event.md#index)
+* [id](event.md#id)
+* [nanos](event.md#nanos)
 * [source](event.md#source)
 * [sourcetype](event.md#sourcetype)
-* [time](event.md#time)
+* [timestamp](event.md#timestamp)
 
 ---
 
 ## Properties
 
-<a id="event-1"></a>
+<a id="attributes"></a>
 
-###  event
+### `<Optional>` attributes
 
-**● event**: * `string` &#124; `any`
-*
+**● attributes**: *[EventAttributes](eventattributes.md)*
 
-Event Object or string payload.
+Specifies a JSON object that contains explicit custom fields to be defined at index time.
 
 ___
-<a id="fields"></a>
+<a id="body"></a>
 
-### `<Optional>` fields
+###  body
 
-**● fields**: *[Fields](fields.md)*
+**● body**: * `string` &#124; `any`
+*
 
-Key/value pairs to associate with the event.
+JSON object for the event.
 
 ___
 <a id="host"></a>
@@ -55,17 +51,27 @@ ___
 **● host**: * `undefined` &#124; `string`
 *
 
-The host name or IP address of the network device that generated the event.
+The host value assigned to the event data. Typically, this is the hostname of the client from which you are sending data.
 
 ___
-<a id="index"></a>
+<a id="id"></a>
 
-### `<Optional>` index
+### `<Optional>` id
 
-**● index**: * `undefined` &#124; `string`
+**● id**: * `undefined` &#124; `string`
 *
 
-Index where the event is to be stored.
+An optional ID that uniquely identifies the event data. It is used to deduplicate the data if same data is set multiple times. If ID is not specified, it will be assigned by the system.
+
+___
+<a id="nanos"></a>
+
+### `<Optional>` nanos
+
+**● nanos**: * `undefined` &#124; `number`
+*
+
+Optional nanoseconds part of the timestamp.
 
 ___
 <a id="source"></a>
@@ -75,7 +81,7 @@ ___
 **● source**: * `undefined` &#124; `string`
 *
 
-A source identifies where the event originated.
+The source value to assign to the event data. For example, if you are sending data from an app that you are developing, set this key to the name of the app.
 
 ___
 <a id="sourcetype"></a>
@@ -85,17 +91,17 @@ ___
 **● sourcetype**: * `undefined` &#124; `string`
 *
 
-A sourcetype determines how Splunk formats data during the indexing process.
+The sourcetype value assigned to the event data.
 
 ___
-<a id="time"></a>
+<a id="timestamp"></a>
 
-### `<Optional>` time
+### `<Optional>` timestamp
 
-**● time**: * `undefined` &#124; `number`
+**● timestamp**: * `undefined` &#124; `number`
 *
 
-Epoch time in seconds.
+Epoch time in milliseconds.
 
 ___
 

@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [BaseApiService](../classes/baseapiservice.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [BaseApiService](../classes/baseapiservice.md)
 
 # Class: BaseApiService
 
@@ -19,6 +19,8 @@ Base class for each of the API proxies
 ↳  [KVStoreService](kvstoreservice.md)
 
 ↳  [SearchService](searchservice.md)
+
+↳  [StreamsService](streamsservice.md)
 
 ## Index
 

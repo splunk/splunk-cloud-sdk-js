@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [ContentType](../enums/contenttype.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [ContentType](../enums/contenttype.md)
 
 # Enumeration: ContentType
 
