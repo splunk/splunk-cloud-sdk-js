@@ -212,8 +212,7 @@ export class KVStoreService extends BaseApiService {
     public deleteRecords = (collection: string, filter?: QueryArgs): Promise<any> => {
         return this.client.delete(
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query']),
-            filter
-        )
+            {}, filter)
             .then(response => response.body);
     };
 

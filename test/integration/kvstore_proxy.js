@@ -222,10 +222,9 @@ describe('Integration tests for KVStore Endpoints', () => {
 
             it('should delete the records based on a query', () =>
                 splunkCloud.kvstore
-                    .deleteRecords(testKVCollectionName, {
-                        name: 'test_record',
-                        count_of_fields: 3,
-                    })
+                    .deleteRecords(testKVCollectionName,
+                        {query: url.encodeURIComponent(`{name: 'test_record', count_of_fields: 3}`)}
+                        )
                     .then(response => {
                         assert(!response);
                     }));
