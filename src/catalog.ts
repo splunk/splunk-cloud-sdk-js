@@ -22,7 +22,7 @@ export class CatalogService extends BaseApiService {
         if (filter) {
             query.filter = filter;
         }
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), query)
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), { query })
             .then(response => response.body as DatasetInfo[]);
     }
 
@@ -109,7 +109,7 @@ export class CatalogService extends BaseApiService {
         if (filter) {
             query.filter = filter;
         }
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), query)
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), { query })
             .then(response => response.body as Rule);
     }
 
@@ -141,7 +141,7 @@ export class CatalogService extends BaseApiService {
      */
     public getDatasetFields = (datasetID: DatasetInfo['id'], filter?: string): Promise<Field[]> => {
         const query = { filter };
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), query)
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), { query })
             .then(response => response.body as Field[]);
     }
 

@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [SplunkError](../classes/splunkerror.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [SplunkError](../classes/splunkerror.md)
 
 # Class: SplunkError
 

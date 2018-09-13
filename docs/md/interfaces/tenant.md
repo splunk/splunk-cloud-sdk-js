@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [Tenant](../interfaces/tenant.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [Tenant](../interfaces/tenant.md)
 
 # Interface: Tenant
 
@@ -12,17 +12,41 @@ Tenant - The unique tenant account within the Identity Service
 
 ### Properties
 
-* [tenantId](tenant.md#tenantid)
+* [createdAt](tenant.md#createdat)
+* [createdBy](tenant.md#createdby)
+* [name](tenant.md#name)
+* [status](tenant.md#status)
 
 ---
 
 ## Properties
 
-<a id="tenantid"></a>
+<a id="createdat"></a>
 
-###  tenantId
+###  createdAt
 
-**● tenantId**: *`string`*
+**● createdAt**: *`Date`*
+
+___
+<a id="createdby"></a>
+
+###  createdBy
+
+**● createdBy**: *`string`*
+
+___
+<a id="name"></a>
+
+###  name
+
+**● name**: *`string`*
+
+___
+<a id="status"></a>
+
+###  status
+
+**● status**: *`string`*
 
 ___
 

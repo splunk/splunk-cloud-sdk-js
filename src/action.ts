@@ -125,7 +125,7 @@ export interface Action {
     // TemplateName to send via Email action
     templateName?: string;
     // Addresses to send to when Email action triggered
-    addresses: string[];
+    addresses?: string[];
 
     // SNS action fields:
     // Topic to trigger SNS action

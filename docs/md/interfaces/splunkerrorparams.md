@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [SplunkErrorParams](../interfaces/splunkerrorparams.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [SplunkErrorParams](../interfaces/splunkerrorparams.md)
 
 # Interface: SplunkErrorParams
 

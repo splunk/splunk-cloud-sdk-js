@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [EventBatcher](../classes/eventbatcher.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [EventBatcher](../classes/eventbatcher.md)
 
 # Class: EventBatcher
 
@@ -71,6 +71,7 @@ ___
 Clean up the events and timer.
 
 **Returns:** `Promise`<`any`>
+Promise that will be completed when events are accepted by service
 
 ___
 <a id="stop"></a>

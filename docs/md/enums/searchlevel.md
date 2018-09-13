@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [SearchLevel](../enums/searchlevel.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [SearchLevel](../enums/searchlevel.md)
 
 # Enumeration: SearchLevel
 

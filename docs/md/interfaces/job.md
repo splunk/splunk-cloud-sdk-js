@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [Job](../interfaces/job.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [Job](../interfaces/job.md)
 
 # Interface: Job
 

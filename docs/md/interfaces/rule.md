@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [Rule](../interfaces/rule.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [Rule](../interfaces/rule.md)
 
 # Interface: Rule
 

@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [ActionKind](../enums/actionkind.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [ActionKind](../enums/actionkind.md)
 
 # Enumeration: ActionKind
 
