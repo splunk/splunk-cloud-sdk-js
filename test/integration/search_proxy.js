@@ -111,7 +111,7 @@ describe("integration tests Using Search APIs", () => {
         it("should allow for easy cancellation", () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
                 return search.cancel()
-                    .then(() => splunk.search.getJob(search.sid))
+                    .then(() => splunk.search.getJob(search.jobId))
                     .then(() => assert.fail("Should have thrown"), (err) => expect(err).to.have.property('httpStatusCode', 404));
             });
         });

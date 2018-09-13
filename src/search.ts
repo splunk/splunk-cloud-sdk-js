@@ -229,7 +229,7 @@ export class SearchService extends BaseApiService {
      */
     public getResults = (jobId: string, args: FetchResultsRequest = {}): Promise<SearchResults | ResultsNotReadyResponse> => {
         const queryArgs: QueryArgs = args || {};
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), queryArgs)
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), { query: queryArgs })
             .then(response => {
                 if (typeof response.body === 'object') {
                     if ('results' in response.body) {
@@ -251,7 +251,9 @@ export class SearchService extends BaseApiService {
     public submitSearch = (searchArgs: SearchJobBase): Promise<Search> => {
         const self = this;
         return this.createJob(searchArgs)
-            .then(job => new Search(self, job.sid));
+            .then(job => {
+                return new Search(self, job.sid)
+            });
     }
 }
 
