@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [CollectionDescription](../interfaces/collectiondescription.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [CollectionDescription](../interfaces/collectiondescription.md)
 
 # Interface: CollectionDescription
 
@@ -12,7 +12,6 @@
 
 * [indexes](collectiondescription.md#indexes)
 * [name](collectiondescription.md#name)
-* [namespace](collectiondescription.md#namespace)
 
 ---
 
@@ -30,13 +29,6 @@ ___
 ###  name
 
 **● name**: *`string`*
-
-___
-<a id="namespace"></a>
-
-###  namespace
-
-**● namespace**: *`string`*
 
 ___
 

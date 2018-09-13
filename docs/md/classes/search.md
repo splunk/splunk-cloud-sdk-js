@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [Search](../classes/search.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [Search](../classes/search.md)
 
 # Class: Search
 
@@ -19,7 +19,6 @@ A base for an easy-to-use search interface
 * [cancel](search.md#cancel)
 * [eventObservable](search.md#eventobservable)
 * [getResults](search.md#getresults)
-* [pause](search.md#pause)
 * [resultObservable](search.md#resultobservable)
 * [status](search.md#status)
 * [statusObservable](search.md#statusobservable)
@@ -58,6 +57,7 @@ ___
 Submits a cancel job against this search job
 
 **Returns:** `Promise`<`any`>
+A promise that will be resolved when the cancel action is accepted by the service
 
 ___
 <a id="eventobservable"></a>
@@ -75,6 +75,7 @@ Returns an Rx.Observable that will return events from the job when it is done pr
 | `Default value` attrs | [EventObservableOptions](../interfaces/eventobservableoptions.md) |  {} |
 
 **Returns:** `Observable`<`any`>
+An observable that will pass each event object as it is received
 
 ___
 <a id="getresults"></a>
@@ -89,20 +90,10 @@ Returns the results from a search as a (promised) array. If 'args.offset' is sup
 
 | Param | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
-| `Default value` args | [FetchResultsRequest](../interfaces/fetchresultsrequest.md) |  {} |   |
+| `Default value` args | [FetchResultsRequest](../interfaces/fetchresultsrequest.md) |  {} |  - |
 
 **Returns:** `Promise`<`any`[]>
-
-___
-<a id="pause"></a>
-
-###  pause
-
-▸ **pause**(): `Promise`<`any`>
-
-Pauses this search job
-
-**Returns:** `Promise`<`any`>
+A list of event objects
 
 ___
 <a id="resultobservable"></a>
@@ -117,9 +108,10 @@ Returns an observable that will poll the job and return results, updating until 
 
 | Param | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
-| `Default value` args | [ResultObservableOptions](../interfaces/resultobservableoptions.md) |  {} |   |
+| `Default value` args | [ResultObservableOptions](../interfaces/resultobservableoptions.md) |  {} |  - |
 
 **Returns:** `Observable`<`any`>
+An observable that will pass each result object as it is received
 
 ___
 <a id="status"></a>
@@ -131,6 +123,7 @@ ___
 Returns the status of the search job
 
 **Returns:** `Promise`<[Job](../interfaces/job.md)>
+search job status description
 
 ___
 <a id="statusobservable"></a>
@@ -139,13 +132,16 @@ ___
 
 ▸ **statusObservable**(updateInterval: *`number`*): `Observable`<[Job](../interfaces/job.md)>
 
+A utility method that will return an Rx.Observable which will supply status updates at a supplied interval until the job is ready.
+
 **Parameters:**
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| updateInterval | `number` |   |
+| updateInterval | `number` |  interval (in ms) at which to poll |
 
 **Returns:** `Observable`<[Job](../interfaces/job.md)>
+An observable that will periodically poll for status on a job until it is complete
 
 ___
 <a id="touch"></a>
@@ -157,6 +153,7 @@ ___
 Resets the time to live on this search job
 
 **Returns:** `Promise`<`any`>
+A promise that will be resolved when the touch action is accepted by the service
 
 ___
 <a id="wait"></a>
@@ -172,9 +169,10 @@ Polls the job until it is done processing
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | updateInterval | `number` |  - |
-| statusCallback | `function` |   |
+| statusCallback | `function` |  - |
 
 **Returns:** `Promise`<[Job](../interfaces/job.md)>
+search job status description
 
 ___
 

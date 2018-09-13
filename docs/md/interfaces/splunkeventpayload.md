@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [SplunkEventPayload](../interfaces/splunkeventpayload.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [SplunkEventPayload](../interfaces/splunkeventpayload.md)
 
 # Interface: SplunkEventPayload
 

@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [IngestService](../classes/ingestservice.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [IngestService](../classes/ingestservice.md)
 
 # Class: IngestService
 
@@ -22,10 +22,8 @@ Encapsulates Ingest service endpoints
 
 ### Methods
 
-* [createEvent](ingestservice.md#createevent)
-* [postEvents](ingestservice.md#createevents)
-* [postMetrics](ingestservice.md#createmetrics)
-* [createRawEvent](ingestservice.md#createrawevent)
+* [postEvents](ingestservice.md#postevents)
+* [postMetrics](ingestservice.md#postmetrics)
 
 ---
 
@@ -61,72 +59,40 @@ ___
 
 ## Methods
 
-<a id="createevent"></a>
-
-###  createEvent
-
-▸ **createEvent**(event: *[Event](../interfaces/event.md)*): `Promise`<`any`>
-
-Create a structured event to be ingested by Splunk SSC via Ingest service.
-
-**Parameters:**
-
-| Param | Type | Description |
-| ------ | ------ | ------ |
-| event | [Event](../interfaces/event.md) |   |
-
-**Returns:** `Promise`<`any`>
-
-___
-<a id="createevents"></a>
+<a id="postevents"></a>
 
 ###  postEvents
 
 ▸ **postEvents**(events: *[Event](../interfaces/event.md)[]*): `Promise`<`any`>
 
-Create structured events to be ingested by Splunk SSC via Ingest service.
+Post structured events to be ingested by Splunk Cloud via Ingest service.
 
 **Parameters:**
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| events | [Event](../interfaces/event.md)[] |   |
+| events | [Event](../interfaces/event.md)[] |  - |
 
 **Returns:** `Promise`<`any`>
+promise that will be resolved when the ingest service has accepted the events for indexing
 
 ___
-<a id="createmetrics"></a>
+<a id="postmetrics"></a>
 
 ###  postMetrics
 
 ▸ **postMetrics**(metrics: *[MetricEvent](../interfaces/metricevent.md)[]*): `Promise`<`any`>
 
-Create metrics to be ingested by Splunk SSC.
+Post metrics to be ingested by Splunk Cloud.
 
 **Parameters:**
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| metrics | [MetricEvent](../interfaces/metricevent.md)[] |   |
+| metrics | [MetricEvent](../interfaces/metricevent.md)[] |  - |
 
 **Returns:** `Promise`<`any`>
-
-___
-<a id="createrawevent"></a>
-
-###  createRawEvent
-
-▸ **createRawEvent**(event: *[Event](../interfaces/event.md)*): `Promise`<`any`>
-
-Create unstructured event data to be ingested by Splunk SSC via Ingest service.
-
-**Parameters:**
-
-| Param | Type | Description |
-| ------ | ------ | ------ |
-| event | [Event](../interfaces/event.md) |   |
-
-**Returns:** `Promise`<`any`>
+promise that will be resolved when the ingest service has accepted the metrics for indexing
 
 ___
 

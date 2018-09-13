@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [DispatchState](../enums/dispatchstate.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [DispatchState](../enums/dispatchstate.md)
 
 # Enumeration: DispatchState
 

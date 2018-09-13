@@ -1,4 +1,4 @@
-[@splunk/ssc-client](../README.md) > [Field](../interfaces/field.md)
+[@splunk/splunk-cloud-sdk](../README.md) > [Field](../interfaces/field.md)
 
 # Interface: Field
 
