@@ -40,7 +40,7 @@ If your application needs to work with one specific service, you can use a speci
 
 ```javascript
 
-var IdentityService = require('@splunk/splunk-cloud-src/identity')
+var { IdentityService } = require('@splunk/splunk-cloud/identity')
 
 var identity = new IdentityService(ENDPOINT_URL, AUTH_TOKEN, TENANT)
 
