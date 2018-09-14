@@ -185,8 +185,8 @@ export class ServiceClient {
 
         if (headers !== undefined && headers !== {}) {
             Object.keys(headers).forEach(key => {
-                requestParamHeaders.append(key, headers[key])
-            })
+                requestParamHeaders.append(key, headers[key]);
+            });
         }
         return requestParamHeaders;
     }
@@ -240,7 +240,7 @@ export class ServiceClient {
      */
     public get(path: string, opts: RequestOptions = {}): Promise<HTTPResponse> {
         return this.fetch('GET', path, opts)
-            .then((response: Response) => handleResponse(response));
+            .then(handleResponse);
     }
 
     /**
@@ -254,7 +254,7 @@ export class ServiceClient {
      */
     public post(path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> {
         return this.fetch('POST', path, opts, data)
-            .then((response: Response) => handleResponse(response));
+            .then(handleResponse);
     }
 
     /**
@@ -268,7 +268,7 @@ export class ServiceClient {
      */
     public put(path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> {
         return this.fetch('PUT', path, opts, data)
-            .then((response: Response) => handleResponse(response));
+            .then(handleResponse);
     }
 
     /**
@@ -282,7 +282,7 @@ export class ServiceClient {
      */
     public patch(path: string, data: object, opts: RequestOptions = {}): Promise<HTTPResponse> {
         return this.fetch('PATCH', path, opts, data)
-            .then((response: Response) => handleResponse(response));
+            .then(handleResponse);
     }
 
     /**
@@ -296,7 +296,7 @@ export class ServiceClient {
      */
     public delete(path: string, data: object = {}, opts: RequestOptions = {}): Promise<HTTPResponse> {
         return this.fetch('DELETE', path, opts, data)
-            .then((response: Response) => handleResponse(response));
+            .then(handleResponse);
     }
 }
 

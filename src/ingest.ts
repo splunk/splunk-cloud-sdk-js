@@ -18,7 +18,8 @@ export class IngestService extends BaseApiService {
      */
     public postEvents = (events: Event[]): Promise<any> => {
         return this.client.post(this.client.buildPath('/ingest/v2', ['events']), events)
-            .then(response => response.body);
+            .then(response => response.body)
+            .then(responseBody => responseBody);
     }
 
     /**
@@ -28,7 +29,8 @@ export class IngestService extends BaseApiService {
      */
     public postMetrics = (metrics: MetricEvent[]): Promise<any> => {
         return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics']), metrics)
-            .then(response => response.body);
+            .then(response => response.body)
+            .then(responseBody => responseBody);
     }
 }
 
@@ -69,7 +71,7 @@ export interface Event {
      * An optional ID that uniquely identifies the event data. It is used to deduplicate the data if same data is set multiple times.
      * If ID is not specified, it will be assigned by the system.
      */
-    id?: string
+    id?: string;
 }
 
 /**
@@ -111,7 +113,7 @@ export interface MetricEvent {
     /**
      * The sourcetype value assigned to the event data.
      */
-    sourceType: string;
+    sourcetype: string;
     /**
      * Epoch time in milliseconds.
      */

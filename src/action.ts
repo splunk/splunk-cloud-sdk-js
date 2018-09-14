@@ -18,7 +18,7 @@ export class ActionService extends BaseApiService {
     public getActions = (): Promise<Action[]> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
             .then(response => response.body as Action[]);
-    };
+    }
 
     /**
      * Get an action by name
@@ -28,7 +28,7 @@ export class ActionService extends BaseApiService {
     public getAction = (name: Action['name']): Promise<Action> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
             .then(response => response.body as Action);
-    };
+    }
 
     /**
      * Delete an action by name
@@ -38,7 +38,7 @@ export class ActionService extends BaseApiService {
     public deleteAction = (name: Action['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
             .then(response => response.body);
-    };
+    }
 
     /**
      * Create an action
@@ -48,7 +48,7 @@ export class ActionService extends BaseApiService {
     public createAction = (action: Action): Promise<Action> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
             .then(response => response.body as Action);
-    };
+    }
 
     /**
      * Update an action
@@ -59,7 +59,7 @@ export class ActionService extends BaseApiService {
     public updateAction = (name: Action['name'], action: ActionUpdateFields): Promise<Action> => {
         return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
             .then(response => response.body as Action);
-    };
+    }
 
     /**
      * Trigger an action
@@ -85,7 +85,7 @@ export class ActionService extends BaseApiService {
                 }
                 return response.body as ActionTriggerResponse;
             });
-    };
+    }
 
     /**
      * Get action status
@@ -96,7 +96,7 @@ export class ActionService extends BaseApiService {
     public getActionStatus = (name: Action['name'], statusId: string): Promise<ActionStatus> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
             .then(response => response.body as ActionStatus);
-    };
+    }
 }
 
 
