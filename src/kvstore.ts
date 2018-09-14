@@ -5,7 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import BaseApiService from './baseapiservice';
-import { ContentType, HTTPResponse, QueryArgs, RequestHeaders } from './client';
+import { ContentType, HTTPResponse, QueryArgs, RequestHeaders, RequestOptions } from './client';
 import { KVSTORE_SERVICE_PREFIX } from './service_prefixes';
 
 /**
@@ -169,7 +169,10 @@ export class KVStoreService extends BaseApiService {
             collection,
             'query',
         ]);
-        return this.client.get(url, filter)
+        const requestOptions: RequestOptions = {
+            query: filter
+        }
+        return this.client.get(url, requestOptions)
             .then(response => response.body as Map<string, string>);
     };
 
@@ -199,7 +202,10 @@ export class KVStoreService extends BaseApiService {
             'collections',
             collection,
         ]);
-        return this.client.get(url, filter)
+        const requestOptions: RequestOptions = {
+            query: filter
+        }
+        return this.client.get(url, requestOptions)
             .then(response => response.body as Map<string, string>);
     };
 
@@ -210,11 +216,11 @@ export class KVStoreService extends BaseApiService {
      * @returns A promise that will be resolved when the matching records are deleted
      */
     public deleteRecords = (collection: string, filter?: QueryArgs): Promise<any> => {
-        return this.client.delete(
-            this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query']),
-            filter
-        )
-            .then(response => response.body);
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query'])
+        const requestOptions: RequestOptions = {
+            query: filter
+        }
+        return this.client.delete(url, requestOptions).then(response => response.body);
     };
 
     /**
