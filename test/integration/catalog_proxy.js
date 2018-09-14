@@ -202,6 +202,30 @@ function createKVCollectionDataset(namespace, collection) {
     );
 }
 
+function deleteAllDatasets() {
+    // Gets the datasets
+    return (
+        splunkCloud.catalog
+            .getDatasets()
+            // Deletes the dataset there should only be one dataset
+            .then(datasets => {
+                return Promise.all(
+                    datasets.map(dataset => {
+                        return splunkCloud.catalog.deleteDataset(dataset.id);
+                    })
+                );
+            })
+            // Finally set the dataset for testing
+            .then(response => {
+                return response;
+            })
+            .catch(error => {
+                console.log('An error was encountered while cleaning up datasests');
+                console.log(error);
+            })
+    );
+}
+
 function createRecord(collection, record) {
     return splunkCloud.kvstore
         .insertRecord(collection, record)
@@ -259,4 +283,5 @@ module.exports = {
     createKVCollectionDataset: createKVCollectionDataset,
     createRecord: createRecord,
     createRule: createRule,
+    deleteAllDatasets: deleteAllDatasets,
 };
