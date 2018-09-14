@@ -15,9 +15,9 @@ export class ActionService extends BaseApiService {
      * Get all actions in action service.
      * @returns Promise of all actions
      */
-    public getActions = (): Promise<Action[]> => {
+    public getActions = (): Promise<Array<EmailAction | WebhookAction | SNSAction>> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
-            .then(response => response.body as Action[]);
+            .then(response => response.body as Array<EmailAction | WebhookAction | SNSAction>);
     };
 
     /**
@@ -25,9 +25,9 @@ export class ActionService extends BaseApiService {
      * @param name name of the action
      * @return Promise of an action
      */
-    public getAction = (name: ActionBase['name']): Promise<Action> => {
+    public getAction = (name: ActionBase['name']): Promise<EmailAction | WebhookAction | SNSAction> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
-            .then(response => response.body as Action);
+            .then(response => response.body as EmailAction | WebhookAction | SNSAction);
     };
 
     /**
@@ -45,9 +45,9 @@ export class ActionService extends BaseApiService {
      * @param action input action
      * @return Promise of an action
      */
-    public createAction = (action: Action): Promise<Action> => {
+    public createAction = (action: EmailAction | WebhookAction | SNSAction): Promise<EmailAction | WebhookAction | SNSAction> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
-            .then(response => response.body as Action);
+            .then(response => response.body as EmailAction | WebhookAction | SNSAction);
     };
 
     /**
@@ -56,9 +56,9 @@ export class ActionService extends BaseApiService {
      * @param action action updates
      * @return Promise of an action
      */
-    public updateAction = (name: ActionBase['name'], action: Action): Promise<Action> => {
+    public updateAction = (name: ActionBase['name'], action: EmailAction | WebhookAction | SNSAction): Promise<EmailAction | WebhookAction | SNSAction> => {
         return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
-            .then(response => response.body as Action);
+            .then(response => response.body as EmailAction | WebhookAction | SNSAction);
     };
 
     /**
@@ -243,6 +243,7 @@ export interface ActionUpdateFields {
 
 
 export interface EmailAction {
+    type: 'email';
     addresses: string[];
     htmlPart?: string;
     subjectPart?: string;
@@ -266,7 +267,6 @@ export interface WebhookAction {
     webhookUrl: string;
 }
 
-export type Action = EmailAction | WebhookAction | SNSAction;
 export interface ActionBase {
     kind: string;
     /**
