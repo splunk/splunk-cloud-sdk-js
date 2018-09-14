@@ -22,7 +22,7 @@ Installing this SDK allows your project to interact with services in the Splunk 
 This example shows how to use one service client to access all supported services:
 
 ```js
-var ServiceClient = require('@splunk/splunk-cloud-src/splunk')
+var { ServiceClient } = require('@splunk/splunk-cloud')
  
 var svc = new ServiceClient(ENDPOINT_URL, AUTH_TOKEN, TENANT)
  
