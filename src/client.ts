@@ -166,8 +166,10 @@ export class ServiceClient {
                 .filter(k => query[k] != null) // filter out undefined and null
                 .map(k => `${encoder(k)}=${encoder(String(query[k]))}`)
                 .join('&');
+
             return `${this.url}${path}?${queryEncoded}`;
         }
+
         return `${this.url}${path}`;
     }
 
@@ -221,12 +223,14 @@ export class ServiceClient {
      * @param data Body data (will be stringified if an object)
      */
     public fetch(method: HTTPMethod, path: string, opts: RequestOptions = {}, data?: any): Promise<Response> {
-        return fetch(this.buildUrl(path, opts.query), {
+        const url = this.buildUrl(path, opts.query)
+        const options = {
             method,
             headers: this.buildHeaders(opts.headers),
             body: typeof data !== 'string' ? JSON.stringify(data) : data,
-        })
-            .then(response => this.invokeHooks(response));
+        }
+
+        return fetch(url, options).then(response => this.invokeHooks(response));
 
     }
 
@@ -318,7 +322,7 @@ export interface RequestOptions {
 }
 
 export interface QueryArgs {
-    [key: string]: string | number | undefined | boolean;
+    [key: string]: string | number | boolean | undefined;
 }
 
 export enum ContentType {
