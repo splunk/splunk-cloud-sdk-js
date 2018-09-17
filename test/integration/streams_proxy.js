@@ -1,6 +1,6 @@
 const { assert } = require("chai");
 const config = require("../config");
-const SplunkCloud = require("../../splunk").SplunkCloud;
+const { SplunkCloud } = require('../../splunk');
 
 const splunkCloudHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
@@ -255,16 +255,16 @@ function createPipelineRequest(name, description) {
         "dsl": "kafka-brokers=\"localhost:9092\";input-topic = \"intopic\";output-topic-1 = \"output-topic-1\";events = deserialize-events(read-kafka(kafka-brokers, input-topic, {}));write-kafka(serialize-events(events, output-topic-1), kafka-brokers, {});"
     };
     return splunkCloud.streams.compileDslToUpl(dsl).then(response => {
-            assert.isNotNull(response);
-            const TestPipelineRequest = {
-                bypassValidation: true,
-                name: name,
-                description: description,
-                createUserID: config.playgroundTenant,
-                data: response
-            };
-            return TestPipelineRequest;
-        })
+        assert.isNotNull(response);
+        const TestPipelineRequest = {
+            bypassValidation: true,
+            name: name,
+            description: description,
+            createUserID: config.playgroundTenant,
+            data: response
+        };
+        return TestPipelineRequest;
+    })
         .catch(error => {
             throw error;
         });
