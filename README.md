@@ -5,6 +5,9 @@
 
 [![codecov](https://codecov.io/gh/splunk/splunk-cloud-sdk-js/branch/develop/graph/badge.svg?token=R5kexVYymt)](https://codecov.io/gh/splunk/splunk-cloud-sdk-js)
 
+# Terms of Service (TOS)
+[Splunk Cloud Terms of Service](https://www.splunk.com/en_us/legal/terms/splunk-cloud-terms-of-service.html)
+
 ## Usage
 
 Download the latest release of the Splunk Cloud SDK for JavaScript from one of the following locations: 
