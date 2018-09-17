@@ -107,38 +107,6 @@ export enum ActionKind {
     sns = 'sns',
 }
 
-// Action defines the fields for email, sns, and webhooks as one aggregated model
-export interface Actionxx {
-    // Common action fields:
-    // Name of action, all actions have this field
-    name: string;
-    // Kind of action (email, webhook, or sns), all actions have this field
-    kind: ActionKind;
-
-    // Email action fields:
-    // HTMLPart to send via Email action
-    htmlPart?: string;
-    // SubjectPart to send via Email action
-    subjectPart?: string;
-    // TextPart to send via Email action
-    textPart?: string;
-    // TemplateName to send via Email action
-    templateName?: string;
-    // Addresses to send to when Email action triggered
-    addresses?: string[];
-
-    // SNS action fields:
-    // Topic to trigger SNS action
-    topic?: string;
-    // Message to send via SNS or Webhook action
-    message: string;
-
-    // Webhook action fields:
-    // WebhookURL to trigger Webhook action
-    webhookUrl?: string;
-}
-
-
 // ActionStatusState reflects the status of the action
 export enum ActionStatusState {
     queue = 'QUEUED',
