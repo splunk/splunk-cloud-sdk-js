@@ -123,9 +123,11 @@ export class ServiceClient {
             } else if (typeof authManager === 'function') {
                 // If we have a function, just call it when we need a token
                 this.tokenSource = authManager;
-            } else {
+            } else if ('getAccessToken' in authManager) {
                 // Else wrap a token manager.
                 this.tokenSource = () => authManager.getAccessToken();
+            } else {
+                throw new SplunkError({ message: 'Unsupported token source' });
             }
             this.url = args.url || DEFAULT_URL;
             this.tenant = args.defaultTenant;
