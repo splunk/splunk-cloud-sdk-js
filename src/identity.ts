@@ -509,5 +509,4 @@ export interface Principal {
  */
 export interface ValidateInfo {
     name: string
-    tenants: string[]
 }
