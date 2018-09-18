@@ -27,7 +27,7 @@ export const IDENTITY_SERVICE_PREFIX: string = '/identity/v1';
 /**
  * @private
  */
-export const SEARCH_SERVICE_PREFIX: string = '/search/v1';
+export const SEARCH_SERVICE_PREFIX: string = '/search/v1beta1';
 
 /**
  * @private
