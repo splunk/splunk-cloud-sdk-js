@@ -421,14 +421,8 @@ export interface UpdateJobResponse {
  * Response when job results are not yet ready.
  */
 export interface ResultsNotReadyResponse {
-    /**
-     * URL for job results
-     */
     nextLink: string;
-    /**
-     * Number of milliseconds to wait before retrying
-     */
-    wait: number;
+    wait: string;
 }
 
 export enum messageTypes {
