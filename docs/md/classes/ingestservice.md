@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [IngestService](../classes/ingestservice.md)
+[@splunk/cloud-sdk](../README.md) > [IngestService](../classes/ingestservice.md)
 
 # Class: IngestService
 

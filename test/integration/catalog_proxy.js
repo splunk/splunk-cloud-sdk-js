@@ -1,5 +1,5 @@
 const config = require('../config');
-const SplunkCloud = require('../../splunk').SplunkCloud;
+const { SplunkCloud } = require('../../splunk');
 const { assert } = require('chai');
 
 const splunkCloudHost = config.playgroundHost;
@@ -8,7 +8,7 @@ const tenantID = config.playgroundTenant;
 
 const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
 
-describe('catalog v2', () => {
+describe('catalog', () => {
     const indexName = `idx_${Date.now()}`;
     // Create an index to ensure there is something to return
     before(() => createIndexDataset(indexName));
@@ -202,6 +202,33 @@ function createKVCollectionDataset(namespace, collection) {
     );
 }
 
+function deleteAllDatasets() {
+    // Gets the datasets
+    return (
+        splunkCloud.catalog
+            .getDatasets()
+            // Deletes the dataset there should only be one dataset
+            .then(datasets => {
+                return Promise.all(
+                    datasets.map(dataset => {
+                        // Delete the dataset unless it's a main or metrics index
+                        if (!(dataset.kind === "index" && (dataset.name === "main" || dataset.name === "metrics"))) {
+                            return splunkCloud.catalog.deleteDataset(dataset.id);
+                        }
+                    })
+                );
+            })
+            // Finally set the dataset for testing
+            .then(response => {
+                return response;
+            })
+            .catch(error => {
+                console.log('An error was encountered while cleaning up datasests');
+                console.log(error);
+            })
+    );
+}
+
 function createRecord(collection, record) {
     return splunkCloud.kvstore
         .insertRecord(collection, record)
@@ -259,4 +286,5 @@ module.exports = {
     createKVCollectionDataset: createKVCollectionDataset,
     createRecord: createRecord,
     createRule: createRule,
+    deleteAllDatasets: deleteAllDatasets,
 };

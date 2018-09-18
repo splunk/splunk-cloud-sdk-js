@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [AdditionalProperties](../interfaces/additionalproperties.md)
+[@splunk/cloud-sdk](../README.md) > [AdditionalProperties](../interfaces/additionalproperties.md)
 
 # Interface: AdditionalProperties
 

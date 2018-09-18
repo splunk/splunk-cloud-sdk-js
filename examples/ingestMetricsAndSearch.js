@@ -3,7 +3,7 @@
 //              and a search on the ingested data to verify the data.
 require("isomorphic-fetch");
 
-const SplunkCloud = require("../splunk");
+const { SplunkCloud } = require("../splunk");
 const { searchResults } = require("../utils/exampleHelperFunctions");
 
 const { SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
@@ -55,7 +55,7 @@ function sendDataViaIngest(splunk, host, source) {
     }];
 
     // Use the Ingest Service metrics endpoint to send the metrics data
-    splunk.ingest.createMetrics([metricEvent1, metricEvent2]).then(data => {
+    splunk.ingest.postMetrics([metricEvent1, metricEvent2]).then(data => {
         console.log(data);
     }).catch(err => {
         console.log(`ingest metrics event failed with err: ${err}`);

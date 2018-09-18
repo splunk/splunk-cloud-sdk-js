@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [Principal](../interfaces/principal.md)
+[@splunk/cloud-sdk](../README.md) > [Principal](../interfaces/principal.md)
 
 # Interface: Principal
 

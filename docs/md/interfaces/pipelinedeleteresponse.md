@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [PipelineDeleteResponse](../interfaces/pipelinedeleteresponse.md)
+[@splunk/cloud-sdk](../README.md) > [PipelineDeleteResponse](../interfaces/pipelinedeleteresponse.md)
 
 # Interface: PipelineDeleteResponse
 

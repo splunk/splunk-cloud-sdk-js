@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [RequestHeaders](../interfaces/requestheaders.md)
+[@splunk/cloud-sdk](../README.md) > [RequestHeaders](../interfaces/requestheaders.md)
 
 # Interface: RequestHeaders
 

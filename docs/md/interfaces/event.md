@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [Event](../interfaces/event.md)
+[@splunk/cloud-sdk](../README.md) > [Event](../interfaces/event.md)
 
 # Interface: Event
 

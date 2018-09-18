@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [DslCompilationRequest](../interfaces/dslcompilationrequest.md)
+[@splunk/cloud-sdk](../README.md) > [DslCompilationRequest](../interfaces/dslcompilationrequest.md)
 
 # Interface: DslCompilationRequest
 

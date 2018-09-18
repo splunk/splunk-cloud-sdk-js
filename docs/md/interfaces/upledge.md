@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [UplEdge](../interfaces/upledge.md)
+[@splunk/cloud-sdk](../README.md) > [UplEdge](../interfaces/upledge.md)
 
 # Interface: UplEdge
 

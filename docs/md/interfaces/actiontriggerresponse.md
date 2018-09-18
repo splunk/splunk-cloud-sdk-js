@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [ActionTriggerResponse](../interfaces/actiontriggerresponse.md)
+[@splunk/cloud-sdk](../README.md) > [ActionTriggerResponse](../interfaces/actiontriggerresponse.md)
 
 # Interface: ActionTriggerResponse
 

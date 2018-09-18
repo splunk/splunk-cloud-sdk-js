@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [Prevalence](../enums/prevalence.md)
+[@splunk/cloud-sdk](../README.md) > [Prevalence](../enums/prevalence.md)
 
 # Enumeration: Prevalence
 

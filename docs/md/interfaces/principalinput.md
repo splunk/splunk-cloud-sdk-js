@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [PrincipalInput](../interfaces/principalinput.md)
+[@splunk/cloud-sdk](../README.md) > [PrincipalInput](../interfaces/principalinput.md)
 
 # Interface: PrincipalInput
 

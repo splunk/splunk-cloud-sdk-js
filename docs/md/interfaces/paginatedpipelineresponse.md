@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [PaginatedPipelineResponse](../interfaces/paginatedpipelineresponse.md)
+[@splunk/cloud-sdk](../README.md) > [PaginatedPipelineResponse](../interfaces/paginatedpipelineresponse.md)
 
 # Interface: PaginatedPipelineResponse
 
