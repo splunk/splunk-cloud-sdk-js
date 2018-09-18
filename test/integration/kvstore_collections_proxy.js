@@ -1,6 +1,6 @@
 const { assert } = require('chai');
 const config = require('../config');
-const SplunkCloud = require('../../splunk').SplunkCloud;
+const { SplunkCloud } = require('../../splunk');
 
 const splunkCloudHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
@@ -10,7 +10,7 @@ const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
 
 const { ContentType } = require('../../client');
-const { createKVCollectionDataset, createRecord } = require('./catalog_proxy');
+const { createKVCollectionDataset, createRecord, deleteAllDatasets } = require('./catalog_proxy');
 
 const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
 
@@ -36,16 +36,11 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
         TEST_KEY_03: 'B',
     };
 
-    beforeEach(async () => {
-        testDataset = await createKVCollectionDataset(testNamespace, testCollection);
-        return testDataset;
-    });
-    afterEach(() => {
-        if (testDataset != null) {
-            return splunkCloud.catalog
-                .deleteDatasetByName(testDataset.name)
-                .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
-        }
+    beforeEach(() => {
+        return deleteAllDatasets().then(response => {
+            testDataset = createKVCollectionDataset(testNamespace, testCollection);
+            return testDataset
+        })
     });
 
     // -------------------------------------------------------------------------

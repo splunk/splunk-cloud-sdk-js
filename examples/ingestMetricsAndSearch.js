@@ -3,7 +3,7 @@
 //              and a search on the ingested data to verify the data.
 require("isomorphic-fetch");
 
-const SplunkCloud = require("../splunk").SplunkCloud;
+const { SplunkCloud } = require("../splunk");
 const { searchResults } = require("../utils/exampleHelperFunctions");
 
 const { SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID } = process.env;

@@ -1,5 +1,5 @@
 const config = require('../config');
-const SplunkCloud = require('../../splunk').SplunkCloud;
+const { SplunkCloud } = require('../../splunk');
 const { assert, expect } = require('chai');
 
 const splunkCloudHost = config.playgroundHost;

@@ -5,6 +5,9 @@
 
 [![codecov](https://codecov.io/gh/splunk/splunk-cloud-sdk-js/branch/develop/graph/badge.svg?token=R5kexVYymt)](https://codecov.io/gh/splunk/splunk-cloud-sdk-js)
 
+# Terms of Service (TOS)
+[Splunk Cloud Terms of Service](https://www.splunk.com/en_us/legal/terms/splunk-cloud-terms-of-service.html)
+
 ## Usage
 
 Download the latest release of the Splunk Cloud SDK for JavaScript from one of the following locations: 
@@ -22,7 +25,7 @@ Installing this SDK allows your project to interact with services in the Splunk 
 This example shows how to use one service client to access all supported services:
 
 ```js
-var ServiceClient = require('@splunk/splunk-cloud-src/splunk')
+var { ServiceClient } = require('@splunk/splunk-cloud')
  
 var svc = new ServiceClient(ENDPOINT_URL, AUTH_TOKEN, TENANT)
  
@@ -40,7 +43,7 @@ If your application needs to work with one specific service, you can use a speci
 
 ```javascript
 
-var IdentityService = require('@splunk/splunk-cloud-src/identity')
+var { IdentityService } = require('@splunk/splunk-cloud/identity')
 
 var identity = new IdentityService(ENDPOINT_URL, AUTH_TOKEN, TENANT)
 
