@@ -34,7 +34,7 @@ function sendDataViaIngest(splunk, index, host, source) {
         "sourcetype": "splunkd",
         "source": source,
         "host": host,
-        "event": `device_id=aa1 haha0 my new event ${host},${source}`,
+        "body": `device_id=aa1 haha0 my new event ${host},${source}`,
         "attributes": {
             "index": index
         }
@@ -47,7 +47,7 @@ function sendDataViaIngest(splunk, index, host, source) {
         },
         "fields": { "fieldkey1": "fieldval1", "fieldkey2": "fieldkey2" },
         "host": host,
-        "event": `04-24-2018 12:32:23.252 -0700 INFO  device_id=[www]401:sdfsf haha1 ${host},${source}`
+        "body": `04-24-2018 12:32:23.252 -0700 INFO  device_id=[www]401:sdfsf haha1 ${host},${source}`
     };
     const event3 = {
         "sourcetype": "splunkd",
@@ -57,7 +57,7 @@ function sendDataViaIngest(splunk, index, host, source) {
         },
         "fields": { "fieldkey1": "fieldval1", "fieldkey2": "fieldkey2" },
         "host": host,
-        "event": `04-24-2018 12:32:23.258 -0700 INFO device_id:aa2 device_id=[code]error3: haha2 "9765f1bebdb4".  ${host},${source}`
+        "body": `04-24-2018 12:32:23.258 -0700 INFO device_id:aa2 device_id=[code]error3: haha2 "9765f1bebdb4".  ${host},${source}`
     };
 
     // Use the Ingest endpoint to send multiple events

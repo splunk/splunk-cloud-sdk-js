@@ -13,17 +13,23 @@ export interface SplunkErrorParams {
     message: string;
     code?: string;
     httpStatusCode?: number;
-    details?: object;
+    details?: object | any[];
     moreInfo?: string;
 }
 
 export class SplunkError extends Error implements SplunkErrorParams {
 
-    public errorParams: SplunkErrorParams;
+    public code?: string;
+    public httpStatusCode?: number;
+    public details?: object | any[];
+    public moreInfo?: string;
 
     constructor(errorParams: SplunkErrorParams) {
         super(errorParams.message);
-        this.errorParams = errorParams;
+        this.code = errorParams.code;
+        this.details = errorParams.details;
+        this.moreInfo = errorParams.moreInfo;
+        this.httpStatusCode = errorParams.httpStatusCode;
     }
 }
 

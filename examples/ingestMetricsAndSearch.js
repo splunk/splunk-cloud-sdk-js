@@ -55,7 +55,7 @@ function sendDataViaIngest(splunk, host, source) {
     }];
 
     // Use the Ingest Service metrics endpoint to send the metrics data
-    splunk.ingest.createMetrics([metricEvent1, metricEvent2]).then(data => {
+    splunk.ingest.postMetrics([metricEvent1, metricEvent2]).then(data => {
         console.log(data);
     }).catch(err => {
         console.log(`ingest metrics event failed with err: ${err}`);
