@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [GroupInput](../interfaces/groupinput.md)
+[@splunk/cloud-sdk](../README.md) > [GroupInput](../interfaces/groupinput.md)
 
 # Interface: GroupInput
 

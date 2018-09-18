@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [SearchService](../classes/searchservice.md)
+[@splunk/cloud-sdk](../README.md) > [SearchService](../classes/searchservice.md)
 
 # Class: SearchService
 
@@ -23,13 +23,11 @@ Encapsulates search endpoints
 ### Methods
 
 * [createJob](searchservice.md#createjob)
-* [createJobControlAction](searchservice.md#createjobcontrolaction)
-* [deleteJob](searchservice.md#deletejob)
-* [getEvents](searchservice.md#getevents)
 * [getJob](searchservice.md#getjob)
-* [getJobs](searchservice.md#getjobs)
 * [getResults](searchservice.md#getresults)
+* [listJobs](searchservice.md#listjobs)
 * [submitSearch](searchservice.md#submitsearch)
+* [updateJob](searchservice.md#updatejob)
 * [waitForJob](searchservice.md#waitforjob)
 
 ---
@@ -70,77 +68,24 @@ ___
 
 ###  createJob
 
-▸ **createJob**(jobArgs?: * `undefined` &#124; `object`*): `Promise`<`string`>
+▸ **createJob**(jobArgs: *[SearchArgs](../interfaces/searchargs.md)*): `Promise`<[SearchJob](../interfaces/searchjob.md)>
 
-Dispatch a search and return the newly created search job id
+Creates a new SearchJob
 
 **Parameters:**
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| `Optional` jobArgs |  `undefined` &#124; `object`|  - |
+| jobArgs | [SearchArgs](../interfaces/searchargs.md) |  Arguments for the new search |
 
-**Returns:** `Promise`<`string`>
-
-___
-<a id="createjobcontrolaction"></a>
-
-###  createJobControlAction
-
-▸ **createJobControlAction**(jobId: *`string`*, action: *`string`*): `Promise`<`any`>
-
-**Parameters:**
-
-| Param | Type |
-| ------ | ------ |
-| jobId | `string` |
-| action | `string` |
-
-**Returns:** `Promise`<`any`>
-
-___
-<a id="deletejob"></a>
-
-###  deleteJob
-
-▸ **deleteJob**(jobId: *`string`*): `Promise`<`any`>
-
-Delete the search job with the given `id`, cancelling the search if it is running.
-
-**Parameters:**
-
-| Param | Type |
-| ------ | ------ |
-| jobId | `string` |
-
-**Returns:** `Promise`<`any`>
-Promise that will be resolved when the job has been deleted
-
-___
-<a id="getevents"></a>
-
-###  getEvents
-
-▸ **getEvents**(jobId: *`string`*, args?: * `undefined` &#124; `object`*): `Promise`<`any`>
-
-Returns events for the search job corresponding to "id". Returns results post-transform, if applicable.
-
-**Parameters:**
-
-| Param | Type |
-| ------ | ------ |
-| jobId | `string` |
-| `Optional` args |  `undefined` &#124; `object`|
-
-**Returns:** `Promise`<`any`>
-an array of event objects
+**Returns:** `Promise`<[SearchJob](../interfaces/searchjob.md)>
 
 ___
 <a id="getjob"></a>
 
 ###  getJob
 
-▸ **getJob**(jobId: *`string`*): `Promise`<[Job](../interfaces/job.md)>
+▸ **getJob**(jobId: *`string`*): `Promise`<[SearchJob](../interfaces/searchjob.md)>
 
 Returns the job resource with the given `id`.
 
@@ -150,34 +95,17 @@ Returns the job resource with the given `id`.
 | ------ | ------ | ------ |
 | jobId | `string` |  - |
 
-**Returns:** `Promise`<[Job](../interfaces/job.md)>
+**Returns:** `Promise`<[SearchJob](../interfaces/searchjob.md)>
 Description of job
-
-___
-<a id="getjobs"></a>
-
-###  getJobs
-
-▸ **getJobs**(jobArgs?: *`any`*): `Promise`<[Job](../interfaces/job.md)[]>
-
-Get details of all current searches.
-
-**Parameters:**
-
-| Param | Type | Default value |
-| ------ | ------ | ------ |
-| `Default value` jobArgs | `any` |  {} |
-
-**Returns:** `Promise`<[Job](../interfaces/job.md)[]>
 
 ___
 <a id="getresults"></a>
 
 ###  getResults
 
-▸ **getResults**(jobId: *`string`*, args?: *[FetchResultsRequest](../interfaces/fetchresultsrequest.md)*): `Promise`<`object`>
+▸ **getResults**(jobId: *`string`*, args?: *[FetchResultsRequest](../interfaces/fetchresultsrequest.md)*): `Promise`< [SearchResults](../interfaces/searchresults.md) &#124; [ResultsNotReadyResponse](../interfaces/resultsnotreadyresponse.md)>
 
-Returns results for the search job corresponding to "id". Returns results post-transform, if applicable.
+Get {search_id} search results.
 
 **Parameters:**
 
@@ -186,14 +114,31 @@ Returns results for the search job corresponding to "id". Returns results post-t
 | jobId | `string` | - |
 | `Default value` args | [FetchResultsRequest](../interfaces/fetchresultsrequest.md) |  {} |
 
-**Returns:** `Promise`<`object`>
+**Returns:** `Promise`< [SearchResults](../interfaces/searchresults.md) &#124; [ResultsNotReadyResponse](../interfaces/resultsnotreadyresponse.md)>
+
+___
+<a id="listjobs"></a>
+
+###  listJobs
+
+▸ **listJobs**(jobArgs?: *`any`*): `Promise`<[SearchJob](../interfaces/searchjob.md)[]>
+
+Get the matching list of search jobs.
+
+**Parameters:**
+
+| Param | Type | Default value |
+| ------ | ------ | ------ |
+| `Default value` jobArgs | `any` |  {} |
+
+**Returns:** `Promise`<[SearchJob](../interfaces/searchjob.md)[]>
 
 ___
 <a id="submitsearch"></a>
 
 ###  submitSearch
 
-▸ **submitSearch**(searchArgs: *[PostJobsRequest](../interfaces/postjobsrequest.md)*): `Promise`<[Search](search.md)>
+▸ **submitSearch**(searchArgs: *[SearchArgs](../interfaces/searchargs.md)*): `Promise`<[Search](search.md)>
 
 Submits a search job and wraps the response in an object for easier further processing.
 
@@ -201,17 +146,35 @@ Submits a search job and wraps the response in an object for easier further proc
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| searchArgs | [PostJobsRequest](../interfaces/postjobsrequest.md) |  arguments for a new search job |
+| searchArgs | [SearchArgs](../interfaces/searchargs.md) |  arguments for a new search job |
 
 **Returns:** `Promise`<[Search](search.md)>
 a wrapper utility object for the search
+
+___
+<a id="updatejob"></a>
+
+###  updateJob
+
+▸ **updateJob**(jobId: *`string`*, update: *[UpdateJob](../interfaces/updatejob.md)*): `Promise`<[UpdateJobResponse](../interfaces/updatejobresponse.md)>
+
+action is applied to search job
+
+**Parameters:**
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| jobId | `string` |  - |
+| update | [UpdateJob](../interfaces/updatejob.md) |   |
+
+**Returns:** `Promise`<[UpdateJobResponse](../interfaces/updatejobresponse.md)>
 
 ___
 <a id="waitforjob"></a>
 
 ###  waitForJob
 
-▸ **waitForJob**(jobId: *`string`*, pollInterval?: * `undefined` &#124; `number`*, callback?: * `undefined` &#124; `function`*): `Promise`<[Job](../interfaces/job.md)>
+▸ **waitForJob**(jobId: *`string`*, pollInterval?: * `undefined` &#124; `number`*, callback?: * `undefined` &#124; `function`*): `Promise`<[SearchJob](../interfaces/searchjob.md)>
 
 Polls the service until the job is ready, then resolves returned promise with the final job description (as found from `getJob`).
 
@@ -223,7 +186,7 @@ Polls the service until the job is ready, then resolves returned promise with th
 | `Optional` pollInterval |  `undefined` &#124; `number`|  in ms |
 | `Optional` callback |  `undefined` &#124; `function`|  optional function that will be called on every poll result |
 
-**Returns:** `Promise`<[Job](../interfaces/job.md)>
+**Returns:** `Promise`<[SearchJob](../interfaces/searchjob.md)>
 
 ___
 

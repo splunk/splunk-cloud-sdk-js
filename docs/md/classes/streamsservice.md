@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [StreamsService](../classes/streamsservice.md)
+[@splunk/cloud-sdk](../README.md) > [StreamsService](../classes/streamsservice.md)
 
 # Class: StreamsService
 

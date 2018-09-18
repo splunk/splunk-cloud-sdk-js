@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [FieldType](../enums/fieldtype.md)
+[@splunk/cloud-sdk](../README.md) > [FieldType](../enums/fieldtype.md)
 
 # Enumeration: FieldType
 

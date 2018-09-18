@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [SplunkErrorParams](../interfaces/splunkerrorparams.md)
+[@splunk/cloud-sdk](../README.md) > [SplunkErrorParams](../interfaces/splunkerrorparams.md)
 
 # Interface: SplunkErrorParams
 
@@ -36,7 +36,7 @@ ___
 
 ### `<Optional>` details
 
-**● details**: * `undefined` &#124; `object`
+**● details**: * `any` &#124; `any`[]
 *
 
 ___

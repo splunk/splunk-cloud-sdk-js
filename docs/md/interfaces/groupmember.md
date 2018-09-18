@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [GroupMember](../interfaces/groupmember.md)
+[@splunk/cloud-sdk](../README.md) > [GroupMember](../interfaces/groupmember.md)
 
 # Interface: GroupMember
 

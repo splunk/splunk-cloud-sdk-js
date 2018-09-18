@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [DispatchState](../enums/dispatchstate.md)
+[@splunk/cloud-sdk](../README.md) > [DispatchState](../enums/dispatchstate.md)
 
 # Enumeration: DispatchState
 
@@ -17,14 +17,14 @@
 
 ###  DONE
 
-**DONE**:  = "DONE"
+**DONE**:  = "done"
 
 ___
 <a id="failed"></a>
 
 ###  FAILED
 
-**FAILED**:  = "FAILED"
+**FAILED**:  = "failed"
 
 ___
 

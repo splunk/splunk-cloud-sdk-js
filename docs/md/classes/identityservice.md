@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [IdentityService](../classes/identityservice.md)
+[@splunk/cloud-sdk](../README.md) > [IdentityService](../classes/identityservice.md)
 
 # Class: IdentityService
 

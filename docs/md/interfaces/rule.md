@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [Rule](../interfaces/rule.md)
+[@splunk/cloud-sdk](../README.md) > [Rule](../interfaces/rule.md)
 
 # Interface: Rule
 
@@ -30,7 +30,7 @@
 
 ###  actions
 
-**● actions**: *`Action`[]*
+**● actions**: *[Action](action.md)[]*
 
 ___
 <a id="created"></a>

@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [Tenant](../interfaces/tenant.md)
+[@splunk/cloud-sdk](../README.md) > [Tenant](../interfaces/tenant.md)
 
 # Interface: Tenant
 

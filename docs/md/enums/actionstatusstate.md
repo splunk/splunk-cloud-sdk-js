@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [ActionStatusState](../enums/actionstatusstate.md)
+[@splunk/cloud-sdk](../README.md) > [ActionStatusState](../enums/actionstatusstate.md)
 
 # Enumeration: ActionStatusState
 

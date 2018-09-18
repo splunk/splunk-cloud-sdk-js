@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [EventBatcher](../classes/eventbatcher.md)
+[@splunk/cloud-sdk](../README.md) > [EventBatcher](../classes/eventbatcher.md)
 
 # Class: EventBatcher
 

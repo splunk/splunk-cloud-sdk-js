@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [MetricEvent](../interfaces/metricevent.md)
+[@splunk/cloud-sdk](../README.md) > [MetricEvent](../interfaces/metricevent.md)
 
 # Interface: MetricEvent
 
