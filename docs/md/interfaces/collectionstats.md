@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [CollectionStats](../interfaces/collectionstats.md)
+[@splunk/cloud-sdk](../README.md) > [CollectionStats](../interfaces/collectionstats.md)
 
 # Interface: CollectionStats
 

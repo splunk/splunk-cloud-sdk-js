@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [HTTPResponse](../interfaces/httpresponse.md)
+[@splunk/cloud-sdk](../README.md) > [HTTPResponse](../interfaces/httpresponse.md)
 
 # Interface: HTTPResponse
 

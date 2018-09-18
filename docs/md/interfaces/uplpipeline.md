@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [UplPipeline](../interfaces/uplpipeline.md)
+[@splunk/cloud-sdk](../README.md) > [UplPipeline](../interfaces/uplpipeline.md)
 
 # Interface: UplPipeline
 

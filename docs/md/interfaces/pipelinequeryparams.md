@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [PipelineQueryParams](../interfaces/pipelinequeryparams.md)
+[@splunk/cloud-sdk](../README.md) > [PipelineQueryParams](../interfaces/pipelinequeryparams.md)
 
 # Interface: PipelineQueryParams
 

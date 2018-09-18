@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [PipelineRequest](../interfaces/pipelinerequest.md)
+[@splunk/cloud-sdk](../README.md) > [PipelineRequest](../interfaces/pipelinerequest.md)
 
 # Interface: PipelineRequest
 

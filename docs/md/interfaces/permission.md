@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [Permission](../interfaces/permission.md)
+[@splunk/cloud-sdk](../README.md) > [Permission](../interfaces/permission.md)
 
 # Interface: Permission
 
