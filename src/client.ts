@@ -7,6 +7,8 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 import { AuthManager } from './auth_manager';
 import agent from './version';
 
+const DEFAULT_URL = 'https://api.splunkbeta.com';
+
 export interface SplunkErrorParams {
     message: string;
     code?: string;
@@ -125,8 +127,7 @@ export class ServiceClient {
                 // Else wrap a token manager.
                 this.tokenSource = () => authManager.getAccessToken();
             }
-            // FIXME: Need real default.
-            this.url = args.url || 'DEFAULT';
+            this.url = args.url || DEFAULT_URL;
             this.tenant = args.defaultTenant;
         }
     }

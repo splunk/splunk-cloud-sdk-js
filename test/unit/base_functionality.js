@@ -167,7 +167,18 @@ describe("Service client args", () => {
         expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
         return s.get("/basic")
             .then(response => {
-                expect(response.body).to.have.own.property("foo");
+                expect(response.body).to.have.own.property('foo');
             });
+    });
+
+    it("should use a default URL", () => {
+        const s = new ServiceClient({
+            tokenSource: config.stubbyAuthToken,
+            defaultTenant: config.stubbyTenant
+        });
+
+        expect(s.buildUrl(s.buildPath('/foo', ['bar']))).to.equal(`https://api.splunkbeta.com/${config.stubbyTenant}/foo/bar`);
+
+
     });
 })
