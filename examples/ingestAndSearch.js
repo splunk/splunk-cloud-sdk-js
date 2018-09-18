@@ -85,7 +85,7 @@ async function main() {
 
     // ***** STEP 3: Get data in using Ingest Service
     // ***** DESCRIPTION: Send a single event, a batch of events, and raw events using Ingest Service.
-    const timeSec = Math.floor(Time.now()/1000);
+    const timeSec = Math.floor(Date.now()/1000);
     const host = `h-${timeSec}`;
     const source = `s-${timeSec}`;
     console.log(`host=${host}, source = ${source}`);
