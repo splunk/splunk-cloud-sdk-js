@@ -17,7 +17,7 @@ export class IngestService extends BaseApiService {
      * @return promise that will be resolved when the ingest service has accepted the events for indexing
      */
     public postEvents = (events: Event[]): Promise<any> => {
-        return this.client.post(this.client.buildPath('/ingest/v2', ['events']), events)
+        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), events)
             .then(response => response.body);
     }
 
