@@ -32,7 +32,7 @@ export const SEARCH_SERVICE_PREFIX: string = '/search/v1';
 /**
  * @private
  */
-export const KVSTORE_SERVICE_PREFIX: string = '/kvstore/v1';
+export const KVSTORE_SERVICE_PREFIX: string = '/kvstore/v1beta1';
 
 /**
  * @private
