@@ -9,6 +9,9 @@ const { sleep, searchResults } = require("../utils/exampleHelperFunctions");
 const { SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 async function createIndex(splunk, index) {
+    if (index === "main") {
+        return;
+    }
     const regex1 = {
         "owner": "splunk",
         "capabilities": "1101-00000:11010",
@@ -18,15 +21,13 @@ async function createIndex(splunk, index) {
         "disabled": false
     };
 
-    if (index !== "main") {
-        splunk.catalog.createDataset(regex1)
-            .then(data => console.log(data))
-            .catch(err => console.log(`create index error 1:  ${err.code}`));
+    splunk.catalog.createDataset(regex1)
+        .then(data => console.log(data))
+        .catch(err => console.log(`create index error 1:  ${err.code}`));
 
-        // it will take some time for the new index to finish the provisioning
-        console.log("wait for 90s for index to be provisioned");
-        await sleep(90 * 1000);
-    }
+    // it will take some time for the new index to finish the provisioning
+    console.log("wait for 90s for index to be provisioned");
+    await sleep(90 * 1000);
 };
 
 function sendDataViaIngest(splunk, index, host, source) {
@@ -34,7 +35,7 @@ function sendDataViaIngest(splunk, index, host, source) {
         "sourcetype": "splunkd",
         "source": source,
         "host": host,
-        "event": `device_id=aa1 haha0 my new event ${host},${source}`,
+        "body": `device_id=aa1 haha0 my new event ${host},${source}`,
         "attributes": {
             "index": index
         }
@@ -45,9 +46,8 @@ function sendDataViaIngest(splunk, index, host, source) {
         "attributes": {
             "index": index
         },
-        "fields": { "fieldkey1": "fieldval1", "fieldkey2": "fieldkey2" },
         "host": host,
-        "event": `04-24-2018 12:32:23.252 -0700 INFO  device_id=[www]401:sdfsf haha1 ${host},${source}`
+        "body": `04-24-2018 12:32:23.252 -0700 INFO  device_id=[www]401:sdfsf haha1 ${host},${source}`
     };
     const event3 = {
         "sourcetype": "splunkd",
@@ -55,9 +55,8 @@ function sendDataViaIngest(splunk, index, host, source) {
         "attributes": {
             "index": index
         },
-        "fields": { "fieldkey1": "fieldval1", "fieldkey2": "fieldkey2" },
         "host": host,
-        "event": `04-24-2018 12:32:23.258 -0700 INFO device_id:aa2 device_id=[code]error3: haha2 "9765f1bebdb4".  ${host},${source}`
+        "body": `04-24-2018 12:32:23.258 -0700 INFO device_id:aa2 device_id=[code]error3: haha2 "9765f1bebdb4".  ${host},${source}`
     };
 
     // Use the Ingest endpoint to send multiple events
@@ -73,7 +72,9 @@ function sendDataViaIngest(splunk, index, host, source) {
 // TODO Contact the ingest team for duplicate data ingestion, currently actual results count is 6, expected is 3
 // define the main workflow
 async function main() {
-    const index = `test_${new Date().getSeconds()}`;
+    // TODO: a pipeline also needs to be created for this index to ingest data, for now use "main"
+    // const index = `test_${new Date().getSeconds()}`;
+    const index = "main" ;
     // ***** STEP 1: Get Splunk Cloud client
     // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authenticatin token.
     const splunk = new SplunkCloud(SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID);
@@ -84,8 +85,9 @@ async function main() {
 
     // ***** STEP 3: Get data in using Ingest Service
     // ***** DESCRIPTION: Send a single event, a batch of events, and raw events using Ingest Service.
-    const host = `myhost-${new Date().getSeconds()}`;
-    const source = `mysource-${new Date().getMinutes()}`;
+    const timeSec = Math.floor(Time.now()/1000);
+    const host = `h-${timeSec}`;
+    const source = `s-${timeSec}`;
     console.log(`host=${host}, source = ${source}`);
     sendDataViaIngest(splunk, index, host, source);
 
