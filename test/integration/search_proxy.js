@@ -64,8 +64,13 @@ describe("integration tests Using Search APIs", () => {
                 expect(searchObj).to.have.property('status');
                 return splunk.search.getResults(searchObj.sid)
                     .then(resultResponse => {
-                        expect(resultResponse).to.have.property('nextLink');
-                        expect(resultResponse).to.have.property('wait');
+                        if (resultResponse.nextLink) {
+                            expect(resultResponse).to.have.property('nextLink');
+                            expect(resultResponse).to.have.property('wait');
+                        } else {
+                            expect(resultResponse).to.have.property('results');
+                            expect(resultResponse).to.have.property('fields');
+                        }
                     })
             }));
 
