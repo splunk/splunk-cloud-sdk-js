@@ -211,7 +211,7 @@ export class ServiceClient {
         }
         const path = `/${effectiveTenant}${servicePrefix}/${pathname.join('/')}`;
         for (const elem of pathname) {
-            if (elem && elem.trim() === '') {
+            if (elem && elem.replace(/^\s+|\s+$/g, '') === '') {
                 throw new Error(`Empty elements in path: ${path}`);
             }
         }

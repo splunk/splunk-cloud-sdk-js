@@ -16,7 +16,7 @@ async function searchResults(splunk, start, timeout, query, expected) {
     await sleep(5000);
 
     return splunk.search.createJob({ "query": query })
-        .then(sid => splunk.search.waitForJob(sid))
+        .then(job => splunk.search.waitForJob(job.sid))
         .then(searchObj => splunk.search.getResults(searchObj.sid)
             .then(resultResponse => {
                 const retNum = resultResponse.results.length;

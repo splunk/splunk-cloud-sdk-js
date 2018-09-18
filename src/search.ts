@@ -80,7 +80,7 @@ export class Search {
      */
     public cancel = (): Promise<object> => {
         this.isCancelling = true;
-        return this.client.updateJob(this.jobId, { action: 'cancel' });
+        return this.client.updateJob(this.jobId, { status: 'canceled' });
     };
 
     /**
@@ -167,7 +167,7 @@ export class SearchService extends BaseApiService {
      * @param jobArgs Arguments for the new search
      * @return
      */
-    public createJob = (jobArgs: SearchJobBase): Promise<SearchJob> => {
+    public createJob = (jobArgs: SearchArgs): Promise<SearchJob> => {
         return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
             .then(response => response.body as SearchJob);
     };
@@ -188,9 +188,9 @@ export class SearchService extends BaseApiService {
      * @param jobId
      * @param update
      */
-    public updateJob = (jobId: string, update: PatchJob): Promise<PatchJobResponse> => {
+    public updateJob = (jobId: string, update: UpdateJob): Promise<UpdateJobResponse> => {
         return this.client.patch(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]), update)
-            .then(response => response.body as PatchJobResponse);
+            .then(response => response.body as UpdateJobResponse);
     };
 
     /**
@@ -248,7 +248,7 @@ export class SearchService extends BaseApiService {
      * @param searchArgs arguments for a new search job
      * @return a wrapper utility object for the search
      */
-    public submitSearch = (searchArgs: SearchJobBase): Promise<Search> => {
+    public submitSearch = (searchArgs: SearchArgs): Promise<Search> => {
         const self = this;
         return this.createJob(searchArgs)
             .then(job => {
@@ -280,7 +280,7 @@ export interface ResultObservableOptions {
 /**
  * Represents parameters on the search job mainly earliest and latest.
  */
-export interface SearchParameters {
+export interface QueryParameters {
     /**
      * The earliest time in absolute or relative format to retrieve events  (only supported if the query supports time-ranges)
      * Default: "-24h@h"
@@ -296,9 +296,9 @@ export interface SearchParameters {
 }
 
 /**
- * Properties allowed (and possibly required) in fully constructed Searchjobs in POST payloads and responses
+ * Arguments for creating a search
  */
-export interface SearchJobBase {
+export interface SearchArgs {
     /**
      * Should SplunkD produce all fields (including those not explicitly mentioned in the SPL).
      * Default: false
@@ -320,7 +320,7 @@ export interface SearchJobBase {
     /**
      * parameters for the search job mainly earliest and latest.
      */
-    parameters?: SearchParameters;
+    queryParameters?: QueryParameters;
 
     /**
      * The SPL query string (in SPLv2)
@@ -328,7 +328,7 @@ export interface SearchJobBase {
     query: string;
 
     /**
-     * Used to convert a formatted time string from {start,end}_time into UTC seconds. The default value is the ISO-8601 format.
+     * Converts a formatted time string from {start,end}_time into UTC seconds. The default value is the ISO-8601 format.
      */
     timeFormat?: string;
 
@@ -340,18 +340,58 @@ export interface SearchJobBase {
 }
 
 /**
- * Fully constructed search job including readonly fields.
+ * Properties allowed (and possibly required) in fully constructed Searchjobs in POST payloads and responses
  */
-export interface SearchJob extends SearchJobBase {
+export interface SearchJob {
+    /**
+     * Should SplunkD produce all fields (including those not explicitly mentioned in the SPL).
+     * Default: false
+     */
+    extractAllFields: boolean;
+
+    /**
+     * The number of seconds to run this search before finalizing.
+     * Min: 1, Max: 21600, Default: 3600
+     */
+    maxTime: number;
+
+    /**
+     * The module to run the search in.
+     * Default: ""
+     */
+    module: string;
+
+    /**
+     * parameters for the search job mainly earliest and latest.
+     */
+    queryParameters: QueryParameters;
+
+    /**
+     * The SPL query string (in SPLv2)
+     */
+    query: string;
+
+    /**
+     * Converts a formatted time string from {start,end}_time into UTC seconds. The default value is the ISO-8601 format.
+     */
+    timeFormat: string;
+
+    /**
+     * The System time at the time the search job was created. Specify a time string to set  the absolute time used for any relative time specifier in the search. Defaults to the current system time when the Job is created.
+     */
+    timeOfSearch: string;
+
+    messages: SearchJobMessage[]
+
     /**
      * An estimate of how far through the job is complete
      */
-    percentComplete?: number;
+    percentComplete: number;
 
     /**
      * The number of results Splunkd produced so far
      */
-    resultsAvailable?: number;
+    resultsAvailable: number;
 
     /**
      * The id assigned to the job
@@ -365,16 +405,16 @@ export interface SearchJob extends SearchJobBase {
 }
 
 /**
- * Patch a search job with an action.
+ * Update a search job with a status.
  */
-export interface PatchJob {
+export interface UpdateJob {
     /**
-     * Action to be taken on an existing search job.
+     * Status to be patched to an existing search job
      */
-    action: 'cancel' | 'finalize'
+    status: 'canceled' | 'finalized'
 }
 
-export interface PatchJobResponse {
+export interface UpdateJobResponse {
     messages: SearchJobMessage[]
 }
 /**
@@ -404,8 +444,6 @@ export interface SearchJobMessage {
 }
 
 export interface SearchResults {
-    preview: boolean;
-    init_offset: number;
     messages: SearchJobMessage[];
     results: object[];
     fields: string[];

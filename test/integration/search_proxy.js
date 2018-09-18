@@ -39,8 +39,7 @@ describe("integration tests Using Search APIs", () => {
                 return splunk.search.getResults(searchObj.sid)
                     .then(resultResponse => {
                         expect(resultResponse).to.have.property('results').with.lengthOf(5);
-                        expect(resultResponse).to.have.property('preview', false);
-                        expect(resultResponse).to.have.property('init_offset', 0);
+                        expect(resultResponse).to.have.property('fields');
                     });
             }));
 
@@ -52,11 +51,10 @@ describe("integration tests Using Search APIs", () => {
             }).then(searchObj => { // Ensure we have events when done
                 expect(searchObj).to.have.property('status', 'done');
                 expect(searchObj).to.have.property('resultsAvailable', 5);
-                splunk.search.getResults(searchObj.sid)
+                return splunk.search.getResults(searchObj.sid)
                     .then(resultResponse => {
                         expect(resultResponse).to.have.property('results').with.lengthOf(5);
-                        expect(resultResponse).to.have.property('preview', false);
-                        expect(resultResponse).to.have.property('init_offset', 0);
+                        expect(resultResponse).to.have.property('fields');
                     })
             }));
 
