@@ -3,13 +3,14 @@ const config = require("../config");
 const { ServiceClient } = require("../../client");
 const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
+const stubbyUrl = `http://${config.stubbyHost}:8882`
 
 chai.use(chaiAsPromised);
 
 const { expect } = chai;
 
 describe("Basic client functionality", () => {
-    const s = new ServiceClient(`http://${config.stubbyHost}:8882`, config.stubbyAuthToken, config.stubbyTenant);
+    const s = new ServiceClient(stubbyUrl, config.stubbyAuthToken, config.stubbyTenant);
     describe("GET", () => {
         it("should return a promise", () => {
             const promise = s.get("/basic");
@@ -81,8 +82,8 @@ describe("Basic client functionality", () => {
         });
 
         it("should allow multiple callbacks that don't change response", () => {
-            for (let i=0; i<5; i++) {
-                s.addResponseHook(() => {});
+            for (let i = 0; i < 5; i++) {
+                s.addResponseHook(() => { });
             }
             return s.get("/basic")
                 .then(httpResponse => {
@@ -104,7 +105,7 @@ describe("Basic client functionality", () => {
 
         it("should handle exceptions", () => {
             s.addResponseHook(response => {
-                throw(new Error("unexpected error"));
+                throw new Error("unexpected error");
             });
             return s.get("/basic")
                 .then(httpResponse => {
@@ -115,3 +116,67 @@ describe("Basic client functionality", () => {
     });
 
 });
+
+describe("Service client args", () => {
+    it("should take a url, a token, and a tenant", () => {
+        const s = new ServiceClient(stubbyUrl, config.stubbyAuthToken, config.stubbyTenant);
+        expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
+        return s.get("/basic")
+            .then(response => {
+                expect(response.body).to.have.own.property("foo");
+            });
+    });
+
+    it("should take an args object", () => {
+        const s = new ServiceClient({
+            url: stubbyUrl,
+            tokenSource: config.stubbyAuthToken,
+            defaultTenant: config.stubbyTenant
+        });
+        expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
+        return s.get("/basic")
+            .then(response => {
+                expect(response.body).to.have.own.property("foo");
+            });
+    });
+
+    it("should take a function that returns a token", () => {
+        const s = new ServiceClient({
+            url: stubbyUrl,
+            tokenSource: () => config.stubbyAuthToken,
+            defaultTenant: config.stubbyTenant
+        });
+        expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
+        return s.get("/basic")
+            .then(response => {
+                expect(response.body).to.have.own.property("foo");
+            });
+
+    });
+
+    it("should take a token manager (like splunk-cloud-auth)", () => {
+        const authObj = {
+            getAccessToken: () => config.stubbyAuthToken
+        };
+
+        const s = new ServiceClient({
+            url: stubbyUrl,
+            tokenSource: authObj,
+            defaultTenant: config.stubbyTenant
+        });
+        expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
+        return s.get("/basic")
+            .then(response => {
+                expect(response.body).to.have.own.property('foo');
+            });
+    });
+
+    it("should use a default URL", () => {
+        const s = new ServiceClient({
+            tokenSource: config.stubbyAuthToken,
+            defaultTenant: config.stubbyTenant
+        });
+
+        expect(s.buildUrl(s.buildPath('/foo', ['bar']))).to.equal(`https://api.splunkbeta.com/${config.stubbyTenant}/foo/bar`);
+    });
+})
