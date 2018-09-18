@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [CatalogService](../classes/catalogservice.md)
+[@splunk/cloud-sdk](../README.md) > [CatalogService](../classes/catalogservice.md)
 
 # Class: CatalogService
 

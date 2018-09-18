@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [DatasetInfo](../interfaces/datasetinfo.md)
+[@splunk/cloud-sdk](../README.md) > [DatasetInfo](../interfaces/datasetinfo.md)
 
 # Interface: DatasetInfo
 

@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [UplNode](../interfaces/uplnode.md)
+[@splunk/cloud-sdk](../README.md) > [UplNode](../interfaces/uplnode.md)
 
 # Interface: UplNode
 

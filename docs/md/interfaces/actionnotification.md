@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [ActionNotification](../interfaces/actionnotification.md)
+[@splunk/cloud-sdk](../README.md) > [ActionNotification](../interfaces/actionnotification.md)
 
 # Interface: ActionNotification
 

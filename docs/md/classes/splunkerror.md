@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [SplunkError](../classes/splunkerror.md)
+[@splunk/cloud-sdk](../README.md) > [SplunkError](../classes/splunkerror.md)
 
 # Class: SplunkError
 
@@ -20,7 +20,10 @@
 
 ### Properties
 
-* [errorParams](splunkerror.md#errorparams)
+* [code](splunkerror.md#code)
+* [details](splunkerror.md#details)
+* [httpStatusCode](splunkerror.md#httpstatuscode)
+* [moreInfo](splunkerror.md#moreinfo)
 * [Error](splunkerror.md#error)
 * [message](splunkerror.md#message)
 * [name](splunkerror.md#name)
@@ -48,11 +51,36 @@ ___
 
 ## Properties
 
-<a id="errorparams"></a>
+<a id="code"></a>
 
-###  errorParams
+### `<Optional>` code
 
-**● errorParams**: *[SplunkErrorParams](../interfaces/splunkerrorparams.md)*
+**● code**: * `undefined` &#124; `string`
+*
+
+___
+<a id="details"></a>
+
+### `<Optional>` details
+
+**● details**: * `any` &#124; `any`[]
+*
+
+___
+<a id="httpstatuscode"></a>
+
+### `<Optional>` httpStatusCode
+
+**● httpStatusCode**: * `undefined` &#124; `number`
+*
+
+___
+<a id="moreinfo"></a>
+
+### `<Optional>` moreInfo
+
+**● moreInfo**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="error"></a>

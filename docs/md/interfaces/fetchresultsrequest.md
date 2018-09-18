@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [FetchResultsRequest](../interfaces/fetchresultsrequest.md)
+[@splunk/cloud-sdk](../README.md) > [FetchResultsRequest](../interfaces/fetchresultsrequest.md)
 
 # Interface: FetchResultsRequest
 

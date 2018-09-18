@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [PingOKBody](../interfaces/pingokbody.md)
+[@splunk/cloud-sdk](../README.md) > [PingOKBody](../interfaces/pingokbody.md)
 
 # Interface: PingOKBody
 

@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [PartialDatasetInfo](../interfaces/partialdatasetinfo.md)
+[@splunk/cloud-sdk](../README.md) > [PartialDatasetInfo](../interfaces/partialdatasetinfo.md)
 
 # Interface: PartialDatasetInfo
 

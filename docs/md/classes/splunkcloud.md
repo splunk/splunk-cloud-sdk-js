@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [SplunkCloud](../classes/splunkcloud.md)
+[@splunk/cloud-sdk](../README.md) > [SplunkCloud](../classes/splunkcloud.md)
 
 # Class: SplunkCloud
 

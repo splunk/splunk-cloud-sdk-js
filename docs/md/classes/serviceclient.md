@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [ServiceClient](../classes/serviceclient.md)
+[@splunk/cloud-sdk](../README.md) > [ServiceClient](../classes/serviceclient.md)
 
 # Class: ServiceClient
 
@@ -34,7 +34,7 @@ This class acts as a raw proxy for Splunk Cloud, implementing authorization for 
 
 ###  constructor
 
-⊕ **new ServiceClient**(url: *`string`*, token: *`string`*, tenant?: * `undefined` &#124; `string`*): [ServiceClient](serviceclient.md)
+⊕ **new ServiceClient**(args: * [ServiceClientArgs](../interfaces/serviceclientargs.md) &#124; `string`*, token?: * `undefined` &#124; `string`*, tenant?: * `undefined` &#124; `string`*): [ServiceClient](serviceclient.md)
 
 Create a ServiceClient with the given URL and an auth token
 
@@ -42,9 +42,9 @@ Create a ServiceClient with the given URL and an auth token
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| url | `string` |  Url to Splunk Cloud instance |
-| token | `string` |  Authentication token |
-| `Optional` tenant |  `undefined` &#124; `string`|  Default tenant ID to use TODO(david): figure out how to manage token refresh |
+| args |  [ServiceClientArgs](../interfaces/serviceclientargs.md) &#124; `string`|  : ServiceClientArgs Url to Splunk Cloud instance |
+| `Optional` token |  `undefined` &#124; `string`|
+| `Optional` tenant |  `undefined` &#124; `string`|
 
 **Returns:** [ServiceClient](serviceclient.md)
 
