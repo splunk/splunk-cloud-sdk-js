@@ -4,6 +4,7 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
+import { AuthManager } from './auth_manager';
 import agent from './version';
 
 export interface SplunkErrorParams {
@@ -78,6 +79,11 @@ function decodeJson(text: string): any {
 }
 
 export type ResponseHook = (response: Response) => Promise<Response> | any;
+export interface ServiceClientArgs {
+    url?: string;
+    token: AuthManager | string;
+    defaultTenant?: string;
+}
 
 /**
  * This class acts as a raw proxy for Splunk Cloud, implementing
@@ -88,22 +94,40 @@ export type ResponseHook = (response: Response) => Promise<Response> | any;
  * TODO: Add links to actual endpoints, Splunk Cloud name
  */
 export class ServiceClient {
-    private readonly token: string;
+    private readonly token: () => string;
     private readonly url: string;
     private readonly tenant?: string;
     private responseHooks: ResponseHook[] = [];
 
     /**
      * Create a ServiceClient with the given URL and an auth token
-     * @param url - Url to Splunk Cloud instance
-     * @param token - Authentication token
-     * @param tenant - Default tenant ID to use
-     * TODO(david): figure out how to manage token refresh
+     * @param args : ServiceClientArgs Url to Splunk Cloud instance
      */
-    constructor(url: string, token: string, tenant?: string) {
-        this.token = token;
-        this.url = url;
-        this.tenant = tenant;
+    constructor(args: ServiceClientArgs | string, token?: string, tenant?: string) {
+        if (typeof args === 'string') {
+            if (typeof token === 'string') {
+                this.token = () => token;
+            } else {
+                throw new SplunkError({ message: 'No auth token supplied.' });
+            }
+            this.url = args;
+            this.tenant = tenant;
+        } else {
+            const authManager = args.token;
+            if (typeof authManager === 'string') {
+                // If we have a string, wrap it in a lambda
+                this.token = () => authManager;
+            } else if (typeof authManager === 'function') {
+                // If we have a function, just call it when we need a token
+                this.token = authManager;
+            } else {
+                // Else wrap a token manager.
+                this.token = () => authManager.getAccessToken();
+            }
+            // FIXME: Need real default.
+            this.url = args.url || 'DEFAULT';
+            this.tenant = args.defaultTenant;
+        }
     }
 
     /**
@@ -180,7 +204,7 @@ export class ServiceClient {
         // TODO: Cache
 
         const requestParamHeaders: Headers = new Headers({
-            'Authorization': `Bearer ${this.token}`,
+            'Authorization': `Bearer ${this.token()}`,
             'Content-Type': ContentType.JSON,
             'Splunk-Client': `${agent.useragent}/${agent.version}`,
         });
