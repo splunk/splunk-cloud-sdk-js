@@ -211,7 +211,10 @@ function deleteAllDatasets() {
             .then(datasets => {
                 return Promise.all(
                     datasets.map(dataset => {
-                        return splunkCloud.catalog.deleteDataset(dataset.id);
+                        // Delete the dataset unless it's a main or metrics index
+                        if (!(dataset.kind === "index" && (dataset.name === "main" || dataset.name === "metrics"))) {
+                            return splunkCloud.catalog.deleteDataset(dataset.id);
+                        }
                     })
                 );
             })
