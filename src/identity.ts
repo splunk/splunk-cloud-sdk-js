@@ -15,7 +15,7 @@ export class IdentityService extends BaseApiService {
      * Validates the access token obtained from authorization header and returns the principal name and tenant memberships
      * @returns a ValidateInfo object
      */
-    public validate = () : Promise<ValidateInfo> => {
+    public validate = (): Promise<ValidateInfo> => {
         return this.client.get(this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['validate']))
             .then(response => response.body as ValidateInfo);
     }
@@ -386,7 +386,7 @@ export interface Role {
 /**
  * RoleInput - The input object for creating a new Role
  */
-export interface RoleInput{
+export interface RoleInput {
     name: string
     permissions: string[]
 
@@ -509,5 +509,4 @@ export interface Principal {
  */
 export interface ValidateInfo {
     name: string
-    tenants: string[]
 }
