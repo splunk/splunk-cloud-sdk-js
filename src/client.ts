@@ -4,23 +4,32 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
+import { AuthManager } from './auth_manager';
 import agent from './version';
+
+const DEFAULT_URL = 'https://api.splunkbeta.com';
 
 export interface SplunkErrorParams {
     message: string;
     code?: string;
     httpStatusCode?: number;
-    details?: object;
+    details?: object | any[];
     moreInfo?: string;
 }
 
 export class SplunkError extends Error implements SplunkErrorParams {
 
-    public errorParams: SplunkErrorParams;
+    public code?: string;
+    public httpStatusCode?: number;
+    public details?: object | any[];
+    public moreInfo?: string;
 
     constructor(errorParams: SplunkErrorParams) {
         super(errorParams.message);
-        this.errorParams = errorParams;
+        this.code = errorParams.code;
+        this.details = errorParams.details;
+        this.moreInfo = errorParams.moreInfo;
+        this.httpStatusCode = errorParams.httpStatusCode;
     }
 }
 
@@ -78,6 +87,12 @@ function decodeJson(text: string): any {
 }
 
 export type ResponseHook = (response: Response) => Promise<Response> | any;
+export type TokenProviderFunction = () => string;
+export interface ServiceClientArgs {
+    url?: string;
+    tokenSource: AuthManager | string | TokenProviderFunction;
+    defaultTenant?: string;
+}
 
 /**
  * This class acts as a raw proxy for Splunk Cloud, implementing
@@ -88,22 +103,41 @@ export type ResponseHook = (response: Response) => Promise<Response> | any;
  * TODO: Add links to actual endpoints, Splunk Cloud name
  */
 export class ServiceClient {
-    private readonly token: string;
+    private readonly tokenSource: () => string;
     private readonly url: string;
     private readonly tenant?: string;
     private responseHooks: ResponseHook[] = [];
 
     /**
      * Create a ServiceClient with the given URL and an auth token
-     * @param url - Url to Splunk Cloud instance
-     * @param token - Authentication token
-     * @param tenant - Default tenant ID to use
-     * TODO(david): figure out how to manage token refresh
+     * @param args : ServiceClientArgs Url to Splunk Cloud instance
      */
-    constructor(url: string, token: string, tenant?: string) {
-        this.token = token;
-        this.url = url;
-        this.tenant = tenant;
+    constructor(args: ServiceClientArgs | string, token?: string, tenant?: string) {
+        if (typeof args === 'string') {
+            if (typeof token === 'string') {
+                this.tokenSource = () => token;
+            } else {
+                throw new SplunkError({ message: 'No auth token supplied.' });
+            }
+            this.url = args;
+            this.tenant = tenant;
+        } else {
+            const authManager = args.tokenSource;
+            if (typeof authManager === 'string') {
+                // If we have a string, wrap it in a lambda
+                this.tokenSource = () => authManager;
+            } else if (typeof authManager === 'function') {
+                // If we have a function, just call it when we need a token
+                this.tokenSource = authManager;
+            } else if ('getAccessToken' in authManager) {
+                // Else wrap a token manager.
+                this.tokenSource = () => authManager.getAccessToken();
+            } else {
+                throw new SplunkError({ message: 'Unsupported token source' });
+            }
+            this.url = args.url || DEFAULT_URL;
+            this.tenant = args.defaultTenant;
+        }
     }
 
     /**
@@ -180,7 +214,7 @@ export class ServiceClient {
         // TODO: Cache
 
         const requestParamHeaders: Headers = new Headers({
-            'Authorization': `Bearer ${this.token}`,
+            'Authorization': `Bearer ${this.tokenSource()}`,
             'Content-Type': ContentType.JSON,
             'Splunk-Client': `${agent.useragent}/${agent.version}`,
         });
