@@ -7,7 +7,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 /**
  * @private
  */
-export const ACTION_SERVICE_PREFIX: string = '/action/v1';
+export const ACTION_SERVICE_PREFIX: string = '/action/v1beta1';
 
 /**
  * @private
