@@ -85,8 +85,9 @@ async function main() {
 
     // ***** STEP 3: Get data in using Ingest Service
     // ***** DESCRIPTION: Send a single event, a batch of events, and raw events using Ingest Service.
-    const host = `myhost-${new Date().getSeconds()}`;
-    const source = `mysource-${new Date().getMinutes()}`;
+    const timeSec = Math.floor(Time.now()/1000);
+    const host = `h-${timeSec}`;
+    const source = `s-${timeSec}`;
     console.log(`host=${host}, source = ${source}`);
     sendDataViaIngest(splunk, index, host, source);
 
