@@ -23,7 +23,7 @@ export class StreamsService extends BaseApiService {
         return this.client.post(
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'compile-dsl']), dsl)
             .then(response => response.body as UplPipeline);
-    };
+    }
 
     /**
      * Gets all the pipelines based on the query parameters provided by the user.
@@ -36,7 +36,7 @@ export class StreamsService extends BaseApiService {
         const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']);
         return this.client.get(url, queryArgs as QueryArgs)
             .then(response => response.body as PaginatedPipelineResponse);
-    };
+    }
 
     /**
      * Creates a new pipeline.
@@ -49,7 +49,7 @@ export class StreamsService extends BaseApiService {
         return this.client.post(
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']), pipeline)
             .then(response => response.body as Pipeline);
-    };
+    }
 
     /**
      * Activates a pipeline.
@@ -62,7 +62,7 @@ export class StreamsService extends BaseApiService {
         return this.client.post(
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'activate']), activatePipelineRequest)
             .then(response => response.body as AdditionalProperties);
-    };
+    }
 
     /**
      * Deactivates a pipeline.
@@ -75,7 +75,7 @@ export class StreamsService extends BaseApiService {
         return this.client.post(
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'deactivate']), deactivatePipelineRequest)
             .then(response => response.body as AdditionalProperties);
-    };
+    }
 
     /**
      * Get the pipeline based on the pipeline ID provided by the user.
@@ -88,7 +88,7 @@ export class StreamsService extends BaseApiService {
         const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]);
         return this.client.get(url)
             .then(response => response.body as Pipeline);
-    };
+    }
 
     /**
      * Updates an existing pipeline.
@@ -103,7 +103,7 @@ export class StreamsService extends BaseApiService {
         return this.client.put(
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]), pipeline)
             .then(response => response.body as Pipeline);
-    };
+    }
 
     /**
      * Deletes the pipeline based on the ID provided by the user.
@@ -114,7 +114,7 @@ export class StreamsService extends BaseApiService {
         return this.client.delete(
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]))
             .then(response => response.body as PipelineDeleteResponse);
-    };
+    }
 }
 
 // TODO (Parul): Find more details on other fields and include comments and optional fiel information
