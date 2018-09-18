@@ -105,7 +105,7 @@ describe("Basic client functionality", () => {
 
         it("should handle exceptions", () => {
             s.addResponseHook(response => {
-                throw (new Error("unexpected error"));
+                throw new Error("unexpected error");
             });
             return s.get("/basic")
                 .then(httpResponse => {
@@ -178,7 +178,5 @@ describe("Service client args", () => {
         });
 
         expect(s.buildUrl(s.buildPath('/foo', ['bar']))).to.equal(`https://api.splunkbeta.com/${config.stubbyTenant}/foo/bar`);
-
-
     });
 })
