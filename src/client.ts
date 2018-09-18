@@ -79,9 +79,10 @@ function decodeJson(text: string): any {
 }
 
 export type ResponseHook = (response: Response) => Promise<Response> | any;
+export type TokenProviderFunction = () => string;
 export interface ServiceClientArgs {
     url?: string;
-    token: AuthManager | string;
+    tokenSource: AuthManager | string | TokenProviderFunction;
     defaultTenant?: string;
 }
 
@@ -94,7 +95,7 @@ export interface ServiceClientArgs {
  * TODO: Add links to actual endpoints, Splunk Cloud name
  */
 export class ServiceClient {
-    private readonly token: () => string;
+    private readonly tokenSource: () => string;
     private readonly url: string;
     private readonly tenant?: string;
     private responseHooks: ResponseHook[] = [];
@@ -106,23 +107,23 @@ export class ServiceClient {
     constructor(args: ServiceClientArgs | string, token?: string, tenant?: string) {
         if (typeof args === 'string') {
             if (typeof token === 'string') {
-                this.token = () => token;
+                this.tokenSource = () => token;
             } else {
                 throw new SplunkError({ message: 'No auth token supplied.' });
             }
             this.url = args;
             this.tenant = tenant;
         } else {
-            const authManager = args.token;
+            const authManager = args.tokenSource;
             if (typeof authManager === 'string') {
                 // If we have a string, wrap it in a lambda
-                this.token = () => authManager;
+                this.tokenSource = () => authManager;
             } else if (typeof authManager === 'function') {
                 // If we have a function, just call it when we need a token
-                this.token = authManager;
+                this.tokenSource = authManager;
             } else {
                 // Else wrap a token manager.
-                this.token = () => authManager.getAccessToken();
+                this.tokenSource = () => authManager.getAccessToken();
             }
             // FIXME: Need real default.
             this.url = args.url || 'DEFAULT';
@@ -204,7 +205,7 @@ export class ServiceClient {
         // TODO: Cache
 
         const requestParamHeaders: Headers = new Headers({
-            'Authorization': `Bearer ${this.token()}`,
+            'Authorization': `Bearer ${this.tokenSource()}`,
             'Content-Type': ContentType.JSON,
             'Splunk-Client': `${agent.useragent}/${agent.version}`,
         });

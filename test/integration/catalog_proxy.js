@@ -8,7 +8,7 @@ const tenantID = config.playgroundTenant;
 
 const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
 
-describe('catalog v2', () => {
+describe('catalog', () => {
     const indexName = `idx_${Date.now()}`;
     // Create an index to ensure there is something to return
     before(() => createIndexDataset(indexName));
