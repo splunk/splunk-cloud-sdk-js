@@ -8,45 +8,45 @@ const tenantID = config.playgroundTenant;
 
 const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
 
-describe('catalog v2', () => {
+describe('catalog tests', () => {
     const indexName = `idx_${Date.now()}`;
     // Create an index to ensure there is something to return
     before(() => createIndexDataset(indexName));
     after(() =>
         splunkCloud.catalog
-            .deleteDatasetByName(indexName)
+            .deleteDataset(indexName)
             .catch(err => console.log('Error cleaning index: ' + err))
     );
 
-    describe("datasets", () => {
-        it("should return datasets", () => splunkCloud.catalog.getDatasets().then((dslist) => {
+    describe('datasets', () => {
+        it('should return datasets', () => splunkCloud.catalog.getDatasets().then((dslist) => {
             assert(dslist.length > 0);
             assert(dslist[0].kind);
         }));
 
-        it("should return datasets with filter", () => splunkCloud.catalog.getDatasets('kind=="index"').then((dslist) => {
+        it('should return datasets with filter', () => splunkCloud.catalog.getDatasets('kind=="index"').then((dslist) => {
             assert(dslist.length > 0);
-            assert(dslist[0].kind === "index");
+            assert(dslist[0].kind === 'index');
         }));
 
-        it("should allow create/delete of datasets", () => {
-            const name = "foobar";
+        it('should allow create/delete of datasets', () => {
+            const name = 'foobar';
             return createIndexDataset(name).then(ds => {
                 assert(ds.name === name);
-                assert(ds.kind === "index");
+                assert(ds.kind === 'index');
                 return ds.id;
             }).then(id => splunkCloud.catalog.deleteDataset(id));
 
         });
 
-        it("should allow delete of datasets by name", () => {
-            const name = "foobar1";
-            return createIndexDataset(name).then(() => splunkCloud.catalog.deleteDatasetByName(name));
+        it('should allow delete of datasets by name', () => {
+            const name = 'foobar1';
+            return createIndexDataset(name).then(() => splunkCloud.catalog.deleteDataset(name));
         });
 
-        it("should throw an error when deleting a dataset that doesn't exist", () => {
-            return splunkCloud.catalog.deleteDatasetByName("queequeg")
-                .then(() => assert.fail("Should have thrown"), () => true /* success */)
+        it('should throw an error when deleting a dataset that doesn\'t exist', () => {
+            return splunkCloud.catalog.deleteDataset('queequeg')
+                .then(() => assert.fail('Should have thrown'), () => true /* success */);
         });
     }).timeout(10000);
 
@@ -77,45 +77,160 @@ describe('catalog v2', () => {
         });
     }).timeout(10000);
 
-    describe("dataset fields", () => {
-        const integrationTestField1 = "integ_test_field1";
-        const integrationTestField2 = "integ_test_field2";
-        it("should create a test dataset, its fields, list its fields and delete the test dataset", () => {
+    describe('dataset fields', () => {
+        const integrationTestField1 = 'integ_test_field1';
+        const integrationTestField2 = 'integ_test_field2';
+        it('should create a test dataset, its fields, list its fields and delete the test dataset', () => {
             return splunkCloud.catalog.createDataset({
-                name: "integ_dataset_1000",
-                owner: "Splunk",
-                kind: "lookup",
-                capabilities: "1101-00000:11010",
-                externalKind: "kvcollection",
-                externalName: "test_externalName"
+                name: 'integ_dataset_1000',
+                owner: 'Splunk',
+                kind: 'lookup',
+                capabilities: '1101-00000:11010',
+                externalKind: 'kvcollection',
+                externalName: 'test_externalName'
             }).then((resultDataset) => splunkCloud.catalog.postDatasetField(resultDataset.id, {
-                "name": integrationTestField1,
-                "datasetid": resultDataset.id,
-                "datatype": "S",
-                "fieldtype": "D",
-                "prevalence": "A"
+                'name': integrationTestField1,
+                'datasetid': resultDataset.id,
+                'datatype': 'S',
+                'fieldtype': 'D',
+                'prevalence': 'A'
             }).then(resultDatasetField1 => splunkCloud.catalog.getDatasetField(resultDataset.id, resultDatasetField1.id).then((getResultDatasetField) => {
                 assert(getResultDatasetField.name, integrationTestField1);
             })).then(() => splunkCloud.catalog.postDatasetField(resultDataset.id, {
-                "name": integrationTestField2,
-                "datasetid": resultDataset.id,
-                "datatype": "S",
-                "fieldtype": "D",
-                "prevalence": "A"
+                'name': integrationTestField2,
+                'datasetid': resultDataset.id,
+                'datatype': 'S',
+                'fieldtype': 'D',
+                'prevalence': 'A'
             })).then((resultDatasetField2) => splunkCloud.catalog.getDatasetField(resultDataset.id, resultDatasetField2.id).then((getResultDatasetField) => {
                 assert(getResultDatasetField.name, integrationTestField2);
             }).then(() => splunkCloud.catalog.getDatasetFields(resultDataset.id).then((resultDatasetFields) => {
-                assert(resultDatasetFields.length === 2, "Two dataset fields should be created");
-            })).then(() => splunkCloud.catalog.getDatasetFields(resultDataset.id, "name==\"integ_test_field2\"").then((resultDatasetFields) => {
-                assert(resultDatasetFields.length === 1, "One dataset fields should be created");
-                assert(resultDatasetFields[0].name === integrationTestField2, "The name should match");
-            })).then(() => splunkCloud.catalog.patchDatasetField(resultDataset.id, resultDatasetField2.id, { "name": "integ_test_field3" }).then((patchResultDatasetField) => {
-                assert(patchResultDatasetField.name === "integ_test_field3", "The name should match");
+                assert(resultDatasetFields.length === 2, 'Two dataset fields should be created');
+            })).then(() => splunkCloud.catalog.getDatasetFields(resultDataset.id, 'name=="integ_test_field2"').then((resultDatasetFields) => {
+                assert(resultDatasetFields.length === 1, 'One dataset fields should be created');
+                assert(resultDatasetFields[0].name === integrationTestField2, 'The name should match');
+            })).then(() => splunkCloud.catalog.patchDatasetField(resultDataset.id, resultDatasetField2.id, { 'name': 'integ_test_field3' }).then((patchResultDatasetField) => {
+                assert(patchResultDatasetField.name === 'integ_test_field3', 'The name should match');
             })).then(() => splunkCloud.catalog.deleteDatasetField(resultDataset.id, resultDatasetField2.id).then((response) => {
-                assert(!response)
+                assert(!response);
             }))).then(() => splunkCloud.catalog.deleteDataset(resultDataset.id)));
         });
     }).timeout(10000);
+
+    describe('rule actions', () => {
+        const fieldName = 'action_test_field1';
+        const ruleName = 'action_test_rule';
+        const ruleModule = 'catalog';
+        const ruleMatch = 'sourcetype::integration_test_match';
+        const owner = 'splunk';
+        const datasetName = 'action_dataset';
+
+        var ruleId;
+        before(() => {
+            return splunkCloud.catalog.createDataset({
+                name: datasetName,
+                owner: 'Splunk',
+                kind: 'lookup',
+                externalKind: 'kvcollection',
+                externalName: 'test_externalName'
+            }).then(dataset => {
+                return splunkCloud.catalog.postDatasetField(dataset.id, {
+                    'name': fieldName,
+                    'datasetid': dataset.id,
+                    'datatype': 'S',
+                    'fieldtype': 'D',
+                    'prevalence': 'A'
+                });
+            }).then(() => {
+                return splunkCloud.catalog.createRule({
+                    name: ruleName,
+                    module: ruleModule,
+                    match: ruleMatch,
+                    owner: owner
+                }).then((rule) => {
+                    ruleId = rule.id;
+
+                });
+            });
+        });
+
+        after(() => {
+
+            return splunkCloud.catalog.deleteDataset(datasetName).then(
+                () => {
+                    console.log('finish delete dataset');
+                }
+            ).then(() => {
+                return splunkCloud.catalog.deleteRule(`${ruleModule}.${ruleName}`).then(
+                    () => {
+                        console.log('finish delete rule');
+                    });
+
+            });
+        });
+
+        it('1t should create ALIAS rule actions', () => {
+            return splunkCloud.catalog.createRuleAction(
+                ruleId,
+                {
+                    alias: 'newalias', 'kind': 'ALIAS', field: fieldName
+                }).then(act => {
+                assert.equal(act.field, fieldName);
+                return act;
+            }).then((act) => {
+                return splunkCloud.catalog.getRuleAction(ruleId, act.id);
+            }).then((act) => {
+                return splunkCloud.catalog.deleteRuleAction(ruleId, act.id);
+            });
+
+        });
+
+        it('1t should create REGEX rule actions', () => {
+            return splunkCloud.catalog.createRuleAction(
+                ruleId,
+                {
+                    pattern: 'mypattern', 'kind': 'REGEX', field: fieldName
+                }).then(act => {
+                assert.equal(act.pattern, 'mypattern');
+            });
+        });
+
+
+        it('1t should create EVAL rule actions', () => {
+            return splunkCloud.catalog.createRuleAction(
+                ruleId,
+                {
+                    expression: 'myexpr', 'kind': 'EVAL', field: fieldName
+                }).then(act => {
+                assert.equal(act.expression, 'myexpr');
+            });
+        });
+
+        it('1t should create AUTOKV rule actions', () => {
+            return splunkCloud.catalog.createRuleAction(
+                ruleId,
+                {
+                    mode: 'mymode', 'kind': 'AUTOKV'
+                }).then(act => {
+                assert.equal(act.mode, 'mymode');
+            });
+        });
+
+        it('1t should create LOOKUP rule actions', () => {
+            return splunkCloud.catalog.createRuleAction(
+                ruleId,
+                {
+                    expression: 'lookupexpr', 'kind': 'LOOKUP'
+                }).then(act => {
+                assert.equal(act.expression, 'lookupexpr');
+            }).then((act) => {
+                return splunkCloud.catalog.getRuleActions(ruleId);
+            }).then((acts) => {
+                assert.equal(acts.length, 4);
+            });
+
+        });
+    }).timeout(1000);
 });
 
 function createIndexDataset(collection) {
@@ -146,7 +261,7 @@ function createIndexDataset(collection) {
                     owner: 'test@splunk.com',
                     kind: 'index',
                     capabilities: '1101-00000:11010',
-                    disabled: false,
+                    disabled: false
                 });
             })
             // Return the dataset for testing
@@ -188,7 +303,7 @@ function createKVCollectionDataset(namespace, collection) {
                     owner: 'splunk',
                     kind: 'kvcollection',
                     capabilities: '1101-00000:11010',
-                    module: namespace,
+                    module: namespace
                 });
             })
             // Finally set the dataset for testing
@@ -264,7 +379,7 @@ function createRule(ruleName) {
                 return splunkCloud.catalog.createRule({
                     name: ruleName,
                     owner: 'SDKJSTEST@splunk.com',
-                    match: 'sourcetype::newtype',
+                    match: 'sourcetype::newtype'
                 });
             })
             // Return the rule testing
@@ -283,5 +398,5 @@ module.exports = {
     createKVCollectionDataset: createKVCollectionDataset,
     createRecord: createRecord,
     createRule: createRule,
-    deleteAllDatasets: deleteAllDatasets,
+    deleteAllDatasets: deleteAllDatasets
 };
