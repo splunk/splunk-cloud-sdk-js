@@ -114,6 +114,8 @@ async function main() {
             } else if (!ret) {
                 process.exit(1);
             }
+        }).catch(() => {
+            process.exit(1);
         });
 }
 

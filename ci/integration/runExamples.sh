@@ -9,14 +9,37 @@ else
     exit 1
 fi
 
+echo "Building src ..."
 yarn build
 
 if [ "$allow_failures" -eq "1" ]; then
     echo "Running examples but not gating on failures..."
-    set +e
-    yarn example
-    exit 0
 else
     echo "Running examples and gating on failures..."
-    yarn example || exit 1
 fi
+echo ""
+
+OVERALL_RESULT=0
+for EXAMPLE_FILE in $(ls examples/)
+do
+    echo "Running example: examples/$EXAMPLE_FILE file ..."
+    
+    set +e
+    node examples/$EXAMPLE_FILE
+    RESULT=$?
+    if [ $RESULT -ne 0 ]
+    then
+        if [ "$allow_failures" -ne "1" ]; then
+            OVERALL_RESULT=1
+        fi
+        echo ""
+        echo "!!!!!!!!!!!!!!!!!!!!!!!"
+        echo "FAIL: There was an error testing the examples/$EXAMPLE_FILE file ... continuing"
+        echo "!!!!!!!!!!!!!!!!!!!!!!!"
+        echo ""
+    fi
+done
+
+echo ""
+echo "Exiting with code=$OVERALL_RESULT ..."
+exit $OVERALL_RESULT

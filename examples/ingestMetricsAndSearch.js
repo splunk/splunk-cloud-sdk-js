@@ -10,33 +10,31 @@ const { SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 // Call to the ingest service to insert data
 function sendDataViaIngest(splunk, host, source) {
-    const metrics = [
-        {
-            "dimensions": { "Server": "ubuntu" },
-            "name": "CPU",
-            "unit": "percentage",
-            "value": 33.89
-        },
-        {
-            "dimensions": { "Region": "us-east-1" },
-            "name": "Memory",
-            "type": "g",
-            "value": 2.27
-        },
-        {
-            "name": "Disk",
-            "unit": "GB",
-            "value": 10.444
-        }
-    ];
-
     const metricEvent1 = {
         "attributes": {
             "defaultDimensions": {},
             "defaultType": "g",
             "defaultUnit": "MB"
         },
-        "body": metrics,
+        "body": [
+            {
+                "dimensions": { "Server": "ubuntu" },
+                "name": "CPU",
+                "unit": "percentage",
+                "value": 33.89
+            },
+            {
+                "dimensions": { "Region": "us-east-1" },
+                "name": "Memory",
+                "type": "g",
+                "value": 2.27
+            },
+            {
+                "name": "Disk",
+                "unit": "GB",
+                "value": 10.444
+            }
+        ],
         "host": host,
         "id": "metric0001",
         "nanos": 1,
@@ -45,14 +43,38 @@ function sendDataViaIngest(splunk, host, source) {
         "timestamp": Date.now() // Millis since epoch
     };
 
-    const metricEvent2 = JSON.parse(JSON.stringify(metricEvent1));
-    metricEvent2.id = "metric0002";
-    metricEvent2.nanos = 2;
-    metricEvent2.body = [{
-        "name": "External",
-        "unit": "GB",
-        "value": 10.444
-    }];
+    const metricEvent2 = {
+        "attributes": {
+            "defaultDimensions": {},
+            "defaultType": "g",
+            "defaultUnit": "MB"
+        },
+        "body": [
+            {
+                "dimensions": { "Server": "ubuntu" },
+                "name": "CPU",
+                "unit": "percentage",
+                "value": 35.89
+            },
+            {
+                "dimensions": { "Region": "us-east-1" },
+                "name": "Memory",
+                "type": "g",
+                "value": 4.27
+            },
+            {
+                "name": "Disk",
+                "unit": "GB",
+                "value": 8.444
+            }
+        ],
+        "host": host,
+        "id": "metric0002",
+        "nanos": 2,
+        "source": source,
+        "sourcetype": "mysourcetype",
+        "timestamp": Date.now() // Millis since epoch
+    };
 
     // Use the Ingest Service metrics endpoint to send the metrics data
     splunk.ingest.postMetrics([metricEvent1, metricEvent2]).then(data => {
@@ -74,19 +96,21 @@ async function main() {
     const timeSec = Math.floor(Date.now()/1000);
     const host = `h-${timeSec}`;
     const source = `s-${timeSec}`;
-    console.log(`host=${host}, source = ${source}`);
+    console.log(`host=${host}, source=${source}`);
     sendDataViaIngest(splunk, host, source);
 
     // ***** STEP 3: Verify the data
     // ***** DESCRIPTION: Search the data to ensure the metrics data was ingested.
     const timeout = 90 * 1000;
-    const query = `| from metrics group by host select sum(cpu) as cpu,host | search host=\"${host}\" AND cpu > 0`;
+    const query = `| from metrics where host=\"${host}\" group by host select avg(CPU), avg(Memory), avg(Disk)`;
     console.log(query);
     searchResults(splunk, Date.now(), timeout, query, 1).then(
         (ret) => {
             if (!ret) {
                 process.exit(1);
             }
+        }).catch(() => {
+            process.exit(1);
         });
 }
 
