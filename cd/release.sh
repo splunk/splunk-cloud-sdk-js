@@ -24,6 +24,10 @@ echo "Checking out a $BRANCH_NAME branch ..."
 git checkout -b $BRANCH_NAME
 
 print_header_line
+echo "Installing dependencies for tooling ..."
+yarn
+
+print_header_line
 echo "Updating Version in package.json ..."
 yarn version
 
