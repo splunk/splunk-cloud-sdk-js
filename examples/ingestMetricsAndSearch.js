@@ -71,15 +71,16 @@ async function main() {
 
     // ***** STEP 2: Get metrics data in using Ingest Service
     // ***** DESCRIPTION: Send two metrics events containing the metrics data using Ingest Service.
-    const host = `myhost-${new Date().getSeconds()}`;
-    const source = `mysource-${new Date().getMinutes()}`;
+    const timeSec = Math.floor(Date.now()/1000);
+    const host = `h-${timeSec}`;
+    const source = `s-${timeSec}`;
     console.log(`host=${host}, source = ${source}`);
     sendDataViaIngest(splunk, host, source);
 
     // ***** STEP 3: Verify the data
     // ***** DESCRIPTION: Search the data to ensure the metrics data was ingested.
     const timeout = 90 * 1000;
-    const query = `| from metric:metrics group by host SELECT sum(CPU) as cpu,host |search host=\"${host}\" AND cpu > 0`;
+    const query = `| from metrics group by host select sum(cpu) as cpu,host | search host=\"${host}\" AND cpu > 0`;
     console.log(query);
     searchResults(splunk, Date.now(), timeout, query, 1).then(
         (ret) => {
