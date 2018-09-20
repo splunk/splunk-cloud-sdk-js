@@ -62,7 +62,7 @@ export class CatalogService extends BaseApiService {
      * @param partial
      * @return information about the updated dataset
      */
-        // TODO: add lint check for xxxID vs. xxxId consistency
+    // TODO: add lint check for xxxID vs. xxxId consistency
     public updateDataset = (datasetIdOrResourceName: string, partial: PartialDatasetInfo): Promise<DatasetInfo> => {
         return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]), partial)
             .then(response => response.body as DatasetInfo);
