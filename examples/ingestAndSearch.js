@@ -8,11 +8,15 @@ const { sleep, searchResults } = require("../utils/exampleHelperFunctions");
 
 const { SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
+function exitOnFailure() {
+    process.exit(1);
+}
+
 async function createIndex(splunk, index) {
     if (index === "main") {
         return;
     }
-    const regex1 = {
+    const indexDataset = {
         "owner": "splunk",
         "capabilities": "1101-00000:11010",
         "version": 1,
@@ -21,12 +25,19 @@ async function createIndex(splunk, index) {
         "disabled": false
     };
 
-    splunk.catalog.createDataset(regex1)
-        .then(data => console.log(data))
-        .catch(err => console.log(`create index error 1:  ${err.code}`));
+    splunk.catalog.createDataset(indexDataset)
+        .then(response => {
+            console.log("Index dataset created with response: ");
+            console.log(response);
+        })
+        .catch(err => {
+            console.log("Error creating index:");
+            console.log(err);
+            exitOnFailure();
+        });
 
     // it will take some time for the new index to finish the provisioning
-    console.log("wait for 90s for index to be provisioned");
+    console.log("Waiting for 90s for index to be provisioned");
     await sleep(90 * 1000);
 };
 
@@ -60,12 +71,13 @@ function sendDataViaIngest(splunk, index, host, source) {
     };
 
     // Use the Ingest endpoint to send multiple events
-    splunk.ingest.postEvents([event1, event2, event3]).then(data => {
-        console.log(data);
+    splunk.ingest.postEvents([event1, event2, event3]).then(response => {
+        console.log("Ingest of events succeeded with response:");
+        console.log(response);
     }).catch(err => {
-        console.log(`ingest events failed with err: ${err}`);
-        process.exit(1);
-
+        console.log("Ingest of events failed with err:");
+        console.log(err);
+        exitOnFailure();
     });
 };
 
@@ -88,7 +100,7 @@ async function main() {
     const timeSec = Math.floor(Date.now()/1000);
     const host = `h-${timeSec}`;
     const source = `s-${timeSec}`;
-    console.log(`host=${host}, source = ${source}`);
+    console.log(`Posting events with host=${host}, source = ${source}`);
     sendDataViaIngest(splunk, index, host, source);
 
     // ***** STEP 4: Verify the data
@@ -96,26 +108,30 @@ async function main() {
     // Search for all 3 events that were sent using Ingest Service
     const timeout = 90 * 1000;
     const query = `|from  index:${index} where host="${host}" and source="${source}"`;
-    console.log(query);
-    searchResults(splunk, Date.now(), timeout, query, 3).then(
-        (ret) => {
+    console.log(`Searching for events with query: '${query}'`);
+    const expectedResults = 3;
+    searchResults(splunk, Date.now(), timeout, query, expectedResults).then(
+        (results) => {
+            // TODO: Known issue with duplicate events in ingest service,
+            // allow more results than expected for now
+            const success = (results && results.length >= expectedResults);
             if (index !== "main") {
-                console.log("delete index");
+                console.log(`Deleting index ${index} ...`);
                 splunk.catalog.deleteDatasetByName(index).then(
                     () => {
-                        console.log(`finish deleted index`);
-                        if (!ret) {
-                            process.exit(1);
+                        console.log(`Finished deleted index ${index}`);
+                        if (!success) {
+                            exitOnFailure();
                         }
                     })
                     .catch(() => {
-                        process.exit(1);
+                        exitOnFailure();
                     });
-            } else if (!ret) {
-                process.exit(1);
+            } else if (!success) {
+                exitOnFailure();
             }
         }).catch(() => {
-            process.exit(1);
+            exitOnFailure();
         });
 }
 

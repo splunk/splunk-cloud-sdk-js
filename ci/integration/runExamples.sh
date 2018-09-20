@@ -12,7 +12,7 @@ fi
 echo "Building src ..."
 yarn build
 
-if [ "$allow_failures" -eq "1" ]; then
+if [ "$allow_failures" == "1" ]; then
     echo "Running examples but not gating on failures..."
 else
     echo "Running examples and gating on failures..."
@@ -29,7 +29,7 @@ do
     RESULT=$?
     if [ $RESULT -ne 0 ]
     then
-        if [ "$allow_failures" -ne "1" ]; then
+        if [ "$allow_failures" != "1" ]; then
             OVERALL_RESULT=1
         fi
         echo ""
