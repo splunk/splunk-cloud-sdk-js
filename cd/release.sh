@@ -32,6 +32,10 @@ echo "Updating Version in package.json ..."
 yarn version
 
 print_header_line
+echo "Building resouces for documentation ..."
+yarn build
+
+print_header_line
 echo "Updating docs and generating ci/cd-publish artifact ..."
 yarn run docs
 git add docs
@@ -65,3 +69,4 @@ echo "Please complete these steps in order to finish the release!"
 echo "Run the command: [git tag -a v$NEW_VERSION -m \"Release v$NEW_VERSION\"]"
 echo "Run the command: [git push origin v$NEW_VERSION]"
 echo "Deliver the documentation in \"ci/docs/build\" to the developer portal team"
+echo "Push the created build artifact to artifactory"
