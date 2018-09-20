@@ -15,7 +15,7 @@ Download the latest release of the Splunk Cloud SDK for JavaScript from the foll
 
 To install the SDK, run the following command from your project directory:
 ```sh
-yarn add <path_to_downloaded_splunk-cloud-sdk-js-X.Y.Z.tar.gz>
+npm install @splunk/cloud-sdk
 ```
 Installing this SDK allows your project to interact with services in the Splunk Developer Cloud, such as authorization, identity control, data ingest, search, and so forth.
 
