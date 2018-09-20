@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [ActionService](../classes/actionservice.md)
+[@splunk/cloud-sdk](../README.md) > [ActionService](../classes/actionservice.md)
 
 # Class: ActionService
 
@@ -68,7 +68,7 @@ ___
 
 ###  createAction
 
-▸ **createAction**(action: *[Action](../enums/action.md)*): `Promise`<[Action](../enums/action.md)>
+▸ **createAction**(action: * [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)*): `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
 
 Create an action
 
@@ -76,9 +76,9 @@ Create an action
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| action | [Action](../enums/action.md) |  input action |
+| action |  [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)|  input action |
 
-**Returns:** `Promise`<[Action](../enums/action.md)>
+**Returns:** `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
 Promise of an action
 
 ___
@@ -104,7 +104,7 @@ ___
 
 ###  getAction
 
-▸ **getAction**(name: *`string`*): `Promise`<[Action](../enums/action.md)>
+▸ **getAction**(name: *`string`*): `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
 
 Get an action by name
 
@@ -114,7 +114,7 @@ Get an action by name
 | ------ | ------ | ------ |
 | name | `string` |  name of the action |
 
-**Returns:** `Promise`<[Action](../enums/action.md)>
+**Returns:** `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
 Promise of an action
 
 ___
@@ -141,11 +141,11 @@ ___
 
 ###  getActions
 
-▸ **getActions**(): `Promise`<[Action](../enums/action.md)[]>
+▸ **getActions**(): `Promise`<`Array`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>>
 
 Get all actions in action service.
 
-**Returns:** `Promise`<[Action](../enums/action.md)[]>
+**Returns:** `Promise`<`Array`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>>
 Promise of all actions
 
 ___
@@ -172,7 +172,7 @@ ___
 
 ###  updateAction
 
-▸ **updateAction**(name: *`string`*, action: *[ActionUpdateFields](../interfaces/actionupdatefields.md)*): `Promise`<[Action](../enums/action.md)>
+▸ **updateAction**(name: *`string`*, action: * [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)*): `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
 
 Update an action
 
@@ -181,9 +181,9 @@ Update an action
 | Param | Type | Description |
 | ------ | ------ | ------ |
 | name | `string` |  name of the action |
-| action | [ActionUpdateFields](../interfaces/actionupdatefields.md) |  action updates |
+| action |  [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)|  action updates |
 
-**Returns:** `Promise`<[Action](../enums/action.md)>
+**Returns:** `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
 Promise of an action
 
 ___

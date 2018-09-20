@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [Metric](../interfaces/metric.md)
+[@splunk/cloud-sdk](../README.md) > [Metric](../interfaces/metric.md)
 
 # Interface: Metric
 

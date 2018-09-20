@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [RequestOptions](../interfaces/requestoptions.md)
+[@splunk/cloud-sdk](../README.md) > [RequestOptions](../interfaces/requestoptions.md)
 
 # Interface: RequestOptions
 

@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [KVStoreService](../classes/kvstoreservice.md)
+[@splunk/cloud-sdk](../README.md) > [KVStoreService](../classes/kvstoreservice.md)
 
 # Class: KVStoreService
 

@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [ValidateInfo](../interfaces/validateinfo.md)
+[@splunk/cloud-sdk](../README.md) > [ValidateInfo](../interfaces/validateinfo.md)
 
 # Interface: ValidateInfo
 
@@ -13,7 +13,6 @@ ValidateInfo - Info object for a valid member
 ### Properties
 
 * [name](validateinfo.md#name)
-* [tenants](validateinfo.md#tenants)
 
 ---
 
@@ -24,13 +23,6 @@ ValidateInfo - Info object for a valid member
 ###  name
 
 **● name**: *`string`*
-
-___
-<a id="tenants"></a>
-
-###  tenants
-
-**● tenants**: *`string`[]*
 
 ___
 

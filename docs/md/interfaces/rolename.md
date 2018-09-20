@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [RoleName](../interfaces/rolename.md)
+[@splunk/cloud-sdk](../README.md) > [RoleName](../interfaces/rolename.md)
 
 # Interface: RoleName
 

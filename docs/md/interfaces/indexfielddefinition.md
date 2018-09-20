@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [IndexFieldDefinition](../interfaces/indexfielddefinition.md)
+[@splunk/cloud-sdk](../README.md) > [IndexFieldDefinition](../interfaces/indexfielddefinition.md)
 
 # Interface: IndexFieldDefinition
 

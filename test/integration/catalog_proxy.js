@@ -14,7 +14,7 @@ describe('catalog tests', () => {
     before(() => createIndexDataset(indexName));
     after(() =>
         splunkCloud.catalog
-            .deleteDataset(indexName)
+            .deleteDatasetByName(indexName)
             .catch(err => console.log('Error cleaning index: ' + err))
     );
 
@@ -41,7 +41,7 @@ describe('catalog tests', () => {
 
         it('should allow delete of datasets by name', () => {
             const name = 'foobar1';
-            return createIndexDataset(name).then(() => splunkCloud.catalog.deleteDataset(name));
+            return createIndexDataset(name).then(() => splunkCloud.catalog.deleteDatasetByName(name));
         });
 
         it('should throw an error when deleting a dataset that doesn\'t exist', () => {
@@ -346,7 +346,10 @@ function deleteAllDatasets() {
             .then(datasets => {
                 return Promise.all(
                     datasets.map(dataset => {
-                        return splunkCloud.catalog.deleteDataset(dataset.id);
+                        // Delete the dataset unless it's a main/metrics
+                        if (dataset.name !== "main" && dataset.name !== "metrics") {
+                            return splunkCloud.catalog.deleteDataset(dataset.id);
+                        }
                     })
                 );
             })

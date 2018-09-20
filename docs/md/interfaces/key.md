@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [Key](../interfaces/key.md)
+[@splunk/cloud-sdk](../README.md) > [Key](../interfaces/key.md)
 
 # Interface: Key
 

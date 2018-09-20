@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [Group](../interfaces/group.md)
+[@splunk/cloud-sdk](../README.md) > [Group](../interfaces/group.md)
 
 # Interface: Group
 

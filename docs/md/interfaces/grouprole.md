@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [GroupRole](../interfaces/grouprole.md)
+[@splunk/cloud-sdk](../README.md) > [GroupRole](../interfaces/grouprole.md)
 
 # Interface: GroupRole
 

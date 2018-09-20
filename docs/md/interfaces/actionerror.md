@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [ActionError](../interfaces/actionerror.md)
+[@splunk/cloud-sdk](../README.md) > [ActionError](../interfaces/actionerror.md)
 
 # Interface: ActionError
 

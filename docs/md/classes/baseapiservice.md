@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [BaseApiService](../classes/baseapiservice.md)
+[@splunk/cloud-sdk](../README.md) > [BaseApiService](../classes/baseapiservice.md)
 
 # Class: BaseApiService
 

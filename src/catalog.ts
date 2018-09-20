@@ -57,6 +57,25 @@ export class CatalogService extends BaseApiService {
     };
 
     /**
+     * Delete the Dataset
+     * @param name of the Dataset to delete
+     * @return A promise that will be resolved when deletion is complete
+     */
+    public deleteDatasetByName = (name: DatasetInfo['name']): Promise<any> => { // TODO: can we add stricter return typing?
+        return this.getDatasets(`name=="${name}"`).then(
+            ret => {
+                if (ret.length > 1) {
+                    throw new Error('There are more than 1 dataset with the input name');
+                } else if (ret.length === 1) {
+                    return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', ret[0].id]))
+                        .then(response => response.body);
+                } else {
+                    return Promise.reject(new Error(`No dataset found with name: ${name}`));
+                }
+            });
+    }
+
+    /**
      * Updates the supplied dataset
      * @param datasetIdOrResourceName
      * @param partial

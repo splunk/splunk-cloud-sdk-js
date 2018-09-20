@@ -1,4 +1,4 @@
-[@splunk/splunk-cloud-sdk](../README.md) > [ActionNotificationKind](../enums/actionnotificationkind.md)
+[@splunk/cloud-sdk](../README.md) > [ActionNotificationKind](../enums/actionnotificationkind.md)
 
 # Enumeration: ActionNotificationKind
 
