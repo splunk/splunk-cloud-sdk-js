@@ -94,9 +94,29 @@ describe('catalog tests', () => {
                 'datatype': 'S',
                 'fieldtype': 'D',
                 'prevalence': 'A'
-            }).then(resultDatasetField1 => splunkCloud.catalog.getDatasetField(resultDataset.id, resultDatasetField1.id).then((getResultDatasetField) => {
-                assert(getResultDatasetField.name, integrationTestField1);
-            })).then(() => splunkCloud.catalog.postDatasetField(resultDataset.id, {
+            }).then(resultDatasetField1 => {
+                splunkCloud.catalog.getDatasetField(resultDataset.id, resultDatasetField1.id).then((getResultDatasetField) => {
+                    assert(getResultDatasetField.name, integrationTestField1);
+                });
+
+                splunkCloud.catalog.getField(resultDatasetField1.id)
+                    .then(field => {
+                        assert(resultDatasetField1.name, field.name);
+                    });
+
+                splunkCloud.catalog.getFields()
+                    .then(fields => {
+                        found = false;
+                        fields.forEach(
+                            a => {
+                                if (a.name === resultDatasetField1.name)
+                                    found = true;
+                            }
+                        );
+                        assert(found);
+
+                    });
+            }).then(() => splunkCloud.catalog.postDatasetField(resultDataset.id, {
                 'name': integrationTestField2,
                 'datasetid': resultDataset.id,
                 'datatype': 'S',
@@ -191,7 +211,7 @@ describe('catalog tests', () => {
                 {
                     pattern: 'mypattern', 'kind': 'REGEX', field: fieldName
                 }).then(act => {
-                assert.equal(act.pattern, 'mypattern');
+                assert(act.pattern, 'mypattern');
             });
         });
 
@@ -202,7 +222,7 @@ describe('catalog tests', () => {
                 {
                     expression: 'myexpr', 'kind': 'EVAL', field: fieldName
                 }).then(act => {
-                assert.equal(act.expression, 'myexpr');
+                assert(act.expression, 'myexpr');
             });
         });
 
@@ -212,7 +232,7 @@ describe('catalog tests', () => {
                 {
                     mode: 'mymode', 'kind': 'AUTOKV'
                 }).then(act => {
-                assert.equal(act.mode, 'mymode');
+                assert(act.mode, 'mymode');
             });
         });
 
@@ -222,11 +242,11 @@ describe('catalog tests', () => {
                 {
                     expression: 'lookupexpr', 'kind': 'LOOKUP'
                 }).then(act => {
-                assert.equal(act.expression, 'lookupexpr');
+                assert(act.expression, 'lookupexpr');
             }).then((act) => {
                 return splunkCloud.catalog.getRuleActions(ruleId);
             }).then((acts) => {
-                assert.equal(acts.length, 4);
+                assert(acts.length, 4);
             });
 
         });

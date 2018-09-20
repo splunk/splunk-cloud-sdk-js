@@ -37,34 +37,34 @@ export class CatalogService extends BaseApiService {
     };
 
     /**
-     * Returns the dataset resource with the specified `id`.
-     * @param datasetId
+     * Returns the dataset resource with the specified `id` or `resourceName`.
+     * @param datasetIdOrResourceName
      * @return description of the dataset
      */
-    public getDataset = (datasetId: string): Promise<DatasetInfo> => {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]))
+    public getDataset = (datasetIdOrResourceName: string): Promise<DatasetInfo> => {
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]))
             .then(response => response.body as DatasetInfo);
     };
 
     /**
      * Delete the DatasetInfo and its dependencies with the specified `id`
-     * @param datasetId `id` of the dataset to delete
+     * @param datasetIdOrResourceName
      * @return A promise that will be resolved when deletion is complete
      */
-    public deleteDataset = (datasetId: string): Promise<any> => { // TODO: can we add stricter return typing?
-        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]))
+    public deleteDataset = (datasetIdOrResourceName: string): Promise<any> => { // TODO: can we add stricter return typing?
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]))
             .then(response => response.body);
     };
 
     /**
      * Updates the supplied dataset
-     * @param datasetId
+     * @param datasetIdOrResourceName
      * @param partial
      * @return information about the updated dataset
      */
         // TODO: add lint check for xxxID vs. xxxId consistency
-    public updateDataset = (datasetId: string, partial: PartialDatasetInfo): Promise<DatasetInfo> => {
-        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]), partial)
+    public updateDataset = (datasetIdOrResourceName: string, partial: PartialDatasetInfo): Promise<DatasetInfo> => {
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]), partial)
             .then(response => response.body as DatasetInfo);
     };
 
@@ -96,21 +96,21 @@ export class CatalogService extends BaseApiService {
 
     /**
      * Return the Rule with the specified `id`
-     * @param ruleId
+     * @param ruleIdOrResourceName
      * @return description of the rule
      */
-    public getRule = (ruleId: string): Promise<Rule> => {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]))
+    public getRule = (ruleIdOrResourceName: string): Promise<Rule> => {
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleIdOrResourceName]))
             .then(response => response.body as Rule);
     };
 
     /**
      * Delete the Rule and its dependencies with the specified `id`
-     * @param ruleId
+     * @param ruleIdOrResourceName
      * @return Promise that will be resolved when the rule is deleted
      */
-    public deleteRule = (ruleId: string): Promise<any> => { // TODO: can we add stricter return typing?
-        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]))
+    public deleteRule = (ruleIdOrResourceName: string): Promise<any> => { // TODO: can we add stricter return typing?
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleIdOrResourceName]))
             .then(response => response.body);
     };
 
