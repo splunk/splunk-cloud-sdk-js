@@ -10,8 +10,8 @@
 
 ## Usage
 
-Download the latest release of the Splunk Cloud SDK for JavaScript from one of the following locations: 
-- Splunk Developer Cloud Portal: https://sdc.splunkbeta.com/tools
+Download the latest release of the Splunk Cloud SDK for JavaScript from the following location: 
+ Splunk Developer Cloud Portal: https://sdc.splunkbeta.com/tools
 
 To install the SDK, run the following command from your project directory:
 ```sh
