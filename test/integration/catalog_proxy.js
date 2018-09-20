@@ -211,8 +211,8 @@ function deleteAllDatasets() {
             .then(datasets => {
                 return Promise.all(
                     datasets.map(dataset => {
-                        // Delete the dataset unless it's a main/metrics
-                        if (dataset.name !== "main" && dataset.name !== "metrics") {
+                        // Delete the dataset unless it's a main/metrics or createdby Splunk
+                        if (dataset.name !== "main" && dataset.name !== "metrics" && dataset.createdby !== "Splunk") {
                             return splunkCloud.catalog.deleteDataset(dataset.id);
                         }
                     })
