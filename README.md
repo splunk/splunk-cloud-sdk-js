@@ -6,17 +6,16 @@
 [![codecov](https://codecov.io/gh/splunk/splunk-cloud-sdk-js/branch/develop/graph/badge.svg?token=R5kexVYymt)](https://codecov.io/gh/splunk/splunk-cloud-sdk-js)
 
 # Terms of Service (TOS)
-[Splunk Cloud Terms of Service](https://www.splunk.com/en_us/legal/terms/splunk-cloud-terms-of-service.html)
+[Splunk Cloud Terms of Service](https://www.splunk.com/en_us/legal/terms/splunk-cloud-pre-release-terms-of-service.html)
 
 ## Usage
 
-Download the latest release of the Splunk Cloud SDK for JavaScript from one of the following locations: 
-- GitHub: https://github.com/splunk/splunk-cloud-sdk-js/releases
-- Splunk Developer Cloud Portal: https://dev.staging.splunkbeta.com/tools
+Download the latest release of the Splunk Cloud SDK for JavaScript from the following location: 
+ - Splunk Developer Cloud Portal: https://sdc.splunkbeta.com/tools
 
 To install the SDK, run the following command from your project directory:
 ```sh
-yarn add <path_to_downloaded_splunk-cloud-sdk-js-X.Y.Z.tar.gz>
+npm install @splunk/cloud-sdk
 ```
 Installing this SDK allows your project to interact with services in the Splunk Developer Cloud, such as authorization, identity control, data ingest, search, and so forth.
 
