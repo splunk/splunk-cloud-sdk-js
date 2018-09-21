@@ -213,8 +213,9 @@ export class CatalogService extends BaseApiService {
 
     /**
      * Create a new Rule Action
-     * @param rule The rule to create
-     * @return a description of the new rule
+     * @param ruleID
+     * @param action The rule action to create
+     * @return a description of the new rule action
      */
     public createRuleAction = (ruleID: Rule['id'], action: AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction):
         Promise<AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction> => {
@@ -223,9 +224,10 @@ export class CatalogService extends BaseApiService {
     };
 
     /**
-     * Gets the list of fields
+     * Gets the list of rule actions
+     * @param ruleID
      * @param filter An SPL filter string
-     * @return fields
+     * @return rule actions
      */
     public getRuleActions = (ruleID: Rule['id'], filter?: string): Promise<AliasAction[] | AutoKVAction[] | EvalAction[] | LookupAction[] | RegexAction[]> => {
         const query = { filter };
@@ -234,21 +236,21 @@ export class CatalogService extends BaseApiService {
     };
 
     /**
-     * Gets the list of fields
-     * @param filter An SPL filter string
-     * @return fields
+     * Gets the rule action with the specified ruleID and actionID
+     * @param ruleID
+     * @param actionID
+     * @return a rule action
      */
-    public getRuleAction = (ruleID: Rule['id'], actionID: string, filter?: string): Promise<AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction> => {
-        const query = { filter };
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions', actionID]), { query })
+    public getRuleAction = (ruleID: Rule['id'], actionID: string): Promise<AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction> => {
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions', actionID]))
             .then(response => response.body as AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction);
     };
 
     /**
-     * Updates the supplied dataset
-     * @param datasetId
-     * @param partial
-     * @return information about the updated dataset
+     * Updates the supplied rule action
+     * @param ruleID
+     * @param actionID
+     * @return information about the updated rule action
      */
     public updateRuleAction = (ruleID: Rule['id'], actionID: string, action: AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction):
         Promise<AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction> => {
@@ -257,10 +259,10 @@ export class CatalogService extends BaseApiService {
     };
 
     /**
-     * Deletes the dataset field with the specified datasetID and datasetFieldID
-     * @param datasetID
-     * @param datasetFieldID
-     * @return promise that will be resolved when field is deleted
+     * Deletes the rule action with the specified ruleID and actionID
+     * @param ruleID
+     * @param actionID
+     * @return promise that will be resolved when rule action is deleted
      */
     public deleteRuleAction = (ruleID: Rule['id'], actionID: string): Promise<object> => {
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions', actionID]))
