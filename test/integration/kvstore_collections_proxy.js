@@ -378,38 +378,4 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                 });
         });
     });
-
-    describe('Test ExportCollection', () => {
-        it('Should successfully return the csv format of records file', () => {
-            return createRecord(testKVCollectionName, recordOne)
-                .then(createRecordResponse => {
-                    return createRecord(testKVCollectionName, recordTwo);
-                })
-                .then(createRecordResponse => {
-                    return createRecord(testKVCollectionName, recordThree);
-                })
-                .then(createRecordResponse => {
-                    return splunkCloud.kvstore.exportCollection(testKVCollectionName, ContentType.CSV);
-                })
-                .then(exportCollectionResponse => {
-                    assert.isNotEmpty(exportCollectionResponse);
-                });
-        });
-
-        it('Should successfully return the gzip format of records file', () => {
-            return createRecord(testKVCollectionName, recordOne)
-                .then(createRecordResponse => {
-                    return createRecord(testKVCollectionName, recordTwo);
-                })
-                .then(createRecordResponse => {
-                    return createRecord(testKVCollectionName, recordThree);
-                })
-                .then(createRecordResponse => {
-                    return splunkCloud.kvstore.exportCollection(testKVCollectionName, ContentType.GZIP);
-                })
-                .then(exportCollectionResponse => {
-                    assert.isNotEmpty(exportCollectionResponse);
-                });
-        });
-    });
 });
