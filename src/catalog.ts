@@ -24,7 +24,7 @@ export class CatalogService extends BaseApiService {
         }
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), { query })
             .then(response => response.body as DatasetInfo[]);
-    }
+    };
 
     /**
      * Create a new dataset.
@@ -34,27 +34,27 @@ export class CatalogService extends BaseApiService {
     public createDataset = (dataset: DatasetInfo): Promise<DatasetInfo> => {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), dataset)
             .then(response => response.body as DatasetInfo);
-    }
+    };
 
     /**
-     * Returns the dataset resource with the specified `id`.
-     * @param datasetId
+     * Returns the dataset resource with the specified `id` or `resourceName`.
+     * @param datasetIdOrResourceName
      * @return description of the dataset
      */
-    public getDataset = (datasetId: DatasetInfo['id']): Promise<DatasetInfo> => {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]))
+    public getDataset = (datasetIdOrResourceName: string): Promise<DatasetInfo> => {
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]))
             .then(response => response.body as DatasetInfo);
-    }
+    };
 
     /**
      * Delete the DatasetInfo and its dependencies with the specified `id`
-     * @param datasetId `id` of the dataset to delete
+     * @param datasetIdOrResourceName
      * @return A promise that will be resolved when deletion is complete
      */
-    public deleteDataset = (datasetId: DatasetInfo['id']): Promise<any> => { // TODO: can we add stricter return typing?
-        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]))
+    public deleteDataset = (datasetIdOrResourceName: string): Promise<any> => { // TODO: can we add stricter return typing?
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]))
             .then(response => response.body);
-    }
+    };
 
     /**
      * Delete the Dataset
@@ -77,15 +77,15 @@ export class CatalogService extends BaseApiService {
 
     /**
      * Updates the supplied dataset
-     * @param datasetId
+     * @param datasetIdOrResourceName
      * @param partial
      * @return information about the updated dataset
      */
     // TODO: add lint check for xxxID vs. xxxId consistency
-    public updateDataset = (datasetId: DatasetInfo['id'], partial: PartialDatasetInfo): Promise<DatasetInfo> => {
-        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetId]), partial)
+    public updateDataset = (datasetIdOrResourceName: string, partial: PartialDatasetInfo): Promise<DatasetInfo> => {
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]), partial)
             .then(response => response.body as DatasetInfo);
-    }
+    };
 
     // rules
 
@@ -97,41 +97,41 @@ export class CatalogService extends BaseApiService {
     public createRule = (rule: Rule): Promise<Rule> => {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), rule)
             .then(response => response.body as Rule);
-    }
+    };
 
     /**
      * Get the matching list of Rules
      * @param filter An SPL filter string
      * @return description of defined rules (optionally matching SPL query)
      */
-    public getRules = (filter?: string): Promise<Rule> => {
+    public getRules = (filter?: string): Promise<Rule[]> => {
         const query: QueryArgs = {};
         if (filter) {
             query.filter = filter;
         }
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), { query })
-            .then(response => response.body as Rule);
-    }
+            .then(response => response.body as Rule[]);
+    };
 
     /**
      * Return the Rule with the specified `id`
-     * @param ruleId
+     * @param ruleIdOrResourceName
      * @return description of the rule
      */
-    public getRule = (ruleId: Rule['id']): Promise<Rule> => {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]))
+    public getRule = (ruleIdOrResourceName: string): Promise<Rule> => {
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleIdOrResourceName]))
             .then(response => response.body as Rule);
-    }
+    };
 
     /**
      * Delete the Rule and its dependencies with the specified `id`
-     * @param ruleId
+     * @param ruleIdOrResourceName
      * @return Promise that will be resolved when the rule is deleted
      */
-    public deleteRule = (ruleId: Rule['id']): Promise<any> => { // TODO: can we add stricter return typing?
-        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleId]))
+    public deleteRule = (ruleIdOrResourceName: string): Promise<any> => { // TODO: can we add stricter return typing?
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleIdOrResourceName]))
             .then(response => response.body);
-    }
+    };
 
     /**
      * Get the list of dataset fields for the given `id`
@@ -143,7 +143,7 @@ export class CatalogService extends BaseApiService {
         const query = { filter };
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), { query })
             .then(response => response.body as Field[]);
-    }
+    };
 
     /**
      * Gets the Field with the specified datasetID and datasetFieldID
@@ -154,7 +154,7 @@ export class CatalogService extends BaseApiService {
     public getDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id']): Promise<Field> => {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]))
             .then(response => response.body as Field);
-    }
+    };
 
     /**
      * Creates a new dataset field
@@ -165,7 +165,7 @@ export class CatalogService extends BaseApiService {
     public postDatasetField = (datasetID: DatasetInfo['id'], datasetField: Field): Promise<Field> => {
         return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), datasetField)
             .then(response => response.body as Field);
-    }
+    };
 
     /**
      * Updates an existing dataset field
@@ -177,7 +177,7 @@ export class CatalogService extends BaseApiService {
     public patchDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id'], datasetField: Field): Promise<Field> => {
         return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]), datasetField)
             .then(response => response.body as Field);
-    }
+    };
 
     /**
      * Deletes the dataset field with the specified datasetID and datasetFieldID
@@ -188,7 +188,86 @@ export class CatalogService extends BaseApiService {
     public deleteDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id']): Promise<object> => {
         return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]))
             .then(response => response.body as object);
-    }
+    };
+
+    /**
+     * Gets the list of fields
+     * @param filter An SPL filter string
+     * @return fields
+     */
+    public getFields = (filter?: string): Promise<Field[]> => {
+        const query = { filter };
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['fields']), { query })
+            .then(response => response.body as Field[]);
+    };
+
+    /**
+     * Get the matching field
+     * @param fieldID
+     * @return description of the field
+     */
+    public getField = (fieldID: Field['id']): Promise<Field> => {
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['fields', fieldID]))
+            .then(response => response.body as Field);
+    };
+
+    /**
+     * Create a new Rule Action
+     * @param ruleID
+     * @param action The rule action to create
+     * @return a description of the new rule action
+     */
+    public createRuleAction = (ruleID: Rule['id'], action: AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction):
+        Promise<AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction> => {
+        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions']), action)
+            .then(response => response.body as AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction);
+    };
+
+    /**
+     * Gets the list of rule actions
+     * @param ruleID
+     * @param filter An SPL filter string
+     * @return rule actions
+     */
+    public getRuleActions = (ruleID: Rule['id'], filter?: string): Promise<AliasAction[] | AutoKVAction[] | EvalAction[] | LookupAction[] | RegexAction[]> => {
+        const query = { filter };
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions']), { query })
+            .then(response => response.body as AliasAction[] | AutoKVAction[] | EvalAction[] | LookupAction[] | RegexAction[]);
+    };
+
+    /**
+     * Gets the rule action with the specified ruleID and actionID
+     * @param ruleID
+     * @param actionID
+     * @return a rule action
+     */
+    public getRuleAction = (ruleID: Rule['id'], actionID: string): Promise<AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction> => {
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions', actionID]))
+            .then(response => response.body as AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction);
+    };
+
+    /**
+     * Updates the supplied rule action
+     * @param ruleID
+     * @param actionID
+     * @return information about the updated rule action
+     */
+    public updateRuleAction = (ruleID: Rule['id'], actionID: string, action: AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction):
+        Promise<AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction> => {
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions', actionID]), action)
+            .then(response => response.body as AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction);
+    };
+
+    /**
+     * Deletes the rule action with the specified ruleID and actionID
+     * @param ruleID
+     * @param actionID
+     * @return promise that will be resolved when rule action is deleted
+     */
+    public deleteRuleAction = (ruleID: Rule['id'], actionID: string): Promise<object> => {
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions', actionID]))
+            .then(response => response.body as object);
+    };
 }
 
 export interface DatasetInfo {
@@ -279,4 +358,74 @@ export interface Action {
     createdBy: string;
     modifiedBy: string;
     version: number;
+}
+
+export interface AliasAction {
+    id: string;
+    ruleid: string;
+    kind: 'ALIAS';
+    owner: string;
+    created: string;
+    modified: string;
+    createdBy: string;
+    modifiedBy: string;
+    version: number;
+    alias: string;
+    field: Field;
+}
+
+export interface AutoKVAction {
+    id: string;
+    ruleid: string;
+    kind: 'AUTOKV';
+    owner: string;
+    created: string;
+    modified: string;
+    createdBy: string;
+    modifiedBy: string;
+    version: number;
+    mode: string;
+}
+
+export interface EvalAction {
+    id: string;
+    ruleid: string;
+    kind: 'EVAL';
+    owner: string;
+    created: string;
+    modified: string;
+    createdBy: string;
+    modifiedBy: string;
+    version: number;
+    expression: string;
+    field: Field;
+}
+
+export interface LookupAction {
+    id: string;
+    ruleid: string;
+    kind: 'LOOKUP';
+    owner: string;
+    created: string;
+    modified: string;
+    createdBy: string;
+    modifiedBy: string;
+    version: number;
+    expression: string;
+}
+
+
+export interface RegexAction {
+    id: string;
+    ruleid: string;
+    kind: 'REGEX';
+    owner: string;
+    created: string;
+    modified: string;
+    createdBy: string;
+    modifiedBy: string;
+    version: number;
+    pattern: string;
+    field: Field;
+    limit: number;
 }
