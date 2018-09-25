@@ -252,7 +252,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
 // Creates a test pipeline request
 function createPipelineRequest(name, description) {
     const dsl = {
-        "dsl": "kafka-brokers=\"localhost:9092\";input-topic = \"intopic\";output-topic-1 = \"output-topic-1\";events = deserialize-events(read-kafka(kafka-brokers, input-topic, {}));write-kafka(serialize-events(events, output-topic-1), kafka-brokers, {});"
+        "dsl": "kafka-brokers=\"localhost:9092\";input-topic = \"intopic\";output-topic-1 = \"output-topic-1\";events = deserialize-events(unauthenticated-read-kafka(kafka-brokers, input-topic, {}));unauthenticated-write-kafka(serialize-events(events, output-topic-1), kafka-brokers, {});"
     };
     return splunkCloud.streams.compileDslToUpl(dsl).then(response => {
         assert.isNotNull(response);
