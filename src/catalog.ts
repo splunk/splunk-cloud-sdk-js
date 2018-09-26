@@ -27,6 +27,21 @@ export class CatalogService extends BaseApiService {
     };
 
     /**
+     * Return a list of modules that match a filter query if it is given,
+     *  otherwise return all modules.
+     *  @param filter a filter to apply to the Modules
+     *  @return Array of module names
+     */
+    public getModules = (filter?: string): Promise<Module[]> => {
+        const query: QueryArgs = {};
+        if (filter) {
+            query.filter = filter;
+        }
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['modules']), { query })
+            .then(response => response.body as Module[]);
+    };
+
+    /**
      * Create a new dataset.
      * @param dataset The dataset to create
      * @return description of the new dataset
@@ -428,4 +443,11 @@ export interface RegexAction {
     pattern: string;
     field: Field;
     limit: number;
+}
+
+export interface Module {
+    /**
+     * The name of a module
+     */
+    name: string;
 }
