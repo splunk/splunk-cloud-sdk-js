@@ -83,7 +83,6 @@ describe('catalog tests', () => {
         it('should create a test dataset, its fields, list its fields and delete the test dataset', () => {
             return splunkCloud.catalog.createDataset({
                 name: 'integ_dataset_1000',
-                owner: 'Splunk',
                 kind: 'lookup',
                 capabilities: '1101-00000:11010',
                 externalKind: 'kvcollection',
@@ -142,14 +141,12 @@ describe('catalog tests', () => {
         const ruleName = 'action_test_rule';
         const ruleModule = 'catalog';
         const ruleMatch = 'sourcetype::integration_test_match';
-        const owner = 'splunk';
         const datasetName = 'action_dataset';
 
         var ruleId;
         before(() => {
             return splunkCloud.catalog.createDataset({
                 name: datasetName,
-                owner: 'Splunk',
                 kind: 'lookup',
                 externalKind: 'kvcollection',
                 externalName: 'test_externalName'
@@ -166,7 +163,6 @@ describe('catalog tests', () => {
                     name: ruleName,
                     module: ruleModule,
                     match: ruleMatch,
-                    owner: owner
                 }).then((rule) => {
                     ruleId = rule.id;
 
@@ -278,7 +274,6 @@ function createIndexDataset(collection) {
             .then(() => {
                 return splunkCloud.catalog.createDataset({
                     name: collection,
-                    owner: 'test@splunk.com',
                     kind: 'index',
                     capabilities: '1101-00000:11010',
                     disabled: false
@@ -320,7 +315,6 @@ function createKVCollectionDataset(namespace, collection) {
             .then(() => {
                 return splunkCloud.catalog.createDataset({
                     name: collection,
-                    owner: 'splunk',
                     kind: 'kvcollection',
                     capabilities: '1101-00000:11010',
                     module: namespace
@@ -401,7 +395,6 @@ function createRule(ruleName) {
             .then(() => {
                 return splunkCloud.catalog.createRule({
                     name: ruleName,
-                    owner: 'SDKJSTEST@splunk.com',
                     match: 'sourcetype::newtype'
                 });
             })
