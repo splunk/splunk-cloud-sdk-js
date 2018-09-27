@@ -40,18 +40,6 @@ describe('Integration tests for KVStore Endpoints', () => {
         });
     });
 
-    describe('Stats Endpoints', () => {
-        describe('Get the stats of a new collections', () => {
-            it('Should return expected defaults', () => {
-                return splunkCloud.kvstore.getCollectionStats(testKVCollectionName).then(statsResponse => {
-                    assert.equal(statsResponse.count, 0);
-                    assert.equal(statsResponse.nindexes, 1);
-                    assert.equal(statsResponse.collection, testKVCollectionName);
-                });
-            });
-        });
-    });
-
     describe('Index Endpoints', () => {
         const testIndex = 'integtestindex';
         const fields = [{ Direction: -1, Field: 'integ_testField1' }];
