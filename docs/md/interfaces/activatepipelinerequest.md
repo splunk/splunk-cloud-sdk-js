@@ -13,6 +13,7 @@ ActivatePipelineRequest - Request to activate the pipeline
 ### Properties
 
 * [ids](activatepipelinerequest.md#ids)
+* [skipSavePoint](activatepipelinerequest.md#skipsavepoint)
 
 ---
 
@@ -25,6 +26,15 @@ ActivatePipelineRequest - Request to activate the pipeline
 **● ids**: *`string`[]*
 
 A list of pipeline IDs.
+
+___
+<a id="skipsavepoint"></a>
+
+###  skipSavePoint
+
+**● skipSavePoint**: *`boolean`*
+
+Skips checkpointing.
 
 ___
 

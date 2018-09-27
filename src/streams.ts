@@ -5,7 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import BaseApiService from './baseapiservice';
-import { QueryArgs } from './client';
+import { QueryArgs, RequestOptions } from './client';
 import { STREAMS_SERVICE_PREFIX } from './service_prefixes';
 
 /**
@@ -27,14 +27,17 @@ export class StreamsService extends BaseApiService {
 
     /**
      * Gets all the pipelines based on the query parameters provided by the user.
-     * @param args Filter string to target specific pipelines
+     * @param queryArgs Filter string to target specific pipelines
      * @returns A Promise of a paginated pipeline response (consists of the pipelines and total count)
      */
     public getPipelines = (
         queryArgs: PipelineQueryParams = {}
     ): Promise<PaginatedPipelineResponse> => {
         const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']);
-        return this.client.get(url, queryArgs as QueryArgs)
+        const requestOptions: RequestOptions = {
+            query: queryArgs as QueryArgs
+        }
+        return this.client.get(url, requestOptions)
             .then(response => response.body as PaginatedPipelineResponse);
     }
 
@@ -126,6 +129,10 @@ export interface ActivatePipelineRequest {
      * A list of pipeline IDs.
      */
     ids: string[];
+    /**
+     * Skips checkpointing.
+     */
+    skipSavePoint: boolean;
 }
 
 /**

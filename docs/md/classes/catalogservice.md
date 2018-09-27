@@ -24,19 +24,27 @@ Encapsulates catalog endpoints
 
 * [createDataset](catalogservice.md#createdataset)
 * [createRule](catalogservice.md#createrule)
+* [createRuleAction](catalogservice.md#createruleaction)
 * [deleteDataset](catalogservice.md#deletedataset)
 * [deleteDatasetByName](catalogservice.md#deletedatasetbyname)
 * [deleteDatasetField](catalogservice.md#deletedatasetfield)
 * [deleteRule](catalogservice.md#deleterule)
+* [deleteRuleAction](catalogservice.md#deleteruleaction)
 * [getDataset](catalogservice.md#getdataset)
 * [getDatasetField](catalogservice.md#getdatasetfield)
 * [getDatasetFields](catalogservice.md#getdatasetfields)
 * [getDatasets](catalogservice.md#getdatasets)
+* [getField](catalogservice.md#getfield)
+* [getFields](catalogservice.md#getfields)
+* [getModules](catalogservice.md#getmodules)
 * [getRule](catalogservice.md#getrule)
+* [getRuleAction](catalogservice.md#getruleaction)
+* [getRuleActions](catalogservice.md#getruleactions)
 * [getRules](catalogservice.md#getrules)
 * [patchDatasetField](catalogservice.md#patchdatasetfield)
 * [postDatasetField](catalogservice.md#postdatasetfield)
 * [updateDataset](catalogservice.md#updatedataset)
+* [updateRuleAction](catalogservice.md#updateruleaction)
 
 ---
 
@@ -108,11 +116,30 @@ Create a new Rule
 a description of the new rule
 
 ___
+<a id="createruleaction"></a>
+
+###  createRuleAction
+
+▸ **createRuleAction**(ruleID: *`string`*, action: * [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)*): `Promise`< [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)>
+
+Create a new Rule Action
+
+**Parameters:**
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| ruleID | `string` |  - |
+| action |  [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)|  The rule action to create |
+
+**Returns:** `Promise`< [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)>
+a description of the new rule action
+
+___
 <a id="deletedataset"></a>
 
 ###  deleteDataset
 
-▸ **deleteDataset**(datasetId: *`string`*): `Promise`<`any`>
+▸ **deleteDataset**(datasetIdOrResourceName: *`string`*): `Promise`<`any`>
 
 Delete the DatasetInfo and its dependencies with the specified `id`
 
@@ -120,7 +147,7 @@ Delete the DatasetInfo and its dependencies with the specified `id`
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| datasetId | `string` |  \`id\` of the dataset to delete |
+| datasetIdOrResourceName | `string` |  - |
 
 **Returns:** `Promise`<`any`>
 A promise that will be resolved when deletion is complete
@@ -167,7 +194,7 @@ ___
 
 ###  deleteRule
 
-▸ **deleteRule**(ruleId: *`string`*): `Promise`<`any`>
+▸ **deleteRule**(ruleIdOrResourceName: *`string`*): `Promise`<`any`>
 
 Delete the Rule and its dependencies with the specified `id`
 
@@ -175,25 +202,44 @@ Delete the Rule and its dependencies with the specified `id`
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| ruleId | `string` |  - |
+| ruleIdOrResourceName | `string` |  - |
 
 **Returns:** `Promise`<`any`>
 Promise that will be resolved when the rule is deleted
+
+___
+<a id="deleteruleaction"></a>
+
+###  deleteRuleAction
+
+▸ **deleteRuleAction**(ruleID: *`string`*, actionID: *`string`*): `Promise`<`any`>
+
+Deletes the rule action with the specified ruleID and actionID
+
+**Parameters:**
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| ruleID | `string` |  - |
+| actionID | `string` |  - |
+
+**Returns:** `Promise`<`any`>
+promise that will be resolved when rule action is deleted
 
 ___
 <a id="getdataset"></a>
 
 ###  getDataset
 
-▸ **getDataset**(datasetId: *`string`*): `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
+▸ **getDataset**(datasetIdOrResourceName: *`string`*): `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
 
-Returns the dataset resource with the specified `id`.
+Returns the dataset resource with the specified `id` or `resourceName`.
 
 **Parameters:**
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| datasetId | `string` |  - |
+| datasetIdOrResourceName | `string` |  - |
 
 **Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
 description of the dataset
@@ -255,11 +301,64 @@ Returns a list of datasets, optionally filtered by a filter string.
 Array of dataset descriptors
 
 ___
+<a id="getfield"></a>
+
+###  getField
+
+▸ **getField**(fieldID: *`string`*): `Promise`<[Field](../interfaces/field.md)>
+
+Get the matching field
+
+**Parameters:**
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| fieldID | `string` |  - |
+
+**Returns:** `Promise`<[Field](../interfaces/field.md)>
+description of the field
+
+___
+<a id="getfields"></a>
+
+###  getFields
+
+▸ **getFields**(filter?: * `undefined` &#124; `string`*): `Promise`<[Field](../interfaces/field.md)[]>
+
+Gets the list of fields
+
+**Parameters:**
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| `Optional` filter |  `undefined` &#124; `string`|  An SPL filter string |
+
+**Returns:** `Promise`<[Field](../interfaces/field.md)[]>
+fields
+
+___
+<a id="getmodules"></a>
+
+###  getModules
+
+▸ **getModules**(filter?: * `undefined` &#124; `string`*): `Promise`<[Module](../interfaces/module.md)[]>
+
+Return a list of modules that match a filter query if it is given, otherwise return all modules. @param filter a filter to apply to the Modules @return Array of module names
+
+**Parameters:**
+
+| Param | Type |
+| ------ | ------ |
+| `Optional` filter |  `undefined` &#124; `string`|
+
+**Returns:** `Promise`<[Module](../interfaces/module.md)[]>
+
+___
 <a id="getrule"></a>
 
 ###  getRule
 
-▸ **getRule**(ruleId: *`string`*): `Promise`<[Rule](../interfaces/rule.md)>
+▸ **getRule**(ruleIdOrResourceName: *`string`*): `Promise`<[Rule](../interfaces/rule.md)>
 
 Return the Rule with the specified `id`
 
@@ -267,17 +366,55 @@ Return the Rule with the specified `id`
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| ruleId | `string` |  - |
+| ruleIdOrResourceName | `string` |  - |
 
 **Returns:** `Promise`<[Rule](../interfaces/rule.md)>
 description of the rule
+
+___
+<a id="getruleaction"></a>
+
+###  getRuleAction
+
+▸ **getRuleAction**(ruleID: *`string`*, actionID: *`string`*): `Promise`< [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)>
+
+Gets the rule action with the specified ruleID and actionID
+
+**Parameters:**
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| ruleID | `string` |  - |
+| actionID | `string` |  - |
+
+**Returns:** `Promise`< [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)>
+a rule action
+
+___
+<a id="getruleactions"></a>
+
+###  getRuleActions
+
+▸ **getRuleActions**(ruleID: *`string`*, filter?: * `undefined` &#124; `string`*): `Promise`< [AliasAction](../interfaces/aliasaction.md)[] &#124; [AutoKVAction](../interfaces/autokvaction.md)[] &#124; [EvalAction](../interfaces/evalaction.md)[] &#124; [LookupAction](../interfaces/lookupaction.md)[] &#124; [RegexAction](../interfaces/regexaction.md)[]>
+
+Gets the list of rule actions
+
+**Parameters:**
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| ruleID | `string` |  - |
+| `Optional` filter |  `undefined` &#124; `string`|  An SPL filter string |
+
+**Returns:** `Promise`< [AliasAction](../interfaces/aliasaction.md)[] &#124; [AutoKVAction](../interfaces/autokvaction.md)[] &#124; [EvalAction](../interfaces/evalaction.md)[] &#124; [LookupAction](../interfaces/lookupaction.md)[] &#124; [RegexAction](../interfaces/regexaction.md)[]>
+rule actions
 
 ___
 <a id="getrules"></a>
 
 ###  getRules
 
-▸ **getRules**(filter?: * `undefined` &#124; `string`*): `Promise`<[Rule](../interfaces/rule.md)>
+▸ **getRules**(filter?: * `undefined` &#124; `string`*): `Promise`<[Rule](../interfaces/rule.md)[]>
 
 Get the matching list of Rules
 
@@ -287,7 +424,7 @@ Get the matching list of Rules
 | ------ | ------ | ------ |
 | `Optional` filter |  `undefined` &#124; `string`|  An SPL filter string |
 
-**Returns:** `Promise`<[Rule](../interfaces/rule.md)>
+**Returns:** `Promise`<[Rule](../interfaces/rule.md)[]>
 description of defined rules (optionally matching SPL query)
 
 ___
@@ -334,7 +471,7 @@ ___
 
 ###  updateDataset
 
-▸ **updateDataset**(datasetId: *`string`*, partial: *[PartialDatasetInfo](../interfaces/partialdatasetinfo.md)*): `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
+▸ **updateDataset**(datasetIdOrResourceName: *`string`*, partial: *[PartialDatasetInfo](../interfaces/partialdatasetinfo.md)*): `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
 
 Updates the supplied dataset
 
@@ -342,11 +479,31 @@ Updates the supplied dataset
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| datasetId | `string` |  - |
+| datasetIdOrResourceName | `string` |  - |
 | partial | [PartialDatasetInfo](../interfaces/partialdatasetinfo.md) |  - |
 
 **Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
 information about the updated dataset
+
+___
+<a id="updateruleaction"></a>
+
+###  updateRuleAction
+
+▸ **updateRuleAction**(ruleID: *`string`*, actionID: *`string`*, action: * [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)*): `Promise`< [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)>
+
+Updates the supplied rule action
+
+**Parameters:**
+
+| Param | Type | Description |
+| ------ | ------ | ------ |
+| ruleID | `string` |  - |
+| actionID | `string` |  - |
+| action |  [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)|
+
+**Returns:** `Promise`< [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)>
+information about the updated rule action
 
 ___
 

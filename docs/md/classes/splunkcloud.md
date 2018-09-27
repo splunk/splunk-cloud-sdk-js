@@ -11,6 +11,12 @@ This class is a Splunk Cloud client.
 
 *__property__*: ingest Proxies for the ingest APIs
 
+*__property__*: kvstore Proxies for the kvstore APIs
+
+*__property__*: action Proxies for the action APIs
+
+*__property__*: streams Proxies for the streams APIs
+
 ## Hierarchy
 
 **SplunkCloud**
@@ -40,7 +46,7 @@ This class is a Splunk Cloud client.
 
 ###  constructor
 
-⊕ **new SplunkCloud**(url: *`string`*, token: *`string`*, defaultTenant?: * `undefined` &#124; `string`*): [SplunkCloud](splunkcloud.md)
+⊕ **new SplunkCloud**(args: * [ServiceClientArgs](../interfaces/serviceclientargs.md) &#124; `string`*, token?: * `undefined` &#124; `string`*, defaultTenant?: * `undefined` &#124; `string`*): [SplunkCloud](splunkcloud.md)
 
 Build a Splunk Cloud Client
 
@@ -48,8 +54,8 @@ Build a Splunk Cloud Client
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| url | `string` |  URL to Splunk Cloud environment |
-| token | `string` |  Auth token |
+| args |  [ServiceClientArgs](../interfaces/serviceclientargs.md) &#124; `string`|  URL to Splunk Cloud environment or a ServiceClientArgs object |
+| `Optional` token |  `undefined` &#124; `string`|  Auth token |
 | `Optional` defaultTenant |  `undefined` &#124; `string`|  Default tenant to use for requests |
 
 **Returns:** [SplunkCloud](splunkcloud.md)

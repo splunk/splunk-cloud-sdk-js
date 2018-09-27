@@ -57,7 +57,7 @@ export class Search {
      * @param statusCallback
      * @return search job status description
      */
-    public wait = (updateInterval: number, statusCallback: (job: SearchJob) => any): Promise<SearchJob> => {
+    public wait = (updateInterval?: number, statusCallback?: (job: SearchJob) => any): Promise<SearchJob> => {
         const self = this;
         return this.client.waitForJob(this.jobId, updateInterval, statusCallback)
             .catch((err: Error) => {
@@ -202,7 +202,7 @@ export class SearchService extends BaseApiService {
      */
     public waitForJob = (jobId: string, pollInterval?: number, callback?: (job: SearchJob) => object): Promise<SearchJob> => {
         const self = this;
-        const interval = pollInterval || 250;
+        const interval = pollInterval || 500;
         return new Promise<SearchJob>((resolve: (job: SearchJob) => void, reject: (error: Error) => void) => {
             this.getJob(jobId).then(job => {
                 if (callback) {

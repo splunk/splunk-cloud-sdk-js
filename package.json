@@ -1,6 +1,6 @@
 {
   "name": "@splunk/cloud-sdk",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Splunk Cloud SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
@@ -25,7 +25,7 @@
     "publish:docs": "yarn ts:docs && npm add -D @splunk/cicd-tools --registry https://repo.splunk.com/artifactory/api/npm/npm && yarn cicd-publish-docs docs/html",
     "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
     "stop:swagger": "docker rm -f swagger",
-    "example": "node examples/ingestMetricsAndSearch.js && node examples/ingestAndSearch.js"
+    "example": "./ci/integration/runExamples.sh"
   },
   "author": "Splunk, Inc.",
   "license": "SEE LICENSE IN LICENSE.txt",
@@ -43,13 +43,13 @@
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.6",
     "ts-node": "^7.0.0",
-    "tslint": "^5.10.0",
-    "tslint-config-airbnb": "^5.9.2",
-    "tslint-config-prettier": "^1.13.0",
-    "tslint-eslint-rules": "^5.3.1",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.11.0",
+    "tslint-config-prettier": "^1.15.0",
+    "tslint-eslint-rules": "^5.4.0",
     "typedoc": "^0.11.1",
     "typedoc-plugin-markdown": "^1.1.13",
-    "typescript": "^2.9.2"
+    "typescript": "^3.0.3"
   },
   "dependencies": {
     "rxjs": "^6.3.2"
