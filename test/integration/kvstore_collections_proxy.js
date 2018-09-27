@@ -369,13 +369,4 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
             });
         });
     });
-
-    describe('Test GetCollections', () => {
-        it('Should successfully return all the collections present in the given tenant', () => {
-            return splunkCloud.kvstore.getCollections()
-                .then(getCollectionsResponse => {
-                    assert(getCollectionsResponse.length >= 1, "Atleast one collection should be returned");
-                });
-        });
-    });
 });
