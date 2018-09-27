@@ -4,11 +4,13 @@ CODEOWNERS
 codeship*
 env
 ci/
+docs/
 test/
 *.iml
 .idea/
 .vscode/
 .prettierrc
+.editorconfig
 tmp/
 jsdoc.json
 .eslintrc.*
