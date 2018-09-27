@@ -1,17 +1,9 @@
 # Splunk Cloud SDK for JavaScript
 
-# Repository status
-[![Codeship Status for splunk/splunk-cloud-sdk-js](https://app.codeship.com/projects/efc247e0-15d9-0136-51cc-4ecad654e338/status?branch=develop)](https://app.codeship.com/projects/283657)
-
-[![codecov](https://codecov.io/gh/splunk/splunk-cloud-sdk-js/branch/develop/graph/badge.svg?token=R5kexVYymt)](https://codecov.io/gh/splunk/splunk-cloud-sdk-js)
-
 # Terms of Service (TOS)
 [Splunk Cloud Terms of Service](https://www.splunk.com/en_us/legal/terms/splunk-cloud-pre-release-terms-of-service.html)
 
 ## Usage
-
-Download the latest release of the Splunk Cloud SDK for JavaScript from the following location: 
- - Splunk Developer Cloud Portal: https://sdc.splunkbeta.com/tools
 
 To install the SDK, run the following command from your project directory:
 ```sh
@@ -24,10 +16,10 @@ Installing this SDK allows your project to interact with services in the Splunk 
 This example shows how to use one service client to access all supported services:
 
 ```js
-var { ServiceClient } = require('@splunk/splunk-cloud')
+const { ServiceClient } = require('@splunk/splunk-cloud')
  
-var svc = new ServiceClient(ENDPOINT_URL, AUTH_TOKEN, TENANT)
- 
+const svc = new ServiceClient({ tokenSource: AUTH_TOKEN, defaultTenant: TENANT });
+
 // Retrieve the datasets for this tenant from the Catalog service
 svc.catalog.getDatasets()
 
@@ -55,18 +47,9 @@ identity.getPrincipal(PRINCIPAL_NAME)
 
 ## Documentation
 For general documentation about the Splunk Cloud SDK for JavaScript, see:
-- https://dev.staging.splunkbeta.com/docs/devtools/jssdk
+- https://sdc.splunkbeta.com/docs/sdks/jssdk
 
 For the API reference for the Splunk Cloud SDK for JavaScript, see:
-- https://dev.staging.splunkbeta.com/reference/sdk/splunk-cloud-sdk-js
+- https://sdc.splunkbeta.com/reference/sdk/splunk-cloud-sdk-js
 
 The API reference contains detailed information about all classes and functions, with clearly-defined parameters and return types.
-    
-## Get Started Developing
-To get the SDK up and running in your project: 
-1. Fork this repo.
-2. Git Clone your fork: `git clone {your repo}`
-3. Install all dependencies: `yarn`
-4. Build the project: `yarn build`
-5. Run the examples: `yarn run example`
-6. Generate the docs: `yarn run docs`
