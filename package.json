@@ -11,7 +11,7 @@
     "ts:docs:md": "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/md/ --inlineSourceMap --module commonjs --theme markdown --excludePrivate --mdHideSources --mdEngine github",
     "docs": "yarn ts:docs",
     "build": "node ci/extract_version.js && tsc -p tsconfig.json",
-    "clean": "rm *.js *.map src/*.js",
+    "clean": "rm *d.ts out/* || true",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
     "codecov:integration": "yarn cover:integration && codecov -f ./coverage-integration/lcov.info -F integration",
     "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test && yarn run cover:report",
