@@ -36,7 +36,7 @@ export class StreamsService extends BaseApiService {
         const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']);
         const requestOptions: RequestOptions = {
             query: queryArgs as QueryArgs
-        }
+        };
         return this.client.get(url, requestOptions)
             .then(response => response.body as PaginatedPipelineResponse);
     }
