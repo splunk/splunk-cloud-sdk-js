@@ -7,6 +7,8 @@ ci/
 test/
 *.iml
 .idea/
+.vscode/
+.prettierrc
 tmp/
 jsdoc.json
 .eslintrc.*
@@ -18,3 +20,5 @@ docs.manifest.json
 okta
 copyright.txt
 yarn-error.log
+tslint.json
+tsconfig.json
