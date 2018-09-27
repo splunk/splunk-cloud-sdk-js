@@ -24,6 +24,18 @@ describe('catalog tests', () => {
             assert(dslist[0].kind);
         }));
 
+        describe('modules', () => {
+            it('should return a list of defined modules', () => splunkCloud.catalog.getModules().then(modules => {
+                assert(modules.length >= 1);
+                modules.filter(m => m.name == "").length == 1;
+            }));
+
+            it('should return a list of filtered modules', () => splunkCloud.catalog.getModules('module=="nonexistent"').then(modules => {
+                assert(modules.length == 0);
+            }));
+        });
+
+
         it('should return datasets with filter', () => splunkCloud.catalog.getDatasets('kind=="index"').then((dslist) => {
             assert(dslist.length > 0);
             assert(dslist[0].kind === 'index');
@@ -83,7 +95,6 @@ describe('catalog tests', () => {
         it('should create a test dataset, its fields, list its fields and delete the test dataset', () => {
             return splunkCloud.catalog.createDataset({
                 name: 'integ_dataset_1000',
-                owner: 'Splunk',
                 kind: 'lookup',
                 capabilities: '1101-00000:11010',
                 externalKind: 'kvcollection',
@@ -142,14 +153,12 @@ describe('catalog tests', () => {
         const ruleName = 'action_test_rule';
         const ruleModule = 'catalog';
         const ruleMatch = 'sourcetype::integration_test_match';
-        const owner = 'splunk';
         const datasetName = 'action_dataset';
 
         var ruleId;
         before(() => {
             return splunkCloud.catalog.createDataset({
                 name: datasetName,
-                owner: 'Splunk',
                 kind: 'lookup',
                 externalKind: 'kvcollection',
                 externalName: 'test_externalName'
@@ -166,7 +175,6 @@ describe('catalog tests', () => {
                     name: ruleName,
                     module: ruleModule,
                     match: ruleMatch,
-                    owner: owner
                 }).then((rule) => {
                     ruleId = rule.id;
 
@@ -195,13 +203,13 @@ describe('catalog tests', () => {
                 {
                     alias: 'newalias', 'kind': 'ALIAS', field: fieldName
                 }).then(act => {
-                assert.equal(act.field, fieldName);
-                return act;
-            }).then((act) => {
-                return splunkCloud.catalog.getRuleAction(ruleId, act.id);
-            }).then((act) => {
-                return splunkCloud.catalog.deleteRuleAction(ruleId, act.id);
-            });
+                    assert.equal(act.field, fieldName);
+                    return act;
+                }).then((act) => {
+                    return splunkCloud.catalog.getRuleAction(ruleId, act.id);
+                }).then((act) => {
+                    return splunkCloud.catalog.deleteRuleAction(ruleId, act.id);
+                });
 
         });
 
@@ -211,8 +219,8 @@ describe('catalog tests', () => {
                 {
                     pattern: 'mypattern', 'kind': 'REGEX', field: fieldName
                 }).then(act => {
-                assert(act.pattern, 'mypattern');
-            });
+                    assert(act.pattern, 'mypattern');
+                });
         });
 
 
@@ -222,8 +230,8 @@ describe('catalog tests', () => {
                 {
                     expression: 'myexpr', 'kind': 'EVAL', field: fieldName
                 }).then(act => {
-                assert(act.expression, 'myexpr');
-            });
+                    assert(act.expression, 'myexpr');
+                });
         });
 
         it('1t should create AUTOKV rule actions', () => {
@@ -232,8 +240,8 @@ describe('catalog tests', () => {
                 {
                     mode: 'mymode', 'kind': 'AUTOKV'
                 }).then(act => {
-                assert(act.mode, 'mymode');
-            });
+                    assert(act.mode, 'mymode');
+                });
         });
 
         it('1t should create LOOKUP rule actions', () => {
@@ -242,12 +250,12 @@ describe('catalog tests', () => {
                 {
                     expression: 'lookupexpr', 'kind': 'LOOKUP'
                 }).then(act => {
-                assert(act.expression, 'lookupexpr');
-            }).then((act) => {
-                return splunkCloud.catalog.getRuleActions(ruleId);
-            }).then((acts) => {
-                assert(acts.length, 4);
-            });
+                    assert(act.expression, 'lookupexpr');
+                }).then((act) => {
+                    return splunkCloud.catalog.getRuleActions(ruleId);
+                }).then((acts) => {
+                    assert(acts.length, 4);
+                });
 
         });
     }).timeout(1000);
@@ -278,7 +286,6 @@ function createIndexDataset(collection) {
             .then(() => {
                 return splunkCloud.catalog.createDataset({
                     name: collection,
-                    owner: 'test@splunk.com',
                     kind: 'index',
                     capabilities: '1101-00000:11010',
                     disabled: false
@@ -320,7 +327,6 @@ function createKVCollectionDataset(namespace, collection) {
             .then(() => {
                 return splunkCloud.catalog.createDataset({
                     name: collection,
-                    owner: 'splunk',
                     kind: 'kvcollection',
                     capabilities: '1101-00000:11010',
                     module: namespace
@@ -401,7 +407,6 @@ function createRule(ruleName) {
             .then(() => {
                 return splunkCloud.catalog.createRule({
                     name: ruleName,
-                    owner: 'SDKJSTEST@splunk.com',
                     match: 'sourcetype::newtype'
                 });
             })
