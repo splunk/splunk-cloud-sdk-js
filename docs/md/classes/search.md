@@ -128,7 +128,7 @@ ___
 
 ###  wait
 
-▸ **wait**(updateInterval: *`number`*, statusCallback: *`function`*): `Promise`<[SearchJob](../interfaces/searchjob.md)>
+▸ **wait**(updateInterval?: * `undefined` &#124; `number`*, statusCallback?: * `undefined` &#124; `function`*): `Promise`<[SearchJob](../interfaces/searchjob.md)>
 
 Polls the job until it is done processing
 
@@ -136,8 +136,8 @@ Polls the job until it is done processing
 
 | Param | Type | Description |
 | ------ | ------ | ------ |
-| updateInterval | `number` |  - |
-| statusCallback | `function` |  - |
+| `Optional` updateInterval |  `undefined` &#124; `number`|  - |
+| `Optional` statusCallback |  `undefined` &#124; `function`|  - |
 
 **Returns:** `Promise`<[SearchJob](../interfaces/searchjob.md)>
 search job status description

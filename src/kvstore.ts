@@ -51,29 +51,6 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Gets all the records of the collection in a file.
-     * @param collection The name of the collection whose records need to be exported
-     * @param contentType The contentType ('text/csv' or 'application/gzip') of the records file to be exported
-     * @returns The records in the collection in string format
-     */
-    public exportCollection = (collection: string, contentType: ContentType): Promise<string> => {
-        let requestHeaders: RequestHeaders = {};
-        if (contentType === ContentType.CSV) {
-            requestHeaders = { 'Accept': ContentType.CSV }
-        } else {
-            requestHeaders = { 'Accept': ContentType.GZIP }
-        }
-
-        return this.client
-            .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-                'collections',
-                collection,
-                'export',
-            ]), { headers: requestHeaders })
-            .then(response => response.body as string);
-    };
-
-    /**
      * Lists all the indexes in a given collection.
      * @param collection The name of the collection whose indexes should be listed
      * @returns A list of indexes on the specified collection
@@ -184,7 +161,7 @@ export class KVStoreService extends BaseApiService {
      */
     public getRecordByKey = (collection: string, key: string): Promise<Map<string, string>> => {
         return this.client
-            .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, key]))
+            .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key]))
             .then(response => response.body as Map<string, string>);
     };
 

@@ -183,9 +183,9 @@ Gets all the pipelines based on the query parameters provided by the user.
 
 **Parameters:**
 
-| Param | Type | Default value |
-| ------ | ------ | ------ |
-| `Default value` queryArgs | [PipelineQueryParams](../interfaces/pipelinequeryparams.md) |  {} |
+| Param | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `Default value` queryArgs | [PipelineQueryParams](../interfaces/pipelinequeryparams.md) |  {} |  Filter string to target specific pipelines |
 
 **Returns:** `Promise`<[PaginatedPipelineResponse](../interfaces/paginatedpipelineresponse.md)>
 A Promise of a paginated pipeline response (consists of the pipelines and total count)

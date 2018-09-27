@@ -192,7 +192,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should retrieve all the Groups for the given Member', () =>
             splunk.identity.getMemberGroups(testPrincipal).then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
-                assert(data.indexOf('admins') > -1);
+                assert(data.indexOf('tenant.admins') > -1);
                 assert(data.indexOf(testGroupName) > -1);
             }));
 
@@ -229,7 +229,6 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             splunk.identity.deleteRole(testRole).then(response => {
                 assert(!response);
             }));
-
     });
 
 });

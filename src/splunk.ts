@@ -6,7 +6,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 
 import { ActionService } from './action';
 import { CatalogService } from './catalog';
-import { ResponseHook, ServiceClient } from './client';
+import { ServiceClient, ServiceClientArgs } from './client';
 import { IdentityService } from './identity';
 import { IngestService } from './ingest';
 import { KVStoreService } from './kvstore';
@@ -19,6 +19,9 @@ import { StreamsService } from './streams';
  * @property catalog Proxies for the catalog APIs
  * @property identity Proxies for the identity APIs
  * @property ingest Proxies for the ingest APIs
+ * @property kvstore Proxies for the kvstore APIs
+ * @property action Proxies for the action APIs
+ * @property streams Proxies for the streams APIs
  */
 export class SplunkCloud {
     public search: SearchService;
@@ -32,12 +35,12 @@ export class SplunkCloud {
 
     /**
      * Build a Splunk Cloud Client
-     * @param url URL to Splunk Cloud environment
+     * @param args URL to Splunk Cloud environment or a ServiceClientArgs object
      * @param token Auth token
      * @param defaultTenant Default tenant to use for requests
      */
-    constructor(url: string, token: string, defaultTenant?: string) {
-        this.client = new ServiceClient(url, token, defaultTenant);
+    constructor(args: ServiceClientArgs | string, token?: string, defaultTenant?: string) {
+        this.client = new ServiceClient(args, token, defaultTenant);
         this.search = new SearchService(this.client);
         this.catalog = new CatalogService(this.client);
         this.identity = new IdentityService(this.client);

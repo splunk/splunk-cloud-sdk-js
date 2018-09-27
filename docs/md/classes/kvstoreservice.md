@@ -26,7 +26,6 @@ Encapsulates kvstore service endpoints
 * [deleteIndex](kvstoreservice.md#deleteindex)
 * [deleteRecordByKey](kvstoreservice.md#deleterecordbykey)
 * [deleteRecords](kvstoreservice.md#deleterecords)
-* [exportCollection](kvstoreservice.md#exportcollection)
 * [getCollectionStats](kvstoreservice.md#getcollectionstats)
 * [getCollections](kvstoreservice.md#getcollections)
 * [getHealthStatus](kvstoreservice.md#gethealthstatus)
@@ -145,25 +144,6 @@ Deletes records present in a given collection based on the query parameters prov
 
 **Returns:** `Promise`<`any`>
 A promise that will be resolved when the matching records are deleted
-
-___
-<a id="exportcollection"></a>
-
-###  exportCollection
-
-▸ **exportCollection**(collection: *`string`*, contentType: *[ContentType](../enums/contenttype.md)*): `Promise`<`string`>
-
-Gets all the records of the collection in a file.
-
-**Parameters:**
-
-| Param | Type | Description |
-| ------ | ------ | ------ |
-| collection | `string` |  The name of the collection whose records need to be exported |
-| contentType | [ContentType](../enums/contenttype.md) |  The contentType ('text/csv' or 'application/gzip') of the records file to be exported |
-
-**Returns:** `Promise`<`string`>
-The records in the collection in string format
 
 ___
 <a id="getcollectionstats"></a>

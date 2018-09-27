@@ -67,12 +67,13 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                 .then(getPipelinesResponse1 => {
                     assert.isNotNull(getPipelinesResponse1);
 
-                    const ids = {
+                    const activatePipelineRequest = {
                         "ids": [
                             pipelineId2
-                        ]
+                        ],
+                        "skipSavepoint": true
                     };
-                    return splunkCloud.streams.activatePipeline(ids);
+                    return splunkCloud.streams.activatePipeline(activatePipelineRequest);
                 })
                 .then(activatePipelineResponse => {
                     assert.isNotNull(activatePipelineResponse);
@@ -145,12 +146,13 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     assert.equal(createPipelineResponse1["description"], TestPipelineDescription);
                     pipelineId1 = createPipelineResponse1["id"];
 
-                    const ids = {
+                    const activatePipelineRequest = {
                         "ids": [
                             pipelineId1
-                        ]
+                        ],
+                        "skipSavepoint": true
                     };
-                    return splunkCloud.streams.activatePipeline(ids);
+                    return splunkCloud.streams.activatePipeline(activatePipelineRequest);
                 })
                 .then(activatePipelineResponse => {
                     assert.isNotNull(activatePipelineResponse);
@@ -179,23 +181,25 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
                     assert.equal(createPipelineResponse1["description"], TestPipelineDescription);
                     pipelineId1 = createPipelineResponse1["id"];
 
-                    const ids = {
+                    const activatePipelineRequest = {
                         "ids": [
                             pipelineId1
-                        ]
+                        ],
+                        "skipSavepoint": true
                     };
-                    return splunkCloud.streams.activatePipeline(ids);
+                    return splunkCloud.streams.activatePipeline(activatePipelineRequest);
                 })
                 .then(activatePipelineResponse => {
                     assert.isNotNull(activatePipelineResponse);
                     assert.equal(activatePipelineResponse["activated"], pipelineId1);
 
-                    const ids = {
+                    const deactivatePipelineRequest = {
                         "ids": [
                             pipelineId1
-                        ]
+                        ],
+                        "skipSavepoint": true
                     };
-                    return splunkCloud.streams.deactivatePipeline(ids);
+                    return splunkCloud.streams.deactivatePipeline(deactivatePipelineRequest);
                 }).then(deactivatePipelineResponse => {
                     assert.isNotNull(deactivatePipelineResponse);
                     assert.isNotNull(deactivatePipelineResponse);
@@ -252,7 +256,7 @@ describe("Integration tests for Streams Pipeline Endpoints", () => {
 // Creates a test pipeline request
 function createPipelineRequest(name, description) {
     const dsl = {
-        "dsl": "kafka-brokers=\"localhost:9092\";input-topic = \"intopic\";output-topic-1 = \"output-topic-1\";events = deserialize-events(read-kafka(kafka-brokers, input-topic, {}));write-kafka(serialize-events(events, output-topic-1), kafka-brokers, {});"
+        "dsl": "kafka-brokers=\"localhost:9092\";input-topic = \"intopic\";output-topic-1 = \"output-topic-1\";events = deserialize-events(unauthenticated-read-kafka(kafka-brokers, input-topic, {}));unauthenticated-write-kafka(serialize-events(events, output-topic-1), kafka-brokers, {});"
     };
     return splunkCloud.streams.compileDslToUpl(dsl).then(response => {
         assert.isNotNull(response);
