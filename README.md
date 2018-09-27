@@ -16,15 +16,16 @@ Installing this SDK allows your project to interact with services in the Splunk 
 This example shows how to use one service client to access all supported services:
 
 ```js
-const { ServiceClient } = require('@splunk/splunk-cloud')
+require('isomorphic-fetch');
+const { SplunkCloud } = require('@splunk/cloud-sdk');
  
-const svc = new ServiceClient({ tokenSource: AUTH_TOKEN, defaultTenant: TENANT });
+const svc = new SplunkCloud({ tokenSource: AUTH_TOKEN, defaultTenant: TENANT });
 
 // Retrieve the datasets for this tenant from the Catalog service
-svc.catalog.getDatasets()
+svc.catalog.getDatasets();
 
 // Run a search on the "main" index
-svc.search.createJob({ "query": "| from index:main | head 5" })
+svc.search.createJob({ "query": "| from index:main | head 5" });
 
 ...
 
