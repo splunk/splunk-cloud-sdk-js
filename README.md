@@ -16,7 +16,8 @@ Installing this SDK allows your project to interact with services in the Splunk 
 This example shows how to use one service client to access all supported services:
 
 ```js
-require('isomorphic-fetch');
+require('isomorphic-fetch'); // or a fetch polyfill of your choosing
+
 const { SplunkCloud } = require('@splunk/cloud-sdk');
  
 const svc = new SplunkCloud({ tokenSource: AUTH_TOKEN, defaultTenant: TENANT });
@@ -34,13 +35,16 @@ svc.search.createJob({ "query": "| from index:main | head 5" });
 If your application needs to work with one specific service, you can use a specific client for only the required service as follows: 
 
 ```javascript
+require('isomorphic-fetch'); // or a fetch polyfill of your choosing
 
-var { IdentityService } = require('@splunk/splunk-cloud/identity')
+const { IdentityService } = require('@splunk/cloud-sdk/identity');
 
-var identity = new IdentityService(ENDPOINT_URL, AUTH_TOKEN, TENANT)
+const ENDPOINT_URL = "https://api.splunkbeta.com";
+
+const identity = new IdentityService(ENDPOINT_URL, AUTH_TOKEN, TENANT);
 
 // Get the user profile from the Identity API
-identity.getPrincipal(PRINCIPAL_NAME)
+identity.getPrincipal(PRINCIPAL_NAME);
 
 ...
 
