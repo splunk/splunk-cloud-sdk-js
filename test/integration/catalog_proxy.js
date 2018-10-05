@@ -35,8 +35,17 @@ describe('catalog tests', () => {
             }));
         });
 
+        it('should return datasets with no filter', () => splunkCloud.catalog.getDatasets().then((dslist) => {
+            assert(dslist.length > 0);
+            assert(dslist[0].kind === 'index');
+        }));
 
         it('should return datasets with filter', () => splunkCloud.catalog.getDatasets('kind=="index"').then((dslist) => {
+            assert(dslist.length > 0);
+            assert(dslist[0].kind === 'index');
+        }));
+
+        it('should list datasets with no options', () => splunkCloud.catalog.listDatasets().then((dslist) => {
             assert(dslist.length > 0);
             assert(dslist[0].kind === 'index');
         }));
@@ -50,8 +59,9 @@ describe('catalog tests', () => {
             assert(dslist.length === 1);
         }));
 
-        it('should list datasets ordered by id descending', () => splunkCloud.catalog.listDatasets({orderby: "id Descending"}).then((dslist) => {
-            assert(dslist[0].id > dslist[-1].id);
+        it('should list datasets ordered by id descending', () => splunkCloud.catalog.listDatasets({orderby:"id Descending"}).then((dslist) => {
+            assert(dslist.length > 0);
+            assert(dslist[0].id > dslist[dslist.length-1].id);
         }));
 
         it('should list datasets with all option query args', () => {
