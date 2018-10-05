@@ -29,7 +29,7 @@ export class CatalogService extends BaseApiService {
      * Returns a list of datasets, optionally filtered by a filter string, count, or orderby criteria
      * @param query QueryArgs
      */
-    public listDatasets =(query?: QueryArgs): Promise<DatasetInfo[]> => {
+    public listDatasets = (query?: QueryArgs): Promise<DatasetInfo[]> => {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), { query })
             .then(response => response.body as DatasetInfo[]);
     };
