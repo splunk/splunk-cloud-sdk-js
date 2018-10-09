@@ -23,34 +23,6 @@ export class KVStoreService extends BaseApiService {
     };
 
     /**
-     * Gets the the KVStore collections stats.
-     * @param collection the collection to retrieve
-     * @returns Statistics for the collection
-     */
-    public getCollectionStats = (collection: string): Promise<CollectionStats> => {
-        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-            'collections',
-            collection,
-            'stats',
-        ]);
-
-        return this.client.get(url)
-            .then(response => response.body as CollectionStats);
-    };
-
-    /**
-     * Gets all the collections.
-     * @returns A list of defined collections
-     */
-    public getCollections = (): Promise<CollectionDefinition[]> => {
-        return this.client
-            .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
-                'collections'
-            ]))
-            .then(response => response.body as CollectionDefinition[]);
-    };
-
-    /**
      * Lists all the indexes in a given collection.
      * @param collection The name of the collection whose indexes should be listed
      * @returns A list of indexes on the specified collection
@@ -217,24 +189,6 @@ export class KVStoreService extends BaseApiService {
 export interface PingOKBody {
     errorMessage?: string;
     status: string;
-}
-
-export interface CollectionDefinition {
-    collection: string;
-}
-
-export interface CollectionDescription {
-    indexes: IndexDescription[];
-    name: string;
-}
-
-export interface CollectionStats {
-    count: number;
-    indexSizes: object;
-    nindexes: number;
-    collection: string;
-    size: number;
-    totalIndexSize: number;
 }
 
 export interface IndexFieldDefinition {
