@@ -101,6 +101,28 @@ describe("integration tests Using Search APIs", () => {
                 expect(results[0]).to.have.property('percentComplete');
             }))
 
+        it("should allow retrieval of jobs with query single status", () => splunk.search.listJobs({status: 'running'})
+            .then(results => {
+                expect(results).to.be.an('array');
+                expect(results[0]).to.have.property('sid');
+                expect(results[0]).to.have.property('query');
+                expect(results[0]).to.have.property('status');
+                expect(results[0]).to.have.property('module');
+                expect(results[0]).to.have.property('resultsAvailable');
+                expect(results[0]).to.have.property('percentComplete');
+            }))
+
+        it("should allow retrieval of jobs with query multiple status", () => splunk.search.listJobs({status: 'running,done'})
+            .then(results => {
+                expect(results).to.be.an('array');
+                expect(results[0]).to.have.property('sid');
+                expect(results[0]).to.have.property('query');
+                expect(results[0]).to.have.property('status');
+                expect(results[0]).to.have.property('module');
+                expect(results[0]).to.have.property('resultsAvailable');
+                expect(results[0]).to.have.property('percentComplete');
+            }))
+
     });
 
     describe("Search composite", () => {
