@@ -104,6 +104,7 @@ describe("integration tests Using Search APIs", () => {
         it("should allow retrieval of jobs with query single status", () => splunk.search.listJobs({status: 'running'})
             .then(results => {
                 expect(results).to.be.an('array');
+                expect(results).to.have.lengthOf.above(0);
                 expect(results[0]).to.have.property('sid');
                 expect(results[0]).to.have.property('query');
                 expect(results[0]).to.have.property('status');
@@ -115,6 +116,7 @@ describe("integration tests Using Search APIs", () => {
         it("should allow retrieval of jobs with query multiple status", () => splunk.search.listJobs({status: 'running,done'})
             .then(results => {
                 expect(results).to.be.an('array');
+                expect(results).to.have.lengthOf.above(0);
                 expect(results[0]).to.have.property('sid');
                 expect(results[0]).to.have.property('query');
                 expect(results[0]).to.have.property('status');
