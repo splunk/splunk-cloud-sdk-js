@@ -4,8 +4,13 @@ CODEOWNERS
 codeship*
 env
 ci/
+docs/
 test/
 *.iml
+.idea/
+.vscode/
+.prettierrc
+.editorconfig
 tmp/
 jsdoc.json
 .eslintrc.*
@@ -17,3 +22,5 @@ docs.manifest.json
 okta
 copyright.txt
 yarn-error.log
+tslint.json
+tsconfig.json
