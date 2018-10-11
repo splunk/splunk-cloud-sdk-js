@@ -22,8 +22,8 @@ export class CatalogService extends BaseApiService {
         if (filter) {
             query.filter = filter;
         }
-        return this.listDatasets(query)
-    };
+        return this.listDatasets(query);
+    }
 
     /**
      * Returns a list of datasets, optionally filtered by a filter string, count, or orderby criteria
