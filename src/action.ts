@@ -18,7 +18,7 @@ export class ActionService extends BaseApiService {
     public getActions = (): Promise<Array<EmailAction | WebhookAction | SNSAction>> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
             .then(response => response.body as Array<EmailAction | WebhookAction | SNSAction>);
-    };
+    }
 
     /**
      * Get an action by name
@@ -28,7 +28,7 @@ export class ActionService extends BaseApiService {
     public getAction = (name: ActionBase['name']): Promise<EmailAction | WebhookAction | SNSAction> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
             .then(response => response.body as EmailAction | WebhookAction | SNSAction);
-    };
+    }
 
     /**
      * Delete an action by name
@@ -38,7 +38,7 @@ export class ActionService extends BaseApiService {
     public deleteAction = (name: ActionBase['name']): Promise<any> => {
         return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
             .then(response => response.body);
-    };
+    }
 
     /**
      * Create an action
@@ -48,7 +48,7 @@ export class ActionService extends BaseApiService {
     public createAction = (action: EmailAction | WebhookAction | SNSAction): Promise<EmailAction | WebhookAction | SNSAction> => {
         return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
             .then(response => response.body as EmailAction | WebhookAction | SNSAction);
-    };
+    }
 
     /**
      * Update an action
@@ -59,7 +59,7 @@ export class ActionService extends BaseApiService {
     public updateAction = (name: ActionBase['name'], action: EmailAction | WebhookAction | SNSAction): Promise<EmailAction | WebhookAction | SNSAction> => {
         return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
             .then(response => response.body as EmailAction | WebhookAction | SNSAction);
-    };
+    }
 
     /**
      * Trigger an action
@@ -85,7 +85,7 @@ export class ActionService extends BaseApiService {
                 }
                 return response.body as ActionTriggerResponse;
             });
-    };
+    }
 
     /**
      * Get action status
@@ -96,7 +96,7 @@ export class ActionService extends BaseApiService {
     public getActionStatus = (name: ActionBase['name'], statusId: string): Promise<ActionStatus> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
             .then(response => response.body as ActionStatus);
-    };
+    }
 }
 
 

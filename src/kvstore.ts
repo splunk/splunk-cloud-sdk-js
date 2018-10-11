@@ -20,7 +20,7 @@ export class KVStoreService extends BaseApiService {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['ping']);
         return this.client.get(url)
             .then(response => response.body as PingOKBody);
-    };
+    }
 
     /**
      * Lists all the indexes in a given collection.
@@ -35,7 +35,7 @@ export class KVStoreService extends BaseApiService {
         ]);
         return this.client.get(url)
             .then(response => response.body as IndexDescription[]);
-    };
+    }
 
     /**
      * Creates a new index to be added to the collection.
@@ -51,7 +51,7 @@ export class KVStoreService extends BaseApiService {
         ]);
         return this.client.post(url, index)
             .then(response => response.body as IndexDescription);
-    };
+    }
 
     /**
      * Deletes an index in a given collection.
@@ -69,7 +69,7 @@ export class KVStoreService extends BaseApiService {
             ])
         )
             .then(response => response.body);
-    };
+    }
 
     /**
      * Inserts a new record to the collection.
@@ -84,7 +84,7 @@ export class KVStoreService extends BaseApiService {
         ]);
         return this.client.post(insertRecordURL, record)
             .then(response => response.body as Key);
-    };
+    }
 
     /**
      * Inserts multiple new records to the collection in a single request.
@@ -101,7 +101,7 @@ export class KVStoreService extends BaseApiService {
             records
         )
             .then(response => response.body as string[]);
-    };
+    }
 
     /**
      * Queries records present in a given collection based on the query parameters provided by the user.
@@ -120,10 +120,10 @@ export class KVStoreService extends BaseApiService {
         ]);
         const requestOptions: RequestOptions = {
             query: filter
-        }
+        };
         return this.client.get(url, requestOptions)
             .then(response => response.body as Map<string, string>);
-    };
+    }
 
     /**
      * Gets the record present in a given collection based on the key value provided by the user.
@@ -135,7 +135,7 @@ export class KVStoreService extends BaseApiService {
         return this.client
             .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key]))
             .then(response => response.body as Map<string, string>);
-    };
+    }
 
     /**
      * Lists the records present in a given collection based on the query parameters provided by the user.
@@ -153,10 +153,10 @@ export class KVStoreService extends BaseApiService {
         ]);
         const requestOptions: RequestOptions = {
             query: filter
-        }
+        };
         return this.client.get(url, requestOptions)
             .then(response => response.body as Map<string, string>);
-    };
+    }
 
     /**
      * Deletes records present in a given collection based on the query parameters provided by the user.
@@ -165,12 +165,12 @@ export class KVStoreService extends BaseApiService {
      * @returns A promise that will be resolved when the matching records are deleted
      */
     public deleteRecords = (collection: string, filter?: QueryArgs): Promise<any> => {
-        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query'])
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query']);
         const requestOptions: RequestOptions = {
             query: filter
-        }
+        };
         return this.client.delete(url, requestOptions).then(response => response.body);
-    };
+    }
 
     /**
      * Deletes a record present in a given collection based on the key value provided by the user.
@@ -183,7 +183,7 @@ export class KVStoreService extends BaseApiService {
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, key])
         )
             .then(response => response.body);
-    };
+    }
 }
 
 export interface PingOKBody {
