@@ -35,11 +35,43 @@ describe('catalog tests', () => {
             }));
         });
 
+        it('should return datasets with no filter', () => splunkCloud.catalog.getDatasets().then((dslist) => {
+            assert(dslist.length > 0);
+            assert(dslist[0].kind === 'index');
+        }));
 
         it('should return datasets with filter', () => splunkCloud.catalog.getDatasets('kind=="index"').then((dslist) => {
             assert(dslist.length > 0);
             assert(dslist[0].kind === 'index');
         }));
+
+        it('should list datasets with no options', () => splunkCloud.catalog.listDatasets().then((dslist) => {
+            assert(dslist.length > 0);
+            assert(dslist[0].kind === 'index');
+        }));
+
+        it('should list datasets with filter', () => splunkCloud.catalog.listDatasets({filter:'kind=="index"'}).then((dslist) => {
+            assert(dslist.length > 0);
+            assert(dslist[0].kind === 'index');
+        }));
+
+        it('should list datasets with a count of 1', () => splunkCloud.catalog.listDatasets({count:1}).then((dslist) => {
+            assert(dslist.length === 1);
+        }));
+
+        it('should list datasets ordered by id descending', () => splunkCloud.catalog.listDatasets({orderby:"id Descending"}).then((dslist) => {
+            assert(dslist.length > 0);
+            assert(dslist[0].id > dslist[dslist.length-1].id);
+        }));
+
+        it('should list datasets with all option query args', () => {
+            const query = {filter:'kind=="index"',
+                           count: 1,
+                           orderby: "id Descending"};
+
+            splunkCloud.catalog.listDatasets(query).then((dslist) => {
+                assert(dslist.length === 1);
+        })});
 
         it('should allow create/delete of datasets', () => {
             const name = 'foobar';
