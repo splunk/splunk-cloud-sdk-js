@@ -29,7 +29,8 @@ yarn
 
 print_header_line
 echo "Updating Version in package.json ..."
-yarn version
+yarn version --new-version $NEW_VERSION \
+             --no-git-tag-version
 
 print_header_line
 echo "Building resouces for documentation ..."
@@ -66,6 +67,7 @@ fi
 
 print_header_line
 echo "Please complete these steps in order to finish the release!"
+echo "Checkout the 'master' branch after the release has been merged [git checkout master]"
 echo "Run the command: [git tag -a v$NEW_VERSION -m \"Release v$NEW_VERSION\"]"
 echo "Run the command: [git push origin v$NEW_VERSION]"
 echo "Deliver the documentation in \"ci/docs/build\" to the developer portal team"
