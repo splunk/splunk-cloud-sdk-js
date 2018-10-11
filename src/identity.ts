@@ -360,35 +360,35 @@ export class IdentityService extends BaseApiService {
  * TenantName - Name of a Tenant
  */
 export interface TenantName {
-    name: string
+    name: string;
 }
 
 /**
  * Tenant - The unique tenant account within the Identity Service
  */
 export interface Tenant {
-    name: string
-    status: string
-    createdAt: Date
-    createdBy: string
+    name: string;
+    status: string;
+    createdAt: Date;
+    createdBy: string;
 }
 
 /**
  * Role - A unique role associated with a tenant within the Identity Service
  */
 export interface Role {
-    createdAt: Date
-    createdBy: string
-    name: string
-    tenant: string
+    createdAt: Date;
+    createdBy: string;
+    name: string;
+    tenant: string;
 }
 
 /**
  * RoleInput - The input object for creating a new Role
  */
 export interface RoleInput {
-    name: string
-    permissions: string[]
+    name: string;
+    permissions: string[];
 
 }
 
@@ -396,117 +396,117 @@ export interface RoleInput {
  * RoleName - Name of a Role to add to Group
  */
 export interface RoleName {
-    name: string
+    name: string;
 }
 
 /**
  * RolePermission - The object that represents a tenant role permission
  */
 export interface RolePermission {
-    tenant: string
-    role: string
-    permission: string
-    addedAt: Date
-    addedBy: string
+    tenant: string;
+    role: string;
+    permission: string;
+    addedAt: Date;
+    addedBy: string;
 }
 
 /**
  * Permission - Permission on a Role
  */
 export interface Permission {
-    name: string
-    addedAt: Date
-    addedBy: string
+    name: string;
+    addedAt: Date;
+    addedBy: string;
 }
 
 /**
  * GroupInput - Inputs for a Group
  */
 export interface GroupInput {
-    name: string
-    roles: string[]
-    members: string[]
+    name: string;
+    roles: string[];
+    members: string[];
 }
 
 /**
  * Group - Association of tenants, members
  */
 export interface Group {
-    tenant: string
-    name: string
-    createdAt: Date
-    createdBy: string
+    tenant: string;
+    name: string;
+    createdAt: Date;
+    createdBy: string;
 }
 
 /**
  * GroupRole - Represents a role that is assigned to a group
  */
 export interface GroupRole {
-    tenant: string
-    group: string
-    role: string
-    addedAt: Date
-    addedBy: string
+    tenant: string;
+    group: string;
+    role: string;
+    addedAt: Date;
+    addedBy: string;
 }
 
 /**
  * MemberName - Member name
  */
 export interface MemberName {
-    name: string
+    name: string;
 }
 
 /**
  * Represents a member that belongs to a tenant.
  */
 export interface Member {
-    tenant: string
-    name: string
-    addedAt: Date
-    addedBy: string
+    tenant: string;
+    name: string;
+    addedAt: Date;
+    addedBy: string;
 }
 
 /**
  * GroupMemberName - Group member name
  */
 export interface GroupMemberName {
-    name: string
+    name: string;
 }
 
 /**
  * Represents a member that belongs to a group
  */
 export interface GroupMember {
-    tenant: string
-    group: string
-    principal: string
-    addedAt: string
-    addedBy: string
+    tenant: string;
+    group: string;
+    principal: string;
+    addedAt: string;
+    addedBy: string;
 }
 
 /**
  * PrincipalInput - Input object for creating a new Principal
  */
 export interface PrincipalInput {
-    name: string
-    kind: string
+    name: string;
+    kind: string;
 }
 
 /**
  * Principal - Principal member
  */
 export interface Principal {
-    name: string
-    kind: string
-    tenants: string[]
-    createdAt: Date
-    createdBy: Date
-    profile: {}
+    name: string;
+    kind: string;
+    tenants: string[];
+    createdAt: Date;
+    createdBy: Date;
+    profile: {};
 }
 
 /**
  * ValidateInfo - Info object for a valid member
  */
 export interface ValidateInfo {
-    name: string
+    name: string;
 }

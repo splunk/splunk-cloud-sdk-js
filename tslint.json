@@ -37,7 +37,9 @@
             true,
             "always"
         ],
-        "no-trailing-whitespace": true
+        "no-trailing-whitespace": true,
+        "semicolon": true,
+        "no-unnecessary-callback-wrapper": true
     },
     "rulesDirectory": []
 }
