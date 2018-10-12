@@ -56,7 +56,7 @@ export class ActionService extends BaseApiService {
      * @param action action updates
      * @return Promise of an action
      */
-    public updateAction = (name: ActionBase['name'], action: EmailAction | WebhookAction | SNSAction): Promise<EmailAction | WebhookAction | SNSAction> => {
+    public updateAction = (name: ActionBase['name'], action: ActionUpdateFields): Promise<EmailAction | WebhookAction | SNSAction> => {
         return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
             .then(response => response.body as EmailAction | WebhookAction | SNSAction);
     }
@@ -206,12 +206,12 @@ export interface ActionUpdateFields {
 
     // Webhook action fields:
     // WebhookURL to trigger Webhook action
-    webhookUrl?: string;
+    webhookUrl?: URL;
 }
 
 
-export interface EmailAction {
-    type: 'email';
+export interface EmailAction extends ActionBase {
+    kind: 'email';
     addresses: string[];
     htmlPart?: string;
     subjectPart?: string;
@@ -219,20 +219,20 @@ export interface EmailAction {
     textPart?: string;
 }
 
-export interface SNSAction {
-    type: 'sns';
+export interface SNSAction extends ActionBase {
+    kind: 'sns';
     message: string;
     topic: string;
 }
 
-export interface WebhookAction {
-    type: 'webhook';
+export interface WebhookAction extends ActionBase {
+    kind: 'webhook';
     message: string;
 
     /**
      * Only allows https scheme. Only allows hostnames that end with "slack.com", "webhook.site", "sendgrid.com", "zapier.com", "hipchat.com", "amazon.com", and "amazonaws.com"
      */
-    webhookUrl: string;
+    webhookUrl: URL;
 }
 
 export interface ActionBase {
