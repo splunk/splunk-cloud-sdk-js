@@ -132,7 +132,7 @@ export class KVStoreService extends BaseApiService {
      * @returns the record associated with the given key
      */
     public getRecordByKey = (collection: string, key: string): Promise<Map<string, string>> => {
-        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key];
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key]);
         return this.client.get(url).then(response => response.body as Map<string, string>);
     }
 
