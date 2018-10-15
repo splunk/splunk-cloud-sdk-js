@@ -132,9 +132,8 @@ export class KVStoreService extends BaseApiService {
      * @returns the record associated with the given key
      */
     public getRecordByKey = (collection: string, key: string): Promise<Map<string, string>> => {
-        return this.client
-            .get(this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key]))
-            .then(response => response.body as Map<string, string>);
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key];
+        return this.client.get(url).then(response => response.body as Map<string, string>);
     }
 
     /**
@@ -179,10 +178,8 @@ export class KVStoreService extends BaseApiService {
      * @returns A promise that will be resolved when the record matching the supplied key is deleted
      */
     public deleteRecordByKey = (collection: string, key: string): Promise<any> => {
-        return this.client.delete(
-            this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, key])
-        )
-            .then(response => response.body);
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key]);
+        return this.client.delete(url).then(response => response.body);
     }
 }
 
