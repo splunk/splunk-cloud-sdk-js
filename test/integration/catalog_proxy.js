@@ -85,8 +85,7 @@ describe('catalog tests', () => {
 
         it('should allow create/delete of metric datasets', () => {
             const name = 'metric_name';
-            const module = 'metric_module';
-            return createMetricDataset(module, name).then(ds => {
+            return createMetricDataset(name).then(ds => {
                 assert(ds.name === name);
                 assert(ds.kind === 'metric');
                 return ds.id;
@@ -105,18 +104,18 @@ describe('catalog tests', () => {
         });
 
         it('should allow create/delete of import datasets', () => {
-            const name1 = 'metricName1';
-            const name2 = 'metricName2';
-            const module1 = 'metricMod1';
-            const module2 = 'metricMod2';
+            const name1 = 'kvcollectionName1';
+            const name2 = 'kvcollectionName2';
+            const module1 = 'kvcollectionMod1';
+            const module2 = 'kvcollectionMod2';
 
-            createMetricDataset(module1, name1).then(ds1 => {
+            createKVCollectionDataset(module1, name1).then(ds1 => {
                 assert(ds1.name === name1);
-                assert(ds1.kind === 'metric');
+                assert(ds1.kind === 'kvcollection');
 
-            }).then(createMetricDataset(module2, name2).then(ds2 => {
+            }).then(createKVCollectionDataset(module2, name2).then(ds2 => {
                 assert(ds2.name === name2);
-                assert(ds2.kind === 'metric');
+                assert(ds2.kind === 'kvcollection');
 
             })).then(createImportDataset(module1, name1, module2, name2).then(ds3 => {
                 assert(ds3.name === name2);
@@ -417,7 +416,7 @@ function createKVCollectionDataset(namespace, collection) {
     );
 }
 
-function createMetricDataset(module, name) {
+function createMetricDataset(name) {
     // Gets the datasets
     return (
         splunkCloud.catalog
@@ -425,7 +424,7 @@ function createMetricDataset(module, name) {
             // Filters the data set
             .then(datasets => {
                 return datasets.filter(element => {
-                    if (element['name'] == name && element['module'] == module) {
+                    if (element['name'] == name) {
                         return element;
                     }
                 });
@@ -443,8 +442,7 @@ function createMetricDataset(module, name) {
                 return splunkCloud.catalog.createDataset({
                     name: name,
                     kind: 'metric',
-                    disabled: false,
-                    module: module
+                    disabled: false
                 });
             })
             // Return the dataset for testing

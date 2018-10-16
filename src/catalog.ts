@@ -298,6 +298,7 @@ export interface DatasetInfo {
     name: string;
     kind: string;
     owner: string;
+    module: string;
     created?: string;
     modified?: string;
     createdBy?: string;
