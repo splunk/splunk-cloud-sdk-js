@@ -83,6 +83,52 @@ describe('catalog tests', () => {
 
         });
 
+        it('should allow create/delete of metric datasets', () => {
+            const name = 'metric_name';
+            return createMetricDataset(name).then(ds => {
+                assert(ds.name === name);
+                assert(ds.kind === 'metric');
+                return ds.id;
+            }).then(id => splunkCloud.catalog.deleteDataset(id));
+
+        });
+
+        it('should allow create/delete of view datasets', () => {
+            const name = 'view_name';
+            return createViewDataset(name).then(ds => {
+                assert(ds.name === name);
+                assert(ds.kind === 'view');
+                return ds.id;
+            }).then(id => splunkCloud.catalog.deleteDataset(id));
+
+        });
+
+        it('should allow create/delete of import datasets', () => {
+            const name1 = 'kvcollectionName1';
+            const name2 = 'kvcollectionName2';
+            const module1 = 'kvcollectionMod1';
+            const module2 = 'kvcollectionMod2';
+
+            createKVCollectionDataset(module1, name1).then(ds1 => {
+                assert(ds1.name === name1);
+                assert(ds1.kind === 'kvcollection');
+
+            }).then(createKVCollectionDataset(module2, name2).then(ds2 => {
+                assert(ds2.name === name2);
+                assert(ds2.kind === 'kvcollection');
+
+            })).then(createImportDataset(module1, name1, module2, name2).then(ds3 => {
+                assert(ds3.name === name2);
+                assert(ds3.kind === 'import');
+
+            })).then(() => {
+                splunkCloud.catalog.deleteDataset(ds1.id);
+                splunkCloud.catalog.deleteDataset(ds2.id);
+                splunkCloud.catalog.deleteDataset(ds3.id);
+            })
+
+        });
+
         it('should allow delete of datasets by name', () => {
             const name = 'foobar1';
             return createIndexDataset(name).then(() => splunkCloud.catalog.deleteDatasetByName(name));
@@ -375,6 +421,129 @@ function createKVCollectionDataset(namespace, collection) {
     );
 }
 
+function createMetricDataset(name) {
+    // Gets the datasets
+    return (
+        splunkCloud.catalog
+            .getDatasets()
+            // Filters the data set
+            .then(datasets => {
+                return datasets.filter(element => {
+                    if (element['name'] == name) {
+                        return element;
+                    }
+                });
+            })
+            // Deletes the dataset should only be one data set
+            .then(datasets => {
+                return Promise.all(
+                    datasets.map(dataset => {
+                        return splunkCloud.catalog.deleteDataset(dataset.id);
+                    })
+                );
+            })
+            // Creates the data sets
+            .then(() => {
+                return splunkCloud.catalog.createDataset({
+                    name: name,
+                    kind: 'metric',
+                    disabled: false,
+                    frozenTimePeriodInSecs: 100
+                });
+            })
+            // Return the dataset for testing
+            .then(response => {
+                return response;
+            })
+            .catch(error => {
+                console.log('An error was encountered while cleaning up datasests');
+                console.log(error);
+            })
+    );
+}
+
+function createViewDataset(name) {
+    // Gets the datasets
+    return (
+        splunkCloud.catalog
+            .getDatasets()
+            // Filters the data set
+            .then(datasets => {
+                return datasets.filter(element => {
+                    if (element['name'] == name) {
+                        return element;
+                    }
+                });
+            })
+            // Deletes the dataset should only be one data set
+            .then(datasets => {
+                return Promise.all(
+                    datasets.map(dataset => {
+                        return splunkCloud.catalog.deleteDataset(dataset.id);
+                    })
+                );
+            })
+            // Creates the data sets
+            .then(() => {
+                return splunkCloud.catalog.createDataset({
+                    name: name,
+                    kind: 'view',
+                    search: 'search index=main|stats count()'
+                });
+            })
+            // Return the dataset for testing
+            .then(response => {
+                return response;
+            })
+            .catch(error => {
+                console.log('An error was encountered while cleaning up datasests');
+                console.log(error);
+            })
+    );
+}
+
+function createImportDataset(sourceName, sourceModule, targetModule, targetName) {
+    // Gets the datasets
+    return (
+        splunkCloud.catalog
+            .getDatasets()
+            // Filters the data set
+            .then(datasets => {
+                return datasets.filter(element => {
+                    if (element['name'] == targetName) {
+                        return element;
+                    }
+                });
+            })
+            // Deletes the dataset should only be one data set
+            .then(datasets => {
+                return Promise.all(
+                    datasets.map(dataset => {
+                        return splunkCloud.catalog.deleteDataset(dataset.id);
+                    })
+                );
+            })
+            // Creates the data sets
+            .then(() => {
+                return splunkCloud.catalog.createDataset({
+                    name: targetName,
+                    kind: 'import',
+                    module: targetModule,
+                    sourceName: sourceName,
+                    sourceModule: sourceModule
+                });
+            })
+            // Return the dataset for testing
+            .then(response => {
+                return response;
+            })
+            .catch(error => {
+                console.log('An error was encountered while cleaning up datasests');
+                console.log(error);
+            })
+    );
+}
+
 function deleteAllDatasets() {
     // Gets the datasets
     return (
@@ -456,6 +625,9 @@ function createRule(ruleName) {
 module.exports = {
     createIndexDataset: createIndexDataset,
     createKVCollectionDataset: createKVCollectionDataset,
+    createMetricDataset: createMetricDataset,
+    createViewDataset: createViewDataset,
+    createImportDataset: createImportDataset,
     createRecord: createRecord,
     createRule: createRule,
     deleteAllDatasets: deleteAllDatasets
