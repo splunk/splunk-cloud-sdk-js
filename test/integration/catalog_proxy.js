@@ -447,8 +447,7 @@ function createMetricDataset(name) {
                 return splunkCloud.catalog.createDataset({
                     name: name,
                     kind: 'metric',
-                    disabled: false,
-                    frozenTimePeriodInSecs: 100
+                    disabled: false
                 });
             })
             // Return the dataset for testing
