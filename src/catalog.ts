@@ -7,7 +7,6 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 import BaseApiService from './baseapiservice';
 import { QueryArgs } from './client';
 import { CATALOG_SERVICE_PREFIX } from './service_prefixes';
-import { not } from "rxjs/internal-compatibility";
 
 /**
  * Encapsulates catalog endpoints
