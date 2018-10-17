@@ -7,6 +7,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 import BaseApiService from './baseapiservice';
 import { QueryArgs } from './client';
 import { CATALOG_SERVICE_PREFIX } from './service_prefixes';
+import { not } from "rxjs/internal-compatibility";
 
 /**
  * Encapsulates catalog endpoints
@@ -29,7 +30,7 @@ export class CatalogService extends BaseApiService {
      * Returns a list of datasets, optionally filtered by a filter string, count, or orderby criteria
      * @param query QueryArgs
      */
-    public listDatasets = (query?: QueryArgs): Promise<DatasetInfo[]> => {
+    public listDatasets = (query: QueryArgs = {}): Promise<DatasetInfo[]> => {
         return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), { query })
             .then(response => response.body as DatasetInfo[]);
     }
@@ -305,6 +306,8 @@ export interface DatasetInfo {
     modifiedBy?: string;
     capabilities?: string;
     version?: number;
+    sourceName?: string;
+    sourceModule?: string;
     readroles?: string[];
     writeroles?: string[];
     fields: Field[];
