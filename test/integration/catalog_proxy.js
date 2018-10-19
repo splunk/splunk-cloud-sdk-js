@@ -185,7 +185,6 @@ describe('catalog tests', () => {
                 externalName: 'test_externalName'
             }).then((resultDataset) => splunkCloud.catalog.postDatasetField(resultDataset.id, {
                 'name': integrationTestField1,
-                'datasetid': resultDataset.id,
                 'datatype': 'S',
                 'fieldtype': 'D',
                 'prevalence': 'A'
@@ -213,7 +212,6 @@ describe('catalog tests', () => {
                     });
             }).then(() => splunkCloud.catalog.postDatasetField(resultDataset.id, {
                 'name': integrationTestField2,
-                'datasetid': resultDataset.id,
                 'datatype': 'S',
                 'fieldtype': 'D',
                 'prevalence': 'A'
@@ -249,7 +247,6 @@ describe('catalog tests', () => {
             }).then(dataset => {
                 return splunkCloud.catalog.postDatasetField(dataset.id, {
                     'name': fieldName,
-                    'datasetid': dataset.id,
                     'datatype': 'S',
                     'fieldtype': 'D',
                     'prevalence': 'A'
