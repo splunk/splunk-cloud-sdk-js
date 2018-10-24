@@ -114,30 +114,25 @@ describe('catalog tests', () => {
                 {name: name1, kind: kind, module: module1 , disabled: false}).then(ds => {
                     assert(ds.name === name1);
                     assert(ds.kind === kind);
-                });
-
-            splunkCloud.catalog.createDataset(
-                {name: name2, kind: kind, module: module2 , disabled: false}).then(ds => {
-                assert(ds.name === name2);
-                assert(ds.kind === kind);
-            });
-
-            splunkCloud.catalog.createDataset(
-                {kind: 'import', name: name1, module: module2, sourceName: name1, sourceModule: module1}).then(ds => {
-                assert(ds.name === name1);
-                assert(ds.module === module2);
-                assert(ds.module != module1);
-                assert(ds.kind === kind);
-            }).then(() => {
-                splunkCloud.catalog.deleteDataset(name1);
-                splunkCloud.catalog.deleteDataset(name2);
-            });
-
+                })
+                .then(() =>
+                    splunkCloud.catalog.createDataset(
+                        {kind: 'import', name: name1, module: module2, sourceName: name1, sourceModule: module1}).then(ds => {
+                        assert(ds.name === name1);
+                        assert(ds.module === module2);
+                        assert(ds.module != module1);
+                        assert(ds.kind === kind);
+                    }))
+                .then(() => {
+                    splunkCloud.catalog.deleteDataset(name1);
+                    splunkCloud.catalog.deleteDataset(name2);
+                })
         });
 
         it('should allow delete of datasets by name', () => {
             const name = 'foobar1';
-            return createIndexDataset(name).then(() => splunkCloud.catalog.deleteDatasetByName(name));
+            return createIndexDataset(name).then(() => splunkCloud.catalog.deleteDatasetByName(name))
+                .catch(e => console.log(e));
         });
 
         it('should throw an error when deleting a dataset that doesn\'t exist', () => {
