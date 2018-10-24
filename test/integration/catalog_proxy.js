@@ -126,7 +126,7 @@ describe('catalog tests', () => {
                 .then(() => {
                     splunkCloud.catalog.deleteDataset(name1);
                     splunkCloud.catalog.deleteDataset(name2);
-                })
+                }).catch(e => console.log(e));
         });
 
         it('should allow delete of datasets by name', () => {
