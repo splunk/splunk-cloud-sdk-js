@@ -83,9 +83,56 @@ describe('catalog tests', () => {
 
         });
 
+        it('should allow create/delete of metric datasets', () => {
+            const name = `metric_${Date.now()}`;
+            splunkCloud.catalog.createDataset({
+                name: name,
+                kind: 'metric',
+                disabled: false
+            }).then(() => splunkCloud.catalog.deleteDataset(name));
+
+        });
+
+        it('should allow create/delete of view datasets', () => {
+            const name = `view_${Date.now()}`;
+            splunkCloud.catalog.createDataset({
+                name: name,
+                kind: 'view',
+                search: 'search index=main|stats count()'
+            }).then(() => splunkCloud.catalog.deleteDataset(name));
+
+        });
+
+        it('should allow create/delete of import datasets', () => {
+            const kind = 'metric';
+            const name1 = `metric1_${Date.now()}`;
+            const name2 = `metric2_${Date.now()}`;
+            const module1 = `module_${Date.now()}`;
+            const module2 = `module_${Date.now()}`;
+
+            splunkCloud.catalog.createDataset(
+                {name: name1, kind: kind, module: module1 , disabled: false}).then(ds => {
+                    assert(ds.name === name1);
+                    assert(ds.kind === kind);
+                })
+                .then(() =>
+                    splunkCloud.catalog.createDataset(
+                        {kind: 'import', name: name1, module: module2, sourceName: name1, sourceModule: module1}).then(ds => {
+                        assert(ds.name === name1);
+                        assert(ds.module === module2);
+                        assert(ds.module != module1);
+                        assert(ds.kind === kind);
+                    }))
+                .then(() => {
+                    splunkCloud.catalog.deleteDataset(name1);
+                    splunkCloud.catalog.deleteDataset(name2);
+                }).catch(e => console.log(e));
+        });
+
         it('should allow delete of datasets by name', () => {
             const name = 'foobar1';
-            return createIndexDataset(name).then(() => splunkCloud.catalog.deleteDatasetByName(name));
+            return createIndexDataset(name).then(() => splunkCloud.catalog.deleteDatasetByName(name))
+                .catch(e => console.log(e));
         });
 
         it('should throw an error when deleting a dataset that doesn\'t exist', () => {
@@ -133,7 +180,6 @@ describe('catalog tests', () => {
                 externalName: 'test_externalName'
             }).then((resultDataset) => splunkCloud.catalog.postDatasetField(resultDataset.id, {
                 'name': integrationTestField1,
-                'datasetid': resultDataset.id,
                 'datatype': 'S',
                 'fieldtype': 'D',
                 'prevalence': 'A'
@@ -161,7 +207,6 @@ describe('catalog tests', () => {
                     });
             }).then(() => splunkCloud.catalog.postDatasetField(resultDataset.id, {
                 'name': integrationTestField2,
-                'datasetid': resultDataset.id,
                 'datatype': 'S',
                 'fieldtype': 'D',
                 'prevalence': 'A'
@@ -197,7 +242,6 @@ describe('catalog tests', () => {
             }).then(dataset => {
                 return splunkCloud.catalog.postDatasetField(dataset.id, {
                     'name': fieldName,
-                    'datasetid': dataset.id,
                     'datatype': 'S',
                     'fieldtype': 'D',
                     'prevalence': 'A'
