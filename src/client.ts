@@ -193,7 +193,7 @@ export class ServiceClient {
      * Builds the URL from a service + endpoint with query encoded in url
      * (concatenates the URL with the path)
      */
-    private buildUrl(path: string, query?: QueryArgs): string {
+    public buildUrl(path: string, query?: QueryArgs): string {
         if (query && Object.keys(query).length > 0) {
             const encoder = encodeURIComponent;
             const queryEncoded = Object.keys(query)

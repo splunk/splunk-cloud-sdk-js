@@ -20,6 +20,7 @@
         "max-classes-per-file": false,
         "max-line-length": false,
         "prefer-array-literal": false,
+        "no-increment-decrement": false,
         "ter-indent": [
             true,
             4,

@@ -25,6 +25,18 @@
   dependencies:
     jsdom "^11.10.0"
 
+"@types/chai-as-promised@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@types/chai-as-promised/-/chai-as-promised-7.1.0.tgz#010b04cde78eacfb6e72bfddb3e58fe23c2e78b9"
+  integrity sha512-MFiW54UOSt+f2bRw8J7LgQeIvE/9b4oGvwU7XW30S9QGAiHGnU/fmiOprsyMkdmH2rl8xSPc0/yrQw8juXU6bQ==
+  dependencies:
+    "@types/chai" "*"
+
+"@types/chai@*", "@types/chai@^4.1.7":
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.1.7.tgz#1b8e33b61a8c09cbe1f85133071baa0dbf9fa71a"
+  integrity sha512-2Y8uPt0/jwjhQ6EiluT0XCri1Dbplr0ZxfFXUz+ye13gaqE8u5gL5ppao1JrUYr9cIip5S6MvQzBS7Kke7U9VA==
+
 "@types/events@*":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"
@@ -66,6 +78,11 @@
 "@types/minimatch@*", "@types/minimatch@3.0.3":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@types/minimatch/-/minimatch-3.0.3.tgz#3dca0e3f33b200fc7d1139c0cd96c1268cadfd9d"
+
+"@types/mocha@^5.2.5":
+  version "5.2.5"
+  resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-5.2.5.tgz#8a4accfc403c124a0bafe8a9fc61a05ec1032073"
+  integrity sha512-lAVp+Kj54ui/vLUFxsJTMtWvZraZxum3w3Nwkble2dNuV5VnPA+Mi2oGX9XYJAaIvZi3tn3cbjS/qcJXRb6Bww==
 
 "@types/node@*":
   version "10.5.2"
