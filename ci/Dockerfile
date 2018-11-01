@@ -1,5 +1,5 @@
 # Start from the latest Node.js image
-FROM node:9-alpine
+FROM node:10-alpine
 
 # Install git for Codecov
 RUN apk update && \
