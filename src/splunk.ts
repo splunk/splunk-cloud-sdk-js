@@ -31,7 +31,6 @@ export class SplunkCloud {
     public kvstore: KVStoreService;
     public action: ActionService;
     public streams: StreamsService;
-    public client: ServiceClient;
 
     /**
      * Build a Splunk Cloud Client
@@ -40,14 +39,25 @@ export class SplunkCloud {
      * @param defaultTenant Default tenant to use for requests
      */
     constructor(args: ServiceClientArgs | string, token?: string, defaultTenant?: string) {
-        this.client = new ServiceClient(args, token, defaultTenant);
-        this.search = new SearchService(this.client);
-        this.catalog = new CatalogService(this.client);
-        this.identity = new IdentityService(this.client);
-        this.ingest = new IngestService(this.client);
-        this.kvstore = new KVStoreService(this.client);
-        this.action = new ActionService(this.client);
-        this.streams = new StreamsService(this.client);
+        this.search = new SearchService(new ServiceClient(args, serviceClusterMapping.search, token, defaultTenant));
+        this.catalog = new CatalogService(new ServiceClient(args, serviceClusterMapping.catalog, token, defaultTenant));
+        this.identity = new IdentityService(new ServiceClient(args, serviceClusterMapping.identity, token, defaultTenant));
+        this.ingest = new IngestService(new ServiceClient(args, serviceClusterMapping.ingest, token, defaultTenant));
+        this.kvstore = new KVStoreService(new ServiceClient(args, serviceClusterMapping.kvstore, token, defaultTenant));
+        this.action = new ActionService(new ServiceClient(args, serviceClusterMapping.action, token, defaultTenant));
+        this.streams = new StreamsService(new ServiceClient(args, serviceClusterMapping.streams, token, defaultTenant));
     }
+
 }
+
+const serviceClusterMapping = {
+    search: 'api',
+    catalog: 'api',
+    identity: 'api',
+    ingest: 'api',
+    kvstore: 'api',
+    action: 'api',
+    streams: 'api'
+};
+
 

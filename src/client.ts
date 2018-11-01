@@ -107,12 +107,14 @@ export class ServiceClient {
     private readonly url: string;
     private readonly tenant?: string;
     private responseHooks: ResponseHook[] = [];
+    private readonly cluster?: string;
+    private readonly scheme: string = 'https';
 
     /**
      * Create a ServiceClient with the given URL and an auth token
      * @param args : ServiceClientArgs Url to Splunk Cloud instance
      */
-    constructor(args: ServiceClientArgs | string, token?: string, tenant?: string) {
+    constructor(args: ServiceClientArgs | string, cluster?: string, token?: string, tenant?: string) {
         if (typeof args === 'string') {
             if (typeof token === 'string') {
                 this.tokenSource = () => token;
@@ -121,6 +123,9 @@ export class ServiceClient {
             }
             this.url = args;
             this.tenant = tenant;
+            if (typeof cluster === 'string') {
+                this.cluster = cluster;
+            }
         } else {
             const authManager = args.tokenSource;
             if (typeof authManager === 'string') {
@@ -137,6 +142,9 @@ export class ServiceClient {
             }
             this.url = args.url || DEFAULT_URL;
             this.tenant = args.defaultTenant;
+            if (typeof cluster === 'string') {
+                this.cluster = cluster;
+            }
         }
     }
 
@@ -200,10 +208,14 @@ export class ServiceClient {
                 .filter(k => query[k] != null) // filter out undefined and null
                 .map(k => `${encoder(k)}=${encoder(String(query[k]))}`)
                 .join('&');
-
+            if (typeof this.cluster === 'string') {
+                return `${this.scheme}://${this.cluster}.${this.url}${path}?${queryEncoded}`;
+            }
             return `${this.url}${path}?${queryEncoded}`;
         }
-
+        if (typeof this.cluster === 'string') {
+            return `${this.scheme}://${this.cluster}.${this.url}${path}`;
+        }
         return `${this.url}${path}`;
     }
 

@@ -10,7 +10,11 @@ chai.use(chaiAsPromised);
 const { expect } = chai;
 
 describe("Basic client functionality", () => {
-    const s = new ServiceClient(stubbyUrl, config.stubbyAuthToken, config.stubbyTenant);
+    const s = new ServiceClient({
+        url: stubbyUrl,
+        tokenSource: () => config.stubbyAuthToken,
+        defaultTenant: config.stubbyTenant
+    });
     describe("GET", () => {
         it("should return a promise", () => {
             const promise = s.get("/basic");
@@ -119,7 +123,11 @@ describe("Basic client functionality", () => {
 
 describe("Service client args", () => {
     it("should take a url, a token, and a tenant", () => {
-        const s = new ServiceClient(stubbyUrl, config.stubbyAuthToken, config.stubbyTenant);
+        const s = new ServiceClient({
+            url: stubbyUrl,
+            tokenSource: () => config.stubbyAuthToken,
+            defaultTenant: config.stubbyTenant
+        });
         expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
         return s.get("/basic")
             .then(response => {
