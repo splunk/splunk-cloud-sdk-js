@@ -93,7 +93,7 @@ export class ActionService extends BaseApiService {
      * @param statusId statusId
      * @return Promise of actionStatus
      */
-    public getActionStatus = (name: ActionBase['name'], statusId: string): Promise<ActionStatus> => {
+    public getActionStatus = (name: ActionBase['name'], statusId: ActionStatus['statusId']): Promise<ActionStatus> => {
         return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
             .then(response => response.body as ActionStatus);
     }
@@ -196,7 +196,7 @@ export interface ActionUpdateFields {
     // TemplateName to send via Email action
     templateName?: string;
     // Addresses to send to when Email action triggered
-    addresses: string[];
+    addresses?: string[];
 
     // SNS action fields:
     // Topic to trigger SNS action
