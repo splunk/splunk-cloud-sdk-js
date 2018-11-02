@@ -1,7 +1,7 @@
 import 'isomorphic-fetch';
 import 'node';
 
-const config = {
+export default {
     stubbyHost: process.env.CI ? 'splunk-cloud-sdk-shared-stubby' : 'localhost',
     stubbyAuthToken: 'TEST_AUTH_TOKEN',
     stubbyTenant: 'TEST_TENANT',
@@ -15,5 +15,3 @@ const config = {
     testCollection: `jscollecn${Date.now()}`,
     tenantCreationOn: (process.env.TENANT_CREATION === '1'),
 };
-
-export default config;
