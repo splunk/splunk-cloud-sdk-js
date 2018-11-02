@@ -8,8 +8,8 @@ import {
     EmailAction,
     SNSAction,
     WebhookAction
-} from '../../src/action';
-import { SplunkCloud } from '../../src/splunk';
+} from '../../action';
+import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
 const splunkCloudHost = config.playgroundHost;

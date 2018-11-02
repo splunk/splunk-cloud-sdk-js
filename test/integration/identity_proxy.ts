@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import 'mocha';
-import { RoleInput } from '../../src/identity';
-import { SplunkCloud } from '../../src/splunk';
+import { RoleInput } from '../../identity';
+import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
 const splunkCloudHost = config.playgroundHost;

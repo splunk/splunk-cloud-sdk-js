@@ -1,7 +1,7 @@
 import { assert, expect } from 'chai';
 import 'mocha';
-import { ResultsNotReadyResponse, SearchResults } from '../../src/search';
-import { SplunkCloud } from '../../src/splunk';
+import { ResultsNotReadyResponse, SearchResults } from '../../search';
+import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
 const splunkCloudHost = config.playgroundHost;
