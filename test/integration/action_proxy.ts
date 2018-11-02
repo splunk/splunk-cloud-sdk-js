@@ -1,6 +1,5 @@
 import { assert } from 'chai';
 import 'mocha';
-import { SplunkCloud } from '../../splunk';
 import {
     ActionNotification,
     ActionNotificationKind,
@@ -10,6 +9,7 @@ import {
     SNSAction,
     WebhookAction
 } from '../../src/action';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
 const splunkCloudHost = config.playgroundHost;
