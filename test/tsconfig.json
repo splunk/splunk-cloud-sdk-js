@@ -7,6 +7,7 @@
   "include": [
     "./config.ts",
     "unit",
-    "integration/action_proxy.ts"
+    "integration/action_proxy.ts",
+    "integration/identity_proxy.ts"
   ]
 }

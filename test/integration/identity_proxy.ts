@@ -1,6 +1,8 @@
-const config = require('../config');
-const { SplunkCloud } = require('../../splunk');
-const { assert } = require('chai');
+import { assert } from 'chai';
+import 'mocha';
+import { SplunkCloud } from '../../splunk';
+import { RoleInput } from '../../src/identity';
+import config from '../config';
 
 const splunkCloudHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
@@ -19,9 +21,9 @@ describe('integration tests for Identity Tenant Endpoints', () => {
     const testPerm1 = `jssdk_perm_${Date.now()}`;
 
     const testPermissions = [
-        tenantID + 'catalog',
-        tenantID + 'ingest',
-        tenantID + 'search'
+        `${tenantID}catalog`,
+        `${tenantID}ingest`,
+        `${tenantID}search`
     ];
     const testGroupName = `mygroup_${Date.now()}`;
     const testPrincipal = 'test1@splunk.com';
@@ -29,8 +31,9 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
     describe('Test Roles and Permissions Management', () => {
 
-        const roleInput = {
-            'name': testRole,
+        const roleInput: RoleInput = {
+            name: testRole,
+            permissions: testPermissions
         };
 
         it('should return the validate info for the principal member', () =>
@@ -180,7 +183,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.group, testGroupName);
                 assert.equal(data.principal, testPrincipal);
-                assert.equal(data.tenant, tenantID)
+                assert.equal(data.tenant, tenantID);
             }));
 
         it('should retrieve all the Members from the Group', () =>
