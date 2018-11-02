@@ -8,6 +8,7 @@
     "./config.ts",
     "unit",
     "integration/action_proxy.ts",
-    "integration/identity_proxy.ts"
+    "integration/identity_proxy.ts",
+    "integration/search_proxy.ts"
   ]
 }

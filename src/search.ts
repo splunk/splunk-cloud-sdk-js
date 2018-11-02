@@ -29,7 +29,7 @@ function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchS
  */
 export class Search {
     private client: SearchService;
-    private readonly jobId: string;
+    public readonly jobId: string;
     private isCancelling: boolean;
 
     /**
