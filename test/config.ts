@@ -1,7 +1,6 @@
 import 'isomorphic-fetch';
+import 'node';
 
-// TODO: create a tsconfig.json just for tests since we can use node stuff there
-// @ts-ignore
 const config = {
     stubbyHost: process.env.CI ? 'splunk-cloud-sdk-shared-stubby' : 'localhost',
     stubbyAuthToken: 'TEST_AUTH_TOKEN',
