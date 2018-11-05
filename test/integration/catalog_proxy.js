@@ -314,9 +314,9 @@ describe('catalog tests', () => {
             return splunkCloud.catalog.createRuleAction(
                 ruleId,
                 {
-                    mode: 'mymode', 'kind': 'AUTOKV'
+                    mode: 'auto', 'kind': 'AUTOKV'
                 }).then(act => {
-                    assert(act.mode, 'mymode');
+                    assert(act.mode, 'auto');
                 });
         });
 
