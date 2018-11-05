@@ -230,17 +230,17 @@ export class ServiceClient {
     /**
      * Builds a path for a given service call
      * @param servicePrefix The name of the service, with version (search/v1)
-     * @param pathname An array of path elements that will be checked and added to the path (['jobs', jobId])
+     * @param segments An array of path elements that will be checked and added to the path (['jobs', jobId])
      * @param overrideTenant If supplied, this tenant will be used instead of the tenant associated with this client object
      * @return A fully qualified path to the resource
      */
-    public buildPath(servicePrefix: string, pathname: string[], overrideTenant?: string): string {
+    public buildPath(servicePrefix: string, segments: string[], overrideTenant?: string): string {
         const effectiveTenant = overrideTenant || this.tenant;
         if (!effectiveTenant) {
             throw new Error('No tenant specified');
         }
-        const path = `/${effectiveTenant}${servicePrefix}/${pathname.join('/')}`;
-        for (const elem of pathname) {
+        const path = `/${effectiveTenant}${servicePrefix}/${segments.join('/')}`;
+        for (const elem of segments) {
             if (elem && elem.trim() === '') {
                 throw new Error(`Empty elements in path: ${path}`);
             }

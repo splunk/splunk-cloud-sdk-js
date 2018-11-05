@@ -1,6 +1,19 @@
-const config = require('../config');
-const { SplunkCloud } = require('../../splunk');
-const { assert } = require('chai');
+import { assert } from 'chai';
+import 'mocha';
+import {
+    AliasAction,
+    AutoKVAction,
+    DatasetInfo,
+    DataType,
+    EvalAction,
+    Field,
+    FieldType,
+    LookupAction,
+    Prevalence,
+    RegexAction
+} from '../../catalog';
+import { SplunkCloud } from '../../splunk';
+import config from '../config';
 
 const splunkCloudHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
@@ -15,11 +28,11 @@ describe('catalog tests', () => {
     after(() =>
         splunkCloud.catalog
             .deleteDatasetByName(indexName)
-            .catch(err => console.log('Error cleaning index: ' + err))
+            .catch(err => console.log(`Error cleaning index: ${err}`))
     );
 
     describe('datasets', () => {
-        it('should return datasets', () => splunkCloud.catalog.getDatasets().then((dslist) => {
+        it('should return datasets', () => splunkCloud.catalog.getDatasets().then(dslist => {
             assert(dslist.length > 0);
             assert(dslist[0].kind);
         }));
@@ -27,11 +40,11 @@ describe('catalog tests', () => {
         describe('modules', () => {
             it('should return a list of defined modules', () => splunkCloud.catalog.getModules().then(modules => {
                 assert(modules.length >= 1);
-                modules.filter(m => m.name == "").length == 1;
+                assert.equal(1, modules.filter(m => m.name === '').length);
             }));
 
             it('should return a list of filtered modules', () => splunkCloud.catalog.getModules('module=="nonexistent"').then(modules => {
-                assert(modules.length == 0);
+                assert(modules.length === 0);
             }));
         });
 
@@ -50,32 +63,36 @@ describe('catalog tests', () => {
             assert(dslist[0].kind === 'index');
         }));
 
-        it('should list datasets with filter', () => splunkCloud.catalog.listDatasets({filter:'kind=="index"'}).then((dslist) => {
+        it('should list datasets with filter', () => splunkCloud.catalog.listDatasets({ filter: 'kind=="index"' }).then((dslist) => {
             assert(dslist.length > 0);
             assert(dslist[0].kind === 'index');
         }));
 
-        it('should list datasets with a count of 1', () => splunkCloud.catalog.listDatasets({count:1}).then((dslist) => {
+        it('should list datasets with a count of 1', () => splunkCloud.catalog.listDatasets({ count: 1 }).then((dslist) => {
             assert(dslist.length === 1);
         }));
 
-        it('should list datasets ordered by id descending', () => splunkCloud.catalog.listDatasets({orderby:"id Descending"}).then((dslist) => {
+        it('should list datasets ordered by id descending', () => splunkCloud.catalog.listDatasets({ orderby: 'id Descending' }).then((dslist) => {
             assert(dslist.length > 0);
-            assert(dslist[0].id > dslist[dslist.length-1].id);
+            assert(dslist[0].id > dslist[dslist.length - 1].id);
         }));
 
         it('should list datasets with all option query args', () => {
-            const query = {filter:'kind=="index"',
-                           count: 1,
-                           orderby: "id Descending"};
+            const query = {
+                filter: 'kind=="index"',
+                count: 1,
+                orderby: 'id Descending'
+            };
 
             splunkCloud.catalog.listDatasets(query).then((dslist) => {
                 assert(dslist.length === 1);
-        })});
+            });
+        });
 
         it('should allow create/delete of datasets', () => {
             const name = 'foobar';
-            return createIndexDataset(name).then(ds => {
+            return createIndexDataset(name).then(res => {
+                const ds = res as DatasetInfo;
                 assert(ds.name === name);
                 assert(ds.kind === 'index');
                 return ds.id;
@@ -86,7 +103,7 @@ describe('catalog tests', () => {
         it('should allow create/delete of metric datasets', () => {
             const name = `metric_${Date.now()}`;
             splunkCloud.catalog.createDataset({
-                name: name,
+                name,
                 kind: 'metric',
                 disabled: false
             }).then(() => splunkCloud.catalog.deleteDataset(name));
@@ -96,7 +113,7 @@ describe('catalog tests', () => {
         it('should allow create/delete of view datasets', () => {
             const name = `view_${Date.now()}`;
             splunkCloud.catalog.createDataset({
-                name: name,
+                name,
                 kind: 'view',
                 search: 'search index=main|stats count()'
             }).then(() => splunkCloud.catalog.deleteDataset(name));
@@ -110,23 +127,32 @@ describe('catalog tests', () => {
             const module1 = `module_${Date.now()}`;
             const module2 = `module_${Date.now()}`;
 
-            splunkCloud.catalog.createDataset(
-                {name: name1, kind: kind, module: module1 , disabled: false}).then(ds => {
-                    assert(ds.name === name1);
-                    assert(ds.kind === kind);
-                })
-                .then(() =>
-                    splunkCloud.catalog.createDataset(
-                        {kind: 'import', name: name1, module: module2, sourceName: name1, sourceModule: module1}).then(ds => {
+            splunkCloud.catalog.createDataset({
+                kind, name: name1, module: module1, disabled: false
+            }).then(res => {
+                const ds = res as DatasetInfo;
+                assert(ds.name === name1);
+                assert(ds.kind === kind);
+            }).then(() =>
+                splunkCloud.catalog.createDataset(
+                    {
+                        kind: 'import',
+                        name: name1,
+                        module: module2,
+                        sourceName: name1,
+                        sourceModule: module1
+                    }).then(res => {
+                        const ds = res as DatasetInfo;
                         assert(ds.name === name1);
                         assert(ds.module === module2);
-                        assert(ds.module != module1);
+                        assert(ds.module !== module1);
                         assert(ds.kind === kind);
                     }))
                 .then(() => {
+                    // TODO: verify deletion
                     splunkCloud.catalog.deleteDataset(name1);
                     splunkCloud.catalog.deleteDataset(name2);
-                }).catch(e => console.log(e));
+                });
         });
 
         it('should allow delete of datasets by name', () => {
@@ -171,6 +197,7 @@ describe('catalog tests', () => {
     describe('dataset fields', () => {
         const integrationTestField1 = 'integ_test_field1';
         const integrationTestField2 = 'integ_test_field2';
+        let found = false;
         it('should create a test dataset, its fields, list its fields and delete the test dataset', () => {
             return splunkCloud.catalog.createDataset({
                 name: 'integ_dataset_1000',
@@ -178,17 +205,18 @@ describe('catalog tests', () => {
                 capabilities: '1101-00000:11010',
                 externalKind: 'kvcollection',
                 externalName: 'test_externalName'
-            }).then((resultDataset) => splunkCloud.catalog.postDatasetField(resultDataset.id, {
-                'name': integrationTestField1,
-                'datatype': 'S',
-                'fieldtype': 'D',
-                'prevalence': 'A'
-            }).then(resultDatasetField1 => {
-                splunkCloud.catalog.getDatasetField(resultDataset.id, resultDatasetField1.id).then((getResultDatasetField) => {
+            }).then(resultDataset => splunkCloud.catalog.postDatasetField(resultDataset.id, {
+                name: integrationTestField1,
+                dataType: DataType.STRING,
+                fieldType: FieldType.DIMENSION,
+                prevalence: Prevalence.ALL
+            }).then(res => {
+                const resultDatasetField1 = res as Field;
+                splunkCloud.catalog.getDatasetField(resultDataset.id, resultDatasetField1.id as string).then((getResultDatasetField) => {
                     assert(getResultDatasetField.name, integrationTestField1);
                 });
 
-                splunkCloud.catalog.getField(resultDatasetField1.id)
+                splunkCloud.catalog.getField(resultDatasetField1.id as string)
                     .then(field => {
                         assert(resultDatasetField1.name, field.name);
                     });
@@ -198,30 +226,34 @@ describe('catalog tests', () => {
                         found = false;
                         fields.forEach(
                             a => {
-                                if (a.name === resultDatasetField1.name)
+                                if (a.name === resultDatasetField1.name) {
                                     found = true;
+                                }
                             }
                         );
                         assert(found);
 
                     });
             }).then(() => splunkCloud.catalog.postDatasetField(resultDataset.id, {
-                'name': integrationTestField2,
-                'datatype': 'S',
-                'fieldtype': 'D',
-                'prevalence': 'A'
-            })).then((resultDatasetField2) => splunkCloud.catalog.getDatasetField(resultDataset.id, resultDatasetField2.id).then((getResultDatasetField) => {
-                assert(getResultDatasetField.name, integrationTestField2);
-            }).then(() => splunkCloud.catalog.getDatasetFields(resultDataset.id).then((resultDatasetFields) => {
-                assert(resultDatasetFields.length === 2, 'Two dataset fields should be created');
-            })).then(() => splunkCloud.catalog.getDatasetFields(resultDataset.id, 'name=="integ_test_field2"').then((resultDatasetFields) => {
-                assert(resultDatasetFields.length === 1, 'One dataset fields should be created');
-                assert(resultDatasetFields[0].name === integrationTestField2, 'The name should match');
-            })).then(() => splunkCloud.catalog.patchDatasetField(resultDataset.id, resultDatasetField2.id, { 'name': 'integ_test_field3' }).then((patchResultDatasetField) => {
-                assert(patchResultDatasetField.name === 'integ_test_field3', 'The name should match');
-            })).then(() => splunkCloud.catalog.deleteDatasetField(resultDataset.id, resultDatasetField2.id).then((response) => {
-                assert(!response);
-            }))).then(() => splunkCloud.catalog.deleteDataset(resultDataset.id)));
+                name: integrationTestField2,
+                dataType: DataType.STRING,
+                fieldType: FieldType.DIMENSION,
+                prevalence: Prevalence.ALL
+            })).then((res) => {
+                const resultDatasetField2 = res as Field;
+                return splunkCloud.catalog.getDatasetField(resultDataset.id, resultDatasetField2.id as string).then((getResultDatasetField) => {
+                    assert(getResultDatasetField.name, integrationTestField2);
+                }).then(() => splunkCloud.catalog.getDatasetFields(resultDataset.id).then((resultDatasetFields) => {
+                    assert(resultDatasetFields.length === 2);
+                })).then(() => splunkCloud.catalog.getDatasetFields(resultDataset.id, 'name=="integ_test_field2"').then((resultDatasetFields) => {
+                    assert(resultDatasetFields.length === 1);
+                    assert(resultDatasetFields[0].name === integrationTestField2);
+                })).then(() => splunkCloud.catalog.patchDatasetField(resultDataset.id, resultDatasetField2.id as string, { 'name': 'integ_test_field3' }).then((patchResultDatasetField) => {
+                    assert(patchResultDatasetField.name === 'integ_test_field3');
+                })).then(() => splunkCloud.catalog.deleteDatasetField(resultDataset.id, resultDatasetField2.id as string).then((response) => {
+                    assert(!response);
+                }));
+            }).then(() => splunkCloud.catalog.deleteDataset(resultDataset.id)));
         });
     }).timeout(10000);
 
@@ -232,7 +264,7 @@ describe('catalog tests', () => {
         const ruleMatch = 'sourcetype::integration_test_match';
         const datasetName = 'action_dataset';
 
-        var ruleId;
+        let ruleId: string;
         before(() => {
             return splunkCloud.catalog.createDataset({
                 name: datasetName,
@@ -241,16 +273,16 @@ describe('catalog tests', () => {
                 externalName: 'test_externalName'
             }).then(dataset => {
                 return splunkCloud.catalog.postDatasetField(dataset.id, {
-                    'name': fieldName,
-                    'datatype': 'S',
-                    'fieldtype': 'D',
-                    'prevalence': 'A'
+                    name: fieldName,
+                    dataType: DataType.STRING,
+                    fieldType: FieldType.DIMENSION,
+                    prevalence: Prevalence.ALL
                 });
             }).then(() => {
                 return splunkCloud.catalog.createRule({
                     name: ruleName,
                     module: ruleModule,
-                    match: ruleMatch,
+                    match: ruleMatch
                 }).then((rule) => {
                     ruleId = rule.id;
 
@@ -259,7 +291,6 @@ describe('catalog tests', () => {
         });
 
         after(() => {
-
             return splunkCloud.catalog.deleteDataset(datasetName).then(
                 () => {
                     console.log('finish delete dataset');
@@ -269,75 +300,77 @@ describe('catalog tests', () => {
                     () => {
                         console.log('finish delete rule');
                     });
-
             });
         });
 
         it('1t should create ALIAS rule actions', () => {
             return splunkCloud.catalog.createRuleAction(
-                ruleId,
-                {
+                ruleId, {
                     alias: 'newalias', 'kind': 'ALIAS', field: fieldName
-                }).then(act => {
+                }).then(res => {
+                    const act = res as AliasAction;
                     assert.equal(act.field, fieldName);
-                    return act;
-                }).then((act) => {
-                    return splunkCloud.catalog.getRuleAction(ruleId, act.id);
-                }).then((act) => {
-                    return splunkCloud.catalog.deleteRuleAction(ruleId, act.id);
+                    return splunkCloud.catalog.getRuleAction(ruleId, act.id as string);
+                }).then(res => {
+                    const act = res as AliasAction;
+                    return splunkCloud.catalog.deleteRuleAction(ruleId, act.id as string);
                 });
-
         });
 
         it('1t should create REGEX rule actions', () => {
+            const regex: RegexAction = {
+                pattern: 'mypattern', 'kind': 'REGEX', field: fieldName
+            };
             return splunkCloud.catalog.createRuleAction(
-                ruleId,
-                {
-                    pattern: 'mypattern', 'kind': 'REGEX', field: fieldName
-                }).then(act => {
-                    assert(act.pattern, 'mypattern');
+                ruleId, regex).then(res => {
+                    const act = res as RegexAction;
+                    assert(act.pattern, regex.pattern);
                 });
         });
 
 
         it('1t should create EVAL rule actions', () => {
+            const evalAction: EvalAction = {
+                expression: 'myexpr', 'kind': 'EVAL', field: fieldName
+            };
             return splunkCloud.catalog.createRuleAction(
-                ruleId,
-                {
-                    expression: 'myexpr', 'kind': 'EVAL', field: fieldName
-                }).then(act => {
-                    assert(act.expression, 'myexpr');
+                ruleId, evalAction).then(res => {
+                    const act = res as EvalAction;
+                    assert(act.expression, evalAction.expression);
                 });
         });
 
         it('1t should create AUTOKV rule actions', () => {
+            const autokvAction: AutoKVAction = {
+                mode: 'mymode', 'kind': 'AUTOKV'
+            };
             return splunkCloud.catalog.createRuleAction(
-                ruleId,
-                {
-                    mode: 'mymode', 'kind': 'AUTOKV'
-                }).then(act => {
-                    assert(act.mode, 'mymode');
+                ruleId, autokvAction).then(res => {
+                    const act = res as AutoKVAction;
+                    assert(act.mode, autokvAction.mode);
                 });
         });
 
         it('1t should create LOOKUP rule actions', () => {
+            const lookup: LookupAction = {
+                expression: 'lookupexpr', kind: 'LOOKUP'
+            };
             return splunkCloud.catalog.createRuleAction(
-                ruleId,
-                {
-                    expression: 'lookupexpr', 'kind': 'LOOKUP'
-                }).then(act => {
+                ruleId, lookup).then(res => {
+                    const act = res as LookupAction;
                     assert(act.expression, 'lookupexpr');
-                }).then((act) => {
+                }).then(() => {
                     return splunkCloud.catalog.getRuleActions(ruleId);
-                }).then((acts) => {
-                    assert(acts.length, 4);
+                }).then((res) => {
+                    const acts = res as LookupAction[];
+                    assert.equal(acts.length, 4);
                 });
 
         });
     }).timeout(1000);
 });
 
-function createIndexDataset(collection) {
+export function createIndexDataset(collection: string): Promise<object | void> {
     // Gets the datasets
     return (
         splunkCloud.catalog
@@ -345,7 +378,7 @@ function createIndexDataset(collection) {
             // Filters the data set
             .then(datasets => {
                 return datasets.filter(element => {
-                    if (element['name'] == collection) {
+                    if (element.name === collection) {
                         return element;
                     }
                 });
@@ -378,7 +411,7 @@ function createIndexDataset(collection) {
     );
 }
 
-function createKVCollectionDataset(namespace, collection) {
+export function createKVCollectionDataset(namespace: string, collection: string): Promise<object | void> {
     // Gets the datasets
     return (
         splunkCloud.catalog
@@ -386,7 +419,7 @@ function createKVCollectionDataset(namespace, collection) {
             // Filters the data set
             .then(datasets => {
                 return datasets.filter(element => {
-                    if (element['module'] == namespace && element['name'] == collection) {
+                    if (element.module === namespace && element.name === collection) {
                         return element;
                     }
                 });
@@ -419,39 +452,37 @@ function createKVCollectionDataset(namespace, collection) {
     );
 }
 
-function deleteAllDatasets() {
+export function deleteAllDatasets(): Promise<any> {
     // Gets the datasets
-    return (
-        splunkCloud.catalog
-            .getDatasets()
-            // Deletes the dataset there should only be one dataset
-            .then(datasets => {
-                return Promise.all(
-                    datasets.map(dataset => {
-                        // Delete the dataset unless it's a main/metrics or createdby Splunk
-                        if (dataset.name !== "main" && dataset.name !== "metrics" && dataset.createdby !== "Splunk") {
-                            return splunkCloud.catalog.deleteDataset(dataset.id);
-                        }
-                    })
-                );
-            })
-            // Finally set the dataset for testing
-            .then(response => {
-                return response;
-            })
-            .catch(error => {
-                console.log('An error was encountered while cleaning up datasests');
-                console.log(error);
-            })
-    );
+    return splunkCloud.catalog
+        .getDatasets()
+        // Deletes the dataset there should only be one dataset
+        .then(datasets => {
+            return Promise.all(
+                datasets.map(dataset => {
+                    // Delete the dataset unless it's a main/metrics or createdby Splunk
+                    if (dataset.name !== 'main' && dataset.name !== 'metrics' && dataset.createdBy !== 'Splunk') {
+                        return splunkCloud.catalog.deleteDataset(dataset.id);
+                    }
+                })
+            );
+        })
+        // Finally set the dataset for testing
+        .then(response => {
+            return response;
+        })
+        .catch(error => {
+            console.log('An error was encountered while cleaning up datasests');
+            console.log(error);
+        });
 }
 
-function createRecord(collection, record) {
+export function createRecord(collection: string, record: Map<string, string>): Promise<any> {
     return splunkCloud.kvstore
         .insertRecord(collection, record)
         .then(response => {
-            assert.notEqual(response['_key'], null);
-            assert.typeOf(response['_key'], 'string');
+            assert.notEqual(response._key, null);
+            assert.typeOf(response._key, 'string');
             return response;
         })
         .catch(error => {
@@ -459,48 +490,39 @@ function createRecord(collection, record) {
         });
 }
 
-function createRule(ruleName) {
-    return (
-        splunkCloud.catalog
-            .getRules()
-            // Filters the rules
-            .then(rules => {
-                return rules.filter(element => {
-                    if (element['name'] == ruleName) {
-                        return element;
-                    }
-                });
-            })
-            // Deletes the rule - there should only be one rule
-            .then(rules => {
-                return Promise.all(
-                    rules.map(rules => {
-                        return splunkCloud.catalog.deleterules(dataset.id);
-                    })
-                );
-            })
-            // Creates the rule
-            .then(() => {
-                return splunkCloud.catalog.createRule({
-                    name: ruleName,
-                    match: 'sourcetype::newtype'
-                });
-            })
-            // Return the rule testing
-            .then(response => {
-                return response;
-            })
-            .catch(error => {
-                console.log('An error was encountered while cleaning up the rules');
-                console.log(error);
-            })
-    );
+export function createRule(ruleName: string): Promise<any> {
+    return splunkCloud.catalog
+        .getRules()
+        // Filters the rules
+        .then(rules => {
+            return rules.filter(element => {
+                if (element.name === ruleName) {
+                    return element;
+                }
+            });
+        })
+        // Deletes the rule - there should only be one rule
+        .then(rules => {
+            return Promise.all(
+                rules.map(rule => {
+                    return splunkCloud.catalog.deleteRule(rule.id);
+                })
+            );
+        })
+        // Creates the rule
+        .then(() => {
+            return splunkCloud.catalog.createRule({
+                name: ruleName,
+                match: 'sourcetype::newtype'
+            });
+        })
+        // Return the rule testing
+        .then(response => {
+            return response;
+        })
+        .catch(error => {
+            console.log('An error was encountered while cleaning up the rules');
+            console.log(error);
+        });
 }
 
-module.exports = {
-    createIndexDataset: createIndexDataset,
-    createKVCollectionDataset: createKVCollectionDataset,
-    createRecord: createRecord,
-    createRule: createRule,
-    deleteAllDatasets: deleteAllDatasets
-};

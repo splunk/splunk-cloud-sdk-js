@@ -1,5 +1,6 @@
 /*.js
 /src/*.js
+/src/*.d.ts
 /*.d.ts
 /test/**/*.d.ts
 ./common/ # built dir

@@ -92,10 +92,7 @@ export class KVStoreService extends BaseApiService {
      * @param records The data tuples to insert
      * @returns A list of keys of the inserted records
      */
-    public insertRecords = (
-        collection: string,
-        records: Array<Map<string, string>>
-    ): Promise<string[]> => {
+    public insertRecords = (collection: string, records: Array<Map<string, string>>): Promise<string[]> => {
         return this.client.post(
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'batch']),
             records
