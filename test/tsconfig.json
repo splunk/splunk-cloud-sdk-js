@@ -12,6 +12,8 @@
     "integration/search_proxy.ts",
     "integration/ingest_proxy.ts",
     "integration/catalog_proxy.ts",
-    "integration/kvstore_proxy.ts"
+    "integration/kvstore_proxy.ts",
+    "integration/kvstore_collections_proxy.ts",
+    "integration/kvstore_query_proxy.ts"
   ]
 }

@@ -477,9 +477,9 @@ export function deleteAllDatasets(): Promise<any> {
         });
 }
 
-export function createRecord(collection: string, record: Map<string, string>): Promise<any> {
+export function createRecord(collection: string, record: object): Promise<object> {
     return splunkCloud.kvstore
-        .insertRecord(collection, record)
+        .insertRecord(collection, record as Map<string, string>)
         .then(response => {
             assert.notEqual(response._key, null);
             assert.typeOf(response._key, 'string');

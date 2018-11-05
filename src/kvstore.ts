@@ -106,10 +106,7 @@ export class KVStoreService extends BaseApiService {
      * @param filter Filter string to target specific records
      * @returns A Promise of an array of records
      */
-    public queryRecords = (
-        collection: string,
-        filter: QueryArgs = {}
-    ): Promise<Map<string, string>> => {
+    public queryRecords = (collection: string, filter: QueryArgs = {}): Promise<Array<Map<string, string>>> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
@@ -119,7 +116,7 @@ export class KVStoreService extends BaseApiService {
             query: filter
         };
         return this.client.get(url, requestOptions)
-            .then(response => response.body as Map<string, string>);
+            .then(response => response.body as Array<Map<string, string>>);
     }
 
     /**
@@ -139,10 +136,7 @@ export class KVStoreService extends BaseApiService {
      * @param filter Filter string to target specific records
      * @return A list of records in the collection
      */
-    public listRecords = (
-        collection: string,
-        filter: QueryArgs = {}
-    ): Promise<Map<string, string>> => {
+    public listRecords = (collection: string, filter: QueryArgs = {}): Promise<Array<Map<string, string>>> => {
         const url: string = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
@@ -151,7 +145,7 @@ export class KVStoreService extends BaseApiService {
             query: filter
         };
         return this.client.get(url, requestOptions)
-            .then(response => response.body as Map<string, string>);
+            .then(response => response.body as Array<Map<string, string>>);
     }
 
     /**

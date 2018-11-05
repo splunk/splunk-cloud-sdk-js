@@ -163,7 +163,7 @@ describe('Integration tests for KVStore Endpoints', () => {
             it('validate that after calling deleteRecordbyKey(), only 3 records are left', () =>
                 splunkCloud.kvstore.listRecords(testKVCollectionName).then(response => {
                     assert.equal(
-                        response.size,
+                        response.length,
                         3,
                         'The total number of remaining records after deletion process should be 3'
                     );
@@ -190,7 +190,7 @@ describe('Integration tests for KVStore Endpoints', () => {
 
             it('should retrieve the records based on a query', () =>
                 splunkCloud.kvstore.listRecords(testKVCollectionName, { fields: 'type' }).then(response => {
-                    assert.equal(response.size, 3);
+                    assert.equal(response.length, 3);
                 }));
 
             it('should delete the records based on a query', () =>
@@ -205,7 +205,7 @@ describe('Integration tests for KVStore Endpoints', () => {
 
             it('validate that after calling deleteRecords() based on query, no record is left', () => {
                 return splunkCloud.kvstore.listRecords(testKVCollectionName).then(response => {
-                    assert.equal(response.size, 0);
+                    assert.equal(response.length, 0);
                 });
             });
 
@@ -216,7 +216,7 @@ describe('Integration tests for KVStore Endpoints', () => {
 
             it('validate that after calling deleteRecords(), no records should be returned', () =>
                 splunkCloud.kvstore.queryRecords(testKVCollectionName).then(response => {
-                    assert.equal(response.size, 0, 'No records should be returned');
+                    assert.equal(response.length, 0, 'No records should be returned');
                 }));
         });
     });
