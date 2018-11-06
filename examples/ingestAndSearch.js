@@ -89,7 +89,7 @@ async function main() {
     const index = "main" ;
     // ***** STEP 1: Get Splunk Cloud client
     // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authenticatin token.
-    const splunk = new SplunkCloud(SPLUNK_CLOUD_HOST, BEARER_TOKEN, TENANT_ID);
+    const splunk = new SplunkCloud({'url': SPLUNK_CLOUD_HOST, 'tokenSource': BEARER_TOKEN, 'defaultTenant': TENANT_ID });
 
     // ***** STEP 2: Define a new index
     // ***** DESCRIPTION: Define a new index in the Metadata Catalog so that we can send events to the new index.

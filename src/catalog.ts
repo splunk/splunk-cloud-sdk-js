@@ -6,7 +6,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 
 import BaseApiService from './baseapiservice';
 import { QueryArgs } from './client';
-import { CATALOG_SERVICE_PREFIX } from './service_prefixes';
+import { CATALOG_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
 /**
  * Encapsulates catalog endpoints
@@ -30,7 +30,7 @@ export class CatalogService extends BaseApiService {
      * @param query QueryArgs
      */
     public listDatasets = (query: QueryArgs = {}): Promise<DatasetInfo[]> => {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), { query })
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets'], SERVICE_CLUSTER_MAPPING.catalog), { query })
             .then(response => response.body as DatasetInfo[]);
     }
 
@@ -45,7 +45,7 @@ export class CatalogService extends BaseApiService {
         if (filter) {
             query.filter = filter;
         }
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['modules']), { query })
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['modules'], SERVICE_CLUSTER_MAPPING.catalog), { query })
             .then(response => response.body as Module[]);
     }
 
@@ -55,7 +55,7 @@ export class CatalogService extends BaseApiService {
      * @return description of the new dataset
      */
     public createDataset = (dataset: DatasetInfo): Promise<DatasetInfo> => {
-        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), dataset)
+        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets'], SERVICE_CLUSTER_MAPPING.catalog), dataset)
             .then(response => response.body as DatasetInfo);
     }
 
@@ -65,7 +65,7 @@ export class CatalogService extends BaseApiService {
      * @return description of the dataset
      */
     public getDataset = (datasetIdOrResourceName: string): Promise<DatasetInfo> => {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]))
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName], SERVICE_CLUSTER_MAPPING.catalog))
             .then(response => response.body as DatasetInfo);
     }
 
@@ -75,7 +75,7 @@ export class CatalogService extends BaseApiService {
      * @return A promise that will be resolved when deletion is complete
      */
     public deleteDataset = (datasetIdOrResourceName: string): Promise<any> => { // TODO: can we add stricter return typing?
-        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]))
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName], SERVICE_CLUSTER_MAPPING.catalog))
             .then(response => response.body);
     }
 
@@ -90,7 +90,7 @@ export class CatalogService extends BaseApiService {
                 if (ret.length > 1) {
                     throw new Error('There are more than 1 dataset with the input name');
                 } else if (ret.length === 1) {
-                    return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', ret[0].id]))
+                    return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', ret[0].id], SERVICE_CLUSTER_MAPPING.catalog))
                         .then(response => response.body);
                 } else {
                     return Promise.reject(new Error(`No dataset found with name: ${name}`));
@@ -106,7 +106,7 @@ export class CatalogService extends BaseApiService {
      */
     // TODO: add lint check for xxxID vs. xxxId consistency
     public updateDataset = (datasetIdOrResourceName: string, partial: PartialDatasetInfo): Promise<DatasetInfo> => {
-        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]), partial)
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName], SERVICE_CLUSTER_MAPPING.catalog), partial)
             .then(response => response.body as DatasetInfo);
     }
 
@@ -118,7 +118,7 @@ export class CatalogService extends BaseApiService {
      * @return a description of the new rule
      */
     public createRule = (rule: Rule): Promise<Rule> => {
-        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), rule)
+        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules'], SERVICE_CLUSTER_MAPPING.catalog), rule)
             .then(response => response.body as Rule);
     }
 
@@ -132,7 +132,7 @@ export class CatalogService extends BaseApiService {
         if (filter) {
             query.filter = filter;
         }
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), { query })
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules'], SERVICE_CLUSTER_MAPPING.catalog), { query })
             .then(response => response.body as Rule[]);
     }
 
@@ -142,7 +142,7 @@ export class CatalogService extends BaseApiService {
      * @return description of the rule
      */
     public getRule = (ruleIdOrResourceName: string): Promise<Rule> => {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleIdOrResourceName]))
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleIdOrResourceName], SERVICE_CLUSTER_MAPPING.catalog))
             .then(response => response.body as Rule);
     }
 
@@ -152,7 +152,7 @@ export class CatalogService extends BaseApiService {
      * @return Promise that will be resolved when the rule is deleted
      */
     public deleteRule = (ruleIdOrResourceName: string): Promise<any> => { // TODO: can we add stricter return typing?
-        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleIdOrResourceName]))
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleIdOrResourceName], SERVICE_CLUSTER_MAPPING.catalog))
             .then(response => response.body);
     }
 
@@ -164,7 +164,7 @@ export class CatalogService extends BaseApiService {
      */
     public getDatasetFields = (datasetID: DatasetInfo['id'], filter?: string): Promise<Field[]> => {
         const query = { filter };
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), { query })
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields'], SERVICE_CLUSTER_MAPPING.catalog), { query })
             .then(response => response.body as Field[]);
     }
 
@@ -175,7 +175,7 @@ export class CatalogService extends BaseApiService {
      * @return field description
      */
     public getDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id']): Promise<Field> => {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]))
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID], SERVICE_CLUSTER_MAPPING.catalog))
             .then(response => response.body as Field);
     }
 
@@ -186,7 +186,7 @@ export class CatalogService extends BaseApiService {
      * @return description of the new field defined on the dataset
      */
     public postDatasetField = (datasetID: DatasetInfo['id'], datasetField: Field): Promise<Field> => {
-        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), datasetField)
+        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields'], SERVICE_CLUSTER_MAPPING.catalog), datasetField)
             .then(response => response.body as Field);
     }
 
@@ -198,7 +198,7 @@ export class CatalogService extends BaseApiService {
      * @return updated description of the field
      */
     public patchDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id'], datasetField: Field): Promise<Field> => {
-        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]), datasetField)
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID], SERVICE_CLUSTER_MAPPING.catalog), datasetField)
             .then(response => response.body as Field);
     }
 
@@ -209,7 +209,7 @@ export class CatalogService extends BaseApiService {
      * @return promise that will be resolved when field is deleted
      */
     public deleteDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id']): Promise<object> => {
-        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]))
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID], SERVICE_CLUSTER_MAPPING.catalog))
             .then(response => response.body as object);
     }
 
@@ -220,7 +220,7 @@ export class CatalogService extends BaseApiService {
      */
     public getFields = (filter?: string): Promise<Field[]> => {
         const query = { filter };
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['fields']), { query })
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['fields'], SERVICE_CLUSTER_MAPPING.catalog), { query })
             .then(response => response.body as Field[]);
     }
 
@@ -230,7 +230,7 @@ export class CatalogService extends BaseApiService {
      * @return description of the field
      */
     public getField = (fieldID: Field['id']): Promise<Field> => {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['fields', fieldID]))
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['fields', fieldID], SERVICE_CLUSTER_MAPPING.catalog))
             .then(response => response.body as Field);
     }
 
@@ -242,7 +242,7 @@ export class CatalogService extends BaseApiService {
      */
     public createRuleAction = (ruleID: Rule['id'], action: AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction):
         Promise<AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction> => {
-        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions']), action)
+        return this.client.post(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions'], SERVICE_CLUSTER_MAPPING.catalog), action)
             .then(response => response.body as AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction);
     }
 
@@ -254,7 +254,7 @@ export class CatalogService extends BaseApiService {
      */
     public getRuleActions = (ruleID: Rule['id'], filter?: string): Promise<AliasAction[] | AutoKVAction[] | EvalAction[] | LookupAction[] | RegexAction[]> => {
         const query = { filter };
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions']), { query })
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions'], SERVICE_CLUSTER_MAPPING.catalog), { query })
             .then(response => response.body as AliasAction[] | AutoKVAction[] | EvalAction[] | LookupAction[] | RegexAction[]);
     }
 
@@ -265,7 +265,7 @@ export class CatalogService extends BaseApiService {
      * @return a rule action
      */
     public getRuleAction = (ruleID: Rule['id'], actionID: string): Promise<AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction> => {
-        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions', actionID]))
+        return this.client.get(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions', actionID], SERVICE_CLUSTER_MAPPING.catalog))
             .then(response => response.body as AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction);
     }
 
@@ -277,7 +277,7 @@ export class CatalogService extends BaseApiService {
      */
     public updateRuleAction = (ruleID: Rule['id'], actionID: string, action: AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction):
         Promise<AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction> => {
-        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions', actionID]), action)
+        return this.client.patch(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions', actionID], SERVICE_CLUSTER_MAPPING.catalog), action)
             .then(response => response.body as AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction);
     }
 
@@ -288,7 +288,7 @@ export class CatalogService extends BaseApiService {
      * @return promise that will be resolved when rule action is deleted
      */
     public deleteRuleAction = (ruleID: Rule['id'], actionID: string): Promise<object> => {
-        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions', actionID]))
+        return this.client.delete(this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleID, 'actions', actionID], SERVICE_CLUSTER_MAPPING.catalog))
             .then(response => response.body as object);
     }
 }

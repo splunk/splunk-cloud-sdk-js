@@ -7,7 +7,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 import { Observable } from 'rxjs';
 import BaseApiService from './baseapiservice';
 import { QueryArgs, SplunkError } from './client';
-import { SEARCH_SERVICE_PREFIX } from './service_prefixes';
+import { SEARCH_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
 export class SplunkSearchCancelError extends Error {
 }
@@ -31,7 +31,6 @@ export class Search {
     private client: SearchService;
     private readonly jobId: string;
     private isCancelling: boolean;
-
     /**
      *
      * @param searchService
@@ -158,7 +157,7 @@ export class SearchService extends BaseApiService {
      * Get the matching list of search jobs.
      */
     public listJobs = (jobArgs: any = {}): Promise<SearchJob[]> => { // TODO: Flesh out JobsRequest
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs'], SERVICE_CLUSTER_MAPPING.search), jobArgs)
             .then(response => response.body as SearchJob[]);
     }
 
@@ -168,7 +167,7 @@ export class SearchService extends BaseApiService {
      * @return
      */
     public createJob = (jobArgs: SearchArgs): Promise<SearchJob> => {
-        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
+        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs'], SERVICE_CLUSTER_MAPPING.search), jobArgs)
             .then(response => response.body as SearchJob);
     }
 
@@ -179,7 +178,7 @@ export class SearchService extends BaseApiService {
      * @return Description of job
      */
     public getJob = (jobId: string): Promise<SearchJob> => {
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]))
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId], SERVICE_CLUSTER_MAPPING.search))
             .then(response => response.body as SearchJob);
     }
 
@@ -189,7 +188,7 @@ export class SearchService extends BaseApiService {
      * @param update
      */
     public updateJob = (jobId: string, update: UpdateJob): Promise<UpdateJobResponse> => {
-        return this.client.patch(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]), update)
+        return this.client.patch(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId], SERVICE_CLUSTER_MAPPING.search), update)
             .then(response => response.body as UpdateJobResponse);
     }
 
@@ -229,7 +228,7 @@ export class SearchService extends BaseApiService {
      */
     public getResults = (jobId: string, args: FetchResultsRequest = {}): Promise<SearchResults | ResultsNotReadyResponse> => {
         const queryArgs: QueryArgs = args || {};
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), { query: queryArgs })
+        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results'], SERVICE_CLUSTER_MAPPING.search), { query: queryArgs })
             .then(response => {
                 if (typeof response.body === 'object') {
                     if ('results' in response.body) {

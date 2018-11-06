@@ -5,6 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import { AuthManager } from './auth_manager';
+import { CLUSTER_URL_MAPPING } from './service_prefixes';
 import agent from './version';
 
 const DEFAULT_URL = 'https://api.splunkbeta.com';
@@ -104,48 +105,31 @@ export interface ServiceClientArgs {
  */
 export class ServiceClient {
     private readonly tokenSource: () => string;
-    private readonly url: string;
+    private url: string;
     private readonly tenant?: string;
     private responseHooks: ResponseHook[] = [];
-    private readonly cluster?: string;
     private readonly scheme: string = 'https';
 
     /**
      * Create a ServiceClient with the given URL and an auth token
      * @param args : ServiceClientArgs Url to Splunk Cloud instance
      */
-    constructor(args: ServiceClientArgs | string, cluster?: string, token?: string, tenant?: string) {
-        if (typeof args === 'string') {
-            if (typeof token === 'string') {
-                this.tokenSource = () => token;
-            } else {
-                throw new SplunkError({ message: 'No auth token supplied.' });
-            }
-            this.url = args;
-            this.tenant = tenant;
-            if (typeof cluster === 'string') {
-                this.cluster = cluster;
-            }
+    constructor(args: ServiceClientArgs) {
+        const authManager = args.tokenSource;
+        if (typeof authManager === 'string') {
+            // If we have a string, wrap it in a lambda
+            this.tokenSource = () => authManager;
+        } else if (typeof authManager === 'function') {
+            // If we have a function, just call it when we need a token
+            this.tokenSource = authManager;
+        } else if ('getAccessToken' in authManager) {
+            // Else wrap a token manager.
+            this.tokenSource = () => authManager.getAccessToken();
         } else {
-            const authManager = args.tokenSource;
-            if (typeof authManager === 'string') {
-                // If we have a string, wrap it in a lambda
-                this.tokenSource = () => authManager;
-            } else if (typeof authManager === 'function') {
-                // If we have a function, just call it when we need a token
-                this.tokenSource = authManager;
-            } else if ('getAccessToken' in authManager) {
-                // Else wrap a token manager.
-                this.tokenSource = () => authManager.getAccessToken();
-            } else {
-                throw new SplunkError({ message: 'Unsupported token source' });
-            }
-            this.url = args.url || DEFAULT_URL;
-            this.tenant = args.defaultTenant;
-            if (typeof cluster === 'string') {
-                this.cluster = cluster;
-            }
+            throw new SplunkError({ message: 'Unsupported token source' });
         }
+        this.url = args.url || DEFAULT_URL;
+        this.tenant = args.defaultTenant;
     }
 
     /**
@@ -208,15 +192,15 @@ export class ServiceClient {
                 .filter(k => query[k] != null) // filter out undefined and null
                 .map(k => `${encoder(k)}=${encoder(String(query[k]))}`)
                 .join('&');
-            if (typeof this.cluster === 'string') {
-                return `${this.scheme}://${this.cluster}.${this.url}${path}?${queryEncoded}`;
+            if (this.url.indexOf('http') >= 0) {
+                return `${this.url}${path}?${queryEncoded}`;
             }
-            return `${this.url}${path}?${queryEncoded}`;
+            return `${this.scheme}://${this.url}${path}?${queryEncoded}`;
         }
-        if (typeof this.cluster === 'string') {
-            return `${this.scheme}://${this.cluster}.${this.url}${path}`;
+        if (this.url.indexOf('http') >= 0) {
+            return `${this.url}${path}`;
         }
-        return `${this.url}${path}`;
+        return `${this.scheme}://${this.url}${path}`;
     }
 
     /**
@@ -246,12 +230,19 @@ export class ServiceClient {
      * @param overrideTenant If supplied, this tenant will be used instead of the tenant associated with this client object
      * @return A fully qualified path to the resource
      */
-    public buildPath(servicePrefix: string, pathname: string[], overrideTenant?: string): string {
+    public buildPath(servicePrefix: string, pathname: string[], cluster?: string, overrideTenant?: string): string {
         const effectiveTenant = overrideTenant || this.tenant;
+        let path: string;
         if (!effectiveTenant) {
             throw new Error('No tenant specified');
         }
-        const path = `/${effectiveTenant}${servicePrefix}/${pathname.join('/')}`;
+        // do not override the default url
+        if (typeof cluster === 'string' && this.url.indexOf(DEFAULT_URL) < 0 ) {
+            this.url = CLUSTER_URL_MAPPING.api;
+        }
+
+        path = `/${effectiveTenant}${servicePrefix}/${pathname.join('/')}`;
+
         for (const elem of pathname) {
             if (elem && elem.trim() === '') {
                 throw new Error(`Empty elements in path: ${path}`);

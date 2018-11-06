@@ -1,12 +1,11 @@
+
 const config = require('../config');
 const { SplunkCloud } = require('../../splunk');
 const { assert, expect } = require('chai');
 
-const splunkCloudHost = config.playgroundHost;
-const token = config.playgroundAuthToken;
 const tenantID = config.playgroundTenant;
 
-const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
+const splunkCloud = new SplunkCloud({'url': config.playgroundHost, 'tokenSource': config.playgroundAuthToken, 'defaultTenant': config.playgroundTenant });
 
 describe("integration tests using action service", () => {
     describe("CRUD email actions", () => {

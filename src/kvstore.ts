@@ -6,7 +6,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 
 import BaseApiService from './baseapiservice';
 import { ContentType, HTTPResponse, QueryArgs, RequestHeaders, RequestOptions } from './client';
-import { KVSTORE_SERVICE_PREFIX } from './service_prefixes';
+import { KVSTORE_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
 /**
  * Encapsulates kvstore service endpoints
@@ -17,7 +17,7 @@ export class KVStoreService extends BaseApiService {
      * @returns KVStore health status
      */
     public getHealthStatus = (): Promise<any> => {
-        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['ping']);
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['ping'], SERVICE_CLUSTER_MAPPING.kvstore);
         return this.client.get(url)
             .then(response => response.body as PingOKBody);
     }
@@ -32,7 +32,7 @@ export class KVStoreService extends BaseApiService {
             'collections',
             collection,
             'indexes',
-        ]);
+        ], SERVICE_CLUSTER_MAPPING.kvstore);
         return this.client.get(url)
             .then(response => response.body as IndexDescription[]);
     }
@@ -48,7 +48,7 @@ export class KVStoreService extends BaseApiService {
             'collections',
             collection,
             'indexes',
-        ]);
+        ], SERVICE_CLUSTER_MAPPING.kvstore);
         return this.client.post(url, index)
             .then(response => response.body as IndexDescription);
     }
@@ -66,7 +66,7 @@ export class KVStoreService extends BaseApiService {
                 collection,
                 'indexes',
                 indexName,
-            ])
+            ], SERVICE_CLUSTER_MAPPING.kvstore)
         )
             .then(response => response.body);
     }
@@ -81,7 +81,7 @@ export class KVStoreService extends BaseApiService {
         const insertRecordURL = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
-        ]);
+        ], SERVICE_CLUSTER_MAPPING.kvstore);
         return this.client.post(insertRecordURL, record)
             .then(response => response.body as Key);
     }
@@ -97,7 +97,7 @@ export class KVStoreService extends BaseApiService {
         records: Array<Map<string, string>>
     ): Promise<string[]> => {
         return this.client.post(
-            this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'batch']),
+            this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'batch'], SERVICE_CLUSTER_MAPPING.kvstore),
             records
         )
             .then(response => response.body as string[]);
@@ -117,7 +117,7 @@ export class KVStoreService extends BaseApiService {
             'collections',
             collection,
             'query',
-        ]);
+        ], SERVICE_CLUSTER_MAPPING.kvstore);
         const requestOptions: RequestOptions = {
             query: filter
         };
@@ -132,7 +132,7 @@ export class KVStoreService extends BaseApiService {
      * @returns the record associated with the given key
      */
     public getRecordByKey = (collection: string, key: string): Promise<Map<string, string>> => {
-        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key]);
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key], SERVICE_CLUSTER_MAPPING.kvstore);
         return this.client.get(url).then(response => response.body as Map<string, string>);
     }
 
@@ -149,7 +149,7 @@ export class KVStoreService extends BaseApiService {
         const url: string = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
-        ]);
+        ], SERVICE_CLUSTER_MAPPING.kvstore);
         const requestOptions: RequestOptions = {
             query: filter
         };
@@ -164,7 +164,7 @@ export class KVStoreService extends BaseApiService {
      * @returns A promise that will be resolved when the matching records are deleted
      */
     public deleteRecords = (collection: string, filter?: QueryArgs): Promise<any> => {
-        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query']);
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query'], SERVICE_CLUSTER_MAPPING.kvstore);
         const requestOptions: RequestOptions = {
             query: filter
         };
@@ -178,7 +178,7 @@ export class KVStoreService extends BaseApiService {
      * @returns A promise that will be resolved when the record matching the supplied key is deleted
      */
     public deleteRecordByKey = (collection: string, key: string): Promise<any> => {
-        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key]);
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key], SERVICE_CLUSTER_MAPPING.kvstore);
         return this.client.delete(url).then(response => response.body);
     }
 }

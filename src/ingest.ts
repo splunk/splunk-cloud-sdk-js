@@ -5,7 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import BaseApiService from './baseapiservice';
-import { INGEST_SERVICE_PREFIX } from './service_prefixes';
+import { INGEST_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
 /**
  * Encapsulates Ingest service endpoints
@@ -17,7 +17,7 @@ export class IngestService extends BaseApiService {
      * @return promise that will be resolved when the ingest service has accepted the events for indexing
      */
     public postEvents = (events: Event[]): Promise<any> => {
-        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), events)
+        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events'], SERVICE_CLUSTER_MAPPING.ingest), events)
             .then(response => response.body);
     }
 
@@ -27,7 +27,7 @@ export class IngestService extends BaseApiService {
      * @return promise that will be resolved when the ingest service has accepted the metrics for indexing
      */
     public postMetrics = (metrics: MetricEvent[]): Promise<any> => {
-        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics']), metrics)
+        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics'],SERVICE_CLUSTER_MAPPING.ingest), metrics)
             .then(response => response.body);
     }
 }

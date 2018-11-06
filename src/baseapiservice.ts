@@ -12,13 +12,12 @@ import { ServiceClient } from './client';
 export default class BaseApiService {
     // TODO: Document when we have a final auth story
     protected client: ServiceClient;
-    constructor(clientOrUrl: string | ServiceClient, cluster?: string, token?: string, defaultTenant?: string) {
-        if (clientOrUrl instanceof ServiceClient) {
-            this.client = clientOrUrl;
-        } else if (token) {
-            this.client = new ServiceClient(clientOrUrl, cluster, token, defaultTenant);
+
+    constructor(client: ServiceClient) {
+        if (client instanceof ServiceClient) {
+            this.client = client;
         } else {
-            throw new Error('Missing token argument to service constructor');
+            throw new Error('Argument not of type ServiceClient');
         }
     }
 }

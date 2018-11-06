@@ -1,12 +1,10 @@
+
 const { assert } = require("chai");
 const config = require("../config");
 const { SplunkCloud } = require('../../splunk');
 
-const splunkCloudHost = config.playgroundHost;
-const token = config.playgroundAuthToken;
-const tenantID = config.playgroundTenant;
+const splunkCloud = new SplunkCloud({'url': config.playgroundHost, 'tokenSource': config.playgroundAuthToken, 'defaultTenant': config.playgroundTenant });
 
-const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
 
 // TODO: Replace strings 'CREATED', 'ACTIVATED' with enum PipelineStatus values
 describe("Integration tests for Streams Pipeline Endpoints", () => {

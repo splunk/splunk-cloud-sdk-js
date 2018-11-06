@@ -61,7 +61,7 @@ describe("Basic client functionality", () => {
         it("Catch empty path elements", () => {
             let failed = false;
             try {
-                s.buildPath('/PREFIX', ['foo', ' '], "TENANT");
+                s.buildPath('/PREFIX', ['foo', ' '], undefined, "TENANT");
                 failed = true;
             } catch (err) {
                 expect(err).to.have.property('message').that.matches(/\/TENANT\/PREFIX\/foo\/ /);
