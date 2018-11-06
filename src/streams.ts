@@ -6,7 +6,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 
 import BaseApiService from './baseapiservice';
 import { QueryArgs, RequestOptions } from './client';
-import { STREAMS_SERVICE_PREFIX } from './service_prefixes';
+import { SERVICE_CLUSTER_MAPPING, STREAMS_SERVICE_PREFIX } from './service_prefixes';
 
 /**
  * Encapsulates Streams endpoints
@@ -21,7 +21,7 @@ export class StreamsService extends BaseApiService {
         dsl: DslCompilationRequest
     ): Promise<UplPipeline> => {
         return this.client.post(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'compile-dsl']), dsl)
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'compile-dsl'], SERVICE_CLUSTER_MAPPING.streams), dsl)
             .then(response => response.body as UplPipeline);
     }
 
@@ -33,7 +33,7 @@ export class StreamsService extends BaseApiService {
     public getPipelines = (
         queryArgs: PipelineQueryParams = {}
     ): Promise<PaginatedPipelineResponse> => {
-        const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']);
+        const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines'], SERVICE_CLUSTER_MAPPING.streams);
         const requestOptions: RequestOptions = {
             query: queryArgs as QueryArgs
         };
@@ -50,7 +50,7 @@ export class StreamsService extends BaseApiService {
         pipeline: PipelineRequest
     ): Promise<Pipeline> => {
         return this.client.post(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']), pipeline)
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines'], SERVICE_CLUSTER_MAPPING.streams), pipeline)
             .then(response => response.body as Pipeline);
     }
 
@@ -63,7 +63,7 @@ export class StreamsService extends BaseApiService {
         activatePipelineRequest: ActivatePipelineRequest
     ): Promise<AdditionalProperties> => {
         return this.client.post(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'activate']), activatePipelineRequest)
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'activate'], SERVICE_CLUSTER_MAPPING.streams), activatePipelineRequest)
             .then(response => response.body as AdditionalProperties);
     }
 
@@ -76,7 +76,7 @@ export class StreamsService extends BaseApiService {
         deactivatePipelineRequest: ActivatePipelineRequest
     ): Promise<AdditionalProperties> => {
         return this.client.post(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'deactivate']), deactivatePipelineRequest)
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'deactivate'], SERVICE_CLUSTER_MAPPING.streams), deactivatePipelineRequest)
             .then(response => response.body as AdditionalProperties);
     }
 
@@ -88,7 +88,7 @@ export class StreamsService extends BaseApiService {
     public getPipeline = (
         id: string
     ): Promise<Pipeline> => {
-        const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]);
+        const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id], SERVICE_CLUSTER_MAPPING.streams);
         return this.client.get(url)
             .then(response => response.body as Pipeline);
     }
@@ -104,7 +104,7 @@ export class StreamsService extends BaseApiService {
         pipeline: PipelineRequest
     ): Promise<Pipeline> => {
         return this.client.put(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]), pipeline)
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id], SERVICE_CLUSTER_MAPPING.streams), pipeline)
             .then(response => response.body as Pipeline);
     }
 
@@ -115,7 +115,7 @@ export class StreamsService extends BaseApiService {
      */
     public deletePipeline = (id: string): Promise<PipelineDeleteResponse> => {
         return this.client.delete(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]))
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id], SERVICE_CLUSTER_MAPPING.streams))
             .then(response => response.body as PipelineDeleteResponse);
     }
 }
