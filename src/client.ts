@@ -238,7 +238,11 @@ export class ServiceClient {
         }
         // do not override the default url
         if (typeof cluster === 'string' && this.url.indexOf(DEFAULT_URL) < 0 ) {
-            this.url = CLUSTER_URL_MAPPING.api;
+            if (cluster === 'api') {
+                this.url = CLUSTER_URL_MAPPING.api;
+            } else {
+                this.url = CLUSTER_URL_MAPPING.apps;
+            }
         }
 
         path = `/${effectiveTenant}${servicePrefix}/${pathname.join('/')}`;
