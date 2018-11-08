@@ -97,8 +97,8 @@ describe('integration tests using action service', () => {
 
         it('should trigger action and get status', () => splunkCloud.action.triggerAction(webhookAction.name, notification).then(response => {
             const webhook = response as ActionTriggerResponse;
-            assert(webhook.StatusID != null);
-            assert(webhook.StatusURL != null);
+            assert.isNotNull(webhook.StatusID);
+            assert.isNotNull(webhook.StatusURL);
 
             splunkCloud.action.getActionStatus(webhookAction.name, webhook.StatusID as string).then(res => {
                 const actionStatus = res as ActionStatus;

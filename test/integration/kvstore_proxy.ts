@@ -22,7 +22,7 @@ describe('Integration tests for KVStore Endpoints', () => {
         return testDataset;
     });
     after(() => {
-        if (testDataset != null) {
+        if (testDataset !== null) {
             splunkCloud.catalog
                 .deleteDatasetByName(testDataset.name as string)
                 .catch(err => console.log(`Error cleaning the test dataset: ${err}`));

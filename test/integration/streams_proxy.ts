@@ -30,14 +30,14 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
     });
 
     afterEach(() => {
-        if (pipelineId1 != null) {
+        if (pipelineId1 !== null) {
             return splunkCloud.streams.deletePipeline(pipelineId1)
                 .catch(err => console.log(`Error cleaning the test pipeline1: ${err}`));
         }
     });
 
     afterEach(() => {
-        if (pipelineId2 != null) {
+        if (pipelineId2 !== null) {
             return splunkCloud.streams.deletePipeline(pipelineId2)
                 .catch(err => console.log(`Error cleaning the test pipeline2: ${err}`));
         }
