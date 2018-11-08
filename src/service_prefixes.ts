@@ -17,7 +17,7 @@ export const CATALOG_SERVICE_PREFIX: string = '/catalog/v1beta1';
 /**
  * @private
  */
-export const INGEST_SERVICE_PREFIX: string = '/ingest/v1beta1';
+export const INGEST_SERVICE_PREFIX: string = '/ingest/v1beta2';
 
 /**
  * @private
