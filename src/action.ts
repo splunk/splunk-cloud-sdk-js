@@ -16,7 +16,7 @@ export class ActionService extends BaseApiService {
      * @returns Promise of all actions
      */
     public getActions = (): Promise<Array<EmailAction | WebhookAction | SNSAction>> => {
-        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX,['actions'], SERVICE_CLUSTER_MAPPING.action))
+        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX,['actions']))
             .then(response => response.body as Array<EmailAction | WebhookAction | SNSAction>);
     }
 
@@ -26,7 +26,7 @@ export class ActionService extends BaseApiService {
      * @return Promise of an action
      */
     public getAction = (name: ActionBase['name']): Promise<EmailAction | WebhookAction | SNSAction> => {
-        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name], SERVICE_CLUSTER_MAPPING.action))
+        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
             .then(response => response.body as EmailAction | WebhookAction | SNSAction);
     }
 
@@ -36,7 +36,7 @@ export class ActionService extends BaseApiService {
      * @return Promise of object
      */
     public deleteAction = (name: ActionBase['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name], SERVICE_CLUSTER_MAPPING.action))
+        return this.client.delete(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
             .then(response => response.body);
     }
 
@@ -46,7 +46,7 @@ export class ActionService extends BaseApiService {
      * @return Promise of an action
      */
     public createAction = (action: EmailAction | WebhookAction | SNSAction): Promise<EmailAction | WebhookAction | SNSAction> => {
-        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions'], SERVICE_CLUSTER_MAPPING.action), action)
+        return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
             .then(response => response.body as EmailAction | WebhookAction | SNSAction);
     }
 
@@ -57,7 +57,7 @@ export class ActionService extends BaseApiService {
      * @return Promise of an action
      */
     public updateAction = (name: ActionBase['name'], action: ActionUpdateFields): Promise<EmailAction | WebhookAction | SNSAction> => {
-        return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name], SERVICE_CLUSTER_MAPPING.action), action)
+        return this.client.patch(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
             .then(response => response.body as EmailAction | WebhookAction | SNSAction);
     }
 
@@ -68,7 +68,7 @@ export class ActionService extends BaseApiService {
      * @return Promise of actionTriggerResponse
      */
     public triggerAction = (name: ActionBase['name'], notification: ActionNotification): Promise<ActionTriggerResponse> => {
-        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name], SERVICE_CLUSTER_MAPPING.action), notification)
+        return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), notification)
             .then(response => {
                 const key = 'location';
                 if (response.headers.has(key)) {
@@ -94,7 +94,7 @@ export class ActionService extends BaseApiService {
      * @return Promise of actionStatus
      */
     public getActionStatus = (name: ActionBase['name'], statusId: string): Promise<ActionStatus> => {
-        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId], SERVICE_CLUSTER_MAPPING.action))
+        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
             .then(response => response.body as ActionStatus);
     }
 }

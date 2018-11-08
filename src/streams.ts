@@ -20,8 +20,8 @@ export class StreamsService extends BaseApiService {
     public compileDslToUpl = (
         dsl: DslCompilationRequest
     ): Promise<UplPipeline> => {
-        return this.client.post(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'compile-dsl'], SERVICE_CLUSTER_MAPPING.streams), dsl)
+        return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'compile-dsl']), dsl)
             .then(response => response.body as UplPipeline);
     }
 
@@ -33,11 +33,11 @@ export class StreamsService extends BaseApiService {
     public getPipelines = (
         queryArgs: PipelineQueryParams = {}
     ): Promise<PaginatedPipelineResponse> => {
-        const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines'], SERVICE_CLUSTER_MAPPING.streams);
+        const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']);
         const requestOptions: RequestOptions = {
             query: queryArgs as QueryArgs
         };
-        return this.client.get(url, requestOptions)
+        return this.client.get(SERVICE_CLUSTER_MAPPING.streams, url, requestOptions)
             .then(response => response.body as PaginatedPipelineResponse);
     }
 
@@ -49,8 +49,8 @@ export class StreamsService extends BaseApiService {
     public createPipeline = (
         pipeline: PipelineRequest
     ): Promise<Pipeline> => {
-        return this.client.post(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines'], SERVICE_CLUSTER_MAPPING.streams), pipeline)
+        return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']), pipeline)
             .then(response => response.body as Pipeline);
     }
 
@@ -62,8 +62,8 @@ export class StreamsService extends BaseApiService {
     public activatePipeline = (
         activatePipelineRequest: ActivatePipelineRequest
     ): Promise<AdditionalProperties> => {
-        return this.client.post(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'activate'], SERVICE_CLUSTER_MAPPING.streams), activatePipelineRequest)
+        return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'activate']), activatePipelineRequest)
             .then(response => response.body as AdditionalProperties);
     }
 
@@ -75,8 +75,8 @@ export class StreamsService extends BaseApiService {
     public deactivatePipeline = (
         deactivatePipelineRequest: ActivatePipelineRequest
     ): Promise<AdditionalProperties> => {
-        return this.client.post(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'deactivate'], SERVICE_CLUSTER_MAPPING.streams), deactivatePipelineRequest)
+        return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'deactivate']), deactivatePipelineRequest)
             .then(response => response.body as AdditionalProperties);
     }
 
@@ -88,8 +88,8 @@ export class StreamsService extends BaseApiService {
     public getPipeline = (
         id: string
     ): Promise<Pipeline> => {
-        const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id], SERVICE_CLUSTER_MAPPING.streams);
-        return this.client.get(url)
+        const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]);
+        return this.client.get(SERVICE_CLUSTER_MAPPING.streams, url)
             .then(response => response.body as Pipeline);
     }
 
@@ -103,8 +103,8 @@ export class StreamsService extends BaseApiService {
         id: string,
         pipeline: PipelineRequest
     ): Promise<Pipeline> => {
-        return this.client.put(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id], SERVICE_CLUSTER_MAPPING.streams), pipeline)
+        return this.client.put(SERVICE_CLUSTER_MAPPING.streams,
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]), pipeline)
             .then(response => response.body as Pipeline);
     }
 
@@ -114,8 +114,8 @@ export class StreamsService extends BaseApiService {
      * @returns A promise pf a pipeline delete response containing details on the deleted pipeline
      */
     public deletePipeline = (id: string): Promise<PipelineDeleteResponse> => {
-        return this.client.delete(
-            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id], SERVICE_CLUSTER_MAPPING.streams))
+        return this.client.delete(SERVICE_CLUSTER_MAPPING.streams,
+            this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]))
             .then(response => response.body as PipelineDeleteResponse);
     }
 }

@@ -3,8 +3,7 @@ const { assert } = require("chai");
 const config = require("../config");
 const { SplunkCloud } = require('../../splunk');
 
-const splunkCloud = new SplunkCloud({'url': config.playgroundHost, 'tokenSource': config.playgroundAuthToken, 'defaultTenant': config.playgroundTenant });
-
+const splunkCloud = new SplunkCloud({'urls': {'api': config.stagingApiHost, 'app': config.stagingAppsHost}, 'tokenSource': config.stagingAuthToken, 'defaultTenant': config.stagingTenant });
 
 // TODO: Replace strings 'CREATED', 'ACTIVATED' with enum PipelineStatus values
 describe("Integration tests for Streams Pipeline Endpoints", () => {

@@ -3,8 +3,8 @@ const { SplunkCloud } = require('../../splunk');
 const { EventBatcher } = require('../../ingest_event_batcher');
 const { assert, expect } = require('chai');
 
-const splunk = new SplunkCloud({'url': config.playgroundHost, 'tokenSource': config.playgroundAuthToken, 'defaultTenant': config.playgroundTenant });
-const splunkBadToken = new SplunkCloud({'url': config.playgroundHost, 'tokenSource': config.invalidAuthToken, 'defaultTenant': config.playgroundTenant });
+const splunk = new SplunkCloud({'urls': {'api': config.stagingApiHost, 'app': config.stagingAppsHost}, 'tokenSource': config.stagingAuthToken, 'defaultTenant': config.stagingTenant });
+const splunkBadToken = new SplunkCloud({'urls': {'api': config.stagingApiHost, 'app': config.stagingAppsHost}, 'tokenSource': config.invalidAuthToken, 'defaultTenant': config.stagingTenant });
 
 describe('integration tests for Ingest Endpoints', () => {
 

@@ -157,7 +157,7 @@ export class SearchService extends BaseApiService {
      * Get the matching list of search jobs.
      */
     public listJobs = (jobArgs: any = {}): Promise<SearchJob[]> => { // TODO: Flesh out JobsRequest
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs'], SERVICE_CLUSTER_MAPPING.search), jobArgs)
+        return this.client.get(SERVICE_CLUSTER_MAPPING.search, this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
             .then(response => response.body as SearchJob[]);
     }
 
@@ -167,7 +167,7 @@ export class SearchService extends BaseApiService {
      * @return
      */
     public createJob = (jobArgs: SearchArgs): Promise<SearchJob> => {
-        return this.client.post(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs'], SERVICE_CLUSTER_MAPPING.search), jobArgs)
+        return this.client.post(SERVICE_CLUSTER_MAPPING.search, this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs']), jobArgs)
             .then(response => response.body as SearchJob);
     }
 
@@ -178,7 +178,7 @@ export class SearchService extends BaseApiService {
      * @return Description of job
      */
     public getJob = (jobId: string): Promise<SearchJob> => {
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId], SERVICE_CLUSTER_MAPPING.search))
+        return this.client.get(SERVICE_CLUSTER_MAPPING.search, this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]))
             .then(response => response.body as SearchJob);
     }
 
@@ -188,7 +188,7 @@ export class SearchService extends BaseApiService {
      * @param update
      */
     public updateJob = (jobId: string, update: UpdateJob): Promise<UpdateJobResponse> => {
-        return this.client.patch(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId], SERVICE_CLUSTER_MAPPING.search), update)
+        return this.client.patch(SERVICE_CLUSTER_MAPPING.search, this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId]), update)
             .then(response => response.body as UpdateJobResponse);
     }
 
@@ -228,7 +228,7 @@ export class SearchService extends BaseApiService {
      */
     public getResults = (jobId: string, args: FetchResultsRequest = {}): Promise<SearchResults | ResultsNotReadyResponse> => {
         const queryArgs: QueryArgs = args || {};
-        return this.client.get(this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results'], SERVICE_CLUSTER_MAPPING.search), { query: queryArgs })
+        return this.client.get(SERVICE_CLUSTER_MAPPING.search, this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), { query: queryArgs })
             .then(response => {
                 if (typeof response.body === 'object') {
                     if ('results' in response.body) {

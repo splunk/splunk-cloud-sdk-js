@@ -17,7 +17,7 @@ export class IngestService extends BaseApiService {
      * @return promise that will be resolved when the ingest service has accepted the events for indexing
      */
     public postEvents = (events: Event[]): Promise<any> => {
-        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['events'], SERVICE_CLUSTER_MAPPING.ingest), events)
+        return this.client.post(SERVICE_CLUSTER_MAPPING.ingest, this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), events)
             .then(response => response.body);
     }
 
@@ -27,7 +27,7 @@ export class IngestService extends BaseApiService {
      * @return promise that will be resolved when the ingest service has accepted the metrics for indexing
      */
     public postMetrics = (metrics: MetricEvent[]): Promise<any> => {
-        return this.client.post(this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics'],SERVICE_CLUSTER_MAPPING.ingest), metrics)
+        return this.client.post(SERVICE_CLUSTER_MAPPING.ingest, this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics']), metrics)
             .then(response => response.body);
     }
 }

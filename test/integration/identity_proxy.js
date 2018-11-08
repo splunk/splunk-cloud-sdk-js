@@ -3,9 +3,9 @@ const config = require('../config');
 const { SplunkCloud } = require('../../splunk');
 const { assert } = require('chai');
 
-const tenantID = config.playgroundTenant;
+const tenantID = config.stagingTenant;
 
-const splunk = new SplunkCloud({'url': config.playgroundHost, 'tokenSource': config.playgroundAuthToken, 'defaultTenant': config.playgroundTenant });
+const splunk = new SplunkCloud({'urls': {'api': config.stagingApiHost, 'app': config.stagingAppsHost}, 'tokenSource': config.stagingAuthToken, 'defaultTenant': config.stagingTenant });
 
 // Scenario:
 // Integration test for Tenant endpoints

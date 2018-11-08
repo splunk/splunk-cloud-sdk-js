@@ -17,8 +17,8 @@ export class KVStoreService extends BaseApiService {
      * @returns KVStore health status
      */
     public getHealthStatus = (): Promise<any> => {
-        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['ping'], SERVICE_CLUSTER_MAPPING.kvstore);
-        return this.client.get(url)
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['ping']);
+        return this.client.get(SERVICE_CLUSTER_MAPPING.kvstore, url)
             .then(response => response.body as PingOKBody);
     }
 
@@ -32,8 +32,8 @@ export class KVStoreService extends BaseApiService {
             'collections',
             collection,
             'indexes',
-        ], SERVICE_CLUSTER_MAPPING.kvstore);
-        return this.client.get(url)
+        ]);
+        return this.client.get(SERVICE_CLUSTER_MAPPING.kvstore, url)
             .then(response => response.body as IndexDescription[]);
     }
 
@@ -48,8 +48,8 @@ export class KVStoreService extends BaseApiService {
             'collections',
             collection,
             'indexes',
-        ], SERVICE_CLUSTER_MAPPING.kvstore);
-        return this.client.post(url, index)
+        ]);
+        return this.client.post(SERVICE_CLUSTER_MAPPING.kvstore, url, index)
             .then(response => response.body as IndexDescription);
     }
 
@@ -60,13 +60,13 @@ export class KVStoreService extends BaseApiService {
      * @returns A promise that will be resolved when the index is deleted
      */
     public deleteIndex = (collection: string, indexName: string): Promise<any> => {
-        return this.client.delete(
+        return this.client.delete(SERVICE_CLUSTER_MAPPING.kvstore,
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
                 'collections',
                 collection,
                 'indexes',
                 indexName,
-            ], SERVICE_CLUSTER_MAPPING.kvstore)
+            ])
         )
             .then(response => response.body);
     }
@@ -81,8 +81,8 @@ export class KVStoreService extends BaseApiService {
         const insertRecordURL = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
-        ], SERVICE_CLUSTER_MAPPING.kvstore);
-        return this.client.post(insertRecordURL, record)
+        ]);
+        return this.client.post(SERVICE_CLUSTER_MAPPING.kvstore, insertRecordURL, record)
             .then(response => response.body as Key);
     }
 
@@ -96,8 +96,8 @@ export class KVStoreService extends BaseApiService {
         collection: string,
         records: Array<Map<string, string>>
     ): Promise<string[]> => {
-        return this.client.post(
-            this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'batch'], SERVICE_CLUSTER_MAPPING.kvstore),
+        return this.client.post(SERVICE_CLUSTER_MAPPING.kvstore,
+            this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'batch']),
             records
         )
             .then(response => response.body as string[]);
@@ -117,11 +117,11 @@ export class KVStoreService extends BaseApiService {
             'collections',
             collection,
             'query',
-        ], SERVICE_CLUSTER_MAPPING.kvstore);
+        ]);
         const requestOptions: RequestOptions = {
             query: filter
         };
-        return this.client.get(url, requestOptions)
+        return this.client.get(SERVICE_CLUSTER_MAPPING.kvstore, url, requestOptions)
             .then(response => response.body as Map<string, string>);
     }
 
@@ -132,8 +132,8 @@ export class KVStoreService extends BaseApiService {
      * @returns the record associated with the given key
      */
     public getRecordByKey = (collection: string, key: string): Promise<Map<string, string>> => {
-        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key], SERVICE_CLUSTER_MAPPING.kvstore);
-        return this.client.get(url).then(response => response.body as Map<string, string>);
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key]);
+        return this.client.get(SERVICE_CLUSTER_MAPPING.kvstore, url).then(response => response.body as Map<string, string>);
     }
 
     /**
@@ -149,11 +149,11 @@ export class KVStoreService extends BaseApiService {
         const url: string = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
-        ], SERVICE_CLUSTER_MAPPING.kvstore);
+        ]);
         const requestOptions: RequestOptions = {
             query: filter
         };
-        return this.client.get(url, requestOptions)
+        return this.client.get(SERVICE_CLUSTER_MAPPING.kvstore, url, requestOptions)
             .then(response => response.body as Map<string, string>);
     }
 
@@ -164,11 +164,11 @@ export class KVStoreService extends BaseApiService {
      * @returns A promise that will be resolved when the matching records are deleted
      */
     public deleteRecords = (collection: string, filter?: QueryArgs): Promise<any> => {
-        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query'], SERVICE_CLUSTER_MAPPING.kvstore);
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query']);
         const requestOptions: RequestOptions = {
             query: filter
         };
-        return this.client.delete(url, requestOptions).then(response => response.body);
+        return this.client.delete(SERVICE_CLUSTER_MAPPING.kvstore, url, requestOptions).then(response => response.body);
     }
 
     /**
@@ -178,8 +178,8 @@ export class KVStoreService extends BaseApiService {
      * @returns A promise that will be resolved when the record matching the supplied key is deleted
      */
     public deleteRecordByKey = (collection: string, key: string): Promise<any> => {
-        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key], SERVICE_CLUSTER_MAPPING.kvstore);
-        return this.client.delete(url).then(response => response.body);
+        const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key]);
+        return this.client.delete(SERVICE_CLUSTER_MAPPING.kvstore, url).then(response => response.body);
     }
 }
 

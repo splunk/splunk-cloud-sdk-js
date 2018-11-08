@@ -2,7 +2,7 @@ const config = require('../config');
 const { SplunkCloud } = require('../../splunk');
 const { assert, expect } = require("chai");
 
-const splunk = new SplunkCloud({'url': config.playgroundHost, 'tokenSource': config.playgroundAuthToken, 'defaultTenant': config.playgroundTenant });
+const splunk = new SplunkCloud({'urls': {'api': config.stagingApiHost, 'app': config.stagingAppsHost}, 'tokenSource': config.stagingAuthToken, 'defaultTenant': config.stagingTenant });
 
 const standardQuery = {
     "query": "| from index:main | head 5",

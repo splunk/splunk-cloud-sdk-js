@@ -51,11 +51,3 @@ export const SERVICE_CLUSTER_MAPPING = {
     action: 'api',
     streams: 'api'
 };
-
-/**
- * @private
- */
-export const CLUSTER_URL_MAPPING = {
-    api: 'api.staging.splunkbeta.com',
-    apps:'apps.staging.splunkbeta.com'
-};
