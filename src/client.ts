@@ -7,6 +7,11 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 import { AuthManager } from './auth_manager';
 import agent from './version';
 
+const DEFAULT_URLS={
+    api: 'https://api.splunkbeta.com',
+    app: 'https://apps.splunkbeta.com'
+};
+
 export interface SplunkErrorParams {
     message: string;
     code?: string;
@@ -109,10 +114,6 @@ export class ServiceClient {
     };
     private readonly tenant?: string;
     private responseHooks: ResponseHook[] = [];
-    private DEFAULT_URLS={
-        api: 'https://api.splunkbeta.com',
-        app: 'https://apps.splunkbeta.com'
-    };
 
     /**
      * Create a ServiceClient with the given URL and an auth token
@@ -132,7 +133,7 @@ export class ServiceClient {
         } else {
             throw new SplunkError({ message: 'Unsupported token source' });
         }
-        this.urls = args.urls || this.DEFAULT_URLS;
+        this.urls = args.urls || DEFAULT_URLS;
         this.tenant = args.defaultTenant;
     }
 
@@ -190,15 +191,16 @@ export class ServiceClient {
      * (concatenates the URL with the path)
      */
     private buildUrl(cluster: string, path: string, query?: QueryArgs): string {
+        const serviceCluster : string = this.urls[cluster] || DEFAULT_URLS.api;
         if (query && Object.keys(query).length > 0) {
             const encoder = encodeURIComponent;
             const queryEncoded = Object.keys(query)
                 .filter(k => query[k] != null) // filter out undefined and null
                 .map(k => `${encoder(k)}=${encoder(String(query[k]))}`)
                 .join('&');
-            return `${this.urls[cluster]}${path}?${queryEncoded}`;
+            return `${serviceCluster}${path}?${queryEncoded}`;
         }
-        return `${this.urls[cluster]}${path}`;
+        return `${serviceCluster}${path}`;
     }
 
     /**
