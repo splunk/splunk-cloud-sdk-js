@@ -6,9 +6,7 @@ import { ServiceClient } from '../../src/client';
 import config from '../config';
 
 const stubbyUrl = `http://${config.stubbyHost}:8882`;
-
 chai.use(chaiAsPromised);
-
 const { expect } = chai;
 
 describe('Basic client functionality', () => {
@@ -157,11 +155,11 @@ describe('Service client args', () => {
     });
 
     it('should take a token manager (like splunk-cloud-auth)', () => {
-        function authObj() { return config.stubbyAuthToken; }
+        function authFunc() { return config.stubbyAuthToken; }
 
         const s: ServiceClient = new ServiceClient({
             url: stubbyUrl,
-            tokenSource: authObj,
+            tokenSource: authFunc,
             defaultTenant: config.stubbyTenant
         });
         expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);

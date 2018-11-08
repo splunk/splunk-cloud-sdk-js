@@ -339,9 +339,8 @@ export interface Field {
     id?: string; // TODO: come back and make a CreateField type
     name: string;
     dataSetId?: string;
-    // TODO: casing is awkward on these 2 and inconsistent with test usage, what does the spec say?
-    dataType?: DataType;
-    fieldType?: FieldType;
+    datatype?: Datatype;
+    fieldtype?: Fieldtype;
     prevalence?: Prevalence;
     created?: string;
     modified?: string;
@@ -351,7 +350,7 @@ export interface Field {
 }
 
 // TODO: verify that these str values conform to the spec
-export enum DataType {
+export enum Datatype {
     DATE = 'D',
     NUMBER = 'N',
     OBJECT_ID = 'O',
@@ -360,7 +359,7 @@ export enum DataType {
 }
 
 // TODO: verify that these str values conform to the spec
-export enum FieldType {
+export enum Fieldtype {
     DIMENSION = 'D',
     MEASURE = 'M',
     UNKNOWN = 'U',
@@ -378,7 +377,7 @@ export interface CreateRule {
     name?: string;
     module?: string;
     match?: string;
-    owne?: string;
+    owner?: string;
     actions?: Action[];
 }
 

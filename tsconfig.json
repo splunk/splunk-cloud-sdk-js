@@ -14,9 +14,10 @@
     "declaration": true,
     "removeComments": false,
     "downlevelIteration": true,
+    "noUnusedLocals": true,
     "strict": true,
     "target": "es3",
-    "types": [],
+    "types": ["isomorphic-fetch"],
     "sourceMap": true
   },
   "include": [

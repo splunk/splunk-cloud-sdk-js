@@ -77,8 +77,8 @@ export class ActionService extends BaseApiService {
                         const parts = responseStr.split('/status/');
                         if (parts.length === 2) {
                             return Promise.resolve({
-                                'StatusID': parts[1],
-                                'StatusURL': responseStr
+                                StatusID: parts[1],
+                                StatusURL: responseStr
                             } as ActionTriggerResponse);
                         }
                     }
@@ -122,12 +122,11 @@ export interface ActionStatus {
     message: string;
 }
 
-// ActionTriggerResponse for returning status url and parsed statusID (if possible)
+// ActionTriggerResponse for returning status url and id
 export interface ActionTriggerResponse {
-    statusId?: string;
-    statusUrl?: string;
+    StatusID?: string;
+    StatusURL?: string;
 }
-
 
 // ActionError defines format for returned errors
 export interface ActionError {
@@ -206,7 +205,7 @@ export interface ActionUpdateFields {
 
     // Webhook action fields:
     // WebhookURL to trigger Webhook action
-    webhookUrl?: URL;
+    webhookUrl?: string;
 }
 
 
@@ -232,7 +231,7 @@ export interface WebhookAction extends ActionBase {
     /**
      * Only allows https scheme. Only allows hostnames that end with "slack.com", "webhook.site", "sendgrid.com", "zapier.com", "hipchat.com", "amazon.com", and "amazonaws.com"
      */
-    webhookUrl: URL;
+    webhookUrl: string;
 }
 
 export interface ActionBase {

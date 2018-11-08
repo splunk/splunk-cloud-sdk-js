@@ -40,7 +40,8 @@
         ],
         "no-trailing-whitespace": true,
         "semicolon": true,
-        "no-unnecessary-callback-wrapper": true
+        "no-unnecessary-callback-wrapper": true,
+        "object-literal-key-quotes": [true, "as-needed"]
     },
     "rulesDirectory": []
 }

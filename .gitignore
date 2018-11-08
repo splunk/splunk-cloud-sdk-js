@@ -3,6 +3,7 @@
 /src/*.d.ts
 /*.d.ts
 /test/**/*.d.ts
+/test/**/*.js
 ./common/ # built dir
 !/.eslintrc.js
 

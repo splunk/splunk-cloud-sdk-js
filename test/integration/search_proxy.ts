@@ -11,13 +11,13 @@ const tenantID = config.playgroundTenant;
 const splunk = new SplunkCloud(splunkCloudHost, token, tenantID);
 
 const standardQuery = {
-    'query': '| from index:main | head 5'
+    query: '| from index:main | head 5'
 };
 
 const moduleQuery = {
-    'query': '| from index:main | head 5',
+    query: '| from index:main | head 5',
     // catalog service isn't ready for handling module
-    'module': ''
+    module: ''
 };
 
 describe('integration tests Using Search APIs', () => {

@@ -15,17 +15,17 @@ const splunkBadToken = new SplunkCloud(splunkCloudHost, invalidToken, tenantID);
 
 describe('integration tests for Ingest Endpoints', () => {
 
-    const successResponse = { 'code': 'SUCCESS', 'message': 'Success' };
-    const event1: Event = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774569, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - Will generate GUID, as none found on this server.' };
-    const event2: Event = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774570, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A' };
-    const event3: Event = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774571, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb4".' };
-    const event4: Event = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774572, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb5".' };
-    const event5: Event = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774573, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb6".' };
-    const event6: Event = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774574, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb7".' };
-    const event7: Event = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774575, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb8".' };
-    const event8: Event = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774576, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb9".' };
-    const event9: Event = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774577, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdc0".' };
-    const event10: Event = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774578, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdc1".' };
+    const successResponse = { code: 'SUCCESS', message: 'Success' };
+    const event1: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774569, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - Will generate GUID, as none found on this server.' };
+    const event2: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774570, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A' };
+    const event3: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774571, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - My server name is "9765f1bebdb4".' };
+    const event4: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774572, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - My server name is "9765f1bebdb5".' };
+    const event5: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774573, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - My server name is "9765f1bebdb6".' };
+    const event6: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774574, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - My server name is "9765f1bebdb7".' };
+    const event7: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774575, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - My server name is "9765f1bebdb8".' };
+    const event8: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774576, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - My server name is "9765f1bebdb9".' };
+    const event9: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774577, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - My server name is "9765f1bebdc0".' };
+    const event10: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774578, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - My server name is "9765f1bebdc1".' };
 
     describe('Events Endpoint', () => {
 
@@ -97,7 +97,7 @@ describe('integration tests for Ingest Endpoints', () => {
         describe('Post batch 1 events', () => {
             it('should create 1 batch event and wait for timer to send it', () => {
                 // 1 total events, batch size 50000, batch count 10, 3000 ms
-                const eb: EventBatcher = new EventBatcher(splunk.ingest, 5, 10, 3000);
+                const eb: EventBatcher = new EventBatcher(splunk.ingest, 5000, 10, 3000);
                 try {
                     const result = eb.add(event1);
                     assert.isNull(result);

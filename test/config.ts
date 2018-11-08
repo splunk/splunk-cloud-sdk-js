@@ -1,5 +1,17 @@
-import 'isomorphic-fetch';
-import 'node';
+/*
+ * Do not touch this process type declaration unless
+ * you're prepared to deal with tsc compiler issues with @types/node
+ * when trying to use the following import as a replacement.
+ *
+ * import 'node';
+ *
+ * See https://stackoverflow.com/a/50235545/2785681
+ */
+declare var process: {
+    env: {
+        [key: string]: string;
+    }
+};
 
 export default {
     stubbyHost: process.env.CI ? 'splunk-cloud-sdk-shared-stubby' : 'localhost',

@@ -4,9 +4,9 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
-import { AuthManager } from './auth_manager';
+import 'isomorphic-fetch';
+import AuthManager from './auth_manager';
 import agent from './version';
-
 const DEFAULT_URL = 'https://api.splunkbeta.com';
 
 export interface SplunkErrorParams {
@@ -18,18 +18,19 @@ export interface SplunkErrorParams {
 }
 
 export class SplunkError extends Error implements SplunkErrorParams {
-
     public code?: string;
     public httpStatusCode?: number;
     public details?: object | any[];
     public moreInfo?: string;
 
-    constructor(errorParams: SplunkErrorParams) {
-        super(errorParams.message);
-        this.code = errorParams.code;
-        this.details = errorParams.details;
-        this.moreInfo = errorParams.moreInfo;
-        this.httpStatusCode = errorParams.httpStatusCode;
+    constructor(errorParams: SplunkErrorParams | string) {
+        super(typeof errorParams === 'string' ? errorParams : errorParams.message);
+        if (typeof errorParams !== 'string') {
+            this.code = errorParams.code;
+            this.details = errorParams.details;
+            this.moreInfo = errorParams.moreInfo;
+            this.httpStatusCode = errorParams.httpStatusCode;
+        }
     }
 }
 
@@ -38,7 +39,6 @@ export class SplunkError extends Error implements SplunkErrorParams {
  * @private
  */
 function handleResponse(response: Response): Promise<HTTPResponse> {
-
     if (response.ok) {
         if (response.headers.get('Content-Type') === ContentType.CSV || response.headers.get('Content-Type') === ContentType.GZIP) {
             return response.text()
@@ -74,8 +74,7 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
  * @private
  */
 // TODO(david): Should we throw if response is empty? We may get here on DELETE
-function decodeJson(text: string): any {
-    // TODO: change to returning object
+function decodeJson(text: string): object | string {
     if (text === '') {
         return text;
     }
@@ -113,7 +112,9 @@ export class ServiceClient {
      * @param args : ServiceClientArgs Url to Splunk Cloud instance
      */
     constructor(args: ServiceClientArgs | string, token?: string, tenant?: string) {
-        if (typeof args === 'string') {
+        if (typeof args === 'undefined') {
+            throw new Error('args must be specified');
+        } else if (typeof args === 'string') {
             if (typeof token === 'string') {
                 this.tokenSource = () => token;
             } else {
@@ -129,7 +130,7 @@ export class ServiceClient {
             } else if (typeof authManager === 'function') {
                 // If we have a function, just call it when we need a token
                 this.tokenSource = authManager;
-            } else if ('getAccessToken' in authManager) {
+            } else if (typeof authManager !== 'undefined' && 'getAccessToken' in authManager) {
                 // Else wrap a token manager.
                 this.tokenSource = () => authManager.getAccessToken();
             } else {
@@ -214,7 +215,7 @@ export class ServiceClient {
         // TODO: Cache
 
         const requestParamHeaders: Headers = new Headers({
-            'Authorization': `Bearer ${this.tokenSource()}`,
+            Authorization: `Bearer ${this.tokenSource()}`,
             'Content-Type': ContentType.JSON,
             'Splunk-Client': `${agent.useragent}/${agent.version}`,
         });

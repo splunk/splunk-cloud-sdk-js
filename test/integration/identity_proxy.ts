@@ -88,11 +88,11 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
     describe('Test Group Member Management', () => {
         const groupInput = {
-            'name': testGroupName,
-            'roles': [
+            name: testGroupName,
+            roles: [
                 'roles.test_user'
             ],
-            'members': [
+            members: [
                 'sdk_test@splunk.com'
             ]
         };
@@ -120,7 +120,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should add a Role to the Group', () =>
-            splunk.identity.addRoleToGroup(testGroupName, { 'name': testRole }).then(data => {
+            splunk.identity.addRoleToGroup(testGroupName, { name: testRole }).then(data => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.group, testGroupName);
                 assert.equal(data.role, testRole);
@@ -144,7 +144,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should create a Member', () =>
-            splunk.identity.addMember({ 'name': testMember }).then(data => {
+            splunk.identity.addMember({ name: testMember }).then(data => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.name, testMember);
                 assert.equal(data.tenant, tenantID);
@@ -166,12 +166,12 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should delete the member from the tenant and group ignore response', () =>
-            splunk.identity.removeGroupMember(testGroupName, testPrincipal).then(response => {
+            splunk.identity.removeGroupMember(testGroupName, testPrincipal).then(() => {
                 assert(true);
             }));
 
         it('should add a Member to the Group', () =>
-            splunk.identity.addGroupMember(testGroupName, { 'name': testPrincipal }).then(data => {
+            splunk.identity.addGroupMember(testGroupName, { name: testPrincipal }).then(data => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.group, testGroupName);
                 assert.equal(data.principal, testPrincipal);
@@ -233,5 +233,4 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 assert(!response);
             }));
     });
-
 });

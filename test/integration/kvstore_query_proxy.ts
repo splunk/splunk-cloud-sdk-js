@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
-import { createKVCollectionDataset, createRecord, deleteAllDatasets } from './catalog_proxy';
+import { createKVCollectionDataset, createRecord /*, deleteAllDatasets */ } from './catalog_proxy';
 
 const splunkCloudHost = config.playgroundHost;
 const token = config.playgroundAuthToken;
@@ -35,10 +35,12 @@ describe('Integration tests for KVStore Query Endpoints', () => {
     };
 
     beforeEach(() => {
-        return deleteAllDatasets().then(response => {
-            testDataset = createKVCollectionDataset(testNamespace, testCollection);
-            return testDataset;
-        });
+        // return deleteAllDatasets().then(() => {
+        //     testDataset = createKVCollectionDataset(testNamespace, testCollection);
+        //     return testDataset;
+        // });
+        testDataset = createKVCollectionDataset(testNamespace, testCollection);
+        return testDataset;
     });
 
     // -------------------------------------------------------------------------
@@ -60,9 +62,9 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     const firstRecord = queryRecordsResponse[0];
 
                     assert.equal(queryRecordsResponse.length, 1);
-                    assert.equal(firstRecord.get('TEST_KEY_01'), 'A');
-                    assert.equal(firstRecord.get('TEST_KEY_02'), 'B');
-                    assert.equal(firstRecord.get('TEST_KEY_03'), 'C');
+                    assert.equal(firstRecord.TEST_KEY_01, 'A');
+                    assert.equal(firstRecord.TEST_KEY_02, 'B');
+                    assert.equal(firstRecord.TEST_KEY_03, 'C');
                 });
         });
     });
@@ -80,9 +82,9 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     const firstRecord = queryRecordsResponse[0];
 
                     assert.equal(queryRecordsResponse.length, 1);
-                    assert.equal(firstRecord.get('TEST_KEY_01'), 'A');
-                    assert.equal(firstRecord.get('TEST_KEY_02'), 'B');
-                    assert.equal(firstRecord.get('TEST_KEY_03'), 'C');
+                    assert.equal(firstRecord.TEST_KEY_01, 'A');
+                    assert.equal(firstRecord.TEST_KEY_02, 'B');
+                    assert.equal(firstRecord.TEST_KEY_03, 'C');
                 });
         });
         it('Should filter records correctly using the fields parameter for include selection', () => {
@@ -96,7 +98,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     const firstRecord = queryRecordsResponse[0];
 
                     assert.equal(queryRecordsResponse.length, 1);
-                    assert.equal(firstRecord.get('TEST_KEY_01'), 'A');
+                    assert.equal(firstRecord.TEST_KEY_01, 'A');
                 });
         });
         it('Should filter records correctly using the fields parameter for exclude selection', () => {
@@ -114,7 +116,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                 .then(queryRecordsResponse => {
                     assert.equal(queryRecordsResponse.length, 3);
                     for (const recordObject of queryRecordsResponse) {
-                        assert(recordObject.size === 3);
+                        assert.equal(Object.keys(recordObject).length, 3);
                     }
                 });
         });
@@ -287,9 +289,9 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                 })
                 .then(queryRecordsResponse => {
                     assert.equal(queryRecordsResponse.length, 3);
-                    assert.equal(queryRecordsResponse[0].get('TEST_KEY_02'), 'A');
-                    assert.equal(queryRecordsResponse[1].get('TEST_KEY_02'), 'B');
-                    assert.equal(queryRecordsResponse[2].get('TEST_KEY_02'), 'C');
+                    assert.equal(queryRecordsResponse[0].TEST_KEY_02, 'A');
+                    assert.equal(queryRecordsResponse[1].TEST_KEY_02, 'B');
+                    assert.equal(queryRecordsResponse[2].TEST_KEY_02, 'C');
                 });
         });
         it('Should successfully return the records in default order when a non-existent key is specified', () => {
@@ -306,9 +308,9 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                 })
                 .then(queryRecordsResponse => {
                     assert.equal(queryRecordsResponse.length, 3);
-                    assert.equal(queryRecordsResponse[0].get('TEST_KEY_01'), 'A');
-                    assert.equal(queryRecordsResponse[1].get('TEST_KEY_01'), 'B');
-                    assert.equal(queryRecordsResponse[2].get('TEST_KEY_01'), 'C');
+                    assert.equal(queryRecordsResponse[0].TEST_KEY_01, 'A');
+                    assert.equal(queryRecordsResponse[1].TEST_KEY_01, 'B');
+                    assert.equal(queryRecordsResponse[2].TEST_KEY_01, 'C');
                 });
         });
     });
@@ -330,9 +332,9 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                 })
                 .then(queryRecordsResponse => {
                     assert.equal(queryRecordsResponse.length, 1);
-                    assert.equal(queryRecordsResponse[0].get('TEST_KEY_02'), 'A');
-                    assert.equal(queryRecordsResponse[0].get('TEST_KEY_03'), 'B');
-                    assert.equal(queryRecordsResponse[0].get('TEST_KEY_01'), 'C');
+                    assert.equal(queryRecordsResponse[0].TEST_KEY_02, 'A');
+                    assert.equal(queryRecordsResponse[0].TEST_KEY_03, 'B');
+                    assert.equal(queryRecordsResponse[0].TEST_KEY_01, 'C');
                 });
         });
     });

@@ -5,7 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import BaseApiService from './baseapiservice';
-import { ContentType, HTTPResponse, QueryArgs, RequestHeaders, RequestOptions } from './client';
+import { QueryArgs, RequestOptions } from './client';
 import { KVSTORE_SERVICE_PREFIX } from './service_prefixes';
 
 /**
@@ -77,7 +77,7 @@ export class KVStoreService extends BaseApiService {
      * @param record The record to add to the collection
      * @returns An object with the unique _key of the added record
      */
-    public insertRecord = (collection: string, record: Map<string, string>): Promise<Key> => {
+    public insertRecord = (collection: string, record: {[key: string]: string}): Promise<Key> => {
         const insertRecordURL = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
@@ -92,7 +92,7 @@ export class KVStoreService extends BaseApiService {
      * @param records The data tuples to insert
      * @returns A list of keys of the inserted records
      */
-    public insertRecords = (collection: string, records: Array<Map<string, string>>): Promise<string[]> => {
+    public insertRecords = (collection: string, records: Array<{[key: string]: string}>): Promise<string[]> => {
         return this.client.post(
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'batch']),
             records
@@ -106,7 +106,7 @@ export class KVStoreService extends BaseApiService {
      * @param filter Filter string to target specific records
      * @returns A Promise of an array of records
      */
-    public queryRecords = (collection: string, filter: QueryArgs = {}): Promise<Array<Map<string, string>>> => {
+    public queryRecords = (collection: string, filter: QueryArgs = {}): Promise<Array<{[key: string]: string}>> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
@@ -116,7 +116,7 @@ export class KVStoreService extends BaseApiService {
             query: filter
         };
         return this.client.get(url, requestOptions)
-            .then(response => response.body as Array<Map<string, string>>);
+            .then(response => response.body as Array<{[key: string]: string}>);
     }
 
     /**
@@ -125,9 +125,9 @@ export class KVStoreService extends BaseApiService {
      * @param key The record key used to query a specific record
      * @returns the record associated with the given key
      */
-    public getRecordByKey = (collection: string, key: string): Promise<Map<string, string>> => {
+    public getRecordByKey = (collection: string, key: string): Promise<{[key: string]: string}> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key]);
-        return this.client.get(url).then(response => response.body as Map<string, string>);
+        return this.client.get(url).then(response => response.body as {[key: string]: string});
     }
 
     /**
@@ -136,7 +136,7 @@ export class KVStoreService extends BaseApiService {
      * @param filter Filter string to target specific records
      * @return A list of records in the collection
      */
-    public listRecords = (collection: string, filter: QueryArgs = {}): Promise<Array<Map<string, string>>> => {
+    public listRecords = (collection: string, filter: QueryArgs = {}): Promise<Array<{[key: string]: string}>> => {
         const url: string = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
@@ -145,7 +145,7 @@ export class KVStoreService extends BaseApiService {
             query: filter
         };
         return this.client.get(url, requestOptions)
-            .then(response => response.body as Array<Map<string, string>>);
+            .then(response => response.body as Array<{[key: string]: string}>);
     }
 
     /**

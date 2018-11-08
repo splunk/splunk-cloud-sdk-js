@@ -74,7 +74,7 @@ describe('integration tests using action service', () => {
         const webhookAction: WebhookAction = {
             name: `WebhookAction_${Date.now()}`,
             kind: 'webhook',
-            webhookUrl: new URL('https://foo.slack.com/test'),
+            webhookUrl: 'https://foo.slack.com/test',
             message: 'some user msg'
         };
 
@@ -91,19 +91,19 @@ describe('integration tests using action service', () => {
             kind: ActionNotificationKind.rawJSON,
             tenant: tenantID as string,
             payload: {
-                'name': 'user payload'
+                name: 'user payload'
             }
         };
 
         it('should trigger action and get status', () => splunkCloud.action.triggerAction(webhookAction.name, notification).then(response => {
             const webhook = response as ActionTriggerResponse;
-            assert(webhook.statusId != null);
-            assert(webhook.statusUrl != null);
+            assert(webhook.StatusID != null);
+            assert(webhook.StatusURL != null);
 
-            splunkCloud.action.getActionStatus(webhookAction.name, webhook.statusId as string).then(res => {
+            splunkCloud.action.getActionStatus(webhookAction.name, webhook.StatusID as string).then(res => {
                 const actionStatus = res as ActionStatus;
                 // expect(['RUNNING', 'FAILED']).to.include(res.state) TODO: Whether the action succeeds or not, depends on the action definition
-                assert.equal(actionStatus.statusId, webhook.statusId);
+                assert.equal(actionStatus.statusId, webhook.StatusID);
             });
         }));
 
@@ -114,10 +114,10 @@ describe('integration tests using action service', () => {
 
     describe('Create/delete SNS actions', () => {
         const action: SNSAction = {
-            'name': `snsAction_${Date.now()}`,
-            'kind': 'sns',
-            'topic': 'sns topic',
-            'message': 'sns user msg'
+            name: `snsAction_${Date.now()}`,
+            kind: 'sns',
+            topic: 'sns topic',
+            message: 'sns user msg'
         };
 
         it('should create action', () => splunkCloud.action.createAction(action).then(response => {

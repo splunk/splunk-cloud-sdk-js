@@ -70,8 +70,7 @@ export class EventBatcher {
      * Clean up the events and timer.
      * @return Promise that will be completed when events are accepted by service
      */
-    // TODO: This shouldn't be any
-    public flush = (): Promise<any> => {
+    public flush = (): Promise<object> => {
         const data = this.queue;
         this.queue = [];
         this.resetTimer();
@@ -85,7 +84,7 @@ export class EventBatcher {
      *
      * @return can return null if event has not been sent yet.
      */
-    private run = (): Promise<any> | null => {
+    private run = (): Promise<object> | null => {
         const maxCountReached = (this.queue.length >= this.batchCount);
         // TODO: is it okay to just import @types/node and call this good?
         const eventByteSize = JSON.stringify(this.queue).length;
