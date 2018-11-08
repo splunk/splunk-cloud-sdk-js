@@ -19,7 +19,7 @@ export class SplunkError extends Error implements SplunkErrorParams {
 
     public code?: string;
     public httpStatusCode?: number;
-    public details?: object;
+    public details?: object | any[];
     public moreInfo?: string;
 
     constructor(errorParams: SplunkErrorParams) {
@@ -230,12 +230,11 @@ export class ServiceClient {
      */
     public buildPath(servicePrefix: string, pathname: string[], overrideTenant?: string): string {
         const effectiveTenant = overrideTenant || this.tenant;
-        let path: string;
         if (!effectiveTenant) {
             throw new Error('No tenant specified');
         }
 
-        path = `/${effectiveTenant}${servicePrefix}/${pathname.join('/')}`;
+        const path = `/${effectiveTenant}${servicePrefix}/${pathname.join('/')}`;
         for (const elem of pathname) {
             if (elem && elem.trim() === '') {
                 throw new Error(`Empty elements in path: ${path}`);
