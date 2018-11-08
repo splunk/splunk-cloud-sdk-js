@@ -7,7 +7,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 import 'isomorphic-fetch';
 import AuthManager from './auth_manager';
 import agent from './version';
-const DEFAULT_URL = 'https://api.splunkbeta.com';
+const DEFAULT_URL= 'https://api.splunkbeta.com';
 
 export interface SplunkErrorParams {
     message: string;
@@ -198,7 +198,7 @@ export class ServiceClient {
         if (query && Object.keys(query).length > 0) {
             const encoder = encodeURIComponent;
             const queryEncoded = Object.keys(query)
-                .filter(k => query[k] != null) // filter out undefined and null
+                .filter(k => query[k] !== null) // filter out undefined and null
                 .map(k => `${encoder(k)}=${encoder(String(query[k]))}`)
                 .join('&');
 

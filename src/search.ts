@@ -97,7 +97,7 @@ export class Search {
         const self = this;
         return self.status()
             .then(async (job: any) => {
-                if (args.offset != null) {
+                if (args.offset !== null) {
                     return self.client.getResults(self.jobId, args);
                     // .then(response => response.results);
                 }

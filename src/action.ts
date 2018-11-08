@@ -73,7 +73,7 @@ export class ActionService extends BaseApiService {
                 const key = 'location';
                 if (response.headers.has(key)) {
                     const responseStr = response.headers.get(key);
-                    if (responseStr != null && responseStr.match('\/status\/')) {
+                    if (responseStr !== null && responseStr.match('\/status\/')) {
                         const parts = responseStr.split('/status/');
                         if (parts.length === 2) {
                             return Promise.resolve({

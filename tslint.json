@@ -39,6 +39,8 @@
             "always"
         ],
         "no-trailing-whitespace": true,
+        "triple-equals": true,
+        "no-irregular-whitespace": true,
         "semicolon": true,
         "no-unnecessary-callback-wrapper": true,
         "object-literal-key-quotes": [true, "as-needed"]
