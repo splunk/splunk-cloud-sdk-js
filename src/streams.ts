@@ -6,7 +6,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 
 import BaseApiService from './baseapiservice';
 import { QueryArgs, RequestOptions } from './client';
-import { STREAMS_SERVICE_PREFIX } from './service_prefixes';
+import { SERVICE_CLUSTER_MAPPING, STREAMS_SERVICE_PREFIX } from './service_prefixes';
 
 /**
  * Encapsulates Streams endpoints
@@ -20,7 +20,7 @@ export class StreamsService extends BaseApiService {
     public compileDslToUpl = (
         dsl: DslCompilationRequest
     ): Promise<UplPipeline> => {
-        return this.client.post(
+        return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'compile-dsl']), dsl)
             .then(response => response.body as UplPipeline);
     }
@@ -37,7 +37,7 @@ export class StreamsService extends BaseApiService {
         const requestOptions: RequestOptions = {
             query: queryArgs as QueryArgs
         };
-        return this.client.get(url, requestOptions)
+        return this.client.get(SERVICE_CLUSTER_MAPPING.streams, url, requestOptions)
             .then(response => response.body as PaginatedPipelineResponse);
     }
 
@@ -49,7 +49,7 @@ export class StreamsService extends BaseApiService {
     public createPipeline = (
         pipeline: PipelineRequest
     ): Promise<Pipeline> => {
-        return this.client.post(
+        return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']), pipeline)
             .then(response => response.body as Pipeline);
     }
@@ -62,7 +62,7 @@ export class StreamsService extends BaseApiService {
     public activatePipeline = (
         activatePipelineRequest: ActivatePipelineRequest
     ): Promise<AdditionalProperties> => {
-        return this.client.post(
+        return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'activate']), activatePipelineRequest)
             .then(response => response.body as AdditionalProperties);
     }
@@ -75,7 +75,7 @@ export class StreamsService extends BaseApiService {
     public deactivatePipeline = (
         deactivatePipelineRequest: ActivatePipelineRequest
     ): Promise<AdditionalProperties> => {
-        return this.client.post(
+        return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'deactivate']), deactivatePipelineRequest)
             .then(response => response.body as AdditionalProperties);
     }
@@ -89,7 +89,7 @@ export class StreamsService extends BaseApiService {
         id: string
     ): Promise<Pipeline> => {
         const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]);
-        return this.client.get(url)
+        return this.client.get(SERVICE_CLUSTER_MAPPING.streams, url)
             .then(response => response.body as Pipeline);
     }
 
@@ -103,7 +103,7 @@ export class StreamsService extends BaseApiService {
         id: string,
         pipeline: PipelineRequest
     ): Promise<Pipeline> => {
-        return this.client.put(
+        return this.client.put(SERVICE_CLUSTER_MAPPING.streams,
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]), pipeline)
             .then(response => response.body as Pipeline);
     }
@@ -114,7 +114,7 @@ export class StreamsService extends BaseApiService {
      * @returns A promise pf a pipeline delete response containing details on the deleted pipeline
      */
     public deletePipeline = (id: string): Promise<PipelineDeleteResponse> => {
-        return this.client.delete(
+        return this.client.delete(SERVICE_CLUSTER_MAPPING.streams,
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]))
             .then(response => response.body as PipelineDeleteResponse);
     }

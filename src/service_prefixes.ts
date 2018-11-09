@@ -38,3 +38,16 @@ export const KVSTORE_SERVICE_PREFIX: string = '/kvstore/v1beta1';
  * @private
  */
 export const STREAMS_SERVICE_PREFIX: string = '/streams/v1';
+
+/**
+ * @private
+ */
+export const SERVICE_CLUSTER_MAPPING = {
+    search: 'api',
+    catalog: 'api',
+    identity: 'api',
+    ingest: 'api',
+    kvstore: 'api',
+    action: 'api',
+    streams: 'api'
+};

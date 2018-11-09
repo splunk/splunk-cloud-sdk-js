@@ -39,8 +39,8 @@ export class SplunkCloud {
      * @param token Auth token
      * @param defaultTenant Default tenant to use for requests
      */
-    constructor(args: ServiceClientArgs | string, token?: string, defaultTenant?: string) {
-        this.client = new ServiceClient(args, token, defaultTenant);
+    constructor(args: ServiceClientArgs) {
+        this.client = new ServiceClient(args);
         this.search = new SearchService(this.client);
         this.catalog = new CatalogService(this.client);
         this.identity = new IdentityService(this.client);
@@ -49,5 +49,7 @@ export class SplunkCloud {
         this.action = new ActionService(this.client);
         this.streams = new StreamsService(this.client);
     }
+
 }
+
 
