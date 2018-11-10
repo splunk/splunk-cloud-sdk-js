@@ -1,3 +1,4 @@
+import 'isomorphic-fetch';
 /*
  * Do not touch this process type declaration unless
  * you're prepared to deal with tsc compiler issues with @types/node

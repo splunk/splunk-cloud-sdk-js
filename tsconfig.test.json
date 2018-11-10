@@ -1,9 +1,6 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
-    "sourceRoot": "test",
-    "outDir": ".",
-    "noEmit": false,
+    "noEmit": true,
     "strict": true,
     "lib": [
       "es5",
@@ -13,12 +10,9 @@
       "es2015.symbol",
       "es2015.symbol.wellknown",
       "dom"
-    ]
+    ],
+    "types": ["node"]
   },
-  "typeRoots": [
-    "./node_modules/@types"
-  ],
-  "types": ["node"],
   "include": [
     "test/**/*.ts"
   ],

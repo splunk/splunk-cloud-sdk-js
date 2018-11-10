@@ -7,7 +7,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 import 'isomorphic-fetch';
 import AuthManager from './auth_manager';
 import agent from './version';
-const DEFAULT_URL= 'https://api.splunkbeta.com';
+const DEFAULT_URL = 'https://api.splunkbeta.com';
 
 export interface SplunkErrorParams {
     message: string;
@@ -113,7 +113,7 @@ export class ServiceClient {
      */
     constructor(args: ServiceClientArgs | string, token?: string, tenant?: string) {
         if (typeof args === 'undefined') {
-            throw new Error('args must be specified');
+            throw new SplunkError('args must be specified');
         } else if (typeof args === 'string') {
             if (typeof token === 'string') {
                 this.tokenSource = () => token;

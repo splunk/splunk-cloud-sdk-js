@@ -10,6 +10,7 @@
       "dom"
     ],
     "sourceRoot": "src",
+    "sourceMap": true,
     "outDir": ".",
     "declaration": true,
     "removeComments": false,
@@ -17,8 +18,7 @@
     "noUnusedLocals": true,
     "strict": true,
     "target": "es3",
-    "types": ["isomorphic-fetch"],
-    "sourceMap": true
+    "types": ["isomorphic-fetch"]
   },
   "include": [
     "src"

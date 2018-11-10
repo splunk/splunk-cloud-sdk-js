@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import 'isomorphic-fetch';
 import 'mocha';
-import { ServiceClient } from '../../src/client';
+import { ServiceClient } from '../../client';
 import config from '../config';
 
 const stubbyUrl = `http://${config.stubbyHost}:8882`;

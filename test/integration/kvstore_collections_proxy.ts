@@ -114,7 +114,7 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                     const queryParameters = { fields: 'TEST_KEY_01:0' };
                     return splunkCloud.kvstore.listRecords(testKVCollectionName, queryParameters);
                 })
-                .then(  listRecordsResponse => {
+                .then(listRecordsResponse => {
                     assert.equal(listRecordsResponse.length, 3);
                     for (const record of listRecordsResponse) {
                         assert.equal(Object.keys(record).length, 3);

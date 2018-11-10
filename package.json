@@ -17,11 +17,10 @@
     "clean": "rm *.js *.map *.d.ts || true",
     "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
     "codecov:integration": "yarn cover:integration && codecov -f ./coverage-integration/lcov.info -F integration",
-    "cover": "NODE_ENV=coverage nyc --reporter=lcov yarn test && yarn run cover:report",
-    "cover:integration": "NODE_ENV=coverage nyc --reporter=lcov --report-dir coverage-integration yarn test:integration && yarn run cover:report",
-    "cover:report": "nyc report",
-    "pretest": "yarn tslint && yarn build",
-    "test": "ts-mocha -p tsconfig.test.json test/unit/*.ts --exclude test/unit/*.d.ts",
+    "cover": "NODE_ENV=coverage nyc yarn test",
+    "cover:integration": "NODE_ENV=coverage nyc --report-dir coverage-integration yarn test:integration",
+    "pretest": "yarn build",
+    "test": "mocha test/unit/*.ts --exclude test/unit/*.d.ts",
     "test:integration": "ts-mocha -p tsconfig.test.json --timeout=900000 test/integration/*.ts --exclude test/integration/*.d.ts",
     "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/splunk-cloud-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",
@@ -67,8 +66,12 @@
       "lcov",
       "text-summary"
     ],
-    "extension": [
-      ".ts"
+    "extensions": [
+      ".ts",
+      ".js"
+    ],
+    "include": [
+      "./*.js"
     ],
     "exclude": [
       ".tmp",
@@ -83,7 +86,7 @@
       "tsconfig.json",
       "docs",
       ".template",
-      "*.d.ts"
+      "**/*.d.ts"
     ]
   }
 }
