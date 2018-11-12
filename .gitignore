@@ -6,6 +6,8 @@
 /test/**/*.js
 ./common/ # built dir
 !/.eslintrc.js
+tsconfig*.json
+tslint*.json
 
 # Don't check in HTML docs or built docs packages
 docs/html

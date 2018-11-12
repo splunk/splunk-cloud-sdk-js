@@ -12,6 +12,8 @@ import {
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
+console.log('0', config);
+
 
 const tenantID = config.stagingTenant;
 
@@ -21,7 +23,7 @@ const splunkCloud = new SplunkCloud({
         app: config.stagingAppsHost
     },
     tokenSource: config.stagingAuthToken,
-    defaultTenant: config.stagingTenant
+    defaultTenant: tenantID
 });
 
 describe('integration tests using action service', () => {

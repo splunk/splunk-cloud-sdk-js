@@ -20,7 +20,7 @@
     "cover": "NODE_ENV=coverage nyc yarn test",
     "cover:integration": "NODE_ENV=coverage nyc --report-dir coverage-integration yarn test:integration",
     "pretest": "yarn build",
-    "test": "ts-mocha -p tsconfig.json test/unit/*.ts --exclude test/unit/*.d.ts",
+    "test": "ts-mocha -p tsconfig.test.json test/unit/*.ts --exclude test/unit/*.d.ts",
     "test:integration": "ts-mocha -p tsconfig.test.json --timeout=900000 test/integration/*.ts --exclude test/integration/*.d.ts",
     "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/splunk-cloud-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",

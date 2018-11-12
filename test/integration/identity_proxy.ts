@@ -7,7 +7,7 @@ import config from '../config';
 
 const tenantID = config.stagingTenant;
 
-const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
+const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: tenantID });
 
 // Scenario:
 // Integration test for Tenant endpoints
@@ -26,7 +26,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         `${tenantID}search`
     ];
     const testGroupName = `mygroup_${Date.now()}`;
-    const testPrincipal = `${process.env.TEST_USERNAME}`;
+    const testPrincipal = config.testUsername;
     const testMember = 'test1@splunk.com';
 
     describe('Test Roles and Permissions Management', () => {

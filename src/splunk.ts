@@ -35,11 +35,10 @@ export class SplunkCloud {
 
     /**
      * Build a Splunk Cloud Client
-     * @param args URL to Splunk Cloud environment or a ServiceClientArgs object
-     * @param token Auth token
-     * @param defaultTenant Default tenant to use for requests
+     * @param args connection configuration
      */
     constructor(args: ServiceClientArgs) {
+        console.log('1', args);
         this.client = new ServiceClient(args);
         this.search = new SearchService(this.client);
         this.catalog = new CatalogService(this.client);

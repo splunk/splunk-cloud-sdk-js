@@ -267,7 +267,7 @@ function createPipelineRequest(name: string, description: string) : Promise<Pipe
             description,
             name,
             bypassValidation: true,
-            createUserId: config.playgroundTenant,
+            createUserId: config.stagingTenant,
             data: response
         } as PipelineRequest;
     }).catch(error => {

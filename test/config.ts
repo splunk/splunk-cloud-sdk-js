@@ -27,5 +27,6 @@ export default {
     stagingAuthToken: process.env.BEARER_TOKEN,
     testNamespace: `jsnmspace${Date.now()}`,
     testCollection: `jscollecn${Date.now()}`,
+    testUsername: process.env.TEST_USERNAME,
     tenantCreationOn: (process.env.TENANT_CREATION === '1'),
 };

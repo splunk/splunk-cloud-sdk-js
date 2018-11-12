@@ -21,14 +21,14 @@
     name: Integration Tests And Example Tests
     steps:
         # Integration Tests
-      - name: Integration Tests - Not Gated
-        service: splunk-cloud-sdk-js-integration
-        exclude: ^(master|develop)$
-        command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
-        encrypted_dockercfg_path: ci/dockercfg.encrypted
+      # - name: Integration Tests - Not Gated
+      #   service: splunk-cloud-sdk-js-integration
+      #   exclude: ^(master|develop)$
+      #   command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
+      #   encrypted_dockercfg_path: ci/dockercfg.encrypted
       - name: Integration Tests - Gated
         service: splunk-cloud-sdk-js-integration
-        tag: ^(master|develop)$
+        # tag: ^(master|develop)$
         command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
         encrypted_dockercfg_path: ci/dockercfg.encrypted
         # Example Tests
