@@ -25,7 +25,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
     ];
     const testGroupName = `mygroup_${Date.now()}`;
     const testPrincipal = `${process.env.TEST_USERNAME}`;
-    const testMember = 'Srv-ssc-mt32intg@splunkcorp.com';
+    const testMember = 'test1@splunk.com';
 
     describe('Test Roles and Permissions Management', () => {
 
