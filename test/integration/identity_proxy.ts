@@ -26,8 +26,8 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         `${tenantID}search`
     ];
     const testGroupName = `mygroup_${Date.now()}`;
-    const testPrincipal = 'test1@splunk.com';
-    const testMember = 'Srv-ssc-mt32intg@splunkcorp.com';
+    const testPrincipal = `${process.env.TEST_USERNAME}`;
+    const testMember = 'test1@splunk.com';
 
     describe('Test Roles and Permissions Management', () => {
 
@@ -100,7 +100,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should create a new Group', () =>
             splunk.identity.createGroup(groupInput).then(group => {
                 assert.typeOf(group, 'Object', 'data should be an object');
-                assert.equal(group.createdBy, 'test1@splunk.com');
+                assert.equal(group.createdBy, testPrincipal);
                 assert.equal(group.name, testGroupName);
                 assert.equal(group.tenant, tenantID);
             }));
@@ -108,7 +108,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should return the Group for the tenant and groupName', () =>
             splunk.identity.getGroup(testGroupName).then(group => {
                 assert.typeOf(group, 'Object', 'data should be an object');
-                assert.equal(group.createdBy, 'test1@splunk.com');
+                assert.equal(group.createdBy, testPrincipal);
                 assert.equal(group.name, testGroupName);
                 assert.equal(group.tenant, tenantID);
             }));
@@ -125,7 +125,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 assert.equal(data.group, testGroupName);
                 assert.equal(data.role, testRole);
                 assert.equal(data.tenant, tenantID);
-                assert.equal(data.addedBy, 'test1@splunk.com');
+                assert.equal(data.addedBy, testPrincipal);
             }));
 
         it('should return the Group for the tenant and groupName', () =>
@@ -134,7 +134,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 assert.equal(data.group, testGroupName);
                 assert.equal(data.role, testRole);
                 assert.equal(data.tenant, tenantID);
-                assert.equal(data.addedBy, 'test1@splunk.com');
+                assert.equal(data.addedBy, testPrincipal);
             }));
 
         it('should return the Groups for the tenant', () =>
@@ -148,7 +148,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.name, testMember);
                 assert.equal(data.tenant, tenantID);
-                assert.equal(data.addedBy, 'test1@splunk.com');
+                assert.equal(data.addedBy, testPrincipal);
             }));
 
         it('should get a Member', () =>
@@ -156,7 +156,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.name, testMember);
                 assert.equal(data.tenant, tenantID);
-                assert.equal(data.addedBy, 'test1@splunk.com');
+                assert.equal(data.addedBy, testPrincipal);
             }));
 
         it('should return the Members for the tenant', () =>
