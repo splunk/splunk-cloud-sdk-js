@@ -5,7 +5,7 @@
   "main": "splunk.js",
   "scripts": {
     "tslint": "tslint -p tsconfig.json -c tslint.json && yarn tslint:tests",
-    "tslint:fix": "tslint -p tsconfig.json -c tslint.json --fix",
+    "tslint:fix": "tslint -p tsconfig.json -c tslint.json --fix && yarn tslint:fix:tests",
     "tslint:tests": "tslint -p tsconfig.test.json -c tslint.json",
     "tslint:fix:tests": "tslint -p tsconfig.test.json -c tslint.json --fix",
     "ts:docs": "rm -rf docs && yarn ts:docs:html && yarn ts:docs:md",
