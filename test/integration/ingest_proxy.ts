@@ -5,13 +5,9 @@ import { EventBatcher } from '../../ingest_event_batcher';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
-const splunkCloudHost = config.playgroundHost;
-const invalidToken = config.invalidAuthToken;
-const token = config.playgroundAuthToken;
-const tenantID = config.playgroundTenant;
+const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
+const splunkBadToken = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.invalidAuthToken, defaultTenant: config.stagingTenant });
 
-const splunk = new SplunkCloud(splunkCloudHost, token, tenantID);
-const splunkBadToken = new SplunkCloud(splunkCloudHost, invalidToken, tenantID);
 
 describe('integration tests for Ingest Endpoints', () => {
 

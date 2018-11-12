@@ -10,10 +10,14 @@ chai.use(chaiAsPromised);
 const { expect } = chai;
 
 describe('Basic client functionality', () => {
-    const s = new ServiceClient(stubbyUrl, config.stubbyAuthToken, config.stubbyTenant);
+    const s = new ServiceClient({
+        urls: { api: stubbyUrl },
+        tokenSource: () => config.stubbyAuthToken,
+        defaultTenant: config.stubbyTenant
+    });
     describe('GET', () => {
         it('should return a promise', () => {
-            const promise = s.get('/basic');
+            const promise = s.get('api', '/basic');
             expect(promise).to.be.a('promise');
             return promise.then((data) => data.body).then(body => {
                 expect(body).to.haveOwnProperty('foo');
@@ -23,7 +27,7 @@ describe('Basic client functionality', () => {
 
     describe('POST', () => {
         it('should return a promise', () => {
-            const promise = s.post('/basic', { robin: 'hood' });
+            const promise = s.post('api', '/basic', { robin: 'hood' });
             expect(promise).to.be.a('promise');
             return promise.then((data) => data.body).then(body => {
                 expect(body).to.haveOwnProperty('friar', 'tuck');
@@ -33,7 +37,7 @@ describe('Basic client functionality', () => {
 
     describe('PUT', () => {
         it('should return a promise', () => {
-            const promise = s.put('/basic', { walrus: 'carpenter' });
+            const promise = s.put('api', '/basic', { walrus: 'carpenter' });
             expect(promise).to.be.a('promise');
             return promise.then((data) => data.body).then(body => {
                 expect(body).to.haveOwnProperty('oysters', 'sad');
@@ -43,14 +47,14 @@ describe('Basic client functionality', () => {
 
     describe('DELETE', () => {
         it('should return a promise', () => {
-            const promise = s.delete('/basic');
+            const promise = s.delete('api', '/basic');
             expect(promise).to.be.a('promise');
             return promise;
         });
     });
 
     describe('Errors', () => {
-        it('should throw on an error response', () => expect(s.get('/error')).to.be.rejectedWith(Error, 'error response'));
+        it('should throw on an error response', () => expect(s.get('api', '/error')).to.be.rejectedWith(Error, 'error response'));
     });
 
     describe('Path building', () => {
@@ -74,7 +78,7 @@ describe('Basic client functionality', () => {
         it('should allow a callback to execute without affecting flow', () => {
             let extractedUrl: string;
             s.addResponseHook((response) => extractedUrl = response.url);
-            return s.get('/basic')
+            return s.get('api', '/basic')
                 .then(httpResponse => {
                     expect(httpResponse.body).to.haveOwnProperty('foo');
                     expect(extractedUrl).matches(/\/basic$/);
@@ -83,9 +87,9 @@ describe('Basic client functionality', () => {
 
         it('should allow multiple callbacks that don\'t change response', () => {
             for (let i = 0; i < 5; i++) {
-                s.addResponseHook(() => 0);
+                s.addResponseHook(() => { return; });
             }
-            return s.get('/basic')
+            return s.get('api', '/basic')
                 .then(httpResponse => {
                     expect(httpResponse.body).to.haveOwnProperty('foo');
                 });
@@ -94,10 +98,10 @@ describe('Basic client functionality', () => {
         it('should allow changing of a response inflight', () => {
             s.addResponseHook(response => {
                 if (!response.ok) {
-                    return s.fetch('GET', '/basic', {});
+                    return s.fetch('GET', 'api', '/basic', {});
                 }
             }); // Totally different URL
-            return s.get('/something_that_does_not_exist')
+            return s.get('api', '/something_that_does_not_exist')
                 .then(httpResponse => {
                     expect(httpResponse.body).to.haveOwnProperty('foo');
                 });
@@ -107,11 +111,10 @@ describe('Basic client functionality', () => {
             s.addResponseHook(response => {
                 throw new Error('unexpected error');
             });
-            return s.get('/basic')
+            return s.get('api', '/basic')
                 .then(httpResponse => {
                     expect(httpResponse.body).to.haveOwnProperty('foo');
                 });
-
         });
     });
 
@@ -119,9 +122,13 @@ describe('Basic client functionality', () => {
 
 describe('Service client args', () => {
     it('should take a url, a token, and a tenant', () => {
-        const s = new ServiceClient(stubbyUrl, config.stubbyAuthToken, config.stubbyTenant);
+        const s = new ServiceClient({
+            urls: { api: stubbyUrl },
+            tokenSource: () => config.stubbyAuthToken,
+            defaultTenant: config.stubbyTenant
+        });
         expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
-        return s.get('/basic')
+        return s.get('api', '/basic')
             .then(response => {
                 expect(response.body).to.haveOwnProperty('foo');
             });
@@ -129,12 +136,12 @@ describe('Service client args', () => {
 
     it('should take an args object', () => {
         const s = new ServiceClient({
-            url: stubbyUrl,
+            urls: { api: stubbyUrl },
             tokenSource: config.stubbyAuthToken,
             defaultTenant: config.stubbyTenant
         });
         expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
-        return s.get('/basic')
+        return s.get('api', '/basic')
             .then(response => {
                 expect(response.body).to.haveOwnProperty('foo');
             });
@@ -142,12 +149,12 @@ describe('Service client args', () => {
 
     it('should take a function that returns a token', () => {
         const s = new ServiceClient({
-            url: stubbyUrl,
+            urls: { api: stubbyUrl },
             tokenSource: () => config.stubbyAuthToken,
             defaultTenant: config.stubbyTenant
         });
         expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
-        return s.get('/basic')
+        return s.get('api', '/basic')
             .then(response => {
                 expect(response.body).to.haveOwnProperty('foo');
             });
@@ -155,15 +162,15 @@ describe('Service client args', () => {
     });
 
     it('should take a token manager (like splunk-cloud-auth)', () => {
-        function authFunc() { return config.stubbyAuthToken; }
+        function getAccessToken () { return config.stubbyAuthToken; }
 
-        const s: ServiceClient = new ServiceClient({
-            url: stubbyUrl,
-            tokenSource: authFunc,
+        const s = new ServiceClient({
+            urls: { api: stubbyUrl },
+            tokenSource: getAccessToken,
             defaultTenant: config.stubbyTenant
         });
         expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
-        return s.get('/basic')
+        return s.get('api', '/basic')
             .then(response => {
                 expect(response.body).to.haveOwnProperty('foo');
             });
@@ -175,6 +182,7 @@ describe('Service client args', () => {
             defaultTenant: config.stubbyTenant
         });
 
-        expect(s.buildUrl(s.buildPath('/foo', ['bar']))).to.equal(`https://api.splunkbeta.com/${config.stubbyTenant}/foo/bar`);
+        expect(s.buildUrl('api', s.buildPath('/foo', ['bar']))).to.equal(`https://api.splunkbeta.com/${config.stubbyTenant}/foo/bar`);
     });
 });
+

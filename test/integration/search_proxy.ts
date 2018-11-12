@@ -4,11 +4,7 @@ import { ResultsNotReadyResponse, SearchResults } from '../../search';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
-const splunkCloudHost = config.playgroundHost;
-const token = config.playgroundAuthToken;
-const tenantID = config.playgroundTenant;
-
-const splunk = new SplunkCloud(splunkCloudHost, token, tenantID);
+const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
 
 const standardQuery = {
     query: '| from index:main | head 5'

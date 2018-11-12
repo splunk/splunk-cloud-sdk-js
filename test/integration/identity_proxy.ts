@@ -4,10 +4,10 @@ import { RoleInput } from '../../identity';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
-const splunkCloudHost = config.playgroundHost;
-const token = config.playgroundAuthToken;
-const tenantID = config.playgroundTenant;
-const splunk = new SplunkCloud(splunkCloudHost, token, tenantID);
+
+const tenantID = config.stagingTenant;
+
+const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
 
 // Scenario:
 // Integration test for Tenant endpoints

@@ -9,11 +9,8 @@ chai.use(chaiAsPromised);
 
 const { expect, assert } = chai;
 
-const splunkCloudHost = config.playgroundHost;
-const token = config.playgroundAuthToken;
-const tenantID = config.playgroundTenant;
+const splunkCloud = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
 
-const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
 
 describe('Integration tests for Streams Pipeline Endpoints', () => {
     const testPipelineName1 = `testPipeline01${Date.now()}`;

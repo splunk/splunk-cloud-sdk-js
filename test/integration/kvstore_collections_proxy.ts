@@ -3,15 +3,10 @@ import { SplunkCloud } from '../../splunk';
 import config from '../config';
 import { createKVCollectionDataset, createRecord /*, deleteAllDatasets*/ } from './catalog_proxy';
 
-const splunkCloudHost = config.playgroundHost;
-const token = config.playgroundAuthToken;
-const tenantID = config.playgroundTenant;
+const splunkCloud = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
 
 const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
-
-const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
-
 const testKVCollectionName = `${testNamespace}.${testCollection}`;
 
 describe('Integration tests for KVStore Collection Endpoints', () => {
