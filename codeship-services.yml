@@ -20,9 +20,9 @@ splunk-cloud-sdk-js-with-stubby:
   depends_on:
     - splunk-cloud-sdk-shared-stubby
 
-splunk-cloud-sdk-js-against-playground:
+splunk-cloud-sdk-js-integration:
   build:
-    image: splunk/splunk-cloud-sdk-js-against-playground
+    image: splunk/splunk-cloud-sdk-js-integration
     dockerfile: ci/Dockerfile
   encrypted_env_file: ci/env.encrypted
   depends_on:
