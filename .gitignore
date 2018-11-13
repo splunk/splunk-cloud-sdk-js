@@ -9,6 +9,10 @@
 tsconfig*.json
 tslint*.json
 
+# Hide compiled test folders, these appear to be webstorm generated
+/integration
+/unit
+
 # Don't check in HTML docs or built docs packages
 docs/html
 build/

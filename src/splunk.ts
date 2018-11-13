@@ -38,7 +38,6 @@ export class SplunkCloud {
      * @param args connection configuration
      */
     constructor(args: ServiceClientArgs) {
-        console.log('1', args);
         this.client = new ServiceClient(args);
         this.search = new SearchService(this.client);
         this.catalog = new CatalogService(this.client);
