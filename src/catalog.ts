@@ -302,8 +302,8 @@ export interface DatasetInfo {
     module: string;
     created?: string;
     modified?: string;
-    createdBy?: string;
-    modifiedBy?: string;
+    createdBy?: string; // TODO: these seems to be lowercase only
+    modifiedBy?: string; // TODO: these seems to be lowercase only
     capabilities?: string;
     version?: number;
     sourceName?: string;
@@ -319,8 +319,8 @@ export interface PartialDatasetInfo {
     owner?: string;
     created?: string;
     modified?: string;
-    createdBy?: string;
-    modifiedBy?: string;
+    createdBy?: string; // TODO: these seems to be lowercase only
+    modifiedBy?: string; // TODO: these seems to be lowercase only
     capabilities?: string;
     version?: number;
     readroles?: string[];

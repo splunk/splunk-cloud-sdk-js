@@ -73,7 +73,7 @@ describe('integration tests using action service', () => {
         }));
 
         it('should delete actions', () => splunkCloud.action.deleteAction(emailAction.name).then(response => {
-            assert(!response);
+            assert.isEmpty(response);
         }));
 
     });
@@ -116,7 +116,7 @@ describe('integration tests using action service', () => {
         }));
 
         it('should delete actions', () => splunkCloud.action.deleteAction(webhookAction.name).then(response => {
-            assert(!response);
+            assert.isEmpty(response);
         }));
     });
 
@@ -138,7 +138,7 @@ describe('integration tests using action service', () => {
         }));
 
         it('should delete actions', () => splunkCloud.action.deleteAction(action.name).then(response => {
-            assert(!response);
+            assert.isEmpty(response);
         }));
     });
 });

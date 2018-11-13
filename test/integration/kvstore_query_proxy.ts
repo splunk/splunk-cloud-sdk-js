@@ -30,12 +30,12 @@ describe('Integration tests for KVStore Query Endpoints', () => {
     };
 
     beforeEach(() => {
-        // return deleteAllDatasets().then(() => {
-        //     testDataset = createKVCollectionDataset(testNamespace, testCollection);
-        //     return testDataset;
-        // });
-        testDataset = createKVCollectionDataset(testNamespace, testCollection);
-        return testDataset;
+        const create = () => {
+            testDataset = createKVCollectionDataset(testNamespace, testCollection);
+            return testDataset;
+        };
+        return splunkCloud.catalog.deleteDatasetByName(testKVCollectionName)
+            .then(create);
     });
 
     // -------------------------------------------------------------------------

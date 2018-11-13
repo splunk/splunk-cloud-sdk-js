@@ -52,7 +52,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should return the roles for the tenant', () =>
             splunk.identity.getRoles().then(roles => {
                 assert.typeOf(roles, 'Array', 'data should be an array');
-                assert(roles.indexOf(testRole) > -1);
+                assert.include(roles, testRole);
             }));
 
         it('should return the role for the tenant and role name', () =>
@@ -116,7 +116,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should return the Groups for the tenant', () =>
             splunk.identity.getGroups().then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
-                assert(data.indexOf(testGroupName) > -1);
+                assert.include(data, testGroupName);
             }));
 
         it('should add a Role to the Group', () =>
@@ -140,7 +140,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should return the Groups for the tenant', () =>
             splunk.identity.getGroupRoles(testGroupName).then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
-                assert(data.indexOf(testRole) > -1);
+                assert.include(data, testRole);
             }));
 
         it('should create a Member', () =>
@@ -162,12 +162,12 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should return the Members for the tenant', () =>
             splunk.identity.getMembers().then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
-                assert(data.indexOf(testMember) > -1);
+                assert.include(data, testMember);
             }));
 
         it('should delete the member from the tenant and group ignore response', () =>
-            splunk.identity.removeGroupMember(testGroupName, testPrincipal).then(() => {
-                assert(true);
+            splunk.identity.removeGroupMember(testGroupName, testPrincipal).then(response => {
+                assert.isEmpty(response);
             }));
 
         it('should add a Member to the Group', () =>
@@ -189,14 +189,14 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should retrieve all the Members from the Group', () =>
             splunk.identity.getGroupMembers(testGroupName).then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
-                assert(data.indexOf(testPrincipal) > -1);
+                assert.include(data, testPrincipal);
             }));
 
         it('should retrieve all the Groups for the given Member', () =>
             splunk.identity.getMemberGroups(testPrincipal).then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
-                assert(data.indexOf('tenant.admins') > -1);
-                assert(data.indexOf(testGroupName) > -1);
+                assert.include(data, 'tenant.admins');
+                assert.include(data, testGroupName);
             }));
 
     });
@@ -205,32 +205,32 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
         it('should delete the member from the tenant and group', () =>
             splunk.identity.removeGroupMember(testGroupName, testPrincipal).then(response => {
-                assert(!response);
+                assert.isEmpty(response);
             }));
 
         it('should delete the selected test member', () =>
             splunk.identity.removeMember(testMember).then(response => {
-                assert(!response);
+                assert.isEmpty(response);
             }));
 
         it('should delete the selected test permission from the role', () =>
             splunk.identity.removeRolePermission(testRole, testPerm1).then(response => {
-                assert(!response);
+                assert.isEmpty(response);
             }));
 
         it('should delete the role for the tenant and group', () =>
             splunk.identity.removeGroupRole(testGroupName, testRole).then(response => {
-                assert(!response);
+                assert.isEmpty(response);
             }));
 
         it('should delete the group for the tenant', () =>
             splunk.identity.deleteGroup(testGroupName).then(response => {
-                assert(!response);
+                assert.isEmpty(response);
             }));
 
         it('should delete the test role from the tenant', () =>
             splunk.identity.deleteRole(testRole).then(response => {
-                assert(!response);
+                assert.isEmpty(response);
             }));
     });
 });

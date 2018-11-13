@@ -66,12 +66,8 @@
       "lcov",
       "text-summary"
     ],
-    "extensions": [
-      ".ts",
-      ".js"
-    ],
-    "include": [
-      "./*.js"
+    "extension": [
+      ".ts"
     ],
     "exclude": [
       ".tmp",
@@ -85,8 +81,7 @@
       "tslint.json",
       "tsconfig.json",
       "docs",
-      ".template",
-      "**/*.d.ts"
+      ".template"
     ]
   }
 }

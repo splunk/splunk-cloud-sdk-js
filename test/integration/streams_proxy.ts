@@ -80,7 +80,7 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                 })
                 .then(activatePipelineResponse => {
                     assert.isNotNull(activatePipelineResponse);
-                    assert(activatePipelineResponse.activated, pipelineId2 as string);
+                    assert.include(activatePipelineResponse.activated, pipelineId2 as string);
 
                     const queryParams = { name: testPipelineName2 };
                     return splunkCloud.streams.getPipelines(queryParams);
@@ -112,18 +112,18 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                     assert.equal(createPipelineResponse1.data.nodes.length, 4);
 
                     for (const node of createPipelineResponse1.data.nodes) {
-                        assert('id' in node, 'node should contain key: id');
-                        assert('op' in node, 'node should contain key: op');
+                        assert.isNotNull(node.id);
+                        assert.isNotNull(node.op);
                     }
 
                     assert.isNotNull(createPipelineResponse1.data.edges);
                     assert.typeOf(createPipelineResponse1.data.edges, 'array', 'Edges response data should be an array');
                     assert.equal(createPipelineResponse1.data.edges.length, 3);
                     for (const edge of createPipelineResponse1.data.edges) {
-                        assert('sourceNode' in edge, 'edge should contain key: sourceNode');
-                        assert('sourcePort' in edge, 'edge should contain key: sourcePort');
-                        assert('targetNode' in edge, 'edge should contain key: targetNode');
-                        assert('targetPort' in edge, 'edge should contain key: targetPort');
+                        assert.isNotNull(edge.sourceNode);
+                        assert.isNotNull(edge.sourcePort);
+                        assert.isNotNull(edge.targetNode);
+                        assert.isNotNull(edge.targetPort);
                     }
 
                     return splunkCloud.streams.getPipeline(pipelineId1 as string);

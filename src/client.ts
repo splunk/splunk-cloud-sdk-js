@@ -9,8 +9,8 @@ import AuthManager from './auth_manager';
 import agent from './version';
 
 const DEFAULT_URLS = {
-    api: 'https://api.splunkbeta.com',
-    app: 'https://apps.splunkbeta.com'
+    api: 'https://api.staging.splunkbeta.com',
+    app: 'https://apps.staging.splunkbeta.com'
 };
 
 export interface SplunkErrorParams {
@@ -65,6 +65,7 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
             }
             err = new SplunkError({ message: json.message, code: json.code, moreInfo: json.moreInfo, httpStatusCode: response.status, details: json.details });
         } catch (ex) {
+            console.log(response);
             const message = `${response.statusText} - unable to process response`;
             err = new SplunkError({ message, httpStatusCode: response.status, details: { response: text } });
         }
@@ -196,7 +197,7 @@ export class ServiceClient {
         if (query && Object.keys(query).length > 0) {
             const encoder = encodeURIComponent;
             const queryEncoded = Object.keys(query)
-                .filter(k => query[k] !== null) // filter out undefined and null
+                .filter(k => query[k] !== undefined && query[k] !== null) // filter out undefined and null
                 .map(k => `${encoder(k)}=${encoder(String(query[k]))}`)
                 .join('&');
             return `${serviceCluster}${path}?${queryEncoded}`;

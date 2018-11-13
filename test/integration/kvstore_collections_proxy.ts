@@ -30,12 +30,12 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     };
 
     beforeEach(() => {
-        // return deleteAllDatasets().then(() => {
-        //     testDataset = createKVCollectionDataset(testNamespace, testCollection);
-        //     return testDataset;
-        // });
-        testDataset = createKVCollectionDataset(testNamespace, testCollection);
-        return testDataset;
+        const create = () => {
+            testDataset = createKVCollectionDataset(testNamespace, testCollection);
+            return testDataset;
+        };
+        return splunkCloud.catalog.deleteDatasetByName(testKVCollectionName)
+            .then(create);
     });
 
     // -------------------------------------------------------------------------
@@ -77,6 +77,7 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                 .then(listRecordsResponse => {
                     const firstRecord = listRecordsResponse[0];
 
+                    console.log('listRecordsResponse', listRecordsResponse);
                     assert.equal(listRecordsResponse.length, 1);
                     assert.equal(firstRecord.TEST_KEY_01, 'A');
                     assert.equal(firstRecord.TEST_KEY_02, 'B');

@@ -81,15 +81,15 @@ describe('integration tests Using Search APIs', () => {
                     return splunk.search.getResults(job.sid, { offset: 0, count: 3 });
                 }).then(res => {
                     const results = res as SearchResults;
-                    assert(results.results.length === 3);
+                    assert.equal(results.results.length, 3);
                     return splunk.search.getResults(createdJob.sid, { offset: 3, count: 5 });
                 }).then(res => {
                     const results = res as SearchResults;
-                    assert(results.results.length === 2, 'Only two events should remain');
+                    assert.equal(results.results.length, 2, 'Only two events should remain');
                     return splunk.search.getResults(createdJob.sid, { offset: 10, count: 10 });
                 }).then(res => {
                     const results = res as SearchResults;
-                    assert(results.results.length === 0);
+                    assert.equal(results.results.length, 0);
                 })));
 
 
@@ -238,7 +238,7 @@ describe('integration tests Using Search APIs', () => {
                         reject,
                         () => {
                             try {
-                                assert(count > 0, 'We should have gotten at least one status');
+                                assert.isAtLeast(count, 1, 'We should have gotten at least one status');
                             } catch (e) {
                                 reject(e);
                             }
