@@ -9,8 +9,8 @@ import AuthManager from './auth_manager';
 import agent from './version';
 
 const DEFAULT_URLS = {
-    api: 'https://api.staging.splunkbeta.com',
-    app: 'https://apps.staging.splunkbeta.com'
+    api: 'https://api.splunkbeta.com',
+    app: 'https://apps.splunkbeta.com'
 };
 
 export interface SplunkErrorParams {
@@ -65,7 +65,6 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
             }
             err = new SplunkError({ message: json.message, code: json.code, moreInfo: json.moreInfo, httpStatusCode: response.status, details: json.details });
         } catch (ex) {
-            console.log(response);
             const message = `${response.statusText} - unable to process response`;
             err = new SplunkError({ message, httpStatusCode: response.status, details: { response: text } });
         }
@@ -132,7 +131,6 @@ export class ServiceClient {
             // Else wrap a token manager.
             this.tokenSource = () => authManager.getAccessToken();
         } else {
-            console.log('2', args);
             throw new SplunkError({ message: 'Unsupported token source' });
         }
         this.urls = args.urls || DEFAULT_URLS;

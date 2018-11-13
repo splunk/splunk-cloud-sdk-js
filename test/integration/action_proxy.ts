@@ -12,9 +12,6 @@ import {
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
-console.log('0', config);
-
-
 const tenantID = config.stagingTenant;
 
 const splunkCloud = new SplunkCloud({

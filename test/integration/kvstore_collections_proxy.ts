@@ -6,12 +6,11 @@ import { createKVCollectionDataset, createRecord /*, deleteAllDatasets*/ } from 
 const splunkCloud = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
 
 const testNamespace = config.testNamespace;
-const testCollection = config.testCollection;
-const testKVCollectionName = `${testNamespace}.${testCollection}`;
 
 describe('Integration tests for KVStore Collection Endpoints', () => {
     // Required for `createKVCollectionDataset` helper
-    let testDataset;
+    let testDataset: object;
+    let testKVCollectionName: string;
 
     const recordOne = {
         TEST_KEY_01: 'A',
@@ -30,12 +29,13 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     };
 
     beforeEach(() => {
+        const testCollection = `jscoll${Date.now()}`;
+        testKVCollectionName = `${testNamespace}.${testCollection}`;
         const create = () => {
             testDataset = createKVCollectionDataset(testNamespace, testCollection);
             return testDataset;
         };
-        return splunkCloud.catalog.deleteDatasetByName(testKVCollectionName)
-            .then(create);
+        return create();
     });
 
     // -------------------------------------------------------------------------
@@ -77,7 +77,6 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                 .then(listRecordsResponse => {
                     const firstRecord = listRecordsResponse[0];
 
-                    console.log('listRecordsResponse', listRecordsResponse);
                     assert.equal(listRecordsResponse.length, 1);
                     assert.equal(firstRecord.TEST_KEY_01, 'A');
                     assert.equal(firstRecord.TEST_KEY_02, 'B');
