@@ -1,7 +1,7 @@
 {
   "name": "@splunk/cloud-sdk",
   "version": "0.6.1",
-  "description": "Splunk Developer Cloud SDK for Javascript",
+  "description": "Splunk Cloud SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
     "commit": "yarn git-cz",
@@ -31,7 +31,6 @@
     "release:minor": "yarn standard-version --release-as minor",
     "release:patch": "yarn standard-version --release-as patch",
     "release": "yarn standard-version"
-
   },
   "author": "Splunk, Inc.",
   "license": "SEE LICENSE IN LICENSE.txt",
