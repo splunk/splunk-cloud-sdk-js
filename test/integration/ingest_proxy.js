@@ -62,8 +62,8 @@ describe('integration tests for Ingest Endpoints', () => {
                     assert.equal(err.httpStatusCode, 400);
                     expect(err).to.have.property('code');
                     expect(err).to.have.property('message');
-                    expect(err.message).to.match(/Invalid/);
-                    expect(err.details).to.match(/unknown/);
+                    expect(err.message).to.have.string("Invalid data");
+                    expect(err.details).to.have.string("unknown field");
                 });
             });
         });
@@ -258,8 +258,9 @@ describe('integration tests for Ingest Endpoints', () => {
                     expect(err).to.have.property('code');
                     expect(err.httpStatusCode).to.equal(400);
                     expect(err).to.have.property('message');
-                    expect(err.message).to.match(/Invalid/);
-                    expect(err.details).to.match(/unknown/);
+                    expect(err).to.have.property('details');
+                    expect(err.message).to.have.string("Invalid data");
+                    expect(err.details).to.have.string("unknown field");
                 }
             ));
         });
