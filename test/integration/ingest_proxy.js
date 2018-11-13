@@ -52,11 +52,18 @@ describe('integration tests for Ingest Endpoints', () => {
                 splunk.ingest.postEvents(events).then(response => {
                     assert.fail('request with unknown field name should not succeed');
                 }).catch(err => {
-                    assert.equal(err.httpStatusCode, 400, 'response httpStatusCode should be 400');
+                    /**
+                     * {
+                     *  code: 'INVALID_DATA',
+                     *  "message": "Invalid data format",
+                     *  details: "json: unknown field \"unknown\""
+                     * }
+                     */
+                    assert.equal(err.httpStatusCode, 400);
                     expect(err).to.have.property('code');
-                    expect(err.httpStatusCode).to.equal(400);
                     expect(err).to.have.property('message');
                     expect(err.message).to.match(/Invalid/);
+                    expect(err.details).to.match(/unknown/);
                 });
             });
         });
@@ -239,20 +246,20 @@ describe('integration tests for Ingest Endpoints', () => {
                     assert.fail('request with unknown data field should not succeed')
                 },
                 err => {
-                    assert.equal(err.httpStatusCode, 400, 'response httpStatusCode should be 400');
+                    assert.equal(err.httpStatusCode, 400);
 
                     /**
                      * {
                      *  code: 'INVALID_DATA',
-                     *  moreInfo: undefined,
-                     *  httpStatusCode: 400,
-                     *  details: undefined
+                     *  "message": "Invalid data format",
+                     *  details: "json: unknown field \"unknown\""
                      * }
                      */
                     expect(err).to.have.property('code');
                     expect(err.httpStatusCode).to.equal(400);
                     expect(err).to.have.property('message');
                     expect(err.message).to.match(/Invalid/);
+                    expect(err.details).to.match(/unknown/);
                 }
             ));
         });
