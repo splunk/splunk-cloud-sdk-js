@@ -8,6 +8,7 @@ import { ServiceClient } from './client';
 
 /**
  * Base class for each of the API proxies
+ * @deprecated ServiceClient Constructor signature with three arguments, future support for constructor with only ServiceClientArgs object - constructor(args: ServiceClientArgs)
  */
 export default class BaseApiService {
     // TODO: Document when we have a final auth story
