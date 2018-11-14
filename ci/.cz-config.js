@@ -23,7 +23,6 @@ module.exports = {
         { name: 'action' },
         { name: 'auth' },
         { name: 'catalog' },
-        { name: 'cicd' },
         { name: 'core' },
         { name: 'examples' },
         { name: 'identity' },
@@ -31,11 +30,12 @@ module.exports = {
         { name: 'kvstore' },
         { name: 'search' },
         { name: 'streams' },
+        { name: '*' },
     ],
 
     // override scopes for certain types
     scopeOverrides: {
-        test: [{ name: 'unit' }, { name: 'integration' }],
+        test: [{ name: 'unit' }, { name: 'integration' }, { name: '*' }],
     },
 
     allowCustomScopes: false,
