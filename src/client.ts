@@ -92,6 +92,9 @@ function decodeJson(text: string): any {
 export type ResponseHook = (response: Response) => Promise<Response> | any;
 export type TokenProviderFunction = () => string;
 export interface ServiceClientArgs {
+    /**
+     * @deprecated Use urls instead
+     */
     url?: string;
     urls?: {
         [key: string]: string;
@@ -119,6 +122,8 @@ export class ServiceClient {
     /**
      * Create a ServiceClient with the given URL and an auth token
      * @param args : ServiceClientArgs Url to Splunk Cloud instance
+     * @param token Auth token
+     * @param tenant Tenant to use for requests
      */
     constructor(args: ServiceClientArgs | string, token?: string, tenant?: string) {
         if (typeof args === 'string') {
@@ -137,7 +142,7 @@ export class ServiceClient {
             } else if (typeof authManager === 'function') {
                 // If we have a function, just call it when we need a token
                 this.tokenSource = authManager;
-            } else if ('getAccessToken' in authManager) {
+            } else if (typeof authManager !== 'undefined' && 'getAccessToken' in authManager) {
                 // Else wrap a token manager.
                 this.tokenSource = () => authManager.getAccessToken();
             } else {
