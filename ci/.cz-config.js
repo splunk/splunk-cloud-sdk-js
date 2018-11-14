@@ -38,6 +38,11 @@ module.exports = {
         test: [{ name: 'unit' }, { name: 'integration' }, { name: '*' }],
     },
 
+    // override the messages, defaults are as follows
+    messages: {
+        scope: 'Denote the SCOPE of this change (optional). Select * to skip.',
+    },
+
     allowCustomScopes: false,
     allowBreakingChanges: ['feat', 'fix', 'refactor'],
 
