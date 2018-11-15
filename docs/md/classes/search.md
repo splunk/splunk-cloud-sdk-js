@@ -35,9 +35,9 @@ A base for an easy-to-use search interface
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| searchService | [SearchService](searchservice.md) |  - |
+| searchService | [SearchService](searchservice.md) |  \- |
 | jobId | `string` |   |
 
 **Returns:** [Search](search.md)
@@ -68,9 +68,12 @@ Returns the results from a search as a (promised) array. If 'args.offset' is sup
 
 **Parameters:**
 
-| Param | Type | Default value | Description |
-| ------ | ------ | ------ | ------ |
-| `Default value` args | `object` |  {} |  - |
+**`Default value` args: `object`**
+
+| Name | Type |
+| ------ | ------ |
+| `Optional` count |  `undefined` &#124; `number`|
+| `Optional` offset |  `undefined` &#124; `number`|
 
 **Returns:** `Promise`<`any`>
 A list of event objects
@@ -86,9 +89,9 @@ Returns an observable that will poll the job and return results, updating until 
 
 **Parameters:**
 
-| Param | Type | Default value | Description |
+| Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
-| `Default value` args | [ResultObservableOptions](../interfaces/resultobservableoptions.md) |  {} |  - |
+| `Default value` args | [ResultObservableOptions](../interfaces/resultobservableoptions.md) |  {} |  \- |
 
 **Returns:** `Observable`<`any`>
 An observable that will pass each result object as it is received
@@ -116,7 +119,7 @@ A utility method that will return an Rx.Observable which will supply status upda
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | updateInterval | `number` |  interval (in ms) at which to poll |
 
@@ -134,10 +137,10 @@ Polls the job until it is done processing
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| `Optional` updateInterval |  `undefined` &#124; `number`|  - |
-| `Optional` statusCallback |  `undefined` &#124; `function`|  - |
+| `Optional` updateInterval |  `undefined` &#124; `number`|  \- |
+| `Optional` statusCallback |  `undefined` &#124; `function`|  \- |
 
 **Returns:** `Promise`<[SearchJob](../interfaces/searchjob.md)>
 search job status description

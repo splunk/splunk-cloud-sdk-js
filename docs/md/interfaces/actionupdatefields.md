@@ -82,8 +82,7 @@ ___
 
 ### `<Optional>` webhookUrl
 
-**● webhookUrl**: * `undefined` &#124; `string`
-*
+**● webhookUrl**: *`URL`*
 
 ___
 

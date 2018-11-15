@@ -3,6 +3,7 @@
 # Class: BaseApiService
 
 Base class for each of the API proxies
+*__deprecated__*: BaseApiService Constructor signature with three arguments, future support for constructor with only ServiceClient object - constructor(client: ServiceClient)
 
 ## Hierarchy
 
@@ -44,7 +45,7 @@ Base class for each of the API proxies
 
 **Parameters:**
 
-| Param | Type |
+| Name | Type |
 | ------ | ------ |
 | clientOrUrl |  `string` &#124; [ServiceClient](serviceclient.md)|
 | `Optional` token |  `undefined` &#124; `string`|

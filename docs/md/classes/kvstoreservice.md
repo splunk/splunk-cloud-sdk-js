@@ -26,8 +26,6 @@ Encapsulates kvstore service endpoints
 * [deleteIndex](kvstoreservice.md#deleteindex)
 * [deleteRecordByKey](kvstoreservice.md#deleterecordbykey)
 * [deleteRecords](kvstoreservice.md#deleterecords)
-* [getCollectionStats](kvstoreservice.md#getcollectionstats)
-* [getCollections](kvstoreservice.md#getcollections)
 * [getHealthStatus](kvstoreservice.md#gethealthstatus)
 * [getRecordByKey](kvstoreservice.md#getrecordbykey)
 * [insertRecord](kvstoreservice.md#insertrecord)
@@ -48,7 +46,7 @@ Encapsulates kvstore service endpoints
 
 **Parameters:**
 
-| Param | Type |
+| Name | Type |
 | ------ | ------ |
 | clientOrUrl |  `string` &#124; [ServiceClient](serviceclient.md)|
 | `Optional` token |  `undefined` &#124; `string`|
@@ -80,7 +78,7 @@ Creates a new index to be added to the collection.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection where the new index will be created |
 | index | [IndexDescription](../interfaces/indexdescription.md) |  The index to create |
@@ -99,7 +97,7 @@ Deletes an index in a given collection.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection whose index should be deleted |
 | indexName | `string` |  The name of the index to delete |
@@ -118,7 +116,7 @@ Deletes a record present in a given collection based on the key value provided b
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection whose record should be deleted |
 | key | `string` |  The key of the record used for deletion |
@@ -137,43 +135,13 @@ Deletes records present in a given collection based on the query parameters prov
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection whose records should be deleted |
 | `Optional` filter | [QueryArgs](../interfaces/queryargs.md) |  Query JSON expression to target specific records |
 
 **Returns:** `Promise`<`any`>
 A promise that will be resolved when the matching records are deleted
-
-___
-<a id="getcollectionstats"></a>
-
-###  getCollectionStats
-
-▸ **getCollectionStats**(collection: *`string`*): `Promise`<[CollectionStats](../interfaces/collectionstats.md)>
-
-Gets the the KVStore collections stats.
-
-**Parameters:**
-
-| Param | Type | Description |
-| ------ | ------ | ------ |
-| collection | `string` |  the collection to retrieve |
-
-**Returns:** `Promise`<[CollectionStats](../interfaces/collectionstats.md)>
-Statistics for the collection
-
-___
-<a id="getcollections"></a>
-
-###  getCollections
-
-▸ **getCollections**(): `Promise`<[CollectionDefinition](../interfaces/collectiondefinition.md)[]>
-
-Gets all the collections.
-
-**Returns:** `Promise`<[CollectionDefinition](../interfaces/collectiondefinition.md)[]>
-A list of defined collections
 
 ___
 <a id="gethealthstatus"></a>
@@ -198,7 +166,7 @@ Gets the record present in a given collection based on the key value provided by
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection whose record should be fetched |
 | key | `string` |  The record key used to query a specific record |
@@ -217,7 +185,7 @@ Inserts a new record to the collection.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection where the record should be inserted |
 | record | `Map`<`string`, `string`> |  The record to add to the collection |
@@ -236,7 +204,7 @@ Inserts multiple new records to the collection in a single request.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection where the new records should be inserted |
 | records | `Array`<`Map`<`string`, `string`>> |  The data tuples to insert |
@@ -255,7 +223,7 @@ Lists all the indexes in a given collection.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection whose indexes should be listed |
 
@@ -273,7 +241,7 @@ Lists the records present in a given collection based on the query parameters pr
 
 **Parameters:**
 
-| Param | Type | Default value | Description |
+| Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | collection | `string` | - |  The name of the collection whose records should be fetched |
 | `Default value` filter | [QueryArgs](../interfaces/queryargs.md) |  {} |  Filter string to target specific records |
@@ -292,7 +260,7 @@ Queries records present in a given collection based on the query parameters prov
 
 **Parameters:**
 
-| Param | Type | Default value | Description |
+| Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | collection | `string` | - |  The name of the collection whose records should be fetched |
 | `Default value` filter | [QueryArgs](../interfaces/queryargs.md) |  {} |  Filter string to target specific records |
