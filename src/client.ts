@@ -92,6 +92,10 @@ function decodeJson(text: string): any {
 export type ResponseHook = (response: Response) => Promise<Response> | any;
 export type TokenProviderFunction = () => string;
 export interface ServiceClientArgs {
+    /**
+     * @deprecated Use urls instead
+     */
+    url?: string;
     urls?: {
         [key: string]: string;
     };
@@ -118,23 +122,40 @@ export class ServiceClient {
     /**
      * Create a ServiceClient with the given URL and an auth token
      * @param args : ServiceClientArgs Url to Splunk Cloud instance
+     * @param token Auth token
+     * @param tenant Tenant to use for requests
      */
-    constructor(args: ServiceClientArgs) {
-        const authManager = args.tokenSource;
-        if (typeof authManager === 'string') {
-            // If we have a string, wrap it in a lambda
-            this.tokenSource = () => authManager;
-        } else if (typeof authManager === 'function') {
-            // If we have a function, just call it when we need a token
-            this.tokenSource = authManager;
-        } else if ('getAccessToken' in authManager) {
-            // Else wrap a token manager.
-            this.tokenSource = () => authManager.getAccessToken();
+    constructor(args: ServiceClientArgs | string, token?: string, tenant?: string) {
+        if (typeof args === 'string') {
+            if (typeof token === 'string') {
+                this.tokenSource = () => token;
+            } else {
+                throw new SplunkError({ message: 'No auth token supplied.' });
+            }
+            this.urls = { 'api': args };
+            this.tenant = tenant;
         } else {
-            throw new SplunkError({ message: 'Unsupported token source' });
+            const authManager = args.tokenSource;
+            if (typeof authManager === 'string') {
+                // If we have a string, wrap it in a lambda
+                this.tokenSource = () => authManager;
+            } else if (typeof authManager === 'function') {
+                // If we have a function, just call it when we need a token
+                this.tokenSource = authManager;
+            } else if (typeof authManager !== 'undefined' && 'getAccessToken' in authManager) {
+                // Else wrap a token manager.
+                this.tokenSource = () => authManager.getAccessToken();
+            } else {
+                throw new SplunkError({ message: 'Unsupported token source' });
+            }
+            if (args.url !== undefined && args.urls === undefined) {
+                // For backwards compatibility, form args.urls from args.url
+                args.urls = { 'api': args.url };
+
+            }
+            this.urls = args.urls || DEFAULT_URLS;
+            this.tenant = args.defaultTenant;
         }
-        this.urls = args.urls || DEFAULT_URLS;
-        this.tenant = args.defaultTenant;
     }
 
     /**
