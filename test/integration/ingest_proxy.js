@@ -3,13 +3,8 @@ const { SplunkCloud } = require('../../splunk');
 const { EventBatcher } = require('../../ingest_event_batcher');
 const { assert, expect } = require('chai');
 
-const splunkCloudHost = config.playgroundHost;
-const invalidToken = config.invalidAuthToken;
-const token = config.playgroundAuthToken;
-const tenantID = config.playgroundTenant;
-
-const splunk = new SplunkCloud(splunkCloudHost, token, tenantID);
-const splunkBadToken = new SplunkCloud(splunkCloudHost, invalidToken, tenantID);
+const splunk = new SplunkCloud({'urls': {'api': config.stagingApiHost, 'app': config.stagingAppsHost}, 'tokenSource': config.stagingAuthToken, 'defaultTenant': config.stagingTenant });
+const splunkBadToken = new SplunkCloud({'urls': {'api': config.stagingApiHost, 'app': config.stagingAppsHost}, 'tokenSource': config.invalidAuthToken, 'defaultTenant': config.stagingTenant });
 
 describe('integration tests for Ingest Endpoints', () => {
 
@@ -24,6 +19,7 @@ describe('integration tests for Ingest Endpoints', () => {
     const event8 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774576, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdb9".' };
     const event9 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774577, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdc0".' };
     const event10 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774578, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'host': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdc1".' };
+    const event11 = { 'sourcetype': 'splunkd', 'source': 'mysource', 'timestamp': 1536174774578, 'attributes': { 'fieldkey1': 'fieldval1', 'fieldkey2': 'fieldkey2' }, 'hostUnknown': 'myhost', 'body': 'INFO  ServerConfig - My server name is "9765f1bebdc1".' };
 
     describe('Events Endpoint', () => {
 
@@ -45,6 +41,29 @@ describe('integration tests for Ingest Endpoints', () => {
                     assert.fail('request with bad auth should not succeed');
                 }).catch(err => {
                     assert.equal(err.httpStatusCode, 401, 'response httpStatusCode should be 401');
+                });
+            });
+        });
+
+        describe('Post events with unknown field name', () => {
+            it('should return a 400 response', () => {
+                const events = [event11];
+
+                splunk.ingest.postEvents(events).then(response => {
+                    assert.fail('request with unknown field name should not succeed');
+                }).catch(err => {
+                    /**
+                     * {
+                     *  code: 'INVALID_DATA',
+                     *  "message": "Invalid data format",
+                     *  details: "json: unknown field \"unknown\""
+                     * }
+                     */
+                    assert.equal(err.httpStatusCode, 400);
+                    expect(err).to.have.property('code');
+                    expect(err).to.have.property('message');
+                    expect(err.message).to.have.string("Invalid data");
+                    expect(err.details).to.have.string("unknown field");
                 });
             });
         });
@@ -201,6 +220,47 @@ describe('integration tests for Ingest Endpoints', () => {
                     expect(err.url).to.match(new RegExp(ServicePrefixes.INGEST_SERVICE_PREFIX, 'i'));
                     expect(err.url).to.match(/metrics/);
                     */
+                }
+            ));
+        });
+
+        describe('Post metrics unknown data fields', () => {
+
+            const metricUnknownFieldEvent = {
+                'attributes': {
+                    'defaultDimensions': {},
+                    'defaultType': 'g',
+                    'defaultUnit': 'MB'
+                },
+                'body': metrics,
+                'host': 'myhost',
+                'id': 'metric0001',
+                'nanosInvalid': 1,
+                'source': 'mysource',
+                'sourcetype': 'mysourcetype',
+                'timestamp': Date.now() // Millis since epoch
+            };
+
+            it('should return a 400 response', () => splunk.ingest.postMetrics([metricUnknownFieldEvent]).then(
+                () => {
+                    assert.fail('request with unknown data field should not succeed')
+                },
+                err => {
+                    assert.equal(err.httpStatusCode, 400);
+
+                    /**
+                     * {
+                     *  code: 'INVALID_DATA',
+                     *  "message": "Invalid data format",
+                     *  details: "json: unknown field \"unknown\""
+                     * }
+                     */
+                    expect(err).to.have.property('code');
+                    expect(err.httpStatusCode).to.equal(400);
+                    expect(err).to.have.property('message');
+                    expect(err).to.have.property('details');
+                    expect(err.message).to.have.string("Invalid data");
+                    expect(err.details).to.have.string("unknown field");
                 }
             ));
         });

@@ -41,7 +41,7 @@
 
 **Parameters:**
 
-| Param | Type |
+| Name | Type |
 | ------ | ------ |
 | errorParams | [SplunkErrorParams](../interfaces/splunkerrorparams.md) |
 

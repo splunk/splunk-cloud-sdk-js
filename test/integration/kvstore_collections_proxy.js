@@ -2,17 +2,13 @@ const { assert } = require('chai');
 const config = require('../config');
 const { SplunkCloud } = require('../../splunk');
 
-const splunkCloudHost = config.playgroundHost;
-const token = config.playgroundAuthToken;
-const tenantID = config.playgroundTenant;
+const splunkCloud = new SplunkCloud({'urls': {'api': config.stagingApiHost, 'app': config.stagingAppsHost}, 'tokenSource': config.stagingAuthToken, 'defaultTenant': config.stagingTenant });
 
 const testNamespace = config.testNamespace;
 const testCollection = config.testCollection;
 
-const { ContentType } = require('../../client');
+const { ContentType } = require('../../client')
 const { createKVCollectionDataset, createRecord, deleteAllDatasets } = require('./catalog_proxy');
-
-const splunkCloud = new SplunkCloud(splunkCloudHost, token, tenantID);
 
 const testKVCollectionName = testNamespace + '.' + testCollection;
 
@@ -367,15 +363,6 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                         collection to be provided on record creation`
                 );
             });
-        });
-    });
-
-    describe('Test GetCollections', () => {
-        it('Should successfully return all the collections present in the given tenant', () => {
-            return splunkCloud.kvstore.getCollections()
-                .then(getCollectionsResponse => {
-                    assert(getCollectionsResponse.length >= 1, "Atleast one collection should be returned");
-                });
         });
     });
 });

@@ -18,9 +18,12 @@
 * [kind](datasetinfo.md#kind)
 * [modified](datasetinfo.md#modified)
 * [modifiedBy](datasetinfo.md#modifiedby)
+* [module](datasetinfo.md#module)
 * [name](datasetinfo.md#name)
 * [owner](datasetinfo.md#owner)
 * [readroles](datasetinfo.md#readroles)
+* [sourceModule](datasetinfo.md#sourcemodule)
+* [sourceName](datasetinfo.md#sourcename)
 * [version](datasetinfo.md#version)
 * [writeroles](datasetinfo.md#writeroles)
 
@@ -89,6 +92,13 @@ ___
 *
 
 ___
+<a id="module"></a>
+
+###  module
+
+**● module**: *`string`*
+
+___
 <a id="name"></a>
 
 ###  name
@@ -108,6 +118,22 @@ ___
 ### `<Optional>` readroles
 
 **● readroles**: *`string`[]*
+
+___
+<a id="sourcemodule"></a>
+
+### `<Optional>` sourceModule
+
+**● sourceModule**: * `undefined` &#124; `string`
+*
+
+___
+<a id="sourcename"></a>
+
+### `<Optional>` sourceName
+
+**● sourceName**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="version"></a>

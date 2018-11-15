@@ -42,7 +42,7 @@ Encapsulates search endpoints
 
 **Parameters:**
 
-| Param | Type |
+| Name | Type |
 | ------ | ------ |
 | clientOrUrl |  `string` &#124; [ServiceClient](serviceclient.md)|
 | `Optional` token |  `undefined` &#124; `string`|
@@ -74,7 +74,7 @@ Creates a new SearchJob
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | jobArgs | [SearchArgs](../interfaces/searchargs.md) |  Arguments for the new search |
 
@@ -91,9 +91,9 @@ Returns the job resource with the given `id`.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| jobId | `string` |  - |
+| jobId | `string` |  \- |
 
 **Returns:** `Promise`<[SearchJob](../interfaces/searchjob.md)>
 Description of job
@@ -105,11 +105,11 @@ ___
 
 ▸ **getResults**(jobId: *`string`*, args?: *[FetchResultsRequest](../interfaces/fetchresultsrequest.md)*): `Promise`< [SearchResults](../interfaces/searchresults.md) &#124; [ResultsNotReadyResponse](../interfaces/resultsnotreadyresponse.md)>
 
-Get {search_id} search results.
+Get {search\_id} search results.
 
 **Parameters:**
 
-| Param | Type | Default value |
+| Name | Type | Default value |
 | ------ | ------ | ------ |
 | jobId | `string` | - |
 | `Default value` args | [FetchResultsRequest](../interfaces/fetchresultsrequest.md) |  {} |
@@ -127,7 +127,7 @@ Get the matching list of search jobs.
 
 **Parameters:**
 
-| Param | Type | Default value |
+| Name | Type | Default value |
 | ------ | ------ | ------ |
 | `Default value` jobArgs | `any` |  {} |
 
@@ -144,7 +144,7 @@ Submits a search job and wraps the response in an object for easier further proc
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | searchArgs | [SearchArgs](../interfaces/searchargs.md) |  arguments for a new search job |
 
@@ -162,9 +162,9 @@ action is applied to search job
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| jobId | `string` |  - |
+| jobId | `string` |  \- |
 | update | [UpdateJob](../interfaces/updatejob.md) |   |
 
 **Returns:** `Promise`<[UpdateJobResponse](../interfaces/updatejobresponse.md)>
@@ -180,9 +180,9 @@ Polls the service until the job is ready, then resolves returned promise with th
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| jobId | `string` |  - |
+| jobId | `string` |  \- |
 | `Optional` pollInterval |  `undefined` &#124; `number`|  in ms |
 | `Optional` callback |  `undefined` &#124; `function`|  optional function that will be called on every poll result |
 

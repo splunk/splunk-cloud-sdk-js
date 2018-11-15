@@ -5,7 +5,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
 import BaseApiService from './baseapiservice';
-import { ACTION_SERVICE_PREFIX } from './service_prefixes';
+import { ACTION_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
 /**
  * Encapsulates Action service endpoints
@@ -16,9 +16,9 @@ export class ActionService extends BaseApiService {
      * @returns Promise of all actions
      */
     public getActions = (): Promise<Array<EmailAction | WebhookAction | SNSAction>> => {
-        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
+        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX,['actions']))
             .then(response => response.body as Array<EmailAction | WebhookAction | SNSAction>);
-    };
+    }
 
     /**
      * Get an action by name
@@ -26,9 +26,9 @@ export class ActionService extends BaseApiService {
      * @return Promise of an action
      */
     public getAction = (name: ActionBase['name']): Promise<EmailAction | WebhookAction | SNSAction> => {
-        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
+        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
             .then(response => response.body as EmailAction | WebhookAction | SNSAction);
-    };
+    }
 
     /**
      * Delete an action by name
@@ -36,9 +36,9 @@ export class ActionService extends BaseApiService {
      * @return Promise of object
      */
     public deleteAction = (name: ActionBase['name']): Promise<any> => {
-        return this.client.delete(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
+        return this.client.delete(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
             .then(response => response.body);
-    };
+    }
 
     /**
      * Create an action
@@ -46,9 +46,9 @@ export class ActionService extends BaseApiService {
      * @return Promise of an action
      */
     public createAction = (action: EmailAction | WebhookAction | SNSAction): Promise<EmailAction | WebhookAction | SNSAction> => {
-        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
+        return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
             .then(response => response.body as EmailAction | WebhookAction | SNSAction);
-    };
+    }
 
     /**
      * Update an action
@@ -56,10 +56,10 @@ export class ActionService extends BaseApiService {
      * @param action action updates
      * @return Promise of an action
      */
-    public updateAction = (name: ActionBase['name'], action: EmailAction | WebhookAction | SNSAction): Promise<EmailAction | WebhookAction | SNSAction> => {
-        return this.client.patch(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
+    public updateAction = (name: ActionBase['name'], action: ActionUpdateFields): Promise<EmailAction | WebhookAction | SNSAction> => {
+        return this.client.patch(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
             .then(response => response.body as EmailAction | WebhookAction | SNSAction);
-    };
+    }
 
     /**
      * Trigger an action
@@ -68,7 +68,7 @@ export class ActionService extends BaseApiService {
      * @return Promise of actionTriggerResponse
      */
     public triggerAction = (name: ActionBase['name'], notification: ActionNotification): Promise<ActionTriggerResponse> => {
-        return this.client.post(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), notification)
+        return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), notification)
             .then(response => {
                 const key = 'location';
                 if (response.headers.has(key)) {
@@ -85,7 +85,7 @@ export class ActionService extends BaseApiService {
                 }
                 return response.body as ActionTriggerResponse;
             });
-    };
+    }
 
     /**
      * Get action status
@@ -94,9 +94,9 @@ export class ActionService extends BaseApiService {
      * @return Promise of actionStatus
      */
     public getActionStatus = (name: ActionBase['name'], statusId: string): Promise<ActionStatus> => {
-        return this.client.get(this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
+        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
             .then(response => response.body as ActionStatus);
-    };
+    }
 }
 
 
@@ -206,12 +206,12 @@ export interface ActionUpdateFields {
 
     // Webhook action fields:
     // WebhookURL to trigger Webhook action
-    webhookUrl?: string;
+    webhookUrl?: URL;
 }
 
 
-export interface EmailAction {
-    type: 'email';
+export interface EmailAction extends ActionBase {
+    kind: 'email';
     addresses: string[];
     htmlPart?: string;
     subjectPart?: string;
@@ -219,20 +219,20 @@ export interface EmailAction {
     textPart?: string;
 }
 
-export interface SNSAction {
-    type: 'sns';
+export interface SNSAction extends ActionBase {
+    kind: 'sns';
     message: string;
     topic: string;
 }
 
-export interface WebhookAction {
-    type: 'webhook';
+export interface WebhookAction extends ActionBase {
+    kind: 'webhook';
     message: string;
 
     /**
      * Only allows https scheme. Only allows hostnames that end with "slack.com", "webhook.site", "sendgrid.com", "zapier.com", "hipchat.com", "amazon.com", and "amazonaws.com"
      */
-    webhookUrl: string;
+    webhookUrl: URL;
 }
 
 export interface ActionBase {

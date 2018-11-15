@@ -2,11 +2,7 @@ const config = require('../config');
 const { SplunkCloud } = require('../../splunk');
 const { assert, expect } = require("chai");
 
-const splunkCloudHost = config.playgroundHost;
-const token = config.playgroundAuthToken;
-const tenantID = config.playgroundTenant;
-
-const splunk = new SplunkCloud(splunkCloudHost, token, tenantID);
+const splunk = new SplunkCloud({'urls': {'api': config.stagingApiHost, 'app': config.stagingAppsHost}, 'tokenSource': config.stagingAuthToken, 'defaultTenant': config.stagingTenant });
 
 const standardQuery = {
     "query": "| from index:main | head 5",
@@ -93,6 +89,30 @@ describe("integration tests Using Search APIs", () => {
         it("should allow retrieval of jobs", () => splunk.search.listJobs()
             .then(results => {
                 expect(results).to.be.an('array');
+                expect(results[0]).to.have.property('sid');
+                expect(results[0]).to.have.property('query');
+                expect(results[0]).to.have.property('status');
+                expect(results[0]).to.have.property('module');
+                expect(results[0]).to.have.property('resultsAvailable');
+                expect(results[0]).to.have.property('percentComplete');
+            }))
+
+        it("should allow retrieval of jobs with query single status", () => splunk.search.listJobs({status: 'running'})
+            .then(results => {
+                expect(results).to.be.an('array');
+                expect(results).to.have.lengthOf.above(0);
+                expect(results[0]).to.have.property('sid');
+                expect(results[0]).to.have.property('query');
+                expect(results[0]).to.have.property('status');
+                expect(results[0]).to.have.property('module');
+                expect(results[0]).to.have.property('resultsAvailable');
+                expect(results[0]).to.have.property('percentComplete');
+            }))
+
+        it("should allow retrieval of jobs with query multiple status", () => splunk.search.listJobs({status: 'running,done'})
+            .then(results => {
+                expect(results).to.be.an('array');
+                expect(results).to.have.lengthOf.above(0);
                 expect(results[0]).to.have.property('sid');
                 expect(results[0]).to.have.property('query');
                 expect(results[0]).to.have.property('status');
