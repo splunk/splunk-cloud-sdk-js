@@ -42,7 +42,7 @@ Encapsulates Action service endpoints
 
 **Parameters:**
 
-| Param | Type |
+| Name | Type |
 | ------ | ------ |
 | clientOrUrl |  `string` &#124; [ServiceClient](serviceclient.md)|
 | `Optional` token |  `undefined` &#124; `string`|
@@ -74,7 +74,7 @@ Create an action
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | action |  [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)|  input action |
 
@@ -92,7 +92,7 @@ Delete an action by name
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | name | `string` |  name of the action |
 
@@ -110,7 +110,7 @@ Get an action by name
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | name | `string` |  name of the action |
 
@@ -128,7 +128,7 @@ Get action status
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | name | `string` |  name of the action |
 | statusId | `string` |  statusId |
@@ -159,7 +159,7 @@ Trigger an action
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | name | `string` |  name of the action |
 | notification | [ActionNotification](../interfaces/actionnotification.md) |  action notification |
@@ -172,16 +172,16 @@ ___
 
 ###  updateAction
 
-▸ **updateAction**(name: *`string`*, action: * [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)*): `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
+▸ **updateAction**(name: *`string`*, action: *[ActionUpdateFields](../interfaces/actionupdatefields.md)*): `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
 
 Update an action
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | name | `string` |  name of the action |
-| action |  [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)|  action updates |
+| action | [ActionUpdateFields](../interfaces/actionupdatefields.md) |  action updates |
 
 **Returns:** `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
 Promise of an action

@@ -13,6 +13,7 @@
 * [defaultTenant](serviceclientargs.md#defaulttenant)
 * [tokenSource](serviceclientargs.md#tokensource)
 * [url](serviceclientargs.md#url)
+* [urls](serviceclientargs.md#urls)
 
 ---
 
@@ -39,6 +40,16 @@ ___
 ### `<Optional>` url
 
 **● url**: * `undefined` &#124; `string`
+*
+
+*__deprecated__*: Use urls instead
+
+___
+<a id="urls"></a>
+
+### `<Optional>` urls
+
+**● urls**: * `undefined` &#124; `object`
 *
 
 ___

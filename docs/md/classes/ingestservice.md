@@ -37,7 +37,7 @@ Encapsulates Ingest service endpoints
 
 **Parameters:**
 
-| Param | Type |
+| Name | Type |
 | ------ | ------ |
 | clientOrUrl |  `string` &#124; [ServiceClient](serviceclient.md)|
 | `Optional` token |  `undefined` &#124; `string`|
@@ -69,9 +69,9 @@ Post structured events to be ingested by Splunk Cloud via Ingest service.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| events | [Event](../interfaces/event.md)[] |  - |
+| events | [Event](../interfaces/event.md)[] |  \- |
 
 **Returns:** `Promise`<`any`>
 promise that will be resolved when the ingest service has accepted the events for indexing
@@ -87,9 +87,9 @@ Post metrics to be ingested by Splunk Cloud.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| metrics | [MetricEvent](../interfaces/metricevent.md)[] |  - |
+| metrics | [MetricEvent](../interfaces/metricevent.md)[] |  \- |
 
 **Returns:** `Promise`<`any`>
 promise that will be resolved when the ingest service has accepted the metrics for indexing
