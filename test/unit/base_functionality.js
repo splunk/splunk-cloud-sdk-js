@@ -188,7 +188,6 @@ describe("Service client args", () => {
 
         expect(s.buildUrl('api', s.buildPath('/foo', ['bar']))).to.equal(`https://api.splunkbeta.com/${config.stubbyTenant}/foo/bar`);
     });
-
 })
 
 describe("Service client with a url string instead of args object", () => {
@@ -199,7 +198,7 @@ describe("Service client with a url string instead of args object", () => {
     );
     describe("GET", () => {
         it("should return a promise when service client is created with a url string instead of args object", () => {
-            expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
+            expect(s.buildUrl('api', s.buildPath('', ['basic']))).to.equal(`http://${config.stubbyHost}:8882/${config.stubbyTenant}/basic`);
             const promise = s.get('api', "/basic");
             expect(promise).to.be.a("promise");
             return promise.then((data) => data.body).then(body => {
@@ -217,7 +216,7 @@ describe("Service client with a ServiceClientArgs object initialized with a url 
     });
     describe("GET", () => {
         it("should return a promise when service client is created with a ServiceClientArgs object initialized with a url string", () => {
-            expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
+            expect(s.buildUrl('api', s.buildPath('', ['basic']))).to.equal(`http://${config.stubbyHost}:8882/${config.stubbyTenant}/basic`);
             const promise = s.get('api', "/basic");
             expect(promise).to.be.a("promise");
             return promise.then((data) => data.body).then(body => {
