@@ -9,11 +9,11 @@ read NEW_VERSION
 
 print_header_line
 echo "Preparing v$NEW_VERSION for release ..."
-echo "Running `git checkout develop` ..."
+echo "Running 'git checkout develop' ..."
 git checkout develop
 
 print_header_line
-echo "Running `git fetch --all && git pull --all` ..."
+echo "Running 'git fetch --all && git pull --all' ..."
 git fetch --all && git pull --all
 
 print_header_line
@@ -27,11 +27,6 @@ echo "Installing dependencies for tooling ..."
 yarn
 
 print_header_line
-echo "Updating Version in package.json ..."
-yarn version --new-version $NEW_VERSION \
-             --no-git-tag-version
-
-print_header_line
 echo "Building resouces for documentation ..."
 yarn build
 
@@ -41,11 +36,7 @@ yarn run docs
 git add docs
 
 print_header_line
-echo "Re-adding package.json because it gets updated sometimes ..."
-git add package.json
-
-print_header_line
-echo "Showing changes with `git status` ..."
+echo "Showing changes with 'git status' ..."
 git status
 
 print_header_line
@@ -54,8 +45,9 @@ read PUSH_TO_GIT
 if [ "$PUSH_TO_GIT" = "Y" ]
 then
     print_header_line
-    echo "Creating commit for client_info.go and docs/ changes ..."
+    echo "Creating commit for version bump and docs/ changes ..."
     yarn commit
+    yarn release -- --release-as $NEW_VERSION
 
     print_header_line
     echo "Pushing branch $BRANCH_NAME ..."
@@ -68,13 +60,15 @@ fi
 print_header_line
 echo "Please complete these steps in order to finish the release!"
 echo ""
-echo "Please create a pull request from $BRANCH_NAME targeting master"
+echo "Please create a pull request from '$BRANCH_NAME' targeting 'master'"
+echo ""
 echo "AFTER the the pull request has been merged go to https://github.com/splunk/splunk-cloud-sdk-js/releases/new and create a release"
 echo " - Make the tag '$NEW_VERSION'"
 echo " - Make the target 'master'"
 echo " - Make the title 'Release $NEW_VERSION'"
 echo " - Make sure the release includes the change notes in the write section"
 echo " - Make sure the release is marked set as a 'pre-release'"
+echo "Please create a pull request from 'master' targeting 'develop'"
 echo "Please inform relevant parties of the release."
 echo "Deliver the documentation in \"ci/docs/build\" to the developer portal team"
 echo "Push the created build artifact to artifactory"
