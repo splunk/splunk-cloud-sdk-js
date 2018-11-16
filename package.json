@@ -1,6 +1,6 @@
 {
   "name": "@splunk/cloud-sdk",
-  "version": "0.6.1",
+  "version": "9.9.9",
   "description": "Splunk Cloud SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
@@ -95,7 +95,9 @@
     }
   },
   "commitlint": {
-    "extends": ["@commitlint/config-conventional"]
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
   "config": {
     "commitizen": {
@@ -104,5 +106,5 @@
     "cz-customizable": {
       "config": "ci/.cz-config.js"
     }
-  }	
+  }
 }
