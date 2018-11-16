@@ -17,7 +17,7 @@ export class CatalogService extends BaseApiService {
      * @param filter An SPL filter string
      * @return Array of dataset descriptors
      */
-    public getDatasets(filter?: string): Promise<DatasetInfo[]> {
+    public getDatasets = (filter?: string): Promise<DatasetInfo[]> => {
         const query: QueryArgs = {};
         if (filter) {
             query.filter = filter;
