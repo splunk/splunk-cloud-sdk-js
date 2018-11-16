@@ -43,7 +43,7 @@ Encapsulates Streams endpoints
 
 **Parameters:**
 
-| Param | Type |
+| Name | Type |
 | ------ | ------ |
 | clientOrUrl |  `string` &#124; [ServiceClient](serviceclient.md)|
 | `Optional` token |  `undefined` &#124; `string`|
@@ -75,7 +75,7 @@ Activates a pipeline.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | activatePipelineRequest | [ActivatePipelineRequest](../interfaces/activatepipelinerequest.md) |  The activate pipeline request containing the ids of pipeline to be activated |
 
@@ -93,7 +93,7 @@ Creates a Upl Json from DSL.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | dsl | [DslCompilationRequest](../interfaces/dslcompilationrequest.md) |  The DSL script that needs to be converted into a UPL pipeline JSON |
 
@@ -111,7 +111,7 @@ Creates a new pipeline.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | pipeline | [PipelineRequest](../interfaces/pipelinerequest.md) |  The new pipeline data to be created |
 
@@ -129,7 +129,7 @@ Deactivates a pipeline.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | deactivatePipelineRequest | [ActivatePipelineRequest](../interfaces/activatepipelinerequest.md) |  The deactivate pipeline request containing the ids of pipeline to be deactivated |
 
@@ -147,7 +147,7 @@ Deletes the pipeline based on the ID provided by the user.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | id | `string` |  The ID of the pipeline that should be deleted |
 
@@ -165,7 +165,7 @@ Get the pipeline based on the pipeline ID provided by the user.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | id | `string` |  The ID of the pipeline that should be fetched |
 
@@ -183,7 +183,7 @@ Gets all the pipelines based on the query parameters provided by the user.
 
 **Parameters:**
 
-| Param | Type | Default value | Description |
+| Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | `Default value` queryArgs | [PipelineQueryParams](../interfaces/pipelinequeryparams.md) |  {} |  Filter string to target specific pipelines |
 
@@ -201,7 +201,7 @@ Updates an existing pipeline.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | id | `string` |  The ID of the pipeline that should be updated |
 | pipeline | [PipelineRequest](../interfaces/pipelinerequest.md) |  The updated pipeline data |

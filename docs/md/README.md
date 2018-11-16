@@ -47,9 +47,6 @@
 * [AliasAction](interfaces/aliasaction.md)
 * [AuthManager](interfaces/authmanager.md)
 * [AutoKVAction](interfaces/autokvaction.md)
-* [CollectionDefinition](interfaces/collectiondefinition.md)
-* [CollectionDescription](interfaces/collectiondescription.md)
-* [CollectionStats](interfaces/collectionstats.md)
 * [DatasetInfo](interfaces/datasetinfo.md)
 * [DslCompilationRequest](interfaces/dslcompilationrequest.md)
 * [EmailAction](interfaces/emailaction.md)
@@ -120,9 +117,9 @@
 * [ResponseHook](#responsehook)
 * [TokenProviderFunction](#tokenproviderfunction)
 
-### Variables
+### Object literals
 
-* [DEFAULT_URL](#default_url)
+* [DEFAULT_URLS](#default_urls)
 
 ---
 
@@ -132,7 +129,7 @@
 
 ###  HTTPMethod
 
-**ΤHTTPMethod**: * "GET" &#124; "POST" &#124; "PUT" &#124; "PATCH" &#124; "DELETE"
+**Ƭ HTTPMethod**: * "GET" &#124; "POST" &#124; "PUT" &#124; "PATCH" &#124; "DELETE"
 *
 
 ___
@@ -140,14 +137,14 @@ ___
 
 ###  ResponseHook
 
-**ΤResponseHook**: *`function`*
+**Ƭ ResponseHook**: *`function`*
 
 #### Type declaration
 ▸(response: *`Response`*):  `Promise`<`Response`> &#124; `any`
 
 **Parameters:**
 
-| Param | Type |
+| Name | Type |
 | ------ | ------ |
 | response | `Response` |
 
@@ -158,7 +155,7 @@ ___
 
 ###  TokenProviderFunction
 
-**ΤTokenProviderFunction**: *`function`*
+**Ƭ TokenProviderFunction**: *`function`*
 
 #### Type declaration
 ▸(): `string`
@@ -167,62 +164,85 @@ ___
 
 ___
 
-## Variables
+## Object literals
 
-<a id="action_service_prefix"></a>
+<a id="default_urls"></a>
 
-### `<Private>``<Const>` ACTION_SERVICE_PREFIX
+### `<Const>` DEFAULT_URLS
 
-**● ACTION_SERVICE_PREFIX**: *`string`* = "/action/v1beta1"
+**DEFAULT_URLS**: *`object`*
 
-___
-<a id="catalog_service_prefix"></a>
+<a id="default_urls.api"></a>
 
-### `<Private>``<Const>` CATALOG_SERVICE_PREFIX
+####  api
 
-**● CATALOG_SERVICE_PREFIX**: *`string`* = "/catalog/v1beta1"
-
-___
-<a id="default_url"></a>
-
-### `<Const>` DEFAULT_URL
-
-**● DEFAULT_URL**: *"https://api.splunkbeta.com"* = "https://api.splunkbeta.com"
+**● api**: *`string`* = "https://api.splunkbeta.com"
 
 ___
-<a id="identity_service_prefix"></a>
+<a id="default_urls.app"></a>
 
-### `<Private>``<Const>` IDENTITY_SERVICE_PREFIX
+####  app
 
-**● IDENTITY_SERVICE_PREFIX**: *`string`* = "/identity/v1"
-
-___
-<a id="ingest_service_prefix"></a>
-
-### `<Private>``<Const>` INGEST_SERVICE_PREFIX
-
-**● INGEST_SERVICE_PREFIX**: *`string`* = "/ingest/v1beta1"
+**● app**: *`string`* = "https://apps.splunkbeta.com"
 
 ___
-<a id="kvstore_service_prefix"></a>
-
-### `<Private>``<Const>` KVSTORE_SERVICE_PREFIX
-
-**● KVSTORE_SERVICE_PREFIX**: *`string`* = "/kvstore/v1beta1"
 
 ___
-<a id="search_service_prefix"></a>
+<a id="service_cluster_mapping"></a>
 
-### `<Private>``<Const>` SEARCH_SERVICE_PREFIX
+### `<Private>``<Const>` SERVICE_CLUSTER_MAPPING
 
-**● SEARCH_SERVICE_PREFIX**: *`string`* = "/search/v1beta1"
+**SERVICE_CLUSTER_MAPPING**: *`object`*
+
+<a id="service_cluster_mapping.action"></a>
+
+####  action
+
+**● action**: *`string`* = "api"
 
 ___
-<a id="streams_service_prefix"></a>
+<a id="service_cluster_mapping.catalog"></a>
 
-### `<Private>``<Const>` STREAMS_SERVICE_PREFIX
+####  catalog
 
-**● STREAMS_SERVICE_PREFIX**: *`string`* = "/streams/v1"
+**● catalog**: *`string`* = "api"
+
+___
+<a id="service_cluster_mapping.identity"></a>
+
+####  identity
+
+**● identity**: *`string`* = "api"
+
+___
+<a id="service_cluster_mapping.ingest"></a>
+
+####  ingest
+
+**● ingest**: *`string`* = "api"
+
+___
+<a id="service_cluster_mapping.kvstore"></a>
+
+####  kvstore
+
+**● kvstore**: *`string`* = "api"
+
+___
+<a id="service_cluster_mapping.search"></a>
+
+####  search
+
+**● search**: *`string`* = "api"
+
+___
+<a id="service_cluster_mapping.streams"></a>
+
+####  streams
+
+**● streams**: *`string`* = "api"
+
+___
 
 ___
 
