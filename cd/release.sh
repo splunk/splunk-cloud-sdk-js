@@ -45,12 +45,20 @@ read PUSH_TO_GIT
 if [ "$PUSH_TO_GIT" = "Y" ]
 then
     print_header_line
-    echo "Creating commit for version bump and docs/ changes ..."
+    echo "Creating commit for release changes ..."
     yarn commit
 
     print_header_line
-    echo "Pushing branch $BRANCH_NAME ..."
+    # This also creates a tag for the version
+    echo "Bumping version, making CHANGELOG.md updates, and committing it ..."
     yarn release -- --release-as $NEW_VERSION
+
+    # Delete the tag that was made because we want to do this step manually
+    git tag -d $NEW_VERSION
+
+    print_header_line
+    echo "Pushing branch $BRANCH_NAME ..."
+    git push --set-upstream origin $BRANCH_NAME
 else
     echo "No changes pushed, branch $BRANCH_NAME only created locally ..."
 fi
