@@ -32,7 +32,7 @@ Provides the ability to keep a growing number of events queued up and sends them
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | ingest | [IngestService](ingestservice.md) |  Proxy for the Ingest API |
 | batchSize | `number` |  Size of events in bytes |
@@ -55,7 +55,7 @@ Add a new event to the array, sends all the events if the event limits are met.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | event | [Event](../interfaces/event.md) |  a single event |
 

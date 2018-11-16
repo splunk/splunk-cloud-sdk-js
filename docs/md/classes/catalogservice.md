@@ -41,6 +41,7 @@ Encapsulates catalog endpoints
 * [getRuleAction](catalogservice.md#getruleaction)
 * [getRuleActions](catalogservice.md#getruleactions)
 * [getRules](catalogservice.md#getrules)
+* [listDatasets](catalogservice.md#listdatasets)
 * [patchDatasetField](catalogservice.md#patchdatasetfield)
 * [postDatasetField](catalogservice.md#postdatasetfield)
 * [updateDataset](catalogservice.md#updatedataset)
@@ -58,7 +59,7 @@ Encapsulates catalog endpoints
 
 **Parameters:**
 
-| Param | Type |
+| Name | Type |
 | ------ | ------ |
 | clientOrUrl |  `string` &#124; [ServiceClient](serviceclient.md)|
 | `Optional` token |  `undefined` &#124; `string`|
@@ -90,7 +91,7 @@ Create a new dataset.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | dataset | [DatasetInfo](../interfaces/datasetinfo.md) |  The dataset to create |
 
@@ -108,7 +109,7 @@ Create a new Rule
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | rule | [Rule](../interfaces/rule.md) |  The rule to create |
 
@@ -126,9 +127,9 @@ Create a new Rule Action
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| ruleID | `string` |  - |
+| ruleID | `string` |  \- |
 | action |  [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)|  The rule action to create |
 
 **Returns:** `Promise`< [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)>
@@ -145,9 +146,9 @@ Delete the DatasetInfo and its dependencies with the specified `id`
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| datasetIdOrResourceName | `string` |  - |
+| datasetIdOrResourceName | `string` |  \- |
 
 **Returns:** `Promise`<`any`>
 A promise that will be resolved when deletion is complete
@@ -163,7 +164,7 @@ Delete the Dataset
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | name | `string` |  of the Dataset to delete |
 
@@ -181,10 +182,10 @@ Deletes the dataset field with the specified datasetID and datasetFieldID
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| datasetID | `string` |  - |
-| datasetFieldID | `string` |  - |
+| datasetID | `string` |  \- |
+| datasetFieldID | `string` |  \- |
 
 **Returns:** `Promise`<`any`>
 promise that will be resolved when field is deleted
@@ -200,9 +201,9 @@ Delete the Rule and its dependencies with the specified `id`
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| ruleIdOrResourceName | `string` |  - |
+| ruleIdOrResourceName | `string` |  \- |
 
 **Returns:** `Promise`<`any`>
 Promise that will be resolved when the rule is deleted
@@ -218,10 +219,10 @@ Deletes the rule action with the specified ruleID and actionID
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| ruleID | `string` |  - |
-| actionID | `string` |  - |
+| ruleID | `string` |  \- |
+| actionID | `string` |  \- |
 
 **Returns:** `Promise`<`any`>
 promise that will be resolved when rule action is deleted
@@ -237,9 +238,9 @@ Returns the dataset resource with the specified `id` or `resourceName`.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| datasetIdOrResourceName | `string` |  - |
+| datasetIdOrResourceName | `string` |  \- |
 
 **Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
 description of the dataset
@@ -255,10 +256,10 @@ Gets the Field with the specified datasetID and datasetFieldID
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| datasetID | `string` |  - |
-| datasetFieldID | `string` |  - |
+| datasetID | `string` |  \- |
+| datasetFieldID | `string` |  \- |
 
 **Returns:** `Promise`<[Field](../interfaces/field.md)>
 field description
@@ -274,9 +275,9 @@ Get the list of dataset fields for the given `id`
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| datasetID | `string` |  - |
+| datasetID | `string` |  \- |
 | `Optional` filter |  `undefined` &#124; `string`|  An SPL filter string |
 
 **Returns:** `Promise`<[Field](../interfaces/field.md)[]>
@@ -293,7 +294,7 @@ Returns a list of datasets, optionally filtered by a filter string.
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | `Optional` filter |  `undefined` &#124; `string`|  An SPL filter string |
 
@@ -311,9 +312,9 @@ Get the matching field
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| fieldID | `string` |  - |
+| fieldID | `string` |  \- |
 
 **Returns:** `Promise`<[Field](../interfaces/field.md)>
 description of the field
@@ -329,7 +330,7 @@ Gets the list of fields
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | `Optional` filter |  `undefined` &#124; `string`|  An SPL filter string |
 
@@ -347,7 +348,7 @@ Return a list of modules that match a filter query if it is given, otherwise ret
 
 **Parameters:**
 
-| Param | Type |
+| Name | Type |
 | ------ | ------ |
 | `Optional` filter |  `undefined` &#124; `string`|
 
@@ -364,9 +365,9 @@ Return the Rule with the specified `id`
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| ruleIdOrResourceName | `string` |  - |
+| ruleIdOrResourceName | `string` |  \- |
 
 **Returns:** `Promise`<[Rule](../interfaces/rule.md)>
 description of the rule
@@ -382,10 +383,10 @@ Gets the rule action with the specified ruleID and actionID
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| ruleID | `string` |  - |
-| actionID | `string` |  - |
+| ruleID | `string` |  \- |
+| actionID | `string` |  \- |
 
 **Returns:** `Promise`< [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)>
 a rule action
@@ -401,9 +402,9 @@ Gets the list of rule actions
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| ruleID | `string` |  - |
+| ruleID | `string` |  \- |
 | `Optional` filter |  `undefined` &#124; `string`|  An SPL filter string |
 
 **Returns:** `Promise`< [AliasAction](../interfaces/aliasaction.md)[] &#124; [AutoKVAction](../interfaces/autokvaction.md)[] &#124; [EvalAction](../interfaces/evalaction.md)[] &#124; [LookupAction](../interfaces/lookupaction.md)[] &#124; [RegexAction](../interfaces/regexaction.md)[]>
@@ -420,12 +421,29 @@ Get the matching list of Rules
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | `Optional` filter |  `undefined` &#124; `string`|  An SPL filter string |
 
 **Returns:** `Promise`<[Rule](../interfaces/rule.md)[]>
 description of defined rules (optionally matching SPL query)
+
+___
+<a id="listdatasets"></a>
+
+###  listDatasets
+
+▸ **listDatasets**(query?: *[QueryArgs](../interfaces/queryargs.md)*): `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)[]>
+
+Returns a list of datasets, optionally filtered by a filter string, count, or orderby criteria
+
+**Parameters:**
+
+| Name | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `Default value` query | [QueryArgs](../interfaces/queryargs.md) |  {} |  QueryArgs |
+
+**Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)[]>
 
 ___
 <a id="patchdatasetfield"></a>
@@ -438,11 +456,11 @@ Updates an existing dataset field
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| datasetID | `string` |  - |
-| datasetFieldID | `string` |  - |
-| datasetField | [Field](../interfaces/field.md) |  - |
+| datasetID | `string` |  \- |
+| datasetFieldID | `string` |  \- |
+| datasetField | [Field](../interfaces/field.md) |  \- |
 
 **Returns:** `Promise`<[Field](../interfaces/field.md)>
 updated description of the field
@@ -458,10 +476,10 @@ Creates a new dataset field
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| datasetID | `string` |  - |
-| datasetField | [Field](../interfaces/field.md) |  - |
+| datasetID | `string` |  \- |
+| datasetField | [Field](../interfaces/field.md) |  \- |
 
 **Returns:** `Promise`<[Field](../interfaces/field.md)>
 description of the new field defined on the dataset
@@ -477,10 +495,10 @@ Updates the supplied dataset
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| datasetIdOrResourceName | `string` |  - |
-| partial | [PartialDatasetInfo](../interfaces/partialdatasetinfo.md) |  - |
+| datasetIdOrResourceName | `string` |  \- |
+| partial | [PartialDatasetInfo](../interfaces/partialdatasetinfo.md) |  \- |
 
 **Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
 information about the updated dataset
@@ -496,10 +514,10 @@ Updates the supplied rule action
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| ruleID | `string` |  - |
-| actionID | `string` |  - |
+| ruleID | `string` |  \- |
+| actionID | `string` |  \- |
 | action |  [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)|
 
 **Returns:** `Promise`< [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)>
