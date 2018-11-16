@@ -47,11 +47,10 @@ then
     print_header_line
     echo "Creating commit for version bump and docs/ changes ..."
     yarn commit
-    yarn release -- --release-as $NEW_VERSION
 
     print_header_line
     echo "Pushing branch $BRANCH_NAME ..."
-    git push --set-upstream origin $BRANCH_NAME
+    yarn release -- --release-as $NEW_VERSION
 else
     echo "No changes pushed, branch $BRANCH_NAME only created locally ..."
 fi
