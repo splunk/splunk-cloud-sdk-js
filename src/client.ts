@@ -46,11 +46,11 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
     if (response.ok) {
         if (response.headers.get('Content-Type') === ContentType.CSV || response.headers.get('Content-Type') === ContentType.GZIP) {
             return response.text()
-                .then(text => ({ body: text, headers: response.headers }));
+                .then(text => ({ body: text, headers: response.headers, status: response.status }));
         } // else
         return response.text()
             .then(decodeJson)
-            .then(json => ({ body: json, headers: response.headers }));
+            .then(json => ({ body: json, headers: response.headers, status: response.status }));
     } // else
     return response.text().then(text => {
         let err: Error;
@@ -368,4 +368,5 @@ export interface RequestHeaders {
 export interface HTTPResponse {
     body?: string | object;
     headers: Headers;
+    status: number;
 }

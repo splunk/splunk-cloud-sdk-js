@@ -100,6 +100,29 @@ export class KVStoreService extends BaseApiService {
     }
 
     /**
+     * Inserts or replaces a record in the tenant's specified collection with the specified key.
+     * @param collection The name of the collection where the record should be inserted/replaced
+     * @param key The key within the collection where the record should be inserted/replaced
+     * @param record The record to add/replace to the collection
+     * @returns An object with the unique _key of the added/replaced record
+     */
+    public putRecord = (collection: string, key: string, record: {[key: string]: string}): Promise<PutResponse> => {
+        const putRecordURL = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
+            'collections',
+            collection,
+            'records',
+            key,
+        ]);
+        return this.client.put(SERVICE_CLUSTER_MAPPING.kvstore, putRecordURL, record)
+            .then(response => {
+                return {
+                    body: response.body as Key,
+                    created: response.status === 201, /* 201 CREATED */
+                } as PutResponse;
+            });
+    }
+
+    /**
      * Queries records present in a given collection based on the query parameters provided by the user.
      * @param collection The name of the collection whose records should be fetched
      * @param filter Filter string to target specific records
@@ -193,4 +216,9 @@ export interface IndexDescription {
 
 export interface Key {
     _key: string;
+}
+
+export interface PutResponse {
+    body: Key;
+    created: boolean;
 }
