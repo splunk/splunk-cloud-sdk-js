@@ -98,7 +98,7 @@ describe('Integration tests for KVStore Endpoints', () => {
     });
 
     describe('Record endpoints', () => {
-        const integrationTestRecord = [
+        const integrationTestRecords = [
             {
                 capacity_gb: 8,
                 size: 0.01,
@@ -123,11 +123,57 @@ describe('Integration tests for KVStore Endpoints', () => {
             },
         ];
 
+        describe('Test inserting/updating records via putRecords', () => {
+            const oldRecord = {
+                lazy: 'dog',
+            };
+            let oldKey: string;
+            const newRecord = {
+                quick: 'fox',
+                brown: 'fox',
+            };
+            const newKey = 'mynewkey';
+
+            before('should create an existing record via putRecord', () =>
+                splunkCloud.kvstore
+                    .insertRecord(testKVCollectionName, oldRecord)
+                    .then((response) => {
+                        oldKey = response._key;
+                    })
+            );
+
+            after('should clean up records created and updated', () =>
+                splunkCloud.kvstore.deleteRecordByKey(testKVCollectionName, oldKey)
+                    .then(() =>
+                        splunkCloud.kvstore.deleteRecordByKey(testKVCollectionName, newKey))
+            );
+
+            it('should update an existing record via putRecord', () =>
+                splunkCloud.kvstore
+                    .putRecord(testKVCollectionName, oldKey, { lazy: 'god' })
+                    .then(putResponse => {
+                        assert.isObject(putResponse.body);
+                        assert.equal(putResponse.body._key, oldKey);
+                        assert.isFalse(putResponse.created);
+                    })
+            );
+
+            it('should create a new record via putRecord', () =>
+                splunkCloud.kvstore
+                    .putRecord(testKVCollectionName, newKey, newRecord)
+                    .then(putResponse => {
+                        assert.isObject(putResponse.body);
+                        assert.equal(putResponse.body._key, newKey);
+                        assert.isTrue(putResponse.created);
+                    })
+            );
+        });
+
         describe('Test insertion, retrieval and deletion of the records', () => {
             let keys: string[];
-            before('should create a new record', () =>
+            before('should create new records via insertRecords', () =>
                 splunkCloud.kvstore
-                    .insertRecords(testKVCollectionName, integrationTestRecord as any)
+                    .insertRecords(testKVCollectionName, integrationTestRecords as any)
                     .then(response => {
                         keys = response as string[];
                         assert.equal(keys.length, 4);
