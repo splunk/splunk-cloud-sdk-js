@@ -23,7 +23,7 @@
     "test:integration": "mocha --timeout=900000 test/integration",
     "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/splunk-cloud-sdk-shared-stubby:latest",
     "stop:stubserver": "docker rm -f stubserver",
-    "publish:docs": "yarn ts:docs && npm add -D @splunk/cicd-tools --registry https://repo.splunk.com/artifactory/api/npm/npm && yarn cicd-publish-docs docs/html",
+    "publish:docs": "./ci/docs/publish.sh",
     "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
     "stop:swagger": "docker rm -f swagger",
     "example": "./ci/integration/runExamples.sh",
