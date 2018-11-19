@@ -53,9 +53,6 @@ then
     echo "Bumping version, making CHANGELOG.md updates, and committing it ..."
     yarn release -- --release-as $NEW_VERSION
 
-    # Delete the tag that was made because we want to do this step manually
-    git tag -d $NEW_VERSION
-
     print_header_line
     echo "Pushing branch $BRANCH_NAME ..."
     git push --set-upstream origin $BRANCH_NAME
