@@ -40,7 +40,7 @@ echo "Showing changes with 'git status' ..."
 git status
 
 print_header_line
-echo "Enter 'Y', then press [ENTER] after reviewing the git status above and confirming the changes are correct. This will push the release branch to the repository:"
+echo "Please review the changes from the 'git status' output above. After confirming the changes are correct type 'Y' and then press [ENTER]. This will push the release branch to the repository:"
 read PUSH_TO_GIT
 if [ "$PUSH_TO_GIT" = "Y" ]
 then
