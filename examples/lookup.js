@@ -7,51 +7,6 @@ const { SplunkCloud } = require("../splunk");
 const { searchResults } = require("../utils/exampleHelperFunctions");
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
-const KV_COLLECTION_DATASET = {
-    name: `kvcollection${Date.now()}`,
-    kind: "kvcollection",
-};
-
-const LOOKUP_DATASET = {
-    name: `lookup${Date.now()}`,
-    kind: 'lookup',
-    externalKind: 'kvcollection',
-    externalName: KV_COLLECTION_DATASET.name
-};
-
-const DATASET_FIELDS = [
-    {
-        name: 'a',
-        datatype: 'NUMBER',
-        fieldtype: 'UNKNOWN',
-        prevalence: 'UNKNOWN'
-    },
-    {
-        name: 'b',
-        datatype: 'NUMBER',
-        fieldtype: 'UNKNOWN',
-        prevalence: 'UNKNOWN'
-    },
-    {
-        name: 'c',
-        datatype: 'NUMBER',
-        fieldtype: 'UNKNOWN',
-        prevalence: 'UNKNOWN'
-    }];
-
-const RECORDS = [
-    {
-        "a": "1",
-        "b": "2",
-        "c": "3"
-    },
-    {
-        "a": "4",
-        "b": "5",
-        "c": "6"
-    }];
-
-
 async function main() {
     // ***** STEP 1: Get Splunk Cloud client
     const splunk = new SplunkCloud({
@@ -61,39 +16,65 @@ async function main() {
     });
 
     // ***** STEP 2: Create kvcollection
-    splunk.catalog.createDataset(KV_COLLECTION_DATASET)
-        .then(() => {
+    let kvcollectionName = `kvcollection${Date.now()}`;
+    let kvDataset = await splunk.catalog.createDataset({ name: kvcollectionName, kind: "kvcollection"});
+    console.log(kvDataset);
 
-            // ***** STEP 3: Retrieve the kvcollection
-            splunk.catalog.getDataset(KV_COLLECTION_DATASET.name).then((data) => {
-                console.log(data);
+    // ***** STEP 3: Create a lookup
+    let lookupName = `lookup${Date.now()}`;
+    let lookupDataset = await splunk.catalog.createDataset({
+        name: lookupName,
+        kind: 'lookup',
+        externalKind: 'kvcollection',
+        externalName: kvcollectionName
+    });
 
-                // ***** STEP 4: Create a lookup
-                splunk.catalog.createDataset(LOOKUP_DATASET).then(lookup => {
+    // ***** STEP 4: Register the fields
+    splunk.catalog.postDatasetField(lookupDataset.id, {
+        name: 'a',
+        datatype: 'NUMBER',
+        fieldtype: 'UNKNOWN',
+        prevalence: 'UNKNOWN'
+    });
+    splunk.catalog.postDatasetField(lookupDataset.id, {
+        name: 'b',
+        datatype: 'NUMBER',
+        fieldtype: 'UNKNOWN',
+        prevalence: 'UNKNOWN'
+    });
+    splunk.catalog.postDatasetField(lookupDataset.id, {
+        name: 'c',
+        datatype: 'NUMBER',
+        fieldtype: 'UNKNOWN',
+        prevalence: 'UNKNOWN'
+    });
 
-                    // ***** STEP 5: Register the fields
-                    for (let i in DATASET_FIELDS)
-                        splunk.catalog.postDatasetField(lookup.id, DATASET_FIELDS[i]);
+    // ***** STEP 5: Insert records into the lookup
+    splunk.kvstore.insertRecords(kvcollectionName, [
+        {
+            "a": "1",
+            "b": "2",
+            "c": "3"
+        },
+        {
+            "a": "4",
+            "b": "5",
+            "c": "6"
+        }]);
 
-                    // ***** STEP 6: Insert records into the lookup
-                    splunk.kvstore.insertRecords(KV_COLLECTION_DATASET.name, RECORDS);
+    // ***** STEP 6: Search the kvcollection via the lookup
+    const query = `| from ${lookupName}`;
+    searchResults(splunk, Date.now(), 90 * 1000, query, 1).then(
+        (results) => {
+            console.log(results);
 
-                    // ***** STEP 7: Search the kvcollection via the lookup
-                    const query = `| from ${LOOKUP_DATASET.name}`;
-                    searchResults(splunk, Date.now(), 90 * 1000, query, 1).then(
-                        (results) => {
-                            console.log(results);
+            // STEP ***** 7: Clean up datasets
+            splunk.catalog.deleteDatasetByName(lookupName);
+            splunk.catalog.deleteDatasetByName(kvcollectionName);
 
-                            // STEP ***** 8: Clean up datasets
-                            splunk.catalog.deleteDatasetByName(LOOKUP_DATASET.name);
-                            splunk.catalog.deleteDatasetByName(KV_COLLECTION_DATASET.name);
-
-                            if (!(results && results.length >= 0)) {
-                                process.exit(1);
-                            }
-                        });
-                })
-            })
+            if (!(results && results.length >= 0)) {
+                process.exit(1);
+            }
         })
         .catch(err => {
             console.log(err);
