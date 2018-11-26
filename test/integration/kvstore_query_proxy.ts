@@ -370,19 +370,5 @@ describe('Integration tests for KVStore Query Endpoints', () => {
             // Testing happens in `createRecord function`
             return createRecord(testKVCollectionName, recordOne);
         });
-
-        // TODO: this test is invalid because we cannot pass null as a string for createRecord()
-        // // A namespace AND collection are required to create a kvcollection
-        // // dataset, you cannot do one without the other.
-        // it('Should error when a namespace and collection are not specified for record creation', () => {
-        //     return createRecord(null, null, recordOne).catch(error => {
-        //         assert.notEqual(
-        //             error,
-        //             null,
-        //             `the queryRecords endpoint requires a namespace and a
-        //                 collection to be provided on record creation`
-        //         );
-        //     });
-        // });
     });
 });
