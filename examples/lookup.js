@@ -1,10 +1,10 @@
 // ***** TITLE: Populating and Searching a KV Collection
 // ***** DESCRIPTION: This example shows how to create a kvcollection dataset, a lookup dataset, populate the collection
-//              and search the collection via the lookup.  This is based on an example provided by Brad Lovering.
-require("isomorphic-fetch");
+//              and search the collection via the lookup.
+require('isomorphic-fetch');
 
-const { SplunkCloud } = require("../splunk");
-const { searchResults } = require("../utils/exampleHelperFunctions");
+const { SplunkCloud } = require('../splunk');
+const { searchResults } = require('../utils/exampleHelperFunctions');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 async function main() {
@@ -16,14 +16,20 @@ async function main() {
     });
 
     // ***** STEP 2: Create kvcollection
-    let kvcollectionName = `kvcollection${Date.now()}`;
-    let kvDataset = await splunk.catalog.createDataset({ name: kvcollectionName, kind: "kvcollection"});
+    let kvcollectionName = `kvcollection${Date.now()}`;  // kvcollectionName should ge unique
+    let moduleName = `mymodule${Date.now()}`;  // moduleName should ge unique
+
+    let kvDataset = await splunk.catalog.createDataset({
+        name: kvcollectionName,
+        module: moduleName,
+        kind: 'kvcollection'});
     console.log(kvDataset);
 
     // ***** STEP 3: Create a lookup
-    let lookupName = `lookup${Date.now()}`;
+    let lookupName = `lookup${Date.now()}`;  // lookupName should ge unique
     let lookupDataset = await splunk.catalog.createDataset({
         name: lookupName,
+        module: moduleName,
         kind: 'lookup',
         externalKind: 'kvcollection',
         externalName: kvcollectionName
@@ -64,15 +70,14 @@ async function main() {
 
     // ***** STEP 6: Search the kvcollection via the lookup
     const query = `| from ${lookupName}`;
-    searchResults(splunk, Date.now(), 90 * 1000, query, 1).then(
-        (results) => {
+    searchResults(splunk, Date.now(), 90 * 1000, query, 1).then((results) => {
             console.log(results);
 
             // STEP ***** 7: Clean up datasets
-            splunk.catalog.deleteDatasetByName(lookupName);
-            splunk.catalog.deleteDatasetByName(kvcollectionName);
+            splunk.catalog.deleteDatasetByName(moduleName + '.' + lookupName);
+            splunk.catalog.deleteDatasetByName(moduleName + '.' + kvcollectionName);
 
-            if (!(results && results.length >= 0)) {
+        if (!results || results.hasOwnProperty('length')) {
                 process.exit(1);
             }
         })
