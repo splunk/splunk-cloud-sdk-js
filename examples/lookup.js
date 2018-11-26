@@ -70,13 +70,8 @@ async function main() {
 
     // ***** STEP 6: Search the kvcollection via the lookup
     const query = `| from ${lookupName}`;
-    searchResults(splunk, Date.now(), 90 * 1000, query, 1).then((results) => {
+    await searchResults(splunk, Date.now(), 90 * 1000, query, 1).then((results) => {
             console.log(results);
-
-            // STEP ***** 7: Clean up datasets
-            splunk.catalog.deleteDatasetByName(moduleName + '.' + lookupName);
-            splunk.catalog.deleteDatasetByName(moduleName + '.' + kvcollectionName);
-
         if (!results || results.hasOwnProperty('length')) {
                 process.exit(1);
             }
@@ -86,6 +81,9 @@ async function main() {
             process.exit(1);
         });
 
+    // STEP ***** 7: Clean up datasets
+    await splunk.catalog.deleteDatasetByName(moduleName + '.' + lookupName);
+    await splunk.catalog.deleteDatasetByName(moduleName + '.' + kvcollectionName);
 }
 main();
 
