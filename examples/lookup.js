@@ -17,7 +17,7 @@ async function main() {
 
     // ***** STEP 2: Create kvcollection
     let kvcollectionName = `kvcollection${Date.now()}`;  // kvcollectionName should ge unique
-    let moduleName = `mymodule${Date.now()}`;  // moduleName should ge unique
+    let moduleName = `mymodule${Date.now()}`;  // moduleName should be unique
 
     let kvDataset = await splunk.catalog.createDataset({
         name: kvcollectionName,
@@ -26,7 +26,7 @@ async function main() {
     console.log(kvDataset);
 
     // ***** STEP 3: Create a lookup
-    let lookupName = `lookup${Date.now()}`;  // lookupName should ge unique
+    let lookupName = `lookup${Date.now()}`;  // lookupName should be unique
     let lookupDataset = await splunk.catalog.createDataset({
         name: lookupName,
         module: moduleName,
