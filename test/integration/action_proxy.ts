@@ -44,7 +44,6 @@ describe('integration tests using action service', () => {
             assert.equal(email.textPart, emailAction.textPart);
             assert.equal(email.templateName, emailAction.templateName);
             assert.deepEqual(email.addresses, emailAction.addresses);
-
         }));
 
         it('should get actions', () => splunkCloud.action.getAction(emailAction.name).then(response => {
@@ -105,7 +104,7 @@ describe('integration tests using action service', () => {
             assert.isNotNull(webhook.StatusID);
             assert.isNotNull(webhook.StatusURL);
 
-            splunkCloud.action.getActionStatus(webhookAction.name, webhook.StatusID as string).then(res => {
+            return splunkCloud.action.getActionStatus(webhookAction.name, webhook.StatusID as string).then(res => {
                 const actionStatus = res as ActionStatus;
                 // expect(['RUNNING', 'FAILED']).to.include(res.state) TODO: Whether the action succeeds or not, depends on the action definition
                 assert.equal(actionStatus.statusId, webhook.StatusID);
@@ -131,7 +130,6 @@ describe('integration tests using action service', () => {
             assert.equal(sns.kind, action.kind);
             assert.equal(sns.topic, action.topic);
             assert.equal(sns.message, action.message);
-
         }));
 
         it('should delete actions', () => splunkCloud.action.deleteAction(action.name).then(response => {
