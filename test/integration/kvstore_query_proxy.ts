@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
-import { createKVCollectionDataset, createRecord /*, deleteAllDatasets */ } from './catalog_proxy';
+import { createKVCollectionDataset, createRecord } from './catalog_proxy';
 
 const splunkCloud = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
 
@@ -9,7 +9,6 @@ const testNamespace = config.testNamespace;
 
 describe('Integration tests for KVStore Query Endpoints', () => {
     // Required for `createKVCollectionDataset` helper
-    let testDataset: object;
     let testKVCollectionName: string;
 
     const recordOne = {
@@ -31,11 +30,12 @@ describe('Integration tests for KVStore Query Endpoints', () => {
     beforeEach(() => {
         const testCollection = `jscoll${Date.now()}`;
         testKVCollectionName = `${testNamespace}.${testCollection}`;
-        const create = () => {
-            testDataset = createKVCollectionDataset(testNamespace, testCollection);
-            return testDataset;
-        };
-        return create();
+
+        return createKVCollectionDataset(testNamespace, testCollection);
+    });
+
+    afterEach(() => {
+        return splunkCloud.catalog.deleteDataset(testKVCollectionName);
     });
 
     // -------------------------------------------------------------------------

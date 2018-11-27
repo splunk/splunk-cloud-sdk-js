@@ -14,11 +14,12 @@ const testKVCollectionName = `${testNamespace}.${testCollection}`;
 describe('Integration tests for KVStore Endpoints', () => {
     let testDataset : object;
 
-    before(async () => {
+    before(() => {
         return createKVCollectionDataset(testNamespace, testCollection).then(ds => {
             testDataset = ds as DatasetInfo;
         });
     });
+
     after(() => {
         if (testDataset !== undefined) {
             const td = testDataset as DatasetInfo;
