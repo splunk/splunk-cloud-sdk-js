@@ -16,12 +16,10 @@ async function main() {
     });
 
     // ***** STEP 2: Create kvcollection
-    let kvcollectionName = `kvcollection${Date.now()}`;  // kvcollectionName should ge unique
-    let moduleName = 'sdktestmodule';
+    let kvcollectionName = `kvcollection${Date.now()}`;  // kvcollectionName should be unique
 
     let kvDataset = await splunk.catalog.createDataset({
         name: kvcollectionName,
-        module: moduleName,
         kind: 'kvcollection'});
     console.log(kvDataset);
 
@@ -29,10 +27,9 @@ async function main() {
     let lookupName = `lookup${Date.now()}`;  // lookupName should be unique
     let lookupDataset = await splunk.catalog.createDataset({
         name: lookupName,
-        module: moduleName,
         kind: 'lookup',
         externalKind: 'kvcollection',
-        externalName: moduleName + "." + kvcollectionName
+        externalName: kvcollectionName
     });
 
     // ***** STEP 4: Register the fields
@@ -56,7 +53,7 @@ async function main() {
     });
 
     // ***** STEP 5: Insert records into the lookup
-    splunk.kvstore.insertRecords(moduleName + "." + kvcollectionName, [
+    splunk.kvstore.insertRecords(kvcollectionName, [
         {
             "a": "1",
             "b": "2",
@@ -69,13 +66,13 @@ async function main() {
         }]);
 
     // ***** STEP 6: Search the kvcollection via the lookup
-    const query = `| from ${moduleName + "." + lookupName}`;
-    searchResults(splunk, Date.now(), 120 * 1000, query, 1).then((results) => {
+    const query = `| from ${lookupName}`;
+    searchResults(splunk, Date.now(), 90 * 1000, query, 1).then((results) => {
             console.log(results);
 
             // STEP ***** 7: Clean up datasets
-            splunk.catalog.deleteDatasetByName(moduleName + '.' + lookupName);
-            splunk.catalog.deleteDatasetByName(moduleName + '.' + kvcollectionName);
+            splunk.catalog.deleteDatasetByName(lookupName);
+            splunk.catalog.deleteDatasetByName(kvcollectionName);
 
             if (!results || results.hasOwnProperty('length')) {
                 process.exit(1);
