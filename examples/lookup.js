@@ -17,7 +17,7 @@ async function main() {
 
     // ***** STEP 2: Create kvcollection
     let kvcollectionName = `kvcollection${Date.now()}`;  // kvcollectionName should ge unique
-    let moduleName = `mymodule${Date.now()}`;  // moduleName should be unique
+    let moduleName = 'sdktestmodule';
 
     let kvDataset = await splunk.catalog.createDataset({
         name: kvcollectionName,
@@ -32,7 +32,7 @@ async function main() {
         module: moduleName,
         kind: 'lookup',
         externalKind: 'kvcollection',
-        externalName: kvcollectionName
+        externalName: moduleName + "." + kvcollectionName
     });
 
     // ***** STEP 4: Register the fields
@@ -56,7 +56,7 @@ async function main() {
     });
 
     // ***** STEP 5: Insert records into the lookup
-    splunk.kvstore.insertRecords(kvcollectionName, [
+    splunk.kvstore.insertRecords(moduleName + "." + kvcollectionName, [
         {
             "a": "1",
             "b": "2",
@@ -69,10 +69,15 @@ async function main() {
         }]);
 
     // ***** STEP 6: Search the kvcollection via the lookup
-    const query = `| from ${lookupName}`;
-    await searchResults(splunk, Date.now(), 90 * 1000, query, 1).then((results) => {
+    const query = `| from ${moduleName + "." + lookupName}`;
+    searchResults(splunk, Date.now(), 90 * 1000, query, 1).then((results) => {
             console.log(results);
-        if (!results || results.hasOwnProperty('length')) {
+
+            // STEP ***** 7: Clean up datasets
+            splunk.catalog.deleteDatasetByName(moduleName + '.' + lookupName);
+            splunk.catalog.deleteDatasetByName(moduleName + '.' + kvcollectionName);
+
+            if (!results || results.hasOwnProperty('length')) {
                 process.exit(1);
             }
         })
@@ -80,10 +85,6 @@ async function main() {
             console.log(err);
             process.exit(1);
         });
-
-    // STEP ***** 7: Clean up datasets
-    await splunk.catalog.deleteDatasetByName(moduleName + '.' + lookupName);
-    await splunk.catalog.deleteDatasetByName(moduleName + '.' + kvcollectionName);
 }
 main();
 
