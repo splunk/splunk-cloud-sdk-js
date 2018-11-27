@@ -6,8 +6,6 @@
 /test/**/*.js
 ./common/ # built dir
 !/.eslintrc.js
-tsconfig*.json
-tslint*.json
 
 # Hide compiled test folders, these appear to be webstorm generated
 /integration

@@ -19,7 +19,7 @@ const moduleQuery = {
 describe('integration tests Using Search APIs', () => {
     before(() => {
         const events = [];
-        for (let i = 0; i < 10; i ++) {
+        for (let i = 0; i < 10; i++) {
             events.push({ body: `Test event #${i}` });
         }
         return splunk.ingest.postEvents(events);
@@ -246,7 +246,6 @@ describe('integration tests Using Search APIs', () => {
                         });
                 });
             });
-
         });
     });
 

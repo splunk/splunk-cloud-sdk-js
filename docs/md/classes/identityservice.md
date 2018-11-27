@@ -69,7 +69,7 @@ Encapsulates Identity endpoints
 
 **Parameters:**
 
-| Param | Type |
+| Name | Type |
 | ------ | ------ |
 | clientOrUrl |  `string` &#124; [ServiceClient](serviceclient.md)|
 | `Optional` token |  `undefined` &#124; `string`|
@@ -101,7 +101,7 @@ Adds a member to the group
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | groupName | `string` |  String name of a group |
 | groupMemberName | [GroupMemberName](../interfaces/groupmembername.md) |  String name of group member |
@@ -120,7 +120,7 @@ Adds a member to the current tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | memberName | [MemberName](../interfaces/membername.md) |  input object of a member |
 
@@ -138,7 +138,7 @@ Adds permissions to an existing role in this tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | roleName | `string` |  String name of a role |
 | permission | `string` |  String name of a permission |
@@ -157,7 +157,7 @@ Adds a role to the group
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | groupName | `string` |  String name of a group |
 | roleName | [RoleName](../interfaces/rolename.md) |  String name of a role |
@@ -176,7 +176,7 @@ Creates a new group in the current tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | groupInput | [GroupInput](../interfaces/groupinput.md) |  The group params for creating a new group |
 
@@ -194,9 +194,9 @@ Create a new principal
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| principalInput | [PrincipalInput](../interfaces/principalinput.md) |  - |
+| principalInput | [PrincipalInput](../interfaces/principalinput.md) |  \- |
 
 **Returns:** `Promise`<[Principal](../interfaces/principal.md)>
 a Principal object
@@ -212,7 +212,7 @@ Creates a new authorization role in the current tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | roleInput | [RoleInput](../interfaces/roleinput.md) |  The role params for creating a new role |
 
@@ -230,7 +230,7 @@ Creates a tenant and default roles/groups
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | tenantName | [TenantName](../interfaces/tenantname.md) |  unique identifier of the tenant |
 
@@ -248,7 +248,7 @@ Deletes a group in the current tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | groupName | `string` |  String name of a group |
 
@@ -266,9 +266,9 @@ Deletes a principal
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| principalName | `string` |  - |
+| principalName | `string` |  \- |
 
 **Returns:** `Promise`<`any`>
 A promise that resolves upon deletion
@@ -284,7 +284,7 @@ Delete an authorization role in the current tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | roleName | `string` |  String name of a role |
 
@@ -302,7 +302,7 @@ Delete the tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | tenantName | `string` |  unique identifier of the tenant |
 
@@ -320,7 +320,7 @@ Defines a group in the current tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | groupName | `string` |  String name of a group |
 
@@ -338,7 +338,7 @@ Returns group-member relationship details
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | groupName | `string` |  String name of a group |
 | groupMemberName | `string` |  String name of group member |
@@ -357,7 +357,7 @@ Lists the members in the given group
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | groupName | `string` |  String name of a group |
 
@@ -375,7 +375,7 @@ Returns group-role relationship details
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | groupName | `string` |  String name of a group |
 | roleName | `string` |  String name of a role |
@@ -394,7 +394,7 @@ Lists the roles attached to the group
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | groupName | `string` |  String name of a group |
 
@@ -424,7 +424,7 @@ Get a member of the current tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | memberName | `string` |  input object of a member |
 
@@ -442,7 +442,7 @@ Returns the list of the member's groups in the current tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | memberName | `string` |  input object of a member |
 
@@ -472,9 +472,9 @@ Returns the principal details
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
-| principalName | `string` |  - |
+| principalName | `string` |  \- |
 
 **Returns:** `Promise`<[Principal](../interfaces/principal.md)>
 a Principal object
@@ -502,7 +502,7 @@ Get a role for the current tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | roleName | `string` |  String name of a role |
 
@@ -520,7 +520,7 @@ Get a permission for the current tenant, role name, and permission name
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | roleName | `string` |  String name of a role |
 | permissionName | `string` |  String name of a permission |
@@ -539,7 +539,7 @@ Get all the permissions for a current tenant and role name
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | roleName | `string` |  String name of a role |
 
@@ -569,7 +569,7 @@ Returns the tenant details
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | tenantName | `string` |  unique identifier of the tenant |
 
@@ -599,7 +599,7 @@ Removes the member from the group
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | groupName | `string` |  String name of a group |
 | groupMemberName | `string` |  String name of group member |
@@ -618,7 +618,7 @@ Removes the role from the group
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | groupName | `string` |  String name of a group |
 | roleName | `string` |  String name of a role |
@@ -637,7 +637,7 @@ Removes a member from the current tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | memberName | `string` |  input object of a member |
 
@@ -655,10 +655,10 @@ Remove an authorization role in the current tenant
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | roleName | `string` |  String name of a role |
-| permissionName | `string` |  - |
+| permissionName | `string` |  \- |
 
 **Returns:** `Promise`<`any`>
 A promise that resolves upon deletion

@@ -17,7 +17,7 @@ export class CatalogService extends BaseApiService {
      * @param filter An SPL filter string
      * @return Array of dataset descriptors
      */
-    public getDatasets(filter?: string): Promise<DatasetInfo[]> {
+    public getDatasets = (filter?: string): Promise<DatasetInfo[]> => {
         const query: QueryArgs = {};
         if (filter) {
             query.filter = filter;
@@ -90,8 +90,7 @@ export class CatalogService extends BaseApiService {
                 if (ret.length > 1) {
                     throw new Error('There are more than 1 dataset with the input name');
                 } else if (ret.length === 1) {
-                    return this.client.delete(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', ret[0].id]))
-                        .then(response => response.body);
+                    return this.deleteDataset(ret[0].id).then(response => response.body);
                 } else {
                     return Promise.reject(new Error(`No dataset found with name: ${name}`));
                 }
@@ -333,6 +332,7 @@ export interface PartialDatasetInfo {
     externalName?: string;
     sourceName?: string;
     sourceModule?: string;
+    sourceId?: string; // for imports
 }
 
 export interface Field {

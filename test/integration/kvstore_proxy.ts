@@ -14,14 +14,16 @@ const testKVCollectionName = `${testNamespace}.${testCollection}`;
 describe('Integration tests for KVStore Endpoints', () => {
     let testDataset : object;
 
-    before(async () => {
-        testDataset = createKVCollectionDataset(testNamespace, testCollection);
-        return testDataset;
+    before(() => {
+        return createKVCollectionDataset(testNamespace, testCollection).then(ds => {
+            testDataset = ds as DatasetInfo;
+        });
     });
+
     after(() => {
         if (testDataset !== undefined) {
             const td = testDataset as DatasetInfo;
-            splunkCloud.catalog
+            return splunkCloud.catalog
                 .deleteDatasetByName(td.name as string)
                 .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
         }
@@ -31,24 +33,20 @@ describe('Integration tests for KVStore Endpoints', () => {
         describe('Ping Endpoint', () => {
             it('Should return a "healthy" response', () => {
                 return splunkCloud.kvstore.getHealthStatus().then(response => {
-                    assert.equal(response.status, 'healthy', 'response status should be `healthy`');
+                    assert.equal(response.status, 'healthy');
                 });
             });
         });
     });
 
     describe('Index Endpoints', () => {
-        const testIndex = 'integtestindex';
+        const testIndex = `integtestindex${Date.now()}`;
         const fields = [{ direction: -1, field: 'integ_testField1' }];
-
-        before(() => {
-            return createKVCollectionDataset(testNamespace, testCollection);
-        });
 
         describe('index endpoints', () => {
             describe('Validate creation and deletion of an index', () => {
-                it('should create a new index', () =>
-                    splunkCloud.kvstore
+                it('should create a new index', () => {
+                    return splunkCloud.kvstore
                         .createIndex(testKVCollectionName, {
                             fields,
                             name: testIndex,
@@ -57,36 +55,40 @@ describe('Integration tests for KVStore Endpoints', () => {
                         })
                         .then(response => {
                             assert.strictEqual(response.name, testIndex);
-                        }));
+                        });
+                });
 
-                it('should return the newly created index', () =>
-                    splunkCloud.kvstore.listIndexes(testKVCollectionName).then(response => {
+                it('should return the newly created index', () => {
+                    return splunkCloud.kvstore.listIndexes(testKVCollectionName).then(response => {
                         assert.equal(response.length, 1);
-                    }));
+                    });
+                });
 
-                it('should delete the specified index', () =>
-                    splunkCloud.kvstore.deleteIndex(testKVCollectionName, testIndex).then(response => {
+                it('should delete the specified index', () => {
+                    return splunkCloud.kvstore.deleteIndex(testKVCollectionName, testIndex).then(response => {
                         assert.isEmpty(response);
-                    }));
+                    });
+                });
 
-                it('should not return any index', () =>
-                    splunkCloud.kvstore.listIndexes(testKVCollectionName).then(response => {
+                it('should not return any index', () => {
+                    return splunkCloud.kvstore.listIndexes(testKVCollectionName).then(response => {
                         assert.equal(response.length, 0);
-                    }));
+                    });
+                });
             });
         });
 
         describe('index endpoints - Error scenarios', () => {
-            it('should throw 404 Not Found error because the namespace or the collection does not exist', () =>
-                splunkCloud.kvstore
-                    .createIndex(
-                        'testcollection1', {
+            it('should throw 404 Not Found error because the namespace or the collection does not exist', () => {
+                return splunkCloud.kvstore.createIndex(
+                        `missing${Date.now()}`, {
                             fields,
                             name: testIndex,
                             collection: testCollection,
                             namespace: testNamespace,
                         })
-                    .then(response => assert.fail(response), err => assert.equal(err.httpStatusCode, 404)));
+                    .then(response => assert.fail(response), err => assert.equal(err.httpStatusCode, 404));
+            });
 
             /* TODO: (Commenting for now) Delete on a non-existing index is yielding a 200OK response. kvstore service updated codes at their end and this would be 204 (Being tracked here: splunkCloud-3101)
             it('should throw 404 index not found error as index being deleted does not exist', () =>
@@ -171,78 +173,61 @@ describe('Integration tests for KVStore Endpoints', () => {
 
         describe('Test insertion, retrieval and deletion of the records', () => {
             let keys: string[];
-            before('should create new records via insertRecords', () =>
-                splunkCloud.kvstore
-                    .insertRecords(testKVCollectionName, integrationTestRecords as any)
-                    .then(response => {
-                        keys = response as string[];
-                        assert.equal(keys.length, 4);
-                    }));
+            before('should create new records via insertRecords', () => {
+                return splunkCloud.kvstore.insertRecords(testKVCollectionName, integrationTestRecords as any).then(response => {
+                    keys = response as string[];
+                    assert.equal(keys.length, 4);
+                });
+            });
 
-            it('should retrieve the newly created record by key', () =>
-                splunkCloud.kvstore.getRecordByKey(testKVCollectionName, keys[0]).then(response => {
+            it('should retrieve the newly created record by key', () => {
+                return splunkCloud.kvstore.getRecordByKey(testKVCollectionName, keys[0]).then(response => {
                     assert.notEqual(response.size, '0');
-                    assert.equal(
-                        response.capacity_gb,
-                        '8',
-                        'The field \'capacity_gb\' should contain the value \'8\''
-                    );
-                    assert.equal(
-                        response.description,
-                        'This is a tiny amount of GB',
-                        'The field \'description\' should contain the value \'This is a tiny amount of GB\''
-                    );
-                    assert.equal(
-                        response.size,
-                        '0.01',
-                        'The field \'size\' should contain the value \'tiny\''
-                    );
-                }));
+                    assert.equal(response.capacity_gb, '8');
+                    assert.equal(response.description, 'This is a tiny amount of GB');
+                    assert.equal(response.size, '0.01');
+                });
+            });
 
-            it('should delete the newly created record by key', () =>
-                splunkCloud.kvstore.deleteRecordByKey(testKVCollectionName, keys[0]).then(response => {
+            it('should delete the newly created record by key', () => {
+                return splunkCloud.kvstore.deleteRecordByKey(testKVCollectionName, keys[0]).then(response => {
                     assert.isEmpty(response);
-                }));
+                });
+            });
 
-            // TODO: fix this test, I might've broken the listRecords() implementation
-            // it('validate that after calling deleteRecordbyKey(), only 3 records are left', () =>
-            //     splunkCloud.kvstore.listRecords(testKVCollectionName).then(response => {
-            //         assert.equal(
-            //             response.length,
-            //             3
-            //         );
-            //         const keyElements : string[] = [];
-            //         for (const elem of response) {
-            //             keyElements.push(elem.);
-            //         }
-            //         assert.equal(
-            //             keyElements[0],
-            //             keys[1]
-            //         );
-            //         assert.equal(
-            //             keyElements[1],
-            //             keys[2]
-            //         );
-            //         assert.equal(
-            //             keyElements[2],
-            //             keys[3]
-            //         );
-            //     }));
-
-            it('should retrieve the records based on a query', () =>
-                splunkCloud.kvstore.listRecords(testKVCollectionName, { fields: 'type' }).then(response => {
+            it('validate that after calling deleteRecordbyKey(), only 3 records are left', () => {
+                return splunkCloud.kvstore.listRecords(testKVCollectionName).then(res => {
+                    const response = res as object[];
                     assert.equal(response.length, 3);
-                }));
 
-            it('should delete the records based on a query', () =>
-                splunkCloud.kvstore
-                    .deleteRecords(testKVCollectionName, {
-                        name: 'test_record',
-                        count_of_fields: 3,
-                    })
+                    const keyElements: string[] = [];
+                    response.forEach(val => {
+                        const v = val as {[key: string]: string};
+                        keyElements.push(v._key);
+                    });
+
+                    assert.equal(keyElements[0], keys[1]);
+                    assert.equal(keyElements[1], keys[2]);
+                    assert.equal(keyElements[2], keys[3]);
+                });
+            });
+
+            it('should retrieve the records based on a query', () => {
+                return splunkCloud.kvstore.listRecords(testKVCollectionName, { fields: 'type' })
                     .then(response => {
-                        assert.isEmpty(response);
-                    }));
+                        assert.equal(response.length, 3);
+                    });
+            });
+
+            it('should delete the records based on a query', () => {
+                return splunkCloud.kvstore.deleteRecords(testKVCollectionName, {
+                    name: 'test_record',
+                    count_of_fields: 3,
+                })
+                .then(response => {
+                    assert.isEmpty(response);
+                });
+            });
 
             it('validate that after calling deleteRecords() based on query, no record is left', () => {
                 return splunkCloud.kvstore.listRecords(testKVCollectionName).then(response => {
@@ -250,15 +235,17 @@ describe('Integration tests for KVStore Endpoints', () => {
                 });
             });
 
-            it('should delete all the records', () =>
-                splunkCloud.kvstore.deleteRecords(testKVCollectionName).then(response => {
+            it('should delete all the records', () => {
+                return splunkCloud.kvstore.deleteRecords(testKVCollectionName).then(response => {
                     assert.isEmpty(response);
-                }));
+                });
+            });
 
-            it('validate that after calling deleteRecords(), no records should be returned', () =>
-                splunkCloud.kvstore.queryRecords(testKVCollectionName).then(response => {
-                    assert.equal(response.length, 0, 'No records should be returned');
-                }));
+            it('validate that after calling deleteRecords(), no records should be returned', () => {
+                return splunkCloud.kvstore.queryRecords(testKVCollectionName).then(response => {
+                    assert.equal(response.length, 0);
+                });
+            });
         });
     });
 });

@@ -4,7 +4,9 @@
 
 ## Hierarchy
 
-**EmailAction**
+ [ActionBase](actionbase.md)
+
+**↳ EmailAction**
 
 ## Index
 
@@ -12,10 +14,11 @@
 
 * [addresses](emailaction.md#addresses)
 * [htmlPart](emailaction.md#htmlpart)
+* [kind](emailaction.md#kind)
+* [name](emailaction.md#name)
 * [subjectPart](emailaction.md#subjectpart)
 * [templateName](emailaction.md#templatename)
 * [textPart](emailaction.md#textpart)
-* [type](emailaction.md#type)
 
 ---
 
@@ -34,6 +37,22 @@ ___
 
 **● htmlPart**: * `undefined` &#124; `string`
 *
+
+___
+<a id="kind"></a>
+
+###  kind
+
+**● kind**: *"email"*
+
+___
+<a id="name"></a>
+
+###  name
+
+**● name**: *`string`*
+
+Name of the action. Must be atleast 4 alphanumeric characters, and can be segmented with periods.
 
 ___
 <a id="subjectpart"></a>
@@ -58,13 +77,6 @@ ___
 
 **● textPart**: * `undefined` &#124; `string`
 *
-
-___
-<a id="type"></a>
-
-###  type
-
-**● type**: *"email"*
 
 ___
 

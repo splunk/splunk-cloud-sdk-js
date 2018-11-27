@@ -41,7 +41,7 @@ describe('integration tests for Ingest Endpoints', () => {
             it('should return a 401 response', () => {
                 const events = [event1, event2, event3];
 
-                splunkBadToken.ingest.postEvents(events).then(() => {
+                return splunkBadToken.ingest.postEvents(events).then(() => {
                     assert.fail('request with bad auth should not succeed');
                 }).catch(err => {
                     assert.equal(err.httpStatusCode, 401, 'response httpStatusCode should be 401');
@@ -52,7 +52,7 @@ describe('integration tests for Ingest Endpoints', () => {
         describe('Post events with unknown field name', () => {
             it('should return a 400 response', () => {
                 const events = [event11];
-                splunk.ingest.postEvents(events).then(() => {
+                return splunk.ingest.postEvents(events).then(() => {
                     assert.fail('request with unknown field name should not succeed');
                 }).catch(err => {
                     /**
@@ -81,10 +81,9 @@ describe('integration tests for Ingest Endpoints', () => {
                 try {
                     for (const e of events) {
                         const event = e as Event;
-                        // TODO: this is required because add() could return null
                         const addPromise = eb.add(event) as Promise<object>;
                         addPromise.then(response => {
-                            assert.deepEqual(response, successResponse, 'response should be expected success response.');
+                            assert.deepEqual(response, successResponse);
                         });
                     }
 
@@ -104,7 +103,7 @@ describe('integration tests for Ingest Endpoints', () => {
                         const event = e as Event;
                         const addPromise = eb.add(event) as Promise<object>;
                         addPromise.then(response => {
-                            assert.deepEqual(response, successResponse, 'response should be expected success response.');
+                            assert.deepEqual(response, successResponse);
                         });
                     }
 
@@ -200,7 +199,8 @@ describe('integration tests for Ingest Endpoints', () => {
         // we should have a stubby/unit test to tackle this scenario and the SplunkError class specifically
         //
         // describe('Post metrics bad format', () => {
-        //     it('should return a 400 response', () => splunk.ingest.postMetrics({ 'invalid': 'data format' }).then(
+        //     const invalid = [{ invalid: 'data format' }];
+        //     it('should return a 400 response', () => splunk.ingest.postMetrics(invalid).then(
         //         () => {
         //             assert.fail('request with bad data format should not succeed');
         //         },

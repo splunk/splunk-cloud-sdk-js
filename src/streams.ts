@@ -17,9 +17,7 @@ export class StreamsService extends BaseApiService {
      * @param dsl The DSL script that needs to be converted into a UPL pipeline JSON
      * @returns A UPL pipeline in JSON format
      */
-    public compileDslToUpl = (
-        dsl: DslCompilationRequest
-    ): Promise<UplPipeline> => {
+    public compileDslToUpl = (dsl: DslCompilationRequest): Promise<UplPipeline> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'compile-dsl']), dsl)
             .then(response => response.body as UplPipeline);

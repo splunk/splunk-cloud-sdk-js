@@ -49,10 +49,11 @@ This class is a Splunk Cloud client.
 ⊕ **new SplunkCloud**(args: * [ServiceClientArgs](../interfaces/serviceclientargs.md) &#124; `string`*, token?: * `undefined` &#124; `string`*, defaultTenant?: * `undefined` &#124; `string`*): [SplunkCloud](splunkcloud.md)
 
 Build a Splunk Cloud Client
+*__deprecated__*: Constructor signature with three arguments, future support for constructor with only ServiceClientArgs object - constructor(args: ServiceClientArgs)
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | args |  [ServiceClientArgs](../interfaces/serviceclientargs.md) &#124; `string`|  URL to Splunk Cloud environment or a ServiceClientArgs object |
 | `Optional` token |  `undefined` &#124; `string`|  Auth token |

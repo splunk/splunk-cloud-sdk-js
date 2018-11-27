@@ -3,8 +3,6 @@ Copyright © 2018 Splunk Inc.
 SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
-
-import 'isomorphic-fetch';
 import AuthManager from './auth_manager';
 import agent from './version';
 
@@ -92,6 +90,10 @@ function decodeJson(text: string): object | string {
 export type ResponseHook = (response: Response) => Promise<Response> | any;
 export type TokenProviderFunction = () => string;
 export interface ServiceClientArgs {
+    /**
+     * @deprecated Use urls instead
+     */
+    url?: string;
     urls?: {
         [key: string]: string;
     };
@@ -118,23 +120,40 @@ export class ServiceClient {
     /**
      * Create a ServiceClient with the given URL and an auth token
      * @param args : ServiceClientArgs Url to Splunk Cloud instance
+     * @param token Auth token
+     * @param tenant Tenant to use for requests
      */
-    constructor(args: ServiceClientArgs) {
-        const authManager = args.tokenSource;
-        if (typeof authManager === 'string') {
-            // If we have a string, wrap it in a lambda
-            this.tokenSource = () => authManager;
-        } else if (typeof authManager === 'function') {
-            // If we have a function, just call it when we need a token
-            this.tokenSource = authManager;
-        } else if (typeof authManager !== 'undefined' && 'getAccessToken' in authManager) {
-            // Else wrap a token manager.
-            this.tokenSource = () => authManager.getAccessToken();
+    constructor(args: ServiceClientArgs | string, token?: string, tenant?: string) {
+        if (typeof args === 'string') {
+            if (typeof token === 'string') {
+                this.tokenSource = () => token;
+            } else {
+                throw new SplunkError({ message: 'No auth token supplied.' });
+            }
+            this.urls = { api: args };
+            this.tenant = tenant;
         } else {
-            throw new SplunkError({ message: 'Unsupported token source' });
+            const authManager = args.tokenSource;
+            if (typeof authManager === 'string') {
+                // If we have a string, wrap it in a lambda
+                this.tokenSource = () => authManager;
+            } else if (typeof authManager === 'function') {
+                // If we have a function, just call it when we need a token
+                this.tokenSource = authManager;
+            } else if (typeof authManager !== 'undefined' && 'getAccessToken' in authManager) {
+                // Else wrap a token manager.
+                this.tokenSource = () => authManager.getAccessToken();
+            } else {
+                throw new SplunkError({ message: 'Unsupported token source' });
+            }
+            if (args.url !== undefined && args.urls === undefined) {
+                // For backwards compatibility, form args.urls from args.url
+                args.urls = { api: args.url };
+
+            }
+            this.urls = args.urls || DEFAULT_URLS;
+            this.tenant = args.defaultTenant;
         }
-        this.urls = args.urls || DEFAULT_URLS;
-        this.tenant = args.defaultTenant;
     }
 
     /**
@@ -145,18 +164,18 @@ export class ServiceClient {
      * etc.
      * @param hook A callback that takes a `Response` object and optionally returns a `Response`
      */
-    public addResponseHook(hook: ResponseHook) {
+    public addResponseHook = (hook: ResponseHook) => {
         this.responseHooks.push(hook);
     }
 
     /**
      * Clears response hooks from the client
      */
-    public clearResponseHooks() {
+    public clearResponseHooks = () => {
         this.responseHooks = [];
     }
 
-    private invokeHooks(response: Response): Promise<Response> {
+    private invokeHooks = (response: Response): Promise<Response> => {
         return this.responseHooks.reduce((result: Promise<Response>, cb: ResponseHook): Promise<Response> => {
             // Result starts as a known good Promise<Result>
             return result.then((chainResponse) => {
@@ -190,7 +209,7 @@ export class ServiceClient {
      * Builds the URL from a service + endpoint with query encoded in url
      * (concatenates the URL with the path)
      */
-    public buildUrl(cluster: string, path: string, query?: QueryArgs): string {
+    public buildUrl = (cluster: string, path: string, query?: QueryArgs): string => {
         const serviceCluster : string = this.urls[cluster] || DEFAULT_URLS.api;
         if (query && Object.keys(query).length > 0) {
             const encoder = encodeURIComponent;
@@ -206,11 +225,11 @@ export class ServiceClient {
     /**
      * Builds headers required for request to Splunk Cloud (auth, content-type, etc)
      */
-    private buildHeaders(headers?: RequestHeaders): Headers {
+    private buildHeaders = (headers?: RequestHeaders): Headers => {
         // TODO: Cache
 
         const requestParamHeaders: Headers = new Headers({
-            Authorization: `Bearer ${this.tokenSource()}`,
+            'Authorization': `Bearer ${this.tokenSource()}`,
             'Content-Type': ContentType.JSON,
             'Splunk-Client': `${agent.useragent}/${agent.version}`,
         });
@@ -230,7 +249,7 @@ export class ServiceClient {
      * @param overrideTenant If supplied, this tenant will be used instead of the tenant associated with this client object
      * @return A fully qualified path to the resource
      */
-    public buildPath(servicePrefix: string, segments: string[], overrideTenant?: string): string {
+    public buildPath = (servicePrefix: string, segments: string[], overrideTenant?: string): string => {
         const effectiveTenant = overrideTenant || this.tenant;
         if (!effectiveTenant) {
             throw new Error('No tenant specified');
@@ -252,7 +271,7 @@ export class ServiceClient {
      * @param opts Request opts
      * @param data Body data (will be stringified if an object)
      */
-    public fetch(method: HTTPMethod, cluster: string, path: string, opts: RequestOptions = {}, data?: any): Promise<Response> {
+    public fetch = (method: HTTPMethod, cluster: string, path: string, opts: RequestOptions = {}, data?: any): Promise<Response> => {
         const url = this.buildUrl(cluster, path, opts.query);
         const options = {
             method,
@@ -272,7 +291,7 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public get(cluster: string, path: string, opts: RequestOptions = {}): Promise<HTTPResponse> {
+    public get = (cluster: string, path: string, opts: RequestOptions = {}): Promise<HTTPResponse> => {
         return this.fetch('GET', cluster, path, opts)
             .then(handleResponse);
     }
@@ -286,7 +305,7 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public post(cluster: string, path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> {
+    public post = (cluster: string, path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> => {
         return this.fetch('POST', cluster, path, opts, data)
             .then(handleResponse);
     }
@@ -300,7 +319,7 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public put(cluster: string, path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> {
+    public put = (cluster: string, path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> => {
         return this.fetch('PUT', cluster, path, opts, data)
             .then(handleResponse);
     }
@@ -314,7 +333,7 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public patch(cluster: string, path: string, data: object, opts: RequestOptions = {}): Promise<HTTPResponse> {
+    public patch = (cluster: string, path: string, data: object, opts: RequestOptions = {}): Promise<HTTPResponse> => {
         return this.fetch('PATCH', cluster, path, opts, data)
             .then(handleResponse);
     }
@@ -328,7 +347,7 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public delete(cluster: string, path: string, data: object = {}, opts: RequestOptions = {}): Promise<HTTPResponse> {
+    public delete = (cluster: string, path: string, data: object = {}, opts: RequestOptions = {}): Promise<HTTPResponse> => {
         return this.fetch('DELETE', cluster, path, opts, data)
             .then(handleResponse);
     }

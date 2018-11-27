@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
-import { createKVCollectionDataset, createRecord /*, deleteAllDatasets */ } from './catalog_proxy';
+import { createKVCollectionDataset, createRecord } from './catalog_proxy';
 
 const splunkCloud = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
 
@@ -9,7 +9,6 @@ const testNamespace = config.testNamespace;
 
 describe('Integration tests for KVStore Query Endpoints', () => {
     // Required for `createKVCollectionDataset` helper
-    let testDataset: object;
     let testKVCollectionName: string;
 
     const recordOne = {
@@ -31,11 +30,12 @@ describe('Integration tests for KVStore Query Endpoints', () => {
     beforeEach(() => {
         const testCollection = `jscoll${Date.now()}`;
         testKVCollectionName = `${testNamespace}.${testCollection}`;
-        const create = () => {
-            testDataset = createKVCollectionDataset(testNamespace, testCollection);
-            return testDataset;
-        };
-        return create();
+
+        return createKVCollectionDataset(testNamespace, testCollection);
+    });
+
+    afterEach(() => {
+        return splunkCloud.catalog.deleteDataset(testKVCollectionName);
     });
 
     // -------------------------------------------------------------------------
@@ -370,19 +370,5 @@ describe('Integration tests for KVStore Query Endpoints', () => {
             // Testing happens in `createRecord function`
             return createRecord(testKVCollectionName, recordOne);
         });
-
-        // TODO: this test is invalid because we cannot pass null as a string for createRecord()
-        // // A namespace AND collection are required to create a kvcollection
-        // // dataset, you cannot do one without the other.
-        // it('Should error when a namespace and collection are not specified for record creation', () => {
-        //     return createRecord(null, null, recordOne).catch(error => {
-        //         assert.notEqual(
-        //             error,
-        //             null,
-        //             `the queryRecords endpoint requires a namespace and a
-        //                 collection to be provided on record creation`
-        //         );
-        //     });
-        // });
     });
 });
