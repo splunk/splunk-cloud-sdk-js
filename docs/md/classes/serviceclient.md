@@ -40,11 +40,11 @@ Create a ServiceClient with the given URL and an auth token
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | args |  [ServiceClientArgs](../interfaces/serviceclientargs.md) &#124; `string`|  : ServiceClientArgs Url to Splunk Cloud instance |
-| `Optional` token |  `undefined` &#124; `string`|
-| `Optional` tenant |  `undefined` &#124; `string`|
+| `Optional` token |  `undefined` &#124; `string`|  Auth token |
+| `Optional` tenant |  `undefined` &#124; `string`|  Tenant to use for requests |
 
 **Returns:** [ServiceClient](serviceclient.md)
 
@@ -62,7 +62,7 @@ Adds a response hook to the list of response handlers. Each will be called with 
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | hook | [ResponseHook](../#responsehook) |  A callback that takes a \`Response\` object and optionally returns a \`Response\` |
 
@@ -79,7 +79,7 @@ Builds a path for a given service call
 
 **Parameters:**
 
-| Param | Type | Description |
+| Name | Type | Description |
 | ------ | ------ | ------ |
 | servicePrefix | `string` |  The name of the service, with version (search/v1) |
 | pathname | `string`[] |  An array of path elements that will be checked and added to the path (\['jobs', jobId\]) |
@@ -104,14 +104,15 @@ ___
 
 ###  delete
 
-▸ **delete**(path: *`string`*, data?: *`object`*, opts?: *[RequestOptions](../interfaces/requestoptions.md)*): `Promise`<[HTTPResponse](../interfaces/httpresponse.md)>
+▸ **delete**(cluster: *`string`*, path: *`string`*, data?: *`object`*, opts?: *[RequestOptions](../interfaces/requestoptions.md)*): `Promise`<[HTTPResponse](../interfaces/httpresponse.md)>
 
 Performs a DELETE on the Splunk Cloud environment with the supplied path. For the most part this is an internal implementation, but is here in case an API endpoint is unsupported by the SDK.
 
 **Parameters:**
 
-| Param | Type | Default value | Description |
+| Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
+| cluster | `string` | - |
 | path | `string` | - |  Path portion of the URL to request from Splunk |
 | `Default value` data | `object` |  {} |  Data object (to be converted to json) to supply as delete body |
 | `Default value` opts | [RequestOptions](../interfaces/requestoptions.md) |  {} |  Request options |
@@ -123,15 +124,16 @@ ___
 
 ###  fetch
 
-▸ **fetch**(method: *[HTTPMethod](../#httpmethod)*, path: *`string`*, opts?: *[RequestOptions](../interfaces/requestoptions.md)*, data?: *`any`*): `Promise`<`Response`>
+▸ **fetch**(method: *[HTTPMethod](../#httpmethod)*, cluster: *`string`*, path: *`string`*, opts?: *[RequestOptions](../interfaces/requestoptions.md)*, data?: *`any`*): `Promise`<`Response`>
 
 Proxy for fetch that builds URL, applies headers and query string, and invokes hooks before returning a `Response`
 
 **Parameters:**
 
-| Param | Type | Default value | Description |
+| Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | method | [HTTPMethod](../#httpmethod) | - |  HTTP Verb |
+| cluster | `string` | - |
 | path | `string` | - |  Path to the resource being requested |
 | `Default value` opts | [RequestOptions](../interfaces/requestoptions.md) |  {} |  Request opts |
 | `Optional` data | `any` | - |  Body data (will be stringified if an object) |
@@ -143,14 +145,15 @@ ___
 
 ###  get
 
-▸ **get**(path: *`string`*, opts?: *[RequestOptions](../interfaces/requestoptions.md)*): `Promise`<[HTTPResponse](../interfaces/httpresponse.md)>
+▸ **get**(cluster: *`string`*, path: *`string`*, opts?: *[RequestOptions](../interfaces/requestoptions.md)*): `Promise`<[HTTPResponse](../interfaces/httpresponse.md)>
 
 Performs a GET on the Splunk Cloud environment with the supplied path. For the most part this is an internal implementation, but is here in case an API endpoint is unsupported by the SDK.
 
 **Parameters:**
 
-| Param | Type | Default value | Description |
+| Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
+| cluster | `string` | - |
 | path | `string` | - |  Path portion of the URL to request from Splunk |
 | `Default value` opts | [RequestOptions](../interfaces/requestoptions.md) |  {} |  Request options |
 
@@ -161,14 +164,15 @@ ___
 
 ###  patch
 
-▸ **patch**(path: *`string`*, data: *`object`*, opts?: *[RequestOptions](../interfaces/requestoptions.md)*): `Promise`<[HTTPResponse](../interfaces/httpresponse.md)>
+▸ **patch**(cluster: *`string`*, path: *`string`*, data: *`object`*, opts?: *[RequestOptions](../interfaces/requestoptions.md)*): `Promise`<[HTTPResponse](../interfaces/httpresponse.md)>
 
 Performs a PATCH on the Splunk Cloud environment with the supplied path. for the most part this is an internal implementation, but is here in case an api endpoint is unsupported by the sdk.
 
 **Parameters:**
 
-| Param | Type | Default value | Description |
+| Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
+| cluster | `string` | - |
 | path | `string` | - |  Path portion of the url to request from Splunk |
 | data | `object` | - |  Data object (to be converted to json) to supply as patch body |
 | `Default value` opts | [RequestOptions](../interfaces/requestoptions.md) |  {} |  Request options |
@@ -180,14 +184,15 @@ ___
 
 ###  post
 
-▸ **post**(path: *`string`*, data: *`any`*, opts?: *[RequestOptions](../interfaces/requestoptions.md)*): `Promise`<[HTTPResponse](../interfaces/httpresponse.md)>
+▸ **post**(cluster: *`string`*, path: *`string`*, data: *`any`*, opts?: *[RequestOptions](../interfaces/requestoptions.md)*): `Promise`<[HTTPResponse](../interfaces/httpresponse.md)>
 
 Performs a POST on the Splunk Cloud environment with the supplied path. For the most part this is an internal implementation, but is here in case an API endpoint is unsupported by the SDK.
 
 **Parameters:**
 
-| Param | Type | Default value | Description |
+| Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
+| cluster | `string` | - |
 | path | `string` | - |  Path portion of the URL to request from Splunk |
 | data | `any` | - |  Data object (to be converted to JSON) to supply as POST body |
 | `Default value` opts | [RequestOptions](../interfaces/requestoptions.md) |  {} |  Request options |
@@ -199,14 +204,15 @@ ___
 
 ###  put
 
-▸ **put**(path: *`string`*, data: *`any`*, opts?: *[RequestOptions](../interfaces/requestoptions.md)*): `Promise`<[HTTPResponse](../interfaces/httpresponse.md)>
+▸ **put**(cluster: *`string`*, path: *`string`*, data: *`any`*, opts?: *[RequestOptions](../interfaces/requestoptions.md)*): `Promise`<[HTTPResponse](../interfaces/httpresponse.md)>
 
 Performs a PUT on the Splunk Cloud environment with the supplied path. for the most part this is an internal implementation, but is here in case an api endpoint is unsupported by the sdk.
 
 **Parameters:**
 
-| Param | Type | Default value | Description |
+| Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
+| cluster | `string` | - |
 | path | `string` | - |  Path portion of the url to request from Splunk |
 | data | `any` | - |  Data object (to be converted to json) to supply as put body |
 | `Default value` opts | [RequestOptions](../interfaces/requestoptions.md) |  {} |  Request options |

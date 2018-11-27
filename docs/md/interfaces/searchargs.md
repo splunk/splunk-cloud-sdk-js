@@ -79,7 +79,7 @@ ___
 **● timeFormat**: * `undefined` &#124; `string`
 *
 
-Converts a formatted time string from {start,end}_time into UTC seconds. The default value is the ISO-8601 format.
+Converts a formatted time string from {start,end}\_time into UTC seconds. The default value is the ISO-8601 format.
 
 ___
 <a id="timeofsearch"></a>
