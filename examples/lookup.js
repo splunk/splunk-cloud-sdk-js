@@ -33,19 +33,19 @@ async function main() {
     });
 
     // ***** STEP 4: Register the fields
-    await splunk.catalog.postDatasetField(lookupDataset.id, {
+    splunk.catalog.postDatasetField(lookupDataset.id, {
         name: 'a',
         datatype: 'NUMBER',
         fieldtype: 'UNKNOWN',
         prevalence: 'UNKNOWN'
     });
-    await splunk.catalog.postDatasetField(lookupDataset.id, {
+    splunk.catalog.postDatasetField(lookupDataset.id, {
         name: 'b',
         datatype: 'NUMBER',
         fieldtype: 'UNKNOWN',
         prevalence: 'UNKNOWN'
     });
-    await splunk.catalog.postDatasetField(lookupDataset.id, {
+    splunk.catalog.postDatasetField(lookupDataset.id, {
         name: 'c',
         datatype: 'NUMBER',
         fieldtype: 'UNKNOWN',
@@ -53,7 +53,7 @@ async function main() {
     });
 
     // ***** STEP 5: Insert records into the lookup
-    await splunk.kvstore.insertRecords(kvcollectionName, [
+    splunk.kvstore.insertRecords(kvcollectionName, [
         {
             "a": "1",
             "b": "2",
@@ -67,17 +67,29 @@ async function main() {
 
     // ***** STEP 6: Search the kvcollection via the lookup
     const query = `| from ${lookupName}`;
-    await searchResults(splunk, Date.now(), 90 * 1000, query, 1).then((results) => {
+    searchResults(splunk, Date.now(), 90 * 1000, query, 1).then((results) => {
         console.log(results);
+
+        splunk.catalog.deleteDatasetByName(lookupName).then(() => {
+                console.log(`Deleting ${lookupName}`);
+            })
+            .catch((err) => {
+                console.log(err);
+                process.exit(1);
+            });
+
+        splunk.catalog.deleteDatasetByName(kvcollectionName).then(() => {
+                console.log(`Deleting ${kvcollectionName}`);
+            })
+            .catch((err) => {
+                console.log(err);
+                process.exit(1);
+            });
 
         if (!results || results.length === 0) {
             process.exit(1);
         }
 
-        }).then(() => {
-            return splunk.catalog.deleteDataset(kvcollectionName);
-        }).then(() => {
-            return splunk.catalog.deleteDataset(lookupName);
     })
     .catch(err => {
         console.log(err);
