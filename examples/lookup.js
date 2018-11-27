@@ -70,13 +70,14 @@ async function main() {
     searchResults(splunk, Date.now(), 90 * 1000, query, 1).then((results) => {
             console.log(results);
 
-            // STEP ***** 7: Clean up datasets
-            splunk.catalog.deleteDataset(lookupName);
-            splunk.catalog.deleteDataset(kvcollectionName);
-
             if (!results || results.length === 0) {
                 process.exit(1);
             }
+
+        }).then(()=> {
+            // STEP ***** 7: Clean up datasets
+            splunk.catalog.deleteDataset(lookupName);
+            splunk.catalog.deleteDataset(kvcollectionName);
         })
         .catch(err => {
             console.log(err);
