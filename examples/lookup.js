@@ -70,7 +70,7 @@ async function main() {
 
     // ***** STEP 6: Search the kvcollection via the lookup
     const query = `| from ${moduleName + "." + lookupName}`;
-    searchResults(splunk, Date.now(), 90 * 1000, query, 1).then((results) => {
+    searchResults(splunk, Date.now(), 120 * 1000, query, 1).then((results) => {
             console.log(results);
 
             // STEP ***** 7: Clean up datasets
