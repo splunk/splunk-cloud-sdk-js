@@ -1,7 +1,7 @@
-// ***** TITLE: Create and Search View Dataset
+// ***** TITLE: Create and Search View Dataset in Catalog
 //
 // ***** DESCRIPTION: This example shows how to create View Dataset using the Catalog Service,
-//             then executes the View using the Search Service and validates results are as expected.
+//             then execute the View using the Search Service and validate results.
 
 require("isomorphic-fetch");
 
@@ -94,7 +94,7 @@ async function main() {
     sendDataViaIngest(splunk, index, host, source);
 
     // ***** STEP 4: Verify the data
-    // ***** DESCRIPTION: Execute the view using Search Service and ensure there is one result available as a result.
+    // ***** DESCRIPTION: Execute the view using Search Service and ensure there is one expected result.
     const timeout = 90 * 1000;
     const query = `|from ${viewName}`;
     console.log(`Executing the view : '${query}'`);
@@ -117,10 +117,10 @@ searchResults(splunk, Date.now(), timeout, query, expectedResults).then(
                 .catch(() => {
                     exitOnFailure();
                 });
-            })
-            .catch(() => {
-                    exitOnFailure();
-            });
+        })
+        .catch(() => {
+            exitOnFailure();
+        });
 }
 
 // run the workflow
