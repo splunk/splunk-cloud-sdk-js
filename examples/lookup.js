@@ -74,7 +74,7 @@ async function main() {
             splunk.catalog.deleteDatasetByName(lookupName);
             splunk.catalog.deleteDatasetByName(kvcollectionName);
 
-            if (!results || results.hasOwnProperty('length')) {
+            if (!results || results.length === 0) {
                 process.exit(1);
             }
         })
