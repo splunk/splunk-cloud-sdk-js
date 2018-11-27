@@ -38,6 +38,7 @@ export class SplunkCloud {
      * @param args URL to Splunk Cloud environment or a ServiceClientArgs object
      * @param token Auth token
      * @param defaultTenant Default tenant to use for requests
+     * @deprecated Constructor signature with three arguments, future support for constructor with only ServiceClientArgs object - constructor(args: ServiceClientArgs)
      */
     constructor(args: ServiceClientArgs | string, token?: string, defaultTenant?: string) {
         this.client = new ServiceClient(args, token, defaultTenant);
