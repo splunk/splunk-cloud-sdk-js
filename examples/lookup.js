@@ -31,29 +31,33 @@ async function main() {
         externalKind: 'kvcollection',
         externalName: kvcollectionName
     });
+    console.log(lookupDataset);
 
     // ***** STEP 4: Register the fields
-    splunk.catalog.postDatasetField(lookupDataset.id, {
+    await splunk.catalog.postDatasetField(lookupDataset.id, {
         name: 'a',
         datatype: 'NUMBER',
         fieldtype: 'UNKNOWN',
         prevalence: 'UNKNOWN'
     });
-    splunk.catalog.postDatasetField(lookupDataset.id, {
+    console.log("postDatasetField a");
+    await splunk.catalog.postDatasetField(lookupDataset.id, {
         name: 'b',
         datatype: 'NUMBER',
         fieldtype: 'UNKNOWN',
         prevalence: 'UNKNOWN'
     });
-    splunk.catalog.postDatasetField(lookupDataset.id, {
+    console.log("postDatasetField b");
+    await splunk.catalog.postDatasetField(lookupDataset.id, {
         name: 'c',
         datatype: 'NUMBER',
         fieldtype: 'UNKNOWN',
         prevalence: 'UNKNOWN'
     });
+    console.log("postDatasetField c");
 
     // ***** STEP 5: Insert records into the lookup
-    splunk.kvstore.insertRecords(kvcollectionName, [
+    await splunk.kvstore.insertRecords(kvcollectionName, [
         {
             "a": "1",
             "b": "2",
@@ -70,16 +74,16 @@ async function main() {
     searchResults(splunk, Date.now(), 180 * 1000, query, 1).then((results) => {
         console.log(results);
 
-        splunk.catalog.deleteDataset(lookupName).then(() => {
-                console.log(`Deleting ${lookupName}`);
+        splunk.catalog.deleteDataset(lookupDataset.id).then(() => {
+                console.log(`Deleting ${lookupName + " " + lookupDataset.id}`);
             })
             .catch((err) => {
                 console.log(err);
                 process.exit(1);
             });
 
-        splunk.catalog.deleteDataset(kvcollectionName).then(() => {
-                console.log(`Deleting ${kvcollectionName}`);
+        splunk.catalog.deleteDataset(kvDataset.id).then(() => {
+                console.log(`Deleting ${kvcollectionName + " " + kvDataset.id}`);
             })
             .catch((err) => {
                 console.log(err);
