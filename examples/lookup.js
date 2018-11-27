@@ -71,8 +71,8 @@ async function main() {
             console.log(results);
 
             // STEP ***** 7: Clean up datasets
-            splunk.catalog.deleteDatasetByName(lookupName);
-            splunk.catalog.deleteDatasetByName(kvcollectionName);
+            splunk.catalog.deleteDataset(lookupName);
+            splunk.catalog.deleteDataset(kvcollectionName);
 
             if (!results || results.length === 0) {
                 process.exit(1);
