@@ -70,43 +70,36 @@ async function main() {
     console.log(`inserting records into ${kvcollectionName}`);
 
     // ***** STEP 6: Search the kvcollection via the lookup
-    splunk.search.createJob({ "query": `| from ${lookupName}`})
-        .then(job => {
-            console.log(`Created sid: ${job.sid}`);
-            return splunk.search.waitForJob(job.sid);
-        })
-        .catch(err=> {
-            console.log(err);
-            process.exit(1);
-        })
-        .then(job => {
-            console.log(`Getting results`);
-            return splunk.search.getResults(job.sid);
-        })
-        .catch(err=> {
-            console.log(err);
-            process.exit(1);
-        })
-        .then(results => {
-            console.log(results);
-        })
-        .then(() => {
-            // Clean up lookup dataset
-            console.log(`Deleting lookup ${lookupDataset.id}`);
-            splunk.catalog.deleteDataset(lookupDataset.id);
-        })
-        .catch(err=> {
-            console.log(err);
-            process.exit(1);
-        })
-        .then(() => {
-            // Clean up kvcollection dataset
-            console.log(`Deleting kvcollection ${kvDataset.id}`)
-            splunk.catalog.deleteDataset(kvDataset.id);
-        })
-        .catch(err=> {
-            console.log(err);
-            process.exit(1);
-        })
+    splunk.catalog.getDataset(lookupName).then(dataset => {
+        console.log(`Found ${dataset.name}`);
+
+        splunk.search.createJob({ "query": `| from ${dataset.name}`})
+            .then(job => {
+                console.log(`Created sid: ${job.sid}`);
+                return splunk.search.waitForJob(job.sid);
+            })
+            .then(job => {
+                console.log(`Getting results`);
+                return splunk.search.getResults(job.sid);
+            })
+            .then(results => {
+                console.log(results);
+            })
+            .then(() => {
+                // Clean up lookup dataset
+                console.log(`Deleting lookup ${lookupDataset.id}`);
+                splunk.catalog.deleteDataset(lookupDataset.id);
+            })
+            .then(() => {
+                // Clean up kvcollection dataset
+                console.log(`Deleting kvcollection ${kvDataset.id}`);
+                splunk.catalog.deleteDataset(kvDataset.id);
+            })
+    })
+    .catch(err=> {
+        console.log(err);
+        process.exit(1);
+    })
+
 }
 main();
