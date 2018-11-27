@@ -33,19 +33,19 @@ async function main() {
     });
 
     // ***** STEP 4: Register the fields
-    splunk.catalog.postDatasetField(lookupDataset.id, {
+    await splunk.catalog.postDatasetField(lookupDataset.id, {
         name: 'a',
         datatype: 'NUMBER',
         fieldtype: 'UNKNOWN',
         prevalence: 'UNKNOWN'
     });
-    splunk.catalog.postDatasetField(lookupDataset.id, {
+    await splunk.catalog.postDatasetField(lookupDataset.id, {
         name: 'b',
         datatype: 'NUMBER',
         fieldtype: 'UNKNOWN',
         prevalence: 'UNKNOWN'
     });
-    splunk.catalog.postDatasetField(lookupDataset.id, {
+    await splunk.catalog.postDatasetField(lookupDataset.id, {
         name: 'c',
         datatype: 'NUMBER',
         fieldtype: 'UNKNOWN',
@@ -53,7 +53,7 @@ async function main() {
     });
 
     // ***** STEP 5: Insert records into the lookup
-    splunk.kvstore.insertRecords(kvcollectionName, [
+    await splunk.kvstore.insertRecords(kvcollectionName, [
         {
             "a": "1",
             "b": "2",
@@ -67,7 +67,7 @@ async function main() {
 
     // ***** STEP 6: Search the kvcollection via the lookup
     const query = `| from ${lookupName}`;
-    searchResults(splunk, Date.now(), 90 * 1000, query, 1).then((results) => {
+    await searchResults(splunk, Date.now(), 90 * 1000, query, 1).then((results) => {
         console.log(results);
 
         if (!results || results.length === 0) {
@@ -75,10 +75,9 @@ async function main() {
         }
 
         }).then(() => {
-            return splunk.catalog.deleteDatasetByName(kvcollectionName);
+            return splunk.catalog.deleteDataset(kvcollectionName);
         }).then(() => {
-            return splunk.catalog.deleteDatasetByName(lookupName);
-
+            return splunk.catalog.deleteDataset(lookupName);
     })
     .catch(err => {
         console.log(err);
@@ -86,4 +85,3 @@ async function main() {
     });
 }
 main();
-
