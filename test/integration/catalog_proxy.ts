@@ -305,7 +305,8 @@ describe('catalog tests', () => {
                 return splunkCloud.catalog.getRuleAction(ruleId, act.id as string);
             }).then(res => {
                 const act = res as AliasAction;
-                return splunkCloud.catalog.deleteRuleAction(ruleId, act.id as string);
+                assert.equal(act.field, fieldName);
+                // Delete handled in after block
             });
         });
 
@@ -346,12 +347,7 @@ describe('catalog tests', () => {
             };
             return splunkCloud.catalog.createRuleAction(ruleId, lookup).then(res => {
                 const act = res as LookupAction;
-                assert.equal(act.expression, 'lookupexpr');
-            }).then(() => {
-                return splunkCloud.catalog.getRuleActions(ruleId);
-            }).then((res) => {
-                const acts = res as LookupAction[];
-                assert.equal(acts.length, 4);
+                assert.equal(act.expression, lookup.expression);
             });
 
         });
@@ -359,113 +355,31 @@ describe('catalog tests', () => {
 });
 
 export function createIndexDataset(collection: string): Promise<object | void> {
-    // Gets the datasets
-    return splunkCloud.catalog.getDatasets()
-        // Filters the data set
-        .then(datasets => {
-            return datasets.filter(element => {
-                if (element.name === collection) {
-                    return element;
-                }
-            });
-        })
-        // TODO: not deleting datasets because of concurrency issues
-        // Deletes the dataset should only be one data set
-        // .then(datasets => {
-        //     return Promise.all(
-        //         datasets.map(dataset => {
-        //             return splunkCloud.catalog.deleteDataset(dataset.id);
-        //         })
-        //     );
-        // })
-        // Creates the data sets
-        .then(() => {
-            return splunkCloud.catalog.createDataset({
-                name: collection,
-                kind: 'index',
-                capabilities: '1101-00000:11010',
-                disabled: false
-            });
-        })
-        // Return the dataset for testing
-        .then(response => {
-            return response;
-        })
-        .catch(error => {
-            console.log('An error was encountered while cleaning up datasests');
-            console.log(error);
-        });
+    return splunkCloud.catalog.createDataset({
+        name: collection,
+        kind: 'index',
+        capabilities: '1101-00000:11010',
+        disabled: false
+    }).then(response => {
+        return response;
+    }).catch(error => {
+        console.log('An error was encountered while cleaning up datasests');
+        console.log(error);
+    });
 }
 
 export function createKVCollectionDataset(namespace: string, collection: string): Promise<DatasetInfo | void> {
-    // Gets the datasets
-    return splunkCloud.catalog.getDatasets()
-        // Filters the data set
-        .then(datasets => {
-            return datasets.filter(element => {
-                if (element.module === namespace && element.name === collection) {
-                    return element;
-                }
-            });
-        })
-        // TODO: not deleting any more datasets because this is causing concurrency issues
-        // Deletes the dataset there should only be one dataset
-        // .then(datasets => {
-        //     return Promise.all(
-        //         datasets.map(dataset => {
-        //             return splunkCloud.catalog.deleteDataset(dataset.id);
-        //         })
-        //     );
-        // })
-        // Creates the data sets
-        .then(() => {
-            return splunkCloud.catalog.createDataset({
-                name: collection,
-                kind: 'kvcollection',
-                capabilities: '1101-00000:11010',
-                module: namespace
-            });
-        })
-        // Finally set the dataset for testing
-        .then(response => {
-            return response;
-        })
-        .catch(error => {
-            console.log('An error was encountered while cleaning up datasests');
-            console.log(error);
-        });
-}
-
-export function deleteAllDatasets(): Promise<any> {
-    // TODO: making this noop for now to move along
-    return new Promise<any>(() => true);
-    // Gets the datasets
-    // return splunkCloud.catalog
-    //     .getDatasets()
-    //     // Deletes the dataset there should only be one dataset
-    //     .then(datasets => {
-    //         return Promise.all(
-    //             datasets.map(dataset => {
-    //                 // Delete the dataset unless it's a main/metrics or createdby Splunk
-    //                 if (dataset.name !== 'main' && dataset.name !== 'metrics' && dataset.createdBy !== 'Splunk') {
-    //                     return splunkCloud.catalog.deleteDataset(dataset.id).catch(err => {
-    //                         // Don't fail the test when there was "nothing to delete"
-    //                         if (err.httpStatusCode !== 404) {
-    //                             throw err;
-    //                         }
-    //                     });
-    //                 }
-    //             })
-    //         );
-    //     })
-    //     // Finally set the dataset for testing
-    //     .then(response => {
-    //         return response;
-    //     })
-    //     .catch(error => {
-    //         console.log('An error was encountered while cleaning up datasets');
-    //         console.log(error);
-    //     });
+    return splunkCloud.catalog.createDataset({
+        name: collection,
+        kind: 'kvcollection',
+        capabilities: '1101-00000:11010',
+        module: namespace
+    }).then(response => {
+        return response;
+    }).catch(error => {
+        console.log('An error was encountered while cleaning up datasests');
+        console.log(error);
+    });
 }
 
 export function createRecord(collection: string, record: object): Promise<object> {
@@ -477,6 +391,7 @@ export function createRecord(collection: string, record: object): Promise<object
         });
 }
 
+// TODO: this function should just create the given rule, any consumers of this function should pass a unique rule name
 export function createRule(ruleName: string): Promise<any> {
     return splunkCloud.catalog
         .getRules()
