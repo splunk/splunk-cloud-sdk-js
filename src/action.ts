@@ -35,9 +35,9 @@ export class ActionService extends BaseApiService {
      * @param name name of the action
      * @return Promise of object
      */
-    public deleteAction = (name: ActionBase['name']): Promise<any> => {
+    public deleteAction = (name: ActionBase['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
