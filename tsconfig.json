@@ -18,7 +18,7 @@
     "noUnusedLocals": true,
     "strict": true,
     "target": "es3",
-    "types": ["isomorphic-fetch"]
+    "types": []
   },
   "include": [
     "src"
