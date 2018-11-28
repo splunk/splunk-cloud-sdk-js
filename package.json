@@ -106,5 +106,10 @@
     "cz-customizable": {
       "config": "ci/.cz-config.js"
     }
+  },
+  "standard-version": {
+    "skip": {
+      "tag": true
+    }
   }
 }
