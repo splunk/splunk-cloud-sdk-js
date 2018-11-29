@@ -77,8 +77,8 @@ export class ActionService extends BaseApiService {
                         const parts = responseStr.split('/status/');
                         if (parts.length === 2) {
                             return Promise.resolve({
-                                StatusID: parts[1],
-                                StatusURL: responseStr
+                                statusId: parts[1],
+                                statusUrl: responseStr
                             } as ActionTriggerResponse);
                         }
                     }
@@ -124,8 +124,8 @@ export interface ActionStatus {
 
 // ActionTriggerResponse for returning status url and id
 export interface ActionTriggerResponse {
-    StatusID?: string;
-    StatusURL?: string;
+    statusId?: string;
+    statusUrl?: string;
 }
 
 // ActionError defines format for returned errors

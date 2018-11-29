@@ -99,21 +99,26 @@ describe('integration tests using action service', () => {
             }
         };
 
-        it('should trigger action and get status', () => splunkCloud.action.triggerAction(webhookAction.name, notification).then(response => {
-            const webhook = response as ActionTriggerResponse;
-            assert.isNotNull(webhook.StatusID);
-            assert.isNotNull(webhook.StatusURL);
+        it('should trigger action and get status', () => {
+            let webhook: ActionTriggerResponse;
+            return splunkCloud.action.triggerAction(webhookAction.name, notification).then(response => {
+                webhook = response as ActionTriggerResponse;
+                assert.isNotNull(webhook.statusId);
+                assert.isNotNull(webhook.statusUrl);
 
-            return splunkCloud.action.getActionStatus(webhookAction.name, webhook.StatusID as string).then(res => {
+                return splunkCloud.action.getActionStatus(webhookAction.name, webhook.statusId as string);
+            }).then(res => {
                 const actionStatus = res as ActionStatus;
                 // expect(['RUNNING', 'FAILED']).to.include(res.state) TODO: Whether the action succeeds or not, depends on the action definition
-                assert.equal(actionStatus.statusId, webhook.StatusID);
+                assert.equal(actionStatus.statusId, webhook.statusId);
             });
-        }));
+        });
 
-        it('should delete actions', () => splunkCloud.action.deleteAction(webhookAction.name).then(response => {
-            assert.isEmpty(response);
-        }));
+        it('should delete actions', () => {
+            return splunkCloud.action.deleteAction(webhookAction.name).then(response => {
+                assert.isEmpty(response);
+            });
+        });
     });
 
     describe('Create/delete SNS actions', () => {
