@@ -24,3 +24,8 @@ copyright.txt
 yarn-error.log
 tslint.json
 tsconfig.json
+tsconfig.test.json
+
+# Hide compiled test folders, these appear to be webstorm generated
+/integration
+/unit

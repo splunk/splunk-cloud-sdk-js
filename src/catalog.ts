@@ -54,7 +54,7 @@ export class CatalogService extends BaseApiService {
      * @param dataset The dataset to create
      * @return description of the new dataset
      */
-    public createDataset = (dataset: DatasetInfo): Promise<DatasetInfo> => {
+    public createDataset = (dataset: PartialDatasetInfo): Promise<DatasetInfo> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), dataset)
             .then(response => response.body as DatasetInfo);
     }
@@ -74,9 +74,9 @@ export class CatalogService extends BaseApiService {
      * @param datasetIdOrResourceName
      * @return A promise that will be resolved when deletion is complete
      */
-    public deleteDataset = (datasetIdOrResourceName: string): Promise<any> => { // TODO: can we add stricter return typing?
+    public deleteDataset = (datasetIdOrResourceName: string): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -84,14 +84,13 @@ export class CatalogService extends BaseApiService {
      * @param name of the Dataset to delete
      * @return A promise that will be resolved when deletion is complete
      */
-    public deleteDatasetByName = (name: DatasetInfo['name']): Promise<any> => { // TODO: can we add stricter return typing?
+    public deleteDatasetByName = (name: DatasetInfo['name']): Promise<object> => {
         return this.getDatasets(`name=="${name}"`).then(
             ret => {
                 if (ret.length > 1) {
                     throw new Error('There are more than 1 dataset with the input name');
                 } else if (ret.length === 1) {
-                    return this.client.delete(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', ret[0].id]))
-                        .then(response => response.body);
+                    return this.deleteDataset(ret[0].id).then(response => response);
                 } else {
                     return Promise.reject(new Error(`No dataset found with name: ${name}`));
                 }
@@ -117,7 +116,7 @@ export class CatalogService extends BaseApiService {
      * @param rule The rule to create
      * @return a description of the new rule
      */
-    public createRule = (rule: Rule): Promise<Rule> => {
+    public createRule = (rule: CreateRule): Promise<Rule> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules']), rule)
             .then(response => response.body as Rule);
     }
@@ -151,9 +150,9 @@ export class CatalogService extends BaseApiService {
      * @param ruleIdOrResourceName
      * @return Promise that will be resolved when the rule is deleted
      */
-    public deleteRule = (ruleIdOrResourceName: string): Promise<any> => { // TODO: can we add stricter return typing?
+    public deleteRule = (ruleIdOrResourceName: string): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleIdOrResourceName]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -174,7 +173,7 @@ export class CatalogService extends BaseApiService {
      * @param datasetFieldID
      * @return field description
      */
-    public getDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id']): Promise<Field> => {
+    public getDatasetField = (datasetID: string, datasetFieldID: string): Promise<Field> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]))
             .then(response => response.body as Field);
     }
@@ -197,7 +196,7 @@ export class CatalogService extends BaseApiService {
      * @param datasetField
      * @return updated description of the field
      */
-    public patchDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id'], datasetField: Field): Promise<Field> => {
+    public patchDatasetField = (datasetID: string, datasetFieldID: string, datasetField: Field): Promise<Field> => {
         return this.client.patch(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]), datasetField)
             .then(response => response.body as Field);
     }
@@ -208,7 +207,7 @@ export class CatalogService extends BaseApiService {
      * @param datasetFieldID
      * @return promise that will be resolved when field is deleted
      */
-    public deleteDatasetField = (datasetID: DatasetInfo['id'], datasetFieldID: Field['id']): Promise<object> => {
+    public deleteDatasetField = (datasetID: string, datasetFieldID: string): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields', datasetFieldID]))
             .then(response => response.body as object);
     }
@@ -229,7 +228,7 @@ export class CatalogService extends BaseApiService {
      * @param fieldID
      * @return description of the field
      */
-    public getField = (fieldID: Field['id']): Promise<Field> => {
+    public getField = (fieldID: string): Promise<Field> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['fields', fieldID]))
             .then(response => response.body as Field);
     }
@@ -273,6 +272,7 @@ export class CatalogService extends BaseApiService {
      * Updates the supplied rule action
      * @param ruleID
      * @param actionID
+     * @param action
      * @return information about the updated rule action
      */
     public updateRuleAction = (ruleID: Rule['id'], actionID: string, action: AliasAction | AutoKVAction | EvalAction | LookupAction | RegexAction):
@@ -301,8 +301,8 @@ export interface DatasetInfo {
     module: string;
     created?: string;
     modified?: string;
-    createdBy?: string;
-    modifiedBy?: string;
+    createdby?: string;
+    modifiedby?: string;
     capabilities?: string;
     version?: number;
     sourceName?: string;
@@ -313,25 +313,33 @@ export interface DatasetInfo {
 }
 
 export interface PartialDatasetInfo {
-    name?: string;
-    kind?: string;
+    name: string;
+    kind: string;
     owner?: string;
     created?: string;
     modified?: string;
-    createdBy?: string;
-    modifiedBy?: string;
+    createdby?: string;
+    modifiedby?: string;
     capabilities?: string;
     version?: number;
     readroles?: string[];
     writeroles?: string[];
+    disabled?: boolean;
+    module?: string;
+    search?: string;
+    externalKind?: string;
+    externalName?: string;
+    sourceName?: string;
+    sourceModule?: string;
+    sourceId?: string; // for imports
 }
 
 export interface Field {
-    id: string;
+    id?: string; // TODO: come back and make a CreateField type
     name: string;
-    dataSetId: string;
-    dataType?: DataType;
-    fieldType?: FieldType;
+    dataSetId?: string;
+    datatype?: Datatype;
+    fieldtype?: Fieldtype;
     prevalence?: Prevalence;
     created?: string;
     modified?: string;
@@ -340,24 +348,36 @@ export interface Field {
     dataset?: DatasetInfo;
 }
 
-export enum DataType {
-    DATE,
-    NUMBER,
-    OBJECT_ID,
-    STRING,
-    UNKNOWN,
+// TODO: verify that these str values conform to the spec
+export enum Datatype {
+    DATE = 'D',
+    NUMBER = 'N',
+    OBJECT_ID = 'O',
+    STRING = 'S',
+    UNKNOWN = 'U',
 }
 
-export enum FieldType {
-    DIMENSION,
-    MEASURE,
-    UNKNOWN,
+// TODO: verify that these str values conform to the spec
+export enum Fieldtype {
+    DIMENSION = 'D',
+    MEASURE = 'M',
+    UNKNOWN = 'U',
 }
 
+// TODO: verify that these str values conform to the spec
 export enum Prevalence {
-    ALL,
-    SOME,
-    UNKNOWN,
+    ALL = 'A',
+    SOME = 'S',
+    UNKNOWN = 'U',
+}
+
+// TODO: audit fields for validity
+export interface CreateRule {
+    name?: string;
+    module?: string;
+    match?: string;
+    owner?: string;
+    actions?: Action[];
 }
 
 export interface Rule {
@@ -374,86 +394,88 @@ export interface Rule {
     version: number;
 }
 
+// TODO: add CreateXAction interfaces, or a generic CreateAction map<string,string>
+// this will take an enum for kind
+
 export interface Action {
-    id: string;
-    ruleid: string;
-    kind: string;
-    owner: string;
-    created: string;
-    modified: string;
-    createdBy: string;
-    modifiedBy: string;
-    version: number;
+    id?: string;
+    ruleid?: string;
+    kind?: string;
+    owner?: string;
+    created?: string;
+    modified?: string;
+    createdBy?: string;
+    modifiedBy?: string;
+    version?: number;
 }
 
 export interface AliasAction {
-    id: string;
-    ruleid: string;
-    kind: 'ALIAS';
-    owner: string;
-    created: string;
-    modified: string;
-    createdBy: string;
-    modifiedBy: string;
-    version: number;
+    id?: string;
+    ruleid?: string;
+    kind?: 'ALIAS';
+    owner?: string;
+    created?: string;
+    modified?: string;
+    createdBy?: string;
+    modifiedBy?: string;
+    version?: number;
     alias: string;
-    field: Field;
+    field: Field['name'];
 }
 
 export interface AutoKVAction {
-    id: string;
-    ruleid: string;
-    kind: 'AUTOKV';
-    owner: string;
-    created: string;
-    modified: string;
-    createdBy: string;
-    modifiedBy: string;
-    version: number;
-    mode: string;
+    id?: string;
+    ruleid?: string;
+    kind?: 'AUTOKV';
+    owner?: string;
+    created?: string;
+    modified?: string;
+    createdBy?: string;
+    modifiedBy?: string;
+    version?: number;
+    mode?: string;
 }
 
 export interface EvalAction {
-    id: string;
-    ruleid: string;
-    kind: 'EVAL';
-    owner: string;
-    created: string;
-    modified: string;
-    createdBy: string;
-    modifiedBy: string;
-    version: number;
-    expression: string;
-    field: Field;
+    id?: string;
+    ruleid?: string;
+    kind?: 'EVAL';
+    owner?: string;
+    created?: string;
+    modified?: string;
+    createdBy?: string;
+    modifiedBy?: string;
+    version?: number;
+    expression?: string;
+    field?: Field['name'];
 }
 
 export interface LookupAction {
-    id: string;
-    ruleid: string;
-    kind: 'LOOKUP';
-    owner: string;
-    created: string;
-    modified: string;
-    createdBy: string;
-    modifiedBy: string;
-    version: number;
-    expression: string;
+    id?: string;
+    ruleid?: string;
+    kind?: 'LOOKUP';
+    owner?: string;
+    created?: string;
+    modified?: string;
+    createdBy?: string;
+    modifiedBy?: string;
+    version?: number;
+    expression?: string;
 }
 
-
 export interface RegexAction {
-    id: string;
-    ruleid: string;
-    kind: 'REGEX';
-    owner: string;
-    created: string;
-    modified: string;
-    createdBy: string;
-    modifiedBy: string;
-    version: number;
-    pattern: string;
-    field: Field;
-    limit: number;
+    id?: string;
+    ruleid?: string;
+    kind?: 'REGEX';
+    owner?: string;
+    created?: string;
+    modified?: string;
+    createdBy?: string;
+    modifiedBy?: string;
+    version?: number;
+    pattern?: string;
+    field?: Field['name'];
+    limit?: number;
 }
 
 export interface Module {

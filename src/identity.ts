@@ -55,9 +55,9 @@ export class IdentityService extends BaseApiService {
      * @param tenantName unique identifier of the tenant
      * @returns A promise that resolves upon deletion
      */
-    public deleteTenant = (tenantName: Tenant['name']): Promise<any> => {
+    public deleteTenant = (tenantName: Tenant['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants', tenantName],'system'))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -94,9 +94,9 @@ export class IdentityService extends BaseApiService {
      * @param memberName input object of a member
      * @returns  A promise that resolves upon deletion
      */
-    public removeMember = (memberName: MemberName['name']): Promise<any> => {
+    public removeMember = (memberName: MemberName['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -143,9 +143,9 @@ export class IdentityService extends BaseApiService {
      * @param roleName String name of a role
      * @returns A promise that resolves upon deletion
      */
-    public deleteRole = (roleName: Role['name']): Promise<any> => {
+    public deleteRole = (roleName: Role['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -186,9 +186,9 @@ export class IdentityService extends BaseApiService {
      * @param permissionName
      * @returns A promise that resolves upon deletion
      */
-    public removeRolePermission = (roleName: Role['name'], permissionName: Permission['name']): Promise<any> => {
+    public removeRolePermission = (roleName: Role['name'], permissionName: Permission['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions', permissionName]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -225,9 +225,9 @@ export class IdentityService extends BaseApiService {
      * @param groupName String name of a group
      * @returns A promise that resolves upon deletion
      */
-    public deleteGroup = (groupName: Group['name']): Promise<any> => {
+    public deleteGroup = (groupName: Group['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -268,9 +268,9 @@ export class IdentityService extends BaseApiService {
      * @param roleName String name of a role
      * @returns A promise that resolves upon deletion
      */
-    public removeGroupRole = (groupName: Group['name'], roleName: Role['name']): Promise<any> => {
+    public removeGroupRole = (groupName: Group['name'], roleName: Role['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles', roleName]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -311,9 +311,9 @@ export class IdentityService extends BaseApiService {
      * @param  groupMemberName String name of group member
      * @returns A promise that resolves upon deletion
      */
-    public removeGroupMember = (groupName: Group['name'], groupMemberName: GroupMemberName['name']): Promise<any> => {
+    public removeGroupMember = (groupName: Group['name'], groupMemberName: GroupMemberName['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members', groupMemberName]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -350,9 +350,9 @@ export class IdentityService extends BaseApiService {
      * @param principalName
      * @returns A promise that resolves upon deletion
      */
-    public deletePrincipal = (principalName: PrincipalInput['name']): Promise<any> => {
+    public deletePrincipal = (principalName: PrincipalInput['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals', principalName], 'system'))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
 }

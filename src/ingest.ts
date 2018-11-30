@@ -16,9 +16,9 @@ export class IngestService extends BaseApiService {
      * @param events
      * @return promise that will be resolved when the ingest service has accepted the events for indexing
      */
-    public postEvents = (events: Event[]): Promise<any> => {
+    public postEvents = (events: Event[]): Promise<object> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.ingest, this.client.buildPath(INGEST_SERVICE_PREFIX, ['events']), events)
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -26,9 +26,9 @@ export class IngestService extends BaseApiService {
      * @param metrics
      * @return promise that will be resolved when the ingest service has accepted the metrics for indexing
      */
-    public postMetrics = (metrics: MetricEvent[]): Promise<any> => {
+    public postMetrics = (metrics: MetricEvent[]): Promise<object> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.ingest, this.client.buildPath(INGEST_SERVICE_PREFIX, ['metrics']), metrics)
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 }
 
@@ -94,7 +94,7 @@ export interface MetricEvent {
     /**
      * Default attributes for related Splunk metrics.
      */
-    attributes: MetricAttributes;
+    attributes?: MetricAttributes;
     /**
      * Specifies multiple related metrics e.g. Memory, CPU etc.
      */
@@ -102,20 +102,20 @@ export interface MetricEvent {
     /**
      * The host value assigned to the event data. Typically, this is the hostname of the client from which you are sending data.
      */
-    host: string;
+    host?: string;
     /**
      * The source value to assign to the event data. For example, if you are sending data from an app that you are developing,
      * set this key to the name of the app.
      */
-    source: string;
+    source?: string;
     /**
      * The sourcetype value assigned to the event data.
      */
-    sourceType: string;
+    sourcetype?: string;
     /**
      * Epoch time in milliseconds.
      */
-    timestamp: number;
+    timestamp?: number;
     /**
      * An optional ID that uniquely identifies the metric data. It is used to deduplicate the data if same data is set multiple times.
      * If ID is not specified, it will be assigned by the system.
@@ -160,7 +160,7 @@ export interface Metric {
     /**
      * Dimensions allow metrics to be classified e.g. {"Server":"nginx", "Region":"us-west-1", ...}
      */
-    dimensions: object;
+    dimensions?: object;
     /**
      * Name of the metric e.g. CPU, Memory etc.
      */
@@ -168,11 +168,11 @@ export interface Metric {
     /**
      * Type of metric. Default is g for gauge.
      */
-    type: string;
+    type?: string;
     /**
      * Unit of the metric e.g. percent, megabytes, seconds etc.
      */
-    unit: string;
+    unit?: string;
     /**
      * Value of the metric.
      */

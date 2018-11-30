@@ -20,6 +20,7 @@
         "max-classes-per-file": false,
         "max-line-length": false,
         "prefer-array-literal": false,
+        "no-increment-decrement": false,
         "ter-indent": [
             true,
             4,
@@ -38,8 +39,12 @@
             "always"
         ],
         "no-trailing-whitespace": true,
+        "triple-equals": true,
+        "no-irregular-whitespace": true,
         "semicolon": true,
-        "no-unnecessary-callback-wrapper": true
+        "no-unnecessary-callback-wrapper": true,
+        "object-literal-key-quotes": [true, "consistent-as-needed"],
+        "no-multi-spaces": true
     },
     "rulesDirectory": []
 }
