@@ -16,7 +16,7 @@ export class KVStoreService extends BaseApiService {
      * Gets the KVStore's status.
      * @returns KVStore health status
      */
-    public getHealthStatus = (): Promise<any> => {
+    public getHealthStatus = (): Promise<PingOKBody> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['ping']);
         return this.client.get(SERVICE_CLUSTER_MAPPING.kvstore, url)
             .then(response => response.body as PingOKBody);
@@ -59,7 +59,7 @@ export class KVStoreService extends BaseApiService {
      * @param collection The name of the collection whose index should be deleted
      * @returns A promise that will be resolved when the index is deleted
      */
-    public deleteIndex = (collection: string, indexName: string): Promise<any> => {
+    public deleteIndex = (collection: string, indexName: string): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.kvstore,
             this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
                 'collections',
@@ -67,8 +67,7 @@ export class KVStoreService extends BaseApiService {
                 'indexes',
                 indexName,
             ])
-        )
-            .then(response => response.body);
+        ).then(response => response.body as object);
     }
 
     /**
@@ -177,12 +176,13 @@ export class KVStoreService extends BaseApiService {
      * @param filter Query JSON expression to target specific records
      * @returns A promise that will be resolved when the matching records are deleted
      */
-    public deleteRecords = (collection: string, filter?: QueryArgs): Promise<any> => {
+    public deleteRecords = (collection: string, filter?: QueryArgs): Promise<object> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query']);
         const requestOptions: RequestOptions = {
             query: filter
         };
-        return this.client.delete(SERVICE_CLUSTER_MAPPING.kvstore, url, requestOptions).then(response => response.body);
+        return this.client.delete(SERVICE_CLUSTER_MAPPING.kvstore, url, requestOptions)
+            .then(response => response.body as object);
     }
 
     /**
@@ -191,9 +191,10 @@ export class KVStoreService extends BaseApiService {
      * @param key The key of the record used for deletion
      * @returns A promise that will be resolved when the record matching the supplied key is deleted
      */
-    public deleteRecordByKey = (collection: string, key: string): Promise<any> => {
+    public deleteRecordByKey = (collection: string, key: string): Promise<object> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'records', key]);
-        return this.client.delete(SERVICE_CLUSTER_MAPPING.kvstore, url).then(response => response.body);
+        return this.client.delete(SERVICE_CLUSTER_MAPPING.kvstore, url)
+            .then(response => response.body as object);
     }
 }
 

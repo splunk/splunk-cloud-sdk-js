@@ -74,9 +74,9 @@ export class CatalogService extends BaseApiService {
      * @param datasetIdOrResourceName
      * @return A promise that will be resolved when deletion is complete
      */
-    public deleteDataset = (datasetIdOrResourceName: string): Promise<any> => { // TODO: can we add stricter return typing?
+    public deleteDataset = (datasetIdOrResourceName: string): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -84,13 +84,13 @@ export class CatalogService extends BaseApiService {
      * @param name of the Dataset to delete
      * @return A promise that will be resolved when deletion is complete
      */
-    public deleteDatasetByName = (name: DatasetInfo['name']): Promise<any> => { // TODO: can we add stricter return typing?
+    public deleteDatasetByName = (name: DatasetInfo['name']): Promise<object> => {
         return this.getDatasets(`name=="${name}"`).then(
             ret => {
                 if (ret.length > 1) {
                     throw new Error('There are more than 1 dataset with the input name');
                 } else if (ret.length === 1) {
-                    return this.deleteDataset(ret[0].id).then(response => response.body);
+                    return this.deleteDataset(ret[0].id).then(response => response);
                 } else {
                     return Promise.reject(new Error(`No dataset found with name: ${name}`));
                 }
@@ -150,9 +150,9 @@ export class CatalogService extends BaseApiService {
      * @param ruleIdOrResourceName
      * @return Promise that will be resolved when the rule is deleted
      */
-    public deleteRule = (ruleIdOrResourceName: string): Promise<any> => { // TODO: can we add stricter return typing?
+    public deleteRule = (ruleIdOrResourceName: string): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['rules', ruleIdOrResourceName]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -301,8 +301,8 @@ export interface DatasetInfo {
     module: string;
     created?: string;
     modified?: string;
-    createdBy?: string; // TODO: these seems to be lowercase only
-    modifiedBy?: string; // TODO: these seems to be lowercase only
+    createdby?: string;
+    modifiedby?: string;
     capabilities?: string;
     version?: number;
     sourceName?: string;
@@ -313,18 +313,17 @@ export interface DatasetInfo {
 }
 
 export interface PartialDatasetInfo {
-    name?: string;
-    kind?: string;
+    name: string;
+    kind: string;
     owner?: string;
     created?: string;
     modified?: string;
-    createdBy?: string; // TODO: these seems to be lowercase only
-    modifiedBy?: string; // TODO: these seems to be lowercase only
+    createdby?: string;
+    modifiedby?: string;
     capabilities?: string;
     version?: number;
     readroles?: string[];
     writeroles?: string[];
-    // TODO: are these valid, or are the tests stale?
     disabled?: boolean;
     module?: string;
     search?: string;

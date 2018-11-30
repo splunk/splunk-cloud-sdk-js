@@ -16,7 +16,7 @@ export class EventBatcher {
     private readonly batchCount: number;
     private readonly timeout: number;
     private queue: Event[];
-    private timer: number;
+    private timer: any;
 
     /**
      * @param ingest - Proxy for the Ingest API
@@ -25,7 +25,7 @@ export class EventBatcher {
      * @param timeout - Interval (milliseconds) to send the events and flush the queue
      */
 
-    constructor(ingest: IngestService, batchSize: number, batchCount: number, timeout: number) {
+    constructor(ingest: IngestService, batchSize: number, batchCount: number, timeout: any) {
         this.ingest = ingest;
         // TODO: set some sane defaults so these 3 can be optional
         this.batchSize = batchSize;
@@ -50,7 +50,7 @@ export class EventBatcher {
      *
      * @return the timer created
      */
-    private setTimer = (): number => {
+    private setTimer = (): any => {
         return setTimeout(() => {
             if (this.queue.length > 0) {
                 this.flush();

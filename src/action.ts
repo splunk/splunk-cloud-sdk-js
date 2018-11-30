@@ -35,9 +35,9 @@ export class ActionService extends BaseApiService {
      * @param name name of the action
      * @return Promise of object
      */
-    public deleteAction = (name: ActionBase['name']): Promise<any> => {
+    public deleteAction = (name: ActionBase['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -77,8 +77,8 @@ export class ActionService extends BaseApiService {
                         const parts = responseStr.split('/status/');
                         if (parts.length === 2) {
                             return Promise.resolve({
-                                StatusID: parts[1],
-                                StatusURL: responseStr
+                                statusId: parts[1],
+                                statusUrl: responseStr
                             } as ActionTriggerResponse);
                         }
                     }
@@ -124,8 +124,8 @@ export interface ActionStatus {
 
 // ActionTriggerResponse for returning status url and id
 export interface ActionTriggerResponse {
-    StatusID?: string;
-    StatusURL?: string;
+    statusId?: string;
+    statusUrl?: string;
 }
 
 // ActionError defines format for returned errors
