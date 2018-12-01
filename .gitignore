@@ -1,8 +1,15 @@
 /*.js
 /src/*.js
+/src/*.d.ts
 /*.d.ts
+/test/**/*.d.ts
+/test/**/*.js
 ./common/ # built dir
 !/.eslintrc.js
+
+# Hide compiled test folders, these appear to be webstorm generated
+/integration
+/unit
 
 # Don't check in HTML docs or built docs packages
 docs/html

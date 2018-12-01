@@ -9,7 +9,7 @@ else
     exit 1
 fi
 
-if [ "$allow_failures" -eq "1" ]; then
+if [[ "$allow_failures" -eq "1" ]]; then
     echo "Running integration tests but not gating on failures..."
     set +e
     yarn codecov:integration

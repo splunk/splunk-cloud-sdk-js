@@ -29,7 +29,7 @@ function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchS
  */
 export class Search {
     private client: SearchService;
-    private readonly jobId: string;
+    public readonly jobId: string;
     private isCancelling: boolean;
     /**
      *
@@ -96,7 +96,7 @@ export class Search {
         const self = this;
         return self.status()
             .then(async (job: any) => {
-                if (args.offset != null) {
+                if (args.offset !== null) {
                     return self.client.getResults(self.jobId, args);
                     // .then(response => response.results);
                 }

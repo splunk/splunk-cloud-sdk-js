@@ -17,9 +17,7 @@ export class StreamsService extends BaseApiService {
      * @param dsl The DSL script that needs to be converted into a UPL pipeline JSON
      * @returns A UPL pipeline in JSON format
      */
-    public compileDslToUpl = (
-        dsl: DslCompilationRequest
-    ): Promise<UplPipeline> => {
+    public compileDslToUpl = (dsl: DslCompilationRequest): Promise<UplPipeline> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'compile-dsl']), dsl)
             .then(response => response.body as UplPipeline);
@@ -30,9 +28,7 @@ export class StreamsService extends BaseApiService {
      * @param queryArgs Filter string to target specific pipelines
      * @returns A Promise of a paginated pipeline response (consists of the pipelines and total count)
      */
-    public getPipelines = (
-        queryArgs: PipelineQueryParams = {}
-    ): Promise<PaginatedPipelineResponse> => {
+    public getPipelines = (queryArgs: PipelineQueryParams = {}): Promise<PaginatedPipelineResponse> => {
         const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']);
         const requestOptions: RequestOptions = {
             query: queryArgs as QueryArgs
@@ -46,9 +42,7 @@ export class StreamsService extends BaseApiService {
      * @param pipeline The new pipeline data to be created
      * @returns A promise of a new pipeline object
      */
-    public createPipeline = (
-        pipeline: PipelineRequest
-    ): Promise<Pipeline> => {
+    public createPipeline = (pipeline: PipelineRequest): Promise<Pipeline> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines']), pipeline)
             .then(response => response.body as Pipeline);
@@ -59,9 +53,7 @@ export class StreamsService extends BaseApiService {
      * @param activatePipelineRequest The activate pipeline request containing the ids of pipeline to be activated
      * @returns A promise of the additional properties defining the current status of the pipelines
      */
-    public activatePipeline = (
-        activatePipelineRequest: ActivatePipelineRequest
-    ): Promise<AdditionalProperties> => {
+    public activatePipeline = (activatePipelineRequest: ActivatePipelineRequest): Promise<AdditionalProperties> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'activate']), activatePipelineRequest)
             .then(response => response.body as AdditionalProperties);
@@ -72,9 +64,7 @@ export class StreamsService extends BaseApiService {
      * @param deactivatePipelineRequest The deactivate pipeline request containing the ids of pipeline to be deactivated
      * @returns A promise of the additional properties defining the current status of the pipelines
      */
-    public deactivatePipeline = (
-        deactivatePipelineRequest: ActivatePipelineRequest
-    ): Promise<AdditionalProperties> => {
+    public deactivatePipeline = (deactivatePipelineRequest: ActivatePipelineRequest): Promise<AdditionalProperties> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.streams,
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', 'deactivate']), deactivatePipelineRequest)
             .then(response => response.body as AdditionalProperties);
@@ -85,9 +75,7 @@ export class StreamsService extends BaseApiService {
      * @param id The ID of the pipeline that should be fetched
      * @returns A Promise of an individual pipeline
      */
-    public getPipeline = (
-        id: string
-    ): Promise<Pipeline> => {
+    public getPipeline = (id: string): Promise<Pipeline> => {
         const url = this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]);
         return this.client.get(SERVICE_CLUSTER_MAPPING.streams, url)
             .then(response => response.body as Pipeline);
@@ -99,10 +87,7 @@ export class StreamsService extends BaseApiService {
      * @param pipeline The updated pipeline data
      * @returns A promise of an updated pipeline object
      */
-    public updatePipeline = (
-        id: string,
-        pipeline: PipelineRequest
-    ): Promise<Pipeline> => {
+    public updatePipeline = (id: string, pipeline: PipelineRequest): Promise<Pipeline> => {
         return this.client.put(SERVICE_CLUSTER_MAPPING.streams,
             this.client.buildPath(STREAMS_SERVICE_PREFIX, ['pipelines', id]), pipeline)
             .then(response => response.body as Pipeline);
@@ -243,7 +228,8 @@ export interface PipelineRequest {
  */
 export enum PipelineStatus {
     Created = 'CREATED',
-    Activated = 'ACTIVATED'
+    Activated = 'ACTIVATED',
+    Deactivated = 'Deactivated' // TODO: can this be uppercase?
 }
 
 /**

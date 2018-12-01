@@ -35,9 +35,9 @@ export class ActionService extends BaseApiService {
      * @param name name of the action
      * @return Promise of object
      */
-    public deleteAction = (name: ActionBase['name']): Promise<any> => {
+    public deleteAction = (name: ActionBase['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
-            .then(response => response.body);
+            .then(response => response.body as object);
     }
 
     /**
@@ -73,12 +73,12 @@ export class ActionService extends BaseApiService {
                 const key = 'location';
                 if (response.headers.has(key)) {
                     const responseStr = response.headers.get(key);
-                    if (responseStr != null && responseStr.match('\/status\/')) {
+                    if (responseStr !== null && responseStr.match('\/status\/')) {
                         const parts = responseStr.split('/status/');
                         if (parts.length === 2) {
                             return Promise.resolve({
-                                'StatusID': parts[1],
-                                'StatusURL': responseStr
+                                statusId: parts[1],
+                                statusUrl: responseStr
                             } as ActionTriggerResponse);
                         }
                     }
@@ -93,7 +93,7 @@ export class ActionService extends BaseApiService {
      * @param statusId statusId
      * @return Promise of actionStatus
      */
-    public getActionStatus = (name: ActionBase['name'], statusId: string): Promise<ActionStatus> => {
+    public getActionStatus = (name: ActionBase['name'], statusId: ActionStatus['statusId']): Promise<ActionStatus> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
             .then(response => response.body as ActionStatus);
     }
@@ -122,12 +122,11 @@ export interface ActionStatus {
     message: string;
 }
 
-// ActionTriggerResponse for returning status url and parsed statusID (if possible)
+// ActionTriggerResponse for returning status url and id
 export interface ActionTriggerResponse {
     statusId?: string;
     statusUrl?: string;
 }
-
 
 // ActionError defines format for returned errors
 export interface ActionError {
@@ -196,7 +195,7 @@ export interface ActionUpdateFields {
     // TemplateName to send via Email action
     templateName?: string;
     // Addresses to send to when Email action triggered
-    addresses: string[];
+    addresses?: string[];
 
     // SNS action fields:
     // Topic to trigger SNS action
@@ -206,7 +205,7 @@ export interface ActionUpdateFields {
 
     // Webhook action fields:
     // WebhookURL to trigger Webhook action
-    webhookUrl?: URL;
+    webhookUrl?: string;
 }
 
 
@@ -232,7 +231,7 @@ export interface WebhookAction extends ActionBase {
     /**
      * Only allows https scheme. Only allows hostnames that end with "slack.com", "webhook.site", "sendgrid.com", "zapier.com", "hipchat.com", "amazon.com", and "amazonaws.com"
      */
-    webhookUrl: URL;
+    webhookUrl: string;
 }
 
 export interface ActionBase {

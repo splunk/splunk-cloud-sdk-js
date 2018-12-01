@@ -16,7 +16,7 @@ export class EventBatcher {
     private readonly batchCount: number;
     private readonly timeout: number;
     private queue: Event[];
-    private timer: number;
+    private timer: any;
 
     /**
      * @param ingest - Proxy for the Ingest API
@@ -25,7 +25,7 @@ export class EventBatcher {
      * @param timeout - Interval (milliseconds) to send the events and flush the queue
      */
 
-    constructor(ingest: IngestService, batchSize: number, batchCount: number, timeout: number) {
+    constructor(ingest: IngestService, batchSize: number, batchCount: number, timeout: any) {
         this.ingest = ingest;
         // TODO: set some sane defaults so these 3 can be optional
         this.batchSize = batchSize;
@@ -50,7 +50,7 @@ export class EventBatcher {
      *
      * @return the timer created
      */
-    private setTimer = (): number => {
+    private setTimer = (): any => {
         return setTimeout(() => {
             if (this.queue.length > 0) {
                 this.flush();
@@ -70,8 +70,7 @@ export class EventBatcher {
      * Clean up the events and timer.
      * @return Promise that will be completed when events are accepted by service
      */
-    // TODO: This shouldn't be any
-    public flush = (): Promise<any> => {
+    public flush = (): Promise<object> => {
         const data = this.queue;
         this.queue = [];
         this.resetTimer();
@@ -85,7 +84,7 @@ export class EventBatcher {
      *
      * @return can return null if event has not been sent yet.
      */
-    private run = (): Promise<any> | null => {
+    private run = (): Promise<object> | null => {
         const maxCountReached = (this.queue.length >= this.batchCount);
         // TODO: is it okay to just import @types/node and call this good?
         const eventByteSize = JSON.stringify(this.queue).length;
