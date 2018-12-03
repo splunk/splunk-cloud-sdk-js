@@ -112,13 +112,12 @@ export class KVStoreService extends BaseApiService {
             'records',
             key,
         ]);
-        return this.client.put(SERVICE_CLUSTER_MAPPING.kvstore, putRecordURL, record)
-            .then(response => {
-                return {
-                    body: response.body as Key,
-                    created: response.status === 201, /* 201 CREATED */
-                } as PutResponse;
-            });
+        return this.client.put(SERVICE_CLUSTER_MAPPING.kvstore, putRecordURL, record).then(response => {
+            return {
+                body: response.body as Key,
+                created: response.status === 201, /* 201 CREATED */
+            } as PutResponse;
+        });
     }
 
     /**

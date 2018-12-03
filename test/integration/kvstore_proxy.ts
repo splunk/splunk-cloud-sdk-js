@@ -129,12 +129,12 @@ describe('Integration tests for KVStore Endpoints', () => {
             const oldRecord = {
                 lazy: 'dog',
             };
-            let oldKey: string;
             const newRecord = {
                 quick: 'fox',
                 brown: 'fox',
             };
-            const newKey = 'mynewkey';
+            const newKey = `newkey${Date.now()}`;
+            let oldKey: string;
 
             before('should create an existing record via putRecord', () =>
                 splunkCloud.kvstore
