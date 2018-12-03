@@ -108,7 +108,7 @@ async function main() {
         .then(() => {
              // Clean up view dataset
              console.log(`Deleting view ${viewDatasetResponse.id}`);
-             splunk.catalog.deleteDataset(viewDatasetResponse.id);
+             return splunk.catalog.deleteDataset(viewDatasetResponse.id);
         })
         .catch(err=> {
            exitOnFailure(err);
