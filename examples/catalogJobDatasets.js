@@ -6,7 +6,6 @@
 require("isomorphic-fetch");
 
 const { SplunkCloud } = require("../splunk");
-const { sleep, searchResults } = require("../utils/exampleHelperFunctions");
 
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
@@ -40,31 +39,31 @@ async function main() {
     console.log(`Posting events with host=${host}, source = ${source}`);
 
     const event1 = {
-        "sourcetype": "splunkd",
-        "source": source,
-        "host": host,
-        "body": `Event1 view dataset ${host},${source}`,
         "attributes": {
             "index": index
-        }
+        },
+        "body": `Event1 view dataset ${host},${source}`,
+        "host": host,
+        "sourcetype": "splunkd",
+        "source": source,
     };
     const event2 = {
-        "sourcetype": "splunkd",
-        "source": source,
         "attributes": {
             "index": index
         },
+        "body": `Event2 view dataset ${host},${source}`,
         "host": host,
-        "body": `Event2 view dataset ${host},${source}`
+        "sourcetype": "splunkd",
+        "source": source,
     };
     const event3 = {
-        "sourcetype": "splunkd",
-        "source": source,
         "attributes": {
             "index": index
         },
+        "body": `Event3 view dataset ${host},${source}`,
         "host": host,
-        "body": `Event3 view dataset ${host},${source}`
+        "sourcetype": "splunkd",
+        "source": source,
     };
     events = [event1, event2, event3];
     let ingestResponse = await splunk.ingest.postEvents(events);
