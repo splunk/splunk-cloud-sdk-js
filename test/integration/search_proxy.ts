@@ -215,6 +215,23 @@ describe('integration tests Using Search APIs', () => {
                     });
                 });
             });
+            it('should allow results observable with polling rate', () => {
+                return splunk.search.submitSearch(standardQuery).then(search => {
+                    return new Promise((resolve, reject) => {
+                        let results: SearchResults;
+                        search.resultObservable({ pollInterval: 150 }).subscribe(r => {
+                            results = r;
+                        }, reject, () => {
+                            try {
+                                expect(results.results).to.be.an('array').and.have.property('length', 5);
+                                resolve();
+                            } catch (e) {
+                                reject(e);
+                            }
+                        });
+                    });
+                });
+            });
         });
 
         it('should allow status subscription', () => {
