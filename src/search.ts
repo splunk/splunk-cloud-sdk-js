@@ -138,7 +138,7 @@ export class Search {
             const pollInterval = args.pollInterval || 500;
             let filteredArgs = _filterObject(args, ['pollInterval']);
             this._resultObservable = Observable.create((observable: any) => {
-                const promises: any[] = [];
+                const promises: Promise<any>[] = [];
                 self.wait(pollInterval, (job: SearchJob) => {
                     if (job.resultsAvailable && job.resultsAvailable > 0) { // Passes through arguments, so has the same semantics of offset == window
                         promises.push(self.getResults(filteredArgs).then(results => observable.next(results)));
