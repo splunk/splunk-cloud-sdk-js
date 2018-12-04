@@ -1,4 +1,4 @@
-// ***** TITLE: Create and Search View Dataset in Catalog
+// ***** TITLE: Create and Search Job Dataset in Catalog
 //
 // ***** DESCRIPTION: This example creates a Search Job using the Search Service,
 //                    then searches Catalog for this Job dataset.
