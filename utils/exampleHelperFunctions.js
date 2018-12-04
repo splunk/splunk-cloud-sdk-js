@@ -6,7 +6,6 @@ function sleep(ms) {
 
 // Creates a search job and fetches search results
 async function searchResults(splunk, start, timeout, query, expected) {
-
     if (Date.now() - start > timeout) {
         console.log(`TIMEOUT!!!! Search is taking more than ${timeout}ms. Terminate!`);
         return false;
@@ -15,13 +14,14 @@ async function searchResults(splunk, start, timeout, query, expected) {
     // sleep 5 seconds before to retry the search
     await sleep(5000);
 
-    return splunk.search.createJob({ "query": query })
+    return splunk.search
+        .createJob({ query: query })
         .then(job => {
             console.log(`Created sid: ${job.sid}`);
             return splunk.search.waitForJob(job.sid);
         })
         .then(searchObj => {
-            console.log(`Done waiting for job, calling getResults on ${searchObj.sid} ...`)
+            console.log(`Done waiting for job, calling getResults on ${searchObj.sid} ...`);
             return splunk.search.getResults(searchObj.sid);
         })
         .then(resultResponse => {
@@ -34,16 +34,29 @@ async function searchResults(splunk, start, timeout, query, expected) {
                 console.log(`find more events than expected for query ${query}`);
                 return resultResponse.results;
             }
-            console.log(`Successfully found ${retNum} event for query ${query}, total spent ${Date.now() - start}ms`);
+            console.log(
+                `Successfully found ${retNum} event for query ${query}, total spent ${Date.now() -
+                    start}ms`
+            );
             return resultResponse.results;
         })
         .catch(err => {
             console.log(err);
             return [];
         });
-};
+}
+
+function exitOnFailure() {
+    process.exit(1);
+}
+
+function exitOnSuccess() {
+    process.exit(0);
+}
 
 module.exports = {
-    sleep: sleep,
-    searchResults: searchResults,
+    sleep,
+    searchResults,
+    exitOnFailure,
+    exitOnSuccess,
 };

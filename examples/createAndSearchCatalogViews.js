@@ -3,31 +3,26 @@
 // ***** DESCRIPTION: This example shows how to create View Dataset using the Catalog Service,
 //             then execute the View using the Search Service and validate results.
 
-require("isomorphic-fetch");
+require('isomorphic-fetch');
 
-const { SplunkCloud } = require("../splunk");
-const { sleep, searchResults } = require("../utils/exampleHelperFunctions");
+const { SplunkCloud } = require('../splunk');
+const { sleep, searchResults, exitOnFailure } = require('../utils/exampleHelperFunctions');
 
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
-
-function exitOnFailure(error) {
-    console.log(error)
-    process.exit(1);
-}
 
 // define the main workflow
 async function main() {
     //assuming index main pre-exists
-    const index = "main";
+    const index = 'main';
     const viewName = `view_${Date.now()}`;
 
     // ***** STEP 1: Get Splunk Cloud client
     // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authentication token.
 
     const splunk = new SplunkCloud({
-        'urls': {'api': SPLUNK_CLOUD_API_HOST, 'app': SPLUNK_CLOUD_APPS_HOST},
-        'tokenSource': BEARER_TOKEN,
-        'defaultTenant': TENANT_ID
+        urls: { api: SPLUNK_CLOUD_API_HOST, app: SPLUNK_CLOUD_APPS_HOST },
+        tokenSource: BEARER_TOKEN,
+        defaultTenant: TENANT_ID,
     });
 
     // ***** STEP 2: Create a new View Dataset
@@ -36,7 +31,7 @@ async function main() {
     let viewDatasetResponse = await splunk.catalog.createDataset({
         name: viewName,
         kind: 'view',
-        search: 'search index=main | head limit=10 | stats count()'
+        search: 'search index=main | head limit=10 | stats count()',
     });
 
     console.log(`View dataset was created : ${viewDatasetResponse.id}`);
@@ -50,37 +45,36 @@ async function main() {
     console.log(`Posting events with host=${host}, source = ${source}`);
 
     const event1 = {
-        "sourcetype": "splunkd",
-        "source": source,
-        "host": host,
-        "body": `Event1 view dataset ${host},${source}`,
-        "attributes": {
-            "index": index
-        }
+        sourcetype: 'splunkd',
+        source: source,
+        host: host,
+        body: `Event1 view dataset ${host},${source}`,
+        attributes: {
+            index: index,
+        },
     };
     const event2 = {
-        "sourcetype": "splunkd",
-        "source": source,
-        "attributes": {
-            "index": index
+        sourcetype: 'splunkd',
+        source: source,
+        attributes: {
+            index: index,
         },
-        "host": host,
-        "body": `Event2 view dataset ${host},${source}`
+        host: host,
+        body: `Event2 view dataset ${host},${source}`,
     };
     const event3 = {
-        "sourcetype": "splunkd",
-        "source": source,
-        "attributes": {
-            "index": index
+        sourcetype: 'splunkd',
+        source: source,
+        attributes: {
+            index: index,
         },
-        "host": host,
-        "body": `Event3 view dataset ${host},${source}`
+        host: host,
+        body: `Event3 view dataset ${host},${source}`,
     };
     events = [event1, event2, event3];
     let ingestResponse = await splunk.ingest.postEvents(events);
-    console.log("Ingest of events succeeded with response:");
+    console.log('Ingest of events succeeded with response:');
     console.log(ingestResponse);
-
 
     // ***** STEP 4: Verify the view dataset
     // ***** DESCRIPTION: Execute the view using Search Service and ensure there is one expected result.
@@ -89,7 +83,8 @@ async function main() {
     console.log(`Executing the view : '${query}'`);
     const expectedResults = 1;
 
-    splunk.search.createJob({"query": `| from ${viewName}`})
+    splunk.search
+        .createJob({ query: `| from ${viewName}` })
         .then(job => {
             console.log(`Created sid: ${job.sid}`);
             return splunk.search.waitForJob(job.sid);
@@ -99,20 +94,21 @@ async function main() {
             return splunk.search.getResults(job.sid);
         })
         .then(resultsResponse => {
-            const success = (resultsResponse && resultsResponse.results.length == expectedResults);
+            const success = resultsResponse && resultsResponse.results.length == expectedResults;
             console.log(`Search results received : ${success}`);
             if (!success) {
-                exitOnFailure("Results did not match expected after executing the View");
+                exitOnFailure('Results did not match expected after executing the View');
             }
         })
         .then(() => {
-             // Clean up view dataset
-             console.log(`Deleting view ${viewDatasetResponse.id}`);
-             return splunk.catalog.deleteDataset(viewDatasetResponse.id);
+            // Clean up view dataset
+            console.log(`Deleting view ${viewDatasetResponse.id}`);
+            return splunk.catalog.deleteDataset(viewDatasetResponse.id);
         })
-        .catch(err=> {
-           exitOnFailure(err);
-        })
+        .catch(err => {
+            console.log(error);
+            exitOnFailure();
+        });
 }
 
 // run the workflow
