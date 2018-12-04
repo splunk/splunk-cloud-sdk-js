@@ -87,6 +87,9 @@ async function main() {
             console.log(`Getting results`);
             return splunk.search.getResults(job.sid);
     })
+    // ***** STEP 4: List Job Datasets using Catalog
+    // ***** DESCRIPTION: List Job Datasets using Catalog and Validate the Job dataset created using Search exists
+
     .then(resultsResponse => {
             const success = (resultsResponse && resultsResponse.results.length == expectedResults);
             console.log(`Search results received : ${success}`);
