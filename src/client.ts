@@ -114,7 +114,7 @@ function _sleep(millis: number) : Promise<void> {
  * other than 429 after it's max number of attempts, it will return the last response received.
  *
  * This ResponseHook can be installed like this:
- * ```{javascript}
+ * ```javascript
  * client.addResponseHook(naiveExponentialBackoff({maxRetries: 5, timeout: 100, backoff: 2});
  * ```
  * @param maxRetries The number of times to retry this request before failing
