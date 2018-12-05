@@ -87,7 +87,7 @@ function decodeJson(text: string): object | string {
     }
 }
 
-export type ResponseHook = (response: Response) => Promise<Response> | any;
+export type ResponseHook = (response: Response, request: Request) => Promise<Response> | any;
 export type TokenProviderFunction = () => string;
 export interface ServiceClientArgs {
     /**
@@ -99,6 +99,50 @@ export interface ServiceClientArgs {
     };
     tokenSource: AuthManager | string | TokenProviderFunction;
     defaultTenant?: string;
+}
+
+function _sleep(millis: number) : Promise<void> {
+    return new Promise(resolve => {
+        setTimeout(resolve, millis);
+    })
+}
+
+/**
+ * This function creates a ResponseHook that will retry requests that receive a 429 (too many requests) response
+ * from the server a certain number of times (5 by default), increasing the wait time with each attempt. The wait
+ * starts at 100ms by default and doubles with each retry attempt. If none of the retries come back with a response
+ * other than 429 after it's max number of attempts, it will return the last response received.
+ *
+ * This ResponseHook can be installed like this:
+ * ```javascript
+ * client.addResponseHook(naiveExponentialBackoff({maxRetries: 5, timeout: 100, backoff: 2});
+ * ```
+ * @param maxRetries The number of times to retry this request before failing
+ * @param timeout The _initial_ time to wait for the first retry attempt
+ * @param backoff The multiplier that is applied to the previous timeout for this attempt
+ * @param onRetry A callback that takes a response and a request. Will be called on every retry attempt.
+ * @param onFailure A callback that takes a response and a request. Will be called after maxRetries are exhausted.
+ */
+export function naiveExponentialBackoff({maxRetries = 5, timeout = 100, backoff = 2.0,
+                                            onRetry=(response: Response, request: Request) => {},
+                                            onFailure=(response: Response, request: Request) => {}} = {}) : ResponseHook {
+    const retry : ResponseHook = async (response: Response, request: Request) => {
+        let retries = 0;
+        let myResponse = response;
+        let currentTimeout = timeout;
+        while (response.status == 429 && retries < maxRetries) {
+            await _sleep(currentTimeout);
+            retries += 1;
+            currentTimeout *= backoff;
+            myResponse = await fetch(request);
+            onRetry(myResponse, request);
+        }
+        if (response.status == 429) {
+            onFailure(myResponse, request);
+        }
+        return myResponse;
+    };
+    return retry;
 }
 
 /**
@@ -175,14 +219,14 @@ export class ServiceClient {
         this.responseHooks = [];
     }
 
-    private invokeHooks = (response: Response): Promise<Response> => {
+    private invokeHooks = (response: Response, request: Request): Promise<Response> => {
         return this.responseHooks.reduce((result: Promise<Response>, cb: ResponseHook): Promise<Response> => {
             // Result starts as a known good Promise<Result>
             return result.then((chainResponse) => {
                 // Call the callback, get the result
                 let cbResult;
                 try {
-                    cbResult = cb.call(null, chainResponse);
+                    cbResult = cb.call(null, chainResponse, request);
                 } catch (err) {
                     cbResult = null;
                 }
@@ -278,8 +322,8 @@ export class ServiceClient {
             headers: this.buildHeaders(opts.headers),
             body: typeof data !== 'string' ? JSON.stringify(data) : data,
         };
-
-        return fetch(url, options).then(response => this.invokeHooks(response));
+        const request = new Request(url, options);
+        return fetch(request).then(response => this.invokeHooks(response, request));
 
     }
 
