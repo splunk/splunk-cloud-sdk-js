@@ -6,9 +6,12 @@
 require('isomorphic-fetch');
 
 const { SplunkCloud } = require('../splunk');
-const { sleep, searchResults, exitOnFailure } = require('../utils/exampleHelperFunctions');
 
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
+
+function exitOnFailure() {
+    process.exit(1);
+}
 
 // define the main workflow
 async function main() {

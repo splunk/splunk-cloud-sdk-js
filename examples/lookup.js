@@ -5,7 +5,10 @@ require('isomorphic-fetch');
 
 const { SplunkCloud } = require('../splunk');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
-const { exitOnFailure } = require('../utils/exampleHelperFunctions');
+
+function exitOnFailure() {
+    process.exit(1);
+}
 
 async function main() {
     // ***** STEP 1: Get Splunk Cloud client
