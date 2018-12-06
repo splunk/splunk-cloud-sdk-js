@@ -41,6 +41,7 @@ async function main() {
             match: `sourcetype::${sourcetype}`,
             actions: [alias],
         });
+        console.log(`rule ${ruleName} created successfully`);
         console.log(rule);
     } catch (error) {
         console.log(error);
@@ -60,6 +61,7 @@ async function main() {
     };
     try {
         let response = await splunk.ingest.postEvents([testEvent]);
+        console.log('event ingested successfully');
         console.log(response);
     } catch (error) {
         console.log(error);
