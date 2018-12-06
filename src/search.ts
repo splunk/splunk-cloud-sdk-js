@@ -42,7 +42,7 @@ export class Search {
     public readonly jobId: string;
     private isCancelling: boolean;
     private resultObservableMemo?: Observable<any>;
-    private resultObservableStatus?: Observable<SearchJob>;
+    private statusObservableMemo?: Observable<SearchJob>;
     /**
      *
      * @param searchService
@@ -158,13 +158,13 @@ export class Search {
      * @return An observable that will periodically poll for status on a job until it is complete
      */
     public statusObservable = (updateInterval: number): Observable<SearchJob> => {
-        if (!this.resultObservableStatus) {
-            this.resultObservableStatus = new Observable<SearchJob>((o: any) => {
+        if (!this.statusObservableMemo) {
+            this.statusObservableMemo = new Observable<SearchJob>((o: any) => {
                 this.wait(updateInterval, (job: SearchJob) => o.next(job))
                     .then(() => o.complete(), (err: Error) => o.error(err));
             });
         }
-        return this.resultObservableStatus;
+        return this.statusObservableMemo;
     }
 }
 
