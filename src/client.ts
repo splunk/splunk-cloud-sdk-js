@@ -126,8 +126,8 @@ function sleep(millis: number) : Promise<void> {
 export function naiveExponentialBackoff({maxRetries = 5,
                                          timeout = 100,
                                          backoff = 2.0,
-                                         onRetry=(response: Response, request: Request) => undefined,
-                                         onFailure=(response: Response, request: Request) => undefined
+                                         onRetry=(response: Response, request: Request) => {/**/},
+                                         onFailure=(response: Response, request: Request) =>{/**/}
                                         } = {}) : ResponseHook {
     const retry : ResponseHook = async (response: Response, request: Request) => {
         let retries = 0;
