@@ -2,8 +2,9 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import 'isomorphic-fetch';
 import 'mocha';
-import { ServiceClient } from '../../client';
+import { ServiceClient, naiveExponentialBackoff } from '../../client';
 import config from '../config';
+import {SplunkError} from "../../src/client";
 
 const stubbyUrl = `http://${config.stubbyHost}:8882`;
 chai.use(chaiAsPromised);
@@ -109,6 +110,45 @@ describe('Basic client functionality', () => {
                     expect(httpResponse.body).to.haveOwnProperty('foo');
                 });
         });
+
+        it('should allow retry on 429', () => {
+            let retries = 0;
+            let failed = false;
+            s.addResponseHook(naiveExponentialBackoff({maxRetries: 3, onRetry: () => retries += 1, onFailure: () => failed = true}));
+            return s.get('api', '/too_many_requests')
+                .then(httpResponse => {
+                    expect(httpResponse.body).to.haveOwnProperty('foo');
+                }, (err: SplunkError) => {
+                    expect(err.httpStatusCode).to.equal(429);
+                    expect(retries).to.equal(3);
+                    expect(failed).to.equal(true);
+                });
+        });
+
+        it('should backoff exponentially on 429', () => {
+            const timeout = 50;
+            const backoff = 2;
+            const expectedTime = timeout + timeout * backoff + timeout * backoff * backoff;
+            s.addResponseHook(naiveExponentialBackoff({maxRetries: 3, timeout: timeout, backoff: backoff}));
+            const start = Date.now();
+            return s.get('api', '/too_many_requests')
+                .then(httpResponse => {
+                    expect(httpResponse.body).to.haveOwnProperty('foo');
+                }, () => {
+                    const elapsed = Date.now() - start;
+                    expect(elapsed).to.be.greaterThan(expectedTime).and.lessThan(expectedTime * 2); // setTimeout is not exact
+                });
+        });
+
+        it('should succeed with a backoff in place', () => {
+            s.addResponseHook(naiveExponentialBackoff());
+            const promise = s.get('api', '/basic');
+            expect(promise).to.be.a('promise');
+            return promise.then((data) => {
+                expect(data.body).to.haveOwnProperty('foo');
+                expect(data.status).to.equal(200);
+            });
+        })
 
         it('should handle exceptions', () => {
             s.addResponseHook(response => {

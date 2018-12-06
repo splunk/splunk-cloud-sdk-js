@@ -24,6 +24,16 @@ function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchS
     }
 }
 
+function _filterObject(template: {[key: string]: any}, propertiesToRemove: Array<string>) : object {
+    let newObj: {[key: string] : { value: any }} = {};
+    for (const key in template) {
+        if (propertiesToRemove.indexOf(key) == -1) {
+            newObj[key] = template[key];
+        }
+    }
+    return newObj;
+}
+
 /**
  * A base for an easy-to-use search interface
  */
@@ -31,6 +41,8 @@ export class Search {
     private client: SearchService;
     public readonly jobId: string;
     private isCancelling: boolean;
+    private _resultObservable?: Observable<any>;
+    private _statusObservable?: Observable<SearchJob>;
     /**
      *
      * @param searchService
@@ -121,18 +133,22 @@ export class Search {
      * @return An observable that will pass each result object as it is received
      */
     public resultObservable = (args: ResultObservableOptions = {}): Observable<any> => {
-        const self = this;
-        const pollInterval = args.pollInterval || 500; // Increasing the default
-        return Observable.create((observable: any) => {
-            const promises: any[] = [];
-            self.wait(pollInterval, (job: SearchJob) => {
-                if (job.resultsAvailable && job.resultsAvailable > 0) { // Passes through arguments, so has the same semantics of offset == window
-                    promises.push(self.getResults(args).then(results => observable.next(results)));
-                }
-            }).then(() => {
-                Promise.all(promises).then(() => observable.complete());
+        if (!this._resultObservable) {
+            const self = this;
+            const pollInterval = args.pollInterval || 500;
+            let filteredArgs = _filterObject(args, ['pollInterval']);
+            this._resultObservable = Observable.create((observable: any) => {
+                const promises: Promise<any>[] = [];
+                self.wait(pollInterval, (job: SearchJob) => {
+                    if (job.resultsAvailable && job.resultsAvailable > 0) { // Passes through arguments, so has the same semantics of offset == window
+                        promises.push(self.getResults(filteredArgs).then(results => observable.next(results)));
+                    }
+                }).then(() => {
+                    Promise.all(promises).then(() => observable.complete(), (err) => observable.error(err));
+                });
             });
-        });
+        }
+        return this._resultObservable as Observable<any>;
     }
 
     /**
@@ -142,10 +158,13 @@ export class Search {
      * @return An observable that will periodically poll for status on a job until it is complete
      */
     public statusObservable = (updateInterval: number): Observable<SearchJob> => {
-        return new Observable<SearchJob>((o: any) => {
-            this.wait(updateInterval, (job: SearchJob) => o.next(job))
-                .then(() => o.complete(), (err: Error) => o.error(err));
-        });
+        if (!this._statusObservable) {
+            this._statusObservable = new Observable<SearchJob>((o: any) => {
+                this.wait(updateInterval, (job: SearchJob) => o.next(job))
+                    .then(() => o.complete(), (err: Error) => o.error(err));
+            });
+        }
+        return this._statusObservable;
     }
 }
 
