@@ -101,11 +101,11 @@ export interface ServiceClientArgs {
     defaultTenant?: string;
 }
 
-function _sleep(millis: number) : Promise<void> {
+const _sleep = (millis: number) : Promise<void> => {
     return new Promise(resolve => {
         setTimeout(resolve, millis);
-    })
-}
+    });
+};
 
 /**
  * This function creates a ResponseHook that will retry requests that receive a 429 (too many requests) response
@@ -123,21 +123,24 @@ function _sleep(millis: number) : Promise<void> {
  * @param onRetry A callback that takes a response and a request. Will be called on every retry attempt.
  * @param onFailure A callback that takes a response and a request. Will be called after maxRetries are exhausted.
  */
-export function naiveExponentialBackoff({maxRetries = 5, timeout = 100, backoff = 2.0,
-                                            onRetry=(response: Response, request: Request) => {},
-                                            onFailure=(response: Response, request: Request) => {}} = {}) : ResponseHook {
+export function naiveExponentialBackoff({maxRetries = 5,
+                                         timeout = 100,
+                                         backoff = 2.0,
+                                         onRetry=(response: Response, request: Request) => {/**/},
+                                         onFailure=(response: Response, request: Request) =>{/**/}
+                                        } = {}) : ResponseHook {
     const retry : ResponseHook = async (response: Response, request: Request) => {
         let retries = 0;
         let myResponse = response;
         let currentTimeout = timeout;
-        while (response.status == 429 && retries < maxRetries) {
+        while (response.status === 429 && retries < maxRetries) {
             await _sleep(currentTimeout);
             retries += 1;
             currentTimeout *= backoff;
             myResponse = await fetch(request);
             onRetry(myResponse, request);
         }
-        if (response.status == 429) {
+        if (response.status === 429) {
             onFailure(myResponse, request);
         }
         return myResponse;
