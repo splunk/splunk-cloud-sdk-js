@@ -50,8 +50,7 @@ describe('Integration tests for KVStore Endpoints', () => {
                         .createIndex(testKVCollectionName, {
                             fields,
                             name: testIndex,
-                            collection: testCollection,
-                            namespace: testNamespace,
+                            collection: testCollection
                         })
                         .then(response => {
                             assert.strictEqual(response.name, testIndex);
@@ -84,8 +83,7 @@ describe('Integration tests for KVStore Endpoints', () => {
                         `missing${Date.now()}`, {
                             fields,
                             name: testIndex,
-                            collection: testCollection,
-                            namespace: testNamespace,
+                            collection: testCollection
                         })
                     .then(response => assert.fail(response), err => assert.equal(err.httpStatusCode, 404));
             });
