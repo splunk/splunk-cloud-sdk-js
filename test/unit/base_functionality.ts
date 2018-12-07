@@ -2,9 +2,8 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import 'isomorphic-fetch';
 import 'mocha';
-import { ServiceClient, naiveExponentialBackoff } from '../../client';
+import { naiveExponentialBackoff, ServiceClient, SplunkError } from '../../client';
 import config from '../config';
-import {SplunkError} from "../../src/client";
 
 const stubbyUrl = `http://${config.stubbyHost}:8882`;
 chai.use(chaiAsPromised);
@@ -114,7 +113,7 @@ describe('Basic client functionality', () => {
         it('should allow retry on 429', () => {
             let retries = 0;
             let failed = false;
-            s.addResponseHook(naiveExponentialBackoff({maxRetries: 3, onRetry: () => retries += 1, onFailure: () => failed = true}));
+            s.addResponseHook(naiveExponentialBackoff({ maxRetries: 3, onRetry: () => retries += 1, onFailure: () => failed = true }));
             return s.get('api', '/too_many_requests')
                 .then(httpResponse => {
                     expect(httpResponse.body).to.haveOwnProperty('foo');
@@ -129,7 +128,7 @@ describe('Basic client functionality', () => {
             const timeout = 50;
             const backoff = 2;
             const expectedTime = timeout + timeout * backoff + timeout * backoff * backoff;
-            s.addResponseHook(naiveExponentialBackoff({maxRetries: 3, timeout: timeout, backoff: backoff}));
+            s.addResponseHook(naiveExponentialBackoff({ timeout, backoff, maxRetries: 3 }));
             const start = Date.now();
             return s.get('api', '/too_many_requests')
                 .then(httpResponse => {
@@ -148,7 +147,7 @@ describe('Basic client functionality', () => {
                 expect(data.body).to.haveOwnProperty('foo');
                 expect(data.status).to.equal(200);
             });
-        })
+        });
 
         it('should handle exceptions', () => {
             s.addResponseHook(response => {
