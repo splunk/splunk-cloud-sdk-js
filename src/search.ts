@@ -24,7 +24,7 @@ function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchS
     }
 }
 
-function filterObject(template: {[key: string]: any}, propertiesToRemove: string[]) : object {
+const _filterObject = (template: {[key: string]: any}, propertiesToRemove: string[]) : object => {
     const newObj: {[key: string] : { value: any }} = {};
     for (const key in template) {
         if (propertiesToRemove.indexOf(key) === -1) {
@@ -32,7 +32,7 @@ function filterObject(template: {[key: string]: any}, propertiesToRemove: string
         }
     }
     return newObj;
-}
+};
 
 /**
  * A base for an easy-to-use search interface
@@ -136,7 +136,7 @@ export class Search {
         if (!this.resultObservableMemo) {
             const self = this;
             const pollInterval = args.pollInterval || 500;
-            const filteredArgs = filterObject(args, ['pollInterval']);
+            const filteredArgs = _filterObject(args, ['pollInterval']);
             this.resultObservableMemo = Observable.create((observable: any) => {
                 const promises: Array<Promise<any>> = [];
                 self.wait(pollInterval, (job: SearchJob) => {

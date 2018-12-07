@@ -101,11 +101,11 @@ export interface ServiceClientArgs {
     defaultTenant?: string;
 }
 
-function sleep(millis: number) : Promise<void> {
+const _sleep = (millis: number) : Promise<void> => {
     return new Promise(resolve => {
         setTimeout(resolve, millis);
     });
-}
+};
 
 /**
  * This function creates a ResponseHook that will retry requests that receive a 429 (too many requests) response
@@ -134,7 +134,7 @@ export function naiveExponentialBackoff({maxRetries = 5,
         let myResponse = response;
         let currentTimeout = timeout;
         while (response.status === 429 && retries < maxRetries) {
-            await sleep(currentTimeout);
+            await _sleep(currentTimeout);
             retries += 1;
             currentTimeout *= backoff;
             myResponse = await fetch(request);
