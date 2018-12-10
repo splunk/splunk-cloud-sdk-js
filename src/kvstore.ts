@@ -211,7 +211,6 @@ export interface IndexDescription {
     collection?: string;
     fields: IndexFieldDefinition[];
     name?: string;
-    namespace?: string;
 }
 
 export interface Key {
