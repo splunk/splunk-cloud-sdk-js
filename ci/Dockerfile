@@ -17,6 +17,9 @@ COPY . /opt/splunk/splunk-cloud-sdk-js
 
 WORKDIR /opt/splunk/splunk-cloud-sdk-js
 
+RUN npm -g uninstall yarn
+RUN npm -g install yarn@1.9
+
 RUN yarn install --non-interactive && yarn build
 
 VOLUME /opt/splunk/splunk-cloud-sdk-js

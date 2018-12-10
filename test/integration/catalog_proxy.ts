@@ -46,7 +46,6 @@ describe('catalog tests', () => {
 
         it('should return datasets with no filter', () => splunkCloud.catalog.getDatasets().then((dslist) => {
             assert.isAtLeast(dslist.length, 1);
-            assert.equal(dslist[0].kind, 'index');
         }));
 
         it('should return datasets with filter', () => splunkCloud.catalog.getDatasets('kind=="index"').then((dslist) => {
@@ -56,7 +55,6 @@ describe('catalog tests', () => {
 
         it('should list datasets with no options', () => splunkCloud.catalog.listDatasets().then((dslist) => {
             assert.isAtLeast(dslist.length, 1);
-            assert.equal(dslist[0].kind, 'index');
         }));
 
         it('should list datasets with filter', () => splunkCloud.catalog.listDatasets({ filter: 'kind=="index"' }).then((dslist) => {
