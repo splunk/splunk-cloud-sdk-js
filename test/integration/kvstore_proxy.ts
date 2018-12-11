@@ -134,7 +134,7 @@ describe('Integration tests for KVStore Endpoints', () => {
             const newKey = `newkey${Date.now()}`;
             let oldKey: string;
 
-            before('should create an existing record via putRecord', () =>
+            before('should create an existing record via insertRecord', () =>
                 splunkCloud.kvstore
                     .insertRecord(testKVCollectionName, oldRecord)
                     .then((response) => {

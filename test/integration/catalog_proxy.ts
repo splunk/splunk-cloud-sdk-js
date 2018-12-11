@@ -184,14 +184,23 @@ describe('catalog tests', () => {
     }).timeout(10000);
 
     describe('dataset fields', () => {
+        const datasetName = `integfields${Date.now()}`;
         const integrationTestField1 = 'integ_test_field1';
         const integrationTestField2 = 'integ_test_field2';
         let resultDatasetField1: Field;
         let resultDatasetField2: Field;
         let resultDataset: DatasetInfo;
+
+        // Cleanup the dataset after we're done with fields
+        after(() =>
+            splunkCloud.catalog
+                .deleteDatasetByName(datasetName)
+                .catch(err => console.log(`Error cleaning dataset for fields: ${err}`))
+        );
+
         it('should create a test dataset, its fields, list its fields and delete the test dataset', () => {
             return splunkCloud.catalog.createDataset({
-                name: `integ_dataset_1000_${Date.now()}`,
+                name: datasetName,
                 kind: 'lookup',
                 capabilities: '1101-00000:11010',
                 externalKind: 'kvcollection',
@@ -378,15 +387,6 @@ export function createKVCollectionDataset(namespace: string, collection: string)
         console.log('An error was encountered while cleaning up datasests');
         console.log(error);
     });
-}
-
-export function createRecord(collection: string, record: object): Promise<object> {
-    return splunkCloud.kvstore.insertRecord(collection, record as {[key: string]: string})
-        .then(response => {
-            assert.notEqual(response._key, null);
-            assert.typeOf(response._key, 'string');
-            return response;
-        });
 }
 
 // TODO: this function should just create the given rule, any consumers of this function should pass a unique rule name

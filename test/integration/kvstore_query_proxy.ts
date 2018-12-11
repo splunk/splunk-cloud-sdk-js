@@ -1,7 +1,8 @@
 import { assert } from 'chai';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
-import { createKVCollectionDataset, createRecord } from './catalog_proxy';
+import { createKVCollectionDataset } from './catalog_proxy';
+import { createRecord } from './kvstore_collections_proxy';
 
 const splunkCloud = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
 
