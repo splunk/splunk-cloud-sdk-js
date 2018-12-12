@@ -357,7 +357,7 @@ export class IdentityService extends BaseApiService {
 
 }
 
-type TenantName = string
+type TenantName = string;
 
 
 export enum TenantStatus {
@@ -412,7 +412,7 @@ export interface RoleName {
 /**
  * PostPermissionBody - Permission to add to a role
  */
-export type PostPermissionBody = string
+export type PostPermissionBody = string;
 
 /**
  * RolePermission - The object that represents a tenant role permission
@@ -499,8 +499,8 @@ export interface GroupMember {
 }
 
 export enum PrincipalKind {
-   SERVICE_ACCOUNT = "service_account",
-   USER = "user",
+   SERVICE_ACCOUNT = 'service_account',
+   USER = 'user',
 }
 
 /**
