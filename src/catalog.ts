@@ -295,6 +295,15 @@ export class CatalogService extends BaseApiService {
 
 export type Dataset = Import | Metric | Index | View | Lookup | KVCollection;
 export type DatasetResponse = ImportResponse | MetricResponse | IndexResponse | JobResponse | ViewResponse | LookupResponse | KVCollectionResponse;
+export enum DatasetTypes {
+    Import = 'import',
+    Metric = 'metric',
+    Index = 'index',
+    View = 'view',
+    Lookup = 'lookup',
+    Job = 'job',
+    KVCollection = 'kvcollection'
+}
 
 export interface DatasetBase {
     // A unique dataset ID. Random ID used if not provided. Not valid for PATCH method.
@@ -329,7 +338,7 @@ export interface DatasetBaseResponse extends DatasetBase {
 }
 
 export interface Import extends DatasetBase {
-    kind: 'import';
+    kind: DatasetTypes.Import;
     // The dataset module being imported.
     sourceModule: string;
     // The dataset name being imported.
@@ -344,7 +353,7 @@ export interface Import extends DatasetBase {
 export type ImportResponse = Import & DatasetBaseResponse;
 
 export interface Metric extends DatasetBase {
-    kind: 'metric';
+    kind: DatasetTypes.Metric;
     // Specifies whether or not the Splunk index is disabled.
     disabled?: boolean;
     // The frozenTimePeriodInSecs to use for the index
@@ -353,7 +362,7 @@ export interface Metric extends DatasetBase {
 export type MetricResponse = Metric & DatasetBaseResponse;
 
 export interface Index extends DatasetBase {
-    kind: 'index';
+    kind: DatasetTypes.Index;
     // Specifies whether or not the Splunk index is disabled.
     disabled?: boolean;
     // The frozenTimePeriodInSecs to use for the index
@@ -363,7 +372,7 @@ export type IndexResponse = Index & DatasetBaseResponse;
 
 // Job is ONLY a response, cannot be created by POST
 export interface JobResponse extends DatasetBaseResponse {
-    kind: 'job';
+    kind: DatasetTypes.Job;
 
     // The time the dataset will be available.
     deleteTime: string;
@@ -392,14 +401,14 @@ export interface JobResponse extends DatasetBaseResponse {
 }
 
 export interface View extends DatasetBase {
-    kind: 'view';
+    kind: DatasetTypes.View;
     // A valid SPL-defined search.
     search: string;
 }
 export type ViewResponse = View & DatasetBaseResponse;
 
 export interface Lookup extends DatasetBase {
-    kind: 'lookup';
+    kind: DatasetTypes.View;
     // Match case-sensitively against the lookup.
     caseSensitiveMatch?: boolean;
     // The type of the external lookup, this should always be `kvcollection`
@@ -412,7 +421,7 @@ export interface Lookup extends DatasetBase {
 export type LookupResponse = Lookup & DatasetBaseResponse;
 
 export interface KVCollection extends DatasetBase {
-    kind: 'kvcollection';
+    kind: DatasetTypes.KVCollection;
 }
 export type KVCollectionResponse = KVCollection & DatasetBaseResponse;
 
