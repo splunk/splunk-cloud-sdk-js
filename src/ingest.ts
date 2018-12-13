@@ -37,39 +37,39 @@ export class IngestService extends BaseApiService {
  */
 export interface Event {
     /**
-     * Epoch time in milliseconds.
-     */
-    timestamp?: number;
-    /**
-     * The sourcetype value assigned to the event data.
-     */
-    sourcetype?: string;
-    /**
-     * The source value to assign to the event data. For example, if you are sending data from an app that you are developing,
-     * set this key to the name of the app.
-     */
-    source?: string;
-    /**
-     * The host value assigned to the event data. Typically, this is the hostname of the client from which you are sending data.
-     */
-    host?: string;
-    /**
-     * Optional nanoseconds part of the timestamp.
-     */
-    nanos?: number;
-    /**
      * Specifies a JSON object that contains explicit custom fields to be defined at index time.
      */
     attributes?: EventAttributes;
     /**
      * JSON object for the event.
      */
-    body: string | object;
+    body: object;
+    /**
+     * The host value assigned to the event data. Typically, this is the hostname of the client from which you are sending data.
+     */
+    host?: string;
     /**
      * An optional ID that uniquely identifies the event data. It is used to deduplicate the data if same data is set multiple times.
      * If ID is not specified, it will be assigned by the system.
      */
     id?: string;
+    /**
+     * Optional nanoseconds part of the timestamp.
+     */
+    nanos?: number;
+    /**
+     * The source value to assign to the event data. For example, if you are sending data from an app that you are developing,
+     * set this key to the name of the app.
+     */
+    source?: string;
+    /**
+     * The sourcetype value assigned to the event data.
+     */
+    sourcetype?: string;
+    /**
+     * Epoch time in milliseconds.
+     */
+    timestamp?: number;
 }
 
 /**
@@ -104,6 +104,15 @@ export interface MetricEvent {
      */
     host?: string;
     /**
+     * An optional ID that uniquely identifies the metric data. It is used to deduplicate the data if same data is set multiple times.
+     * If ID is not specified, it will be assigned by the system.
+     */
+    id?: string;
+    /**
+     * Optional nanoseconds part of the timestamp.
+     */
+    nanos?: number;
+    /**
      * The source value to assign to the event data. For example, if you are sending data from an app that you are developing,
      * set this key to the name of the app.
      */
@@ -116,15 +125,6 @@ export interface MetricEvent {
      * Epoch time in milliseconds.
      */
     timestamp?: number;
-    /**
-     * An optional ID that uniquely identifies the metric data. It is used to deduplicate the data if same data is set multiple times.
-     * If ID is not specified, it will be assigned by the system.
-     */
-    id?: string;
-    /**
-     * Optional nanoseconds part of the timestamp.
-     */
-    nanos?: number;
 }
 
 /**
@@ -176,5 +176,5 @@ export interface Metric {
     /**
      * Value of the metric.
      */
-    value: number;
+    value?: number;
 }
