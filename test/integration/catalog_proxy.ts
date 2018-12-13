@@ -3,7 +3,8 @@ import 'mocha';
 import {
     AliasAction,
     AutoKVAction,
-    DatasetInfo,
+    Dataset,
+    DatasetResponse,
     Datatype,
     EvalAction,
     Field,
@@ -87,7 +88,7 @@ describe('catalog tests', () => {
         it('should allow create/delete of datasets', () => {
             const name = 'foobar';
             return createIndexDataset(name).then(res => {
-                const ds = res as DatasetInfo;
+                const ds = res as DatasetResponse;
                 assert.equal(ds.name, name);
                 assert.equal(ds.kind, 'index');
                 return ds.id;
@@ -124,7 +125,7 @@ describe('catalog tests', () => {
             return splunkCloud.catalog.createDataset({
                 kind, name: metricDS, module: metricModule, disabled: false
             }).then(res => {
-                const ds = res as DatasetInfo;
+                const ds = res as Dataset;
                 assert.equal(ds.name, metricDS);
                 assert.equal(ds.kind, kind);
 
@@ -136,7 +137,7 @@ describe('catalog tests', () => {
                     sourceModule: metricModule
                 });
             }).then(res => {
-                const ds = res as DatasetInfo;
+                const ds = res as Dataset;
                 assert.equal(ds.name, importDS);
                 assert.equal(ds.module, importModule);
                 assert.notEqual(ds.module, metricModule);
@@ -189,7 +190,7 @@ describe('catalog tests', () => {
         const integrationTestField2 = 'integ_test_field2';
         let resultDatasetField1: Field;
         let resultDatasetField2: Field;
-        let resultDataset: DatasetInfo;
+        let resultDataset: DatasetResponse;
 
         // Cleanup the dataset after we're done with fields
         after(() =>
@@ -202,7 +203,6 @@ describe('catalog tests', () => {
             return splunkCloud.catalog.createDataset({
                 name: datasetName,
                 kind: 'lookup',
-                capabilities: '1101-00000:11010',
                 externalKind: 'kvcollection',
                 externalName: 'test_externalName'
             }).then(res => {
@@ -365,7 +365,6 @@ export function createIndexDataset(collection: string): Promise<object | void> {
     return splunkCloud.catalog.createDataset({
         name: collection,
         kind: 'index',
-        capabilities: '1101-00000:11010',
         disabled: false
     }).then(response => {
         return response;
@@ -375,11 +374,10 @@ export function createIndexDataset(collection: string): Promise<object | void> {
     });
 }
 
-export function createKVCollectionDataset(namespace: string, collection: string): Promise<DatasetInfo | void> {
+export function createKVCollectionDataset(namespace: string, collection: string): Promise<DatasetResponse | void> {
     return splunkCloud.catalog.createDataset({
         name: collection,
         kind: 'kvcollection',
-        capabilities: '1101-00000:11010',
         module: namespace
     }).then(response => {
         return response;
