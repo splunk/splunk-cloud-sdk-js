@@ -139,7 +139,7 @@ describe('integration tests using action service', () => {
             name: `snsAction_${Date.now()}`,
             kind: ActionKind.sns,
             topic: 'sns topic',
-            message: 'sns user msg',
+            message: 'sns user msg'
         };
 
         it('should create action', () =>

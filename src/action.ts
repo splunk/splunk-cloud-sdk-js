@@ -15,7 +15,7 @@ export class ActionService extends BaseApiService {
      * Get all actions in action service.
      * @returns Promise of all actions
      */
-    public getActions = (): Promise<Array<EmailAction | WebhookAction | SNSAction> | Error> => {
+    public getActions = (): Promise<Array<EmailAction | WebhookAction | SNSAction>> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
             .then(response => response.body as Array<EmailAction | WebhookAction | SNSAction> | Error);
     }
@@ -25,7 +25,7 @@ export class ActionService extends BaseApiService {
      * @param name name of the action
      * @return Promise of an action
      */
-    public getAction = (name: ActionBase['name']): Promise<EmailAction | WebhookAction | SNSAction | Error> => {
+    public getAction = (name: ActionBase['name']): Promise<EmailAction | WebhookAction | SNSAction> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
             .then(response => response.body as EmailAction | WebhookAction | SNSAction | Error);
     }
@@ -35,7 +35,7 @@ export class ActionService extends BaseApiService {
      * @param name name of the action
      * @return Promise of object
      */
-    public deleteAction = (name: ActionBase['name']): Promise<object | Error> => {
+    public deleteAction = (name: ActionBase['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
             .then(response => response.body as object | Error);
     }
@@ -45,9 +45,9 @@ export class ActionService extends BaseApiService {
      * @param action input action
      * @return Promise of an action
      */
-    public createAction = (action: EmailAction | WebhookAction | SNSAction): Promise<EmailAction | WebhookAction | SNSAction | Error> => {
+    public createAction = (action: EmailAction | WebhookAction | SNSAction): Promise<EmailAction | WebhookAction | SNSAction> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
-            .then(response => response.body as EmailAction | WebhookAction | SNSAction | Error);
+            .then(response => response.body as EmailAction | WebhookAction | SNSAction);
     }
 
     /**
@@ -56,9 +56,9 @@ export class ActionService extends BaseApiService {
      * @param action action updates
      * @return Promise of an action
      */
-    public updateAction = (name: ActionBase['name'], action: Partial<EmailAction | SNSAction | WebhookAction>): Promise<EmailAction | WebhookAction | SNSAction | Error> => {
+    public updateAction = (name: ActionBase['name'], action: Partial<EmailAction | SNSAction | WebhookAction>): Promise<EmailAction | WebhookAction | SNSAction> => {
         return this.client.patch(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
-            .then(response => response.body as EmailAction | WebhookAction | SNSAction | Error);
+            .then(response => response.body as EmailAction | WebhookAction | SNSAction);
     }
 
     /**
@@ -67,7 +67,7 @@ export class ActionService extends BaseApiService {
      * @param notification action notification
      * @return Promise of actionTriggerResponse
      */
-    public triggerAction = (name: ActionBase['name'], notification: Notification): Promise<ActionTriggerResponse | Error> => {
+    public triggerAction = (name: ActionBase['name'], notification: Notification): Promise<ActionTriggerResponse> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), notification)
             .then(response => {
                 const key = 'location';
@@ -79,11 +79,11 @@ export class ActionService extends BaseApiService {
                             return Promise.resolve({
                                 statusId: parts[1],
                                 statusUrl: responseStr,
-                            } as ActionTriggerResponse | Error);
+                            } as ActionTriggerResponse);
                         }
                     }
                 }
-                return response.body as ActionTriggerResponse | Error;
+                return response.body as ActionTriggerResponse;
             });
     }
 
@@ -93,9 +93,9 @@ export class ActionService extends BaseApiService {
      * @param statusId statusId
      * @return Promise of actionResult
      */
-    public getActionStatus = (name: ActionBase['name'], statusId: ActionResult['statusId']): Promise<ActionResult | Error> => {
+    public getActionStatus = (name: ActionBase['name'], statusId: ActionResult['statusId']): Promise<ActionResult> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
-            .then(response => response.body as ActionResult | Error);
+            .then(response => response.body as ActionResult);
     }
 }
 
@@ -214,11 +214,4 @@ export interface ActionBase {
      * and can be segmented with periods.
      */
     name: string;
-}
-
-export interface Error {
-    code: string;
-    details: object;
-    message: string;
-    moreInfo: string;
 }
