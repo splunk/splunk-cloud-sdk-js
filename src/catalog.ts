@@ -399,9 +399,14 @@ export interface Rule {
 // this will take an enum for kind
 
 export interface Action {
+    created?: string;
+    createdby?: string;
     id?: string;
-    ruleid?: string;
     kind: string;
+    modified?: string;
+    modifiedby?: string;
+    owner?: string;
+    ruleid?: string;
     version?: number;
 }
 
