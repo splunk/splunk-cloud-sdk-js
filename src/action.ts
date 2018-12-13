@@ -17,7 +17,7 @@ export class ActionService extends BaseApiService {
      */
     public getActions = (): Promise<Array<EmailAction | WebhookAction | SNSAction>> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
-            .then(response => response.body as Array<EmailAction | WebhookAction | SNSAction> | Error);
+            .then(response => response.body as Array<EmailAction | WebhookAction | SNSAction>);
     }
 
     /**
@@ -27,7 +27,7 @@ export class ActionService extends BaseApiService {
      */
     public getAction = (name: ActionBase['name']): Promise<EmailAction | WebhookAction | SNSAction> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
-            .then(response => response.body as EmailAction | WebhookAction | SNSAction | Error);
+            .then(response => response.body as EmailAction | WebhookAction | SNSAction);
     }
 
     /**
@@ -37,7 +37,7 @@ export class ActionService extends BaseApiService {
      */
     public deleteAction = (name: ActionBase['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
-            .then(response => response.body as object | Error);
+            .then(response => response.body as object);
     }
 
     /**
@@ -125,12 +125,6 @@ export interface ActionResult {
 export interface ActionTriggerResponse {
     statusId?: string;
     statusUrl?: string;
-}
-
-// ActionError defines format for returned errors
-export interface ActionError {
-    code: string;
-    message: string;
 }
 
 // NotificationKind defines the types of notifications
