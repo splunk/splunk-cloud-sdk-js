@@ -11,9 +11,6 @@ async function createIndex(splunk, index) {
         return;
     }
     const indexDataset = {
-        owner: 'splunk',
-        capabilities: '1101-00000:11010',
-        version: 1,
         name: index,
         kind: 'index',
         disabled: false,
@@ -36,7 +33,7 @@ async function createIndex(splunk, index) {
     await sleep(90 * 1000);
 }
 
-function sendDataViaIngest(splunk, index, host, source) {
+async function sendDataViaIngest(splunk, index, host, source) {
     const event1 = {
         sourcetype: 'splunkd',
         source: source,
@@ -66,7 +63,7 @@ function sendDataViaIngest(splunk, index, host, source) {
     };
 
     // Use the Ingest endpoint to send multiple events
-    splunk.ingest
+    await splunk.ingest
         .postEvents([event1, event2, event3])
         .then(response => {
             console.log('Ingest of events succeeded with response:');
@@ -153,7 +150,7 @@ async function main() {
     const host = `h-${timeSec}`;
     const source = `s-${timeSec}`;
     console.log(`Posting events with host=${host}, source = ${source}`);
-    sendDataViaIngest(splunk, index, host, source);
+    await sendDataViaIngest(splunk, index, host, source);
 
     // ***** STEP 4: Verify the data
     // ***** DESCRIPTION: Search the data to ensure the data was ingested and field extractions are present.
