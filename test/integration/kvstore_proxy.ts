@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { DatasetInfo } from '../../catalog';
+import { DatasetResponse } from '../../catalog';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 import { createKVCollectionDataset } from './catalog_proxy';
@@ -12,20 +12,22 @@ const testKVCollectionName = `${testNamespace}.${testCollection}`;
 
 
 describe('Integration tests for KVStore Endpoints', () => {
-    let testDataset : object;
+    let testDataset : DatasetResponse | null;
 
     before(() => {
         return createKVCollectionDataset(testNamespace, testCollection).then(ds => {
-            testDataset = ds as DatasetInfo;
+            testDataset = ds;
         });
     });
 
     after(() => {
         if (testDataset !== undefined) {
-            const td = testDataset as DatasetInfo;
-            return splunkCloud.catalog
-                .deleteDatasetByName(td.name as string)
-                .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
+            const td = testDataset;
+            if (td !== null) {
+                return splunkCloud.catalog
+                    .deleteDatasetByName(td.name as string)
+                    .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
+            }
         }
     });
 
