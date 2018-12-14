@@ -17,7 +17,7 @@ export class CatalogService extends BaseApiService {
      * @param filter An SPL filter string
      * @return Array of dataset descriptors
      */
-    public getDatasets = (filter?: string): Promise<DatasetInfo[]> => {
+    public getDatasets = (filter?: string): Promise<DatasetResponse[]> => {
         const query: QueryArgs = {};
         if (filter) {
             query.filter = filter;
@@ -29,9 +29,9 @@ export class CatalogService extends BaseApiService {
      * Returns a list of datasets, optionally filtered by a filter string, count, or orderby criteria
      * @param query QueryArgs
      */
-    public listDatasets = (query: QueryArgs = {}): Promise<DatasetInfo[]> => {
+    public listDatasets = (query: QueryArgs = {}): Promise<DatasetResponse[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), { query })
-            .then(response => response.body as DatasetInfo[]);
+            .then(response => response.body as DatasetResponse[]);
     }
 
     /**
@@ -54,9 +54,9 @@ export class CatalogService extends BaseApiService {
      * @param dataset The dataset to create
      * @return description of the new dataset
      */
-    public createDataset = (dataset: PartialDatasetInfo): Promise<DatasetInfo> => {
+    public createDataset (dataset: Dataset): Promise<DatasetResponse> {
         return this.client.post(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets']), dataset)
-            .then(response => response.body as DatasetInfo);
+            .then(response => response.body as DatasetResponse);
     }
 
     /**
@@ -64,13 +64,13 @@ export class CatalogService extends BaseApiService {
      * @param datasetIdOrResourceName
      * @return description of the dataset
      */
-    public getDataset = (datasetIdOrResourceName: string): Promise<DatasetInfo> => {
+    public getDataset = (datasetIdOrResourceName: string): Promise<DatasetResponse> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]))
-            .then(response => response.body as DatasetInfo);
+            .then(response => response.body as DatasetResponse);
     }
 
     /**
-     * Delete the DatasetInfo and its dependencies with the specified `id`
+     * Delete the Dataset and its dependencies with the specified `id`
      * @param datasetIdOrResourceName
      * @return A promise that will be resolved when deletion is complete
      */
@@ -84,7 +84,7 @@ export class CatalogService extends BaseApiService {
      * @param name of the Dataset to delete
      * @return A promise that will be resolved when deletion is complete
      */
-    public deleteDatasetByName = (name: DatasetInfo['name']): Promise<object> => {
+    public deleteDatasetByName = (name: string): Promise<object> => {
         return this.getDatasets(`name=="${name}"`).then(
             ret => {
                 if (ret.length > 1) {
@@ -104,9 +104,9 @@ export class CatalogService extends BaseApiService {
      * @return information about the updated dataset
      */
     // TODO: add lint check for xxxID vs. xxxId consistency
-    public updateDataset = (datasetIdOrResourceName: string, partial: PartialDatasetInfo): Promise<DatasetInfo> => {
+    public updateDataset = (datasetIdOrResourceName: string, partial: Partial<Dataset>): Promise<DatasetResponse> => {
         return this.client.patch(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetIdOrResourceName]), partial)
-            .then(response => response.body as DatasetInfo);
+            .then(response => response.body as DatasetResponse);
     }
 
     // rules
@@ -161,7 +161,7 @@ export class CatalogService extends BaseApiService {
      * @param filter An SPL filter string
      * @return array of field descriptions for fields defined on the dataset
      */
-    public getDatasetFields = (datasetID: DatasetInfo['id'], filter?: string): Promise<Field[]> => {
+    public getDatasetFields = (datasetID: string, filter?: string): Promise<Field[]> => {
         const query = { filter };
         return this.client.get(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), { query })
             .then(response => response.body as Field[]);
@@ -184,7 +184,7 @@ export class CatalogService extends BaseApiService {
      * @param datasetField
      * @return description of the new field defined on the dataset
      */
-    public postDatasetField = (datasetID: DatasetInfo['id'], datasetField: Field): Promise<Field> => {
+    public postDatasetField = (datasetID: string, datasetField: Field): Promise<Field> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.catalog, this.client.buildPath(CATALOG_SERVICE_PREFIX, ['datasets', datasetID, 'fields']), datasetField)
             .then(response => response.body as Field);
     }
@@ -293,51 +293,145 @@ export class CatalogService extends BaseApiService {
     }
 }
 
-export interface DatasetInfo {
-    id: string;
-    name: string;
-    kind: string;
-    owner: string;
-    module: string;
-    created?: string;
-    modified?: string;
-    createdby?: string;
-    modifiedby?: string;
-    capabilities?: string;
-    version?: number;
-    sourceName?: string;
-    sourceModule?: string;
-    readroles?: string[];
-    writeroles?: string[];
-    fields: Field[];
+export type Dataset = Import | Metric | Index | View | Lookup | KVCollection;
+export type DatasetResponse = ImportResponse | MetricResponse | IndexResponse | JobResponse | ViewResponse | LookupResponse | KVCollectionResponse;
+export enum DatasetTypes {
+    Import = 'import',
+    Metric = 'metric',
+    Index = 'index',
+    View = 'view',
+    Lookup = 'lookup',
+    Job = 'job',
+    KVCollection = 'kvcollection'
 }
 
-export interface PartialDatasetInfo {
-    name: string;
-    kind: string;
-    owner?: string;
-    created?: string;
-    modified?: string;
-    createdby?: string;
-    modifiedby?: string;
-    capabilities?: string;
-    version?: number;
-    readroles?: string[];
-    writeroles?: string[];
-    disabled?: boolean;
+export interface DatasetBase {
+    /** A unique dataset ID. Random ID used if not provided. Not valid for PATCH method. */
+    id?: string;
+    /** The name of the module to create the new dataset in. */
     module?: string;
-    search?: string;
-    externalKind?: string;
-    externalName?: string;
-    sourceName?: string;
-    sourceModule?: string;
-    sourceId?: string; // for imports
+    /** The dataset name. Dataset names must be unique within each module. */
+    name: string;
+    /** The dataset kind. */
+    kind: string;
 }
+
+/**
+ * A response doik
+ */
+export interface DatasetBaseResponse extends DatasetBase {
+    /** A unique dataset ID. Random ID used if not provided. Not valid for PATCH method. */
+    id: string;
+    /** The name of the module to create the new dataset in. */
+    module: string;
+    /** The catalog version. */
+    version: number;
+    /** The date and time object was created. */
+    created: string;
+    /** The date and time object was modified. */
+    modified: string;
+    /** The name of the user who created the object. This value is obtained from the bearer token and may not be changed. */
+    createdby: string;
+    /** The name of the user who most recently modified the object. */
+    modifiedby: string;
+    /** The name of the object's owner. */
+    owner: string;
+    /** The dataset name qualified by the module name. */
+    resourcename: string;
+}
+
+export interface Import extends DatasetBase {
+    kind: DatasetTypes.Import;
+    /** The dataset module being imported. */
+    sourceModule: string;
+    /** The dataset name being imported. */
+    sourceName: string;
+    /** The dataset ID being imported. */
+    originalDatasetId?: string;
+    /** The dataset ID being imported. */
+    // TODO: sourceId is only used for POST operations, all others use originalDatasetId.
+    // This should be fixed by the Catalog service in the future.
+    sourceId?: string;
+}
+export type ImportResponse = Import & DatasetBaseResponse;
+
+export interface Metric extends DatasetBase {
+    kind: DatasetTypes.Metric;
+    /** Specifies whether or not the Splunk index is disabled. */
+    disabled?: boolean;
+    /** The frozenTimePeriodInSecs to use for the index */
+    frozenTimePeriodInSecs?: number;
+}
+export type MetricResponse = Metric & DatasetBaseResponse;
+
+export interface Index extends DatasetBase {
+    kind: DatasetTypes.Index;
+    /** Specifies whether or not the Splunk index is disabled. */
+    disabled?: boolean;
+    /** The frozenTimePeriodInSecs to use for the index */
+    frozenTimePeriodInSecs?: number;
+}
+export type IndexResponse = Index & DatasetBaseResponse;
+
+// Job is ONLY a response, cannot be created by POST
+export interface JobResponse extends DatasetBaseResponse {
+    kind: DatasetTypes.Job;
+
+    /** The time the dataset will be available. */
+    deleteTime: string;
+    /** Should the search produce all fields (including those not explicitly mentioned in the SPL)? */
+    extractAllFields?: boolean;
+    /** The number of seconds to run this search before finishing. */
+    maxTime?: number;
+    /** Parameters for the search job, mainly earliest and latest. */
+    parameters: object;
+    /** An estimate of how complete the search job is. */
+    percentComplete?: number;
+    /** The SPL query string for the search job. */
+    query: string;
+    /** The instantaneous number of results produced by the search job. */
+    resultsAvailable?: number;
+    /** The ID assigned to the search job. */
+    sid: string;
+    /** The SPLv2 version of the search job query string. */
+    spl: string;
+    /** The current status of the search job. */
+    status: string;
+    /** Converts a formatted time string from into UTC seconds. */
+    timeFormat: string;
+    /** The system time at the time the search job was created */
+    timeOfSearch: string;
+}
+
+export interface View extends DatasetBase {
+    kind: DatasetTypes.View;
+    /** A valid SPL-defined search. */
+    search: string;
+}
+export type ViewResponse = View & DatasetBaseResponse;
+
+export interface Lookup extends DatasetBase {
+    kind: DatasetTypes.Lookup;
+    /** Match case-sensitively against the lookup. */
+    caseSensitiveMatch?: boolean;
+    /** The type of the external lookup, this should always be `kvcollection` */
+    externalKind: string;
+    /** The name of the external lookup. */
+    externalName: string;
+    /** A query that filters results out of the lookup before those results are returned. */
+    filter?: string;
+}
+export type LookupResponse = Lookup & DatasetBaseResponse;
+
+export interface KVCollection extends DatasetBase {
+    kind: DatasetTypes.KVCollection;
+}
+export type KVCollectionResponse = KVCollection & DatasetBaseResponse;
 
 export interface Field {
     id?: string; // TODO: come back and make a CreateField type
     name: string;
-    dataSetId?: string;
+    datasetid?: string;
     datatype?: Datatype;
     fieldtype?: Fieldtype;
     prevalence?: Prevalence;
@@ -345,7 +439,6 @@ export interface Field {
     modified?: string;
     versionAdded?: string;
     versionRemoved?: string;
-    dataset?: DatasetInfo;
 }
 
 // TODO: verify that these str values conform to the spec
