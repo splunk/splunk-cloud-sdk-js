@@ -306,46 +306,49 @@ export enum DatasetTypes {
 }
 
 export interface DatasetBase {
-    // A unique dataset ID. Random ID used if not provided. Not valid for PATCH method.
+    /** A unique dataset ID. Random ID used if not provided. Not valid for PATCH method. */
     id?: string;
-    // The name of the module to create the new dataset in.
+    /** The name of the module to create the new dataset in. */
     module?: string;
-    // The dataset name. Dataset names must be unique within each module.
+    /** The dataset name. Dataset names must be unique within each module. */
     name: string;
-    // The dataset kind.
+    /** The dataset kind. */
     kind: string;
 }
 
+/**
+ * A response doik
+ */
 export interface DatasetBaseResponse extends DatasetBase {
-    // A unique dataset ID. Random ID used if not provided. Not valid for PATCH method.
+    /** A unique dataset ID. Random ID used if not provided. Not valid for PATCH method. */
     id: string;
-    // The name of the module to create the new dataset in.
+    /** The name of the module to create the new dataset in. */
     module: string;
-    // The catalog version.
+    /** The catalog version. */
     version: number;
-    // The date and time object was created.
+    /** The date and time object was created. */
     created: string;
-    // The date and time object was modified.
+    /** The date and time object was modified. */
     modified: string;
-    // The name of the user who created the object. This value is obtained from the bearer token and may not be changed.
-    createdBy: string;
-    // The name of the user who most recently modified the object.
-    modifiedBy: string;
-    // The name of the object's owner.
+    /** The name of the user who created the object. This value is obtained from the bearer token and may not be changed. */
+    createdby: string;
+    /** The name of the user who most recently modified the object. */
+    modifiedby: string;
+    /** The name of the object's owner. */
     owner: string;
-    // The dataset name qualified by the module name.
-    resourceName: string;
+    /** The dataset name qualified by the module name. */
+    resourcename: string;
 }
 
 export interface Import extends DatasetBase {
     kind: DatasetTypes.Import;
-    // The dataset module being imported.
+    /** The dataset module being imported. */
     sourceModule: string;
-    // The dataset name being imported.
+    /** The dataset name being imported. */
     sourceName: string;
-    // The dataset ID being imported.
+    /** The dataset ID being imported. */
     originalDatasetId?: string;
-    // The dataset ID being imported.
+    /** The dataset ID being imported. */
     // TODO: sourceId is only used for POST operations, all others use originalDatasetId.
     // This should be fixed by the Catalog service in the future.
     sourceId?: string;
@@ -354,18 +357,18 @@ export type ImportResponse = Import & DatasetBaseResponse;
 
 export interface Metric extends DatasetBase {
     kind: DatasetTypes.Metric;
-    // Specifies whether or not the Splunk index is disabled.
+    /** Specifies whether or not the Splunk index is disabled. */
     disabled?: boolean;
-    // The frozenTimePeriodInSecs to use for the index
+    /** The frozenTimePeriodInSecs to use for the index */
     frozenTimePeriodInSecs?: number;
 }
 export type MetricResponse = Metric & DatasetBaseResponse;
 
 export interface Index extends DatasetBase {
     kind: DatasetTypes.Index;
-    // Specifies whether or not the Splunk index is disabled.
+    /** Specifies whether or not the Splunk index is disabled. */
     disabled?: boolean;
-    // The frozenTimePeriodInSecs to use for the index
+    /** The frozenTimePeriodInSecs to use for the index */
     frozenTimePeriodInSecs?: number;
 }
 export type IndexResponse = Index & DatasetBaseResponse;
@@ -374,48 +377,48 @@ export type IndexResponse = Index & DatasetBaseResponse;
 export interface JobResponse extends DatasetBaseResponse {
     kind: DatasetTypes.Job;
 
-    // The time the dataset will be available.
+    /** The time the dataset will be available. */
     deleteTime: string;
-    // Should the search produce all fields (including those not explicitly mentioned in the SPL)?
+    /** Should the search produce all fields (including those not explicitly mentioned in the SPL)? */
     extractAllFields?: boolean;
-    // The number of seconds to run this search before finishing.
+    /** The number of seconds to run this search before finishing. */
     maxTime?: number;
-    // Parameters for the search job, mainly earliest and latest.
+    /** Parameters for the search job, mainly earliest and latest. */
     parameters: object;
-    // An estimate of how complete the search job is.
+    /** An estimate of how complete the search job is. */
     percentComplete?: number;
-    // The SPL query string for the search job.
+    /** The SPL query string for the search job. */
     query: string;
-    // The instantaneous number of results produced by the search job.
+    /** The instantaneous number of results produced by the search job. */
     resultsAvailable?: number;
-    // The ID assigned to the search job.
+    /** The ID assigned to the search job. */
     sid: string;
-    // The SPLv2 version of the search job query string.
+    /** The SPLv2 version of the search job query string. */
     spl: string;
-    // The current status of the search job.
+    /** The current status of the search job. */
     status: string;
-    // Converts a formatted time string from into UTC seconds.
+    /** Converts a formatted time string from into UTC seconds. */
     timeFormat: string;
-    // The system time at the time the search job was created
+    /** The system time at the time the search job was created */
     timeOfSearch: string;
 }
 
 export interface View extends DatasetBase {
     kind: DatasetTypes.View;
-    // A valid SPL-defined search.
+    /** A valid SPL-defined search. */
     search: string;
 }
 export type ViewResponse = View & DatasetBaseResponse;
 
 export interface Lookup extends DatasetBase {
     kind: DatasetTypes.View;
-    // Match case-sensitively against the lookup.
+    /** Match case-sensitively against the lookup. */
     caseSensitiveMatch?: boolean;
-    // The type of the external lookup, this should always be `kvcollection`
+    /** The type of the external lookup, this should always be `kvcollection` */
     externalKind: string;
-    // The name of the external lookup.
+    /** The name of the external lookup. */
     externalName: string;
-    // A query that filters results out of the lookup before those results are returned.
+    /** A query that filters results out of the lookup before those results are returned. */
     filter?: string;
 }
 export type LookupResponse = Lookup & DatasetBaseResponse;
