@@ -376,7 +376,7 @@ export function createIndexDataset(collection: string): Promise<object | void> {
     });
 }
 
-export function createKVCollectionDataset(namespace: string, collection: string): Promise<DatasetResponse | void> {
+export function createKVCollectionDataset(namespace: string, collection: string): Promise<DatasetResponse | null> {
     return splunkCloud.catalog.createDataset({
         name: collection,
         kind: DatasetTypes.KVCollection,
@@ -386,6 +386,7 @@ export function createKVCollectionDataset(namespace: string, collection: string)
     }).catch(error => {
         console.log('An error was encountered while cleaning up datasests');
         console.log(error);
+        return null;
     });
 }
 
