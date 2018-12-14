@@ -1,4 +1,4 @@
-import {assert} from 'chai';
+import { assert } from 'chai';
 import 'mocha';
 import {
     AliasAction,
@@ -15,7 +15,7 @@ import {
     RegexAction,
     Rule
 } from '../../catalog';
-import {SplunkCloud} from '../../splunk';
+import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
 const splunkCloud = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
