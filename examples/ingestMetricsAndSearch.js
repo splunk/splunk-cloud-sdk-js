@@ -7,7 +7,7 @@ const { SplunkCloud } = require('../splunk');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 // Call to the ingest service to insert data
-function sendDataViaIngest(splunk, host, source) {
+async function sendDataViaIngest(splunk, host, source) {
     const metricEvent1 = {
         attributes: {
             defaultDimensions: {},
@@ -34,7 +34,6 @@ function sendDataViaIngest(splunk, host, source) {
             },
         ],
         host: host,
-        id: 'metric0001',
         nanos: 1,
         source: source,
         sourcetype: 'mysourcetype',
@@ -67,7 +66,6 @@ function sendDataViaIngest(splunk, host, source) {
             },
         ],
         host: host,
-        id: 'metric0002',
         nanos: 2,
         source: source,
         sourcetype: 'mysourcetype',
@@ -75,7 +73,7 @@ function sendDataViaIngest(splunk, host, source) {
     };
 
     // Use the Ingest Service metrics endpoint to send the metrics data
-    splunk.ingest
+    await splunk.ingest
         .postMetrics([metricEvent1, metricEvent2])
         .then(response => {
             console.log('Ingest of metrics succeeded with response:');
@@ -90,6 +88,10 @@ function sendDataViaIngest(splunk, host, source) {
 
 function exitOnFailure() {
     process.exit(1);
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 // Creates a search job and fetches search results
@@ -150,7 +152,7 @@ async function main() {
     const host = `h-${timeSec}`;
     const source = `s-${timeSec}`;
     console.log(`Posting metrics with host=${host}, source=${source}`);
-    sendDataViaIngest(splunk, host, source);
+    await sendDataViaIngest(splunk, host, source);
 
     // ***** STEP 3: Verify the data
     // ***** DESCRIPTION: Search the data to ensure the metrics data was ingested.
@@ -163,10 +165,13 @@ async function main() {
             // allow more results than expected for now
             const success = results && results.length >= 0;
             if (!success) {
+                console.log('Searching for metrics returned no results.');
                 exitOnFailure();
             }
         })
-        .catch(() => {
+        .catch((err) => {
+            console.log('Searching for metrics failed with err:');
+            console.log(err);
             exitOnFailure();
         });
 }
