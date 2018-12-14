@@ -1,19 +1,21 @@
-import { assert } from 'chai';
+import {assert} from 'chai';
 import 'mocha';
 import {
     AliasAction,
     AutoKVAction,
     Dataset,
     DatasetResponse,
+    DatasetTypes,
     Datatype,
     EvalAction,
     Field,
     Fieldtype,
     LookupAction,
     Prevalence,
-    RegexAction, Rule
+    RegexAction,
+    Rule
 } from '../../catalog';
-import { SplunkCloud } from '../../splunk';
+import {SplunkCloud} from '../../splunk';
 import config from '../config';
 
 const splunkCloud = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
@@ -99,7 +101,7 @@ describe('catalog tests', () => {
             const name = `metric_${Date.now()}`;
             return splunkCloud.catalog.createDataset({
                 name,
-                kind: 'metric',
+                kind: DatasetTypes.Metric,
                 disabled: false
             }).then(() => splunkCloud.catalog.deleteDataset(name));
 
@@ -109,14 +111,14 @@ describe('catalog tests', () => {
             const name = `view_${Date.now()}`;
             return splunkCloud.catalog.createDataset({
                 name,
-                kind: 'view',
+                kind: DatasetTypes.View,
                 search: 'search index=main|stats count()'
             }).then(() => splunkCloud.catalog.deleteDataset(name));
 
         });
 
         it('should allow create/delete of import datasets', () => {
-            const kind = 'metric';
+            const kind = DatasetTypes.Metric;
             const metricDS = `metric1_${Date.now()}`;
             const importDS = `import1_${Date.now()}`;
             const metricModule = `metmodule${Date.now()}`;
@@ -130,7 +132,7 @@ describe('catalog tests', () => {
                 assert.equal(ds.kind, kind);
 
                 return splunkCloud.catalog.createDataset({
-                    kind: 'import',
+                    kind: DatasetTypes.Import,
                     name: importDS,
                     module: importModule,
                     sourceName: metricDS,
@@ -202,7 +204,7 @@ describe('catalog tests', () => {
         it('should create a test dataset, its fields, list its fields and delete the test dataset', () => {
             return splunkCloud.catalog.createDataset({
                 name: datasetName,
-                kind: 'lookup',
+                kind: DatasetTypes.Lookup,
                 externalKind: 'kvcollection',
                 externalName: 'test_externalName'
             }).then(res => {
@@ -269,7 +271,7 @@ describe('catalog tests', () => {
         before(() => {
             return splunkCloud.catalog.createDataset({
                 name: datasetName,
-                kind: 'lookup',
+                kind: DatasetTypes.Lookup,
                 externalKind: 'kvcollection',
                 externalName: 'test_externalName'
             }).then(dataset => {
@@ -364,7 +366,7 @@ describe('catalog tests', () => {
 export function createIndexDataset(collection: string): Promise<object | void> {
     return splunkCloud.catalog.createDataset({
         name: collection,
-        kind: 'index',
+        kind: DatasetTypes.Index,
         disabled: false
     }).then(response => {
         return response;
@@ -377,7 +379,7 @@ export function createIndexDataset(collection: string): Promise<object | void> {
 export function createKVCollectionDataset(namespace: string, collection: string): Promise<DatasetResponse | void> {
     return splunkCloud.catalog.createDataset({
         name: collection,
-        kind: 'kvcollection',
+        kind: DatasetTypes.KVCollection,
         module: namespace
     }).then(response => {
         return response;

@@ -411,7 +411,7 @@ export interface View extends DatasetBase {
 export type ViewResponse = View & DatasetBaseResponse;
 
 export interface Lookup extends DatasetBase {
-    kind: DatasetTypes.View;
+    kind: DatasetTypes.Lookup;
     /** Match case-sensitively against the lookup. */
     caseSensitiveMatch?: boolean;
     /** The type of the external lookup, this should always be `kvcollection` */
