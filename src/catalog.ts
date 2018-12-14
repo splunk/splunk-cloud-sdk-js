@@ -390,8 +390,8 @@ export interface Rule {
     actions: Action[];
     created: string;
     modified: string;
-    createdBy: string;
-    modifiedBy: string;
+    createdby: string;
+    modifiedby: string;
     version: number;
 }
 
