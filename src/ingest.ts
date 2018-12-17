@@ -43,7 +43,7 @@ export interface Event {
     /**
      * JSON object for the event.
      */
-    body: object;
+    body: [any] | number | string | object;
     /**
      * The host value assigned to the event data. Typically, this is the hostname of the client from which you are sending data.
      */
