@@ -326,6 +326,7 @@ describe('catalog tests', () => {
             return splunkCloud.catalog.createRuleAction(ruleId, regex).then(res => {
                 const act = res as RegexAction;
                 assert.equal(act.pattern, regex.pattern);
+                assert.equal(act.limit, regex.limit);
             });
         });
 
