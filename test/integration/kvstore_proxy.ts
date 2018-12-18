@@ -216,7 +216,7 @@ describe('Integration tests for KVStore Endpoints', () => {
             });
 
             it('should delete the records based on a query', () => {
-                const query = "{ name: 'test_record', count_of_fields: 3, }"
+                const query = '{ name: "test_record", count_of_fields: 3, }';
                 return splunkCloud.kvstore.deleteRecords(testKVCollectionName, query)
                 .then(response => {
                     assert.isEmpty(response);
