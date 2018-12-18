@@ -52,7 +52,6 @@ describe('Integration tests for KVStore Endpoints', () => {
                         .createIndex(testKVCollectionName, {
                             fields,
                             name: testIndex,
-                            collection: testCollection
                         })
                         .then(response => {
                             assert.strictEqual(response.name, testIndex);
@@ -85,7 +84,6 @@ describe('Integration tests for KVStore Endpoints', () => {
                         `missing${Date.now()}`, {
                             fields,
                             name: testIndex,
-                            collection: testCollection
                         })
                     .then(response => assert.fail(response), err => assert.equal(err.httpStatusCode, 404));
             });
@@ -154,9 +152,8 @@ describe('Integration tests for KVStore Endpoints', () => {
                 splunkCloud.kvstore
                     .putRecord(testKVCollectionName, oldKey, { lazy: 'god' })
                     .then(putResponse => {
-                        assert.isObject(putResponse.body);
-                        assert.equal(putResponse.body._key, oldKey);
-                        assert.isFalse(putResponse.created);
+                        assert.isObject(putResponse);
+                        assert.equal(putResponse._key, oldKey);
                     })
             );
 
@@ -164,9 +161,8 @@ describe('Integration tests for KVStore Endpoints', () => {
                 splunkCloud.kvstore
                     .putRecord(testKVCollectionName, newKey, newRecord)
                     .then(putResponse => {
-                        assert.isObject(putResponse.body);
-                        assert.equal(putResponse.body._key, newKey);
-                        assert.isTrue(putResponse.created);
+                        assert.isObject(putResponse);
+                        assert.equal(putResponse._key, newKey);
                     })
             );
         });
@@ -213,17 +209,15 @@ describe('Integration tests for KVStore Endpoints', () => {
             });
 
             it('should retrieve the records based on a query', () => {
-                return splunkCloud.kvstore.listRecords(testKVCollectionName, { fields: 'type' })
+                return splunkCloud.kvstore.listRecords(testKVCollectionName, { fields: ['type'] })
                     .then(response => {
                         assert.equal(response.length, 3);
                     });
             });
 
             it('should delete the records based on a query', () => {
-                return splunkCloud.kvstore.deleteRecords(testKVCollectionName, {
-                    name: 'test_record',
-                    count_of_fields: 3,
-                })
+                const query = "{ name: 'test_record', count_of_fields: 3, }"
+                return splunkCloud.kvstore.deleteRecords(testKVCollectionName, query)
                 .then(response => {
                     assert.isEmpty(response);
                 });
