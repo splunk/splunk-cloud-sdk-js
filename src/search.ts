@@ -439,7 +439,7 @@ export interface UpdateJob {
 
 /*
  * Response payload of a update job.
- */ 
+ */
 export interface UpdateJobResponse {
     messages: SearchJobMessage[];
 }
