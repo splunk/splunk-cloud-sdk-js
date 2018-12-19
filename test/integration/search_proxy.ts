@@ -34,7 +34,7 @@ describe('integration tests Using Search APIs', () => {
             }).then(searchObj => { // Ensure we have events when done
                 expect(searchObj).to.have.property('status', 'done');
                 expect(searchObj).to.have.property('resultsAvailable', 5);
-                return splunk.search.getResults(searchObj.sid)
+                return splunk.search.listResults(searchObj.sid)
                     .then(resultResponse => {
                         expect(resultResponse).to.have.property('results').with.lengthOf(5);
                         expect(resultResponse).to.have.property('fields');
@@ -49,7 +49,7 @@ describe('integration tests Using Search APIs', () => {
             }).then(searchObj => { // Ensure we have events when done
                 expect(searchObj).to.have.property('status', 'done');
                 expect(searchObj).to.have.property('resultsAvailable', 5);
-                return splunk.search.getResults(searchObj.sid)
+                return splunk.search.listResults(searchObj.sid)
                     .then(resultResponse => {
                         expect(resultResponse).to.have.property('results').with.lengthOf(5);
                         expect(resultResponse).to.have.property('fields');
@@ -60,7 +60,7 @@ describe('integration tests Using Search APIs', () => {
             .then(searchObj => { // Check the state of the job
                 expect(searchObj).to.have.property('sid');
                 expect(searchObj).to.have.property('status');
-                return splunk.search.getResults(searchObj.sid)
+                return splunk.search.listResults(searchObj.sid)
                     .then(res => {
                         if ((res as ResultsNotReadyResponse).nextLink) {
                             const resultsNotReady = res as ResultsNotReadyResponse;
@@ -78,15 +78,15 @@ describe('integration tests Using Search APIs', () => {
             .then(createdJob => splunk.search.waitForJob(createdJob.sid)
                 .then(job => { // As a child to keep sid in the closure
                     expect(job).to.have.property('resultsAvailable', 5);
-                    return splunk.search.getResults(job.sid, { offset: 0, count: 3 });
+                    return splunk.search.listResults(job.sid, { offset: 0, count: 3 });
                 }).then(res => {
                     const results = res as SearchResults;
                     assert.equal(results.results.length, 3);
-                    return splunk.search.getResults(createdJob.sid, { offset: 3, count: 5 });
+                    return splunk.search.listResults(createdJob.sid, { offset: 3, count: 5 });
                 }).then(res => {
                     const results = res as SearchResults;
                     assert.equal(results.results.length, 2, 'Only two events should remain');
-                    return splunk.search.getResults(createdJob.sid, { offset: 10, count: 10 });
+                    return splunk.search.listResults(createdJob.sid, { offset: 10, count: 10 });
                 }).then(res => {
                     const results = res as SearchResults;
                     assert.equal(results.results.length, 0);

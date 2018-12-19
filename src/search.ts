@@ -39,7 +39,7 @@ const _filterObject = (template: {[key: string]: any}, propertiesToRemove: strin
  */
 export class Search {
     private client: SearchService;
-    public readonly jobId: string;
+    public readonly jobId: SearchJob['sid'];
     private isCancelling: boolean;
     private resultObservableMemo?: Observable<any>;
     private statusObservableMemo?: Observable<SearchJob>;
@@ -75,7 +75,7 @@ export class Search {
                 if (self.isCancelling && 'code' in err) {
                     const splunkErr = err as SplunkError;
                     if (splunkErr.httpStatusCode === 404) {
-                        throw new SplunkSearchCancelError('Search has been cancelled');
+                        throw new SplunkSearchCancelError('Search has been canceled');
                     } else {
                         throw err;
                     }
@@ -91,7 +91,7 @@ export class Search {
      */
     public cancel = (): Promise<object> => {
         this.isCancelling = true;
-        return this.client.updateJob(this.jobId, { status: 'canceled' });
+        return this.client.updateJob(this.jobId, { status: UpdateJobStatus.CANCELED });
     }
 
     /**
@@ -109,10 +109,10 @@ export class Search {
         return self.status()
             .then(async (job: any) => {
                 if (args.offset !== null) {
-                    return self.client.getResults(self.jobId, args);
+                    return self.client.listResults(self.jobId, args);
                     // .then(response => response.results);
                 }
-                const fetcher = (start: number) => self.client.getResults(self.jobId, (Object as any).assign({}, args, { offset: start }));
+                const fetcher = (start: number) => self.client.listResults(self.jobId, (Object as any).assign({}, args, { offset: start }));
                 const iterator = iterateBatches(fetcher, count, job.eventCount);
                 let results: object[] = [];
                 for (const batch of iterator) {
@@ -245,7 +245,7 @@ export class SearchService extends BaseApiService {
     /**
      * Get {search_id} search results.
      */
-    public getResults = (jobId: string, args: FetchResultsRequest = {}): Promise<SearchResults | ResultsNotReadyResponse> => {
+    public listResults = (jobId: string, args: FetchResultsRequest = {}): Promise<SearchResults | ResultsNotReadyResponse> => {
         const queryArgs: QueryArgs = args || {};
         return this.client.get(SERVICE_CLUSTER_MAPPING.search, this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), { query: queryArgs })
             .then(response => {
@@ -362,54 +362,54 @@ export interface SearchArgs {
  */
 export interface SearchJob {
     /**
-     * Should SplunkD produce all fields (including those not explicitly mentioned in the SPL).
+     * Determine whether the Search service extracts all available fields in the data, including fields not mentioned in the SPL for the search job. Set to 'false' for better search peformance.
      * Default: false
      */
-    extractAllFields: boolean;
+    extractAllFields?: boolean;
 
     /**
      * The number of seconds to run this search before finalizing.
      * Min: 1, Max: 21600, Default: 3600
      */
-    maxTime: number;
+    maxTime?: number;
 
     /**
      * The module to run the search in.
      * Default: ""
      */
-    module: string;
+    module?: string;
 
     /**
-     * parameters for the search job mainly earliest and latest.
+     * Represents parameters on the search job such as 'earliest' and 'latest'.
      */
-    queryParameters: QueryParameters;
+    queryParameters?: QueryParameters;
 
     /**
-     * The SPL query string (in SPLv2)
+     * The SPL query string.
      */
     query: string;
 
     /**
      * Converts a formatted time string from {start,end}_time into UTC seconds. The default value is the ISO-8601 format.
      */
-    timeFormat: string;
+    timeFormat?: string;
 
     /**
      * The System time at the time the search job was created. Specify a time string to set  the absolute time used for any relative time specifier in the search. Defaults to the current system time when the Job is created.
      */
-    timeOfSearch: string;
+    timeOfSearch?: string;
 
-    messages: SearchJobMessage[];
+    messages?: SearchJobMessage[];
 
     /**
      * An estimate of how far through the job is complete
      */
-    percentComplete: number;
+    percentComplete?: number;
 
     /**
      * The number of results Splunkd produced so far
      */
-    resultsAvailable: number;
+    resultsAvailable?: number;
 
     /**
      * The id assigned to the job
@@ -419,7 +419,12 @@ export interface SearchJob {
     /**
      * The current status of the job
      */
-    status: string;
+    status?: string;
+}
+
+export enum UpdateJobStatus {
+    CANCELED = 'canceled',
+    FINALIZED = 'finalized'
 }
 
 /**
@@ -429,9 +434,12 @@ export interface UpdateJob {
     /**
      * Status to be patched to an existing search job
      */
-    status: 'canceled' | 'finalized';
+    status: UpdateJobStatus;
 }
 
+/*
+ * Response payload of a update job.
+ */ 
 export interface UpdateJobResponse {
     messages: SearchJobMessage[];
 }
@@ -450,11 +458,17 @@ export enum messageTypes {
     Error = 'ERROR'
 }
 
+/*
+ * The message field in search results or search jobs.
+ */
 export interface SearchJobMessage {
-    text: string;
-    type: messageTypes;
+    text?: string;
+    type?: messageTypes;
 }
 
+/*
+ * Results of a search job
+ */
 export interface SearchResults {
     messages: SearchJobMessage[];
     results: object[];
