@@ -279,7 +279,7 @@ export class IdentityService extends BaseApiService {
      * @param groupMemberName String name of group member
      * @returns a GroupMember object
      */
-    public addGroupMember = (groupName: Group['name'], groupMemberName: PostGroupMemberBody): Promise<GroupMember> => {
+    public addGroupMember = (groupName: Group['name'], groupMemberName: GroupMemberName): Promise<GroupMember> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members']), groupMemberName)
             .then(response => response.body as GroupMember);
     }
@@ -478,9 +478,9 @@ export interface Member {
 }
 
 /**
- * PostGroupMemberBody - Group member creation contract
+ * GroupMemberName - Group member namet
  */
-export interface PostGroupMemberBody {
+export interface GroupMemberName {
     name: string;
 }
 

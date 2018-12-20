@@ -25,9 +25,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
     const testRole = `jssdk_role_${Date.now()}`;
     const testPerm1 = `jssdk_perm_${Date.now()}`;
 
-    const testPermissions = [`${tenantID}catalog`,
-                             `${tenantID}ingest`,
-                             `${tenantID}search`];
+    const testPermissions = [`${tenantID}catalog`, `${tenantID}ingest`, `${tenantID}search`];
     const testGroupName = `mygroup_${Date.now()}`;
     const testPrincipal = config.testUsername;
     const testMember = 'test1@splunk.com';
