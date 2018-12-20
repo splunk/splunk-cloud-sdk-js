@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import 'mocha';
-import { PostRoleBody } from '../../identity';
+import { RoleInput } from '../../identity';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
@@ -25,13 +25,15 @@ describe('integration tests for Identity Tenant Endpoints', () => {
     const testRole = `jssdk_role_${Date.now()}`;
     const testPerm1 = `jssdk_perm_${Date.now()}`;
 
-    const testPermissions = [`${tenantID}catalog`, `${tenantID}ingest`, `${tenantID}search`];
+    const testPermissions = [`${tenantID}catalog`,
+                             `${tenantID}ingest`,
+                             `${tenantID}search`];
     const testGroupName = `mygroup_${Date.now()}`;
     const testPrincipal = config.testUsername;
     const testMember = 'test1@splunk.com';
 
     describe('Test Roles and Permissions Management', () => {
-        const postRoleBody: PostRoleBody = {
+        const roleInput: RoleInput = {
             name: testRole,
         };
 
@@ -42,7 +44,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should create a new role', () =>
-            splunk.identity.createRole(postRoleBody).then(response => {
+            splunk.identity.createRole(roleInput).then(response => {
                 assert.equal(response.tenant, tenantID);
                 assert.equal(response.name, testRole);
             }));

@@ -111,11 +111,11 @@ export class IdentityService extends BaseApiService {
 
     /**
      * Creates a new authorization role in the current tenant
-     * @param postRoleBody The role params for creating a new role
+     * @param roleInput The role params for creating a new role
      * @returns a Role object
      */
-    public createRole = (postRoleBody: PostRoleBody): Promise<Role> => {
-        return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles']), postRoleBody)
+    public createRole = (roleInput: RoleInput): Promise<Role> => {
+        return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles']), roleInput)
             .then(response => response.body as Role);
     }
 
@@ -393,9 +393,9 @@ export interface Role {
 }
 
 /**
- * PostRoleBody - Role definition
+ * RoleInput - The input object for creating a new Role
  */
-export interface PostRoleBody {
+export interface RoleInput {
     name: string;
 }
 
