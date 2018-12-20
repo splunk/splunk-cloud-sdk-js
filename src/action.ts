@@ -15,9 +15,9 @@ export class ActionService extends BaseApiService {
      * Get all actions in action service.
      * @returns Promise of all actions
      */
-    public getActions = (): Promise<Array<EmailAction | WebhookAction | SNSAction>> => {
+    public getActions = (): Promise<Action[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
-            .then(response => response.body as Array<EmailAction | WebhookAction | SNSAction>);
+            .then(response => response.body as Action[]);
     }
 
     /**
@@ -25,9 +25,9 @@ export class ActionService extends BaseApiService {
      * @param name name of the action
      * @return Promise of an action
      */
-    public getAction = (name: ActionBase['name']): Promise<EmailAction | WebhookAction | SNSAction> => {
+    public getAction = (name: ActionBase['name']): Promise<Action> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
-            .then(response => response.body as EmailAction | WebhookAction | SNSAction);
+            .then(response => response.body as Action);
     }
 
     /**
@@ -45,9 +45,9 @@ export class ActionService extends BaseApiService {
      * @param action input action
      * @return Promise of an action
      */
-    public createAction = (action: EmailAction | WebhookAction | SNSAction): Promise<EmailAction | WebhookAction | SNSAction> => {
+    public createAction = (action: Action): Promise<Action> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
-            .then(response => response.body as EmailAction | WebhookAction | SNSAction);
+            .then(response => response.body as Action);
     }
 
     /**
@@ -56,9 +56,9 @@ export class ActionService extends BaseApiService {
      * @param action action updates
      * @return Promise of an action
      */
-    public updateAction = (name: ActionBase['name'], action: Partial<EmailAction | SNSAction | WebhookAction>): Promise<EmailAction | WebhookAction | SNSAction> => {
+    public updateAction = (name: ActionBase['name'], action: Partial<Action>): Promise<Action> => {
         return this.client.patch(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
-            .then(response => response.body as EmailAction | WebhookAction | SNSAction);
+            .then(response => response.body as Action);
     }
 
     /**
@@ -91,11 +91,11 @@ export class ActionService extends BaseApiService {
      * Get action status
      * @param name name of the action
      * @param statusId statusId
-     * @return Promise of actionResult
+     * @return Promise of actionStatus
      */
-    public getActionStatus = (name: ActionBase['name'], statusId: ActionResult['statusId']): Promise<ActionResult> => {
+    public getActionStatus = (name: ActionBase['name'], statusId: ActionStatus['statusId']): Promise<ActionStatus> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
-            .then(response => response.body as ActionResult);
+            .then(response => response.body as ActionStatus);
     }
 }
 
@@ -106,17 +106,17 @@ export enum ActionKind {
     sns = 'sns',
 }
 
-// ActionResultState reflects the status of the action
-export enum ActionResultState {
+// ActionStatusState reflects the status of the action
+export enum ActionStatusState {
     queue = 'QUEUED',
     running = 'RUNNING',
     done = 'DONE',
     failed = 'FAILED',
 }
 
-// ActionResult defines the state information
-export interface ActionResult {
-    state: ActionResultState;
+// ActionStatus defines the state information
+export interface ActionStatus {
+    state: ActionStatusState;
     statusId: string;
     message: string;
 }
@@ -209,3 +209,5 @@ export interface ActionBase {
      */
     name: string;
 }
+
+export type Action = EmailAction | WebhookAction | SNSAction;
