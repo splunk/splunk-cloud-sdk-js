@@ -318,11 +318,11 @@ export class IdentityService extends BaseApiService {
 
     /**
      * Create a new principal
-     * @param postPrincipalBody
+     * @param principalInput
      * @returns a Principal object
      */
-    public createPrincipal = (postPrincipalBody: PostPrincipalBody): Promise<Principal> => {
-        return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals'], 'system'), postPrincipalBody)
+    public createPrincipal = (principalInput: PrincipalInput): Promise<Principal> => {
+        return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals'], 'system'), principalInput)
             .then(response => response.body as Principal);
     }
 
@@ -501,9 +501,9 @@ export enum PrincipalKind {
 }
 
 /**
- * PostPrincipalBody - Input object for creating a new Principal
+ * PrincipalInput - Input object for creating a new Principal
  */
-export interface PostPrincipalBody {
+export interface PrincipalInput {
     name: string;
     kind: PrincipalKind;
 }
