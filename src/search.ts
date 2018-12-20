@@ -39,7 +39,7 @@ const _filterObject = (template: {[key: string]: any}, propertiesToRemove: strin
  */
 export class Search {
     private client: SearchService;
-    public readonly jobId: SearchJob['sid'];
+    public readonly jobId: string;
     private isCancelling: boolean;
     private resultObservableMemo?: Observable<any>;
     private statusObservableMemo?: Observable<SearchJob>;
