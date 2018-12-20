@@ -10,10 +10,6 @@ function exitOnFailure() {
     process.exit(1);
 }
 
- function sleep(ms) {
-     return new Promise(resolve => setTimeout(resolve, ms));
- }
-
 async function main() {
     // ***** STEP 1: Get Splunk Cloud client
     // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authentication token.
@@ -22,9 +18,9 @@ async function main() {
         tokenSource: BEARER_TOKEN,
         defaultTenant: TENANT_ID,
     });
-    const collectionModule = `collectionmodule`;
 
     // ***** STEP 2: Create kvcollection
+    const collectionModule = `collectionmodule`;
     const kvcollectionName = `kvcollection${Date.now()}`; // kvcollectionName should be unique
 
     let kvDataset = await splunk.catalog.createDataset({
@@ -46,8 +42,6 @@ async function main() {
     });
     console.log("Lookup dataset created with response: ");
     console.log(lookupDataset);
-
-    await sleep(5000);
 
     // ***** STEP 4: Register the fields
     let postDataFieldResponse = splunk.catalog.postDatasetField(lookupDataset.id, {
