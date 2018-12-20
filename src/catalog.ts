@@ -464,13 +464,14 @@ export enum Prevalence {
     UNKNOWN = 'U',
 }
 
-// TODO: audit fields for validity
 export interface CreateRule {
-    name?: string;
-    module?: string;
-    match?: string;
-    owner?: string;
     actions?: Action[];
+    id?: string;
+    match: string;
+    module?: string;
+    name: string;
+    owner?: string;
+    version?: number;
 }
 
 export interface Rule {
@@ -482,8 +483,8 @@ export interface Rule {
     actions: Action[];
     created: string;
     modified: string;
-    createdBy: string;
-    modifiedBy: string;
+    createdby: string;
+    modifiedby: string;
     version: number;
 }
 
@@ -491,84 +492,45 @@ export interface Rule {
 // this will take an enum for kind
 
 export interface Action {
-    id?: string;
-    ruleid?: string;
-    kind?: string;
-    owner?: string;
     created?: string;
+    createdby?: string;
+    id?: string;
+    kind: string;
     modified?: string;
-    createdBy?: string;
-    modifiedBy?: string;
+    modifiedby?: string;
+    owner?: string;
+    ruleid?: string;
     version?: number;
 }
 
-export interface AliasAction {
-    id?: string;
-    ruleid?: string;
-    kind?: 'ALIAS';
-    owner?: string;
-    created?: string;
-    modified?: string;
-    createdBy?: string;
-    modifiedBy?: string;
-    version?: number;
+export interface AliasAction extends Action{
     alias: string;
     field: Field['name'];
+    kind: 'ALIAS';
+    version?: number;
 }
 
-export interface AutoKVAction {
-    id?: string;
-    ruleid?: string;
-    kind?: 'AUTOKV';
-    owner?: string;
-    created?: string;
-    modified?: string;
-    createdBy?: string;
-    modifiedBy?: string;
-    version?: number;
-    mode?: string;
+export interface AutoKVAction extends Action{
+    kind: 'AUTOKV';
+    mode: string;
 }
 
-export interface EvalAction {
-    id?: string;
-    ruleid?: string;
-    kind?: 'EVAL';
-    owner?: string;
-    created?: string;
-    modified?: string;
-    createdBy?: string;
-    modifiedBy?: string;
-    version?: number;
-    expression?: string;
+export interface EvalAction extends Action{
+    expression: string;
+    field: Field['name'];
+    kind: 'EVAL';
+}
+
+export interface LookupAction extends Action {
+    expression: string;
+    kind: 'LOOKUP';
+}
+
+export interface RegexAction extends Action {
     field?: Field['name'];
-}
-
-export interface LookupAction {
-    id?: string;
-    ruleid?: string;
-    kind?: 'LOOKUP';
-    owner?: string;
-    created?: string;
-    modified?: string;
-    createdBy?: string;
-    modifiedBy?: string;
-    version?: number;
-    expression?: string;
-}
-
-export interface RegexAction {
-    id?: string;
-    ruleid?: string;
-    kind?: 'REGEX';
-    owner?: string;
-    created?: string;
-    modified?: string;
-    createdBy?: string;
-    modifiedBy?: string;
-    version?: number;
-    pattern?: string;
-    field?: Field['name'];
-    limit?: number;
+    kind: 'REGEX';
+    limit: number;
+    pattern: string;
 }
 
 export interface Module {

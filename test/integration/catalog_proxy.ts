@@ -321,11 +321,12 @@ describe('catalog tests', () => {
 
         it('should create REGEX rule actions', () => {
             const regex: RegexAction = {
-                pattern: 'mypattern', kind: 'REGEX', field: fieldName
+                pattern: 'mypattern', kind: 'REGEX', field: fieldName, limit: 5,
             };
             return splunkCloud.catalog.createRuleAction(ruleId, regex).then(res => {
                 const act = res as RegexAction;
                 assert.equal(act.pattern, regex.pattern);
+                assert.equal(act.limit, regex.limit);
             });
         });
 
