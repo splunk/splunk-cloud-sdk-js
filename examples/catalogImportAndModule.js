@@ -1,3 +1,9 @@
+/*
+Copyright © 2018 Splunk Inc.
+SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
+without a valid written license from Splunk Inc. is PROHIBITED.
+*/
+
 // ***** TITLE: Import KVCollection dataset, lookup dataset into a module.
 // ***** DESCRIPTION: This example shows how to create a kvcollection dataset, a lookup dataset, populate the collection,
 //              import into a new module and search the collection via the lookup in the imported module.
@@ -28,6 +34,7 @@ async function main() {
         module: collectionModule,
         kind: 'kvcollection',
     });
+    console.log("KVCollection dataset created with response: ");
     console.log(kvDataset);
 
     // ***** STEP 3: Create a lookup
