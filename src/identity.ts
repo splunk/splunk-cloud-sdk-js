@@ -23,11 +23,11 @@ export class IdentityService extends BaseApiService {
 
     /**
      * Creates a tenant and default roles/groups
-     * @param postTenantBody unique identifier of the tenant
+     * @param tenantName unique identifier of the tenant
      * @returns a Tenant object
      */
-    public createTenant = (postTenantBody: PostTenantBody): Promise<Tenant> => {
-        return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), postTenantBody)
+    public createTenant = (tenantName: TenantName): Promise<Tenant> => {
+        return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['tenants'], 'system'), tenantName)
             .then(response => response.body as Tenant);
     }
 
@@ -357,9 +357,6 @@ export class IdentityService extends BaseApiService {
 
 }
 
-type TenantName = string;
-
-
 export enum TenantStatus {
     PROVISIONING = 'provisioning',
     FAILED = 'failed',
@@ -369,9 +366,9 @@ export enum TenantStatus {
 }
 
 /**
- * PostTenantBody - The contract to create a tenant
+ * TenantName - Name of a Tenant
  */
-export interface PostTenantBody {
+export interface TenantName {
     name: string;
 }
 
@@ -379,7 +376,7 @@ export interface PostTenantBody {
  * Tenant - The unique tenant account within the Identity Service
  */
 export interface Tenant {
-    name: TenantName;
+    name: TenantName['name'];
     status: TenantStatus;
     createdAt: Date;
     createdBy: string;
