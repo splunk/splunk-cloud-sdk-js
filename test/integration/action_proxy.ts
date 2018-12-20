@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import 'mocha';
 import {
     ActionKind,
-    ActionResult,
+    ActionStatus,
     ActionTriggerResponse,
     EmailAction,
     Notification,
@@ -121,9 +121,9 @@ describe('integration tests using action service', () => {
                     );
                 })
                 .then(res => {
-                    const actionResult = res as ActionResult;
+                    const actionStatus = res as ActionStatus;
                     // expect(['RUNNING', 'FAILED']).to.include(res.state) TODO: Whether the action succeeds or not, depends on the action definition
-                    assert.equal(actionResult.statusId, webhook.statusId);
+                    assert.equal(actionStatus.statusId, webhook.statusId);
                 });
         });
 
