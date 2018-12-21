@@ -91,7 +91,7 @@ export class Search {
      */
     public cancel = (): Promise<object> => {
         this.isCancelling = true;
-        return this.client.updateJob(this.jobId, { status: UpdateJobStatus.CANCELED });
+        return this.client.updateJob(this.jobId, { status: 'canceled' });
     }
 
     /**
