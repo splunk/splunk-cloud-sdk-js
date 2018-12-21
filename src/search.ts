@@ -422,11 +422,6 @@ export interface SearchJob {
     status?: string;
 }
 
-export enum UpdateJobStatus {
-    CANCELED = 'canceled',
-    FINALIZED = 'finalized'
-}
-
 /**
  * Update a search job with a status.
  */
@@ -434,7 +429,7 @@ export interface UpdateJob {
     /**
      * Status to be patched to an existing search job
      */
-    status: UpdateJobStatus;
+    status: 'canceled' | 'finalized';
 }
 
 /*
