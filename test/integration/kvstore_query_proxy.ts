@@ -86,7 +86,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
         it('Should filter records correctly using the fields parameter for include selection', () => {
             return createRecord(testKVCollectionName, recordOne)
                 .then(() => {
-                    const queryParameters = { fields: 'TEST_KEY_01' };
+                    const queryParameters = { fields: ['TEST_KEY_01'] };
 
                     return splunkCloud.kvstore.queryRecords(testKVCollectionName, queryParameters);
                 })
@@ -106,7 +106,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     return createRecord(testKVCollectionName, recordThree);
                 })
                 .then(() => {
-                    const queryParameters = { fields: 'TEST_KEY_01:0' };
+                    const queryParameters = { fields: ['TEST_KEY_01:0'] };
                     return splunkCloud.kvstore.queryRecords(testKVCollectionName, queryParameters);
                 })
                 .then(queryRecordsResponse => {
@@ -125,7 +125,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     return createRecord(testKVCollectionName, recordThree);
                 })
                 .then(() => {
-                    const queryParameters = { fields: 'TEST_KEY_01,TEST_KEY_02:0' };
+                    const queryParameters = { fields: ['TEST_KEY_01,TEST_KEY_02:0'] };
                     return splunkCloud.kvstore
                         .queryRecords(testKVCollectionName, queryParameters)
                         .then(queryRecordsResponse => {
@@ -157,7 +157,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     return createRecord(testKVCollectionName, recordTwo);
                 })
                 .then(() => {
-                    const queryParameters = { count: '1' };
+                    const queryParameters = { count: 1 };
                     return splunkCloud.kvstore.queryRecords(testKVCollectionName, queryParameters);
                 })
                 .then(queryRecordsResponse => {
@@ -170,7 +170,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     return createRecord(testKVCollectionName, recordTwo);
                 })
                 .then(() => {
-                    const queryParameters = { count: '-1' };
+                    const queryParameters = { count: -1 };
                     return splunkCloud.kvstore
                         .queryRecords(testKVCollectionName, queryParameters)
                         .then(queryRecordsResponse => {
@@ -198,7 +198,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     return createRecord(testKVCollectionName, recordTwo);
                 })
                 .then(() => {
-                    const queryParameters = { count: '1000000' };
+                    const queryParameters = { count: 1000000 };
                     return splunkCloud.kvstore.queryRecords(testKVCollectionName, queryParameters);
                 })
                 .then(queryRecordsResponse => {
@@ -217,7 +217,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     return createRecord(testKVCollectionName, recordTwo);
                 })
                 .then(() => {
-                    const queryParameters = { offset: '1' };
+                    const queryParameters = { offset: 1 };
                     return splunkCloud.kvstore.queryRecords(testKVCollectionName, queryParameters);
                 })
                 .then(queryRecordsResponse => {
@@ -230,7 +230,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     return createRecord(testKVCollectionName, recordTwo);
                 })
                 .then(() => {
-                    const queryParameters = { offset: '-1' };
+                    const queryParameters = { offset: -1 };
                     return splunkCloud.kvstore
                         .queryRecords(testKVCollectionName, queryParameters)
                         .then(queryRecordsResponse => {
@@ -258,7 +258,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     return createRecord(testKVCollectionName, recordTwo);
                 })
                 .then(() => {
-                    const queryParameters = { offset: '1000000' };
+                    const queryParameters = { offset: 1000000 };
                     return splunkCloud.kvstore.queryRecords(testKVCollectionName, queryParameters);
                 })
                 .then(queryRecordsResponse => {
@@ -280,7 +280,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     return createRecord(testKVCollectionName, recordThree);
                 })
                 .then(() => {
-                    const queryParameters = { orderby: 'TEST_KEY_02' };
+                    const queryParameters = { orderby: ['TEST_KEY_02'] };
                     return splunkCloud.kvstore.queryRecords(testKVCollectionName, queryParameters);
                 })
                 .then(queryRecordsResponse => {
@@ -299,7 +299,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                     return createRecord(testKVCollectionName, recordThree);
                 })
                 .then(() => {
-                    const queryParameters = { orderby: 'thisdoesntexistasakey' };
+                    const queryParameters = { orderby: ['thisdoesntexistasakey'] };
                     return splunkCloud.kvstore.queryRecords(testKVCollectionName, queryParameters);
                 })
                 .then(queryRecordsResponse => {
@@ -349,10 +349,10 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                 })
                 .then(() => {
                     const queryParameters = {
-                        fields: 'TEST_KEY_01:0',
-                        count: '1',
-                        offset: '1',
-                        orderby: 'TEST_KEY_02',
+                        fields: ['TEST_KEY_01:0'],
+                        count: 1,
+                        offset: 1,
+                        orderby: ['TEST_KEY_02'],
                         query: '{"TEST_KEY_02":"A"}',
                     };
                     return splunkCloud.kvstore.queryRecords(testKVCollectionName, queryParameters);

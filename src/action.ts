@@ -15,9 +15,9 @@ export class ActionService extends BaseApiService {
      * Get all actions in action service.
      * @returns Promise of all actions
      */
-    public getActions = (): Promise<Array<EmailAction | WebhookAction | SNSAction>> => {
-        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX,['actions']))
-            .then(response => response.body as Array<EmailAction | WebhookAction | SNSAction>);
+    public getActions = (): Promise<Action[]> => {
+        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
+            .then(response => response.body as Action[]);
     }
 
     /**
@@ -25,9 +25,9 @@ export class ActionService extends BaseApiService {
      * @param name name of the action
      * @return Promise of an action
      */
-    public getAction = (name: ActionBase['name']): Promise<EmailAction | WebhookAction | SNSAction> => {
+    public getAction = (name: ActionBase['name']): Promise<Action> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
-            .then(response => response.body as EmailAction | WebhookAction | SNSAction);
+            .then(response => response.body as Action);
     }
 
     /**
@@ -45,9 +45,9 @@ export class ActionService extends BaseApiService {
      * @param action input action
      * @return Promise of an action
      */
-    public createAction = (action: EmailAction | WebhookAction | SNSAction): Promise<EmailAction | WebhookAction | SNSAction> => {
+    public createAction = (action: Action): Promise<Action> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
-            .then(response => response.body as EmailAction | WebhookAction | SNSAction);
+            .then(response => response.body as Action);
     }
 
     /**
@@ -56,9 +56,9 @@ export class ActionService extends BaseApiService {
      * @param action action updates
      * @return Promise of an action
      */
-    public updateAction = (name: ActionBase['name'], action: ActionUpdateFields): Promise<EmailAction | WebhookAction | SNSAction> => {
+    public updateAction = (name: ActionBase['name'], action: Partial<Action>): Promise<Action> => {
         return this.client.patch(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
-            .then(response => response.body as EmailAction | WebhookAction | SNSAction);
+            .then(response => response.body as Action);
     }
 
     /**
@@ -67,18 +67,18 @@ export class ActionService extends BaseApiService {
      * @param notification action notification
      * @return Promise of actionTriggerResponse
      */
-    public triggerAction = (name: ActionBase['name'], notification: ActionNotification): Promise<ActionTriggerResponse> => {
+    public triggerAction = (name: ActionBase['name'], notification: Notification): Promise<ActionTriggerResponse> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), notification)
             .then(response => {
                 const key = 'location';
                 if (response.headers.has(key)) {
                     const responseStr = response.headers.get(key);
-                    if (responseStr !== null && responseStr.match('\/status\/')) {
+                    if (responseStr !== null && responseStr.match('/status/')) {
                         const parts = responseStr.split('/status/');
                         if (parts.length === 2) {
                             return Promise.resolve({
                                 statusId: parts[1],
-                                statusUrl: responseStr
+                                statusUrl: responseStr,
                             } as ActionTriggerResponse);
                         }
                     }
@@ -98,7 +98,6 @@ export class ActionService extends BaseApiService {
             .then(response => response.body as ActionStatus);
     }
 }
-
 
 // ActionKind reflects the kinds of actions supported by the Action service
 export enum ActionKind {
@@ -128,23 +127,17 @@ export interface ActionTriggerResponse {
     statusUrl?: string;
 }
 
-// ActionError defines format for returned errors
-export interface ActionError {
-    code: string;
-    message: string;
-}
-
-// ActionNotificationKind defines the types of notifications
-export enum ActionNotificationKind {
+// NotificationKind defines the types of notifications
+export enum NotificationKind {
     splunkEvent = 'splunkEvent',
     rawJSON = 'rawJSON',
 }
 
-// ActionNotification defines the action notification format
-export interface ActionNotification {
-    kind: ActionNotificationKind;
+// Notification defines the action notification format
+export interface Notification {
+    kind: NotificationKind;
     tenant: string;
-    payload: any;
+    payload: object | SplunkEventPayload;
 }
 
 // SplunkEventPayload is the payload for a notification coming from Splunk
@@ -183,34 +176,8 @@ export interface SplunkEventPayload {
     time: number;
 }
 
-// ActionUpdateFields defines the fields that may be updated for an existing Action
-export interface ActionUpdateFields {
-    // Email action fields:
-    // HTMLPart to send via Email action
-    htmlPart?: string;
-    // SubjectPart to send via Email action
-    subjectPart?: string;
-    // TextPart to send via Email action
-    textPart?: string;
-    // TemplateName to send via Email action
-    templateName?: string;
-    // Addresses to send to when Email action triggered
-    addresses?: string[];
-
-    // SNS action fields:
-    // Topic to trigger SNS action
-    topic?: string;
-    // Message to send via SNS or Webhook action
-    message?: string;
-
-    // Webhook action fields:
-    // WebhookURL to trigger Webhook action
-    webhookUrl?: string;
-}
-
-
 export interface EmailAction extends ActionBase {
-    kind: 'email';
+    kind: ActionKind.email;
     addresses: string[];
     htmlPart?: string;
     subjectPart?: string;
@@ -219,13 +186,13 @@ export interface EmailAction extends ActionBase {
 }
 
 export interface SNSAction extends ActionBase {
-    kind: 'sns';
+    kind: ActionKind.sns;
     message: string;
     topic: string;
 }
 
 export interface WebhookAction extends ActionBase {
-    kind: 'webhook';
+    kind: ActionKind.webhook;
     message: string;
 
     /**
@@ -235,10 +202,12 @@ export interface WebhookAction extends ActionBase {
 }
 
 export interface ActionBase {
-    kind: string;
+    kind: ActionKind;
     /**
      * Name of the action.  Must be atleast 4 alphanumeric characters,
      * and can be segmented with periods.
      */
     name: string;
 }
+
+export type Action = EmailAction | WebhookAction | SNSAction;

@@ -27,14 +27,14 @@ export class KVStoreService extends BaseApiService {
      * @param collection The name of the collection whose indexes should be listed
      * @returns A list of indexes on the specified collection
      */
-    public listIndexes = (collection: string): Promise<IndexDescription[]> => {
+    public listIndexes = (collection: string): Promise<IndexDefinition[]> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
             'indexes',
         ]);
         return this.client.get(SERVICE_CLUSTER_MAPPING.kvstore, url)
-            .then(response => response.body as IndexDescription[]);
+            .then(response => response.body as IndexDefinition[]);
     }
 
     /**
@@ -43,14 +43,14 @@ export class KVStoreService extends BaseApiService {
      * @param collection The name of the collection where the new index will be created
      * @returns A definition of the created index
      */
-    public createIndex = (collection: string, index: IndexDescription): Promise<IndexDescription> => {
+    public createIndex = (collection: string, index: IndexDefinition): Promise<IndexDefinition> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
             'indexes',
         ]);
         return this.client.post(SERVICE_CLUSTER_MAPPING.kvstore, url, index)
-            .then(response => response.body as IndexDescription);
+            .then(response => response.body as IndexDefinition);
     }
 
     /**
@@ -105,19 +105,14 @@ export class KVStoreService extends BaseApiService {
      * @param record The record to add/replace to the collection
      * @returns An object with the unique _key of the added/replaced record
      */
-    public putRecord = (collection: string, key: string, record: {[key: string]: string}): Promise<PutResponse> => {
+    public putRecord = (collection: string, key: string, record: {[key: string]: string}): Promise<Key> => {
         const putRecordURL = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
             'records',
             key,
         ]);
-        return this.client.put(SERVICE_CLUSTER_MAPPING.kvstore, putRecordURL, record).then(response => {
-            return {
-                body: response.body as Key,
-                created: response.status === 201, /* 201 CREATED */
-            } as PutResponse;
-        });
+        return this.client.put(SERVICE_CLUSTER_MAPPING.kvstore, putRecordURL, record).then(response => response.body as Key);
     }
 
     /**
@@ -126,14 +121,14 @@ export class KVStoreService extends BaseApiService {
      * @param filter Filter string to target specific records
      * @returns A Promise of an array of records
      */
-    public queryRecords = (collection: string, filter: QueryArgs = {}): Promise<Array<{[key: string]: string}>> => {
+    public queryRecords = (collection: string, filter: QueryRecordsFilter = {}): Promise<Array<{[key: string]: string}>> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
             'query',
         ]);
         const requestOptions: RequestOptions = {
-            query: filter
+            query: filter as QueryArgs,
         };
 
         return this.client.get(SERVICE_CLUSTER_MAPPING.kvstore, url, requestOptions)
@@ -157,13 +152,13 @@ export class KVStoreService extends BaseApiService {
      * @param filter Filter string to target specific records
      * @return A list of records in the collection
      */
-    public listRecords = (collection: string, filter: QueryArgs = {}): Promise<Array<{[key: string]: string}>> => {
+    public listRecords = (collection: string, filter: ListRecordsFilter = {}): Promise<Array<{[key: string]: string}>> => {
         const url: string = this.client.buildPath(KVSTORE_SERVICE_PREFIX, [
             'collections',
             collection,
         ]);
         const requestOptions: RequestOptions = {
-            query: filter
+            query: filter as QueryArgs,
         };
         return this.client.get(SERVICE_CLUSTER_MAPPING.kvstore, url, requestOptions)
             .then(response => response.body as Array<{[key: string]: string}>);
@@ -175,10 +170,10 @@ export class KVStoreService extends BaseApiService {
      * @param filter Query JSON expression to target specific records
      * @returns A promise that will be resolved when the matching records are deleted
      */
-    public deleteRecords = (collection: string, filter?: QueryArgs): Promise<object> => {
+    public deleteRecords = (collection: string, filter?: string): Promise<object> => {
         const url = this.client.buildPath(KVSTORE_SERVICE_PREFIX, ['collections', collection, 'query']);
         const requestOptions: RequestOptions = {
-            query: filter
+            query: { filter }
         };
         return this.client.delete(SERVICE_CLUSTER_MAPPING.kvstore, url, requestOptions)
             .then(response => response.body as object);
@@ -196,10 +191,15 @@ export class KVStoreService extends BaseApiService {
             .then(response => response.body as object);
     }
 }
+enum PingOKBodyStatus {
+    HEALTHY = 'healthy',
+    UNHEALTHY = 'unhealthy',
+    UNKNOWN = 'unknown',
+}
 
 export interface PingOKBody {
     errorMessage?: string;
-    status: string;
+    status: PingOKBodyStatus;
 }
 
 export interface IndexFieldDefinition {
@@ -207,17 +207,22 @@ export interface IndexFieldDefinition {
     field: string;
 }
 
-export interface IndexDescription {
-    collection?: string;
+export interface IndexDefinition {
     fields: IndexFieldDefinition[];
-    name?: string;
+    name: string;
 }
 
 export interface Key {
     _key: string;
 }
 
-export interface PutResponse {
-    body: Key;
-    created: boolean;
+export interface ListRecordsFilter {
+    count?: number;
+    fields?: string[];
+    offset?: number;
+    orderby?: string[];
+}
+
+export interface QueryRecordsFilter extends ListRecordsFilter {
+    query?: string;
 }
