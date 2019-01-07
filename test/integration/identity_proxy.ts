@@ -17,15 +17,15 @@ const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config
 // 4. Delete the newly created test tenant using deleteTenant() method and validate using getUserProfile() method
 describe('integration tests for Identity Tenant Endpoints', () => {
 
-    const testRole = `jssdk_role_${Date.now()}`;
-    const testPerm1 = `jssdk_perm_${Date.now()}`;
+    const testRole = `js_role_${Date.now()}`;
+    const testPerm1 = `${tenantID}:*:jperm1_${Date.now()}`;
 
     const testPermissions = [
-        `${tenantID}catalog`,
-        `${tenantID}ingest`,
-        `${tenantID}search`
+        `${tenantID}:*:jread_${Date.now()}`,
+        `${tenantID}:*:jwrite_${Date.now()}`,
+        `${tenantID}:*:jsearch_${Date.now()}`
     ];
-    const testGroupName = `mygroup_${Date.now()}`;
+    const testGroupName = `jsgroup_${Date.now()}`;
     const testPrincipal = config.testUsername;
     const testMember = 'test1@splunk.com';
 
