@@ -108,6 +108,12 @@ export class IdentityService extends BaseApiService {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName, 'groups']))
             .then(response => response.body as string[]);
     }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listMemberGroups instead
+     */
+    public getMemberGroups = (memberName: MemberName['name']): Promise<string[]> => {
+        return this.listMemberGroups(memberName);
+    }
 
     /**
      * Creates a new authorization role in the current tenant
@@ -126,6 +132,12 @@ export class IdentityService extends BaseApiService {
     public listRoles = (): Promise<string[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles']))
             .then(response => response.body as string[]);
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listRoles instead
+     */
+    public getRoles = (): Promise<string[]> => {
+        return this.listRoles();
     }
 
     /**
@@ -156,6 +168,12 @@ export class IdentityService extends BaseApiService {
     public listRolePermissions = (roleName: Role['name']): Promise<string[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions']))
             .then(response => response.body as string[]);
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listRolePermissions instead
+     */
+    public getRolePermissions = (roleName: Role['name']): Promise<string[]> => {
+        return this.listRolePermissions(roleName);
     }
 
     /**
@@ -219,6 +237,12 @@ export class IdentityService extends BaseApiService {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups']))
             .then(response => response.body as string[]);
     }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listGroups instead
+     */
+    public getGroups = (): Promise<string[]> => {
+        return this.listGroups();
+    }
 
     /**
      * Deletes a group in the current tenant
@@ -240,6 +264,12 @@ export class IdentityService extends BaseApiService {
         return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles']), roleName)
             .then(response => response.body as GroupRole);
     }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use addGroupRole instead
+     */
+    public addRoleToGroup = (groupName: Group['name'], roleName: PostGroupRoleBody): Promise<GroupRole> => {
+        return this.addGroupRole(groupName, roleName);
+    }
 
     /**
      * Returns group-role relationship details
@@ -260,6 +290,12 @@ export class IdentityService extends BaseApiService {
     public listGroupRoles = (groupName: Group['name']): Promise<string[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles']))
             .then(response => response.body as string[]);
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listGroupRoles instead
+     */
+    public getGroupRoles = (groupName: Group['name']): Promise<string[]> => {
+        return this.listGroupRoles(groupName);
     }
 
     /**
@@ -304,6 +340,12 @@ export class IdentityService extends BaseApiService {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members']))
             .then(response => response.body as string[]);
     }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listGroupMembers instead
+     */
+    public getGroupMembers = (groupName: Group['name']): Promise<string[]> => {
+        return this.listGroupMembers(groupName);
+    }
 
     /**
      * Removes the member from the group
@@ -343,6 +385,12 @@ export class IdentityService extends BaseApiService {
     public listPrincipals = (): Promise<string[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals'], 'system'))
             .then(response => response.body as string[]);
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listPrincipals instead
+     */
+    public getPrincipals = (): Promise<string[]> => {
+        return this.listPrincipals();
     }
 
     /**
