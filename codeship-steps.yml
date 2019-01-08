@@ -55,10 +55,10 @@
         encrypted_dockercfg_path: ci/dockercfg.encrypted
 
 # - type: serial
-# 	name: Deploy
-# 	steps:
-# 		- name: Deploy to NPM
-# 			service: splunk-cloud-sdk-js-with-stubby
-# 			tag: master
-# 			command: ./ci/publish.sh
-# 			encrypted_dockercfg_path: ci/dockercfg.encrypted
+#   name: Deploy
+#   steps:
+#     - name: Deploy to NPM
+#       service: splunk-cloud-sdk-js-with-stubby
+#       tag: master
+#       command: ./ci/publish.sh
+#       encrypted_dockercfg_path: ci/dockercfg.encrypted

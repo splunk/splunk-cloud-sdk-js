@@ -104,9 +104,15 @@ export class IdentityService extends BaseApiService {
      * @param memberName input object of a member
      * @returns a list of Groups
      */
-    public getMemberGroups = (memberName: MemberName['name']): Promise<string[]> => {
+    public listMemberGroups = (memberName: MemberName['name']): Promise<string[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['members', memberName, 'groups']))
             .then(response => response.body as string[]);
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listMemberGroups instead
+     */
+    public getMemberGroups = (memberName: MemberName['name']): Promise<string[]> => {
+        return this.listMemberGroups(memberName);
     }
 
     /**
@@ -123,9 +129,15 @@ export class IdentityService extends BaseApiService {
      * Get all roles for the current tenant
      * @returns A list of roles
      */
-    public getRoles = (): Promise<string[]> => {
+    public listRoles = (): Promise<string[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles']))
             .then(response => response.body as string[]);
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listRoles instead
+     */
+    public getRoles = (): Promise<string[]> => {
+        return this.listRoles();
     }
 
     /**
@@ -153,9 +165,15 @@ export class IdentityService extends BaseApiService {
      * @param roleName String name of a role
      * @returns A list of permissions
      */
-    public getRolePermissions = (roleName: Role['name']): Promise<string[]> => {
+    public listRolePermissions = (roleName: Role['name']): Promise<string[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions']))
             .then(response => response.body as string[]);
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listRolePermissions instead
+     */
+    public getRolePermissions = (roleName: Role['name']): Promise<string[]> => {
+        return this.listRolePermissions(roleName);
     }
 
     /**
@@ -164,7 +182,7 @@ export class IdentityService extends BaseApiService {
      * @param permission String name of a permission
      * @returns A promise that resolves upon deletion
      */
-    public addRolePermission = (roleName: Role['name'], permission: string): Promise<RolePermission> => {
+    public addRolePermission = (roleName: Role['name'], permission: PostPermissionBody): Promise<RolePermission> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['roles', roleName, 'permissions']), JSON.stringify(permission))
             .then(response => response.body as RolePermission);
     }
@@ -193,11 +211,11 @@ export class IdentityService extends BaseApiService {
 
     /**
      * Creates a new group in the current tenant
-     * @param groupInput The group params for creating a new group
+     * @param postGroupBody The group params for creating a new group
      * @returns A promise that resolves upon deletion
      */
-    public createGroup = (groupInput: GroupInput): Promise<Group> => {
-        return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups']), groupInput)
+    public createGroup = (postGroupBody: PostGroupBody): Promise<Group> => {
+        return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups']), postGroupBody)
             .then(response => response.body as Group);
     }
 
@@ -215,9 +233,15 @@ export class IdentityService extends BaseApiService {
      * Lists the groups in the current tenant
      * @returns a list of groups
      */
-    public getGroups = (): Promise<string[]> => {
+    public listGroups = (): Promise<string[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups']))
             .then(response => response.body as string[]);
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listGroups instead
+     */
+    public getGroups = (): Promise<string[]> => {
+        return this.listGroups();
     }
 
     /**
@@ -236,7 +260,7 @@ export class IdentityService extends BaseApiService {
      * @param roleName String name of a role
      * @returns GroupRole
      */
-    public addRoleToGroup = (groupName: Group['name'], roleName: RoleName): Promise<GroupRole> => {
+    public addRoleToGroup = (groupName: Group['name'], roleName: PostGroupRoleBody): Promise<GroupRole> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles']), roleName)
             .then(response => response.body as GroupRole);
     }
@@ -257,9 +281,15 @@ export class IdentityService extends BaseApiService {
      * @param groupName String name of a group
      * @returns a list of groupRoles
      */
-    public getGroupRoles = (groupName: Group['name']): Promise<string[]> => {
+    public listGroupRoles = (groupName: Group['name']): Promise<string[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles']))
             .then(response => response.body as string[]);
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listGroupRoles instead
+     */
+    public getGroupRoles = (groupName: Group['name']): Promise<string[]> => {
+        return this.listGroupRoles(groupName);
     }
 
     /**
@@ -290,7 +320,7 @@ export class IdentityService extends BaseApiService {
      * @param  groupMemberName String name of group member
      * @returns a GroupMember object
      */
-    public getGroupMember = (groupName: Group['name'], groupMemberName: GroupMemberName['name']): Promise<GroupMember> => {
+    public getGroupMember = (groupName: Group['name'], groupMemberName: MemberName['name']): Promise<GroupMember> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members', groupMemberName]))
             .then(response => response.body as GroupMember);
     }
@@ -300,9 +330,15 @@ export class IdentityService extends BaseApiService {
      * @param  groupName String name of a group
      * @returns a list of group members
      */
-    public getGroupMembers = (groupName: Group['name']): Promise<string[]> => {
+    public listGroupMembers = (groupName: Group['name']): Promise<string[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members']))
             .then(response => response.body as string[]);
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listGroupMembers instead
+     */
+    public getGroupMembers = (groupName: Group['name']): Promise<string[]> => {
+        return this.listGroupMembers(groupName);
     }
 
     /**
@@ -311,7 +347,7 @@ export class IdentityService extends BaseApiService {
      * @param  groupMemberName String name of group member
      * @returns A promise that resolves upon deletion
      */
-    public removeGroupMember = (groupName: Group['name'], groupMemberName: GroupMemberName['name']): Promise<object> => {
+    public removeGroupMember = (groupName: Group['name'], groupMemberName: MemberName['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'members', groupMemberName]))
             .then(response => response.body as object);
     }
@@ -331,7 +367,7 @@ export class IdentityService extends BaseApiService {
      * @param principalName
      * @returns a Principal object
      */
-    public getPrincipal = (principalName: PrincipalInput['name']): Promise<Principal> => {
+    public getPrincipal = (principalName: Principal['name']): Promise<Principal> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals', principalName], 'system'))
             .then(response => response.body as Principal);
     }
@@ -340,9 +376,15 @@ export class IdentityService extends BaseApiService {
      * Returns the list of principals known to IAC
      * @returns a list of principals
      */
-    public getPrincipals = (): Promise<string[]> => {
+    public listPrincipals = (): Promise<string[]> => {
         return this.client.get(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals'], 'system'))
             .then(response => response.body as string[]);
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 - Please use listPrincipals instead
+     */
+    public getPrincipals = (): Promise<string[]> => {
+        return this.listPrincipals();
     }
 
     /**
@@ -350,11 +392,19 @@ export class IdentityService extends BaseApiService {
      * @param principalName
      * @returns A promise that resolves upon deletion
      */
-    public deletePrincipal = (principalName: PrincipalInput['name']): Promise<object> => {
+    public deletePrincipal = (principalName: Principal['name']): Promise<object> => {
         return this.client.delete(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['principals', principalName], 'system'))
             .then(response => response.body as object);
     }
 
+}
+
+export enum TenantStatus {
+    PROVISIONING = 'provisioning',
+    FAILED = 'failed',
+    READY = 'ready',
+    DELETING = 'deleting',
+    DELETED = 'deleted',
 }
 
 /**
@@ -368,8 +418,8 @@ export interface TenantName {
  * Tenant - The unique tenant account within the Identity Service
  */
 export interface Tenant {
-    name: string;
-    status: string;
+    name: TenantName['name'];
+    status: TenantStatus;
     createdAt: Date;
     createdBy: string;
 }
@@ -378,7 +428,7 @@ export interface Tenant {
  * Role - A unique role associated with a tenant within the Identity Service
  */
 export interface Role {
-    createdAt: Date;
+    createdAt: string;
     createdBy: string;
     name: string;
     tenant: string;
@@ -389,8 +439,6 @@ export interface Role {
  */
 export interface RoleInput {
     name: string;
-    permissions: string[];
-
 }
 
 /**
@@ -401,13 +449,18 @@ export interface RoleName {
 }
 
 /**
+ * PostPermissionBody - Permission to add to a role
+ */
+export type PostPermissionBody = string;
+
+/**
  * RolePermission - The object that represents a tenant role permission
  */
 export interface RolePermission {
     tenant: string;
     role: string;
     permission: string;
-    addedAt: Date;
+    addedAt: string;
     addedBy: string;
 }
 
@@ -416,17 +469,13 @@ export interface RolePermission {
  */
 export interface Permission {
     name: string;
-    addedAt: Date;
-    addedBy: string;
 }
 
 /**
- * GroupInput - Inputs for a Group
+ * PostGroupBody - Group definition
  */
-export interface GroupInput {
+export interface PostGroupBody {
     name: string;
-    roles: string[];
-    members: string[];
 }
 
 /**
@@ -435,10 +484,13 @@ export interface GroupInput {
 export interface Group {
     tenant: string;
     name: string;
-    createdAt: Date;
+    createdAt: string;
     createdBy: string;
 }
 
+export interface PostGroupRoleBody {
+    name: string;
+}
 /**
  * GroupRole - Represents a role that is assigned to a group
  */
@@ -446,7 +498,7 @@ export interface GroupRole {
     tenant: string;
     group: string;
     role: string;
-    addedAt: Date;
+    addedAt: string;
     addedBy: string;
 }
 
@@ -463,12 +515,12 @@ export interface MemberName {
 export interface Member {
     tenant: string;
     name: string;
-    addedAt: Date;
+    addedAt: string;
     addedBy: string;
 }
 
 /**
- * GroupMemberName - Group member name
+ * GroupMemberName - Group member namet
  */
 export interface GroupMemberName {
     name: string;
@@ -485,12 +537,17 @@ export interface GroupMember {
     addedBy: string;
 }
 
+export enum PrincipalKind {
+   SERVICE_ACCOUNT = 'service_account',
+   USER = 'user',
+}
+
 /**
  * PrincipalInput - Input object for creating a new Principal
  */
 export interface PrincipalInput {
     name: string;
-    kind: string;
+    kind: PrincipalKind;
 }
 
 /**
@@ -498,11 +555,11 @@ export interface PrincipalInput {
  */
 export interface Principal {
     name: string;
-    kind: string;
-    tenants: string[];
-    createdAt: Date;
-    createdBy: Date;
-    profile: {};
+    kind: PrincipalKind;
+    tenants: Tenant[];
+    createdAt: string;
+    createdBy: string;
+    profile?: object;
 }
 
 /**
