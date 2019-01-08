@@ -260,15 +260,9 @@ export class IdentityService extends BaseApiService {
      * @param roleName String name of a role
      * @returns GroupRole
      */
-    public addGroupRole = (groupName: Group['name'], roleName: PostGroupRoleBody): Promise<GroupRole> => {
+    public addRoleToGroup = (groupName: Group['name'], roleName: PostGroupRoleBody): Promise<GroupRole> => {
         return this.client.post(SERVICE_CLUSTER_MAPPING.identity, this.client.buildPath(IDENTITY_SERVICE_PREFIX, ['groups', groupName, 'roles']), roleName)
             .then(response => response.body as GroupRole);
-    }
-    /**
-     * @deprecated Deprecated after v0.6.2 - Please use addGroupRole instead
-     */
-    public addRoleToGroup = (groupName: Group['name'], roleName: PostGroupRoleBody): Promise<GroupRole> => {
-        return this.addGroupRole(groupName, roleName);
     }
 
     /**

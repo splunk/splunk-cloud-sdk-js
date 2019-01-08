@@ -117,7 +117,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should add a Role to the Group', () =>
-            splunk.identity.addGroupRole(testGroupName, { name: testRole }).then(data => {
+            splunk.identity.addRoleToGroup(testGroupName, { name: testRole }).then(data => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.group, testGroupName);
                 assert.equal(data.role, testRole);
