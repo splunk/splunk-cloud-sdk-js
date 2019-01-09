@@ -261,7 +261,7 @@ export class SearchService extends BaseApiService {
      * @deprecated Deprecated after v0.6.2 please use listResults instead.
      */
     public getResults = (jobId: string, args: FetchResultsRequest = {}): Promise<SearchResults | ResultsNotReadyResponse> => {
-        return this.listResults(jobId, args)
+        return this.listResults(jobId, args);
     }
 
     /**
