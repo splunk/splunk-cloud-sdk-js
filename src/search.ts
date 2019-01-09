@@ -101,7 +101,6 @@ export class Search {
      * @param args
      * @return A list of event objects
      */
-    // TODO: backwardsCompatibleCount
     public getResults = (args: { count?: number, offset?: number } = {}): Promise<object> => {
         const count = args.count = args.count || 30;
         args.offset = args.offset || 0;
@@ -257,6 +256,12 @@ export class SearchService extends BaseApiService {
                 }
                 throw new SplunkError({ message: `Unexpected response: ${response.body}` });
             });
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 please use listResults instead.
+     */
+    public getResults = (jobId: string, args: FetchResultsRequest = {}): Promise<SearchResults | ResultsNotReadyResponse> => {
+        return this.listResults(jobId, args)
     }
 
     /**
