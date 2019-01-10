@@ -9,8 +9,11 @@ chai.use(chaiAsPromised);
 
 const { expect, assert } = chai;
 
-const splunkCloud = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
-
+const splunkCloud = new SplunkCloud({
+    urls: { api: config.stagingApiHost, app: config.stagingAppsHost },
+    tokenSource: config.stagingAuthToken,
+    defaultTenant: config.stagingTenant,
+});
 
 describe('Integration tests for Streams Pipeline Endpoints', () => {
     const testPipelineName1 = `testPipeline01${Date.now()}`;
@@ -23,14 +26,16 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
 
     after(() => {
         if (pipelineId1 !== null) {
-            return splunkCloud.streams.deletePipeline(pipelineId1)
+            return splunkCloud.streams
+                .deletePipeline(pipelineId1)
                 .catch(err => console.log(`Error cleaning the test pipeline1: ${err}`));
         }
     });
 
     after(() => {
         if (pipelineId2 !== null) {
-            return splunkCloud.streams.deletePipeline(pipelineId2)
+            return splunkCloud.streams
+                .deletePipeline(pipelineId2)
                 .catch(err => console.log(`Error cleaning the test pipeline2: ${err}`));
         }
     });
@@ -50,8 +55,8 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                     assert.isNotNull(createPipelineResponse1.data);
 
                     assert.isNotNull(createPipelineResponse1.data.nodes);
-                    assert.typeOf(createPipelineResponse1.data.nodes, 'array', 'Nodes response data should be an array');
-                    assert.equal(createPipelineResponse1.data.nodes.length, 4);
+                    assert.typeOf(createPipelineResponse1.data.nodes, 'array');
+                    assert.equal(createPipelineResponse1.data.nodes.length, 2);
 
                     for (const node of createPipelineResponse1.data.nodes) {
                         assert.isNotNull(node.id);
@@ -59,8 +64,8 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                     }
 
                     assert.isNotNull(createPipelineResponse1.data.edges);
-                    assert.typeOf(createPipelineResponse1.data.edges, 'array', 'Edges response data should be an array');
-                    assert.equal(createPipelineResponse1.data.edges.length, 3);
+                    assert.typeOf(createPipelineResponse1.data.edges, 'array');
+                    assert.equal(createPipelineResponse1.data.edges.length, 1);
                     for (const edge of createPipelineResponse1.data.edges) {
                         assert.isNotNull(edge.sourceNode);
                         assert.isNotNull(edge.sourcePort);
@@ -85,7 +90,8 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
 
     describe('Test GET a Pipeline by id', () => {
         it('Should expected pipeline', () => {
-            return splunkCloud.streams.getPipeline(pipelineId1 as string)
+            return splunkCloud.streams
+                .getPipeline(pipelineId1 as string)
                 .then(getPipelineResponse => {
                     assert.isNotNull(getPipelineResponse);
                     assert.equal(getPipelineResponse.name, testPipelineName1);
@@ -96,27 +102,26 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
 
     describe('Test GET all Pipelines', () => {
         it('Should return all the pipelines', () => {
-            return splunkCloud.streams.getPipelines()
-                .then(getPipelinesResponse1 => {
-                    assert.isNotNull(getPipelinesResponse1);
-                });
+            return splunkCloud.streams.getPipelines().then(getPipelinesResponse1 => {
+                assert.isNotNull(getPipelinesResponse1);
+            });
         });
     });
 
     describe('Test Activate Pipeline', () => {
         it('Should activate the newly created pipeline', () => {
             const activatePipelineRequest = {
-                ids: [
-                    pipelineId1 as string
-                ],
-                skipSavePoint: true
+                ids: [pipelineId1 as string],
+                skipSavePoint: true,
             };
-            return splunkCloud.streams.activatePipeline(activatePipelineRequest)
+            return splunkCloud.streams
+                .activatePipeline(activatePipelineRequest)
                 .then(activatePipelineResponse => {
                     assert.isNotNull(activatePipelineResponse);
                     expect(activatePipelineResponse.activated).to.contain(pipelineId1 as string);
 
-                    return splunkCloud.streams.getPipeline(pipelineId1 as string)
+                    return splunkCloud.streams
+                        .getPipeline(pipelineId1 as string)
                         .then(getPipelineResponse => {
                             assert.isNotNull(getPipelineResponse);
                             assert.equal(getPipelineResponse.name, testPipelineName1);
@@ -131,7 +136,12 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
         it('Should update an existing pipeline with new name and description', () => {
             const updatedDescription = 'Updated Integration Test Pipeline';
             return createPipelineRequest(testUpdatedPipelineName, updatedDescription)
-                .then(createPipelineRequestResponse2 => splunkCloud.streams.updatePipeline(pipelineId1 as string, createPipelineRequestResponse2))
+                .then(createPipelineRequestResponse2 =>
+                    splunkCloud.streams.updatePipeline(
+                        pipelineId1 as string,
+                        createPipelineRequestResponse2
+                    )
+                )
                 .then(updatePipelineResponse => {
                     assert.isNotNull(updatePipelineResponse);
 
@@ -152,18 +162,20 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
     describe('Test Deactivate Pipeline', () => {
         it('Should deactivate the newly created pipeline', () => {
             const deactivatePipelineRequest = {
-                ids: [
-                    pipelineId1 as string
-                ],
-                skipSavePoint: true
+                ids: [pipelineId1 as string],
+                skipSavePoint: true,
             };
-            return splunkCloud.streams.deactivatePipeline(deactivatePipelineRequest)
+            return splunkCloud.streams
+                .deactivatePipeline(deactivatePipelineRequest)
                 .then(deactivatePipelineResponse => {
                     assert.isNotNull(deactivatePipelineResponse);
-                    expect(deactivatePipelineResponse.deactivated).to.contain(pipelineId1 as string);
+                    expect(
+                        deactivatePipelineResponse.deactivated
+                    ).to.contain(pipelineId1 as string);
 
                     return splunkCloud.streams.getPipeline(pipelineId1 as string);
-                }).then(getPipelineResponse => {
+                })
+                .then(getPipelineResponse => {
                     assert.isNotNull(getPipelineResponse);
                     assert.equal(getPipelineResponse.statusMessage, PipelineStatus.Deactivated);
                 });
@@ -182,20 +194,24 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
 });
 
 // Creates a test pipeline request
-function createPipelineRequest(name: string, description: string) : Promise<PipelineRequest> {
+function createPipelineRequest(name: string, description: string): Promise<PipelineRequest> {
     const dsl = {
-        dsl: 'kafka-brokers="localhost:9092";input-topic = "intopic";output-topic-1 = "output-topic-1";events = deserialize-events(unauthenticated-read-kafka(kafka-brokers, input-topic, {}));unauthenticated-write-kafka(serialize-events(events, output-topic-1), kafka-brokers, {});'
+        dsl: 'events = read-splunk-firehose(); write-splunk-index(events);',
     };
-    return splunkCloud.streams.compileDslToUpl(dsl).then(response => {
-        assert.isNotNull(response);
-        return {
-            description,
-            name,
-            bypassValidation: true,
-            createUserId: config.stagingTenant,
-            data: response
-        } as PipelineRequest;
-    }).catch(error => {
-        throw error;
-    });
+    return splunkCloud.streams
+        .compileDslToUpl(dsl)
+        .then(response => {
+            assert.isNotNull(response);
+            const pipelineRequest = {
+                description,
+                name,
+                bypassValidation: true,
+                createUserId: config.stagingTenant,
+                data: response,
+            } as PipelineRequest;
+            return pipelineRequest;
+        })
+        .catch(error => {
+            throw error;
+        });
 }
