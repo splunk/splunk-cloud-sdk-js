@@ -12,7 +12,7 @@ export const ACTION_SERVICE_PREFIX: string = '/action/v1beta1';
 /**
  * @private
  */
-export const CATALOG_SERVICE_PREFIX: string = '/catalog/v1beta1';
+export const CATALOG_SERVICE_PREFIX: string = '/catalog/v1beta2';
 
 /**
  * @private
