@@ -65,6 +65,12 @@ describe('catalog tests', () => {
             assert.equal(dslist[0].kind, 'index');
         }));
 
+        it('should list datasets with complex filter', () => splunkCloud.catalog.listDatasets({ filter: `name=="${indexName}" AND kind=="index"` }).then((dslist) => {
+            assert.isAtLeast(dslist.length, 1);
+            assert.equal(dslist[0].kind, 'index');
+            assert.equal(dslist[0].name, indexName);
+        }));
+
         it('should list datasets with a count of 1', () => splunkCloud.catalog.listDatasets({ count: 1 }).then((dslist) => {
             assert.equal(dslist.length, 1);
         }));
