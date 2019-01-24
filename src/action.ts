@@ -4,9 +4,9 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
-import BaseApiService from './baseapiservice';
 import { V1beta2ActionManagementApi } from '../generated_api/action/api/v1beta2ActionManagementApi';
 import { Action as wrapper_action } from '../generated_api/action/model/action';
+import BaseApiService from './baseapiservice';
 import { ACTION_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
 /**
@@ -24,7 +24,7 @@ export class ActionService extends BaseApiService {
                 this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions'])
             )
             .then(response => response.body as Action[]);
-    };
+    }
 
     /**
      * Get an action by name
@@ -38,7 +38,7 @@ export class ActionService extends BaseApiService {
                 this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name])
             )
             .then(response => response.body as Action);
-    };
+    }
 
     /**
      * Delete an action by name
@@ -52,7 +52,7 @@ export class ActionService extends BaseApiService {
                 this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name])
             )
             .then(response => response.body as object);
-    };
+    }
 
     /**
      * Create an action
@@ -61,14 +61,14 @@ export class ActionService extends BaseApiService {
      */
     // public createAction = (action: Action): Promise<Action> => {
     public createAction = (action: wrapper_action): Promise<wrapper_action> => {
-        const url = this.client.getURLS()['api'];
-        const authorization_token = this.client.getToken();
+        const url = this.client.getURLS().api;
+        const authorizationToken = this.client.getToken();
         const tenant = this.client.getTenant() || '';
-        const request_options = { headers: {} };
+        const requestOptions = { headers: {} };
 
-        const wrapper_client = new V1beta2ActionManagementApi(url);
+        const wrapperClient = new V1beta2ActionManagementApi(url);
 
-        return wrapper_client.createAction(authorization_token, tenant, action, request_options);
+        return wrapperClient.createAction(authorizationToken, tenant, action, requestOptions);
 
         // return this.client
         //     .post(
@@ -77,7 +77,7 @@ export class ActionService extends BaseApiService {
         //         action
         //     )
         //     .then(response => response.body as Action);
-    };
+    }
 
     /**
      * Update an action
@@ -93,7 +93,7 @@ export class ActionService extends BaseApiService {
                 action
             )
             .then(response => response.body as Action);
-    };
+    }
 
     /**
      * Trigger an action
@@ -127,7 +127,7 @@ export class ActionService extends BaseApiService {
                 }
                 return response.body as ActionTriggerResponse;
             });
-    };
+    }
 
     /**
      * Get action status
@@ -145,7 +145,7 @@ export class ActionService extends BaseApiService {
                 this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId])
             )
             .then(response => response.body as ActionStatus);
-    };
+    }
 }
 
 // ActionKind reflects the kinds of actions supported by the Action service

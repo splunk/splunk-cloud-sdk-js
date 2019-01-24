@@ -1,122 +1,122 @@
 {
-  "name": "@splunk/cloud-sdk",
-  "version": "0.6.2",
-  "description": "Splunk Cloud SDK for Javascript",
-  "main": "splunk.js",
-  "scripts": {
-    "commit": "yarn git-cz",
-    "tslint": "tslint -p tsconfig.json -c tslint.json && yarn tslint:tests",
-    "tslint:fix": "tslint -p tsconfig.json -c tslint.json --fix && yarn tslint:fix:tests",
-    "tslint:tests": "tslint -p tsconfig.test.json -c tslint.json",
-    "tslint:fix:tests": "tslint -p tsconfig.test.json -c tslint.json --fix",
-    "ts:docs": "rm -rf docs && yarn ts:docs:html && yarn ts:docs:md",
-    "ts:docs:html": "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/html/ --inlineSourceMap --module commonjs --theme minimal --excludePrivate",
-    "ts:docs:md": "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/md/ --inlineSourceMap --module commonjs --theme markdown --excludePrivate --mdHideSources --mdEngine github",
-    "docs": "yarn ts:docs",
-    "build": "node ci/extract_version.js && tsc -p tsconfig.json",
-    "build:tests": "tsc -p tsconfig.test.json",
-    "clean": "rm *.js *.map *.d.ts || true",
-    "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
-    "codecov:integration": "yarn cover:integration && codecov -f ./coverage-integration/lcov.info -F integration",
-    "cover": "NODE_ENV=coverage nyc yarn test",
-    "cover:integration": "NODE_ENV=coverage nyc --report-dir coverage-integration yarn test:integration",
-    "pretest": "yarn tslint && yarn build",
-    "test": "ts-mocha -p tsconfig.test.json test/unit/*.ts --exclude test/unit/*.d.ts",
-    "test:integration": "ts-mocha -p tsconfig.test.json --timeout=900000 test/integration/*.ts --exclude test/integration/*.d.ts",
-    "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/splunk-cloud-sdk-shared-stubby:latest",
-    "stop:stubserver": "docker rm -f stubserver",
-    "publish:docs": "yarn ts:docs && npm add -D @splunk/cicd-tools --registry https://repo.splunk.com/artifactory/api/npm/npm && yarn cicd-publish-docs docs/html",
-    "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
-    "stop:swagger": "docker rm -f swagger",
-    "example": "./ci/integration/runExamples.sh",
-    "release:dryrun": "yarn standard-version --dry-run",
-    "release:minor": "yarn standard-version --release-as minor",
-    "release:patch": "yarn standard-version --release-as patch",
-    "release": "yarn standard-version"
-  },
-  "author": "Splunk, Inc.",
-  "license": "SEE LICENSE IN LICENSE.txt",
-  "devDependencies": {
-    "@commitlint/cli": "^7.2.1",
-    "@commitlint/config-conventional": "^7.1.2",
-    "@types/chai": "^4.1.7",
-    "@types/chai-as-promised": "^7.1.0",
-    "@types/isomorphic-fetch": "^0.0.34",
-    "@types/mocha": "^5.2.5",
-    "@types/node": "^10.12.2",
-    "chai": "^4.1.2",
-    "chai-as-promised": "^7.1.1",
-    "codecov": "^3.0.2",
-    "commitizen": " ^3.0.4",
-    "cz-conventional-changelog": "^2.1.0",
-    "cz-customizable": "^5.2.0",
-    "husky": "^1.1.3",
-    "isomorphic-fetch": "^2.2.1",
-    "istanbul": "^0.4.5",
-    "js-yaml": "^3.11.0",
-    "jsdoc": "^3.5.5",
-    "mocha": "^5.0.4",
-    "nyc": "^13.1.0",
-    "rimraf": "^2.6.2",
-    "source-map-support": "^0.5.6",
-    "standard-version": "^4.4.0",
-    "ts-mocha": "^2.0.0",
-    "ts-node": "^7.0.0",
-    "tslint": "^5.11.0",
-    "tslint-config-airbnb": "^5.11.0",
-    "tslint-config-prettier": "^1.15.0",
-    "tslint-eslint-rules": "^5.4.0",
-    "typedoc": "^0.11.1",
-    "typedoc-plugin-markdown": "^1.1.13",
-    "typescript": "^3.0.3"
-  },
-  "dependencies": {
-    "rxjs": "^6.3.2"
-  },
-  "nyc": {
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ],
-    "extension": [
-      ".ts"
-    ],
-    "exclude": [
-      ".tmp",
-      "ci",
-      "coverage",
-      "dist",
-      "node_modules",
-      "test",
-      "tmp",
-      ".eslintrc.js",
-      "tslint.json",
-      "tsconfig.json",
-      "docs",
-      ".template"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -e"
-    }
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "node_modules/cz-customizable"
+    "name": "@splunk/cloud-sdk",
+    "version": "0.6.2",
+    "description": "Splunk Cloud SDK for Javascript",
+    "main": "splunk.js",
+    "scripts": {
+        "commit": "yarn git-cz",
+        "tslint": "tslint -p tsconfig.json -c tslint.json && yarn tslint:tests",
+        "tslint:fix": "tslint -p tsconfig.json -c tslint.json --fix && yarn tslint:fix:tests",
+        "tslint:tests": "tslint -p tsconfig.test.json -c tslint.json",
+        "tslint:fix:tests": "tslint -p tsconfig.test.json -c tslint.json --fix",
+        "ts:docs": "rm -rf docs && yarn ts:docs:html && yarn ts:docs:md",
+        "ts:docs:html":
+            "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/html/ --inlineSourceMap --module commonjs --theme minimal --excludePrivate",
+        "ts:docs:md":
+            "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/md/ --inlineSourceMap --module commonjs --theme markdown --excludePrivate --mdHideSources --mdEngine github",
+        "docs": "yarn ts:docs",
+        "build": "node ci/extract_version.js && tsc -p tsconfig.json",
+        "build:tests": "tsc -p tsconfig.test.json",
+        "clean": "rm *.js *.map *.d.ts || true",
+        "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
+        "codecov:integration":
+            "yarn cover:integration && codecov -f ./coverage-integration/lcov.info -F integration",
+        "cover": "NODE_ENV=coverage nyc yarn test",
+        "cover:integration":
+            "NODE_ENV=coverage nyc --report-dir coverage-integration yarn test:integration",
+        "pretest": "yarn tslint && yarn build",
+        "test": "ts-mocha -p tsconfig.test.json test/unit/*.ts --exclude test/unit/*.d.ts",
+        "test:integration":
+            "ts-mocha -p tsconfig.test.json --timeout=900000 test/integration/*.ts --exclude test/integration/*.d.ts",
+        "start:stubserver":
+            "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/splunk-cloud-sdk-shared-stubby:latest",
+        "stop:stubserver": "docker rm -f stubserver",
+        "publish:docs":
+            "yarn ts:docs && npm add -D @splunk/cicd-tools --registry https://repo.splunk.com/artifactory/api/npm/npm && yarn cicd-publish-docs docs/html",
+        "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
+        "stop:swagger": "docker rm -f swagger",
+        "example": "./ci/integration/runExamples.sh",
+        "release:dryrun": "yarn standard-version --dry-run",
+        "release:minor": "yarn standard-version --release-as minor",
+        "release:patch": "yarn standard-version --release-as patch",
+        "release": "yarn standard-version"
     },
-    "cz-customizable": {
-      "config": "ci/.cz-config.js"
+    "author": "Splunk, Inc.",
+    "license": "SEE LICENSE IN LICENSE.txt",
+    "devDependencies": {
+        "@commitlint/cli": "^7.2.1",
+        "@commitlint/config-conventional": "^7.1.2",
+        "@types/chai": "^4.1.7",
+        "@types/chai-as-promised": "^7.1.0",
+        "@types/isomorphic-fetch": "^0.0.34",
+        "@types/mocha": "^5.2.5",
+        "@types/node": "^10.12.2",
+        "chai": "^4.1.2",
+        "chai-as-promised": "^7.1.1",
+        "codecov": "^3.0.2",
+        "commitizen": " ^3.0.4",
+        "cz-conventional-changelog": "^2.1.0",
+        "cz-customizable": "^5.2.0",
+        "husky": "^1.1.3",
+        "isomorphic-fetch": "^2.2.1",
+        "istanbul": "^0.4.5",
+        "js-yaml": "^3.11.0",
+        "jsdoc": "^3.5.5",
+        "mocha": "^5.0.4",
+        "nyc": "^13.1.0",
+        "rimraf": "^2.6.2",
+        "source-map-support": "^0.5.6",
+        "standard-version": "^4.4.0",
+        "ts-mocha": "^2.0.0",
+        "ts-node": "^7.0.0",
+        "tslint": "^5.11.0",
+        "tslint-config-airbnb": "^5.11.0",
+        "tslint-config-prettier": "^1.15.0",
+        "tslint-eslint-rules": "^5.4.0",
+        "typedoc": "^0.11.1",
+        "typedoc-plugin-markdown": "^1.1.13",
+        "typescript": "^3.0.3"
+    },
+    "dependencies": {
+        "rxjs": "^6.3.2"
+    },
+    "nyc": {
+        "reporter": ["lcov", "text-summary"],
+        "extension": [".ts"],
+        "exclude": [
+            ".tmp",
+            "ci",
+            "coverage",
+            "dist",
+            "node_modules",
+            "test",
+            "tmp",
+            ".eslintrc.js",
+            "tslint.json",
+            "tsconfig.json",
+            "docs",
+            ".template"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -e"
+        }
+    },
+    "commitlint": {
+        "extends": ["@commitlint/config-conventional"]
+    },
+    "config": {
+        "commitizen": {
+            "path": "node_modules/cz-customizable"
+        },
+        "cz-customizable": {
+            "config": "ci/.cz-config.js"
+        }
+    },
+    "standard-version": {
+        "skip": {
+            "tag": true
+        }
     }
-  },
-  "standard-version": {
-    "skip": {
-      "tag": true
-    }
-  }
 }

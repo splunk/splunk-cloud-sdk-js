@@ -8,10 +8,11 @@
     ],
     "jsRules": {},
     "rules": {
-        "quotemark": [
-            true,
-            "single"
-        ],
+        "no-namespace": false,
+        "no-parameter-reassignment": false,
+        "forin": false,
+        "no-else-after-return": false,
+        "quotemark": [true, "single"],
         "interface-name": false,
         "member-ordering": false,
         "object-literal-sort-keys": false,
@@ -34,10 +35,7 @@
         "import-name": false,
         "no-this-assignment": false,
         "curly": true,
-        "object-curly-spacing": [
-            true,
-            "always"
-        ],
+        "object-curly-spacing": [true, "always"],
         "no-trailing-whitespace": true,
         "triple-equals": true,
         "no-irregular-whitespace": true,
