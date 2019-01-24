@@ -10,29 +10,22 @@
         "tslint:tests": "tslint -p tsconfig.test.json -c tslint.json",
         "tslint:fix:tests": "tslint -p tsconfig.test.json -c tslint.json --fix",
         "ts:docs": "rm -rf docs && yarn ts:docs:html && yarn ts:docs:md",
-        "ts:docs:html":
-            "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/html/ --inlineSourceMap --module commonjs --theme minimal --excludePrivate",
-        "ts:docs:md":
-            "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/md/ --inlineSourceMap --module commonjs --theme markdown --excludePrivate --mdHideSources --mdEngine github",
+        "ts:docs:html": "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/html/ --inlineSourceMap --module commonjs --theme minimal --excludePrivate",
+        "ts:docs:md": "typedoc --tsconfig tsconfig.json --readme none --mode file --out docs/md/ --inlineSourceMap --module commonjs --theme markdown --excludePrivate --mdHideSources --mdEngine github",
         "docs": "yarn ts:docs",
         "build": "node ci/extract_version.js && tsc -p tsconfig.json",
         "build:tests": "tsc -p tsconfig.test.json",
         "clean": "rm *.js *.map *.d.ts || true",
         "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
-        "codecov:integration":
-            "yarn cover:integration && codecov -f ./coverage-integration/lcov.info -F integration",
+        "codecov:integration": "yarn cover:integration && codecov -f ./coverage-integration/lcov.info -F integration",
         "cover": "NODE_ENV=coverage nyc yarn test",
-        "cover:integration":
-            "NODE_ENV=coverage nyc --report-dir coverage-integration yarn test:integration",
+        "cover:integration": "NODE_ENV=coverage nyc --report-dir coverage-integration yarn test:integration",
         "pretest": "yarn tslint && yarn build",
         "test": "ts-mocha -p tsconfig.test.json test/unit/*.ts --exclude test/unit/*.d.ts",
-        "test:integration":
-            "ts-mocha -p tsconfig.test.json --timeout=900000 test/integration/*.ts --exclude test/integration/*.d.ts",
-        "start:stubserver":
-            "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/splunk-cloud-sdk-shared-stubby:latest",
+        "test:integration": "ts-mocha -p tsconfig.test.json --timeout=900000 test/integration/*.ts --exclude test/integration/*.d.ts",
+        "start:stubserver": "docker run --name=stubserver -d -p 8882:8882 137462835382.dkr.ecr.us-west-1.amazonaws.com/splunk-cloud-sdk-shared-stubby:latest",
         "stop:stubserver": "docker rm -f stubserver",
-        "publish:docs":
-            "yarn ts:docs && npm add -D @splunk/cicd-tools --registry https://repo.splunk.com/artifactory/api/npm/npm && yarn cicd-publish-docs docs/html",
+        "publish:docs": "yarn ts:docs && npm add -D @splunk/cicd-tools --registry https://repo.splunk.com/artifactory/api/npm/npm && yarn cicd-publish-docs docs/html",
         "start:swagger": "docker run --name=swagger -d -p 80:8080 swaggerapi/swagger-ui",
         "stop:swagger": "docker rm -f swagger",
         "example": "./ci/integration/runExamples.sh",
@@ -50,7 +43,7 @@
         "@types/chai-as-promised": "^7.1.0",
         "@types/isomorphic-fetch": "^0.0.34",
         "@types/mocha": "^5.2.5",
-        "@types/node": "^10.12.2",
+        "@types/node": "^10.12.18",
         "chai": "^4.1.2",
         "chai-as-promised": "^7.1.1",
         "codecov": "^3.0.2",
@@ -81,8 +74,13 @@
         "rxjs": "^6.3.2"
     },
     "nyc": {
-        "reporter": ["lcov", "text-summary"],
-        "extension": [".ts"],
+        "reporter": [
+            "lcov",
+            "text-summary"
+        ],
+        "extension": [
+            ".ts"
+        ],
         "exclude": [
             ".tmp",
             "ci",
@@ -104,7 +102,9 @@
         }
     },
     "commitlint": {
-        "extends": ["@commitlint/config-conventional"]
+        "extends": [
+            "@commitlint/config-conventional"
+        ]
     },
     "config": {
         "commitizen": {

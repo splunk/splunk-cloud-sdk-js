@@ -16,7 +16,7 @@ export * from './modelError';
 export * from './mutableDeprecatedEmailAction';
 export * from './mutableDeprecatedSNSAction';
 export * from './mutableDeprecatedWebhookAction';
-export * from './notification';
+// export * from './notification';
 export * from './splunkEventPayload';
 export * from './webhookAction';
 export * from './webhookActionMutable';
@@ -41,7 +41,7 @@ import { ModelError } from './modelError';
 import { MutableDeprecatedEmailAction } from './mutableDeprecatedEmailAction';
 import { MutableDeprecatedSNSAction } from './mutableDeprecatedSNSAction';
 import { MutableDeprecatedWebhookAction } from './mutableDeprecatedWebhookAction';
-import { Notification } from './notification';
+// import { Notification } from './notification';
 import { SplunkEventPayload } from './splunkEventPayload';
 import { WebhookAction } from './webhookAction';
 import { WebhookActionMutable } from './webhookActionMutable';
@@ -59,7 +59,7 @@ const enumsMap: { [index: string]: any } = {
     'DeprecatedSNSAction.KindEnum': DeprecatedSNSAction.KindEnum,
     'DeprecatedWebhookAction.KindEnum': DeprecatedWebhookAction.KindEnum,
     'EmailAction.KindEnum': EmailAction.KindEnum,
-    'Notification.KindEnum': Notification.KindEnum,
+    // 'Notification.KindEnum': Notification.KindEnum,
     'WebhookAction.KindEnum': WebhookAction.KindEnum,
 };
 
@@ -82,7 +82,7 @@ const typeMap: { [index: string]: any } = {
     MutableDeprecatedEmailAction,
     MutableDeprecatedSNSAction,
     MutableDeprecatedWebhookAction,
-    Notification,
+    // Notification,
     SplunkEventPayload,
     WebhookAction,
     WebhookActionMutable,

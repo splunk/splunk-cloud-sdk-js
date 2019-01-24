@@ -12,6 +12,7 @@
         "no-parameter-reassignment": false,
         "forin": false,
         "no-else-after-return": false,
+        "no-unused-variable": false,
         "quotemark": [true, "single"],
         "interface-name": false,
         "member-ordering": false,

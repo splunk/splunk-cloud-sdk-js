@@ -64,9 +64,19 @@ export class ActionService extends BaseApiService {
         const url = this.client.getURLS().api;
         const authorizationToken = this.client.getToken();
         const tenant = this.client.getTenant() || '';
-        const requestOptions = { headers: {} };
+        const requestOptions = { headers: {
+            Authorization: `Bearer ${authorizationToken}`,
+        } };
 
         const wrapperClient = new V1beta2ActionManagementApi(url);
+
+        console.log("========================================================");
+        console.log("PRINTING ACTION CREATION");
+        console.log("url: " + url);
+        console.log("authorizationToken: " + authorizationToken);
+        console.log("tenant: " + tenant);
+        console.log("requestOptions: " + requestOptions);
+
 
         return wrapperClient.createAction(authorizationToken, tenant, action, requestOptions);
 

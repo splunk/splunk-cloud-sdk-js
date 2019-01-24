@@ -90,7 +90,7 @@ export class V1beta2ActionManagementApi {
         tenant: string,
         action: Action,
         options: { headers: { [name: string]: string } } = { headers: {} }
-    ): Promise<{ response: http.ClientResponse; body: Action }> {
+    ): Promise<{ response: http.IncomingMessage; body: Action }> {
         const localVarPath =
             this.basePath +
             '/{tenant}/action/v1beta2/actions'.replace(
@@ -100,6 +100,12 @@ export class V1beta2ActionManagementApi {
         const localVarQueryParameters: any = {};
         const localVarHeaderParams: any = (Object as any).assign({}, this.defaultHeaders);
         const localVarFormParams: any = {};
+
+        console.log("INSIDE GENERATED CODE");
+        console.log(localVarPath);
+        console.log(localVarQueryParameters);
+        console.log(localVarHeaderParams);
+        console.log(localVarFormParams);
 
         // verify required parameter 'authorization' is not null or undefined
         if (authorization === null || authorization === undefined) {
@@ -146,7 +152,7 @@ export class V1beta2ActionManagementApi {
                 localVarRequestOptions.form = localVarFormParams;
             }
         }
-        return new Promise<{ response: http.ClientResponse; body: Action }>((resolve, reject) => {
+        return new Promise<{ response: http.IncomingMessage; body: Action }>((resolve, reject) => {
             localVarRequest(localVarRequestOptions, (error, response, body) => {
                 if (error) {
                     reject(error);
@@ -177,7 +183,7 @@ export class V1beta2ActionManagementApi {
         authorization: string,
         tenant: string,
         options: { headers: { [name: string]: string } } = { headers: {} }
-    ): Promise<{ response: http.ClientResponse; body?: any }> {
+    ): Promise<{ response: http.IncomingMessage; body?: any }> {
         const localVarPath =
             this.basePath +
             '/{tenant}/action/v1beta2/actions/{action_name}'
@@ -231,7 +237,7 @@ export class V1beta2ActionManagementApi {
                 localVarRequestOptions.form = localVarFormParams;
             }
         }
-        return new Promise<{ response: http.ClientResponse; body?: any }>((resolve, reject) => {
+        return new Promise<{ response: http.IncomingMessage; body?: any }>((resolve, reject) => {
             localVarRequest(localVarRequestOptions, (error, response, body) => {
                 if (error) {
                     reject(error);
@@ -261,7 +267,7 @@ export class V1beta2ActionManagementApi {
         authorization: string,
         tenant: string,
         options: { headers: { [name: string]: string } } = { headers: {} }
-    ): Promise<{ response: http.ClientResponse; body: Action }> {
+    ): Promise<{ response: http.IncomingMessage; body: Action }> {
         const localVarPath =
             this.basePath +
             '/{tenant}/action/v1beta2/actions/{action_name}'
@@ -315,7 +321,7 @@ export class V1beta2ActionManagementApi {
                 localVarRequestOptions.form = localVarFormParams;
             }
         }
-        return new Promise<{ response: http.ClientResponse; body: Action }>((resolve, reject) => {
+        return new Promise<{ response: http.IncomingMessage; body: Action }>((resolve, reject) => {
             localVarRequest(localVarRequestOptions, (error, response, body) => {
                 if (error) {
                     reject(error);
@@ -348,7 +354,7 @@ export class V1beta2ActionManagementApi {
         authorization: string,
         tenant: string,
         options: { headers: { [name: string]: string } } = { headers: {} }
-    ): Promise<{ response: http.ClientResponse; body: ActionResult }> {
+    ): Promise<{ response: http.IncomingMessage; body: ActionResult }> {
         const localVarPath =
             this.basePath +
             '/{tenant}/action/v1beta2/actions/{action_name}/status/{status_id}'
@@ -411,7 +417,7 @@ export class V1beta2ActionManagementApi {
             }
         }
         return new Promise<{
-            response: http.ClientResponse;
+            response: http.IncomingMessage;
             body: ActionResult;
         }>((resolve, reject) => {
             localVarRequest(localVarRequestOptions, (error, response, body) => {
@@ -442,7 +448,7 @@ export class V1beta2ActionManagementApi {
         authorization: string,
         tenant: string,
         options: { headers: { [name: string]: string } } = { headers: {} }
-    ): Promise<{ response: http.ClientResponse; body: Action[] }> {
+    ): Promise<{ response: http.IncomingMessage; body: Action[] }> {
         const localVarPath =
             this.basePath +
             '/{tenant}/action/v1beta2/actions'.replace(
@@ -491,7 +497,7 @@ export class V1beta2ActionManagementApi {
             }
         }
         return new Promise<{
-            response: http.ClientResponse;
+            response: http.IncomingMessage;
             body: Action[];
         }>((resolve, reject) => {
             localVarRequest(localVarRequestOptions, (error, response, body) => {
@@ -526,7 +532,7 @@ export class V1beta2ActionManagementApi {
         tenant: string,
         actionMutable: ActionMutable,
         options: { headers: { [name: string]: string } } = { headers: {} }
-    ): Promise<{ response: http.ClientResponse; body: Action }> {
+    ): Promise<{ response: http.IncomingMessage; body: Action }> {
         const localVarPath =
             this.basePath +
             '/{tenant}/action/v1beta2/actions/{action_name}'
@@ -588,7 +594,7 @@ export class V1beta2ActionManagementApi {
                 localVarRequestOptions.form = localVarFormParams;
             }
         }
-        return new Promise<{ response: http.ClientResponse; body: Action }>((resolve, reject) => {
+        return new Promise<{ response: http.IncomingMessage; body: Action }>((resolve, reject) => {
             localVarRequest(localVarRequestOptions, (error, response, body) => {
                 if (error) {
                     reject(error);
