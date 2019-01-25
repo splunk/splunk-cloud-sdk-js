@@ -4,8 +4,11 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
-import { V1beta2ActionManagementApi } from '../generated_api/action/api/v1beta2ActionManagementApi';
-import { Action as wrapper_action } from '../generated_api/action/model/action';
+import { V1beta2ActionManagementApi } from '../generated_api/action/api'
+import { 
+    Action as wrapper_action,
+    EmailAction as wrapper_email_action
+} from '../generated_api/action/model/models';
 import BaseApiService from './baseapiservice';
 import { ACTION_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
@@ -31,13 +34,16 @@ export class ActionService extends BaseApiService {
      * @param name name of the action
      * @return Promise of an action
      */
-    public getAction = (name: ActionBase['name']): Promise<Action> => {
-        return this.client
-            .get(
-                SERVICE_CLUSTER_MAPPING.action,
-                this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name])
-            )
-            .then(response => response.body as Action);
+    public getAction = (name: ActionBase['name']): Promise<wrapper_action> => {
+        const url = this.client.getURLS().api;
+        const authorizationToken = this.client.getToken();
+        const tenant = this.client.getTenant() || '';
+        const requestOptions = { headers: {
+            Authorization: `Bearer ${authorizationToken}`,
+        } };
+
+        const wrapperClient = new V1beta2ActionManagementApi(url);
+        return wrapperClient.getAction(name, authorizationToken, tenant, requestOptions);
     }
 
     /**
@@ -59,34 +65,16 @@ export class ActionService extends BaseApiService {
      * @param action input action
      * @return Promise of an action
      */
-    // public createAction = (action: Action): Promise<Action> => {
-    public createAction = (action: wrapper_action): Promise<wrapper_action> => {
+    public createAction = (action: wrapper_action | wrapper_email_action): Promise<wrapper_action> => {
         const url = this.client.getURLS().api;
         const authorizationToken = this.client.getToken();
         const tenant = this.client.getTenant() || '';
         const requestOptions = { headers: {
             Authorization: `Bearer ${authorizationToken}`,
         } };
-
         const wrapperClient = new V1beta2ActionManagementApi(url);
 
-        console.log("========================================================");
-        console.log("PRINTING ACTION CREATION");
-        console.log("url: " + url);
-        console.log("authorizationToken: " + authorizationToken);
-        console.log("tenant: " + tenant);
-        console.log("requestOptions: " + requestOptions);
-
-
-        return wrapperClient.createAction(authorizationToken, tenant, action, requestOptions);
-
-        // return this.client
-        //     .post(
-        //         SERVICE_CLUSTER_MAPPING.action,
-        //         this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']),
-        //         action
-        //     )
-        //     .then(response => response.body as Action);
+        return wrapperClient.createAction(authorizationToken, tenant, action as wrapper_action, requestOptions);
     }
 
     /**
