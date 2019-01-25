@@ -83,14 +83,24 @@ export class ActionService extends BaseApiService {
      * @param action action updates
      * @return Promise of an action
      */
-    public updateAction = (name: ActionBase['name'], action: Partial<Action>): Promise<Action> => {
-        return this.client
-            .patch(
-                SERVICE_CLUSTER_MAPPING.action,
-                this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]),
-                action
-            )
-            .then(response => response.body as Action);
+    public updateAction = (name: ActionBase['name'], action: Partial<wrapper_action>): Promise<Action> => {
+        const url = this.client.getURLS().api;
+        const authorizationToken = this.client.getToken();
+        const tenant = this.client.getTenant() || '';
+        const requestOptions = { headers: {
+            Authorization: `Bearer ${authorizationToken}`,
+        } };
+        const wrapperClient = new V1beta2ActionManagementApi(url);
+
+        return wrapperClient.updateAction(name, authorizationToken, tenant, action as wrapper_action, requestOptions);
+        // ---------------------------------------------------------------------
+        // return this.client
+        //     .patch(
+        //         SERVICE_CLUSTER_MAPPING.action,
+        //         this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]),
+        //         action
+        //     )
+        //     .then(response => response.body as Action);
     }
 
     /**

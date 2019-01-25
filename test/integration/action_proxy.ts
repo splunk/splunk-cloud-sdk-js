@@ -55,7 +55,7 @@ describe('integration tests using action service', () => {
             });
         });
 
-        it('should get an action', () =>{
+        it('should get an action', () => {
             return splunkCloud.action.getAction(emailAction.name).then((response: any) => {
                 const email = response.body as EmailAction;
                 // console.log("RESPONSE")
@@ -70,19 +70,20 @@ describe('integration tests using action service', () => {
             });
         });
 
-        // it('should update actions', () =>
-        //     splunkCloud.action
-        //         .updateAction(emailAction.name, { subjectPart: 'new subject' })
-        //         .then(response => {
-        //             const email = response as EmailAction;
-        //             assert.equal(email.name, emailAction.name);
-        //             assert.equal(email.kind, emailAction.kind);
-        //             assert.equal(email.htmlPart, emailAction.htmlPart);
-        //             assert.equal(email.subjectPart, 'new subject');
-        //             assert.equal(email.textPart, emailAction.textPart);
-        //             assert.equal(email.templateName, emailAction.templateName);
-        //             assert.deepEqual(email.addresses, emailAction.addresses);
-        //         }));
+        it('should update actions', () => {
+            const new_subject = 'new subject'
+            return splunkCloud.action.updateAction(emailAction.name,
+                                                   { subject: new_subject })
+                .then((response: any) => {
+                    const email = response.body as EmailAction;
+                    assert.deepEqual(email.addresses, emailAction.addresses);
+                    assert.equal(email.body, emailAction.body);
+                    assert.equal(email.kind, emailAction.kind);
+                    assert.equal(email.name, emailAction.name);
+                    assert.equal(email.subject, new_subject);
+                    assert.equal(email.title, emailAction.title);
+                })
+        });
 
         it('should delete actions', () =>
             splunkCloud.action.deleteAction(emailAction.name).then(response => {
