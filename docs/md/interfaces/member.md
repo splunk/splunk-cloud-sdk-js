@@ -25,7 +25,7 @@ Represents a member that belongs to a tenant.
 
 ###  addedAt
 
-**● addedAt**: *`Date`*
+**● addedAt**: *`string`*
 
 ___
 <a id="addedby"></a>

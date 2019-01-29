@@ -12,28 +12,12 @@ Permission - Permission on a Role
 
 ### Properties
 
-* [addedAt](permission.md#addedat)
-* [addedBy](permission.md#addedby)
 * [name](permission.md#name)
 
 ---
 
 ## Properties
 
-<a id="addedat"></a>
-
-###  addedAt
-
-**● addedAt**: *`Date`*
-
-___
-<a id="addedby"></a>
-
-###  addedBy
-
-**● addedBy**: *`string`*
-
-___
 <a id="name"></a>
 
 ###  name
