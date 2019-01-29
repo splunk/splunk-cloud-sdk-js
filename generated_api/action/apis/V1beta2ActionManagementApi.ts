@@ -30,37 +30,37 @@ import {
 
 export interface CreateActionRequest {
     tenant: string;
-    authorization: any;
+    authorization: string;
     action: Action;
 }
 
 export interface DeleteActionRequest {
     tenant: string;
-    authorization: any;
+    authorization: string;
     actionName: string;
 }
 
 export interface GetActionRequest {
     tenant: string;
-    authorization: any;
+    authorization: string;
     actionName: string;
 }
 
 export interface GetActionStatusRequest {
     tenant: string;
-    authorization: any;
+    authorization: string;
     actionName: string;
     statusId: string;
 }
 
 export interface GetActionsRequest {
     tenant: string;
-    authorization: any;
+    authorization: string;
 }
 
 export interface UpdateActionRequest {
     tenant: string;
-    authorization: any;
+    authorization: string;
     actionName: string;
     actionMutable: ActionMutable;
 }

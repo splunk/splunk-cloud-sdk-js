@@ -59,11 +59,14 @@ export interface WebhookAction {
     webhookPayload?: string;
 }
 
+/*
 export function WebhookActionFromJSON(json: any): WebhookAction {
     return {
     };
 }
+*/
 
+/*
 export function WebhookActionToJSON(value?: WebhookAction): any {
     if (value === undefined) {
         return undefined;
@@ -71,6 +74,7 @@ export function WebhookActionToJSON(value?: WebhookAction): any {
     return {
     };
 }
+*/
 
 /**
  * @export

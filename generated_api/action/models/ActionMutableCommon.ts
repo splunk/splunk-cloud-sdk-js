@@ -26,12 +26,15 @@ export interface ActionMutableCommon {
     title?: string;
 }
 
+/*
 export function ActionMutableCommonFromJSON(json: any): ActionMutableCommon {
     return {
         'title': !exists(json, 'title') ? undefined : json['title'],
     };
 }
+*/
 
+/*
 export function ActionMutableCommonToJSON(value?: ActionMutableCommon): any {
     if (value === undefined) {
         return undefined;
@@ -40,5 +43,6 @@ export function ActionMutableCommonToJSON(value?: ActionMutableCommon): any {
         'title': value.title,
     };
 }
+*/
 
 

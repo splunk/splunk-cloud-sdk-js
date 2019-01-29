@@ -71,11 +71,14 @@ export interface NotificationPayload {
     time: number;
 }
 
+/*
 export function NotificationPayloadFromJSON(json: any): NotificationPayload {
     return {
     };
 }
+*/
 
+/*
 export function NotificationPayloadToJSON(value?: NotificationPayload): any {
     if (value === undefined) {
         return undefined;
@@ -83,5 +86,6 @@ export function NotificationPayloadToJSON(value?: NotificationPayload): any {
     return {
     };
 }
+*/
 
 

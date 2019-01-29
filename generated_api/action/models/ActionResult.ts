@@ -38,6 +38,7 @@ export interface ActionResult {
     message?: string;
 }
 
+/*
 export function ActionResultFromJSON(json: any): ActionResult {
     return {
         'state': !exists(json, 'state') ? undefined : json['state'],
@@ -45,7 +46,9 @@ export function ActionResultFromJSON(json: any): ActionResult {
         'message': !exists(json, 'message') ? undefined : json['message'],
     };
 }
+*/
 
+/*
 export function ActionResultToJSON(value?: ActionResult): any {
     if (value === undefined) {
         return undefined;
@@ -56,6 +59,7 @@ export function ActionResultToJSON(value?: ActionResult): any {
         'message': value.message,
     };
 }
+*/
 
 /**
  * @export

@@ -24,7 +24,7 @@ import {
 
 export interface TriggerActionRequest {
     tenant: string;
-    authorization: any;
+    authorization: string;
     actionName: string;
     notification: Notification;
 }

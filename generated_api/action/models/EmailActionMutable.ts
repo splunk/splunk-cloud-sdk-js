@@ -50,6 +50,7 @@ export interface EmailActionMutable {
     addresses?: Array<string>;
 }
 
+/*
 export function EmailActionMutableFromJSON(json: any): EmailActionMutable {
     return {
         'subject': !exists(json, 'subject') ? undefined : json['subject'],
@@ -57,7 +58,9 @@ export function EmailActionMutableFromJSON(json: any): EmailActionMutable {
         'addresses': !exists(json, 'addresses') ? undefined : json['addresses'],
     };
 }
+*/
 
+/*
 export function EmailActionMutableToJSON(value?: EmailActionMutable): any {
     if (value === undefined) {
         return undefined;
@@ -68,5 +71,6 @@ export function EmailActionMutableToJSON(value?: EmailActionMutable): any {
         'addresses': value.addresses,
     };
 }
+*/
 
 

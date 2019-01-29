@@ -44,6 +44,7 @@ export interface Notification {
     kind: Notification.KindEnum;
 }
 
+/*
 export function NotificationFromJSON(json: any): Notification {
     return {
         'payload': NotificationPayloadFromJSON(json['payload']),
@@ -51,7 +52,9 @@ export function NotificationFromJSON(json: any): Notification {
         'kind': json['kind'],
     };
 }
+*/
 
+/*
 export function NotificationToJSON(value?: Notification): any {
     if (value === undefined) {
         return undefined;
@@ -62,6 +65,7 @@ export function NotificationToJSON(value?: Notification): any {
         'kind': value.kind,
     };
 }
+*/
 
 /**
  * @export

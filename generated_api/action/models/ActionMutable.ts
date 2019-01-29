@@ -65,11 +65,14 @@ export interface ActionMutable {
     webhookPayload?: string;
 }
 
+/*
 export function ActionMutableFromJSON(json: any): ActionMutable {
     return {
     };
 }
+*/
 
+/*
 export function ActionMutableToJSON(value?: ActionMutable): any {
     if (value === undefined) {
         return undefined;
@@ -77,5 +80,6 @@ export function ActionMutableToJSON(value?: ActionMutable): any {
     return {
     };
 }
+*/
 
 

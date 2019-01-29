@@ -44,6 +44,7 @@ export interface ServiceError {
     moreInfo?: string;
 }
 
+/*
 export function ServiceErrorFromJSON(json: any): ServiceError {
     return {
         'code': json['code'],
@@ -52,7 +53,9 @@ export function ServiceErrorFromJSON(json: any): ServiceError {
         'moreInfo': !exists(json, 'moreInfo') ? undefined : json['moreInfo'],
     };
 }
+*/
 
+/*
 export function ServiceErrorToJSON(value?: ServiceError): any {
     if (value === undefined) {
         return undefined;
@@ -64,5 +67,6 @@ export function ServiceErrorToJSON(value?: ServiceError): any {
         'moreInfo': value.moreInfo,
     };
 }
+*/
 
 
