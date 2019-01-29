@@ -1,6 +1,6 @@
-[@splunk/cloud-sdk](../README.md) > [FieldType](../enums/fieldtype.md)
+[@splunk/cloud-sdk](../README.md) > [Fieldtype](../enums/fieldtype.md)
 
-# Enumeration: FieldType
+# Enumeration: Fieldtype
 
 ## Index
 
@@ -18,21 +18,21 @@
 
 ###  DIMENSION
 
-**DIMENSION**: 
+**DIMENSION**:  = "D"
 
 ___
 <a id="measure"></a>
 
 ###  MEASURE
 
-**MEASURE**: 
+**MEASURE**:  = "M"
 
 ___
 <a id="unknown"></a>
 
 ###  UNKNOWN
 
-**UNKNOWN**: 
+**UNKNOWN**:  = "U"
 
 ___
 

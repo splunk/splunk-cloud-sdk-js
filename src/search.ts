@@ -24,13 +24,25 @@ function* iterateBatches(func: (s: number, b: number) => Promise<object>, batchS
     }
 }
 
+const _filterObject = (template: {[key: string]: any}, propertiesToRemove: string[]) : object => {
+    const newObj: {[key: string] : { value: any }} = {};
+    for (const key in template) {
+        if (propertiesToRemove.indexOf(key) === -1) {
+            newObj[key] = template[key];
+        }
+    }
+    return newObj;
+};
+
 /**
  * A base for an easy-to-use search interface
  */
 export class Search {
     private client: SearchService;
-    private readonly jobId: string;
+    public readonly jobId: string;
     private isCancelling: boolean;
+    private resultObservableMemo?: Observable<any>;
+    private statusObservableMemo?: Observable<SearchJob>;
     /**
      *
      * @param searchService
@@ -63,7 +75,7 @@ export class Search {
                 if (self.isCancelling && 'code' in err) {
                     const splunkErr = err as SplunkError;
                     if (splunkErr.httpStatusCode === 404) {
-                        throw new SplunkSearchCancelError('Search has been cancelled');
+                        throw new SplunkSearchCancelError('Search has been canceled');
                     } else {
                         throw err;
                     }
@@ -89,18 +101,17 @@ export class Search {
      * @param args
      * @return A list of event objects
      */
-    // TODO: backwardsCompatibleCount
     public getResults = (args: { count?: number, offset?: number } = {}): Promise<object> => {
         const count = args.count = args.count || 30;
         args.offset = args.offset || 0;
         const self = this;
         return self.status()
             .then(async (job: any) => {
-                if (args.offset != null) {
-                    return self.client.getResults(self.jobId, args);
+                if (args.offset !== null) {
+                    return self.client.listResults(self.jobId, args);
                     // .then(response => response.results);
                 }
-                const fetcher = (start: number) => self.client.getResults(self.jobId, (Object as any).assign({}, args, { offset: start }));
+                const fetcher = (start: number) => self.client.listResults(self.jobId, (Object as any).assign({}, args, { offset: start }));
                 const iterator = iterateBatches(fetcher, count, job.eventCount);
                 let results: object[] = [];
                 for (const batch of iterator) {
@@ -121,18 +132,22 @@ export class Search {
      * @return An observable that will pass each result object as it is received
      */
     public resultObservable = (args: ResultObservableOptions = {}): Observable<any> => {
-        const self = this;
-        const pollInterval = args.pollInterval || 500; // Increasing the default
-        return Observable.create((observable: any) => {
-            const promises: any[] = [];
-            self.wait(pollInterval, (job: SearchJob) => {
-                if (job.resultsAvailable && job.resultsAvailable > 0) { // Passes through arguments, so has the same semantics of offset == window
-                    promises.push(self.getResults(args).then(results => observable.next(results)));
-                }
-            }).then(() => {
-                Promise.all(promises).then(() => observable.complete());
+        if (!this.resultObservableMemo) {
+            const self = this;
+            const pollInterval = args.pollInterval || 500;
+            const filteredArgs = _filterObject(args, ['pollInterval']);
+            this.resultObservableMemo = Observable.create((observable: any) => {
+                const promises: Array<Promise<any>> = [];
+                self.wait(pollInterval, (job: SearchJob) => {
+                    if (job.resultsAvailable && job.resultsAvailable > 0) { // Passes through arguments, so has the same semantics of offset == window
+                        promises.push(self.getResults(filteredArgs).then(results => observable.next(results)));
+                    }
+                }).then(() => {
+                    Promise.all(promises).then(() => observable.complete(), (err) => observable.error(err));
+                });
             });
-        });
+        }
+        return this.resultObservableMemo as Observable<any>;
     }
 
     /**
@@ -142,10 +157,13 @@ export class Search {
      * @return An observable that will periodically poll for status on a job until it is complete
      */
     public statusObservable = (updateInterval: number): Observable<SearchJob> => {
-        return new Observable<SearchJob>((o: any) => {
-            this.wait(updateInterval, (job: SearchJob) => o.next(job))
-                .then(() => o.complete(), (err: Error) => o.error(err));
-        });
+        if (!this.statusObservableMemo) {
+            this.statusObservableMemo = new Observable<SearchJob>((o: any) => {
+                this.wait(updateInterval, (job: SearchJob) => o.next(job))
+                    .then(() => o.complete(), (err: Error) => o.error(err));
+            });
+        }
+        return this.statusObservableMemo;
     }
 }
 
@@ -226,7 +244,7 @@ export class SearchService extends BaseApiService {
     /**
      * Get {search_id} search results.
      */
-    public getResults = (jobId: string, args: FetchResultsRequest = {}): Promise<SearchResults | ResultsNotReadyResponse> => {
+    public listResults = (jobId: string, args: FetchResultsRequest = {}): Promise<SearchResults | ResultsNotReadyResponse> => {
         const queryArgs: QueryArgs = args || {};
         return this.client.get(SERVICE_CLUSTER_MAPPING.search, this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), { query: queryArgs })
             .then(response => {
@@ -238,6 +256,12 @@ export class SearchService extends BaseApiService {
                 }
                 throw new SplunkError({ message: `Unexpected response: ${response.body}` });
             });
+    }
+    /**
+     * @deprecated Deprecated after v0.6.2 please use listResults instead.
+     */
+    public getResults = (jobId: string, args: FetchResultsRequest = {}): Promise<SearchResults | ResultsNotReadyResponse> => {
+        return this.listResults(jobId, args);
     }
 
     /**
@@ -343,54 +367,54 @@ export interface SearchArgs {
  */
 export interface SearchJob {
     /**
-     * Should SplunkD produce all fields (including those not explicitly mentioned in the SPL).
+     * Determine whether the Search service extracts all available fields in the data, including fields not mentioned in the SPL for the search job. Set to 'false' for better search peformance.
      * Default: false
      */
-    extractAllFields: boolean;
+    extractAllFields?: boolean;
 
     /**
      * The number of seconds to run this search before finalizing.
      * Min: 1, Max: 21600, Default: 3600
      */
-    maxTime: number;
+    maxTime?: number;
 
     /**
      * The module to run the search in.
      * Default: ""
      */
-    module: string;
+    module?: string;
 
     /**
-     * parameters for the search job mainly earliest and latest.
+     * Represents parameters on the search job such as 'earliest' and 'latest'.
      */
-    queryParameters: QueryParameters;
+    queryParameters?: QueryParameters;
 
     /**
-     * The SPL query string (in SPLv2)
+     * The SPL query string.
      */
     query: string;
 
     /**
      * Converts a formatted time string from {start,end}_time into UTC seconds. The default value is the ISO-8601 format.
      */
-    timeFormat: string;
+    timeFormat?: string;
 
     /**
      * The System time at the time the search job was created. Specify a time string to set  the absolute time used for any relative time specifier in the search. Defaults to the current system time when the Job is created.
      */
-    timeOfSearch: string;
+    timeOfSearch?: string;
 
-    messages: SearchJobMessage[];
+    messages?: SearchJobMessage[];
 
     /**
      * An estimate of how far through the job is complete
      */
-    percentComplete: number;
+    percentComplete?: number;
 
     /**
      * The number of results Splunkd produced so far
      */
-    resultsAvailable: number;
+    resultsAvailable?: number;
 
     /**
      * The id assigned to the job
@@ -400,7 +424,7 @@ export interface SearchJob {
     /**
      * The current status of the job
      */
-    status: string;
+    status?: string;
 }
 
 /**
@@ -413,6 +437,9 @@ export interface UpdateJob {
     status: 'canceled' | 'finalized';
 }
 
+/*
+ * Response payload of a update job.
+ */
 export interface UpdateJobResponse {
     messages: SearchJobMessage[];
 }
@@ -431,11 +458,17 @@ export enum messageTypes {
     Error = 'ERROR'
 }
 
+/*
+ * The message field in search results or search jobs.
+ */
 export interface SearchJobMessage {
-    text: string;
-    type: messageTypes;
+    text?: string;
+    type?: messageTypes;
 }
 
+/*
+ * Results of a search job
+ */
 export interface SearchResults {
     messages: SearchJobMessage[];
     results: object[];

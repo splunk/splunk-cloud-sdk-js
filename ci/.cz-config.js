@@ -12,6 +12,10 @@ module.exports = {
             value: 'refactor',
             name: 'refactor: A code change that neither fixes a bug nor adds a feature',
         },
+        {
+            value: 'release',
+            name: 'release: An aggregation of code changes to be used for a release',
+        },
         { value: 'perf', name: 'perf:     A code change that improves performance' },
         { value: 'test', name: 'test:     A code change that adds, updates or fixes tests' },
         { value: 'ci', name: 'ci:    A code change in CI pipeline' },

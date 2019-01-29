@@ -20,28 +20,23 @@
   - type: parallel
     name: Integration Tests And Example Tests
     steps:
-        # Integration Tests
-      - name: Integration Tests - Not Gated
+      # Integration Tests
+      - name: Integration Tests - Gated
         service: splunk-cloud-sdk-js-integration
-#        exclude: ^(master|develop)$
-        command: bash -c "allow_failures=1 ./ci/integration/runtests.sh"
+        command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
         encrypted_dockercfg_path: ci/dockercfg.encrypted
-#      - name: Integration Tests - Gated
-#        service: splunk-cloud-sdk-js-integration
-#        tag: ^(master|develop)$
-#        command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
-#        encrypted_dockercfg_path: ci/dockercfg.encrypted
-        # Example Tests
+      # Example Tests
       - name: Example Tests - Not Gated
         service: splunk-cloud-sdk-js-integration
-#        exclude: ^(master|develop)$
+        exclude: ^(master|develop)$
         command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
-#       encrypted_dockercfg_path: ci/dockercfg.encrypted
-#      - name: Example Tests - Gated
-#        service: splunk-cloud-sdk-js-integration
-#        tag: ^(master|develop)$
-#        command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
-#        encrypted_dockercfg_path: ci/dockercfg.encrypted
+        encrypted_dockercfg_path: ci/dockercfg.encrypted
+      - name: Example Tests - Gated
+        service: splunk-cloud-sdk-js-integration
+        tag: ^(master|develop)$
+        command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
+        encrypted_dockercfg_path: ci/dockercfg.encrypted
+      # Whitesource
       - name: WhiteSource Testing
         service: splunk-cloud-sdk-js-whitesource
         command: bash -c "java -jar /opt/whitesource/whitesource-fs-agent.jar \
@@ -50,14 +45,14 @@
                          -apiKey $WHITESOURCE_API_KEY \
                          -productToken $WHITESOURCE_PRODUCT_TOKEN \
                          -userKey $WHITESOURCE_USER_KEY"
-        tag: ^(master|develop)$
+        tag: (?i)^(master$|release.*)
         encrypted_dockercfg_path: ci/dockercfg.encrypted
 
 # - type: serial
-# 	name: Deploy
-# 	steps:
-# 		- name: Deploy to NPM
-# 			service: splunk-cloud-sdk-js-with-stubby
-# 			tag: master
-# 			command: ./ci/publish.sh
-# 			encrypted_dockercfg_path: ci/dockercfg.encrypted
+#   name: Deploy
+#   steps:
+#     - name: Deploy to NPM
+#       service: splunk-cloud-sdk-js-with-stubby
+#       tag: master
+#       command: ./ci/publish.sh
+#       encrypted_dockercfg_path: ci/dockercfg.encrypted

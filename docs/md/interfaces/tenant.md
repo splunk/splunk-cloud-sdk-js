@@ -46,7 +46,7 @@ ___
 
 ###  status
 
-**● status**: *`string`*
+**● status**: *[TenantStatus](../enums/tenantstatus.md)*
 
 ___
 

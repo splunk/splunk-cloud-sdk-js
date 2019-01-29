@@ -1,11 +1,19 @@
-
-const config = require('../config');
-const { SplunkCloud } = require('../../splunk');
-const { assert } = require('chai');
+import { assert } from 'chai';
+import 'mocha';
+import { RoleInput } from '../../identity';
+import { SplunkCloud } from '../../splunk';
+import config from '../config';
 
 const tenantID = config.stagingTenant;
 
-const splunk = new SplunkCloud({'urls': {'api': config.stagingApiHost, 'app': config.stagingAppsHost}, 'tokenSource': config.stagingAuthToken, 'defaultTenant': config.stagingTenant });
+const splunk = new SplunkCloud({
+    urls: {
+        api: config.stagingApiHost,
+        app: config.stagingAppsHost,
+    },
+    tokenSource: config.stagingAuthToken,
+    defaultTenant: tenantID,
+});
 
 // Scenario:
 // Integration test for Tenant endpoints
@@ -14,23 +22,21 @@ const splunk = new SplunkCloud({'urls': {'api': config.stagingApiHost, 'app': co
 // 3. Deletes Roles, Permissions, Groups, Members
 // 4. Delete the newly created test tenant using deleteTenant() method and validate using getUserProfile() method
 describe('integration tests for Identity Tenant Endpoints', () => {
-
-    const testRole = `jssdk_role_${Date.now()}`;
-    const testPerm1 = `jssdk_perm_${Date.now()}`;
+    const testRole = `js_role_${Date.now()}`;
+    const testPerm1 = `${tenantID}:*:jperm1_${Date.now()}`;
 
     const testPermissions = [
-        tenantID + 'catalog',
-        tenantID + 'ingest',
-        tenantID + 'search'
+        `${tenantID}:*:jread_${Date.now()}`,
+        `${tenantID}:*:jwrite_${Date.now()}`,
+        `${tenantID}:*:jsearch_${Date.now()}`
     ];
-    const testGroupName = `mygroup_${Date.now()}`;
-    const testPrincipal = `${process.env.TEST_USERNAME}`;
+    const testGroupName = `jsgroup_${Date.now()}`;
+    const testPrincipal = config.testUsername;
     const testMember = 'test1@splunk.com';
 
     describe('Test Roles and Permissions Management', () => {
-
-        const roleInput = {
-            'name': testRole,
+        const roleInput: RoleInput = {
+            name: testRole,
         };
 
         it('should return the validate info for the principal member', () =>
@@ -40,16 +46,15 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should create a new role', () =>
-            splunk.identity.createRole(roleInput)
-                .then(response => {
-                    assert.equal(response.tenant, tenantID);
-                    assert.equal(response.name, testRole);
-                }));
+            splunk.identity.createRole(roleInput).then(response => {
+                assert.equal(response.tenant, tenantID);
+                assert.equal(response.name, testRole);
+            }));
 
         it('should return the roles for the tenant', () =>
-            splunk.identity.getRoles().then(roles => {
+            splunk.identity.listRoles().then(roles => {
                 assert.typeOf(roles, 'Array', 'data should be an array');
-                assert(roles.indexOf(testRole) > -1);
+                assert.include(roles, testRole);
             }));
 
         it('should return the role for the tenant and role name', () =>
@@ -68,7 +73,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should return the permissions for the tenant and role name', () =>
-            splunk.identity.getRolePermissions(testRole).then(perms => {
+            splunk.identity.listRolePermissions(testRole).then(perms => {
                 assert.typeOf(perms, 'Array', 'data should be an array');
                 assert.equal(perms[0], testPerm1);
             }));
@@ -80,18 +85,13 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 assert.equal(perm.role, testRole);
                 assert.equal(perm.tenant, tenantID);
             }));
-
     });
 
     describe('Test Group Member Management', () => {
         const groupInput = {
-            'name': testGroupName,
-            'roles': [
-                'roles.test_user'
-            ],
-            'members': [
-                'sdk_test@splunk.com'
-            ]
+            name: testGroupName,
+            roles: ['roles.test_user'],
+            members: ['sdk_test@splunk.com'],
         };
 
         it('should create a new Group', () =>
@@ -111,13 +111,13 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should return the Groups for the tenant', () =>
-            splunk.identity.getGroups().then(data => {
+            splunk.identity.listGroups().then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
-                assert(data.indexOf(testGroupName) > -1);
+                assert.include(data, testGroupName);
             }));
 
         it('should add a Role to the Group', () =>
-            splunk.identity.addRoleToGroup(testGroupName, { 'name': testRole }).then(data => {
+            splunk.identity.addRoleToGroup(testGroupName, { name: testRole }).then(data => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.group, testGroupName);
                 assert.equal(data.role, testRole);
@@ -135,13 +135,13 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should return the Groups for the tenant', () =>
-            splunk.identity.getGroupRoles(testGroupName).then(data => {
+            splunk.identity.listGroupRoles(testGroupName).then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
-                assert(data.indexOf(testRole) > -1);
+                assert.include(data, testRole);
             }));
 
         it('should create a Member', () =>
-            splunk.identity.addMember({ 'name': testMember }).then(data => {
+            splunk.identity.addMember({ name: testMember }).then(data => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.name, testMember);
                 assert.equal(data.tenant, tenantID);
@@ -159,16 +159,16 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should return the Members for the tenant', () =>
             splunk.identity.getMembers().then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
-                assert(data.indexOf(testMember) > -1);
+                assert.include(data, testMember);
             }));
 
         it('should delete the member from the tenant and group ignore response', () =>
             splunk.identity.removeGroupMember(testGroupName, testPrincipal).then(response => {
-                assert(true);
+                assert.isEmpty(response);
             }));
 
         it('should add a Member to the Group', () =>
-            splunk.identity.addGroupMember(testGroupName, { 'name': testPrincipal }).then(data => {
+            splunk.identity.addGroupMember(testGroupName, { name: testPrincipal }).then(data => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.group, testGroupName);
                 assert.equal(data.principal, testPrincipal);
@@ -180,55 +180,52 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 assert.typeOf(data, 'Object', 'data should be an object');
                 assert.equal(data.group, testGroupName);
                 assert.equal(data.principal, testPrincipal);
-                assert.equal(data.tenant, tenantID)
+                assert.equal(data.tenant, tenantID);
             }));
 
         it('should retrieve all the Members from the Group', () =>
-            splunk.identity.getGroupMembers(testGroupName).then(data => {
+            splunk.identity.listGroupMembers(testGroupName).then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
-                assert(data.indexOf(testPrincipal) > -1);
+                assert.include(data, testPrincipal);
             }));
 
         it('should retrieve all the Groups for the given Member', () =>
-            splunk.identity.getMemberGroups(testPrincipal).then(data => {
+            splunk.identity.listMemberGroups(testPrincipal).then(data => {
                 assert.typeOf(data, 'Array', 'data should be an array');
-                assert(data.indexOf('tenant.admins') > -1);
-                assert(data.indexOf(testGroupName) > -1);
+                assert.include(data, 'tenant.admins');
+                assert.include(data, testGroupName);
             }));
-
     });
 
     describe('Delete the test roles, permissions, group, tenant and validate - Good and Bad cases', () => {
-
         it('should delete the member from the tenant and group', () =>
             splunk.identity.removeGroupMember(testGroupName, testPrincipal).then(response => {
-                assert(!response);
+                assert.isEmpty(response);
             }));
 
         it('should delete the selected test member', () =>
             splunk.identity.removeMember(testMember).then(response => {
-                assert(!response);
+                assert.isEmpty(response);
             }));
 
         it('should delete the selected test permission from the role', () =>
             splunk.identity.removeRolePermission(testRole, testPerm1).then(response => {
-                assert(!response);
+                assert.isEmpty(response);
             }));
 
         it('should delete the role for the tenant and group', () =>
             splunk.identity.removeGroupRole(testGroupName, testRole).then(response => {
-                assert(!response);
+                assert.isEmpty(response);
             }));
 
         it('should delete the group for the tenant', () =>
             splunk.identity.deleteGroup(testGroupName).then(response => {
-                assert(!response);
+                assert.isEmpty(response);
             }));
 
         it('should delete the test role from the tenant', () =>
             splunk.identity.deleteRole(testRole).then(response => {
-                assert(!response);
+                assert.isEmpty(response);
             }));
     });
-
 });

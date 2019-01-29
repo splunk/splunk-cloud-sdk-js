@@ -11,10 +11,9 @@
 ### Properties
 
 * [created](field.md#created)
-* [dataSetId](field.md#datasetid)
-* [dataType](field.md#datatype)
-* [dataset](field.md#dataset)
-* [fieldType](field.md#fieldtype)
+* [datasetid](field.md#datasetid)
+* [datatype](field.md#datatype)
+* [fieldtype](field.md#fieldtype)
 * [id](field.md#id)
 * [modified](field.md#modified)
 * [name](field.md#name)
@@ -36,37 +35,32 @@
 ___
 <a id="datasetid"></a>
 
-###  dataSetId
+### `<Optional>` datasetid
 
-**● dataSetId**: *`string`*
+**● datasetid**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="datatype"></a>
 
-### `<Optional>` dataType
+### `<Optional>` datatype
 
-**● dataType**: *[DataType](../enums/datatype.md)*
-
-___
-<a id="dataset"></a>
-
-### `<Optional>` dataset
-
-**● dataset**: *[DatasetInfo](datasetinfo.md)*
+**● datatype**: *[Datatype](../enums/datatype.md)*
 
 ___
 <a id="fieldtype"></a>
 
-### `<Optional>` fieldType
+### `<Optional>` fieldtype
 
-**● fieldType**: *[FieldType](../enums/fieldtype.md)*
+**● fieldtype**: *[Fieldtype](../enums/fieldtype.md)*
 
 ___
 <a id="id"></a>
 
-###  id
+### `<Optional>` id
 
-**● id**: *`string`*
+**● id**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="modified"></a>

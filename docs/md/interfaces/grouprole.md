@@ -26,7 +26,7 @@ GroupRole - Represents a role that is assigned to a group
 
 ###  addedAt
 
-**● addedAt**: *`Date`*
+**● addedAt**: *`string`*
 
 ___
 <a id="addedby"></a>
