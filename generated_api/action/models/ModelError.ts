@@ -15,36 +15,36 @@ import { exists } from '../runtime';
 /**
  * 
  * @export
- * @interface ServiceError
+ * @interface ModelError
  */
-export interface ServiceError {
+export interface ModelError {
     /**
      * 
      * @type {string}
-     * @memberof ServiceError
+     * @memberof ModelError
      */
     code: string;
     /**
      * 
      * @type {string}
-     * @memberof ServiceError
+     * @memberof ModelError
      */
     message: string;
     /**
      * 
      * @type {any}
-     * @memberof ServiceError
+     * @memberof ModelError
      */
     details?: any;
     /**
      * 
      * @type {string}
-     * @memberof ServiceError
+     * @memberof ModelError
      */
     moreInfo?: string;
 }
 
-export function ServiceErrorFromJSON(json: any): ServiceError {
+export function ModelErrorFromJSON(json: any): ModelError {
     return {
         'code': json['code'],
         'message': json['message'],
@@ -53,7 +53,7 @@ export function ServiceErrorFromJSON(json: any): ServiceError {
     };
 }
 
-export function ServiceErrorToJSON(value?: ServiceError): any {
+export function ModelErrorToJSON(value?: ModelError): any {
     if (value === undefined) {
         return undefined;
     }

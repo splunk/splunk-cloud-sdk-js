@@ -62,7 +62,6 @@ export interface SplunkEventPayload {
     time: number;
 }
 
-/*
 export function SplunkEventPayloadFromJSON(json: any): SplunkEventPayload {
     return {
         'event': anyFromJSON(json['event']),
@@ -74,9 +73,7 @@ export function SplunkEventPayloadFromJSON(json: any): SplunkEventPayload {
         'time': json['time'],
     };
 }
-*/
 
-/*
 export function SplunkEventPayloadToJSON(value?: SplunkEventPayload): any {
     if (value === undefined) {
         return undefined;
@@ -91,6 +88,5 @@ export function SplunkEventPayloadToJSON(value?: SplunkEventPayload): any {
         'time': value.time,
     };
 }
-*/
 
 

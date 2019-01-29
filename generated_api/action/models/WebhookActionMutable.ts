@@ -44,16 +44,13 @@ export interface WebhookActionMutable {
     webhookPayload?: string;
 }
 
-/*
 export function WebhookActionMutableFromJSON(json: any): WebhookActionMutable {
     return {
         'webhookUrl': !exists(json, 'webhookUrl') ? undefined : json['webhookUrl'],
         'webhookPayload': !exists(json, 'webhookPayload') ? undefined : json['webhookPayload'],
     };
 }
-*/
 
-/*
 export function WebhookActionMutableToJSON(value?: WebhookActionMutable): any {
     if (value === undefined) {
         return undefined;
@@ -63,6 +60,5 @@ export function WebhookActionMutableToJSON(value?: WebhookActionMutable): any {
         'webhookPayload': value.webhookPayload,
     };
 }
-*/
 
 

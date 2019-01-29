@@ -65,14 +65,11 @@ export interface EmailAction {
     addresses?: Array<string>;
 }
 
-/*
 export function EmailActionFromJSON(json: any): EmailAction {
     return {
     };
 }
-*/
 
-/*
 export function EmailActionToJSON(value?: EmailAction): any {
     if (value === undefined) {
         return undefined;
@@ -80,7 +77,6 @@ export function EmailActionToJSON(value?: EmailAction): any {
     return {
     };
 }
-*/
 
 /**
  * @export

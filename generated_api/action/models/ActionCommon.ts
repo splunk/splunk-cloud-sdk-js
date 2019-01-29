@@ -38,7 +38,6 @@ export interface ActionCommon {
     title?: string;
 }
 
-/*
 export function ActionCommonFromJSON(json: any): ActionCommon {
     return {
         'name': json['name'],
@@ -46,9 +45,7 @@ export function ActionCommonFromJSON(json: any): ActionCommon {
         'title': !exists(json, 'title') ? undefined : json['title'],
     };
 }
-*/
 
-/*
 export function ActionCommonToJSON(value?: ActionCommon): any {
     if (value === undefined) {
         return undefined;
@@ -59,7 +56,6 @@ export function ActionCommonToJSON(value?: ActionCommon): any {
         'title': value.title,
     };
 }
-*/
 
 /**
  * @export

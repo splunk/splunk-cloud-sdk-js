@@ -77,14 +77,11 @@ export interface Action {
     webhookPayload?: string;
 }
 
-/*
 export function ActionFromJSON(json: any): Action {
     return {
     };
 }
-*/
 
-/*
 export function ActionToJSON(value?: Action): any {
     if (value === undefined) {
         return undefined;
@@ -92,7 +89,6 @@ export function ActionToJSON(value?: Action): any {
     return {
     };
 }
-*/
 
 /**
  * @export

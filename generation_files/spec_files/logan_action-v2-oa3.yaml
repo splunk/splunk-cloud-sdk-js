@@ -12,6 +12,21 @@ servers:
   description: Action service in playground cluster
 paths:
   /{tenant}/action/v1beta2/actions:
+    parameters:
+      - name: tenant
+        description: Tenant name/identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        example: "wingdings-widgets"
+      - name: Authorization
+        in: header
+        description: Access token provided by the user (obtained from a known identity provider).
+        required: true
+        schema:
+          type: string
+          pattern: '^Bearer .+'
     get:
       summary: Get the list of created action object templates.
       operationId: getActions
@@ -38,7 +53,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/ServiceError"
     post:
       summary: Create an action object template.
       operationId: createAction
@@ -72,7 +87,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/ServiceError"
         401:
           description: Unauthenticated user.
         403:
@@ -84,14 +99,29 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/ServiceError"
         default:
           description: Unexpected error.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/ServiceError"
   /{tenant}/action/v1beta2/actions/{action_name}:
+    parameters:
+      - name: tenant
+        description: Tenant name/identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        example: "wingdings-widgets"
+      - name: Authorization
+        in: header
+        description: Access token provided by the user (obtained from a known identity provider).
+        required: true
+        schema:
+          type: string
+          pattern: '^Bearer .+'
     get:
       summary: Return a specific action object.
       operationId: getAction
@@ -125,7 +155,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/ServiceError"
     post:
       summary: Trigger an action from a notification.
       operationId: triggerAction
@@ -161,7 +191,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/ServiceError"
         422:
           description: The provided fields are invalid.
         default:
@@ -169,7 +199,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/ServiceError"
     patch:
       summary: Update an action template object.
       operationId: updateAction
@@ -209,7 +239,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/ServiceError"
         401:
           description: Unauthenticated user.
         403:
@@ -221,13 +251,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/ServiceError"
         default:
           description: Unexpected error.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/ServiceError"
     delete:
       summary: Delete an action object template.
       operationId: deleteAction
@@ -257,8 +287,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/ServiceError"
   /{tenant}/action/v1beta2/actions/{action_name}/status/{status_id}:
+    parameters:
+      - name: tenant
+        description: Tenant name/identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        example: "wingdings-widgets"
+      - name: Authorization
+        in: header
+        description: Access token provided by the user (obtained from a known identity provider).
+        required: true
+        schema:
+          type: string
+          pattern: '^Bearer .+'
     get:
       summary: Get triggered action's execution status.
       operationId: getActionStatus
@@ -298,7 +343,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/ServiceError"
 
 components:
   parameters:
@@ -481,7 +526,7 @@ components:
       required:
       - webhookUrl
       - message
-    Error:
+    ServiceError:
       required:
       - code
       - message
