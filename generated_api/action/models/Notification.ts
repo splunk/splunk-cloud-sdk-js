@@ -13,9 +13,9 @@
 
 import { exists } from '../runtime';
 import {
-    OneOfSplunkEventPayloadmap,
-    OneOfSplunkEventPayloadmapFromJSON,
-    OneOfSplunkEventPayloadmapToJSON,
+    NotificationPayload,
+    NotificationPayloadFromJSON,
+    NotificationPayloadToJSON,
 } from './';
 
 /**
@@ -26,10 +26,10 @@ import {
 export interface Notification {
     /**
      * 
-     * @type {OneOfSplunkEventPayloadmap}
+     * @type {NotificationPayload}
      * @memberof Notification
      */
-    payload: OneOfSplunkEventPayloadmap;
+    payload: NotificationPayload;
     /**
      * 
      * @type {string}
@@ -46,7 +46,7 @@ export interface Notification {
 
 export function NotificationFromJSON(json: any): Notification {
     return {
-        'payload': OneOfSplunkEventPayloadmapFromJSON(json['payload']),
+        'payload': NotificationPayloadFromJSON(json['payload']),
         'tenant': json['tenant'],
         'kind': json['kind'],
     };
@@ -57,7 +57,7 @@ export function NotificationToJSON(value?: Notification): any {
         return undefined;
     }
     return {
-        'payload': OneOfSplunkEventPayloadmapToJSON(value.payload),
+        'payload': NotificationPayloadToJSON(value.payload),
         'tenant': value.tenant,
         'kind': value.kind,
     };
