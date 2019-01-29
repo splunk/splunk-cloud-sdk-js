@@ -187,17 +187,17 @@ export class ServiceClient {
     private responseHooks: ResponseHook[] = [];
 
     // -------------------------------------------------------------------------
-    // Extra Shit
+    // Extra Stuff
     // -------------------------------------------------------------------------
     public getURLS = () => {
         return this.urls;
-    }
+    };
     public getToken = () => {
         return this.tokenSource();
-    }
+    };
     public getTenant = () => {
         return this.tenant;
-    }
+    };
     // -------------------------------------------------------------------------
 
     /**
@@ -248,14 +248,14 @@ export class ServiceClient {
      */
     public addResponseHook = (hook: ResponseHook) => {
         this.responseHooks.push(hook);
-    }
+    };
 
     /**
      * Clears response hooks from the client
      */
     public clearResponseHooks = () => {
         this.responseHooks = [];
-    }
+    };
 
     private invokeHooks = (response: Response, request: Request): Promise<Response> => {
         return this.responseHooks.reduce((result: Promise<Response>, cb: ResponseHook): Promise<
@@ -287,7 +287,7 @@ export class ServiceClient {
                 return chainResponse;
             });
         }, Promise.resolve(response));
-    }
+    };
 
     /**
      * Builds the URL from a service + endpoint with query encoded in url
@@ -304,7 +304,7 @@ export class ServiceClient {
             return `${serviceCluster}${path}?${queryEncoded}`;
         }
         return `${serviceCluster}${path}`;
-    }
+    };
 
     /**
      * Builds headers required for request to Splunk Cloud (auth, content-type, etc)
@@ -313,7 +313,7 @@ export class ServiceClient {
         // TODO: Cache
 
         const requestParamHeaders: Headers = new Headers({
-            'Authorization': `Bearer ${this.tokenSource()}`,
+            Authorization: `Bearer ${this.tokenSource()}`,
             'Content-Type': ContentType.JSON,
             'Splunk-Client': `${agent.useragent}/${agent.version}`,
         });
@@ -324,7 +324,7 @@ export class ServiceClient {
             });
         }
         return requestParamHeaders;
-    }
+    };
 
     /**
      * Builds a path for a given service call
@@ -349,7 +349,7 @@ export class ServiceClient {
             }
         }
         return path;
-    }
+    };
 
     /**
      * Proxy for fetch that builds URL, applies headers and query string, and invokes hooks
@@ -374,7 +374,7 @@ export class ServiceClient {
         };
         const request = new Request(url, options);
         return fetch(request).then(response => this.invokeHooks(response, request));
-    }
+    };
 
     /**
      * Performs a GET on the Splunk Cloud environment with the supplied path.
@@ -390,7 +390,7 @@ export class ServiceClient {
         opts: RequestOptions = {}
     ): Promise<HTTPResponse> => {
         return this.fetch('GET', cluster, path, opts).then(handleResponse);
-    }
+    };
 
     /**
      * Performs a POST on the Splunk Cloud environment with the supplied path.
@@ -408,7 +408,7 @@ export class ServiceClient {
         opts: RequestOptions = {}
     ): Promise<HTTPResponse> => {
         return this.fetch('POST', cluster, path, opts, data).then(handleResponse);
-    }
+    };
 
     /**
      * Performs a PUT on the Splunk Cloud environment with the supplied path.
@@ -426,7 +426,7 @@ export class ServiceClient {
         opts: RequestOptions = {}
     ): Promise<HTTPResponse> => {
         return this.fetch('PUT', cluster, path, opts, data).then(handleResponse);
-    }
+    };
 
     /**
      * Performs a PATCH on the Splunk Cloud environment with the supplied path.
@@ -444,7 +444,7 @@ export class ServiceClient {
         opts: RequestOptions = {}
     ): Promise<HTTPResponse> => {
         return this.fetch('PATCH', cluster, path, opts, data).then(handleResponse);
-    }
+    };
 
     /**
      * Performs a DELETE on the Splunk Cloud environment with the supplied path.
@@ -462,7 +462,7 @@ export class ServiceClient {
         opts: RequestOptions = {}
     ): Promise<HTTPResponse> => {
         return this.fetch('DELETE', cluster, path, opts, data).then(handleResponse);
-    }
+    };
 }
 
 type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';

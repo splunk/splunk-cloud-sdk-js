@@ -1,0 +1,1193 @@
+openapi: 3.0.0
+info:
+  title: Identity and Access Control
+  version: "1.0"
+  description: Service for authenticating and authorizing users of Splunk APIs
+security:
+  - Bearer:
+      []
+paths:
+  /system/identity/v1/principals:
+    get:
+      operationId: listPrincipals
+      description: Returns the list of principals known to IAC
+      x-authz-scope: identity.principals.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+    post:
+      operationId: createPrincipal
+      description: Create a new principal
+      x-authz-scope: identity.principals.create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - kind
+              properties:
+                name:
+                  type: string
+                  minLength: 2
+                  x-case-insensitive: true
+                kind:
+                  type: string
+                  enum:
+                    - user
+                    - service_account
+        description: New principal to add to the system
+        required: true
+      responses:
+        "201":
+          description: Principal successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Principal"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "409":
+          description: Principal already exists
+  "/system/identity/v1/principals/{principal}":
+    parameters:
+      - $ref: "#/components/parameters/principal"
+    get:
+      operationId: getPrincipal
+      description: Returns the principal details
+      x-authz-scope: identity.principals.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Principal"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    delete:
+      operationId: deletePrincipal
+      description: Deletes a principal
+      x-authz-scope: identity.principals.delete
+      responses:
+        "204":
+          description: Principal successfully deleted
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+  /system/identity/v1/tenants:
+    get:
+      operationId: listTenants
+      description: Returns the list of tenants in the system
+      x-authz-scope: identity.tenants.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+    post:
+      operationId: createTenant
+      description: Creates a tenant and default roles/groups
+      x-authz-scope: identity.tenants.create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  $ref: "#/components/schemas/TenantName"
+        description: New tenant to create
+        required: true
+      responses:
+        "201":
+          description: Tenant successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tenant"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "405":
+          description: Operation is disallowed
+        "409":
+          description: Tenant already exists
+        "422":
+          description: Unprocessable entity in request
+  "/system/identity/v1/tenants/{tenant}":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+    get:
+      operationId: getTenant
+      description: Returns the tenant details
+      x-authz-scope: identity.tenants.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tenant"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    delete:
+      operationId: deleteTenant
+      description: Deletes a tenant
+      x-authz-scope: identity.tenants.delete
+      responses:
+        "202":
+          description: Delete accepted
+        "204":
+          description: Successfully deleted
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "405":
+          description: Operation is disallowed
+        "423":
+          description: Resource locked
+  "/{tenant}/identity/v1/validate":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+    get:
+      operationId: validateToken
+      description: >
+        Validates the access token obtained from authorization header and
+        returns the principal name and tenant memberships
+      responses:
+        "200":
+          description: Token is valid
+          headers:
+            Cache-Control:
+              description: no-store, specifies that clients should not cache this response
+              schema:
+                type: string
+            X-Internal-Cache-Control:
+              description: max-age=, specifies the time a token can be cached.
+                This is meant for internal services only
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateInfo"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated request
+        "404":
+          description: Resource not found
+  "/{tenant}/identity/v1/members":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+    get:
+      operationId: listMembers
+      description: Returns the list of members in the given tenant
+      x-authz-scope: identity.members.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    post:
+      operationId: addMember
+      description: Adds a member to the given tenant
+      x-authz-scope: identity.members.write
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  minLength: 2
+                  x-case-insensitive: true
+        description: Member to associate with a tenant
+        required: true
+      responses:
+        "201":
+          description: Member successfully added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "423":
+          description: Resource locked
+  "/{tenant}/identity/v1/members/{member}":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+      - $ref: "#/components/parameters/member"
+    get:
+      operationId: getMember
+      description: Get a member of the given tenant
+      x-authz-scope: identity.members.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Member"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    delete:
+      operationId: removeMember
+      description: Removes a member from the given tenant
+      x-authz-scope: identity.members.write
+      responses:
+        "204":
+          description: Member successfully removed
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "423":
+          description: Resource locked
+  "/{tenant}/identity/v1/members/{member}/groups":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+      - $ref: "#/components/parameters/member"
+    get:
+      operationId: listMemberGroups
+      description: Returns the list of groups a member belongs to within a tenant
+      x-authz-scope: identity.members.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+  "/{tenant}/identity/v1/members/{member}/roles":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+      - $ref: "#/components/parameters/member"
+    get:
+      operationId: listMemberRoles
+      description: |
+        Returns the set of roles the member possesses within the tenant
+      x-authz-scope: identity.members.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+  "/{tenant}/identity/v1/members/{member}/permissions":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+      - $ref: "#/components/parameters/member"
+    get:
+      operationId: listMemberPermissions
+      description: |
+        Returns the set of permissions granted to the member within the tenant
+      x-authz-scope: identity.members.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+  "/{tenant}/identity/v1/roles":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+    get:
+      operationId: listRoles
+      description: Get all roles for the given tenant
+      x-authz-scope: identity.roles.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    post:
+      operationId: createRole
+      description: Creates a new authorization role in the given tenant
+      x-authz-scope: identity.roles.write
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  minLength: 4
+                  pattern: ^[_a-z][_\.a-z0-9]*$
+        description: Role definition
+        required: true
+      responses:
+        "201":
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Role"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "409":
+          description: Role already exists
+        "423":
+          description: Resource locked
+  "/{tenant}/identity/v1/roles/{role}":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+      - $ref: "#/components/parameters/role"
+    get:
+      operationId: getRole
+      description: Get a role for the given tenant
+      x-authz-scope: identity.roles.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Role"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    delete:
+      operationId: deleteRole
+      description: Deletes a defined role for the given tenant
+      x-authz-scope: identity.roles.write
+      responses:
+        "204":
+          description: Successfully deleted
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "423":
+          description: Resource locked
+  "/{tenant}/identity/v1/roles/{role}/permissions":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+      - $ref: "#/components/parameters/role"
+    get:
+      operationId: listRolePermissions
+      description: Gets permissions for a role in this tenant
+      x-authz-scope: identity.roles.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    post:
+      operationId: addRolePermission
+      description: Adds permissions to a role in this tenant
+      x-authz-scope: identity.roles.write
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              x-case-insensitive: true
+              minLength: 4
+        description: Permission to add to a role
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RolePermission"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "422":
+          description: Unprocessable entity in request
+        "423":
+          description: Resource locked
+  "/{tenant}/identity/v1/roles/{role}/permissions/{permission}":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+      - $ref: "#/components/parameters/role"
+      - $ref: "#/components/parameters/permission"
+    get:
+      operationId: getRolePermission
+      description: Gets a permission
+      x-authz-scope: identity.roles.read
+      responses:
+        "200":
+          description: Permission successfully added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RolePermission"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    delete:
+      operationId: removeRolePermission
+      description: Removes a permission from the role
+      x-authz-scope: identity.roles.write
+      responses:
+        "204":
+          description: Permission successfully removed
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "423":
+          description: Resource locked
+  "/{tenant}/identity/v1/groups":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+    get:
+      operationId: listGroups
+      description: List groups that exist in the tenant
+      x-authz-scope: identity.groups.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+    post:
+      operationId: createGroup
+      description: Creates a new group in the given tenant
+      x-authz-scope: identity.groups.write
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  minLength: 4
+                  pattern: ^[_a-z][_\.a-z0-9]*$
+        description: Group definition
+        required: true
+      responses:
+        "201":
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "409":
+          description: Group already exists
+        "423":
+          description: Resource locked
+  "/{tenant}/identity/v1/groups/{group}":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+      - $ref: "#/components/parameters/group"
+    get:
+      operationId: getGroup
+      description: Defines a group in the given tenant
+      x-authz-scope: identity.groups.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    delete:
+      operationId: deleteGroup
+      description: Deletes a group in the given tenant
+      x-authz-scope: identity.groups.write
+      responses:
+        "204":
+          description: Group successfully deleted
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "423":
+          description: Resource locked
+  "/{tenant}/identity/v1/groups/{group}/roles":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+      - $ref: "#/components/parameters/group"
+    get:
+      operationId: listGroupRoles
+      description: Lists the roles attached to the group
+      x-authz-scope: identity.groups.read
+      responses:
+        "200":
+          description: The request succeeded
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    post:
+      operationId: addGroupRole
+      description: Adds a role to the group
+      x-authz-scope: identity.groups.write
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  x-case-insensitive: true
+                  minLength: 4
+        description: Role to add to a group
+        required: true
+      responses:
+        "201":
+          description: The role has been added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupRole"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "409":
+          description: Role already exists
+        "423":
+          description: Resource locked
+  "/{tenant}/identity/v1/groups/{group}/roles/{role}":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+      - $ref: "#/components/parameters/group"
+      - $ref: "#/components/parameters/role"
+    get:
+      operationId: getGroupRole
+      description: Returns group-role relationship details
+      x-authz-scope: identity.groups.read
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupRole"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    delete:
+      operationId: removeGroupRole
+      description: Removes the role from the group
+      x-authz-scope: identity.groups.write
+      responses:
+        "204":
+          description: Role successfully removed
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "423":
+          description: Resource locked
+  "/{tenant}/identity/v1/groups/{group}/members":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+      - $ref: "#/components/parameters/group"
+    get:
+      operationId: listGroupMembers
+      description: Lists the members attached to the group
+      x-authz-scope: identity.groups.read
+      responses:
+        "200":
+          description: The request succeeded
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    post:
+      operationId: addGroupMember
+      description: Adds a member to the group
+      x-authz-scope: identity.groups.write
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  x-case-insensitive: true
+                  minLength: 2
+        description: Member to add to a group
+        required: true
+      responses:
+        "201":
+          description: The member has been added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupMember"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "409":
+          description: Member already exists
+        "423":
+          description: Resource locked
+  "/{tenant}/identity/v1/groups/{group}/members/{member}":
+    parameters:
+      - $ref: "#/components/parameters/tenant"
+      - $ref: "#/components/parameters/group"
+      - $ref: "#/components/parameters/member"
+    get:
+      operationId: getGroupMember
+      description: Returns group-member relationship details
+      x-authz-scope: identity.groups.read
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupMember"
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+    delete:
+      operationId: removeGroupMember
+      description: Removes the member from the group
+      x-authz-scope: identity.groups.write
+      responses:
+        "204":
+          description: Successfully removed
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "403":
+          description: Unauthorized operation
+        "404":
+          description: Resource not found
+        "423":
+          description: Resource locked
+  /system/identity/v1/token:
+    post:
+      x-auth-required: false
+      security:
+        []
+      operationId: createAuthToken
+      description: Create an API token
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                grant_type:
+                  type: string
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+              required:
+                - grant_type
+                - client_id
+                - client_secret
+      responses:
+        "200":
+          description: Token created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+        "400":
+          description: Malformed request
+        "401":
+          description: Unauthenticated user
+        "500":
+          description: Internal server error
+servers:
+  - url: /
+components:
+  parameters:
+    group:
+      description: The group name.
+      name: group
+      in: path
+      x-case-insensitive: true
+      required: true
+      schema:
+        type: string
+    member:
+      description: The member name.
+      name: member
+      in: path
+      x-case-insensitive: true
+      required: true
+      schema:
+        type: string
+        minLength: 2
+    permission:
+      description: The permission string.
+      name: permission
+      in: path
+      x-case-insensitive: true
+      required: true
+      schema:
+        type: string
+    principal:
+      description: The principal name.
+      name: principal
+      in: path
+      x-case-insensitive: true
+      required: true
+      schema:
+        type: string
+        minLength: 2
+    role:
+      description: The role name.
+      name: role
+      in: path
+      x-case-insensitive: true
+      required: true
+      schema:
+        type: string
+        minLength: 4
+    tenant:
+      description: The tenant name.
+      name: tenant
+      in: path
+      required: true
+      schema:
+        type: string
+        minLength: 4
+        maxLength: 36
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header
+  schemas:
+    ValidateInfo:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 4
+          maxLength: 36
+    TenantName:
+      type: string
+      minLength: 4
+      maxLength: 36
+      pattern: ^[a-z][a-z0-9]*$
+    Tenant:
+      type: object
+      required:
+        - name
+        - status
+        - createdAt
+        - createdBy
+      properties:
+        name:
+          $ref: "#/components/schemas/TenantName"
+        status:
+          $ref: "#/components/schemas/TenantStatus"
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+    TenantStatus:
+      type: string
+      enum:
+        - provisioning
+        - failed
+        - ready
+        - deleting
+        - deleted
+    Principal:
+      type: object
+      required:
+        - name
+        - kind
+        - tenants
+        - createdAt
+        - createdBy
+      properties:
+        name:
+          type: string
+        kind:
+          type: string
+          enum:
+            - user
+            - service_account
+        tenants:
+          type: array
+          items:
+            $ref: "#/components/schemas/TenantName"
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        profile:
+          type: object
+    Member:
+      description: Represents a member that belongs to a tenant.
+      type: object
+      required:
+        - tenant
+        - name
+        - addedAt
+        - addedBy
+      properties:
+        tenant:
+          type: string
+        name:
+          type: string
+        addedAt:
+          description: When the principal was added to the tenant.
+          type: string
+          format: date-time
+        addedBy:
+          type: string
+    Role:
+      type: object
+      required:
+        - tenant
+        - name
+        - createdAt
+        - createdBy
+      properties:
+        tenant:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+    RolePermission:
+      type: object
+      required:
+        - tenant
+        - role
+        - permission
+        - addedAt
+        - addedBy
+      properties:
+        tenant:
+          type: string
+        role:
+          type: string
+        permission:
+          type: string
+        addedAt:
+          type: string
+          format: date-time
+        addedBy:
+          type: string
+    Group:
+      type: object
+      required:
+        - tenant
+        - name
+        - createdAt
+        - createdBy
+      properties:
+        tenant:
+          type: string
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+    GroupRole:
+      description: Represents a role that is assigned to a group
+      type: object
+      required:
+        - tenant
+        - group
+        - role
+        - addedAt
+        - addedBy
+      properties:
+        tenant:
+          type: string
+        group:
+          type: string
+        role:
+          type: string
+        addedAt:
+          type: string
+          format: date-time
+        addedBy:
+          type: string
+    GroupMember:
+      description: Represents a member that belongs to a group
+      type: object
+      required:
+        - tenant
+        - group
+        - principal
+        - addedAt
+        - addedBy
+      properties:
+        tenant:
+          type: string
+        group:
+          type: string
+        principal:
+          type: string
+        addedAt:
+          type: string
+          format: date-time
+        addedBy:
+          type: string
