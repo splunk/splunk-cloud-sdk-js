@@ -64,6 +64,8 @@ fi
 print_header_line
 echo "Please complete these steps in order to finish the release!"
 echo ""
+echo "UPDATE the version number in package.json"
+echo ""
 echo "Please create a pull request from '$BRANCH_NAME' targeting 'master'"
 echo ""
 echo "AFTER the the pull request has been merged go to https://github.com/splunk/splunk-cloud-sdk-js/releases/new and create a release"
