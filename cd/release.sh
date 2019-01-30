@@ -57,6 +57,7 @@ then
     echo "Pushing branch $BRANCH_NAME ..."
     git push --set-upstream origin $BRANCH_NAME
 else
+    echo "============================WARNING============================"
     echo "No changes pushed, branch $BRANCH_NAME only created locally ..."
 fi
 
