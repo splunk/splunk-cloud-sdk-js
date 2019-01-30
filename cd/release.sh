@@ -4,7 +4,7 @@ print_header_line() {
     echo "\n------------------------------------------------------------"
 }
 
-echo "Input the version to release omitting the leading 'v' (e.g. 0.7.1) followed by [ENTER]:"
+echo "Input the version to release (e.g. 0.7.1) followed by [ENTER]:"
 read NEW_VERSION
 
 print_header_line
