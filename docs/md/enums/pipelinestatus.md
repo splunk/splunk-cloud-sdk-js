@@ -10,6 +10,7 @@ PipelineStatus - The status of a pipeline
 
 * [Activated](pipelinestatus.md#activated)
 * [Created](pipelinestatus.md#created)
+* [Deactivated](pipelinestatus.md#deactivated)
 
 ---
 
@@ -27,6 +28,13 @@ ___
 ###  Created
 
 **Created**:  = "CREATED"
+
+___
+<a id="deactivated"></a>
+
+###  Deactivated
+
+**Deactivated**:  = "Deactivated"
 
 ___
 

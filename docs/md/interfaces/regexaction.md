@@ -4,20 +4,22 @@
 
 ## Hierarchy
 
-**RegexAction**
+ `Action`
+
+**↳ RegexAction**
 
 ## Index
 
 ### Properties
 
 * [created](regexaction.md#created)
-* [createdBy](regexaction.md#createdby)
+* [createdby](regexaction.md#createdby)
 * [field](regexaction.md#field)
 * [id](regexaction.md#id)
 * [kind](regexaction.md#kind)
 * [limit](regexaction.md#limit)
 * [modified](regexaction.md#modified)
-* [modifiedBy](regexaction.md#modifiedby)
+* [modifiedby](regexaction.md#modifiedby)
 * [owner](regexaction.md#owner)
 * [pattern](regexaction.md#pattern)
 * [ruleid](regexaction.md#ruleid)
@@ -29,30 +31,34 @@
 
 <a id="created"></a>
 
-###  created
+### `<Optional>` created
 
-**● created**: *`string`*
+**● created**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="createdby"></a>
 
-###  createdBy
+### `<Optional>` createdby
 
-**● createdBy**: *`string`*
+**● createdby**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="field"></a>
 
-###  field
+### `<Optional>` field
 
-**● field**: *[Field](field.md)*
+**● field**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="id"></a>
 
-###  id
+### `<Optional>` id
 
-**● id**: *`string`*
+**● id**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="kind"></a>
@@ -71,23 +77,26 @@ ___
 ___
 <a id="modified"></a>
 
-###  modified
+### `<Optional>` modified
 
-**● modified**: *`string`*
+**● modified**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="modifiedby"></a>
 
-###  modifiedBy
+### `<Optional>` modifiedby
 
-**● modifiedBy**: *`string`*
+**● modifiedby**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="owner"></a>
 
-###  owner
+### `<Optional>` owner
 
-**● owner**: *`string`*
+**● owner**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="pattern"></a>
@@ -99,16 +108,18 @@ ___
 ___
 <a id="ruleid"></a>
 
-###  ruleid
+### `<Optional>` ruleid
 
-**● ruleid**: *`string`*
+**● ruleid**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="version"></a>
 
-###  version
+### `<Optional>` version
 
-**● version**: *`number`*
+**● version**: * `undefined` &#124; `number`
+*
 
 ___
 

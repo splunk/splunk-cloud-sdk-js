@@ -4,7 +4,9 @@
 
 ## Hierarchy
 
-**AliasAction**
+ `Action`
+
+**↳ AliasAction**
 
 ## Index
 
@@ -12,12 +14,12 @@
 
 * [alias](aliasaction.md#alias)
 * [created](aliasaction.md#created)
-* [createdBy](aliasaction.md#createdby)
+* [createdby](aliasaction.md#createdby)
 * [field](aliasaction.md#field)
 * [id](aliasaction.md#id)
 * [kind](aliasaction.md#kind)
 * [modified](aliasaction.md#modified)
-* [modifiedBy](aliasaction.md#modifiedby)
+* [modifiedby](aliasaction.md#modifiedby)
 * [owner](aliasaction.md#owner)
 * [ruleid](aliasaction.md#ruleid)
 * [version](aliasaction.md#version)
@@ -35,30 +37,33 @@
 ___
 <a id="created"></a>
 
-###  created
+### `<Optional>` created
 
-**● created**: *`string`*
+**● created**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="createdby"></a>
 
-###  createdBy
+### `<Optional>` createdby
 
-**● createdBy**: *`string`*
+**● createdby**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="field"></a>
 
 ###  field
 
-**● field**: *[Field](field.md)*
+**● field**: *`string`*
 
 ___
 <a id="id"></a>
 
-###  id
+### `<Optional>` id
 
-**● id**: *`string`*
+**● id**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="kind"></a>
@@ -70,37 +75,42 @@ ___
 ___
 <a id="modified"></a>
 
-###  modified
+### `<Optional>` modified
 
-**● modified**: *`string`*
+**● modified**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="modifiedby"></a>
 
-###  modifiedBy
+### `<Optional>` modifiedby
 
-**● modifiedBy**: *`string`*
+**● modifiedby**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="owner"></a>
 
-###  owner
+### `<Optional>` owner
 
-**● owner**: *`string`*
+**● owner**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="ruleid"></a>
 
-###  ruleid
+### `<Optional>` ruleid
 
-**● ruleid**: *`string`*
+**● ruleid**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="version"></a>
 
-###  version
+### `<Optional>` version
 
-**● version**: *`number`*
+**● version**: * `undefined` &#124; `number`
+*
 
 ___
 

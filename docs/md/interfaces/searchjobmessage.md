@@ -19,14 +19,15 @@
 
 <a id="text"></a>
 
-###  text
+### `<Optional>` text
 
-**● text**: *`string`*
+**● text**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="type"></a>
 
-###  type
+### `<Optional>` type
 
 **● type**: *[messageTypes](../enums/messagetypes.md)*
 

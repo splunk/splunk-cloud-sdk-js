@@ -26,7 +26,7 @@ RolePermission - The object that represents a tenant role permission
 
 ###  addedAt
 
-**● addedAt**: *`Date`*
+**● addedAt**: *`string`*
 
 ___
 <a id="addedby"></a>

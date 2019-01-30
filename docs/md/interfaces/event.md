@@ -38,7 +38,7 @@ ___
 
 ###  body
 
-**● body**: * `string` &#124; `any`
+**● body**: * [`any`] &#124; `number` &#124; `string` &#124; `any`
 *
 
 JSON object for the event.
