@@ -7,7 +7,6 @@ import {
     EmailAction,
     Notification,
     NotificationKind,
-    SNSAction,
     WebhookAction,
 } from '../../action';
 import { SplunkCloud } from '../../splunk';
@@ -29,10 +28,8 @@ describe('integration tests using action service', () => {
         const emailAction: EmailAction = {
             name: `crudemail_${Date.now()}`,
             kind: ActionKind.email,
-            htmlPart: '<html><h1>The HTML</h1></html>',
-            subjectPart: 'The Subject',
-            textPart: 'The Text',
-            templateName: 'template1000',
+            body: '<html><h1>The HTML</h1></html>',
+            subject: 'The Subject',
             addresses: ['test1@splunk.com', 'test2@splunk.com'],
         };
 
@@ -41,10 +38,8 @@ describe('integration tests using action service', () => {
                 const email = response as EmailAction;
                 assert.equal(email.name, emailAction.name);
                 assert.equal(email.kind, emailAction.kind);
-                assert.equal(email.htmlPart, emailAction.htmlPart);
-                assert.equal(email.subjectPart, emailAction.subjectPart);
-                assert.equal(email.textPart, emailAction.textPart);
-                assert.equal(email.templateName, emailAction.templateName);
+                assert.equal(email.body, emailAction.body);
+                assert.equal(email.subject, emailAction.subject);
                 assert.deepEqual(email.addresses, emailAction.addresses);
             }));
 
@@ -53,24 +48,20 @@ describe('integration tests using action service', () => {
                 const email = response as EmailAction;
                 assert.equal(email.name, emailAction.name);
                 assert.equal(email.kind, emailAction.kind);
-                assert.equal(email.htmlPart, emailAction.htmlPart);
-                assert.equal(email.subjectPart, emailAction.subjectPart);
-                assert.equal(email.textPart, emailAction.textPart);
-                assert.equal(email.templateName, emailAction.templateName);
+                assert.equal(email.body, emailAction.body);
+                assert.equal(email.subject, emailAction.subject);
                 assert.deepEqual(email.addresses, emailAction.addresses);
             }));
 
         it('should update actions', () =>
             splunkCloud.action
-                .updateAction(emailAction.name, { subjectPart: 'new subject' })
+                .updateAction(emailAction.name, { subject: 'new subject' })
                 .then(response => {
                     const email = response as EmailAction;
                     assert.equal(email.name, emailAction.name);
                     assert.equal(email.kind, emailAction.kind);
-                    assert.equal(email.htmlPart, emailAction.htmlPart);
-                    assert.equal(email.subjectPart, 'new subject');
-                    assert.equal(email.textPart, emailAction.textPart);
-                    assert.equal(email.templateName, emailAction.templateName);
+                    assert.equal(email.body, emailAction.body);
+                    assert.equal(email.subject, emailAction.subject);
                     assert.deepEqual(email.addresses, emailAction.addresses);
                 }));
 
@@ -85,7 +76,7 @@ describe('integration tests using action service', () => {
             name: `WebhookAction_${Date.now()}`,
             kind: ActionKind.webhook,
             webhookUrl: 'https://foo.slack.com/test',
-            message: 'some user msg',
+            webhookPayload: 'some user msg',
         };
 
         it('should create action', () => {
@@ -94,7 +85,7 @@ describe('integration tests using action service', () => {
                 assert.equal(webhook.name, webhookAction.name);
                 assert.equal(webhook.kind, webhookAction.kind);
                 assert.equal(webhook.webhookUrl, webhookAction.webhookUrl);
-                assert.equal(webhook.message, webhookAction.message);
+                assert.equal(webhook.webhookPayload, webhookAction.webhookPayload);
             });
         });
 
@@ -134,7 +125,7 @@ describe('integration tests using action service', () => {
         });
     });
 
-    describe('Create/delete SNS actions', () => {
+    /*describe('Create/delete SNS actions', () => {
         const action: SNSAction = {
             name: `snsAction_${Date.now()}`,
             kind: ActionKind.sns,
@@ -155,5 +146,5 @@ describe('integration tests using action service', () => {
             splunkCloud.action.deleteAction(action.name).then(response => {
                 assert.isEmpty(response);
             }));
-    });
+    });TODO: SNS Action deleted in v1beta2 version*/
 });
