@@ -12,6 +12,7 @@
 
 * [body](httpresponse.md#body)
 * [headers](httpresponse.md#headers)
+* [status](httpresponse.md#status)
 
 ---
 
@@ -30,6 +31,13 @@ ___
 ###  headers
 
 **● headers**: *`Headers`*
+
+___
+<a id="status"></a>
+
+###  status
+
+**● status**: *`number`*
 
 ___
 

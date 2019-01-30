@@ -27,21 +27,21 @@ Principal - Principal member
 
 ###  createdAt
 
-**● createdAt**: *`Date`*
+**● createdAt**: *`string`*
 
 ___
 <a id="createdby"></a>
 
 ###  createdBy
 
-**● createdBy**: *`Date`*
+**● createdBy**: *`string`*
 
 ___
 <a id="kind"></a>
 
 ###  kind
 
-**● kind**: *`string`*
+**● kind**: *[PrincipalKind](../enums/principalkind.md)*
 
 ___
 <a id="name"></a>
@@ -53,16 +53,17 @@ ___
 ___
 <a id="profile"></a>
 
-###  profile
+### `<Optional>` profile
 
-**● profile**: *`__type`*
+**● profile**: * `undefined` &#124; `object`
+*
 
 ___
 <a id="tenants"></a>
 
 ###  tenants
 
-**● tenants**: *`string`[]*
+**● tenants**: *[Tenant](tenant.md)[]*
 
 ___
 

@@ -18,6 +18,7 @@ This class acts as a raw proxy for Splunk Cloud, implementing authorization for 
 
 * [addResponseHook](serviceclient.md#addresponsehook)
 * [buildPath](serviceclient.md#buildpath)
+* [buildUrl](serviceclient.md#buildurl)
 * [clearResponseHooks](serviceclient.md#clearresponsehooks)
 * [delete](serviceclient.md#delete)
 * [fetch](serviceclient.md#fetch)
@@ -73,7 +74,7 @@ ___
 
 ###  buildPath
 
-▸ **buildPath**(servicePrefix: *`string`*, pathname: *`string`[]*, overrideTenant?: * `undefined` &#124; `string`*): `string`
+▸ **buildPath**(servicePrefix: *`string`*, segments: *`string`[]*, overrideTenant?: * `undefined` &#124; `string`*): `string`
 
 Builds a path for a given service call
 
@@ -82,11 +83,30 @@ Builds a path for a given service call
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | servicePrefix | `string` |  The name of the service, with version (search/v1) |
-| pathname | `string`[] |  An array of path elements that will be checked and added to the path (\['jobs', jobId\]) |
+| segments | `string`[] |  An array of path elements that will be checked and added to the path (\['jobs', jobId\]) |
 | `Optional` overrideTenant |  `undefined` &#124; `string`|  If supplied, this tenant will be used instead of the tenant associated with this client object |
 
 **Returns:** `string`
 A fully qualified path to the resource
+
+___
+<a id="buildurl"></a>
+
+###  buildUrl
+
+▸ **buildUrl**(cluster: *`string`*, path: *`string`*, query?: *[QueryArgs](../interfaces/queryargs.md)*): `string`
+
+Builds the URL from a service + endpoint with query encoded in url (concatenates the URL with the path)
+
+**Parameters:**
+
+| Name | Type |
+| ------ | ------ |
+| cluster | `string` |
+| path | `string` |
+| `Optional` query | [QueryArgs](../interfaces/queryargs.md) |
+
+**Returns:** `string`
 
 ___
 <a id="clearresponsehooks"></a>

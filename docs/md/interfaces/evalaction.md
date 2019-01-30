@@ -4,20 +4,22 @@
 
 ## Hierarchy
 
-**EvalAction**
+ `Action`
+
+**↳ EvalAction**
 
 ## Index
 
 ### Properties
 
 * [created](evalaction.md#created)
-* [createdBy](evalaction.md#createdby)
+* [createdby](evalaction.md#createdby)
 * [expression](evalaction.md#expression)
 * [field](evalaction.md#field)
 * [id](evalaction.md#id)
 * [kind](evalaction.md#kind)
 * [modified](evalaction.md#modified)
-* [modifiedBy](evalaction.md#modifiedby)
+* [modifiedby](evalaction.md#modifiedby)
 * [owner](evalaction.md#owner)
 * [ruleid](evalaction.md#ruleid)
 * [version](evalaction.md#version)
@@ -28,16 +30,18 @@
 
 <a id="created"></a>
 
-###  created
+### `<Optional>` created
 
-**● created**: *`string`*
+**● created**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="createdby"></a>
 
-###  createdBy
+### `<Optional>` createdby
 
-**● createdBy**: *`string`*
+**● createdby**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="expression"></a>
@@ -51,14 +55,15 @@ ___
 
 ###  field
 
-**● field**: *[Field](field.md)*
+**● field**: *`string`*
 
 ___
 <a id="id"></a>
 
-###  id
+### `<Optional>` id
 
-**● id**: *`string`*
+**● id**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="kind"></a>
@@ -70,37 +75,42 @@ ___
 ___
 <a id="modified"></a>
 
-###  modified
+### `<Optional>` modified
 
-**● modified**: *`string`*
+**● modified**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="modifiedby"></a>
 
-###  modifiedBy
+### `<Optional>` modifiedby
 
-**● modifiedBy**: *`string`*
+**● modifiedby**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="owner"></a>
 
-###  owner
+### `<Optional>` owner
 
-**● owner**: *`string`*
+**● owner**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="ruleid"></a>
 
-###  ruleid
+### `<Optional>` ruleid
 
-**● ruleid**: *`string`*
+**● ruleid**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="version"></a>
 
-###  version
+### `<Optional>` version
 
-**● version**: *`number`*
+**● version**: * `undefined` &#124; `number`
+*
 
 ___
 
