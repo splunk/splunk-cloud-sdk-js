@@ -1,6 +1,6 @@
 {
   "name": "@splunk/cloud-sdk",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Splunk Cloud SDK for Javascript",
   "main": "splunk.js",
   "scripts": {
