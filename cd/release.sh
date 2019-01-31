@@ -4,7 +4,7 @@ print_header_line() {
     echo "\n------------------------------------------------------------"
 }
 
-echo "Input the version to release omitting the leading 'v' (e.g. 0.7.1) followed by [ENTER]:"
+echo "Input the version to release (e.g. 0.7.1) followed by [ENTER]:"
 read NEW_VERSION
 
 print_header_line
@@ -57,6 +57,7 @@ then
     echo "Pushing branch $BRANCH_NAME ..."
     git push --set-upstream origin $BRANCH_NAME
 else
+    echo "============================WARNING============================"
     echo "No changes pushed, branch $BRANCH_NAME only created locally ..."
 fi
 
@@ -64,12 +65,14 @@ fi
 print_header_line
 echo "Please complete these steps in order to finish the release!"
 echo ""
+echo "UPDATE the version number in package.json"
+echo ""
 echo "Please create a pull request from '$BRANCH_NAME' targeting 'master'"
 echo ""
 echo "AFTER the the pull request has been merged go to https://github.com/splunk/splunk-cloud-sdk-js/releases/new and create a release"
-echo " - Make the tag '$NEW_VERSION'"
+echo " - Make the tag 'v$NEW_VERSION'"
 echo " - Make the target 'master'"
-echo " - Make the title 'Release $NEW_VERSION'"
+echo " - Make the title 'Release v$NEW_VERSION'"
 echo " - Make sure the release includes the change notes in the write section"
 echo " - Make sure the release is marked set as a 'pre-release'"
 echo "Please create a pull request from 'master' targeting 'develop'"
