@@ -25,7 +25,7 @@
 
 ###  kind
 
-**● kind**: *"sns"*
+**● kind**: *[sns](../enums/actionkind.md#sns)*
 
 ___
 <a id="message"></a>

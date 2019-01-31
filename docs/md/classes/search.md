@@ -14,6 +14,10 @@ A base for an easy-to-use search interface
 
 * [constructor](search.md#constructor)
 
+### Properties
+
+* [jobId](search.md#jobid)
+
 ### Methods
 
 * [cancel](search.md#cancel)
@@ -41,6 +45,16 @@ A base for an easy-to-use search interface
 | jobId | `string` |   |
 
 **Returns:** [Search](search.md)
+
+___
+
+## Properties
+
+<a id="jobid"></a>
+
+###  jobId
+
+**● jobId**: *`string`*
 
 ___
 

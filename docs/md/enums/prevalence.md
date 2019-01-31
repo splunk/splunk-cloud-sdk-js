@@ -18,21 +18,21 @@
 
 ###  ALL
 
-**ALL**: 
+**ALL**:  = "A"
 
 ___
 <a id="some"></a>
 
 ###  SOME
 
-**SOME**: 
+**SOME**:  = "S"
 
 ___
 <a id="unknown"></a>
 
 ###  UNKNOWN
 
-**UNKNOWN**: 
+**UNKNOWN**:  = "U"
 
 ___
 

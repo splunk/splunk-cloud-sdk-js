@@ -68,7 +68,7 @@ ___
 
 ###  createAction
 
-▸ **createAction**(action: * [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)*): `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
+▸ **createAction**(action: *[Action](../#action)*): `Promise`<[Action](../#action)>
 
 Create an action
 
@@ -76,9 +76,9 @@ Create an action
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| action |  [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)|  input action |
+| action | [Action](../#action) |  input action |
 
-**Returns:** `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
+**Returns:** `Promise`<[Action](../#action)>
 Promise of an action
 
 ___
@@ -104,7 +104,7 @@ ___
 
 ###  getAction
 
-▸ **getAction**(name: *`string`*): `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
+▸ **getAction**(name: *`string`*): `Promise`<[Action](../#action)>
 
 Get an action by name
 
@@ -114,7 +114,7 @@ Get an action by name
 | ------ | ------ | ------ |
 | name | `string` |  name of the action |
 
-**Returns:** `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
+**Returns:** `Promise`<[Action](../#action)>
 Promise of an action
 
 ___
@@ -141,11 +141,11 @@ ___
 
 ###  getActions
 
-▸ **getActions**(): `Promise`<`Array`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>>
+▸ **getActions**(): `Promise`<[Action](../#action)[]>
 
 Get all actions in action service.
 
-**Returns:** `Promise`<`Array`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>>
+**Returns:** `Promise`<[Action](../#action)[]>
 Promise of all actions
 
 ___
@@ -153,7 +153,7 @@ ___
 
 ###  triggerAction
 
-▸ **triggerAction**(name: *`string`*, notification: *[ActionNotification](../interfaces/actionnotification.md)*): `Promise`<[ActionTriggerResponse](../interfaces/actiontriggerresponse.md)>
+▸ **triggerAction**(name: *`string`*, notification: *[Notification](../interfaces/notification.md)*): `Promise`<[ActionTriggerResponse](../interfaces/actiontriggerresponse.md)>
 
 Trigger an action
 
@@ -162,7 +162,7 @@ Trigger an action
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | name | `string` |  name of the action |
-| notification | [ActionNotification](../interfaces/actionnotification.md) |  action notification |
+| notification | [Notification](../interfaces/notification.md) |  action notification |
 
 **Returns:** `Promise`<[ActionTriggerResponse](../interfaces/actiontriggerresponse.md)>
 Promise of actionTriggerResponse
@@ -172,7 +172,7 @@ ___
 
 ###  updateAction
 
-▸ **updateAction**(name: *`string`*, action: *[ActionUpdateFields](../interfaces/actionupdatefields.md)*): `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
+▸ **updateAction**(name: *`string`*, action: *`Partial`<[Action](../#action)>*): `Promise`<[Action](../#action)>
 
 Update an action
 
@@ -181,9 +181,9 @@ Update an action
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | name | `string` |  name of the action |
-| action | [ActionUpdateFields](../interfaces/actionupdatefields.md) |  action updates |
+| action | `Partial`<[Action](../#action)> |  action updates |
 
-**Returns:** `Promise`< [EmailAction](../interfaces/emailaction.md) &#124; [WebhookAction](../interfaces/webhookaction.md) &#124; [SNSAction](../interfaces/snsaction.md)>
+**Returns:** `Promise`<[Action](../#action)>
 Promise of an action
 
 ___

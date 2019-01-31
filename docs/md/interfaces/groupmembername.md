@@ -2,7 +2,7 @@
 
 # Interface: GroupMemberName
 
-GroupMemberName - Group member name
+GroupMemberName - Group member namet
 
 ## Hierarchy
 
