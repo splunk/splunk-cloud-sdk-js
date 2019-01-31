@@ -203,6 +203,10 @@ export interface ActionBase {
      * and can be segmented with periods.
      */
     name: string;
+    /**
+     * Human readable name title for the action. Must be less than 128 characters.
+     */
+    title?: string;
 }
 
 export type Action = EmailAction | WebhookAction;

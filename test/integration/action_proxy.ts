@@ -43,27 +43,27 @@ describe('integration tests using action service', () => {
                 assert.deepEqual(email.addresses, emailAction.addresses);
             }));
 
+        it('should update actions', () =>
+            splunkCloud.action
+                .updateAction(emailAction.name, { subject: 'new subject' })
+                .then(updateResponse => {
+                    const updatedEmail = updateResponse as EmailAction;
+                    assert.equal(updatedEmail.name, emailAction.name);
+                    assert.equal(updatedEmail.kind, emailAction.kind);
+                    assert.equal(updatedEmail.body, emailAction.body);
+                    assert.equal(updatedEmail.subject, 'new subject');
+                    assert.deepEqual(updatedEmail.addresses, emailAction.addresses);
+                }));
+
         it('should get actions', () =>
             splunkCloud.action.getAction(emailAction.name).then(response => {
                 const email = response as EmailAction;
                 assert.equal(email.name, emailAction.name);
                 assert.equal(email.kind, emailAction.kind);
                 assert.equal(email.body, emailAction.body);
-                assert.equal(email.subject, emailAction.subject);
+                assert.equal(email.subject, 'new subject');
                 assert.deepEqual(email.addresses, emailAction.addresses);
             }));
-
-        it('should update actions', () =>
-            splunkCloud.action
-                .updateAction(emailAction.name, { subject: 'new subject' })
-                .then(response => {
-                    const email = response as EmailAction;
-                    assert.equal(email.name, emailAction.name);
-                    assert.equal(email.kind, emailAction.kind);
-                    assert.equal(email.body, emailAction.body);
-                    assert.equal(email.subject, emailAction.subject);
-                    assert.deepEqual(email.addresses, emailAction.addresses);
-                }));
 
         it('should delete actions', () =>
             splunkCloud.action.deleteAction(emailAction.name).then(response => {
@@ -73,8 +73,9 @@ describe('integration tests using action service', () => {
 
     describe('Trigger webhook actions', () => {
         const webhookAction: WebhookAction = {
-            name: `WebhookAction_${Date.now()}`,
+            name: `wh_${Date.now()}`,
             kind: ActionKind.webhook,
+            title: 'My Title',
             webhookUrl: 'https://foo.slack.com/test',
             webhookPayload: 'some user msg',
         };
@@ -84,6 +85,7 @@ describe('integration tests using action service', () => {
                 const webhook = response as WebhookAction;
                 assert.equal(webhook.name, webhookAction.name);
                 assert.equal(webhook.kind, webhookAction.kind);
+                assert.equal(webhook.title, webhookAction.title);
                 assert.equal(webhook.webhookUrl, webhookAction.webhookUrl);
                 assert.equal(webhook.webhookPayload, webhookAction.webhookPayload);
             });
@@ -125,26 +127,4 @@ describe('integration tests using action service', () => {
         });
     });
 
-    /*describe('Create/delete SNS actions', () => {
-        const action: SNSAction = {
-            name: `snsAction_${Date.now()}`,
-            kind: ActionKind.sns,
-            topic: 'sns topic',
-            message: 'sns user msg'
-        };
-
-        it('should create action', () =>
-            splunkCloud.action.createAction(action).then(response => {
-                const sns = response as SNSAction;
-                assert.equal(sns.name, action.name);
-                assert.equal(sns.kind, action.kind);
-                assert.equal(sns.topic, action.topic);
-                assert.equal(sns.message, action.message);
-            }));
-
-        it('should delete actions', () =>
-            splunkCloud.action.deleteAction(action.name).then(response => {
-                assert.isEmpty(response);
-            }));
-    });TODO: SNS Action deleted in v1beta2 version*/
 });
