@@ -29,6 +29,7 @@ describe('integration tests using action service', () => {
             name: `crudemail_${Date.now()}`,
             kind: ActionKind.email,
             body: '<html><h1>The HTML</h1></html>',
+            bodyPlainText: 'The Plain Text Body',
             subject: 'The Subject',
             addresses: ['test1@splunk.com', 'test2@splunk.com'],
         };
@@ -39,6 +40,7 @@ describe('integration tests using action service', () => {
                 assert.equal(email.name, emailAction.name);
                 assert.equal(email.kind, emailAction.kind);
                 assert.equal(email.body, emailAction.body);
+                assert.equal(email.bodyPlainText, emailAction.bodyPlainText);
                 assert.equal(email.subject, emailAction.subject);
                 assert.deepEqual(email.addresses, emailAction.addresses);
             }));
@@ -51,6 +53,7 @@ describe('integration tests using action service', () => {
                     assert.equal(updatedEmail.name, emailAction.name);
                     assert.equal(updatedEmail.kind, emailAction.kind);
                     assert.equal(updatedEmail.body, emailAction.body);
+                    assert.equal(updatedEmail.bodyPlainText, emailAction.bodyPlainText);
                     assert.equal(updatedEmail.subject, 'new subject');
                     assert.deepEqual(updatedEmail.addresses, emailAction.addresses);
                 }));
@@ -61,6 +64,7 @@ describe('integration tests using action service', () => {
                 assert.equal(email.name, emailAction.name);
                 assert.equal(email.kind, emailAction.kind);
                 assert.equal(email.body, emailAction.body);
+                assert.equal(email.bodyPlainText, emailAction.bodyPlainText);
                 assert.equal(email.subject, 'new subject');
                 assert.deepEqual(email.addresses, emailAction.addresses);
             }));

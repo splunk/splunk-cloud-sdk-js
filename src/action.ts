@@ -180,7 +180,16 @@ export interface EmailAction extends ActionBase {
     kind: ActionKind.email;
     addresses: string[];
     subject: string;
+    /**
+     * HTML content that will be sent as the body of this email.
+     */
     body: string;
+    /**
+     * Optional text that will be sent as the text/plain part of this email. If this field is not
+     * set for an email action, when triggering that action the Action Service will convert th
+     * value from the body field to text and send that as the text/plain part.
+     */
+    bodyPlainText?: string;
 }
 
 export interface WebhookAction extends ActionBase {
@@ -189,7 +198,6 @@ export interface WebhookAction extends ActionBase {
      * WebhookPayload (earlier named as 'message') is the (possibly) templated payload body which will be POSTed to the webhookUrl when triggered
      */
     webhookPayload: string;
-
     /**
      * Only allows https scheme. Only allows hostnames that end with "slack.com", "webhook.site", "sendgrid.com", "zapier.com", "hipchat.com", "amazon.com", and "amazonaws.com"
      */
