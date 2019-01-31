@@ -8,6 +8,7 @@
     ],
     "jsRules": {},
     "rules": {
+        "semicolon": false,
         "no-namespace": false,
         "no-parameter-reassignment": false,
         "forin": false,
@@ -40,7 +41,6 @@
         "no-trailing-whitespace": true,
         "triple-equals": true,
         "no-irregular-whitespace": true,
-        "semicolon": true,
         "no-unnecessary-callback-wrapper": true,
         "object-literal-key-quotes": [true, "consistent-as-needed"],
         "no-multi-spaces": true,

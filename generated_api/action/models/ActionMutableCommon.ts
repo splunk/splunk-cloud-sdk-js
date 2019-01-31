@@ -29,7 +29,9 @@ export interface ActionMutableCommon {
 export function ActionMutableCommonFromJSON(json: any): ActionMutableCommon {
     return {
         'title': !exists(json, 'title') ? undefined : json['title'],
-    };
+    // TODO: Template Change
+    } as ActionMutableCommon;
+
 }
 
 export function ActionMutableCommonToJSON(value?: ActionMutableCommon): any {

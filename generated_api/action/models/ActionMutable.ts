@@ -67,7 +67,9 @@ export interface ActionMutable {
 
 export function ActionMutableFromJSON(json: any): ActionMutable {
     return {
-    };
+    // TODO: Template Change
+    } as ActionMutable;
+
 }
 
 export function ActionMutableToJSON(value?: ActionMutable): any {

@@ -43,7 +43,9 @@ export function ActionCommonFromJSON(json: any): ActionCommon {
         'name': json['name'],
         'kind': json['kind'],
         'title': !exists(json, 'title') ? undefined : json['title'],
-    };
+    // TODO: Template Change
+    } as ActionCommon;
+
 }
 
 export function ActionCommonToJSON(value?: ActionCommon): any {

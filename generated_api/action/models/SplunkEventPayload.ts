@@ -64,14 +64,18 @@ export interface SplunkEventPayload {
 
 export function SplunkEventPayloadFromJSON(json: any): SplunkEventPayload {
     return {
-        'event': anyFromJSON(json['event']),
+        // TODO: Template Change
+        'event': JSON.parse(json['event']),
+        // 'event': anyFromJSON(json['event']),
         'fields': json['fields'],
         'host': json['host'],
         'index': json['index'],
         'source': json['source'],
         'sourcetype': json['sourcetype'],
         'time': json['time'],
-    };
+    // TODO: Template Change
+    } as SplunkEventPayload;
+
 }
 
 export function SplunkEventPayloadToJSON(value?: SplunkEventPayload): any {
@@ -79,7 +83,11 @@ export function SplunkEventPayloadToJSON(value?: SplunkEventPayload): any {
         return undefined;
     }
     return {
-        'event': anyToJSON(value.event),
+        // TODO: Template Change
+        // Original
+        // 'event': anyToJSON(value.event),
+        // New
+        'event': JSON.stringify(value.event),
         'fields': value.fields,
         'host': value.host,
         'index': value.index,

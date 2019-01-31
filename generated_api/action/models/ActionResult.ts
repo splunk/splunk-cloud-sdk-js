@@ -43,7 +43,9 @@ export function ActionResultFromJSON(json: any): ActionResult {
         'state': !exists(json, 'state') ? undefined : json['state'],
         'statusId': !exists(json, 'statusId') ? undefined : json['statusId'],
         'message': !exists(json, 'message') ? undefined : json['message'],
-    };
+    // TODO: Template Change
+    } as ActionResult;
+
 }
 
 export function ActionResultToJSON(value?: ActionResult): any {

@@ -187,7 +187,7 @@ export class ServiceClient {
     private responseHooks: ResponseHook[] = [];
 
     // -------------------------------------------------------------------------
-    // Extra Stuff
+    // NEW STUFF
     // -------------------------------------------------------------------------
     public getURLS = () => {
         return this.urls;

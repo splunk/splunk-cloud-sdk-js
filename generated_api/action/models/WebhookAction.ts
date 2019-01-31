@@ -61,7 +61,9 @@ export interface WebhookAction {
 
 export function WebhookActionFromJSON(json: any): WebhookAction {
     return {
-    };
+    // TODO: Template Change
+    } as WebhookAction;
+
 }
 
 export function WebhookActionToJSON(value?: WebhookAction): any {

@@ -4,7 +4,7 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
-import { V1beta2ActionManagementApi } from '../generated_api/action/apis';
+import { CreateActionRequest, V1beta2Api } from '../generated_api/action/apis';
 import {
     Action as wrapper_action,
     EmailAction as wrapper_email_action,
@@ -34,18 +34,13 @@ export class ActionService extends BaseApiService {
      * @param name name of the action
      * @return Promise of an action
      */
-    public getAction = (name: ActionBase['name']): Promise<wrapper_action> => {
-        const url = this.client.getURLS().api;
-        const authorizationToken = this.client.getToken();
-        const tenant = this.client.getTenant() || '';
-        const requestOptions = {
-            headers: {
-                Authorization: `Bearer ${authorizationToken}`,
-            },
-        };
-
-        const wrapperClient = new V1beta2ActionManagementApi(url);
-        return wrapperClient.getAction(name, authorizationToken, tenant, requestOptions);
+    public getAction = (name: ActionBase['name']): Promise<Action> => {
+        return this.client
+            .get(
+                SERVICE_CLUSTER_MAPPING.action,
+                this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name])
+            )
+            .then(response => response.body as Action);
     };
 
     /**
@@ -67,25 +62,24 @@ export class ActionService extends BaseApiService {
      * @param action input action
      * @return Promise of an action
      */
+    // public createAction = (action: wrapper_action | wrapper_email_action): Promise<wrapper_action> => {
+    // public createAction = (action: Action): Promise<Action> => {
     public createAction = (
         action: wrapper_action | wrapper_email_action
     ): Promise<wrapper_action> => {
-        const url = this.client.getURLS().api;
-        const authorizationToken = this.client.getToken();
-        const tenant = this.client.getTenant() || '';
-        const requestOptions = {
-            headers: {
-                Authorization: `Bearer ${authorizationToken}`,
-            },
+        const newClient = new V1beta2Api();
+        const newRequest: CreateActionRequest = {
+            action,
+            authorization: this.client.getToken(),
+            tenant: this.client.getTenant() || '',
         };
-        const wrapperClient = new V1beta2ActionManagementApi(url);
 
-        return wrapperClient.createAction(
-            authorizationToken,
-            tenant,
-            action as wrapper_action,
-            requestOptions
-        );
+        return newClient.createAction(newRequest);
+        // ---------------------------------------------------------------------
+        // const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']);
+        // return this.client
+        //     .post(SERVICE_CLUSTER_MAPPING.action, url, action)
+        //     .then(response => response.body as Action);
     };
 
     /**
@@ -94,35 +88,14 @@ export class ActionService extends BaseApiService {
      * @param action action updates
      * @return Promise of an action
      */
-    public updateAction = (
-        name: ActionBase['name'],
-        action: Partial<wrapper_action>
-    ): Promise<Action> => {
-        const url = this.client.getURLS().api;
-        const authorizationToken = this.client.getToken();
-        const tenant = this.client.getTenant() || '';
-        const requestOptions = {
-            headers: {
-                Authorization: `Bearer ${authorizationToken}`,
-            },
-        };
-        const wrapperClient = new V1beta2ActionManagementApi(url);
-
-        return wrapperClient.updateAction(
-            name,
-            authorizationToken,
-            tenant,
-            action as wrapper_action,
-            requestOptions
-        );
-        // ---------------------------------------------------------------------
-        // return this.client
-        //     .patch(
-        //         SERVICE_CLUSTER_MAPPING.action,
-        //         this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]),
-        //         action
-        //     )
-        //     .then(response => response.body as Action);
+    public updateAction = (name: ActionBase['name'], action: Partial<Action>): Promise<Action> => {
+        return this.client
+            .patch(
+                SERVICE_CLUSTER_MAPPING.action,
+                this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]),
+                action
+            )
+            .then(response => response.body as Action);
     };
 
     /**

@@ -48,9 +48,13 @@ export function ServiceErrorFromJSON(json: any): ServiceError {
     return {
         'code': json['code'],
         'message': json['message'],
-        'details': !exists(json, 'details') ? undefined : anyFromJSON(json['details']),
+        // TODO: Template Change
+        'details': !exists(json, 'details') ? undefined : JSON.parse(json['details']),
+        // 'details': !exists(json, 'details') ? undefined : anyFromJSON(json['details']),
         'moreInfo': !exists(json, 'moreInfo') ? undefined : json['moreInfo'],
-    };
+    // TODO: Template Change
+    } as ServiceError;
+
 }
 
 export function ServiceErrorToJSON(value?: ServiceError): any {
@@ -60,7 +64,11 @@ export function ServiceErrorToJSON(value?: ServiceError): any {
     return {
         'code': value.code,
         'message': value.message,
-        'details': anyToJSON(value.details),
+        // TODO: Template Change
+        // Original
+        // 'details': anyToJSON(value.details),
+        // New
+        'details': JSON.stringify(value.details),
         'moreInfo': value.moreInfo,
     };
 }

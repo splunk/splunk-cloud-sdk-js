@@ -6,7 +6,6 @@ export * from './ActionResult';
 export * from './EmailAction';
 export * from './EmailActionMutable';
 export * from './Notification';
-export * from './NotificationPayload';
 export * from './ServiceError';
 export * from './SplunkEventPayload';
 export * from './WebhookAction';

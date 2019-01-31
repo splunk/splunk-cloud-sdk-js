@@ -55,7 +55,9 @@ export function EmailActionMutableFromJSON(json: any): EmailActionMutable {
         'subject': !exists(json, 'subject') ? undefined : json['subject'],
         'body': !exists(json, 'body') ? undefined : json['body'],
         'addresses': !exists(json, 'addresses') ? undefined : json['addresses'],
-    };
+    // TODO: Template Change
+    } as EmailActionMutable;
+
 }
 
 export function EmailActionMutableToJSON(value?: EmailActionMutable): any {

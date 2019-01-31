@@ -48,7 +48,9 @@ export function WebhookActionMutableFromJSON(json: any): WebhookActionMutable {
     return {
         'webhookUrl': !exists(json, 'webhookUrl') ? undefined : json['webhookUrl'],
         'webhookPayload': !exists(json, 'webhookPayload') ? undefined : json['webhookPayload'],
-    };
+    // TODO: Template Change
+    } as WebhookActionMutable;
+
 }
 
 export function WebhookActionMutableToJSON(value?: WebhookActionMutable): any {

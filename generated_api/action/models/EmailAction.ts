@@ -67,7 +67,9 @@ export interface EmailAction {
 
 export function EmailActionFromJSON(json: any): EmailAction {
     return {
-    };
+    // TODO: Template Change
+    } as EmailAction;
+
 }
 
 export function EmailActionToJSON(value?: EmailAction): any {

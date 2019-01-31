@@ -12,12 +12,6 @@
  */
 
 import { exists } from '../runtime';
-import {
-    NotificationPayload,
-    NotificationPayloadFromJSON,
-    NotificationPayloadToJSON,
-} from './';
-
 /**
  * 
  * @export
@@ -26,10 +20,10 @@ import {
 export interface Notification {
     /**
      * 
-     * @type {NotificationPayload}
+     * @type {any}
      * @memberof Notification
      */
-    payload: NotificationPayload;
+    payload: any;
     /**
      * 
      * @type {string}
@@ -46,10 +40,14 @@ export interface Notification {
 
 export function NotificationFromJSON(json: any): Notification {
     return {
-        'payload': NotificationPayloadFromJSON(json['payload']),
+        // TODO: Template Change
+        'payload': JSON.parse(json['payload']),
+        // 'payload': anyFromJSON(json['payload']),
         'tenant': json['tenant'],
         'kind': json['kind'],
-    };
+    // TODO: Template Change
+    } as Notification;
+
 }
 
 export function NotificationToJSON(value?: Notification): any {
@@ -57,7 +55,11 @@ export function NotificationToJSON(value?: Notification): any {
         return undefined;
     }
     return {
-        'payload': NotificationPayloadToJSON(value.payload),
+        // TODO: Template Change
+        // Original
+        // 'payload': anyToJSON(value.payload),
+        // New
+        'payload': JSON.stringify(value.payload),
         'tenant': value.tenant,
         'kind': value.kind,
     };

@@ -79,7 +79,9 @@ export interface Action {
 
 export function ActionFromJSON(json: any): Action {
     return {
-    };
+    // TODO: Template Change
+    } as Action;
+
 }
 
 export function ActionToJSON(value?: Action): any {
