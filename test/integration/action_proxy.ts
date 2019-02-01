@@ -45,31 +45,27 @@ describe('integration tests using action service', () => {
                 assert.equal(email.title, emailAction.title);
             }));
 
-        // it('should get actions', () =>
-        //     splunkCloud.action.getAction(emailAction.name).then(response => {
-        //         const email = response as EmailAction;
-        //         assert.equal(email.name, emailAction.name);
-        //         assert.equal(email.kind, emailAction.kind);
-        //         assert.equal(email.htmlPart, emailAction.htmlPart);
-        //         assert.equal(email.subjectPart, emailAction.subjectPart);
-        //         assert.equal(email.textPart, emailAction.textPart);
-        //         assert.equal(email.templateName, emailAction.templateName);
-        //         assert.deepEqual(email.addresses, emailAction.addresses);
-        //     }));
+        it('should get actions', () =>
+            splunkCloud.action.getAction(emailAction.name).then(response => {
+                const email = response as EmailAction;
+                assert.deepEqual(email.addresses, emailAction.addresses);
+                assert.equal(email.name, emailAction.name);
+                assert.equal(email.kind, emailAction.kind);
+                assert.equal(email.subject, emailAction.subject);
+                assert.equal(email.title, emailAction.title);
+            }));
 
-        // it('should update actions', () =>
-        //     splunkCloud.action
-        //         .updateAction(emailAction.name, { subjectPart: 'new subject' })
-        //         .then(response => {
-        //             const email = response as EmailAction;
-        //             assert.equal(email.name, emailAction.name);
-        //             assert.equal(email.kind, emailAction.kind);
-        //             assert.equal(email.htmlPart, emailAction.htmlPart);
-        //             assert.equal(email.subjectPart, 'new subject');
-        //             assert.equal(email.textPart, emailAction.textPart);
-        //             assert.equal(email.templateName, emailAction.templateName);
-        //             assert.deepEqual(email.addresses, emailAction.addresses);
-        //         }));
+        it('should update actions', () =>
+            splunkCloud.action
+                .updateAction(emailAction.name, { subject: 'new subject' })
+                .then(response => {
+                    const email = response as EmailAction;
+                    assert.deepEqual(email.addresses, emailAction.addresses);
+                    assert.equal(email.name, emailAction.name);
+                    assert.equal(email.kind, emailAction.kind);
+                    assert.equal(email.subject, 'new subject');
+                    assert.equal(email.title, emailAction.title);
+                }));
 
         it('should delete actions', () =>
             splunkCloud.action.deleteAction(emailAction.name).then(response => {

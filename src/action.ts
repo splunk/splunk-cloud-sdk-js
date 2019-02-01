@@ -4,7 +4,7 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
-import { Action, EmailAction, WebhookAction } from '../generated_api/action/models';
+import { EmailAction, WebhookAction } from '../generated_api/action/models';
 import BaseApiService from './baseapiservice';
 import { ACTION_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
@@ -24,24 +24,24 @@ export class ActionService extends BaseApiService {
     };
 
     /**
-     * Get an action by name
-     * @param name name of the action
+     * Get an action by action_name
+     * @param action_name name of the action
      * @return Promise of an action
      */
-    public getAction = (name: ActionBase['name']): Promise<Action> => {
-        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]);
+    public getAction = (action_name: string): Promise<Action> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', action_name]);
         return this.client
             .get(SERVICE_CLUSTER_MAPPING.action, url)
             .then(response => response.body as Action);
     };
 
     /**
-     * Delete an action by name
-     * @param name name of the action
+     * Delete an action by action_name
+     * @param action_name name of the action
      * @return Promise of object
      */
-    public deleteAction = (name: ActionBase['name']): Promise<object> => {
-        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]);
+    public deleteAction = (action_name: string): Promise<object> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', action_name]);
         return this.client
             .delete(SERVICE_CLUSTER_MAPPING.action, url)
             .then(response => response.body as object);
@@ -61,12 +61,12 @@ export class ActionService extends BaseApiService {
 
     /**
      * Update an action
-     * @param name name of the action
+     * @param action_name name of the action
      * @param action action updates
      * @return Promise of an action
      */
-    public updateAction = (name: ActionBase['name'], action: Partial<Action>): Promise<Action> => {
-        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]);
+    public updateAction = (action_name: string, action: Partial<Action>): Promise<Action> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', action_name]);
         return this.client
             .patch(SERVICE_CLUSTER_MAPPING.action, url, action)
             .then(response => response.body as Action);
@@ -202,29 +202,10 @@ export interface SplunkEventPayload {
     time: number;
 }
 
-// export interface EmailAction extends ActionBase {
-//     kind: ActionKind.email;
-//     addresses: string[];
-//     htmlPart?: string;
-//     subjectPart?: string;
-//     templateName?: string;
-//     textPart?: string;
-// }
-
 // export interface SNSAction extends ActionBase {
 //     kind: ActionKind.sns;
 //     message: string;
 //     topic: string;
-// }
-
-// export interface WebhookAction extends ActionBase {
-//     kind: ActionKind.webhook;
-//     message: string;
-
-//     /**
-//      * Only allows https scheme. Only allows hostnames that end with "slack.com", "webhook.site", "sendgrid.com", "zapier.com", "hipchat.com", "amazon.com", and "amazonaws.com"
-//      */
-//     webhookUrl: string;
 // }
 
 export interface ActionBase {
