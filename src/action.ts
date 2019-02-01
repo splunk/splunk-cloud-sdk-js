@@ -4,6 +4,7 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
+import { EmailAction } from '../generated_api/action/models';
 import BaseApiService from './baseapiservice';
 import { ACTION_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
@@ -201,14 +202,14 @@ export interface SplunkEventPayload {
     time: number;
 }
 
-export interface EmailAction extends ActionBase {
-    kind: ActionKind.email;
-    addresses: string[];
-    htmlPart?: string;
-    subjectPart?: string;
-    templateName?: string;
-    textPart?: string;
-}
+// export interface EmailAction extends ActionBase {
+//     kind: ActionKind.email;
+//     addresses: string[];
+//     htmlPart?: string;
+//     subjectPart?: string;
+//     templateName?: string;
+//     textPart?: string;
+// }
 
 export interface SNSAction extends ActionBase {
     kind: ActionKind.sns;
@@ -235,4 +236,4 @@ export interface ActionBase {
     name: string;
 }
 
-export type Action = EmailAction | WebhookAction | SNSAction;
+export type Action = EmailAction | SNSAction | WebhookAction;
