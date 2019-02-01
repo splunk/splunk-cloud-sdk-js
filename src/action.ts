@@ -16,9 +16,11 @@ export class ActionService extends BaseApiService {
      * @returns Promise of all actions
      */
     public getActions = (): Promise<Action[]> => {
-        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']);
+        return this.client
+            .get(SERVICE_CLUSTER_MAPPING.action, url)
             .then(response => response.body as Action[]);
-    }
+    };
 
     /**
      * Get an action by name
@@ -26,9 +28,11 @@ export class ActionService extends BaseApiService {
      * @return Promise of an action
      */
     public getAction = (name: ActionBase['name']): Promise<Action> => {
-        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]);
+        return this.client
+            .get(SERVICE_CLUSTER_MAPPING.action, url)
             .then(response => response.body as Action);
-    }
+    };
 
     /**
      * Delete an action by name
@@ -36,9 +40,11 @@ export class ActionService extends BaseApiService {
      * @return Promise of object
      */
     public deleteAction = (name: ActionBase['name']): Promise<object> => {
-        return this.client.delete(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]);
+        return this.client
+            .delete(SERVICE_CLUSTER_MAPPING.action, url)
             .then(response => response.body as object);
-    }
+    };
 
     /**
      * Create an action
@@ -46,9 +52,11 @@ export class ActionService extends BaseApiService {
      * @return Promise of an action
      */
     public createAction = (action: Action): Promise<Action> => {
-        return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']);
+        return this.client
+            .post(SERVICE_CLUSTER_MAPPING.action, url, action)
             .then(response => response.body as Action);
-    }
+    };
 
     /**
      * Update an action
@@ -57,9 +65,11 @@ export class ActionService extends BaseApiService {
      * @return Promise of an action
      */
     public updateAction = (name: ActionBase['name'], action: Partial<Action>): Promise<Action> => {
-        return this.client.patch(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]);
+        return this.client
+            .patch(SERVICE_CLUSTER_MAPPING.action, url, action)
             .then(response => response.body as Action);
-    }
+    };
 
     /**
      * Trigger an action
@@ -67,8 +77,13 @@ export class ActionService extends BaseApiService {
      * @param notification action notification
      * @return Promise of actionTriggerResponse
      */
-    public triggerAction = (name: ActionBase['name'], notification: Notification): Promise<ActionTriggerResponse> => {
-        return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), notification)
+    public triggerAction = (
+        name: ActionBase['name'],
+        notification: Notification
+    ): Promise<ActionTriggerResponse> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]);
+        return this.client
+            .post(SERVICE_CLUSTER_MAPPING.action, url, notification)
             .then(response => {
                 const key = 'location';
                 if (response.headers.has(key)) {
@@ -85,7 +100,7 @@ export class ActionService extends BaseApiService {
                 }
                 return response.body as ActionTriggerResponse;
             });
-    }
+    };
 
     /**
      * Get action status
@@ -93,10 +108,20 @@ export class ActionService extends BaseApiService {
      * @param statusId statusId
      * @return Promise of actionStatus
      */
-    public getActionStatus = (name: ActionBase['name'], statusId: ActionStatus['statusId']): Promise<ActionStatus> => {
-        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
+    public getActionStatus = (
+        name: ActionBase['name'],
+        statusId: ActionStatus['statusId']
+    ): Promise<ActionStatus> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, [
+            'actions',
+            name,
+            'status',
+            statusId,
+        ]);
+        return this.client
+            .get(SERVICE_CLUSTER_MAPPING.action, url)
             .then(response => response.body as ActionStatus);
-    }
+    };
 }
 
 // ActionKind reflects the kinds of actions supported by the Action service
