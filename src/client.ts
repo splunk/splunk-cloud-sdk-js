@@ -8,7 +8,7 @@ import agent from './version';
 
 const DEFAULT_URLS = {
     api: 'https://api.splunkbeta.com',
-    app: 'https://apps.splunkbeta.com',
+    app: 'https://apps.splunkbeta.com'
 };
 
 export interface SplunkErrorParams {
@@ -42,16 +42,11 @@ export class SplunkError extends Error implements SplunkErrorParams {
  */
 function handleResponse(response: Response): Promise<HTTPResponse> {
     if (response.ok) {
-        if (
-            response.headers.get('Content-Type') === ContentType.CSV ||
-            response.headers.get('Content-Type') === ContentType.GZIP
-        ) {
-            return response
-                .text()
+        if (response.headers.get('Content-Type') === ContentType.CSV || response.headers.get('Content-Type') === ContentType.GZIP) {
+            return response.text()
                 .then(text => ({ body: text, headers: response.headers, status: response.status }));
         } // else
-        return response
-            .text()
+        return response.text()
             .then(decodeJson)
             .then(json => ({ body: json, headers: response.headers, status: response.status }));
     } // else
@@ -66,20 +61,10 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
                     `Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`
                 );
             }
-            err = new SplunkError({
-                message: json.message,
-                code: json.code,
-                moreInfo: json.moreInfo,
-                httpStatusCode: response.status,
-                details: json.details,
-            });
+            err = new SplunkError({ message: json.message, code: json.code, moreInfo: json.moreInfo, httpStatusCode: response.status, details: json.details });
         } catch (ex) {
             const message = `${response.statusText} - unable to process response`;
-            err = new SplunkError({
-                message,
-                httpStatusCode: response.status,
-                details: { response: text },
-            });
+            err = new SplunkError({ message, httpStatusCode: response.status, details: { response: text } });
         }
         throw err;
     });
@@ -116,7 +101,7 @@ export interface ServiceClientArgs {
     defaultTenant?: string;
 }
 
-const _sleep = (millis: number): Promise<void> => {
+const _sleep = (millis: number) : Promise<void> => {
     return new Promise(resolve => {
         setTimeout(resolve, millis);
     });
@@ -138,20 +123,13 @@ const _sleep = (millis: number): Promise<void> => {
  * @param onRetry A callback that takes a response and a request. Will be called on every retry attempt.
  * @param onFailure A callback that takes a response and a request. Will be called after maxRetries are exhausted.
  */
-export function naiveExponentialBackoff(
-    {
-        maxRetries = 5,
-        timeout = 100,
-        backoff = 2.0,
-        onRetry = (response: Response, request: Request) => {
-            /**/
-        },
-        onFailure = (response: Response, request: Request) => {
-            /**/
-        },
-    } = {}
-): ResponseHook {
-    const retry: ResponseHook = async (response: Response, request: Request) => {
+export function naiveExponentialBackoff({maxRetries = 5,
+                                         timeout = 100,
+                                         backoff = 2.0,
+                                         onRetry=(response: Response, request: Request) => {/**/},
+                                         onFailure=(response: Response, request: Request) =>{/**/}
+                                        } = {}) : ResponseHook {
+    const retry : ResponseHook = async (response: Response, request: Request) => {
         let retries = 0;
         let myResponse = response;
         let currentTimeout = timeout;
@@ -186,20 +164,6 @@ export class ServiceClient {
     private readonly tenant?: string;
     private responseHooks: ResponseHook[] = [];
 
-    // -------------------------------------------------------------------------
-    // NEW STUFF
-    // -------------------------------------------------------------------------
-    public getURLS = () => {
-        return this.urls;
-    };
-    public getToken = () => {
-        return this.tokenSource();
-    };
-    public getTenant = () => {
-        return this.tenant;
-    };
-    // -------------------------------------------------------------------------
-
     /**
      * Create a ServiceClient with the given URL and an auth token
      * @param args : ServiceClientArgs Url to Splunk Cloud instance
@@ -232,6 +196,7 @@ export class ServiceClient {
             if (args.url !== undefined && args.urls === undefined) {
                 // For backwards compatibility, form args.urls from args.url
                 args.urls = { api: args.url };
+
             }
             this.urls = args.urls || DEFAULT_URLS;
             this.tenant = args.defaultTenant;
@@ -248,21 +213,19 @@ export class ServiceClient {
      */
     public addResponseHook = (hook: ResponseHook) => {
         this.responseHooks.push(hook);
-    };
+    }
 
     /**
      * Clears response hooks from the client
      */
     public clearResponseHooks = () => {
         this.responseHooks = [];
-    };
+    }
 
     private invokeHooks = (response: Response, request: Request): Promise<Response> => {
-        return this.responseHooks.reduce((result: Promise<Response>, cb: ResponseHook): Promise<
-            Response
-        > => {
+        return this.responseHooks.reduce((result: Promise<Response>, cb: ResponseHook): Promise<Response> => {
             // Result starts as a known good Promise<Result>
-            return result.then(chainResponse => {
+            return result.then((chainResponse) => {
                 // Call the callback, get the result
                 let cbResult;
                 try {
@@ -287,14 +250,14 @@ export class ServiceClient {
                 return chainResponse;
             });
         }, Promise.resolve(response));
-    };
+    }
 
     /**
      * Builds the URL from a service + endpoint with query encoded in url
      * (concatenates the URL with the path)
      */
     public buildUrl = (cluster: string, path: string, query?: QueryArgs): string => {
-        const serviceCluster: string = this.urls[cluster] || DEFAULT_URLS.api;
+        const serviceCluster : string = this.urls[cluster] || DEFAULT_URLS.api;
         if (query && Object.keys(query).length > 0) {
             const encoder = encodeURIComponent;
             const queryEncoded = Object.keys(query)
@@ -304,7 +267,7 @@ export class ServiceClient {
             return `${serviceCluster}${path}?${queryEncoded}`;
         }
         return `${serviceCluster}${path}`;
-    };
+    }
 
     /**
      * Builds headers required for request to Splunk Cloud (auth, content-type, etc)
@@ -313,7 +276,7 @@ export class ServiceClient {
         // TODO: Cache
 
         const requestParamHeaders: Headers = new Headers({
-            Authorization: `Bearer ${this.tokenSource()}`,
+            'Authorization': `Bearer ${this.tokenSource()}`,
             'Content-Type': ContentType.JSON,
             'Splunk-Client': `${agent.useragent}/${agent.version}`,
         });
@@ -324,7 +287,7 @@ export class ServiceClient {
             });
         }
         return requestParamHeaders;
-    };
+    }
 
     /**
      * Builds a path for a given service call
@@ -333,11 +296,7 @@ export class ServiceClient {
      * @param overrideTenant If supplied, this tenant will be used instead of the tenant associated with this client object
      * @return A fully qualified path to the resource
      */
-    public buildPath = (
-        servicePrefix: string,
-        segments: string[],
-        overrideTenant?: string
-    ): string => {
+    public buildPath = (servicePrefix: string, segments: string[], overrideTenant?: string): string => {
         const effectiveTenant = overrideTenant || this.tenant;
         if (!effectiveTenant) {
             throw new Error('No tenant specified');
@@ -349,7 +308,7 @@ export class ServiceClient {
             }
         }
         return path;
-    };
+    }
 
     /**
      * Proxy for fetch that builds URL, applies headers and query string, and invokes hooks
@@ -359,13 +318,7 @@ export class ServiceClient {
      * @param opts Request opts
      * @param data Body data (will be stringified if an object)
      */
-    public fetch = (
-        method: HTTPMethod,
-        cluster: string,
-        path: string,
-        opts: RequestOptions = {},
-        data?: any
-    ): Promise<Response> => {
+    public fetch = (method: HTTPMethod, cluster: string, path: string, opts: RequestOptions = {}, data?: any): Promise<Response> => {
         const url = this.buildUrl(cluster, path, opts.query);
         const options = {
             method,
@@ -374,7 +327,8 @@ export class ServiceClient {
         };
         const request = new Request(url, options);
         return fetch(request).then(response => this.invokeHooks(response, request));
-    };
+
+    }
 
     /**
      * Performs a GET on the Splunk Cloud environment with the supplied path.
@@ -384,13 +338,10 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public get = (
-        cluster: string,
-        path: string,
-        opts: RequestOptions = {}
-    ): Promise<HTTPResponse> => {
-        return this.fetch('GET', cluster, path, opts).then(handleResponse);
-    };
+    public get = (cluster: string, path: string, opts: RequestOptions = {}): Promise<HTTPResponse> => {
+        return this.fetch('GET', cluster, path, opts)
+            .then(handleResponse);
+    }
 
     /**
      * Performs a POST on the Splunk Cloud environment with the supplied path.
@@ -401,14 +352,10 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public post = (
-        cluster: string,
-        path: string,
-        data: any,
-        opts: RequestOptions = {}
-    ): Promise<HTTPResponse> => {
-        return this.fetch('POST', cluster, path, opts, data).then(handleResponse);
-    };
+    public post = (cluster: string, path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> => {
+        return this.fetch('POST', cluster, path, opts, data)
+            .then(handleResponse);
+    }
 
     /**
      * Performs a PUT on the Splunk Cloud environment with the supplied path.
@@ -419,14 +366,10 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public put = (
-        cluster: string,
-        path: string,
-        data: any,
-        opts: RequestOptions = {}
-    ): Promise<HTTPResponse> => {
-        return this.fetch('PUT', cluster, path, opts, data).then(handleResponse);
-    };
+    public put = (cluster: string, path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> => {
+        return this.fetch('PUT', cluster, path, opts, data)
+            .then(handleResponse);
+    }
 
     /**
      * Performs a PATCH on the Splunk Cloud environment with the supplied path.
@@ -437,14 +380,10 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public patch = (
-        cluster: string,
-        path: string,
-        data: object,
-        opts: RequestOptions = {}
-    ): Promise<HTTPResponse> => {
-        return this.fetch('PATCH', cluster, path, opts, data).then(handleResponse);
-    };
+    public patch = (cluster: string, path: string, data: object, opts: RequestOptions = {}): Promise<HTTPResponse> => {
+        return this.fetch('PATCH', cluster, path, opts, data)
+            .then(handleResponse);
+    }
 
     /**
      * Performs a DELETE on the Splunk Cloud environment with the supplied path.
@@ -455,17 +394,14 @@ export class ServiceClient {
      * @param opts Request options
      * @return
      */
-    public delete = (
-        cluster: string,
-        path: string,
-        data: object = {},
-        opts: RequestOptions = {}
-    ): Promise<HTTPResponse> => {
-        return this.fetch('DELETE', cluster, path, opts, data).then(handleResponse);
-    };
+    public delete = (cluster: string, path: string, data: object = {}, opts: RequestOptions = {}): Promise<HTTPResponse> => {
+        return this.fetch('DELETE', cluster, path, opts, data)
+            .then(handleResponse);
+    }
 }
 
 type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
 
 /**
  * Optional arguments for the HTTP request
