@@ -7,11 +7,11 @@ import {
     // EmailAction,
     Notification,
     NotificationKind,
-    SNSAction,
-    WebhookAction,
+    // SNSAction,
+    // WebhookAction,
 } from '../../src/action';
 import { SplunkCloud } from '../../src/splunk';
-import { EmailAction } from '../../generated_api/action/models';
+import { EmailAction, WebhookAction } from '../../generated_api/action/models';
 import config from '../config';
 
 const tenantID = config.stagingTenant;
@@ -30,29 +30,18 @@ describe('integration tests using action service', () => {
         const emailAction: EmailAction = {
             addresses: ['test1@splunk.com', 'test2@splunk.com'],
             name: `crudemail_${Date.now()}`,
-            kind: ActionKind.email,
+            kind: EmailAction.KindEnum.Email,
             subject: 'The subject',
-            text: 'The body',
             title: 'The title',
         };
 
-        // name: string;
-        // kind: EmailAction.KindEnum;
-        // title?: string;
-        // subject?: string;
-        // body?: string;
-        // addresses?: Array<string>;
-
         it('should create action', () =>
             splunkCloud.action.createAction(emailAction).then(response => {
-                console.log('RESPONSE!!!');
-                console.log(response);
                 const email = response as EmailAction;
                 assert.deepEqual(email.addresses, emailAction.addresses);
                 assert.equal(email.name, emailAction.name);
                 assert.equal(email.kind, emailAction.kind);
                 assert.equal(email.subject, emailAction.subject);
-                assert.equal(email.text, emailAction.text);
                 assert.equal(email.title, emailAction.title);
             }));
 
