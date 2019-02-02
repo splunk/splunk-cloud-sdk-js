@@ -4,7 +4,7 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
-import { EmailAction, WebhookAction } from '../generated_api/action/models';
+import { ActionResult, EmailAction, WebhookAction } from '../generated_api/action/models';
 import BaseApiService from './baseapiservice';
 import { ACTION_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
@@ -24,24 +24,24 @@ export class ActionService extends BaseApiService {
     };
 
     /**
-     * Get an action by action_name
-     * @param action_name name of the action
+     * Get an action by actionName
+     * @param actionName name of the action
      * @return Promise of an action
      */
-    public getAction = (action_name: string): Promise<Action> => {
-        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', action_name]);
+    public getAction = (actionName: string): Promise<Action> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', actionName]);
         return this.client
             .get(SERVICE_CLUSTER_MAPPING.action, url)
             .then(response => response.body as Action);
     };
 
     /**
-     * Delete an action by action_name
-     * @param action_name name of the action
+     * Delete an action by actionName
+     * @param actionName name of the action
      * @return Promise of object
      */
-    public deleteAction = (action_name: string): Promise<object> => {
-        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', action_name]);
+    public deleteAction = (actionName: string): Promise<object> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', actionName]);
         return this.client
             .delete(SERVICE_CLUSTER_MAPPING.action, url)
             .then(response => response.body as object);
@@ -61,12 +61,12 @@ export class ActionService extends BaseApiService {
 
     /**
      * Update an action
-     * @param action_name name of the action
+     * @param actionName name of the action
      * @param action action updates
      * @return Promise of an action
      */
-    public updateAction = (action_name: string, action: Partial<Action>): Promise<Action> => {
-        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', action_name]);
+    public updateAction = (actionName: string, action: Partial<Action>): Promise<Action> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', actionName]);
         return this.client
             .patch(SERVICE_CLUSTER_MAPPING.action, url, action)
             .then(response => response.body as Action);
@@ -74,15 +74,15 @@ export class ActionService extends BaseApiService {
 
     /**
      * Trigger an action
-     * @param name name of the action
+     * @param actionName name of the action
      * @param notification action notification
      * @return Promise of actionTriggerResponse
      */
     public triggerAction = (
-        name: ActionBase['name'],
+        actionName: string,
         notification: Notification
     ): Promise<ActionTriggerResponse> => {
-        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]);
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', actionName]);
         return this.client
             .post(SERVICE_CLUSTER_MAPPING.action, url, notification)
             .then(response => {
@@ -105,23 +105,23 @@ export class ActionService extends BaseApiService {
 
     /**
      * Get action status
-     * @param name name of the action
+     * @param actionName name of the action
      * @param statusId statusId
      * @return Promise of actionStatus
      */
     public getActionStatus = (
-        name: ActionBase['name'],
-        statusId: ActionStatus['statusId']
-    ): Promise<ActionStatus> => {
+        actionName: string,
+        statusId: ActionResult['statusId']
+    ): Promise<ActionResult> => {
         const url = this.client.buildPath(ACTION_SERVICE_PREFIX, [
             'actions',
-            name,
+            actionName,
             'status',
             statusId,
         ]);
         return this.client
             .get(SERVICE_CLUSTER_MAPPING.action, url)
-            .then(response => response.body as ActionStatus);
+            .then(response => response.body as ActionResult);
     };
 }
 
@@ -130,21 +130,6 @@ export enum ActionKind {
     email = 'email',
     webhook = 'webhook',
     sns = 'sns',
-}
-
-// ActionStatusState reflects the status of the action
-export enum ActionStatusState {
-    queue = 'QUEUED',
-    running = 'RUNNING',
-    done = 'DONE',
-    failed = 'FAILED',
-}
-
-// ActionStatus defines the state information
-export interface ActionStatus {
-    state: ActionStatusState;
-    statusId: string;
-    message: string;
 }
 
 // ActionTriggerResponse for returning status url and id
@@ -208,14 +193,13 @@ export interface SplunkEventPayload {
 //     topic: string;
 // }
 
-export interface ActionBase {
-    kind: ActionKind;
-    /**
-     * Name of the action.  Must be atleast 4 alphanumeric characters,
-     * and can be segmented with periods.
-     */
-    name: string;
-}
+// export interface ActionBase {
+//     kind: ActionKind;
+//     /*
+//      * Name of the action.  Must be atleast 4 alphanumeric characters,
+//      * and can be segmented with periods. */
+//     name: string;
+// }
 
 // export type Action = EmailAction | SNSAction | WebhookAction;
 export type Action = EmailAction | WebhookAction;

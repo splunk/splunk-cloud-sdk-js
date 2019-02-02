@@ -1,8 +1,9 @@
 import { assert } from 'chai';
 import 'mocha';
+import { ActionResult, EmailAction, WebhookAction } from '../../generated_api/action/models';
 import {
     ActionKind,
-    ActionStatus,
+    // ActionStatus,
     ActionTriggerResponse,
     // EmailAction,
     Notification,
@@ -11,7 +12,6 @@ import {
     // WebhookAction,
 } from '../../src/action';
 import { SplunkCloud } from '../../src/splunk';
-import { EmailAction, WebhookAction } from '../../generated_api/action/models';
 import config from '../config';
 
 const tenantID = config.stagingTenant;
@@ -74,11 +74,6 @@ describe('integration tests using action service', () => {
     });
 
     describe('Trigger webhook actions', () => {
-        // name: string;
-        // kind: WebhookAction.KindEnum;
-        // title?: string;
-        // webhookUrl?: string;
-        // webhookPayload?: string;
         const webhookAction: WebhookAction = {
             name: `webhook_action_${Date.now()}`,
             kind: WebhookAction.KindEnum.Webhook,
@@ -96,34 +91,35 @@ describe('integration tests using action service', () => {
             });
         });
 
-        // const notification: Notification = {
-        //     kind: NotificationKind.rawJSON,
-        //     tenant: tenantID as string,
-        //     payload: {
-        //         name: 'user payload',
-        //     },
-        // };
+        const notification: Notification = {
+            kind: NotificationKind.rawJSON,
+            tenant: tenantID as string,
+            payload: {
+                name: 'user payload',
+            },
+        };
 
-        // it('should trigger action and get status', () => {
-        //     let webhook: ActionTriggerResponse;
-        //     return splunkCloud.action
-        //         .triggerAction(webhookAction.name, notification)
-        //         .then(response => {
-        //             webhook = response as ActionTriggerResponse;
-        //             assert.isNotNull(webhook.statusId);
-        //             assert.isNotNull(webhook.statusUrl);
+        it('should trigger action and get status', () => {
+            let webhook: ActionTriggerResponse;
+            return splunkCloud.action
+                .triggerAction(webhookAction.name, notification)
+                .then(response => {
+                    webhook = response as ActionTriggerResponse;
+                    assert.isNotNull(webhook.statusId);
+                    assert.isNotNull(webhook.statusUrl);
 
-        //             return splunkCloud.action.getActionStatus(
-        //                 webhookAction.name,
-        //                 webhook.statusId as string
-        //             );
-        //         })
-        //         .then(res => {
-        //             const actionStatus = res as ActionStatus;
-        //             // expect(['RUNNING', 'FAILED']).to.include(res.state) TODO: Whether the action succeeds or not, depends on the action definition
-        //             assert.equal(actionStatus.statusId, webhook.statusId);
-        //         });
-        // });
+                    return splunkCloud.action.getActionStatus(
+                        webhookAction.name,
+                        webhook.statusId as string
+                    );
+                })
+                .then(res => {
+                    const actionStatus = res as ActionResult;
+                    // expect(['RUNNING', 'FAILED']).to.include(res.state)
+                    // TODO: Whether the action succeeds or not, depends on the action definition
+                    assert.equal(actionStatus.statusId, webhook.statusId);
+                });
+        });
 
         it('should delete actions', () => {
             return splunkCloud.action.deleteAction(webhookAction.name).then(response => {

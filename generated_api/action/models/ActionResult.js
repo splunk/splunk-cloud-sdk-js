@@ -16,7 +16,7 @@ var runtime_1 = require("../runtime");
 function ActionResultFromJSON(json) {
     return {
         'state': !runtime_1.exists(json, 'state') ? undefined : json['state'],
-        'statusId': !runtime_1.exists(json, 'statusId') ? undefined : json['statusId'],
+        'statusId': json['statusId'],
         'message': !runtime_1.exists(json, 'message') ? undefined : json['message'],
     };
 }

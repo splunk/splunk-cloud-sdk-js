@@ -29,7 +29,7 @@ export interface ActionResult {
      * @type {string}
      * @memberof ActionResult
      */
-    statusId?: string;
+    statusId: string;
     /**
      * 
      * @type {string}
@@ -41,7 +41,7 @@ export interface ActionResult {
 export function ActionResultFromJSON(json: any): ActionResult {
     return {
         'state': !exists(json, 'state') ? undefined : json['state'],
-        'statusId': !exists(json, 'statusId') ? undefined : json['statusId'],
+        'statusId': json['statusId'],
         'message': !exists(json, 'message') ? undefined : json['message'],
     // TODO: Template Change
     } as ActionResult;

@@ -26,7 +26,7 @@ export interface ActionResult {
      * @type {string}
      * @memberof ActionResult
      */
-    statusId?: string;
+    statusId: string;
     /**
      *
      * @type {string}
