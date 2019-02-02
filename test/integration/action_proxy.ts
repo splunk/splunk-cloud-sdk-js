@@ -73,59 +73,64 @@ describe('integration tests using action service', () => {
             }));
     });
 
-    // describe('Trigger webhook actions', () => {
-    //     const webhookAction: WebhookAction = {
-    //         name: `WebhookAction_${Date.now()}`,
-    //         kind: ActionKind.webhook,
-    //         webhookUrl: 'https://foo.slack.com/test',
-    //         message: 'some user msg',
-    //     };
+    describe('Trigger webhook actions', () => {
+        // name: string;
+        // kind: WebhookAction.KindEnum;
+        // title?: string;
+        // webhookUrl?: string;
+        // webhookPayload?: string;
+        const webhookAction: WebhookAction = {
+            name: `webhook_action_${Date.now()}`,
+            kind: WebhookAction.KindEnum.Webhook,
+            webhookPayload: 'This is a webhook payload!',
+            webhookUrl: 'https://foo.slack.com/test',
+        };
 
-    //     it('should create action', () => {
-    //         return splunkCloud.action.createAction(webhookAction).then(response => {
-    //             const webhook = response as WebhookAction;
-    //             assert.equal(webhook.name, webhookAction.name);
-    //             assert.equal(webhook.kind, webhookAction.kind);
-    //             assert.equal(webhook.webhookUrl, webhookAction.webhookUrl);
-    //             assert.equal(webhook.message, webhookAction.message);
-    //         });
-    //     });
+        it('should create action', () => {
+            return splunkCloud.action.createAction(webhookAction).then(response => {
+                const webhook = response as WebhookAction;
+                assert.equal(webhook.name, webhookAction.name);
+                assert.equal(webhook.kind, webhookAction.kind);
+                assert.equal(webhook.webhookPayload, webhookAction.webhookPayload);
+                assert.equal(webhook.webhookUrl, webhookAction.webhookUrl);
+            });
+        });
 
-    //     const notification: Notification = {
-    //         kind: NotificationKind.rawJSON,
-    //         tenant: tenantID as string,
-    //         payload: {
-    //             name: 'user payload',
-    //         },
-    //     };
+        // const notification: Notification = {
+        //     kind: NotificationKind.rawJSON,
+        //     tenant: tenantID as string,
+        //     payload: {
+        //         name: 'user payload',
+        //     },
+        // };
 
-    //     it('should trigger action and get status', () => {
-    //         let webhook: ActionTriggerResponse;
-    //         return splunkCloud.action
-    //             .triggerAction(webhookAction.name, notification)
-    //             .then(response => {
-    //                 webhook = response as ActionTriggerResponse;
-    //                 assert.isNotNull(webhook.statusId);
-    //                 assert.isNotNull(webhook.statusUrl);
+        // it('should trigger action and get status', () => {
+        //     let webhook: ActionTriggerResponse;
+        //     return splunkCloud.action
+        //         .triggerAction(webhookAction.name, notification)
+        //         .then(response => {
+        //             webhook = response as ActionTriggerResponse;
+        //             assert.isNotNull(webhook.statusId);
+        //             assert.isNotNull(webhook.statusUrl);
 
-    //                 return splunkCloud.action.getActionStatus(
-    //                     webhookAction.name,
-    //                     webhook.statusId as string
-    //                 );
-    //             })
-    //             .then(res => {
-    //                 const actionStatus = res as ActionStatus;
-    //                 // expect(['RUNNING', 'FAILED']).to.include(res.state) TODO: Whether the action succeeds or not, depends on the action definition
-    //                 assert.equal(actionStatus.statusId, webhook.statusId);
-    //             });
-    //     });
+        //             return splunkCloud.action.getActionStatus(
+        //                 webhookAction.name,
+        //                 webhook.statusId as string
+        //             );
+        //         })
+        //         .then(res => {
+        //             const actionStatus = res as ActionStatus;
+        //             // expect(['RUNNING', 'FAILED']).to.include(res.state) TODO: Whether the action succeeds or not, depends on the action definition
+        //             assert.equal(actionStatus.statusId, webhook.statusId);
+        //         });
+        // });
 
-    //     it('should delete actions', () => {
-    //         return splunkCloud.action.deleteAction(webhookAction.name).then(response => {
-    //             assert.isEmpty(response);
-    //         });
-    //     });
-    // });
+        it('should delete actions', () => {
+            return splunkCloud.action.deleteAction(webhookAction.name).then(response => {
+                assert.isEmpty(response);
+            });
+        });
+    });
 
     // describe('Create/delete SNS actions', () => {
     //     const action: SNSAction = {
