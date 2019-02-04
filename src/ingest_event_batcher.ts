@@ -12,6 +12,7 @@ import { Event, IngestService } from './ingest';
  */
 export class EventBatcher {
     private ingest: IngestService;
+    // Ingest service has a kinesis internal limit, ~1MiB 1048576 bytes
     private readonly batchSize: number = 1040000;
     private readonly batchCount: number;
     private readonly timeout: number;
