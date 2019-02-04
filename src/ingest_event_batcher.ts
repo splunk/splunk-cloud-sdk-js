@@ -12,7 +12,7 @@ import { Event, IngestService } from './ingest';
  */
 export class EventBatcher {
     private ingest: IngestService;
-    private readonly batchSize: number;
+    private readonly batchSize: number = 1040000;
     private readonly batchCount: number;
     private readonly timeout: number;
     private queue: Event[];
@@ -27,8 +27,12 @@ export class EventBatcher {
 
     constructor(ingest: IngestService, batchSize: number, batchCount: number, timeout: any) {
         this.ingest = ingest;
-        // TODO: set some sane defaults so these 3 can be optional
-        this.batchSize = batchSize;
+        if (batchSize > 1040000) {
+            this.batchSize = 1040000;
+        } else {
+            this.batchSize = batchSize;
+        }
+        // TODO: set some sane defaults so these 2 can be optional
         this.batchCount = batchCount;
         this.timeout = timeout;
         this.queue = [];
