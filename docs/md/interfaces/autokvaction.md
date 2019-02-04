@@ -4,19 +4,21 @@
 
 ## Hierarchy
 
-**AutoKVAction**
+ `Action`
+
+**↳ AutoKVAction**
 
 ## Index
 
 ### Properties
 
 * [created](autokvaction.md#created)
-* [createdBy](autokvaction.md#createdby)
+* [createdby](autokvaction.md#createdby)
 * [id](autokvaction.md#id)
 * [kind](autokvaction.md#kind)
 * [mode](autokvaction.md#mode)
 * [modified](autokvaction.md#modified)
-* [modifiedBy](autokvaction.md#modifiedby)
+* [modifiedby](autokvaction.md#modifiedby)
 * [owner](autokvaction.md#owner)
 * [ruleid](autokvaction.md#ruleid)
 * [version](autokvaction.md#version)
@@ -27,23 +29,26 @@
 
 <a id="created"></a>
 
-###  created
+### `<Optional>` created
 
-**● created**: *`string`*
+**● created**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="createdby"></a>
 
-###  createdBy
+### `<Optional>` createdby
 
-**● createdBy**: *`string`*
+**● createdby**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="id"></a>
 
-###  id
+### `<Optional>` id
 
-**● id**: *`string`*
+**● id**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="kind"></a>
@@ -62,37 +67,42 @@ ___
 ___
 <a id="modified"></a>
 
-###  modified
+### `<Optional>` modified
 
-**● modified**: *`string`*
+**● modified**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="modifiedby"></a>
 
-###  modifiedBy
+### `<Optional>` modifiedby
 
-**● modifiedBy**: *`string`*
+**● modifiedby**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="owner"></a>
 
-###  owner
+### `<Optional>` owner
 
-**● owner**: *`string`*
+**● owner**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="ruleid"></a>
 
-###  ruleid
+### `<Optional>` ruleid
 
-**● ruleid**: *`string`*
+**● ruleid**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="version"></a>
 
-###  version
+### `<Optional>` version
 
-**● version**: *`number`*
+**● version**: * `undefined` &#124; `number`
+*
 
 ___
 

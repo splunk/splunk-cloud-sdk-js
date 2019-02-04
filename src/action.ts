@@ -179,22 +179,25 @@ export interface SplunkEventPayload {
 export interface EmailAction extends ActionBase {
     kind: ActionKind.email;
     addresses: string[];
-    htmlPart?: string;
-    subjectPart?: string;
-    templateName?: string;
-    textPart?: string;
-}
-
-export interface SNSAction extends ActionBase {
-    kind: ActionKind.sns;
-    message: string;
-    topic: string;
+    subject: string;
+    /**
+     * HTML content that will be sent as the body of this email.
+     */
+    body: string;
+    /**
+     * Optional text that will be sent as the text/plain part of this email. If this field is not
+     * set for an email action, when triggering that action the Action Service will convert th
+     * value from the body field to text and send that as the text/plain part.
+     */
+    bodyPlainText?: string;
 }
 
 export interface WebhookAction extends ActionBase {
     kind: ActionKind.webhook;
-    message: string;
-
+    /**
+     * WebhookPayload (earlier named as 'message') is the (possibly) templated payload body which will be POSTed to the webhookUrl when triggered
+     */
+    webhookPayload: string;
     /**
      * Only allows https scheme. Only allows hostnames that end with "slack.com", "webhook.site", "sendgrid.com", "zapier.com", "hipchat.com", "amazon.com", and "amazonaws.com"
      */
@@ -208,6 +211,10 @@ export interface ActionBase {
      * and can be segmented with periods.
      */
     name: string;
+    /**
+     * Human readable name title for the action. Must be less than 128 characters.
+     */
+    title?: string;
 }
 
-export type Action = EmailAction | WebhookAction | SNSAction;
+export type Action = EmailAction | WebhookAction;

@@ -28,7 +28,7 @@ Provides the ability to keep a growing number of events queued up and sends them
 
 ###  constructor
 
-⊕ **new EventBatcher**(ingest: *[IngestService](ingestservice.md)*, batchSize: *`number`*, batchCount: *`number`*, timeout: *`number`*): [EventBatcher](eventbatcher.md)
+⊕ **new EventBatcher**(ingest: *[IngestService](ingestservice.md)*, batchSize: *`number`*, batchCount: *`number`*, timeout: *`any`*): [EventBatcher](eventbatcher.md)
 
 **Parameters:**
 
@@ -37,7 +37,7 @@ Provides the ability to keep a growing number of events queued up and sends them
 | ingest | [IngestService](ingestservice.md) |  Proxy for the Ingest API |
 | batchSize | `number` |  Size of events in bytes |
 | batchCount | `number` |  Number of events |
-| timeout | `number` |  Interval (milliseconds) to send the events and flush the queue |
+| timeout | `any` |  Interval (milliseconds) to send the events and flush the queue |
 
 **Returns:** [EventBatcher](eventbatcher.md)
 

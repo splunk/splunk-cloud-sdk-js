@@ -27,7 +27,7 @@
 
 ###  kind
 
-**● kind**: *`string`*
+**● kind**: *[ActionKind](../enums/actionkind.md)*
 
 ___
 <a id="name"></a>

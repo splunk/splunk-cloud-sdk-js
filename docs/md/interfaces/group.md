@@ -25,7 +25,7 @@ Group - Association of tenants, members
 
 ###  createdAt
 
-**● createdAt**: *`Date`*
+**● createdAt**: *`string`*
 
 ___
 <a id="createdby"></a>

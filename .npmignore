@@ -9,6 +9,8 @@ test/
 *.iml
 .idea/
 .vscode/
+coverage/
+.nyc_output/
 .prettierrc
 .editorconfig
 tmp/
@@ -29,3 +31,4 @@ tsconfig.test.json
 # Hide compiled test folders, these appear to be webstorm generated
 /integration
 /unit
+

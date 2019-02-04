@@ -85,7 +85,7 @@ ___
 
 ###  createDataset
 
-▸ **createDataset**(dataset: *[DatasetInfo](../interfaces/datasetinfo.md)*): `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
+▸ **createDataset**(dataset: *[Dataset](../#dataset)*): `Promise`<[DatasetResponse](../#datasetresponse)>
 
 Create a new dataset.
 
@@ -93,9 +93,9 @@ Create a new dataset.
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| dataset | [DatasetInfo](../interfaces/datasetinfo.md) |  The dataset to create |
+| dataset | [Dataset](../#dataset) |  The dataset to create |
 
-**Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
+**Returns:** `Promise`<[DatasetResponse](../#datasetresponse)>
 description of the new dataset
 
 ___
@@ -103,7 +103,7 @@ ___
 
 ###  createRule
 
-▸ **createRule**(rule: *[Rule](../interfaces/rule.md)*): `Promise`<[Rule](../interfaces/rule.md)>
+▸ **createRule**(rule: *[CreateRule](../interfaces/createrule.md)*): `Promise`<[Rule](../interfaces/rule.md)>
 
 Create a new Rule
 
@@ -111,7 +111,7 @@ Create a new Rule
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| rule | [Rule](../interfaces/rule.md) |  The rule to create |
+| rule | [CreateRule](../interfaces/createrule.md) |  The rule to create |
 
 **Returns:** `Promise`<[Rule](../interfaces/rule.md)>
 a description of the new rule
@@ -142,7 +142,7 @@ ___
 
 ▸ **deleteDataset**(datasetIdOrResourceName: *`string`*): `Promise`<`any`>
 
-Delete the DatasetInfo and its dependencies with the specified `id`
+Delete the Dataset and its dependencies with the specified `id`
 
 **Parameters:**
 
@@ -232,7 +232,7 @@ ___
 
 ###  getDataset
 
-▸ **getDataset**(datasetIdOrResourceName: *`string`*): `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
+▸ **getDataset**(datasetIdOrResourceName: *`string`*): `Promise`<[DatasetResponse](../#datasetresponse)>
 
 Returns the dataset resource with the specified `id` or `resourceName`.
 
@@ -242,7 +242,7 @@ Returns the dataset resource with the specified `id` or `resourceName`.
 | ------ | ------ | ------ |
 | datasetIdOrResourceName | `string` |  \- |
 
-**Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
+**Returns:** `Promise`<[DatasetResponse](../#datasetresponse)>
 description of the dataset
 
 ___
@@ -288,7 +288,7 @@ ___
 
 ###  getDatasets
 
-▸ **getDatasets**(filter?: * `undefined` &#124; `string`*): `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)[]>
+▸ **getDatasets**(filter?: * `undefined` &#124; `string`*): `Promise`<[DatasetResponse](../#datasetresponse)[]>
 
 Returns a list of datasets, optionally filtered by a filter string.
 
@@ -298,7 +298,7 @@ Returns a list of datasets, optionally filtered by a filter string.
 | ------ | ------ | ------ |
 | `Optional` filter |  `undefined` &#124; `string`|  An SPL filter string |
 
-**Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)[]>
+**Returns:** `Promise`<[DatasetResponse](../#datasetresponse)[]>
 Array of dataset descriptors
 
 ___
@@ -433,7 +433,7 @@ ___
 
 ###  listDatasets
 
-▸ **listDatasets**(query?: *[QueryArgs](../interfaces/queryargs.md)*): `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)[]>
+▸ **listDatasets**(query?: *[QueryArgs](../interfaces/queryargs.md)*): `Promise`<[DatasetResponse](../#datasetresponse)[]>
 
 Returns a list of datasets, optionally filtered by a filter string, count, or orderby criteria
 
@@ -443,7 +443,7 @@ Returns a list of datasets, optionally filtered by a filter string, count, or or
 | ------ | ------ | ------ | ------ |
 | `Default value` query | [QueryArgs](../interfaces/queryargs.md) |  {} |  QueryArgs |
 
-**Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)[]>
+**Returns:** `Promise`<[DatasetResponse](../#datasetresponse)[]>
 
 ___
 <a id="patchdatasetfield"></a>
@@ -489,7 +489,7 @@ ___
 
 ###  updateDataset
 
-▸ **updateDataset**(datasetIdOrResourceName: *`string`*, partial: *[PartialDatasetInfo](../interfaces/partialdatasetinfo.md)*): `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
+▸ **updateDataset**(datasetIdOrResourceName: *`string`*, partial: *`Partial`<[Dataset](../#dataset)>*): `Promise`<[DatasetResponse](../#datasetresponse)>
 
 Updates the supplied dataset
 
@@ -498,9 +498,9 @@ Updates the supplied dataset
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | datasetIdOrResourceName | `string` |  \- |
-| partial | [PartialDatasetInfo](../interfaces/partialdatasetinfo.md) |  \- |
+| partial | `Partial`<[Dataset](../#dataset)> |  \- |
 
-**Returns:** `Promise`<[DatasetInfo](../interfaces/datasetinfo.md)>
+**Returns:** `Promise`<[DatasetResponse](../#datasetresponse)>
 information about the updated dataset
 
 ___
@@ -518,7 +518,7 @@ Updates the supplied rule action
 | ------ | ------ | ------ |
 | ruleID | `string` |  \- |
 | actionID | `string` |  \- |
-| action |  [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)|
+| action |  [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)|  \- |
 
 **Returns:** `Promise`< [AliasAction](../interfaces/aliasaction.md) &#124; [AutoKVAction](../interfaces/autokvaction.md) &#124; [EvalAction](../interfaces/evalaction.md) &#124; [LookupAction](../interfaces/lookupaction.md) &#124; [RegexAction](../interfaces/regexaction.md)>
 information about the updated rule action

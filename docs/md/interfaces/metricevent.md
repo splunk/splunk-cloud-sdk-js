@@ -33,7 +33,7 @@ MetricEvent - Common payload to specify multiple related Splunk metrics.
 * [id](metricevent.md#id)
 * [nanos](metricevent.md#nanos)
 * [source](metricevent.md#source)
-* [sourceType](metricevent.md#sourcetype)
+* [sourcetype](metricevent.md#sourcetype)
 * [timestamp](metricevent.md#timestamp)
 
 ---
@@ -42,7 +42,7 @@ MetricEvent - Common payload to specify multiple related Splunk metrics.
 
 <a id="attributes"></a>
 
-###  attributes
+### `<Optional>` attributes
 
 **● attributes**: *[MetricAttributes](metricattributes.md)*
 
@@ -53,16 +53,17 @@ ___
 
 ###  body
 
-**● body**: *[Metric](metric.md)[]*
+**● body**: *`Metric`[]*
 
 Specifies multiple related metrics e.g. Memory, CPU etc.
 
 ___
 <a id="host"></a>
 
-###  host
+### `<Optional>` host
 
-**● host**: *`string`*
+**● host**: * `undefined` &#124; `string`
+*
 
 The host value assigned to the event data. Typically, this is the hostname of the client from which you are sending data.
 
@@ -89,27 +90,30 @@ Optional nanoseconds part of the timestamp.
 ___
 <a id="source"></a>
 
-###  source
+### `<Optional>` source
 
-**● source**: *`string`*
+**● source**: * `undefined` &#124; `string`
+*
 
 The source value to assign to the event data. For example, if you are sending data from an app that you are developing, set this key to the name of the app.
 
 ___
 <a id="sourcetype"></a>
 
-###  sourceType
+### `<Optional>` sourcetype
 
-**● sourceType**: *`string`*
+**● sourcetype**: * `undefined` &#124; `string`
+*
 
 The sourcetype value assigned to the event data.
 
 ___
 <a id="timestamp"></a>
 
-###  timestamp
+### `<Optional>` timestamp
 
-**● timestamp**: *`number`*
+**● timestamp**: * `undefined` &#124; `number`
+*
 
 Epoch time in milliseconds.
 

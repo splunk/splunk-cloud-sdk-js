@@ -12,11 +12,11 @@
 
 * [actions](rule.md#actions)
 * [created](rule.md#created)
-* [createdBy](rule.md#createdby)
+* [createdby](rule.md#createdby)
 * [id](rule.md#id)
 * [match](rule.md#match)
 * [modified](rule.md#modified)
-* [modifiedBy](rule.md#modifiedby)
+* [modifiedby](rule.md#modifiedby)
 * [module](rule.md#module)
 * [name](rule.md#name)
 * [owner](rule.md#owner)
@@ -30,7 +30,7 @@
 
 ###  actions
 
-**● actions**: *[Action](action.md)[]*
+**● actions**: *`Action`[]*
 
 ___
 <a id="created"></a>
@@ -42,9 +42,9 @@ ___
 ___
 <a id="createdby"></a>
 
-###  createdBy
+###  createdby
 
-**● createdBy**: *`string`*
+**● createdby**: *`string`*
 
 ___
 <a id="id"></a>
@@ -70,9 +70,9 @@ ___
 ___
 <a id="modifiedby"></a>
 
-###  modifiedBy
+###  modifiedby
 
-**● modifiedBy**: *`string`*
+**● modifiedby**: *`string`*
 
 ___
 <a id="module"></a>

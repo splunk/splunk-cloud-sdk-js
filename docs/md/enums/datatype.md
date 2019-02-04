@@ -1,6 +1,6 @@
-[@splunk/cloud-sdk](../README.md) > [DataType](../enums/datatype.md)
+[@splunk/cloud-sdk](../README.md) > [Datatype](../enums/datatype.md)
 
-# Enumeration: DataType
+# Enumeration: Datatype
 
 ## Index
 
@@ -20,35 +20,35 @@
 
 ###  DATE
 
-**DATE**: 
+**DATE**:  = "D"
 
 ___
 <a id="number"></a>
 
 ###  NUMBER
 
-**NUMBER**: 
+**NUMBER**:  = "N"
 
 ___
 <a id="object_id"></a>
 
 ###  OBJECT_ID
 
-**OBJECT_ID**: 
+**OBJECT_ID**:  = "O"
 
 ___
 <a id="string"></a>
 
 ###  STRING
 
-**STRING**: 
+**STRING**:  = "S"
 
 ___
 <a id="unknown"></a>
 
 ###  UNKNOWN
 
-**UNKNOWN**: 
+**UNKNOWN**:  = "U"
 
 ___
 

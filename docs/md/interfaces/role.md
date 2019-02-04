@@ -25,7 +25,7 @@ Role - A unique role associated with a tenant within the Identity Service
 
 ###  createdAt
 
-**● createdAt**: *`Date`*
+**● createdAt**: *`string`*
 
 ___
 <a id="createdby"></a>
