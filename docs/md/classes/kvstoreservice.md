@@ -32,6 +32,7 @@ Encapsulates kvstore service endpoints
 * [insertRecords](kvstoreservice.md#insertrecords)
 * [listIndexes](kvstoreservice.md#listindexes)
 * [listRecords](kvstoreservice.md#listrecords)
+* [putRecord](kvstoreservice.md#putrecord)
 * [queryRecords](kvstoreservice.md#queryrecords)
 
 ---
@@ -72,7 +73,7 @@ ___
 
 ###  createIndex
 
-▸ **createIndex**(collection: *`string`*, index: *[IndexDescription](../interfaces/indexdescription.md)*): `Promise`<[IndexDescription](../interfaces/indexdescription.md)>
+▸ **createIndex**(collection: *`string`*, index: *[IndexDefinition](../interfaces/indexdefinition.md)*): `Promise`<[IndexDefinition](../interfaces/indexdefinition.md)>
 
 Creates a new index to be added to the collection.
 
@@ -81,9 +82,9 @@ Creates a new index to be added to the collection.
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection where the new index will be created |
-| index | [IndexDescription](../interfaces/indexdescription.md) |  The index to create |
+| index | [IndexDefinition](../interfaces/indexdefinition.md) |  The index to create |
 
-**Returns:** `Promise`<[IndexDescription](../interfaces/indexdescription.md)>
+**Returns:** `Promise`<[IndexDefinition](../interfaces/indexdefinition.md)>
 A definition of the created index
 
 ___
@@ -129,7 +130,7 @@ ___
 
 ###  deleteRecords
 
-▸ **deleteRecords**(collection: *`string`*, filter?: *[QueryArgs](../interfaces/queryargs.md)*): `Promise`<`any`>
+▸ **deleteRecords**(collection: *`string`*, filter?: * `undefined` &#124; `string`*): `Promise`<`any`>
 
 Deletes records present in a given collection based on the query parameters provided by the user.
 
@@ -138,7 +139,7 @@ Deletes records present in a given collection based on the query parameters prov
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection whose records should be deleted |
-| `Optional` filter | [QueryArgs](../interfaces/queryargs.md) |  Query JSON expression to target specific records |
+| `Optional` filter |  `undefined` &#124; `string`|  Query JSON expression to target specific records |
 
 **Returns:** `Promise`<`any`>
 A promise that will be resolved when the matching records are deleted
@@ -148,11 +149,11 @@ ___
 
 ###  getHealthStatus
 
-▸ **getHealthStatus**(): `Promise`<`any`>
+▸ **getHealthStatus**(): `Promise`<[PingOKBody](../interfaces/pingokbody.md)>
 
 Gets the KVStore's status.
 
-**Returns:** `Promise`<`any`>
+**Returns:** `Promise`<[PingOKBody](../interfaces/pingokbody.md)>
 KVStore health status
 
 ___
@@ -160,7 +161,7 @@ ___
 
 ###  getRecordByKey
 
-▸ **getRecordByKey**(collection: *`string`*, key: *`string`*): `Promise`<`Map`<`string`, `string`>>
+▸ **getRecordByKey**(collection: *`string`*, key: *`string`*): `Promise`<`object`>
 
 Gets the record present in a given collection based on the key value provided by the user.
 
@@ -171,7 +172,7 @@ Gets the record present in a given collection based on the key value provided by
 | collection | `string` |  The name of the collection whose record should be fetched |
 | key | `string` |  The record key used to query a specific record |
 
-**Returns:** `Promise`<`Map`<`string`, `string`>>
+**Returns:** `Promise`<`object`>
 the record associated with the given key
 
 ___
@@ -179,7 +180,7 @@ ___
 
 ###  insertRecord
 
-▸ **insertRecord**(collection: *`string`*, record: *`Map`<`string`, `string`>*): `Promise`<[Key](../interfaces/key.md)>
+▸ **insertRecord**(collection: *`string`*, record: *`object`*): `Promise`<[Key](../interfaces/key.md)>
 
 Inserts a new record to the collection.
 
@@ -188,7 +189,7 @@ Inserts a new record to the collection.
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection where the record should be inserted |
-| record | `Map`<`string`, `string`> |  The record to add to the collection |
+| record | `object` |  The record to add to the collection |
 
 **Returns:** `Promise`<[Key](../interfaces/key.md)>
 An object with the unique _key of the added record
@@ -198,7 +199,7 @@ ___
 
 ###  insertRecords
 
-▸ **insertRecords**(collection: *`string`*, records: *`Array`<`Map`<`string`, `string`>>*): `Promise`<`string`[]>
+▸ **insertRecords**(collection: *`string`*, records: *`Array`<`object`>*): `Promise`<`string`[]>
 
 Inserts multiple new records to the collection in a single request.
 
@@ -207,7 +208,7 @@ Inserts multiple new records to the collection in a single request.
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection where the new records should be inserted |
-| records | `Array`<`Map`<`string`, `string`>> |  The data tuples to insert |
+| records | `Array`<`object`> |  The data tuples to insert |
 
 **Returns:** `Promise`<`string`[]>
 A list of keys of the inserted records
@@ -217,7 +218,7 @@ ___
 
 ###  listIndexes
 
-▸ **listIndexes**(collection: *`string`*): `Promise`<[IndexDescription](../interfaces/indexdescription.md)[]>
+▸ **listIndexes**(collection: *`string`*): `Promise`<[IndexDefinition](../interfaces/indexdefinition.md)[]>
 
 Lists all the indexes in a given collection.
 
@@ -227,7 +228,7 @@ Lists all the indexes in a given collection.
 | ------ | ------ | ------ |
 | collection | `string` |  The name of the collection whose indexes should be listed |
 
-**Returns:** `Promise`<[IndexDescription](../interfaces/indexdescription.md)[]>
+**Returns:** `Promise`<[IndexDefinition](../interfaces/indexdefinition.md)[]>
 A list of indexes on the specified collection
 
 ___
@@ -235,7 +236,7 @@ ___
 
 ###  listRecords
 
-▸ **listRecords**(collection: *`string`*, filter?: *[QueryArgs](../interfaces/queryargs.md)*): `Promise`<`Map`<`string`, `string`>>
+▸ **listRecords**(collection: *`string`*, filter?: *[ListRecordsFilter](../interfaces/listrecordsfilter.md)*): `Promise`<`Array`<`object`>>
 
 Lists the records present in a given collection based on the query parameters provided by the user.
 
@@ -244,17 +245,37 @@ Lists the records present in a given collection based on the query parameters pr
 | Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | collection | `string` | - |  The name of the collection whose records should be fetched |
-| `Default value` filter | [QueryArgs](../interfaces/queryargs.md) |  {} |  Filter string to target specific records |
+| `Default value` filter | [ListRecordsFilter](../interfaces/listrecordsfilter.md) |  {} |  Filter string to target specific records |
 
-**Returns:** `Promise`<`Map`<`string`, `string`>>
+**Returns:** `Promise`<`Array`<`object`>>
 A list of records in the collection
+
+___
+<a id="putrecord"></a>
+
+###  putRecord
+
+▸ **putRecord**(collection: *`string`*, key: *`string`*, record: *`object`*): `Promise`<[Key](../interfaces/key.md)>
+
+Inserts or replaces a record in the tenant's specified collection with the specified key.
+
+**Parameters:**
+
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| collection | `string` |  The name of the collection where the record should be inserted/replaced |
+| key | `string` |  The key within the collection where the record should be inserted/replaced |
+| record | `object` |  The record to add/replace to the collection |
+
+**Returns:** `Promise`<[Key](../interfaces/key.md)>
+An object with the unique _key of the added/replaced record
 
 ___
 <a id="queryrecords"></a>
 
 ###  queryRecords
 
-▸ **queryRecords**(collection: *`string`*, filter?: *[QueryArgs](../interfaces/queryargs.md)*): `Promise`<`Map`<`string`, `string`>>
+▸ **queryRecords**(collection: *`string`*, filter?: *[QueryRecordsFilter](../interfaces/queryrecordsfilter.md)*): `Promise`<`Array`<`object`>>
 
 Queries records present in a given collection based on the query parameters provided by the user.
 
@@ -263,9 +284,9 @@ Queries records present in a given collection based on the query parameters prov
 | Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | collection | `string` | - |  The name of the collection whose records should be fetched |
-| `Default value` filter | [QueryArgs](../interfaces/queryargs.md) |  {} |  Filter string to target specific records |
+| `Default value` filter | [QueryRecordsFilter](../interfaces/queryrecordsfilter.md) |  {} |  Filter string to target specific records |
 
-**Returns:** `Promise`<`Map`<`string`, `string`>>
+**Returns:** `Promise`<`Array`<`object`>>
 A Promise of an array of records
 
 ___

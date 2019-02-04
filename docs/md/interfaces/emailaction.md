@@ -43,7 +43,7 @@ ___
 
 ###  kind
 
-**● kind**: *"email"*
+**● kind**: *[email](../enums/actionkind.md#email)*
 
 ___
 <a id="name"></a>

@@ -13,7 +13,6 @@ RoleInput - The input object for creating a new Role
 ### Properties
 
 * [name](roleinput.md#name)
-* [permissions](roleinput.md#permissions)
 
 ---
 
@@ -24,13 +23,6 @@ RoleInput - The input object for creating a new Role
 ###  name
 
 **● name**: *`string`*
-
-___
-<a id="permissions"></a>
-
-###  permissions
-
-**● permissions**: *`string`[]*
 
 ___
 

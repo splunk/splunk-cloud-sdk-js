@@ -23,7 +23,7 @@ PrincipalInput - Input object for creating a new Principal
 
 ###  kind
 
-**● kind**: *`string`*
+**● kind**: *[PrincipalKind](../enums/principalkind.md)*
 
 ___
 <a id="name"></a>

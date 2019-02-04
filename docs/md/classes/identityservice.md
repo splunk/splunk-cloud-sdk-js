@@ -51,6 +51,13 @@ Encapsulates Identity endpoints
 * [getRoles](identityservice.md#getroles)
 * [getTenant](identityservice.md#gettenant)
 * [getTenants](identityservice.md#gettenants)
+* [listGroupMembers](identityservice.md#listgroupmembers)
+* [listGroupRoles](identityservice.md#listgrouproles)
+* [listGroups](identityservice.md#listgroups)
+* [listMemberGroups](identityservice.md#listmembergroups)
+* [listPrincipals](identityservice.md#listprincipals)
+* [listRolePermissions](identityservice.md#listrolepermissions)
+* [listRoles](identityservice.md#listroles)
 * [removeGroupMember](identityservice.md#removegroupmember)
 * [removeGroupRole](identityservice.md#removegrouprole)
 * [removeMember](identityservice.md#removemember)
@@ -132,7 +139,7 @@ ___
 
 ###  addRolePermission
 
-▸ **addRolePermission**(roleName: *`string`*, permission: *`string`*): `Promise`<[RolePermission](../interfaces/rolepermission.md)>
+▸ **addRolePermission**(roleName: *`string`*, permission: *[PostPermissionBody](../#postpermissionbody)*): `Promise`<[RolePermission](../interfaces/rolepermission.md)>
 
 Adds permissions to an existing role in this tenant
 
@@ -141,7 +148,7 @@ Adds permissions to an existing role in this tenant
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | roleName | `string` |  String name of a role |
-| permission | `string` |  String name of a permission |
+| permission | [PostPermissionBody](../#postpermissionbody) |  String name of a permission |
 
 **Returns:** `Promise`<[RolePermission](../interfaces/rolepermission.md)>
 A promise that resolves upon deletion
@@ -151,7 +158,7 @@ ___
 
 ###  addRoleToGroup
 
-▸ **addRoleToGroup**(groupName: *`string`*, roleName: *[RoleName](../interfaces/rolename.md)*): `Promise`<[GroupRole](../interfaces/grouprole.md)>
+▸ **addRoleToGroup**(groupName: *`string`*, roleName: *[PostGroupRoleBody](../interfaces/postgrouprolebody.md)*): `Promise`<[GroupRole](../interfaces/grouprole.md)>
 
 Adds a role to the group
 
@@ -160,7 +167,7 @@ Adds a role to the group
 | Name | Type | Description |
 | ------ | ------ | ------ |
 | groupName | `string` |  String name of a group |
-| roleName | [RoleName](../interfaces/rolename.md) |  String name of a role |
+| roleName | [PostGroupRoleBody](../interfaces/postgrouprolebody.md) |  String name of a role |
 
 **Returns:** `Promise`<[GroupRole](../interfaces/grouprole.md)>
 GroupRole
@@ -170,7 +177,7 @@ ___
 
 ###  createGroup
 
-▸ **createGroup**(groupInput: *[GroupInput](../interfaces/groupinput.md)*): `Promise`<[Group](../interfaces/group.md)>
+▸ **createGroup**(postGroupBody: *[PostGroupBody](../interfaces/postgroupbody.md)*): `Promise`<[Group](../interfaces/group.md)>
 
 Creates a new group in the current tenant
 
@@ -178,7 +185,7 @@ Creates a new group in the current tenant
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| groupInput | [GroupInput](../interfaces/groupinput.md) |  The group params for creating a new group |
+| postGroupBody | [PostGroupBody](../interfaces/postgroupbody.md) |  The group params for creating a new group |
 
 **Returns:** `Promise`<[Group](../interfaces/group.md)>
 A promise that resolves upon deletion
@@ -353,16 +360,13 @@ ___
 
 ▸ **getGroupMembers**(groupName: *`string`*): `Promise`<`string`[]>
 
-Lists the members in the given group
-
 **Parameters:**
 
-| Name | Type | Description |
-| ------ | ------ | ------ |
-| groupName | `string` |  String name of a group |
+| Name | Type |
+| ------ | ------ |
+| groupName | `string` |
 
 **Returns:** `Promise`<`string`[]>
-a list of group members
 
 ___
 <a id="getgrouprole"></a>
@@ -390,16 +394,13 @@ ___
 
 ▸ **getGroupRoles**(groupName: *`string`*): `Promise`<`string`[]>
 
-Lists the roles attached to the group
-
 **Parameters:**
 
-| Name | Type | Description |
-| ------ | ------ | ------ |
-| groupName | `string` |  String name of a group |
+| Name | Type |
+| ------ | ------ |
+| groupName | `string` |
 
 **Returns:** `Promise`<`string`[]>
-a list of groupRoles
 
 ___
 <a id="getgroups"></a>
@@ -408,10 +409,7 @@ ___
 
 ▸ **getGroups**(): `Promise`<`string`[]>
 
-Lists the groups in the current tenant
-
 **Returns:** `Promise`<`string`[]>
-a list of groups
 
 ___
 <a id="getmember"></a>
@@ -438,16 +436,13 @@ ___
 
 ▸ **getMemberGroups**(memberName: *`string`*): `Promise`<`string`[]>
 
-Returns the list of the member's groups in the current tenant
-
 **Parameters:**
 
-| Name | Type | Description |
-| ------ | ------ | ------ |
-| memberName | `string` |  input object of a member |
+| Name | Type |
+| ------ | ------ |
+| memberName | `string` |
 
 **Returns:** `Promise`<`string`[]>
-a list of Groups
 
 ___
 <a id="getmembers"></a>
@@ -486,10 +481,7 @@ ___
 
 ▸ **getPrincipals**(): `Promise`<`string`[]>
 
-Returns the list of principals known to IAC
-
 **Returns:** `Promise`<`string`[]>
-a list of principals
 
 ___
 <a id="getrole"></a>
@@ -535,16 +527,13 @@ ___
 
 ▸ **getRolePermissions**(roleName: *`string`*): `Promise`<`string`[]>
 
-Get all the permissions for a current tenant and role name
-
 **Parameters:**
 
-| Name | Type | Description |
-| ------ | ------ | ------ |
-| roleName | `string` |  String name of a role |
+| Name | Type |
+| ------ | ------ |
+| roleName | `string` |
 
 **Returns:** `Promise`<`string`[]>
-A list of permissions
 
 ___
 <a id="getroles"></a>
@@ -553,10 +542,7 @@ ___
 
 ▸ **getRoles**(): `Promise`<`string`[]>
 
-Get all roles for the current tenant
-
 **Returns:** `Promise`<`string`[]>
-A list of roles
 
 ___
 <a id="gettenant"></a>
@@ -587,6 +573,114 @@ Returns the list of tenants in the system
 
 **Returns:** `Promise`<`string`[]>
 a list of tenant names
+
+___
+<a id="listgroupmembers"></a>
+
+###  listGroupMembers
+
+▸ **listGroupMembers**(groupName: *`string`*): `Promise`<`string`[]>
+
+Lists the members in the given group
+
+**Parameters:**
+
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| groupName | `string` |  String name of a group |
+
+**Returns:** `Promise`<`string`[]>
+a list of group members
+
+___
+<a id="listgrouproles"></a>
+
+###  listGroupRoles
+
+▸ **listGroupRoles**(groupName: *`string`*): `Promise`<`string`[]>
+
+Lists the roles attached to the group
+
+**Parameters:**
+
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| groupName | `string` |  String name of a group |
+
+**Returns:** `Promise`<`string`[]>
+a list of groupRoles
+
+___
+<a id="listgroups"></a>
+
+###  listGroups
+
+▸ **listGroups**(): `Promise`<`string`[]>
+
+Lists the groups in the current tenant
+
+**Returns:** `Promise`<`string`[]>
+a list of groups
+
+___
+<a id="listmembergroups"></a>
+
+###  listMemberGroups
+
+▸ **listMemberGroups**(memberName: *`string`*): `Promise`<`string`[]>
+
+Returns the list of the member's groups in the current tenant
+
+**Parameters:**
+
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| memberName | `string` |  input object of a member |
+
+**Returns:** `Promise`<`string`[]>
+a list of Groups
+
+___
+<a id="listprincipals"></a>
+
+###  listPrincipals
+
+▸ **listPrincipals**(): `Promise`<`string`[]>
+
+Returns the list of principals known to IAC
+
+**Returns:** `Promise`<`string`[]>
+a list of principals
+
+___
+<a id="listrolepermissions"></a>
+
+###  listRolePermissions
+
+▸ **listRolePermissions**(roleName: *`string`*): `Promise`<`string`[]>
+
+Get all the permissions for a current tenant and role name
+
+**Parameters:**
+
+| Name | Type | Description |
+| ------ | ------ | ------ |
+| roleName | `string` |  String name of a role |
+
+**Returns:** `Promise`<`string`[]>
+A list of permissions
+
+___
+<a id="listroles"></a>
+
+###  listRoles
+
+▸ **listRoles**(): `Promise`<`string`[]>
+
+Get all roles for the current tenant
+
+**Returns:** `Promise`<`string`[]>
+A list of roles
 
 ___
 <a id="removegroupmember"></a>
