@@ -4,7 +4,12 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
-import { ActionResult, EmailAction, WebhookAction } from '../generated_api/action/models';
+import {
+    ActionResult,
+    EmailAction,
+    Notification,
+    WebhookAction,
+} from '../generated_api/action/models';
 import BaseApiService from './baseapiservice';
 import { ACTION_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
@@ -125,81 +130,10 @@ export class ActionService extends BaseApiService {
     };
 }
 
-// ActionKind reflects the kinds of actions supported by the Action service
-export enum ActionKind {
-    email = 'email',
-    webhook = 'webhook',
-    sns = 'sns',
-}
-
 // ActionTriggerResponse for returning status url and id
 export interface ActionTriggerResponse {
     statusId?: string;
     statusUrl?: string;
 }
 
-// NotificationKind defines the types of notifications
-export enum NotificationKind {
-    splunkEvent = 'splunkEvent',
-    rawJSON = 'rawJSON',
-}
-
-// Notification defines the action notification format
-export interface Notification {
-    kind: NotificationKind;
-    tenant: string;
-    payload: object | SplunkEventPayload;
-}
-
-// SplunkEventPayload is the payload for a notification coming from Splunk
-export interface SplunkEventPayload {
-    /**
-     * JSON object for the event.
-     */
-    event: object;
-    /**
-     * Specifies a JSON object that contains explicit custom fields
-     * to be defined at index time.
-     */
-    fields: Map<string, string>;
-    /**
-     * The host value assigned to the event data. This is typically
-     * the hostname of the client from which you are sending data.
-     */
-    host: string;
-    /**
-     * The name of the index by which the event data is to be indexed.
-     */
-    index: string;
-    /**
-     * The source value assigned to the event data. For example, if you are sending data from an app that you are developing,
-     * set this key to the name of the app.
-     */
-    source: string;
-    /**
-     * The sourcetype value assigned to the event data.
-     */
-    sourcetype: string;
-    /**
-     * The event time. The default time format is epoch time, in the format sec.ms. For example, 1433188255.500 indicates 1433188255 seconds and
-     * 500 milliseconds after epoch.
-     */
-    time: number;
-}
-
-// export interface SNSAction extends ActionBase {
-//     kind: ActionKind.sns;
-//     message: string;
-//     topic: string;
-// }
-
-// export interface ActionBase {
-//     kind: ActionKind;
-//     /*
-//      * Name of the action.  Must be atleast 4 alphanumeric characters,
-//      * and can be segmented with periods. */
-//     name: string;
-// }
-
-// export type Action = EmailAction | SNSAction | WebhookAction;
 export type Action = EmailAction | WebhookAction;

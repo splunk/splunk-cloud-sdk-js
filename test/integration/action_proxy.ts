@@ -1,16 +1,12 @@
 import { assert } from 'chai';
 import 'mocha';
-import { ActionResult, EmailAction, WebhookAction } from '../../generated_api/action/models';
 import {
-    ActionKind,
-    // ActionStatus,
-    ActionTriggerResponse,
-    // EmailAction,
+    ActionResult,
+    EmailAction,
     Notification,
-    NotificationKind,
-    // SNSAction,
-    // WebhookAction,
-} from '../../src/action';
+    WebhookAction,
+} from '../../generated_api/action/models';
+import { ActionTriggerResponse } from '../../src/action';
 import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
@@ -92,7 +88,7 @@ describe('integration tests using action service', () => {
         });
 
         const notification: Notification = {
-            kind: NotificationKind.rawJSON,
+            kind: Notification.KindEnum.RawJSON,
             tenant: tenantID as string,
             payload: {
                 name: 'user payload',
@@ -127,27 +123,4 @@ describe('integration tests using action service', () => {
             });
         });
     });
-
-    // describe('Create/delete SNS actions', () => {
-    //     const action: SNSAction = {
-    //         name: `snsAction_${Date.now()}`,
-    //         kind: ActionKind.sns,
-    //         topic: 'sns topic',
-    //         message: 'sns user msg',
-    //     };
-
-    //     it('should create action', () =>
-    //         splunkCloud.action.createAction(action).then(response => {
-    //             const sns = response as SNSAction;
-    //             assert.equal(sns.name, action.name);
-    //             assert.equal(sns.kind, action.kind);
-    //             assert.equal(sns.topic, action.topic);
-    //             assert.equal(sns.message, action.message);
-    //         }));
-
-    //     it('should delete actions', () =>
-    //         splunkCloud.action.deleteAction(action.name).then(response => {
-    //             assert.isEmpty(response);
-    //         }));
-    // });
 });
