@@ -4,19 +4,21 @@
 
 ## Hierarchy
 
-**LookupAction**
+ `Action`
+
+**↳ LookupAction**
 
 ## Index
 
 ### Properties
 
 * [created](lookupaction.md#created)
-* [createdBy](lookupaction.md#createdby)
+* [createdby](lookupaction.md#createdby)
 * [expression](lookupaction.md#expression)
 * [id](lookupaction.md#id)
 * [kind](lookupaction.md#kind)
 * [modified](lookupaction.md#modified)
-* [modifiedBy](lookupaction.md#modifiedby)
+* [modifiedby](lookupaction.md#modifiedby)
 * [owner](lookupaction.md#owner)
 * [ruleid](lookupaction.md#ruleid)
 * [version](lookupaction.md#version)
@@ -27,16 +29,18 @@
 
 <a id="created"></a>
 
-###  created
+### `<Optional>` created
 
-**● created**: *`string`*
+**● created**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="createdby"></a>
 
-###  createdBy
+### `<Optional>` createdby
 
-**● createdBy**: *`string`*
+**● createdby**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="expression"></a>
@@ -48,9 +52,10 @@ ___
 ___
 <a id="id"></a>
 
-###  id
+### `<Optional>` id
 
-**● id**: *`string`*
+**● id**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="kind"></a>
@@ -62,37 +67,42 @@ ___
 ___
 <a id="modified"></a>
 
-###  modified
+### `<Optional>` modified
 
-**● modified**: *`string`*
+**● modified**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="modifiedby"></a>
 
-###  modifiedBy
+### `<Optional>` modifiedby
 
-**● modifiedBy**: *`string`*
+**● modifiedby**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="owner"></a>
 
-###  owner
+### `<Optional>` owner
 
-**● owner**: *`string`*
+**● owner**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="ruleid"></a>
 
-###  ruleid
+### `<Optional>` ruleid
 
-**● ruleid**: *`string`*
+**● ruleid**: * `undefined` &#124; `string`
+*
 
 ___
 <a id="version"></a>
 
-###  version
+### `<Optional>` version
 
-**● version**: *`number`*
+**● version**: * `undefined` &#124; `number`
+*
 
 ___
 

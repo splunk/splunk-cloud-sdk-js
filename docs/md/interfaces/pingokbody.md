@@ -29,7 +29,7 @@ ___
 
 ###  status
 
-**● status**: *`string`*
+**● status**: *[PingOKBodyStatus](../enums/pingokbodystatus.md)*
 
 ___
 
