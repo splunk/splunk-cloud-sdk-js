@@ -37,13 +37,13 @@
 
 ###  constructor
 
-⊕ **new SplunkError**(errorParams: *[SplunkErrorParams](../interfaces/splunkerrorparams.md)*): [SplunkError](splunkerror.md)
+⊕ **new SplunkError**(errorParams: * [SplunkErrorParams](../interfaces/splunkerrorparams.md) &#124; `string`*): [SplunkError](splunkerror.md)
 
 **Parameters:**
 
 | Name | Type |
 | ------ | ------ |
-| errorParams | [SplunkErrorParams](../interfaces/splunkerrorparams.md) |
+| errorParams |  [SplunkErrorParams](../interfaces/splunkerrorparams.md) &#124; `string`|
 
 **Returns:** [SplunkError](splunkerror.md)
 

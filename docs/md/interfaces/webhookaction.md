@@ -25,7 +25,7 @@
 
 ###  kind
 
-**● kind**: *"webhook"*
+**● kind**: *[webhook](../enums/actionkind.md#webhook)*
 
 ___
 <a id="message"></a>
@@ -48,7 +48,7 @@ ___
 
 ###  webhookUrl
 
-**● webhookUrl**: *`URL`*
+**● webhookUrl**: *`string`*
 
 Only allows https scheme. Only allows hostnames that end with "slack.com", "webhook.site", "sendgrid.com", "zapier.com", "hipchat.com", "amazon.com", and "amazonaws.com"
 

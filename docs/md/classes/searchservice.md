@@ -26,6 +26,7 @@ Encapsulates search endpoints
 * [getJob](searchservice.md#getjob)
 * [getResults](searchservice.md#getresults)
 * [listJobs](searchservice.md#listjobs)
+* [listResults](searchservice.md#listresults)
 * [submitSearch](searchservice.md#submitsearch)
 * [updateJob](searchservice.md#updatejob)
 * [waitForJob](searchservice.md#waitforjob)
@@ -105,8 +106,6 @@ ___
 
 ▸ **getResults**(jobId: *`string`*, args?: *[FetchResultsRequest](../interfaces/fetchresultsrequest.md)*): `Promise`< [SearchResults](../interfaces/searchresults.md) &#124; [ResultsNotReadyResponse](../interfaces/resultsnotreadyresponse.md)>
 
-Get {search\_id} search results.
-
 **Parameters:**
 
 | Name | Type | Default value |
@@ -132,6 +131,24 @@ Get the matching list of search jobs.
 | `Default value` jobArgs | `any` |  {} |
 
 **Returns:** `Promise`<[SearchJob](../interfaces/searchjob.md)[]>
+
+___
+<a id="listresults"></a>
+
+###  listResults
+
+▸ **listResults**(jobId: *`string`*, args?: *[FetchResultsRequest](../interfaces/fetchresultsrequest.md)*): `Promise`< [SearchResults](../interfaces/searchresults.md) &#124; [ResultsNotReadyResponse](../interfaces/resultsnotreadyresponse.md)>
+
+Get {search\_id} search results.
+
+**Parameters:**
+
+| Name | Type | Default value |
+| ------ | ------ | ------ |
+| jobId | `string` | - |
+| `Default value` args | [FetchResultsRequest](../interfaces/fetchresultsrequest.md) |  {} |
+
+**Returns:** `Promise`< [SearchResults](../interfaces/searchresults.md) &#124; [ResultsNotReadyResponse](../interfaces/resultsnotreadyresponse.md)>
 
 ___
 <a id="submitsearch"></a>
