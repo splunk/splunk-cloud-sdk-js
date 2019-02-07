@@ -1,25 +1,29 @@
 {
-  "compilerOptions": {
-    "noEmit": true,
-    "strict": true,
-    "lib": [
-      "es5",
-      "es2015.iterable",
-      "es2015.collection",
-      "es2015.promise",
-      "es2015.symbol",
-      "es2015.symbol.wellknown",
-      "dom"
-    ],
-    "types": ["node"]
-  },
-  "include": [
-    "test/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "test/**/*.d.ts",
-    "test/**/*.js",
-    "test/**/*.js.map"
-  ]
+    "compilerOptions": {
+        "strictPropertyInitialization": false,
+        "noImplicitAny": false,
+        "noUnusedLocals": false,
+        "noEmit": true,
+        "lib": [
+            "es5",
+            "es2015.iterable",
+            "es2015.collection",
+            "es2015.promise",
+            "es2015.symbol",
+            "es2015.symbol.wellknown",
+            "dom"
+        ],
+        "sourceRoot": "src",
+        "sourceMap": true,
+        "outDir": ".",
+        "declaration": true,
+        "removeComments": false,
+        "downlevelIteration": true,
+        "strict": true,
+        "target": "es5",
+        "strict": true,
+        "types": ["node"]
+    },
+    "include": ["src", "test/**/*.ts"],
+    "exclude": ["node_modules", "test/**/*.d.ts", "test/**/*.js", "test/**/*.js.map"]
 }
