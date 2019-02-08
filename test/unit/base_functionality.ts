@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import 'isomorphic-fetch';
 import 'mocha';
-import { naiveExponentialBackoff, ServiceClient, SplunkError } from '../../client';
+import { naiveExponentialBackoff, ServiceClient, SplunkError } from '../../src/client';
 import config from '../config';
 
 const stubbyUrl = `http://${config.stubbyHost}:8882`;

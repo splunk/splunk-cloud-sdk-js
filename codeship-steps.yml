@@ -1,10 +1,10 @@
-# - type: serial
-#   name: Documentation
-#   steps:
-#     - name: Build Docs
-#       service: splunk-cloud-sdk-js-with-stubby
-#       command: bash -c "yarn docs"
-#       encrypted_dockercfg_path: ci/dockercfg.encrypted
+- type: serial
+  name: Documentation
+  steps:
+    - name: Build Docs
+      service: splunk-cloud-sdk-js-with-stubby
+      command: bash -c "yarn docs"
+      encrypted_dockercfg_path: ci/dockercfg.encrypted
 
 - type: serial
   name: Testing
@@ -13,10 +13,10 @@
     service: splunk-cloud-sdk-shared-token-fetcher
     command: true
     encrypted_dockercfg_path: ci/dockercfg.encrypted
-  # - name: Functional Tests With Code Coverage
-  #   service: splunk-cloud-sdk-js-with-stubby
-  #   command: bash -c "yarn codecov"
-  #   encrypted_dockercfg_path: ci/dockercfg.encrypted
+  - name: Functional Tests With Code Coverage
+    service: splunk-cloud-sdk-js-with-stubby
+    command: bash -c "yarn codecov"
+    encrypted_dockercfg_path: ci/dockercfg.encrypted
   - type: parallel
     name: Integration Tests And Example Tests
     steps:
@@ -25,34 +25,34 @@
         service: splunk-cloud-sdk-js-integration
         command: bash -c "allow_failures=0 ./ci/integration/runtests.sh"
         encrypted_dockercfg_path: ci/dockercfg.encrypted
-#       # Example Tests
-#       - name: Example Tests - Not Gated
-#         service: splunk-cloud-sdk-js-integration
-#         exclude: ^(master|develop)$
-#         command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
-#         encrypted_dockercfg_path: ci/dockercfg.encrypted
-#       - name: Example Tests - Gated
-#         service: splunk-cloud-sdk-js-integration
-#         tag: ^(master|develop)$
-#         command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
-#         encrypted_dockercfg_path: ci/dockercfg.encrypted
-#       # Whitesource
-#       - name: WhiteSource Testing
-#         service: splunk-cloud-sdk-js-whitesource
-#         command: bash -c "java -jar /opt/whitesource/whitesource-fs-agent.jar \
-#                          -c /opt/splunk/splunk-cloud-sdk-js/ci/whitesource/whitesource-fs-agent.config \
-#                          -d /opt/splunk/splunk-cloud-sdk-js \
-#                          -apiKey $WHITESOURCE_API_KEY \
-#                          -productToken $WHITESOURCE_PRODUCT_TOKEN \
-#                          -userKey $WHITESOURCE_USER_KEY"
-#         tag: (?i)^(master$|release.*)
-#         encrypted_dockercfg_path: ci/dockercfg.encrypted
+      # Example Tests
+      - name: Example Tests - Not Gated
+        service: splunk-cloud-sdk-js-integration
+        exclude: ^(master|develop)$
+        command: bash -c "allow_failures=1 ./ci/integration/runExamples.sh"
+        encrypted_dockercfg_path: ci/dockercfg.encrypted
+      - name: Example Tests - Gated
+        service: splunk-cloud-sdk-js-integration
+        tag: ^(master|develop)$
+        command: bash -c "allow_failures=0 ./ci/integration/runExamples.sh"
+        encrypted_dockercfg_path: ci/dockercfg.encrypted
+      # Whitesource
+      - name: WhiteSource Testing
+        service: splunk-cloud-sdk-js-whitesource
+        command: bash -c "java -jar /opt/whitesource/whitesource-fs-agent.jar \
+                         -c /opt/splunk/splunk-cloud-sdk-js/ci/whitesource/whitesource-fs-agent.config \
+                         -d /opt/splunk/splunk-cloud-sdk-js \
+                         -apiKey $WHITESOURCE_API_KEY \
+                         -productToken $WHITESOURCE_PRODUCT_TOKEN \
+                         -userKey $WHITESOURCE_USER_KEY"
+        tag: (?i)^(master$|release.*)
+        encrypted_dockercfg_path: ci/dockercfg.encrypted
 
-# # - type: serial
-# #   name: Deploy
-# #   steps:
-# #     - name: Deploy to NPM
-# #       service: splunk-cloud-sdk-js-with-stubby
-# #       tag: master
-# #       command: ./ci/publish.sh
-# #       encrypted_dockercfg_path: ci/dockercfg.encrypted
+# - type: serial
+#   name: Deploy
+#   steps:
+#     - name: Deploy to NPM
+#       service: splunk-cloud-sdk-js-with-stubby
+#       tag: master
+#       command: ./ci/publish.sh
+#       encrypted_dockercfg_path: ci/dockercfg.encrypted

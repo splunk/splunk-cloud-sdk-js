@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "noUnusedLocals": false,
-    "strictPropertyInitialization": false,
     "lib": [
       "es5",
       "es2015.iterable",
