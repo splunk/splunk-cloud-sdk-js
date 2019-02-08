@@ -120,5 +120,8 @@
     "skip": {
       "tag": true
     }
+  },
+  "engines": {
+    "yarn": "^1.13.0"
   }
 }
