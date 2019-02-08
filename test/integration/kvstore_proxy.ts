@@ -1,6 +1,6 @@
 import { assert } from 'chai';
-import { DatasetResponse } from '../../catalog';
-import { SplunkCloud } from '../../splunk';
+import { DatasetResponse } from '../../src/catalog';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 import { createKVCollectionDataset } from './catalog_proxy';
 

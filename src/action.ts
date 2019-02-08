@@ -4,6 +4,12 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
+import {
+    ActionResult,
+    EmailAction,
+    Notification,
+    WebhookAction,
+} from '../generated_api/action/models';
 import BaseApiService from './baseapiservice';
 import { ACTION_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
@@ -16,27 +22,33 @@ export class ActionService extends BaseApiService {
      * @returns Promise of all actions
      */
     public getActions = (): Promise<Action[]> => {
-        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']))
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']);
+        return this.client
+            .get(SERVICE_CLUSTER_MAPPING.action, url)
             .then(response => response.body as Action[]);
     }
 
     /**
-     * Get an action by name
-     * @param name name of the action
+     * Get an action by actionName
+     * @param actionName name of the action
      * @return Promise of an action
      */
-    public getAction = (name: ActionBase['name']): Promise<Action> => {
-        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
+    public getAction = (actionName: string): Promise<Action> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', actionName]);
+        return this.client
+            .get(SERVICE_CLUSTER_MAPPING.action, url)
             .then(response => response.body as Action);
     }
 
     /**
-     * Delete an action by name
-     * @param name name of the action
+     * Delete an action by actionName
+     * @param actionName name of the action
      * @return Promise of object
      */
-    public deleteAction = (name: ActionBase['name']): Promise<object> => {
-        return this.client.delete(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]))
+    public deleteAction = (actionName: string): Promise<object> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', actionName]);
+        return this.client
+            .delete(SERVICE_CLUSTER_MAPPING.action, url)
             .then(response => response.body as object);
     }
 
@@ -46,29 +58,38 @@ export class ActionService extends BaseApiService {
      * @return Promise of an action
      */
     public createAction = (action: Action): Promise<Action> => {
-        return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']), action)
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions']);
+        return this.client
+            .post(SERVICE_CLUSTER_MAPPING.action, url, action)
             .then(response => response.body as Action);
     }
 
     /**
      * Update an action
-     * @param name name of the action
+     * @param actionName name of the action
      * @param action action updates
      * @return Promise of an action
      */
-    public updateAction = (name: ActionBase['name'], action: Partial<Action>): Promise<Action> => {
-        return this.client.patch(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), action)
+    public updateAction = (actionName: string, action: Partial<Action>): Promise<Action> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', actionName]);
+        return this.client
+            .patch(SERVICE_CLUSTER_MAPPING.action, url, action)
             .then(response => response.body as Action);
     }
 
     /**
      * Trigger an action
-     * @param name name of the action
+     * @param actionName name of the action
      * @param notification action notification
      * @return Promise of actionTriggerResponse
      */
-    public triggerAction = (name: ActionBase['name'], notification: Notification): Promise<ActionTriggerResponse> => {
-        return this.client.post(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name]), notification)
+    public triggerAction = (
+        actionName: string,
+        notification: Notification
+    ): Promise<ActionTriggerResponse> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', actionName]);
+        return this.client
+            .post(SERVICE_CLUSTER_MAPPING.action, url, notification)
             .then(response => {
                 const key = 'location';
                 if (response.headers.has(key)) {
@@ -89,132 +110,30 @@ export class ActionService extends BaseApiService {
 
     /**
      * Get action status
-     * @param name name of the action
+     * @param actionName name of the action
      * @param statusId statusId
      * @return Promise of actionStatus
      */
-    public getActionStatus = (name: ActionBase['name'], statusId: ActionStatus['statusId']): Promise<ActionStatus> => {
-        return this.client.get(SERVICE_CLUSTER_MAPPING.action, this.client.buildPath(ACTION_SERVICE_PREFIX, ['actions', name, 'status', statusId]))
-            .then(response => response.body as ActionStatus);
+    public getActionStatus = (
+        actionName: string,
+        statusId: ActionResult['statusId']
+    ): Promise<ActionResult> => {
+        const url = this.client.buildPath(ACTION_SERVICE_PREFIX, [
+            'actions',
+            actionName,
+            'status',
+            statusId,
+        ]);
+        return this.client
+            .get(SERVICE_CLUSTER_MAPPING.action, url)
+            .then(response => response.body as ActionResult);
     }
-}
-
-// ActionKind reflects the kinds of actions supported by the Action service
-export enum ActionKind {
-    email = 'email',
-    webhook = 'webhook',
-    sns = 'sns',
-}
-
-// ActionStatusState reflects the status of the action
-export enum ActionStatusState {
-    queue = 'QUEUED',
-    running = 'RUNNING',
-    done = 'DONE',
-    failed = 'FAILED',
-}
-
-// ActionStatus defines the state information
-export interface ActionStatus {
-    state: ActionStatusState;
-    statusId: string;
-    message: string;
 }
 
 // ActionTriggerResponse for returning status url and id
 export interface ActionTriggerResponse {
     statusId?: string;
     statusUrl?: string;
-}
-
-// NotificationKind defines the types of notifications
-export enum NotificationKind {
-    splunkEvent = 'splunkEvent',
-    rawJSON = 'rawJSON',
-}
-
-// Notification defines the action notification format
-export interface Notification {
-    kind: NotificationKind;
-    tenant: string;
-    payload: object | SplunkEventPayload;
-}
-
-// SplunkEventPayload is the payload for a notification coming from Splunk
-export interface SplunkEventPayload {
-    /**
-     * JSON object for the event.
-     */
-    event: object;
-    /**
-     * Specifies a JSON object that contains explicit custom fields
-     * to be defined at index time.
-     */
-    fields: Map<string, string>;
-    /**
-     * The host value assigned to the event data. This is typically
-     * the hostname of the client from which you are sending data.
-     */
-    host: string;
-    /**
-     * The name of the index by which the event data is to be indexed.
-     */
-    index: string;
-    /**
-     * The source value assigned to the event data. For example, if you are sending data from an app that you are developing,
-     * set this key to the name of the app.
-     */
-    source: string;
-    /**
-     * The sourcetype value assigned to the event data.
-     */
-    sourcetype: string;
-    /**
-     * The event time. The default time format is epoch time, in the format sec.ms. For example, 1433188255.500 indicates 1433188255 seconds and
-     * 500 milliseconds after epoch.
-     */
-    time: number;
-}
-
-export interface EmailAction extends ActionBase {
-    kind: ActionKind.email;
-    addresses: string[];
-    subject: string;
-    /**
-     * HTML content that will be sent as the body of this email.
-     */
-    body: string;
-    /**
-     * Optional text that will be sent as the text/plain part of this email. If this field is not
-     * set for an email action, when triggering that action the Action Service will convert th
-     * value from the body field to text and send that as the text/plain part.
-     */
-    bodyPlainText?: string;
-}
-
-export interface WebhookAction extends ActionBase {
-    kind: ActionKind.webhook;
-    /**
-     * WebhookPayload (earlier named as 'message') is the (possibly) templated payload body which will be POSTed to the webhookUrl when triggered
-     */
-    webhookPayload: string;
-    /**
-     * Only allows https scheme. Only allows hostnames that end with "slack.com", "webhook.site", "sendgrid.com", "zapier.com", "hipchat.com", "amazon.com", and "amazonaws.com"
-     */
-    webhookUrl: string;
-}
-
-export interface ActionBase {
-    kind: ActionKind;
-    /**
-     * Name of the action.  Must be atleast 4 alphanumeric characters,
-     * and can be segmented with periods.
-     */
-    name: string;
-    /**
-     * Human readable name title for the action. Must be less than 128 characters.
-     */
-    title?: string;
 }
 
 export type Action = EmailAction | WebhookAction;

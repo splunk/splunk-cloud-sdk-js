@@ -1,8 +1,8 @@
 import { assert, expect } from 'chai';
 import 'mocha';
-import { Event } from '../../ingest';
-import { EventBatcher } from '../../ingest_event_batcher';
-import { SplunkCloud } from '../../splunk';
+import { Event } from '../../src/ingest';
+import { EventBatcher } from '../../src/ingest_event_batcher';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
 const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });

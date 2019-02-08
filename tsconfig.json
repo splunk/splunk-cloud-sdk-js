@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "noUnusedLocals": false,
+    "strictPropertyInitialization": false,
     "lib": [
       "es5",
       "es2015.iterable",
@@ -15,9 +17,8 @@
     "declaration": true,
     "removeComments": false,
     "downlevelIteration": true,
-    "noUnusedLocals": true,
     "strict": true,
-    "target": "es3",
+    "target": "es5",
     "types": []
   },
   "include": [

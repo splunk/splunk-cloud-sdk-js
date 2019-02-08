@@ -1,0 +1,491 @@
+openapi: "3.0.0"
+
+info:
+  version: v1beta2
+  title: Action Service
+  description: A service that receives incoming notifications and uses pre-defined templates (action objects) to turn those notifications into meaningful actions.
+
+servers:
+- url: https://api.splunkbeta.com
+  description: Action service
+- url: https://api.staging.splunkbeta.com
+  description: Action service in staging cluster
+- url: https://api.playground.splunkbeta.com
+  description: Action service in playground cluster
+
+paths:
+  /{tenant}/action/v1beta2/actions:
+    parameters:
+    - name: tenant
+      description: Tenant name/identifier
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "wingdings-widgets"
+    - name: Authorization
+      in: header
+      description: Access token provided by the user (obtained from a known identity provider).
+      required: true
+      schema:
+        type: string
+        pattern: '^Bearer .+'
+    get:
+      summary: Get the list of created action object templates.
+      operationId: getActions
+      tags:
+      - v1beta2
+      responses:
+        200:
+          description: Action objects have been successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Action"
+        401:
+          description: Unauthenticated user.
+        403:
+          description: Unauthorized operation.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceError"
+    post:
+      summary: Create an action object template.
+      operationId: createAction
+      tags:
+      - v1beta2
+      requestBody:
+        description: The action object template to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Action'
+      x-authz-scope: action.actions.create
+      responses:
+        201:
+          description: The action object has been successfully created.
+          headers:
+            Location:
+              description: The URL of the created action object.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Action"
+        400:
+          description: Failed to parse the request body.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceError"
+        401:
+          description: Unauthenticated user.
+        403:
+          description: Unauthorized operation.
+        409:
+          description: The action object already exists.
+        422:
+          description: The provided fields are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceError"
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceError"
+  /{tenant}/action/v1beta2/actions/{action_name}:
+    parameters:
+    - name: tenant
+      description: Tenant name/identifier
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "wingdings-widgets"
+    - name: Authorization
+      in: header
+      description: Access token provided by the user (obtained from a known identity provider).
+      required: true
+      schema:
+        type: string
+        pattern: '^Bearer .+'
+    - name: action_name
+      in: path
+      description: The name of the action object to retrieve.
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Return a specific action object.
+      operationId: getAction
+      tags:
+      - v1beta2
+      x-authz-scope: action.actions.read
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Action"
+        401:
+          description: Unauthenticated user.
+        403:
+          description: Unauthorized operation.
+        404:
+          description: The action object does not exist.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceError"
+    post:
+      summary: Trigger an action from a notification.
+      operationId: triggerAction
+      tags:
+      - v1beta2
+      requestBody:
+        description: The payload for the action.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      x-authz-scope: action.actions.trigger
+      responses:
+        201:
+          description: Notification received.
+          headers:
+            Location:
+              description: URL of the notification status, with the following format {tenant}/action/v1beta2/actions/{action_name}/status/{status_id}
+                Send a GET request on this URL to check on the execution status.
+              schema:
+                type: string
+        400:
+          description: Failed to parse the request body.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceError"
+        422:
+          description: The provided fields are invalid.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceError"
+    patch:
+      summary: Update an action template object.
+      operationId: updateAction
+      tags:
+      - v1beta2
+      requestBody:
+        description: The desired updates to the action object.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActionMutable'
+      x-authz-scope: action.actions.modify
+      responses:
+        200:
+          description: The action has been successfully updated.
+          headers:
+            Location:
+              description: URL of the updated action.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Action"
+        400:
+          description: Failed to parse request body.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceError"
+        401:
+          description: Unauthenticated user.
+        403:
+          description: Unauthorized operation.
+        404:
+          description: The action does not exist.
+        422:
+          description: The provided fields are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceError"
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceError"
+    delete:
+      summary: Delete an action object template.
+      operationId: deleteAction
+      tags:
+      - v1beta2
+      x-authz-scope: action.actions.modify
+      responses:
+        204:
+          description: Success.
+        401:
+          description: Unauthenticated user.
+        403:
+          description: Unauthorized operation.
+        404:
+          description: The action object does not exist.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceError"
+  /{tenant}/action/v1beta2/actions/{action_name}/status/{status_id}:
+    parameters:
+    - name: tenant
+      description: Tenant name/identifier
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "wingdings-widgets"
+    - name: Authorization
+      in: header
+      description: Access token provided by the user (obtained from a known identity provider).
+      required: true
+      schema:
+        type: string
+        pattern: '^Bearer .+'
+    - name: action_name
+      in: path
+      description: Name of the triggered action.
+      required: true
+      schema:
+        type: string
+    - name: status_id
+      in: path
+      description: ID for the action status.
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Get triggered action's execution status.
+      operationId: getActionStatus
+      tags:
+      - v1beta2
+      x-authz-scope: action.actions.read
+      responses:
+        200:
+          description: The status was retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionResult"
+        401:
+          description: Unauthenticated user.
+        403:
+          description: Unauthorized operation.
+        404:
+          description: The action status ID does not exist or is no longer available.
+        default:
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceError"
+
+components:
+  parameters:
+    AuthorizationHeaderParam:
+      name: Authorization
+      in: header
+      description: Access token provided by the user (obtained from a known identity provider).
+      required: true
+      schema:
+        type: string
+        pattern: '^Bearer .+'
+    Tenant:
+      name: tenant
+      description: Tenant name/identifier
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "wingdings-widgets"
+  schemas:
+    Action:
+      oneOf:
+      - $ref: "#/components/schemas/EmailAction"
+      - $ref: "#/components/schemas/WebhookAction"
+      discriminator:
+        propertyName: kind
+        mapping:
+          email: "#/components/schemas/EmailAction"
+          webhook: "#/components/schemas/WebhookAction"
+    ActionCommon:
+      type: object
+      required:
+      - name
+      - kind
+      properties:
+        name:
+          type: string
+          pattern: ^[_a-z][_a-z0-9]*(?:\.[_a-z][_a-z0-9]*)*$
+          description: "The name of the action. The name is one or more identifier strings separated by dots. Each identifier string consists of lower case letters, digits, and underscores, and cannot start with a digit."
+        kind:
+          type: string
+          enum:
+          - webhook
+          - email
+        title:
+          type: string
+          description: "Human readable name title for the action. Must be less than 128 characters."
+    ActionMutable:
+      oneOf:
+      - $ref: "#/components/schemas/EmailActionMutable"
+      - $ref: "#/components/schemas/WebhookActionMutable"
+    ActionMutableCommon:
+      type: object
+      properties:
+        title:
+          type: string
+          description: "Human readable name title for the action. Must be less than 128 characters."
+    ActionResult:
+      type: object
+      properties:
+        state:
+          type: string
+          enum:
+          - "QUEUED"
+          - "RUNNING"
+          - "DONE"
+          - "FAILED"
+        statusId:
+          type: string
+        message:
+          type: string
+    EmailAction:
+      allOf:
+      - $ref: "#/components/schemas/ActionCommon"
+      - $ref: "#/components/schemas/EmailActionMutable"
+      required:
+      - addresses
+    EmailActionMutable:
+      allOf:
+      - $ref: "#/components/schemas/ActionMutableCommon"
+      - type: object
+        properties:
+          subject:
+            type: string
+          body:
+            type: string
+          addresses:
+            type: array
+            items:
+              type: string
+              format: email
+    Notification:
+      type: object
+      required:
+      - payload
+      - tenant
+      - kind
+      properties:
+        payload:
+          type: object
+        tenant:
+          type: string
+        kind:
+          type: string
+          enum:
+          - splunkEvent
+          - rawJSON
+    RawJSONPayload:
+      type: object
+      additionalProperties: true
+    ServiceError:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+        moreInfo:
+          type: string
+    SplunkEventPayload:
+      required:
+      - event
+      - fields
+      - host
+      - index
+      - source
+      - sourcetype
+      - time
+      type: object
+      properties:
+        event:
+          description: "JSON object for the event."
+          type: object
+        fields:
+          description: "Specifies a JSON object that contains explicit custom fields to be defined at indexing time."
+          type: object
+          additionalProperties:
+            type: string
+        host:
+          description: "The host value assigned to the event data. This is typically the hostname of the client from which you are sending data."
+          type: string
+        index:
+          description: "The name of the index where the event data will be indexed."
+          type: string
+        source:
+          description: "The source value assigned to the event data. For example, if you are sending data from an app that you are developing,\nset this key to the name of the app."
+          type: string
+        sourcetype:
+          description: "The sourcetype value assigned to the event data."
+          type: string
+        time:
+          description: "The event time. The default time format is epoch time, in the format sec.ms. For example, 1433188255.500 indicates 1433188255 seconds and\n500 milliseconds after epoch."
+          type: number
+          format: double
+    WebhookAction:
+      allOf:
+      - $ref: "#/components/schemas/ActionCommon"
+      - $ref: "#/components/schemas/WebhookActionMutable"
+      required:
+      - webhookUrl
+      - message
+    WebhookActionMutable:
+      allOf:
+      - $ref: "#/components/schemas/ActionMutableCommon"
+      - type: object
+        properties:
+          webhookUrl:
+            type: string
+            format: uri
+            description: >
+              Only allows the HTTPS scheme.
+          webhookPayload:
+            type: string
+            description: >
+              The (possibly) templated payload body which will be
+              POSTed to the webhookUrl when triggered.

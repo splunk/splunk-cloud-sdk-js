@@ -1,8 +1,8 @@
 import * as chai from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import 'mocha';
-import { SplunkCloud } from '../../splunk';
-import { PipelineRequest, PipelineStatus } from '../../streams';
+import { SplunkCloud } from '../../src/splunk';
+import { PipelineRequest, PipelineStatus } from '../../src/streams';
 import config from '../config';
 
 chai.use(chaiAsPromised);

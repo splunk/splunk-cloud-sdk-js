@@ -1,15 +1,13 @@
 import { assert } from 'chai';
 import 'mocha';
 import {
-    ActionKind,
-    ActionStatus,
-    ActionTriggerResponse,
+    ActionResult,
     EmailAction,
     Notification,
-    NotificationKind,
     WebhookAction,
-} from '../../action';
-import { SplunkCloud } from '../../splunk';
+} from '../../generated_api/action/models';
+import { ActionTriggerResponse } from '../../src/action';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
 const tenantID = config.stagingTenant;
@@ -26,48 +24,44 @@ const splunkCloud = new SplunkCloud({
 describe('integration tests using action service', () => {
     describe('CRUD email actions', () => {
         const emailAction: EmailAction = {
-            name: `crudemail_${Date.now()}`,
-            kind: ActionKind.email,
-            body: '<html><h1>The HTML</h1></html>',
-            bodyPlainText: 'The Plain Text Body',
-            subject: 'The Subject',
             addresses: ['test1@splunk.com', 'test2@splunk.com'],
+            name: `crudemail_${Date.now()}`,
+            kind: EmailAction.KindEnum.Email,
+            subject: 'The subject',
+            title: 'The title',
         };
 
         it('should create action', () =>
             splunkCloud.action.createAction(emailAction).then(response => {
                 const email = response as EmailAction;
+                assert.deepEqual(email.addresses, emailAction.addresses);
                 assert.equal(email.name, emailAction.name);
                 assert.equal(email.kind, emailAction.kind);
-                assert.equal(email.body, emailAction.body);
-                assert.equal(email.bodyPlainText, emailAction.bodyPlainText);
                 assert.equal(email.subject, emailAction.subject);
+                assert.equal(email.title, emailAction.title);
+            }));
+
+        it('should get actions', () =>
+            splunkCloud.action.getAction(emailAction.name).then(response => {
+                const email = response as EmailAction;
                 assert.deepEqual(email.addresses, emailAction.addresses);
+                assert.equal(email.name, emailAction.name);
+                assert.equal(email.kind, emailAction.kind);
+                assert.equal(email.subject, emailAction.subject);
+                assert.equal(email.title, emailAction.title);
             }));
 
         it('should update actions', () =>
             splunkCloud.action
                 .updateAction(emailAction.name, { subject: 'new subject' })
-                .then(updateResponse => {
-                    const updatedEmail = updateResponse as EmailAction;
-                    assert.equal(updatedEmail.name, emailAction.name);
-                    assert.equal(updatedEmail.kind, emailAction.kind);
-                    assert.equal(updatedEmail.body, emailAction.body);
-                    assert.equal(updatedEmail.bodyPlainText, emailAction.bodyPlainText);
-                    assert.equal(updatedEmail.subject, 'new subject');
-                    assert.deepEqual(updatedEmail.addresses, emailAction.addresses);
+                .then(response => {
+                    const email = response as EmailAction;
+                    assert.deepEqual(email.addresses, emailAction.addresses);
+                    assert.equal(email.name, emailAction.name);
+                    assert.equal(email.kind, emailAction.kind);
+                    assert.equal(email.subject, 'new subject');
+                    assert.equal(email.title, emailAction.title);
                 }));
-
-        it('should get actions', () =>
-            splunkCloud.action.getAction(emailAction.name).then(response => {
-                const email = response as EmailAction;
-                assert.equal(email.name, emailAction.name);
-                assert.equal(email.kind, emailAction.kind);
-                assert.equal(email.body, emailAction.body);
-                assert.equal(email.bodyPlainText, emailAction.bodyPlainText);
-                assert.equal(email.subject, 'new subject');
-                assert.deepEqual(email.addresses, emailAction.addresses);
-            }));
 
         it('should delete actions', () =>
             splunkCloud.action.deleteAction(emailAction.name).then(response => {
@@ -77,11 +71,10 @@ describe('integration tests using action service', () => {
 
     describe('Trigger webhook actions', () => {
         const webhookAction: WebhookAction = {
-            name: `wh_${Date.now()}`,
-            kind: ActionKind.webhook,
-            title: 'My Title',
+            name: `webhook_action_${Date.now()}`,
+            kind: WebhookAction.KindEnum.Webhook,
+            webhookPayload: 'This is a webhook payload!',
             webhookUrl: 'https://foo.slack.com/test',
-            webhookPayload: 'some user msg',
         };
 
         it('should create action', () => {
@@ -89,14 +82,13 @@ describe('integration tests using action service', () => {
                 const webhook = response as WebhookAction;
                 assert.equal(webhook.name, webhookAction.name);
                 assert.equal(webhook.kind, webhookAction.kind);
-                assert.equal(webhook.title, webhookAction.title);
-                assert.equal(webhook.webhookUrl, webhookAction.webhookUrl);
                 assert.equal(webhook.webhookPayload, webhookAction.webhookPayload);
+                assert.equal(webhook.webhookUrl, webhookAction.webhookUrl);
             });
         });
 
         const notification: Notification = {
-            kind: NotificationKind.rawJSON,
+            kind: Notification.KindEnum.RawJSON,
             tenant: tenantID as string,
             payload: {
                 name: 'user payload',
@@ -118,8 +110,9 @@ describe('integration tests using action service', () => {
                     );
                 })
                 .then(res => {
-                    const actionStatus = res as ActionStatus;
-                    // expect(['RUNNING', 'FAILED']).to.include(res.state) TODO: Whether the action succeeds or not, depends on the action definition
+                    const actionStatus = res as ActionResult;
+                    // expect(['RUNNING', 'FAILED']).to.include(res.state)
+                    // TODO: Whether the action succeeds or not, depends on the action definition
                     assert.equal(actionStatus.statusId, webhook.statusId);
                 });
         });
@@ -130,5 +123,4 @@ describe('integration tests using action service', () => {
             });
         });
     });
-
 });

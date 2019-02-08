@@ -20,6 +20,7 @@
     "codecov:integration": "yarn cover:integration && codecov -f ./coverage-integration/lcov.info -F integration",
     "cover": "NODE_ENV=coverage nyc yarn test",
     "cover:integration": "NODE_ENV=coverage nyc --report-dir coverage-integration yarn test:integration",
+    "openapi:generate": "sh generation_files/generate_action_spec.sh",
     "pretest": "yarn tslint && yarn build",
     "test": "ts-mocha -p tsconfig.test.json test/unit/*.ts --exclude test/unit/*.d.ts",
     "test:integration": "ts-mocha -p tsconfig.test.json --timeout=900000 test/integration/*.ts --exclude test/integration/*.d.ts",
@@ -71,6 +72,7 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
+    "@openapitools/openapi-generator-cli": "^0.0.7-4.0.0-beta2",
     "rxjs": "^6.3.2"
   },
   "nyc": {

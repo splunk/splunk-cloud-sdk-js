@@ -1,5 +1,5 @@
 import { assert } from 'chai';
-import { SplunkCloud } from '../../splunk';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 import { createKVCollectionDataset } from './catalog_proxy';
 

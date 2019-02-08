@@ -1,7 +1,7 @@
 import { assert, expect } from 'chai';
 import 'mocha';
-import { ResultsNotReadyResponse, SearchResults } from '../../search';
-import { SplunkCloud } from '../../splunk';
+import { ResultsNotReadyResponse, SearchResults } from '../../src/search';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
 const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
@@ -18,7 +18,7 @@ const moduleQuery = {
 
 describe('integration tests Using Search APIs', () => {
     before(() => {
-        const events = [];
+        const events: any = [];
         for (let i = 0; i < 10; i++) {
             events.push({ body: `Test event #${i}` });
         }
