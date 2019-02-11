@@ -15,6 +15,7 @@
 docs/html
 build/
 out/
+docs.manifest.json
 
 ## Node ###
 # Logs
