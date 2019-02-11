@@ -83,12 +83,18 @@ describe('integration tests for Ingest Endpoints', () => {
                         const event = e as Event;
                         const addPromise = eb.add(event) as Promise<object>;
                         addPromise.then(response => {
-                            assert.deepEqual(response, successResponse);
+                            if (response !== null) {
+                                console.log(response);
+                            }
                         });
                     }
-
                 } finally {
-                    eb.stop();
+                    const stopPromise = eb.stop();
+                    stopPromise.then(response => {
+                        if (response !== null) {
+                            console.log(response);
+                        }
+                    });
                 }
             });
         });
@@ -103,12 +109,44 @@ describe('integration tests for Ingest Endpoints', () => {
                         const event = e as Event;
                         const addPromise = eb.add(event) as Promise<object>;
                         addPromise.then(response => {
-                            assert.deepEqual(response, successResponse);
+                            if (response !== null) {
+                                console.log(response);
+                            }
                         });
                     }
-
                 } finally {
-                    eb.stop();
+                    const stopPromise = eb.stop();
+                    stopPromise.then(response => {
+                        if (response !== null) {
+                            console.log(response);
+                        }
+                    });
+                }
+            });
+        });
+
+        describe('Post batch 3 events where batch size is large', () => {
+            it('should create 3 batched events and wait for timer to send them', () => {
+                const events = [event1, event2, event3];
+                // 3 total events, batch size 40000, batch count 10, 3000 ms
+                const eb: EventBatcher = new EventBatcher(splunk.ingest, 40000, 10, 3000);
+                try {
+                    for (const e of events) {
+                        const event = e as Event;
+                        const addPromise = eb.add(event) as Promise<object>;
+                        addPromise.then(response => {
+                            if (response !== null) {
+                                console.log(response);
+                            }
+                        });
+                    }
+                } finally {
+                    const stopPromise = eb.stop();
+                    stopPromise.then(response => {
+                        if (response !== null) {
+                            console.log(response);
+                        }
+                    });
                 }
             });
         });
@@ -119,9 +157,16 @@ describe('integration tests for Ingest Endpoints', () => {
                 const eb: EventBatcher = new EventBatcher(splunk.ingest, 5000, 10, 3000);
                 try {
                     const result = eb.add(event1);
-                    assert.isNull(result);
+                    result.then(response => {
+                        assert.isNull(response);
+                    });
                 } finally {
-                    eb.stop();
+                    const stopPromise = eb.stop();
+                    stopPromise.then(response => {
+                        if (response !== null) {
+                            console.log(response);
+                        }
+                    });
                 }
             });
         });

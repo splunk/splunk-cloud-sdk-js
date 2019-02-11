@@ -45,7 +45,7 @@ export class EventBatcher {
      *
      * @param event - a single event
      */
-    public add = (event: Event): Promise<object> | null => {
+    public add = (event: Event): Promise<object|null> => {
         this.queue.push(event);
         return this.run();
     }
@@ -67,7 +67,7 @@ export class EventBatcher {
      * Reset the timer, update the timerId.
      */
     private resetTimer = () => {
-        this.stop();
+        this.stopTimer();
         this.timer = this.setTimer();
     }
 
@@ -89,7 +89,7 @@ export class EventBatcher {
      *
      * @return can return null if event has not been sent yet.
      */
-    private run = (): Promise<object> | null => {
+    private run = (): Promise<object|null> => {
         const maxCountReached = (this.queue.length >= this.batchCount);
         // TODO: is it okay to just import @types/node and call this good?
         const eventByteSize = JSON.stringify(this.queue).length;
@@ -97,13 +97,24 @@ export class EventBatcher {
         if (maxCountReached || eventByteSize >= this.batchSize) {
             return this.flush();
         }
-        return null;
+        return Promise.resolve(null);
+    }
+
+    /**
+     * Perform flush operation if queue is non-empty
+     */
+    public stop = (): Promise<object|null> => {
+        this.stopTimer();
+        if (this.queue !== undefined && this.queue.length > 0) {
+            return this.flush();
+        }
+        return Promise.resolve(null);
     }
 
     /**
      * Stop the timer
      */
-    public stop = () => {
+    private stopTimer = () => {
         clearTimeout(this.timer);
     }
 
