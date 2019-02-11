@@ -49,7 +49,6 @@ then
 
     print_header_line
     # This also creates a tag for the version
-    yarn add -D standard-version
     echo "Bumping version, making CHANGELOG.md updates, and committing it ..."
     yarn release --release-as $NEW_VERSION
 
