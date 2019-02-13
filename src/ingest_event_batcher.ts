@@ -18,6 +18,7 @@ export class EventBatcher {
     private readonly timeout: number;
     private queue: Event[];
     private timer: any;
+    private promiseQueue: Array<Promise<object|null>>;
 
     /**
      * @param ingest - Proxy for the Ingest API
@@ -38,6 +39,7 @@ export class EventBatcher {
         this.timeout = timeout;
         this.queue = [];
         this.timer = this.setTimer();
+        this.promiseQueue = [];
     }
 
     /**
@@ -78,6 +80,8 @@ export class EventBatcher {
     public flush = (): Promise<object> => {
         const data = this.queue;
         this.queue = [];
+        this.promiseQueue.map(p => Promise.resolve(p));
+        this.promiseQueue = [];
         this.resetTimer();
         return this.ingest.postEvents(data);
     }
@@ -97,7 +101,9 @@ export class EventBatcher {
         if (maxCountReached || eventByteSize >= this.batchSize) {
             return this.flush();
         }
-        return Promise.resolve(null);
+        const promise = new Promise(resolve => null);
+        this.promiseQueue.push(promise);
+        return promise;
     }
 
     /**

@@ -89,8 +89,7 @@ describe('integration tests for Ingest Endpoints', () => {
                         });
                     }
                 } finally {
-                    const stopPromise = eb.stop();
-                    stopPromise.then(response => {
+                    eb.stop().then(response => {
                         if (response !== null) {
                             console.log(response);
                         }
@@ -115,8 +114,7 @@ describe('integration tests for Ingest Endpoints', () => {
                         });
                     }
                 } finally {
-                    const stopPromise = eb.stop();
-                    stopPromise.then(response => {
+                    eb.stop().then(response => {
                         if (response !== null) {
                             console.log(response);
                         }
@@ -141,8 +139,7 @@ describe('integration tests for Ingest Endpoints', () => {
                         });
                     }
                 } finally {
-                    const stopPromise = eb.stop();
-                    stopPromise.then(response => {
+                    eb.stop().then(response => {
                         if (response !== null) {
                             console.log(response);
                         }
@@ -161,8 +158,7 @@ describe('integration tests for Ingest Endpoints', () => {
                         assert.isNull(response);
                     });
                 } finally {
-                    const stopPromise = eb.stop();
-                    stopPromise.then(response => {
+                    eb.stop().then(response => {
                         if (response !== null) {
                             console.log(response);
                         }
