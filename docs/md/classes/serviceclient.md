@@ -102,7 +102,7 @@ Builds the URL from a service + endpoint with query encoded in url (concatenates
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| cluster | `string` |  Service prefix |
+| cluster | `string` |  The cluster endpoint to target e.g. \`api\` or \`app\` |
 | path | `string` |  Path to the resource being requested |
 | `Optional` query | [QueryArgs](../interfaces/queryargs.md) |  QueryArgs object |
 
@@ -133,7 +133,7 @@ Performs a DELETE on the Splunk Cloud environment with the supplied path. For th
 
 | Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
-| cluster | `string` | - |  Service prefix |
+| cluster | `string` | - |  The cluster endpoint to target e.g. \`api\` or \`app\` |
 | path | `string` | - |  Path portion of the URL to request from Splunk |
 | `Default value` data | `object` |  {} |  Data object (to be converted to json) to supply as delete body |
 | `Default value` opts | [RequestOptions](../interfaces/requestoptions.md) |  {} |  Request options |
@@ -155,7 +155,7 @@ Proxy for fetch that builds URL, applies headers and query string, and invokes h
 | Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | method | [HTTPMethod](../#httpmethod) | - |  HTTP Verb |
-| cluster | `string` | - |  Service prefix |
+| cluster | `string` | - |  The cluster endpoint to target e.g. \`api\` or \`app\` |
 | path | `string` | - |  Path to the resource being requested |
 | `Default value` opts | [RequestOptions](../interfaces/requestoptions.md) |  {} |  Request opts |
 | `Optional` data | `any` | - |  Body data (will be stringified if an object) |
@@ -175,7 +175,7 @@ Performs a GET on the Splunk Cloud environment with the supplied path. For the m
 
 | Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
-| cluster | `string` | - |  Service prefix |
+| cluster | `string` | - |  The cluster endpoint to target e.g. \`api\` or \`app\` |
 | path | `string` | - |  Path portion of the URL to request from Splunk |
 | `Default value` opts | [RequestOptions](../interfaces/requestoptions.md) |  {} |  Request options |
 
@@ -195,7 +195,7 @@ Performs a PATCH on the Splunk Cloud environment with the supplied path. for the
 
 | Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
-| cluster | `string` | - |  Service prefix |
+| cluster | `string` | - |  The cluster endpoint to target e.g. \`api\` or \`app\` |
 | path | `string` | - |  Path portion of the url to request from Splunk |
 | data | `object` | - |  Data object (to be converted to json) to supply as patch body |
 | `Default value` opts | [RequestOptions](../interfaces/requestoptions.md) |  {} |  Request options |
@@ -216,7 +216,7 @@ Performs a POST on the Splunk Cloud environment with the supplied path. For the 
 
 | Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
-| cluster | `string` | - |  Service prefix |
+| cluster | `string` | - |  The cluster endpoint to target e.g. \`api\` or \`app\` |
 | path | `string` | - |  Path portion of the URL to request from Splunk |
 | data | `any` | - |  Data object (to be converted to JSON) to supply as POST body |
 | `Default value` opts | [RequestOptions](../interfaces/requestoptions.md) |  {} |  Request options |
@@ -237,7 +237,7 @@ Performs a PUT on the Splunk Cloud environment with the supplied path. for the m
 
 | Name | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
-| cluster | `string` | - |  Service prefix |
+| cluster | `string` | - |  The cluster endpoint to target e.g. \`api\` or \`app\` |
 | path | `string` | - |  Path portion of the url to request from Splunk |
 | data | `any` | - |  Data object (to be converted to json) to supply as put body |
 | `Default value` opts | [RequestOptions](../interfaces/requestoptions.md) |  {} |  Request options |

@@ -103,8 +103,8 @@ export interface ServiceClientArgs {
      */
     url?: string;
     /**
-     * An object of specific key value pairs.
-     * `api` the base Splunk Cloud Platform endpoint. Example: `https://api.splunkbeta.com`
+     * An object of key value pairs, where the keys represent a Splunk Cloud Platform cluster, and values are the base url for the cluster.
+     * Example: `{ "api": "https://api.splunkbeta.com" }`
      */
     urls?: {
         [key: string]: string;
@@ -265,7 +265,7 @@ export class ServiceClient {
     /**
      * Builds the URL from a service + endpoint with query encoded in url
      * (concatenates the URL with the path)
-     * @param cluster Service prefix
+     * @param cluster The cluster endpoint to target e.g. `api` or `app`
      * @param path Path to the resource being requested
      * @param query QueryArgs object
      * @return A fully qualified url
@@ -328,7 +328,7 @@ export class ServiceClient {
      * Proxy for fetch that builds URL, applies headers and query string, and invokes hooks
      * before returning a `Response`
      * @param method HTTP Verb
-     * @param cluster Service prefix
+     * @param cluster The cluster endpoint to target e.g. `api` or `app`
      * @param path Path to the resource being requested
      * @param opts Request opts
      * @param data Body data (will be stringified if an object)
@@ -348,7 +348,7 @@ export class ServiceClient {
      * Performs a GET on the Splunk Cloud environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
-     * @param cluster Service prefix
+     * @param cluster The cluster endpoint to target e.g. `api` or `app`
      * @param path Path portion of the URL to request from Splunk
      * @param opts Request options
      * @return A promise containing an HTTPResponse object
@@ -362,7 +362,7 @@ export class ServiceClient {
      * Performs a POST on the Splunk Cloud environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
-     * @param cluster Service prefix
+     * @param cluster The cluster endpoint to target e.g. `api` or `app`
      * @param path Path portion of the URL to request from Splunk
      * @param data Data object (to be converted to JSON) to supply as POST body
      * @param opts Request options
@@ -377,7 +377,7 @@ export class ServiceClient {
      * Performs a PUT on the Splunk Cloud environment with the supplied path.
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
-     * @param cluster Service prefix
+     * @param cluster The cluster endpoint to target e.g. `api` or `app`
      * @param path Path portion of the url to request from Splunk
      * @param data Data object (to be converted to json) to supply as put body
      * @param opts Request options
@@ -392,7 +392,7 @@ export class ServiceClient {
      * Performs a PATCH on the Splunk Cloud environment with the supplied path.
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
-     * @param cluster Service prefix
+     * @param cluster The cluster endpoint to target e.g. `api` or `app`
      * @param path Path portion of the url to request from Splunk
      * @param data Data object (to be converted to json) to supply as patch body
      * @param opts Request options
@@ -407,7 +407,7 @@ export class ServiceClient {
      * Performs a DELETE on the Splunk Cloud environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
-     * @param cluster Service prefix
+     * @param cluster The cluster endpoint to target e.g. `api` or `app`
      * @param path Path portion of the URL to request from Splunk
      * @param data Data object (to be converted to json) to supply as delete body
      * @param opts Request options

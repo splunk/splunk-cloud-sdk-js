@@ -56,7 +56,7 @@ ___
 **● urls**: * `undefined` &#124; `object`
 *
 
-An object of specific key value pairs. `api` the base Splunk Cloud Platform endpoint. Example: `https://api.splunkbeta.com`
+An object of key value pairs, where the keys represent a Splunk Cloud Platform cluster, and values are the base url for the cluster. Example: `{ "api": "https://api.splunkbeta.com" }`
 
 ___
 
