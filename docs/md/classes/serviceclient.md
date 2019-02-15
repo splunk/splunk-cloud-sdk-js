@@ -43,7 +43,7 @@ Create a ServiceClient with the given URL and an auth token
 
 | Name | Type | Description |
 | ------ | ------ | ------ |
-| args |  [ServiceClientArgs](../interfaces/serviceclientargs.md) &#124; `string`|  A string that is an authentication or a ServiceClientArgs Url to a Splunk Cloud instance |
+| args |  [ServiceClientArgs](../interfaces/serviceclientargs.md) &#124; `string`|  A string that is an authentication token or a ServiceClientArgs object |
 | `Optional` token |  `undefined` &#124; `string`|  Authentication token |
 | `Optional` tenant |  `undefined` &#124; `string`|  Tenant to use for requests |
 

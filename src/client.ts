@@ -176,7 +176,7 @@ export class ServiceClient {
 
     /**
      * Create a ServiceClient with the given URL and an auth token
-     * @param args A string that is an authentication or a ServiceClientArgs Url to  a Splunk Cloud instance
+     * @param args A string that is an authentication token or a ServiceClientArgs object
      * @param token Authentication token
      * @param tenant Tenant to use for requests
      */
