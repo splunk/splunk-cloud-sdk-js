@@ -91,14 +91,24 @@ export type ResponseHook = (response: Response, request: Request) => Promise<Res
 export type TokenProviderFunction = () => string;
 export interface ServiceClientArgs {
     /**
+     * Default tenant to use for requests
+     */
+    defaultTenant?: string;
+    /**
+     * A function that returns a token. A string that is a token. Or, an object containing a function named `getAccessToken` that returns a token.
+     */
+    tokenSource: AuthManager | string | TokenProviderFunction;
+    /**
      * @deprecated Use urls instead
      */
     url?: string;
+    /**
+     * An object of specific key value pairs.
+     * `api` the base Splunk Cloud Platform endpoint. Example: `https://api.splunkbeta.com`
+     */
     urls?: {
         [key: string]: string;
     };
-    tokenSource: AuthManager | string | TokenProviderFunction;
-    defaultTenant?: string;
 }
 
 const _sleep = (millis: number) : Promise<void> => {
@@ -166,8 +176,8 @@ export class ServiceClient {
 
     /**
      * Create a ServiceClient with the given URL and an auth token
-     * @param args : ServiceClientArgs Url to Splunk Cloud instance
-     * @param token Auth token
+     * @param args A string that is an authentication or a ServiceClientArgs Url to  a Splunk Cloud instance
+     * @param token Authentication token
      * @param tenant Tenant to use for requests
      */
     constructor(args: ServiceClientArgs | string, token?: string, tenant?: string) {
@@ -255,6 +265,10 @@ export class ServiceClient {
     /**
      * Builds the URL from a service + endpoint with query encoded in url
      * (concatenates the URL with the path)
+     * @param cluster Service prefix
+     * @param path Path to the resource being requested
+     * @param query QueryArgs object
+     * @return A fully qualified url
      */
     public buildUrl = (cluster: string, path: string, query?: QueryArgs): string => {
         const serviceCluster : string = this.urls[cluster] || DEFAULT_URLS.api;
@@ -314,6 +328,7 @@ export class ServiceClient {
      * Proxy for fetch that builds URL, applies headers and query string, and invokes hooks
      * before returning a `Response`
      * @param method HTTP Verb
+     * @param cluster Service prefix
      * @param path Path to the resource being requested
      * @param opts Request opts
      * @param data Body data (will be stringified if an object)
@@ -327,16 +342,16 @@ export class ServiceClient {
         };
         const request = new Request(url, options);
         return fetch(request).then(response => this.invokeHooks(response, request));
-
     }
 
     /**
      * Performs a GET on the Splunk Cloud environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
+     * @param cluster Service prefix
      * @param path Path portion of the URL to request from Splunk
      * @param opts Request options
-     * @return
+     * @return A promise containing an HTTPResponse object
      */
     public get = (cluster: string, path: string, opts: RequestOptions = {}): Promise<HTTPResponse> => {
         return this.fetch('GET', cluster, path, opts)
@@ -347,10 +362,11 @@ export class ServiceClient {
      * Performs a POST on the Splunk Cloud environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
+     * @param cluster Service prefix
      * @param path Path portion of the URL to request from Splunk
      * @param data Data object (to be converted to JSON) to supply as POST body
      * @param opts Request options
-     * @return
+     * @return A promise containing an HTTPResponse object
      */
     public post = (cluster: string, path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> => {
         return this.fetch('POST', cluster, path, opts, data)
@@ -361,10 +377,11 @@ export class ServiceClient {
      * Performs a PUT on the Splunk Cloud environment with the supplied path.
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
+     * @param cluster Service prefix
      * @param path Path portion of the url to request from Splunk
      * @param data Data object (to be converted to json) to supply as put body
      * @param opts Request options
-     * @return
+     * @return A promise containing an HTTPResponse object
      */
     public put = (cluster: string, path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> => {
         return this.fetch('PUT', cluster, path, opts, data)
@@ -375,10 +392,11 @@ export class ServiceClient {
      * Performs a PATCH on the Splunk Cloud environment with the supplied path.
      * for the most part this is an internal implementation, but is here in
      * case an api endpoint is unsupported by the sdk.
+     * @param cluster Service prefix
      * @param path Path portion of the url to request from Splunk
      * @param data Data object (to be converted to json) to supply as patch body
      * @param opts Request options
-     * @return
+     * @return A promise containing an HTTPResponse object
      */
     public patch = (cluster: string, path: string, data: object, opts: RequestOptions = {}): Promise<HTTPResponse> => {
         return this.fetch('PATCH', cluster, path, opts, data)
@@ -389,10 +407,11 @@ export class ServiceClient {
      * Performs a DELETE on the Splunk Cloud environment with the supplied path.
      * For the most part this is an internal implementation, but is here in
      * case an API endpoint is unsupported by the SDK.
+     * @param cluster Service prefix
      * @param path Path portion of the URL to request from Splunk
      * @param data Data object (to be converted to json) to supply as delete body
      * @param opts Request options
-     * @return
+     * @return A promise containing an HTTPResponse object
      */
     public delete = (cluster: string, path: string, data: object = {}, opts: RequestOptions = {}): Promise<HTTPResponse> => {
         return this.fetch('DELETE', cluster, path, opts, data)
