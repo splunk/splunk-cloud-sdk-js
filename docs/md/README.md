@@ -103,7 +103,6 @@
 * [RoleName](interfaces/rolename.md)
 * [RolePermission](interfaces/rolepermission.md)
 * [Rule](interfaces/rule.md)
-* [SNSAction](interfaces/snsaction.md)
 * [SearchArgs](interfaces/searchargs.md)
 * [SearchJob](interfaces/searchjob.md)
 * [SearchJobMessage](interfaces/searchjobmessage.md)
@@ -156,7 +155,7 @@
 
 ###  Action
 
-**Ƭ Action**: * [EmailAction](interfaces/emailaction.md) &#124; [WebhookAction](interfaces/webhookaction.md) &#124; [SNSAction](interfaces/snsaction.md)
+**Ƭ Action**: * [EmailAction](interfaces/emailaction.md) &#124; [WebhookAction](interfaces/webhookaction.md)
 *
 
 <a id="action.created"></a>

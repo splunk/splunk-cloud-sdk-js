@@ -8,8 +8,6 @@
 
 ↳  [EmailAction](emailaction.md)
 
-↳  [SNSAction](snsaction.md)
-
 ↳  [WebhookAction](webhookaction.md)
 
 ## Index
@@ -18,6 +16,7 @@
 
 * [kind](actionbase.md#kind)
 * [name](actionbase.md#name)
+* [title](actionbase.md#title)
 
 ---
 
@@ -37,6 +36,16 @@ ___
 **● name**: *`string`*
 
 Name of the action. Must be atleast 4 alphanumeric characters, and can be segmented with periods.
+
+___
+<a id="title"></a>
+
+### `<Optional>` title
+
+**● title**: * `undefined` &#124; `string`
+*
+
+Human readable name title for the action. Must be less than 128 characters.
 
 ___
 
