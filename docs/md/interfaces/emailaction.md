@@ -13,12 +13,12 @@
 ### Properties
 
 * [addresses](emailaction.md#addresses)
-* [htmlPart](emailaction.md#htmlpart)
+* [body](emailaction.md#body)
+* [bodyPlainText](emailaction.md#bodyplaintext)
 * [kind](emailaction.md#kind)
 * [name](emailaction.md#name)
-* [subjectPart](emailaction.md#subjectpart)
-* [templateName](emailaction.md#templatename)
-* [textPart](emailaction.md#textpart)
+* [subject](emailaction.md#subject)
+* [title](emailaction.md#title)
 
 ---
 
@@ -31,12 +31,23 @@
 **● addresses**: *`string`[]*
 
 ___
-<a id="htmlpart"></a>
+<a id="body"></a>
 
-### `<Optional>` htmlPart
+###  body
 
-**● htmlPart**: * `undefined` &#124; `string`
+**● body**: *`string`*
+
+HTML content that will be sent as the body of this email.
+
+___
+<a id="bodyplaintext"></a>
+
+### `<Optional>` bodyPlainText
+
+**● bodyPlainText**: * `undefined` &#124; `string`
 *
+
+Optional text that will be sent as the text/plain part of this email. If this field is not set for an email action, when triggering that action the Action Service will convert th value from the body field to text and send that as the text/plain part.
 
 ___
 <a id="kind"></a>
@@ -55,28 +66,21 @@ ___
 Name of the action. Must be atleast 4 alphanumeric characters, and can be segmented with periods.
 
 ___
-<a id="subjectpart"></a>
+<a id="subject"></a>
 
-### `<Optional>` subjectPart
+###  subject
 
-**● subjectPart**: * `undefined` &#124; `string`
-*
-
-___
-<a id="templatename"></a>
-
-### `<Optional>` templateName
-
-**● templateName**: * `undefined` &#124; `string`
-*
+**● subject**: *`string`*
 
 ___
-<a id="textpart"></a>
+<a id="title"></a>
 
-### `<Optional>` textPart
+### `<Optional>` title
 
-**● textPart**: * `undefined` &#124; `string`
+**● title**: * `undefined` &#124; `string`
 *
+
+Human readable name title for the action. Must be less than 128 characters.
 
 ___
 
