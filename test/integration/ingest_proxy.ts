@@ -1,6 +1,6 @@
 import { assert, expect } from 'chai';
 import 'mocha';
-import { Event } from '../../ingest';
+import { Event, IngestResponse } from '../../ingest';
 import { EventBatcher } from '../../ingest_event_batcher';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
@@ -11,7 +11,7 @@ const splunkBadToken = new SplunkCloud({ urls: { api: config.stagingApiHost, app
 
 describe('integration tests for Ingest Endpoints', () => {
 
-    const successResponse = { code: 'SUCCESS', message: 'Success' };
+    const successResponse: IngestResponse = { code: 'SUCCESS', message: 'Success' };
     const event1: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774569, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - Will generate GUID, as none found on this server.' };
     const event2: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774570, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - My newly generated GUID is 6F386D83-ADB2-4BAB-A7AA-634B0BEA2C6A' };
     const event3: Event = { sourcetype: 'splunkd', source: 'mysource', timestamp: 1536174774571, attributes: { fieldkey1: 'fieldval1', fieldkey2: 'fieldkey2' }, host: 'myhost', body: 'INFO  ServerConfig - My server name is "9765f1bebdb4".' };
@@ -31,7 +31,7 @@ describe('integration tests for Ingest Endpoints', () => {
             it('should return a successful response', () => {
                 const events = [event1, event2, event3];
 
-                return splunk.ingest.postEvents(events).then(response => {
+                return splunk.ingest.postEvents(events).then((response: IngestResponse) => {
                     assert.deepEqual(response, successResponse, 'response should be expected success response.');
                 });
             });
@@ -81,7 +81,7 @@ describe('integration tests for Ingest Endpoints', () => {
                 try {
                     for (const e of events) {
                         const event = e as Event;
-                        const addPromise = eb.add(event) as Promise<object>;
+                        const addPromise = eb.add(event) as Promise<IngestResponse>;
                         addPromise.then(response => {
                             assert.deepEqual(response, successResponse);
                         });
@@ -101,7 +101,7 @@ describe('integration tests for Ingest Endpoints', () => {
                 try {
                     for (const e of events) {
                         const event = e as Event;
-                        const addPromise = eb.add(event) as Promise<object>;
+                        const addPromise = eb.add(event) as Promise<IngestResponse>;
                         addPromise.then(response => {
                             assert.deepEqual(response, successResponse);
                         });

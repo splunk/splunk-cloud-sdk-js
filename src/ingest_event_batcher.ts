@@ -4,7 +4,7 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
-import { Event, IngestService } from './ingest';
+import { Event, IngestResponse, IngestService } from './ingest';
 
 /**
  * Provides the ability to keep a growing number of events queued up and sends them to HEC.
@@ -70,7 +70,7 @@ export class EventBatcher {
      * Clean up the events and timer.
      * @return Promise that will be completed when events are accepted by service
      */
-    public flush = (): Promise<object> => {
+    public flush = (): Promise<IngestResponse> => {
         const data = this.queue;
         this.queue = [];
         this.resetTimer();
@@ -84,7 +84,7 @@ export class EventBatcher {
      *
      * @return can return null if event has not been sent yet.
      */
-    private run = (): Promise<object> | null => {
+    private run = (): Promise<IngestResponse> | null => {
         const maxCountReached = (this.queue.length >= this.batchCount);
         // TODO: is it okay to just import @types/node and call this good?
         const eventByteSize = JSON.stringify(this.queue).length;
