@@ -119,7 +119,8 @@ describe('integration tests using action service', () => {
                 })
                 .then(res => {
                     const actionStatus = res as ActionStatus;
-                    // expect(['RUNNING', 'FAILED']).to.include(res.state) TODO: Whether the action succeeds or not, depends on the action definition
+                    // TODO: Whether the action succeeds or not, depends on the action definition
+                    // assert.include([ActionStatusState.running, ActionStatusState.failed], res.state)
                     assert.equal(actionStatus.statusId, webhook.statusId);
                 });
         });

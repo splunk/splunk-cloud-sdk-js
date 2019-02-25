@@ -1,13 +1,8 @@
-import * as chai from 'chai';
-import * as chaiAsPromised from 'chai-as-promised';
+import { assert } from 'chai';
 import 'mocha';
 import { SplunkCloud } from '../../splunk';
 import { PipelineRequest, PipelineStatus } from '../../streams';
 import config from '../config';
-
-chai.use(chaiAsPromised);
-
-const { expect, assert } = chai;
 
 const splunkCloud = new SplunkCloud({
     urls: { api: config.stagingApiHost, app: config.stagingAppsHost },
@@ -118,7 +113,7 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                 .activatePipeline(activatePipelineRequest)
                 .then(activatePipelineResponse => {
                     assert.isNotNull(activatePipelineResponse);
-                    expect(activatePipelineResponse.activated).to.contain(pipelineId1 as string);
+                    assert.include(activatePipelineResponse.activated, pipelineId1);
 
                     return splunkCloud.streams
                         .getPipeline(pipelineId1 as string)
@@ -169,9 +164,7 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                 .deactivatePipeline(deactivatePipelineRequest)
                 .then(deactivatePipelineResponse => {
                     assert.isNotNull(deactivatePipelineResponse);
-                    expect(
-                        deactivatePipelineResponse.deactivated
-                    ).to.contain(pipelineId1 as string);
+                    assert.include(deactivatePipelineResponse.deactivated, pipelineId1);
 
                     return splunkCloud.streams.getPipeline(pipelineId1 as string);
                 })

@@ -1,13 +1,10 @@
-import * as chai from 'chai';
-import * as chaiAsPromised from 'chai-as-promised';
+import { assert } from 'chai';
 import 'isomorphic-fetch';
 import 'mocha';
 import { naiveExponentialBackoff, ServiceClient, SplunkError } from '../../client';
 import config from '../config';
 
 const stubbyUrl = `http://${config.stubbyHost}:8882`;
-chai.use(chaiAsPromised);
-const { expect } = chai;
 
 describe('Basic client functionality', () => {
     const s = new ServiceClient({
@@ -18,10 +15,10 @@ describe('Basic client functionality', () => {
     describe('GET', () => {
         it('should return a promise', () => {
             const promise = s.get('api', '/basic');
-            expect(promise).to.be.a('promise');
+            assert.typeOf(promise, 'Promise');
             return promise.then((data) => {
-                expect(data.body).to.haveOwnProperty('foo');
-                expect(data.status).to.equal(200);
+                assert.property(data.body, 'foo');
+                assert.equal(data.status, 200);
             });
         });
     });
@@ -29,10 +26,13 @@ describe('Basic client functionality', () => {
     describe('POST', () => {
         it('should return a promise', () => {
             const promise = s.post('api', '/basic', { robin: 'hood' });
-            expect(promise).to.be.a('promise');
+            assert.typeOf(promise, 'Promise');
             return promise.then((data) => {
-                expect(data.body).to.haveOwnProperty('friar', 'tuck');
-                expect(data.status).to.equal(200);
+                assert.typeOf(data.body, 'object');
+                assert.property(data.body, 'friar');
+                const bodyObj = data.body as any;
+                assert.equal(bodyObj.friar, 'tuck');
+                assert.equal(data.status, 200);
             });
         });
     });
@@ -40,10 +40,12 @@ describe('Basic client functionality', () => {
     describe('PUT', () => {
         it('should return a promise', () => {
             const promise = s.put('api', '/basic', { walrus: 'carpenter' });
-            expect(promise).to.be.a('promise');
+            assert.typeOf(promise, 'Promise');
             return promise.then((data) => {
-                expect(data.body).to.haveOwnProperty('oysters', 'sad');
-                expect(data.status).to.equal(200);
+                assert.typeOf(data.body, 'object');
+                const bodyObj = data.body as any;
+                assert.equal(bodyObj.oysters, 'sad');
+                assert.equal(data.status, 200);
             });
         });
     });
@@ -51,26 +53,31 @@ describe('Basic client functionality', () => {
     describe('DELETE', () => {
         it('should return a promise', () => {
             const promise = s.delete('api', '/basic');
-            expect(promise).to.be.a('promise');
+            assert.typeOf(promise, 'Promise');
             return promise;
         });
     });
 
     describe('Errors', () => {
-        it('should throw on an error response', () => expect(s.get('api', '/error')).to.be.rejectedWith(Error, 'error response'));
+        it('should throw on an error response', () => {
+            return s.get('api', '/error').then(() => {
+                assert.fail('Should have caught a rejected promise');
+            }).catch((err) => {
+                assert.typeOf(err, 'Error');
+                assert.equal(err.message, 'error response');
+            });
+
+        });
     });
 
     describe('Path building', () => {
         it('Catch empty path elements', () => {
-            let failed = false;
             try {
                 s.buildPath('/PREFIX', ['foo', ' '], 'TENANT');
-                failed = true;
+                assert.fail('Should have thrown an error');
             } catch (err) {
-                expect(err).to.have.property('message').that.matches(/\/TENANT\/PREFIX\/foo\/ /);
-            }
-            if (failed) {
-                expect.fail('Should have thrown an error');
+                assert.property(err, 'message');
+                assert.match(err.message, /\/TENANT\/PREFIX\/foo\/ /);
             }
         });
     });
@@ -83,8 +90,8 @@ describe('Basic client functionality', () => {
             s.addResponseHook((response) => extractedUrl = response.url);
             return s.get('api', '/basic')
                 .then(httpResponse => {
-                    expect(httpResponse.body).to.haveOwnProperty('foo');
-                    expect(extractedUrl).matches(/\/basic$/);
+                    assert.property(httpResponse.body, 'foo');
+                    assert.match(extractedUrl, /\/basic$/);
                 });
         });
 
@@ -94,7 +101,7 @@ describe('Basic client functionality', () => {
             }
             return s.get('api', '/basic')
                 .then(httpResponse => {
-                    expect(httpResponse.body).to.haveOwnProperty('foo');
+                    assert.property(httpResponse.body, 'foo');
                 });
         });
 
@@ -106,7 +113,7 @@ describe('Basic client functionality', () => {
             }); // Totally different URL
             return s.get('api', '/something_that_does_not_exist')
                 .then(httpResponse => {
-                    expect(httpResponse.body).to.haveOwnProperty('foo');
+                    assert.property(httpResponse.body, 'foo');
                 });
         });
 
@@ -116,11 +123,11 @@ describe('Basic client functionality', () => {
             s.addResponseHook(naiveExponentialBackoff({ maxRetries: 3, onRetry: () => retries += 1, onFailure: () => failed = true }));
             return s.get('api', '/too_many_requests')
                 .then(httpResponse => {
-                    expect(httpResponse.body).to.haveOwnProperty('foo');
+                    assert.property(httpResponse.body, 'foo');
                 }, (err: SplunkError) => {
-                    expect(err.httpStatusCode).to.equal(429);
-                    expect(retries).to.equal(3);
-                    expect(failed).to.equal(true);
+                    assert.equal(err.httpStatusCode, 429);
+                    assert.equal(retries, 3);
+                    assert.ok(failed);
                 });
         });
 
@@ -132,30 +139,32 @@ describe('Basic client functionality', () => {
             const start = Date.now();
             return s.get('api', '/too_many_requests')
                 .then(httpResponse => {
-                    expect(httpResponse.body).to.haveOwnProperty('foo');
+                    assert.property(httpResponse.body, 'foo');
                 }, () => {
                     const elapsed = Date.now() - start;
-                    expect(elapsed).to.be.greaterThan(expectedTime).and.lessThan(expectedTime * 2); // setTimeout is not exact
+                    // setTimeout is not exact
+                    assert.isAtLeast(elapsed, expectedTime);
+                    assert.isAtMost(elapsed, expectedTime * 2);
                 });
         });
 
         it('should succeed with a backoff in place', () => {
             s.addResponseHook(naiveExponentialBackoff());
             const promise = s.get('api', '/basic');
-            expect(promise).to.be.a('promise');
+            assert.typeOf(promise, 'Promise');
             return promise.then((data) => {
-                expect(data.body).to.haveOwnProperty('foo');
-                expect(data.status).to.equal(200);
+                assert.property(data.body, 'foo');
+                assert.equal(data.status, 200);
             });
         });
 
         it('should handle exceptions', () => {
-            s.addResponseHook(response => {
+            s.addResponseHook(() => {
                 throw new Error('unexpected error');
             });
             return s.get('api', '/basic')
-                .then(httpResponse => {
-                    expect(httpResponse.body).to.haveOwnProperty('foo');
+                .then(response => {
+                    assert.property(response.body, 'foo');
                 });
         });
     });
@@ -169,10 +178,10 @@ describe('Service client args', () => {
             tokenSource: () => config.stubbyAuthToken,
             defaultTenant: config.stubbyTenant
         });
-        expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
+        assert.equal(s.buildPath('/prefix', ['path']), `/${config.stubbyTenant}/prefix/path`);
         return s.get('api', '/basic')
             .then(response => {
-                expect(response.body).to.haveOwnProperty('foo');
+                assert.property(response.body, 'foo');
             });
     });
 
@@ -182,10 +191,10 @@ describe('Service client args', () => {
             tokenSource: config.stubbyAuthToken,
             defaultTenant: config.stubbyTenant
         });
-        expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
+        assert.equal(s.buildPath('/prefix', ['path']), `/${config.stubbyTenant}/prefix/path`);
         return s.get('api', '/basic')
             .then(response => {
-                expect(response.body).to.haveOwnProperty('foo');
+                assert.property(response.body, 'foo');
             });
     });
 
@@ -195,10 +204,10 @@ describe('Service client args', () => {
             tokenSource: () => config.stubbyAuthToken,
             defaultTenant: config.stubbyTenant
         });
-        expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
+        assert.equal(s.buildPath('/prefix', ['path']), `/${config.stubbyTenant}/prefix/path`);
         return s.get('api', '/basic')
             .then(response => {
-                expect(response.body).to.haveOwnProperty('foo');
+                assert.property(response.body, 'foo');
             });
 
     });
@@ -211,10 +220,10 @@ describe('Service client args', () => {
             tokenSource: getAccessToken,
             defaultTenant: config.stubbyTenant
         });
-        expect(s.buildPath('/prefix', ['path'])).to.equal(`/${config.stubbyTenant}/prefix/path`);
+        assert.equal(s.buildPath('/prefix', ['path']), `/${config.stubbyTenant}/prefix/path`);
         return s.get('api', '/basic')
             .then(response => {
-                expect(response.body).to.haveOwnProperty('foo');
+                assert.property(response.body, 'foo');
             });
     });
 
@@ -224,7 +233,7 @@ describe('Service client args', () => {
             defaultTenant: config.stubbyTenant
         });
 
-        expect(s.buildUrl('api', s.buildPath('/foo', ['bar']))).to.equal(`https://api.splunkbeta.com/${config.stubbyTenant}/foo/bar`);
+        assert.equal(s.buildUrl('api', s.buildPath('/foo', ['bar'])), `https://api.splunkbeta.com/${config.stubbyTenant}/foo/bar`);
     });
 });
 
@@ -236,11 +245,11 @@ describe('Service client with a url string instead of args object', () => {
     );
     describe('GET', () => {
         it('should return a promise when service client is created with a url string instead of args object', () => {
-            expect(s.buildUrl('api', s.buildPath('', ['basic']))).to.equal(`${stubbyUrl}/${config.stubbyTenant}/basic`);
+            assert.equal(s.buildUrl('api', s.buildPath('', ['basic'])), `${stubbyUrl}/${config.stubbyTenant}/basic`);
             const promise = s.get('api', '/basic');
-            expect(promise).to.be.a('promise');
+            assert.typeOf(promise, 'Promise');
             return promise.then((data) => data.body).then(body => {
-                expect(body).to.haveOwnProperty('foo');
+                assert.property(body, 'foo');
             });
         });
     });
@@ -254,11 +263,11 @@ describe('Service client with a ServiceClientArgs object initialized with a url 
     });
     describe('GET', () => {
         it('should return a promise when service client is created with a ServiceClientArgs object initialized with a url string', () => {
-            expect(s.buildUrl('api', s.buildPath('', ['basic']))).to.equal(`${stubbyUrl}/${config.stubbyTenant}/basic`);
+            assert.equal(s.buildUrl('api', s.buildPath('', ['basic'])), `${stubbyUrl}/${config.stubbyTenant}/basic`);
             const promise = s.get('api', '/basic');
-            expect(promise).to.be.a('promise');
+            assert.typeOf(promise, 'Promise');
             return promise.then((data) => data.body).then(body => {
-                expect(body).to.haveOwnProperty('foo');
+                assert.property(body, 'foo');
             });
         });
     });
