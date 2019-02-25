@@ -6,6 +6,11 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 
 import { Event, IngestResponse, IngestService } from './ingest';
 
+interface PromiseInternal<T> {
+    resolve: (r: T) => void;
+    reject: (err: Error) => void;
+}
+
 /**
  * Provides the ability to keep a growing number of events queued up and sends them to HEC.
  * The events are flushed on a periodic interval or when the set capacity has been reached.
@@ -18,7 +23,7 @@ export class EventBatcher {
     private readonly timeout: number;
     private queue: Event[];
     private timer: any;
-    private promiseQueue: Array<Promise<IngestResponse|{}>>;
+    private promiseQueue: Array<PromiseInternal<IngestResponse>>;
 
     /**
      * @param ingest - Proxy for the Ingest API
@@ -47,7 +52,7 @@ export class EventBatcher {
      *
      * @param event - a single event
      */
-    public add = (event: Event): Promise<IngestResponse|{}> => {
+    public add = (event: Event): Promise<IngestResponse> => {
         this.queue.push(event);
         return this.run();
     }
@@ -77,7 +82,7 @@ export class EventBatcher {
      * Clean up the events and timer.
      * @return Promise that will be completed when events are accepted by service
      */
-    public flush = (): Promise<IngestResponse|{}> => {
+    public flush = (): Promise<IngestResponse> => {
         this.resetTimer();
         const data = this.queue;
         this.queue = [];
@@ -85,7 +90,13 @@ export class EventBatcher {
         this.promiseQueue = [];
         this.resetTimer();
         return this.ingest.postEvents(data)
-            .then(result => result, err => promises.map(p => Promise.reject(err)));
+            .then(response => {
+                promises.forEach(p => p.resolve(response));
+                return response;
+            }, err => {
+                promises.forEach(p => p.reject(err));
+                throw err;
+            });
     }
 
     /**
@@ -95,7 +106,7 @@ export class EventBatcher {
      *
      * @return can return null if event has not been sent yet.
      */
-    private run = (): Promise<IngestResponse|{}> => {
+    private run = (): Promise<IngestResponse> => {
         const maxCountReached = (this.queue.length >= this.batchCount);
         // TODO: is it okay to just import @types/node and call this good?
         const eventByteSize = JSON.stringify(this.queue).length;
@@ -103,8 +114,10 @@ export class EventBatcher {
         if (maxCountReached || eventByteSize >= this.batchSize) {
             return this.flush();
         }
-        const promise = new Promise(resolve => null);
-        this.promiseQueue.push(promise);
+        const promise = new Promise<IngestResponse>((resolve, reject) => this.promiseQueue.push({
+            resolve,
+            reject
+        }));
         return promise;
     }
 

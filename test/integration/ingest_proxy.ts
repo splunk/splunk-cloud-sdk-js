@@ -88,7 +88,7 @@ describe('integration tests for Ingest Endpoints', () => {
                     }
                 } finally {
                     eb.stop().then(response => {
-                        console.log('Stopping the event batcher: ', response);
+                        console.log('Stopping the event batcher (flushing pending events in the queue, if any):', response);
                     }).catch(err => console.log(err));
                 }
             });
@@ -109,7 +109,7 @@ describe('integration tests for Ingest Endpoints', () => {
                     }
                 } finally {
                     eb.stop().then(response => {
-                        console.log('Stopping the event batcher: ', response);
+                        console.log('Stopping the event batcher (flushing pending events in the queue, if any):', response);
                     }).catch(err => console.log(err));
                 }
             });
@@ -119,7 +119,7 @@ describe('integration tests for Ingest Endpoints', () => {
             it('should create 3 batched events and wait for timer to send them', () => {
                 const events = [event1, event2, event3];
                 // 3 total events, batch size 40000, batch count 10, 3000 ms
-                const eb: EventBatcher = new EventBatcher(splunk.ingest, 218, 10, 3000);
+                const eb: EventBatcher = new EventBatcher(splunk.ingest, 40000, 10, 3000);
                 try {
                     for (const e of events) {
                         const event = e as Event;
@@ -130,7 +130,7 @@ describe('integration tests for Ingest Endpoints', () => {
                     }
                 } finally {
                     eb.stop().then(response => {
-                        console.log('Stopping the event batcher: ', response);
+                        console.log('Stopping the event batcher (flushing pending events in the queue, if any):', response);
                     }).catch(err => console.log(err));
                 }
             });
@@ -147,7 +147,7 @@ describe('integration tests for Ingest Endpoints', () => {
                     }).catch(err => console.log(err));
                 } finally {
                     eb.stop().then(response => {
-                        console.log('Stopping the event batcher: ', response);
+                        console.log('Stopping the event batcher (flushing pending events in the queue, if any):', response);
                     }).catch(err => console.log(err));
                 }
             });
