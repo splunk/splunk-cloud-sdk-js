@@ -6,7 +6,7 @@ without a valid written license from Splunk Inc. is PROHIBITED.
 
 import { Observable } from 'rxjs';
 import BaseApiService from './baseapiservice';
-import { QueryArgs, SplunkError } from './client';
+import { SplunkError } from './client';
 import { SEARCH_SERVICE_PREFIX, SERVICE_CLUSTER_MAPPING } from './service_prefixes';
 
 export class SplunkSearchCancelError extends Error {
@@ -245,8 +245,7 @@ export class SearchService extends BaseApiService {
      * Get {search_id} search results.
      */
     public listResults = (jobId: string, args: FetchResultsRequest = {}): Promise<SearchResults | ResultsNotReadyResponse> => {
-        const queryArgs: QueryArgs = args || {};
-        return this.client.get(SERVICE_CLUSTER_MAPPING.search, this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), { query: queryArgs })
+        return this.client.get(SERVICE_CLUSTER_MAPPING.search, this.client.buildPath(SEARCH_SERVICE_PREFIX, ['jobs', jobId, 'results']), { query: args })
             .then(response => {
                 if (typeof response.body === 'object') {
                     if ('results' in response.body) {

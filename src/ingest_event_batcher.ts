@@ -4,7 +4,7 @@ SPLUNK CONFIDENTIAL – Use or disclosure of this material in whole or in part
 without a valid written license from Splunk Inc. is PROHIBITED.
 */
 
-import { Event, IngestService } from './ingest';
+import { Event, IngestResponse, IngestService } from './ingest';
 
 /**
  * Provides the ability to keep a growing number of events queued up and sends them to HEC.
@@ -18,7 +18,7 @@ export class EventBatcher {
     private readonly timeout: number;
     private queue: Event[];
     private timer: any;
-    private promiseQueue: Array<Promise<object|null>>;
+    private promiseQueue: Array<Promise<IngestResponse|{}>>;
 
     /**
      * @param ingest - Proxy for the Ingest API
@@ -47,7 +47,7 @@ export class EventBatcher {
      *
      * @param event - a single event
      */
-    public add = (event: Event): Promise<object|null> => {
+    public add = (event: Event): Promise<IngestResponse|{}> => {
         this.queue.push(event);
         return this.run();
     }
@@ -77,13 +77,15 @@ export class EventBatcher {
      * Clean up the events and timer.
      * @return Promise that will be completed when events are accepted by service
      */
-    public flush = (): Promise<object> => {
+    public flush = (): Promise<IngestResponse|{}> => {
+        this.resetTimer();
         const data = this.queue;
         this.queue = [];
-        this.promiseQueue.map(p => Promise.resolve(p));
+        const promises = this.promiseQueue;
         this.promiseQueue = [];
         this.resetTimer();
-        return this.ingest.postEvents(data);
+        return this.ingest.postEvents(data)
+            .then(result => result, err => promises.map(p => Promise.reject(err)));
     }
 
     /**
@@ -93,7 +95,7 @@ export class EventBatcher {
      *
      * @return can return null if event has not been sent yet.
      */
-    private run = (): Promise<object|null> => {
+    private run = (): Promise<IngestResponse|{}> => {
         const maxCountReached = (this.queue.length >= this.batchCount);
         // TODO: is it okay to just import @types/node and call this good?
         const eventByteSize = JSON.stringify(this.queue).length;
@@ -109,12 +111,12 @@ export class EventBatcher {
     /**
      * Perform flush operation if queue is non-empty
      */
-    public stop = (): Promise<object|null> => {
+    public stop = (): Promise<IngestResponse|{}> => {
         this.stopTimer();
         if (this.queue !== undefined && this.queue.length > 0) {
             return this.flush();
         }
-        return Promise.resolve(null);
+        return Promise.resolve('Queue is empty, all events flushed');
     }
 
     /**

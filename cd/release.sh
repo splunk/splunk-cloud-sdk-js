@@ -4,7 +4,7 @@ print_header_line() {
     echo "\n------------------------------------------------------------"
 }
 
-echo "Input the version to release omitting the leading 'v' (e.g. 0.7.1) followed by [ENTER]:"
+echo "Input the version to release (e.g. 0.7.1) followed by [ENTER]:"
 read NEW_VERSION
 
 print_header_line
@@ -18,7 +18,6 @@ git fetch --all && git pull --all
 
 print_header_line
 BRANCH_NAME=release/v$NEW_VERSION
-REPOSITORY_URL="https://github.com/splunk/splunk-cloud-sdk-js"
 echo "Checking out a $BRANCH_NAME branch ..."
 git checkout -b $BRANCH_NAME
 
@@ -31,7 +30,7 @@ echo "Building resouces for documentation ..."
 yarn build
 
 print_header_line
-echo "Updating docs and generating ci/cd-publish artifact ..."
+echo "Updating docs ..."
 yarn run docs
 git add docs
 
@@ -51,12 +50,17 @@ then
     print_header_line
     # This also creates a tag for the version
     echo "Bumping version, making CHANGELOG.md updates, and committing it ..."
-    yarn release -- --release-as $NEW_VERSION
+    yarn release --release-as $NEW_VERSION
+
+    print_header_line
+    echo "Creating docs artifact for portals team \"build\/cloud-sdk-$NEW_VERSION.tgz\" ..."
+    yarn publish:docs
 
     print_header_line
     echo "Pushing branch $BRANCH_NAME ..."
     git push --set-upstream origin $BRANCH_NAME
 else
+    echo "============================WARNING============================"
     echo "No changes pushed, branch $BRANCH_NAME only created locally ..."
 fi
 
@@ -76,5 +80,5 @@ echo " - Make sure the release includes the change notes in the write section"
 echo " - Make sure the release is marked set as a 'pre-release'"
 echo "Please create a pull request from 'master' targeting 'develop'"
 echo "Please inform relevant parties of the release."
-echo "Deliver the documentation in \"ci/docs/build\" to the developer portal team"
+echo "Deliver the documentation in \"build\/cloud-sdk-$NEW_VERSION.tgz\" to the developer portal team"
 echo "Push the created build artifact to artifactory"
