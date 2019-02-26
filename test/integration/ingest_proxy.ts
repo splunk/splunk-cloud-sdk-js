@@ -1,4 +1,4 @@
-import { assert, expect } from 'chai';
+import { assert } from 'chai';
 import 'mocha';
 import { Event, IngestResponse } from '../../ingest';
 import { EventBatcher } from '../../ingest_event_batcher';
@@ -63,10 +63,9 @@ describe('integration tests for Ingest Endpoints', () => {
                      * }
                      */
                     assert.equal(err.httpStatusCode, 400);
-                    expect(err).to.have.property('code');
-                    expect(err).to.have.property('message');
-                    expect(err.message).to.have.string('Invalid data');
-                    expect(err.details).to.have.string('unknown field');
+                    assert.containsAllKeys(err, ['code', 'details']);
+                    assert.include(err.message, 'Invalid data');
+                    assert.include(err.details, 'unknown field');
                 });
             });
         });
@@ -200,7 +199,8 @@ describe('integration tests for Ingest Endpoints', () => {
 
         describe('Post metrics', () => {
             it('should return a successful response', () => splunk.ingest.postMetrics([metricEvent1]).then(response => {
-                expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
+                assert.property(response, 'message');
+                assert.equal(response.message, 'Success');
             }).catch(err => {
                 assert.fail(`request should not have failed ${err}`);
             }));
@@ -208,7 +208,8 @@ describe('integration tests for Ingest Endpoints', () => {
 
         describe('Post metrics with no defaults', () => {
             it('should return a successful response', () => splunk.ingest.postMetrics([metricEventNoDefaults]).then(response => {
-                expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
+                assert.property(response, 'message');
+                assert.equal(response.message, 'Success');
             }).catch(err => {
                 assert.fail(`request should not have failed ${err}`);
             }));
@@ -216,44 +217,12 @@ describe('integration tests for Ingest Endpoints', () => {
 
         describe('Post metrics, two events', () => {
             it('should return a successful response', () => splunk.ingest.postMetrics([metricEvent1, metricEvent2]).then(response => {
-                expect(response).to.have.property('message').and.equal('Success', 'response should be expected success response.');
+                assert.property(response, 'message');
+                assert.equal(response.message, 'Success');
             }).catch(err => {
                 assert.fail(`request should not have failed ${err}`);
             }));
         });
-
-        // TODO: commenting out this test, not possible to tests with valid typescript,
-        // we should have a stubby/unit test to tackle this scenario and the SplunkError class specifically
-        //
-        // describe('Post metrics bad format', () => {
-        //     const invalid = [{ invalid: 'data format' }];
-        //     it('should return a 400 response', () => splunk.ingest.postMetrics(invalid).then(
-        //         () => {
-        //             assert.fail('request with bad data format should not succeed');
-        //         },
-        //         err => {
-        //             assert.equal(err.httpStatusCode, 400, 'response httpStatusCode should be 400');
-        //
-        //             /**
-        //              * {
-        //              *  code: 'INVALID_DATA',
-        //              *  moreInfo: undefined,
-        //              *  httpStatusCode: 400,
-        //              *  details: undefined
-        //              * }
-        //              */
-        //             expect(err).to.have.property('code');
-        //             expect(err.httpStatusCode).to.equal(400);
-        //             expect(err).to.have.property('message');
-        //             expect(err.message).to.match(/Invalid/);
-        //             /* TODO: New error response doesn't contain url details, check with the services
-        //             expect(err).to.have.property('url');
-        //             expect(err.url).to.match(new RegExp(ServicePrefixes.INGEST_SERVICE_PREFIX, 'i'));
-        //             expect(err.url).to.match(/metrics/);
-        //             */
-        //         }
-        //     ));
-        // });
 
         describe('Post metrics unknown data fields', () => {
             const metricUnknownFieldEvent = {
@@ -275,7 +244,6 @@ describe('integration tests for Ingest Endpoints', () => {
                     assert.fail('request with unknown data field should not succeed');
                 },
                 err => {
-                    assert.equal(err.httpStatusCode, 400);
                     /**
                      * {
                      *  code: 'INVALID_DATA',
@@ -283,12 +251,10 @@ describe('integration tests for Ingest Endpoints', () => {
                      *  details: "json: unknown field \"unknown\""
                      * }
                      */
-                    expect(err).to.have.property('code');
-                    expect(err.httpStatusCode).to.equal(400);
-                    expect(err).to.have.property('message');
-                    expect(err).to.have.property('details');
-                    expect(err.message).to.have.string('Invalid data');
-                    expect(err.details).to.have.string('unknown field');
+                    assert.equal(err.httpStatusCode, 400);
+                    assert.containsAllKeys(err, ['code', 'details']);
+                    assert.include(err.message, 'Invalid data');
+                    assert.include(err.details, 'unknown field');
                 }
             ));
         });

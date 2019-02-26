@@ -1,4 +1,4 @@
-import { assert, expect } from 'chai';
+import { assert } from 'chai';
 import 'mocha';
 import { ResultsNotReadyResponse, SearchResults } from '../../search';
 import { SplunkCloud } from '../../splunk';
@@ -28,48 +28,50 @@ describe('integration tests Using Search APIs', () => {
     describe('Search', () => {
         it('should allow submitting a search and getting results', () => splunk.search.createJob(standardQuery)
             .then(searchObj => { // Check the state of the job
-                expect(searchObj).to.have.property('sid');
-                expect(searchObj).to.have.property('status');
+                assert.property(searchObj, 'sid');
+                assert.property(searchObj, 'status');
                 return splunk.search.waitForJob(searchObj.sid);
             }).then(searchObj => { // Ensure we have events when done
-                expect(searchObj).to.have.property('status', 'done');
-                expect(searchObj).to.have.property('resultsAvailable', 5);
+                assert.equal(searchObj.status, 'done');
+                assert.equal(searchObj.resultsAvailable, 5);
                 return splunk.search.listResults(searchObj.sid)
                     .then(resultResponse => {
-                        expect(resultResponse).to.have.property('results').with.lengthOf(5);
-                        expect(resultResponse).to.have.property('fields');
+                        const response = resultResponse as SearchResults;
+                        assert.equal(response.results.length, 5);
+                        assert.property(response, 'fields');
                     });
             }));
 
         it('should allow submitting a search with module field and getting results', () => splunk.search.createJob(moduleQuery)
             .then(searchObj => { // Check the state of the job
-                expect(searchObj).to.have.property('sid');
-                expect(searchObj).to.have.property('status');
+                assert.property(searchObj, 'sid');
+                assert.property(searchObj, 'status');
                 return splunk.search.waitForJob(searchObj.sid);
             }).then(searchObj => { // Ensure we have events when done
-                expect(searchObj).to.have.property('status', 'done');
-                expect(searchObj).to.have.property('resultsAvailable', 5);
+                assert.equal(searchObj.status, 'done');
+                assert.equal(searchObj.resultsAvailable, 5);
                 return splunk.search.listResults(searchObj.sid)
                     .then(resultResponse => {
-                        expect(resultResponse).to.have.property('results').with.lengthOf(5);
-                        expect(resultResponse).to.have.property('fields');
+                        const response = resultResponse as SearchResults;
+                        assert.equal(response.results.length, 5);
+                        assert.property(response, 'fields');
                     });
             }));
 
         it('should return a wait request if the job is not ready', () => splunk.search.createJob(moduleQuery)
             .then(searchObj => { // Check the state of the job
-                expect(searchObj).to.have.property('sid');
-                expect(searchObj).to.have.property('status');
+                assert.property(searchObj, 'sid');
+                assert.property(searchObj, 'status');
                 return splunk.search.listResults(searchObj.sid)
                     .then(res => {
                         if ((res as ResultsNotReadyResponse).nextLink) {
                             const resultsNotReady = res as ResultsNotReadyResponse;
-                            expect(resultsNotReady).to.have.property('nextLink');
-                            expect(resultsNotReady).to.have.property('wait');
+                            assert.property(resultsNotReady, 'nextLink');
+                            assert.property(resultsNotReady, 'wait');
                         } else {
                             const resultsResponse = res as SearchResults;
-                            expect(resultsResponse).to.have.property('results');
-                            expect(resultsResponse).to.have.property('fields');
+                            assert.property(resultsResponse, 'results');
+                            assert.property(resultsResponse, 'fields');
                         }
                     });
             }));
@@ -77,7 +79,7 @@ describe('integration tests Using Search APIs', () => {
         it('should allow pagination of results', () => splunk.search.createJob(standardQuery)
             .then(createdJob => splunk.search.waitForJob(createdJob.sid)
                 .then(job => { // As a child to keep sid in the closure
-                    expect(job).to.have.property('resultsAvailable', 5);
+                    assert.equal(job.resultsAvailable, 5);
                     return splunk.search.listResults(job.sid, { offset: 0, count: 3 });
                 }).then(res => {
                     const results = res as SearchResults;
@@ -95,37 +97,38 @@ describe('integration tests Using Search APIs', () => {
 
         it('should allow retrieval of jobs', () => splunk.search.listJobs()
             .then(results => {
-                expect(results).to.be.an('array');
-                expect(results[0]).to.have.property('sid');
-                expect(results[0]).to.have.property('query');
-                expect(results[0]).to.have.property('status');
-                expect(results[0]).to.have.property('module');
-                expect(results[0]).to.have.property('resultsAvailable');
-                expect(results[0]).to.have.property('percentComplete');
+                assert.typeOf(results, 'array');
+                assert.ok(results.length > 0);
+                assert.property(results[0], 'sid');
+                assert.property(results[0], 'query');
+                assert.property(results[0], 'status');
+                assert.property(results[0], 'module');
+                assert.property(results[0], 'resultsAvailable');
+                assert.property(results[0], 'percentComplete');
             }));
 
         it('should allow retrieval of jobs with query single status', () => splunk.search.listJobs({ status: 'running' })
             .then(results => {
-                expect(results).to.be.an('array');
-                expect(results).to.have.lengthOf.above(0);
-                expect(results[0]).to.have.property('sid');
-                expect(results[0]).to.have.property('query');
-                expect(results[0]).to.have.property('status');
-                expect(results[0]).to.have.property('module');
-                expect(results[0]).to.have.property('resultsAvailable');
-                expect(results[0]).to.have.property('percentComplete');
+                assert.typeOf(results, 'array');
+                assert.ok(results.length > 0);
+                assert.property(results[0], 'sid');
+                assert.property(results[0], 'query');
+                assert.property(results[0], 'status');
+                assert.property(results[0], 'module');
+                assert.property(results[0], 'resultsAvailable');
+                assert.property(results[0], 'percentComplete');
             }));
 
         it('should allow retrieval of jobs with query multiple status', () => splunk.search.listJobs({ status: 'running,done' })
             .then(results => {
-                expect(results).to.be.an('array');
-                expect(results).to.have.lengthOf.above(0);
-                expect(results[0]).to.have.property('sid');
-                expect(results[0]).to.have.property('query');
-                expect(results[0]).to.have.property('status');
-                expect(results[0]).to.have.property('module');
-                expect(results[0]).to.have.property('resultsAvailable');
-                expect(results[0]).to.have.property('percentComplete');
+                assert.typeOf(results, 'array');
+                assert.ok(results.length > 0);
+                assert.property(results[0], 'sid');
+                assert.property(results[0], 'query');
+                assert.property(results[0], 'status');
+                assert.property(results[0], 'module');
+                assert.property(results[0], 'resultsAvailable');
+                assert.property(results[0], 'percentComplete');
             }));
 
     });
@@ -134,7 +137,7 @@ describe('integration tests Using Search APIs', () => {
         it('should allow for easy job status', () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
                 return search.status()
-                    .then(status => expect(status).to.have.property('status'));
+                    .then(status => assert.property(status, 'status'));
             });
         });
 
@@ -142,7 +145,7 @@ describe('integration tests Using Search APIs', () => {
             return splunk.search.submitSearch(standardQuery).then(search => {
                 return search.cancel()
                     .then(() => splunk.search.getJob(search.jobId))
-                    .then(() => assert.fail('Should have thrown'), (err) => expect(err).to.have.property('httpStatusCode', 404));
+                    .then(() => assert.fail('Should have thrown'), (err) => assert.equal(err.httpStatusCode, 404));
             });
         });
 
@@ -151,7 +154,7 @@ describe('integration tests Using Search APIs', () => {
                 return search.cancel()
                     .then(() => search.wait())
                     .then(() => assert.fail('should have received error'), (err) => {
-                        expect(err).to.have.property('message');
+                        assert.property(err, 'message');
                     });
             });
         });
@@ -163,7 +166,8 @@ describe('integration tests Using Search APIs', () => {
                     return search.wait()
                         .then(() => search.getResults().then((res) => {
                             const results = res as SearchResults;
-                            expect(results.results).to.be.an('array').and.have.property('length', 5);
+                            assert.typeOf(results.results, 'array');
+                            assert.equal(results.results.length, 5);
                         }));
                 });
             });
@@ -173,7 +177,8 @@ describe('integration tests Using Search APIs', () => {
                     return search.wait()
                         .then(() => search.getResults({ offset: 0, count: 2 }).then((res) => {
                             const results = res as SearchResults;
-                            expect(results.results).to.be.an('array').and.have.property('length', 2);
+                            assert.typeOf(results.results, 'array');
+                            assert.equal(results.results.length, 2);
                         }));
                 });
             });
@@ -188,7 +193,8 @@ describe('integration tests Using Search APIs', () => {
                             results = r;
                         }, reject, () => {
                             try {
-                                expect(results.results).to.be.an('array').and.have.property('length', 5);
+                                assert.typeOf(results.results, 'array');
+                                assert.equal(results.results.length, 5);
                                 resolve();
                             } catch (e) {
                                 reject(e);
@@ -206,7 +212,8 @@ describe('integration tests Using Search APIs', () => {
                             results = r;
                         }, reject, () => {
                             try {
-                                expect(results.results).to.be.an('array').and.have.property('length', 2);
+                                assert.typeOf(results.results, 'array');
+                                assert.equal(results.results.length, 2);
                                 resolve();
                             } catch (e) {
                                 reject(e);
@@ -223,7 +230,8 @@ describe('integration tests Using Search APIs', () => {
                             results = r;
                         }, reject, () => {
                             try {
-                                expect(results.results).to.be.an('array').and.have.property('length', 5);
+                                assert.typeOf(results.results, 'array');
+                                assert.equal(results.results.length, 5);
                                 resolve();
                             } catch (e) {
                                 reject(e);
@@ -245,9 +253,7 @@ describe('integration tests Using Search APIs', () => {
                         status => {
                             count += 1;
                             try {
-                                expect(status).to.have.property('sid');
-                                expect(status).to.have.property('resultsAvailable');
-                                expect(status).to.have.property('status');
+                                assert.containsAllKeys(status, ['sid', 'resultsAvailable', 'status']);
                             } catch (e) {
                                 reject(e);
                             }
