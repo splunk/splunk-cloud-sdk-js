@@ -45,7 +45,8 @@
         "no-unnecessary-callback-wrapper": true,
         "object-literal-key-quotes": [true, "consistent-as-needed"],
         "no-multi-spaces": true,
-        "variable-name": [true, "allow-leading-underscore"]
+        "variable-name": [true, "allow-leading-underscore"],
+        "no-floating-promises": true
     },
     "rulesDirectory": []
 }

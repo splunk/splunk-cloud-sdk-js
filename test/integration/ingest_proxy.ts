@@ -83,6 +83,8 @@ describe('integration tests for Ingest Endpoints', () => {
                         const addPromise = eb.add(event) as Promise<IngestResponse>;
                         addPromise.then(response => {
                             assert.deepEqual(response, successResponse);
+                        }).catch(err => {
+                            assert.fail(err);
                         });
                     }
 
@@ -103,6 +105,8 @@ describe('integration tests for Ingest Endpoints', () => {
                         const addPromise = eb.add(event) as Promise<IngestResponse>;
                         addPromise.then(response => {
                             assert.deepEqual(response, successResponse);
+                        }).catch(err => {
+                            assert.fail(err);
                         });
                     }
 

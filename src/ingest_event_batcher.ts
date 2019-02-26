@@ -53,7 +53,7 @@ export class EventBatcher {
     private setTimer = (): any => {
         return setTimeout(() => {
             if (this.queue.length > 0) {
-                this.flush();
+                return this.flush();
             }
         }, this.timeout);
     }
