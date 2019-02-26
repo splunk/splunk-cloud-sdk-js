@@ -80,14 +80,15 @@ describe('integration tests for Ingest Endpoints', () => {
                 try {
                     for (const e of events) {
                         const event = e as Event;
-                        const addPromise = eb.add(event) as Promise<IngestResponse>;
+                        const addPromise = eb.add(event) as Promise<IngestResponse|{}>;
                         addPromise.then(response => {
-                            assert.deepEqual(response, successResponse);
-                        });
+                            console.log(response);
+                        }).catch(err => console.log(err));
                     }
-
                 } finally {
-                    eb.stop();
+                    eb.stop().then(response => {
+                        console.log('Stopping the event batcher (flushing pending events in the queue, if any):', response);
+                    }).catch(err => console.log(err));
                 }
             });
         });
@@ -100,14 +101,36 @@ describe('integration tests for Ingest Endpoints', () => {
                 try {
                     for (const e of events) {
                         const event = e as Event;
-                        const addPromise = eb.add(event) as Promise<IngestResponse>;
+                        const addPromise = eb.add(event) as Promise<IngestResponse|{}>;
                         addPromise.then(response => {
-                            assert.deepEqual(response, successResponse);
-                        });
+                            console.log(response);
+                        }).catch(err => console.log(err));
                     }
-
                 } finally {
-                    eb.stop();
+                    eb.stop().then(response => {
+                        console.log('Stopping the event batcher (flushing pending events in the queue, if any):', response);
+                    }).catch(err => console.log(err));
+                }
+            });
+        });
+
+        describe('Post batch 3 events where batch size is large', () => {
+            it('should create 3 batched events and wait for timer to send them', () => {
+                const events = [event1, event2, event3];
+                // 3 total events, batch size 40000, batch count 10, 3000 ms
+                const eb: EventBatcher = new EventBatcher(splunk.ingest, 40000, 10, 3000);
+                try {
+                    for (const e of events) {
+                        const event = e as Event;
+                        const addPromise = eb.add(event) as Promise<IngestResponse|{}>;
+                        addPromise.then(response => {
+                            console.log(response);
+                        }).catch(err => console.log(err));
+                    }
+                } finally {
+                    eb.stop().then(response => {
+                        console.log('Stopping the event batcher (flushing pending events in the queue, if any):', response);
+                    }).catch(err => console.log(err));
                 }
             });
         });
@@ -117,10 +140,14 @@ describe('integration tests for Ingest Endpoints', () => {
                 // 1 total events, batch size 50000, batch count 10, 3000 ms
                 const eb: EventBatcher = new EventBatcher(splunk.ingest, 5000, 10, 3000);
                 try {
-                    const result = eb.add(event1);
-                    assert.isNull(result);
+                    const addPromise = eb.add(event1) as Promise<IngestResponse|{}>;
+                    addPromise.then(response => {
+                        console.log(response);
+                    }).catch(err => console.log(err));
                 } finally {
-                    eb.stop();
+                    eb.stop().then(response => {
+                        console.log('Stopping the event batcher (flushing pending events in the queue, if any):', response);
+                    }).catch(err => console.log(err));
                 }
             });
         });
