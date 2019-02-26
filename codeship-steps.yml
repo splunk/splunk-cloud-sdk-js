@@ -13,9 +13,9 @@
     service: splunk-cloud-sdk-shared-token-fetcher
     command: true
     encrypted_dockercfg_path: ci/dockercfg.encrypted
-  - name: Functional Tests With Code Coverage
+  - name: Functional Tests With Coverage Report
     service: splunk-cloud-sdk-js-with-stubby
-    command: bash -c "yarn codecov"
+    command: bash -c "yarn cover"
     encrypted_dockercfg_path: ci/dockercfg.encrypted
   - type: parallel
     name: Integration Tests And Example Tests
