@@ -94,7 +94,7 @@ describe('catalog tests', () => {
         });
 
         it('should allow create/delete of datasets', () => {
-            const name = 'foobar';
+            const name = `index_${Date.now()}`;
             return createIndexDataset(name).then(res => {
                 const ds = res as DatasetResponse;
                 assert.equal(ds.name, name);
