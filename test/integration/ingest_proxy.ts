@@ -83,7 +83,11 @@ describe('integration tests for Ingest Endpoints', () => {
                         const addPromise = eb.add(event) as Promise<IngestResponse|{}>;
                         addPromise.then(response => {
                             console.log(response);
-                        }).catch(err => console.log(err));
+                            assert.deepEqual(response, successResponse);
+                        }).catch(err => {
+                            console.log(err);
+                            assert.fail(err);
+                        });
                     }
                 } finally {
                     eb.stop().then(response => {
@@ -104,7 +108,11 @@ describe('integration tests for Ingest Endpoints', () => {
                         const addPromise = eb.add(event) as Promise<IngestResponse|{}>;
                         addPromise.then(response => {
                             console.log(response);
-                        }).catch(err => console.log(err));
+                            assert.deepEqual(response, successResponse);
+                        }).catch(err => {
+                            console.log(err);
+                            assert.fail(err);
+                        });
                     }
                 } finally {
                     eb.stop().then(response => {
