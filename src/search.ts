@@ -138,7 +138,7 @@ export class Search {
             const filteredArgs = _filterObject(args, ['pollInterval']);
             this.resultObservableMemo = Observable.create((observable: any) => {
                 const promises: Array<Promise<any>> = [];
-                self.wait(pollInterval, (job: SearchJob) => {
+                return self.wait(pollInterval, (job: SearchJob) => {
                     if (job.resultsAvailable && job.resultsAvailable > 0) { // Passes through arguments, so has the same semantics of offset == window
                         promises.push(self.getResults(filteredArgs).then(results => observable.next(results)));
                     }
@@ -234,7 +234,7 @@ export class SearchService extends BaseApiService {
                 } else {
                     setTimeout(() => {
                         // Resolving with a promise which will then resolve- recursion with the event loop
-                        self.waitForJob(jobId, interval, callback).then(resolve);
+                        return self.waitForJob(jobId, interval, callback).then(resolve);
                     }, interval);
                 }
             }).catch(reject);
