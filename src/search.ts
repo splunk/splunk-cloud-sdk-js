@@ -289,7 +289,11 @@ export interface FetchResultsRequest {
     count?: number;
     f?: string;
     search?: string;
-
+    /**
+     A field to return for the result set. You can pass multiple fields of comma-separated values if multiple
+     fields are required.
+     */
+    field?: string;
     [key: string]: any;
 }
 
