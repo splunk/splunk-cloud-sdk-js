@@ -290,8 +290,8 @@ export interface FetchResultsRequest {
     f?: string;
     search?: string;
     /**
-     A field to return for the result set. You can pass multiple fields of comma-separated values if multiple
-     fields are required.
+     * A field to return for the result set. You can pass multiple fields of comma-separated values if multiple
+     * fields are required.
      */
     field?: string;
     [key: string]: any;
@@ -470,11 +470,19 @@ export interface SearchJobMessage {
 }
 
 /*
+ * A Field with a name
+ */
+export interface SearchResultField {
+    name: string;
+    groupby_rank?: string;
+}
+
+/*
  * Results of a search job
  */
 export interface SearchResults {
     messages: SearchJobMessage[];
     results: object[];
-    fields: string[];
+    fields: SearchResultField[];
 }
 
