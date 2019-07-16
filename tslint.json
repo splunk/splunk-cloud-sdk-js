@@ -1,0 +1,58 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended",
+        "tslint-eslint-rules",
+        "tslint-config-airbnb",
+        "tslint-config-prettier"
+    ],
+    "linterOptions": {
+        "exclude": [
+            "src/generated/**/*"
+        ]
+    },
+    "jsRules": {},
+    "rules": {
+        "quotemark": [
+            true,
+            "single"
+        ],
+        "interface-name": false,
+        "member-ordering": false,
+        "object-literal-sort-keys": false,
+        "no-console": false,
+        "arrow-parens": false,
+        "max-classes-per-file": false,
+        "max-line-length": false,
+        "prefer-array-literal": false,
+        "no-increment-decrement": false,
+        "ter-indent": [
+            true,
+            4,
+            {
+                "SwitchCase": 1,
+                "VariableDeclarator": 1,
+                "outerIIFEBody": 1
+            }
+        ],
+        "ter-no-tabs": true,
+        "import-name": false,
+        "no-this-assignment": false,
+        "curly": true,
+        "object-curly-spacing": [
+            true,
+            "always"
+        ],
+        "no-trailing-whitespace": true,
+        "triple-equals": true,
+        "no-irregular-whitespace": true,
+        "semicolon": true,
+        "no-unnecessary-callback-wrapper": true,
+        "object-literal-key-quotes": [true, "consistent-as-needed"],
+        "no-multi-spaces": true,
+        "variable-name": [true, "allow-leading-underscore"],
+        "no-floating-promises": true,
+        "no-redundant-jsdoc": true
+    },
+    "rulesDirectory": []
+}

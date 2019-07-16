@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es5",
+      "es2015.iterable",
+      "es2015.collection",
+      "es2015.promise",
+      "es2015.symbol",
+      "es2015.symbol.wellknown",
+      "dom"
+    ],
+    "sourceMap": true,
+    "outDir": ".",
+    "declaration": true,
+    "removeComments": false,
+    "downlevelIteration": true,
+    // comment this out to avoid compile error in generated files
+    // "noUnusedLocals": true,
+    "strict": true,
+    "target": "es3",
+    "types": []
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/generated/**/*"
+  ]
+}
