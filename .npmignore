@@ -36,7 +36,6 @@ tsconfig.json
 tsconfig.test.json
 .gitlab-ci.yml
 .npmrc
-CHANGELOG.md
 
 # Hide compiled test folders, these appear to be webstorm generated
 /integration

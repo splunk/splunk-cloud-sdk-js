@@ -120,6 +120,14 @@
       ]
     }
   },
+  "standard-version": {
+    "skip": {
+      "tag": true
+    },
+    "scripts": {
+      "postchangelog": "cd/replace_url.sh"
+    }
+  },
   "config": {
     "commitizen": {
       "path": "node_modules/cz-customizable"
