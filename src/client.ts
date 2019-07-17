@@ -16,7 +16,7 @@
 import { AuthManager } from './auth_manager';
 import agent from './version';
 
-const DEFAULT_URLS = {
+export const DEFAULT_URLS = {
     api: 'https://api.scp.splunk.com',
     app: 'https://apps.scp.splunk.com'
 };
@@ -266,15 +266,15 @@ export class ServiceClient {
      */
     public buildUrl = (cluster: string, path: string, query?: QueryArgs): string => {
         const serviceCluster : string = this.urls[cluster] || DEFAULT_URLS.api;
+        const basePath = `${serviceCluster}${escape(path)}`;
         if (query && Object.keys(query).length > 0) {
-            const encoder = encodeURIComponent;
             const queryEncoded = Object.keys(query)
                 .filter(k => query[k] !== undefined && query[k] !== null) // filter out undefined and null
-                .map(k => `${encoder(k)}=${encoder(String(query[k]))}`)
+                .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(String(query[k]))}`)
                 .join('&');
-            return `${serviceCluster}${path}?${queryEncoded}`;
+            return `${basePath}?${queryEncoded}`;
         }
-        return `${serviceCluster}${path}`;
+        return basePath;
     }
 
     /**

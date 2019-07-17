@@ -19,6 +19,12 @@ describe('Test Tagged Template Literal', () => {
         assert.equal(tlAtBegin, `myName is js sdk`);
         const tlInMiddle = testService.template`hello! ${'my_name'} is js sdk`(mapping);
         assert.equal(tlInMiddle, `hello! myName is js sdk`);
+
+        const qualifier = testService.template`/some/path/${'qualifier'}`({ qualifier: 'some.string.here?and=qualifier' });
+        assert.equal(qualifier, `/some/path/some.string.here?and=qualifier`);
+
+        const atSymbol = testService.template`/some/path/${'email'}`({ email: 'hello@example.com' });
+        assert.equal(atSymbol, `/some/path/hello@example.com`);
     });
 
     it('should throw an error when no match found or with empty map', () => {

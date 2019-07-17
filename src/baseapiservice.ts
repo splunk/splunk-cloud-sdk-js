@@ -41,7 +41,7 @@ export default class BaseApiService {
                 const wordsToBeReplaced = index <= keys.length - 1 ? keys[index] : ``;
                 let replacedValue = ``;
                 if (wordsToBeReplaced in tlMap) {
-                    replacedValue = escape(tlMap[wordsToBeReplaced]);
+                    replacedValue = tlMap[wordsToBeReplaced];
                 } else if(wordsToBeReplaced === ``) {
                     replacedValue = ``;
                 } else {

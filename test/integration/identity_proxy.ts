@@ -53,6 +53,14 @@ describe('integration tests for Identity Tenant Endpoints', () => {
                 assert.containsAllKeys(info, ['name', 'principal', 'tenant']);
             }));
 
+        it('should get the principal details', () =>
+            splunk.identity.getPrincipal(testPrincipal).then(info => {
+                assert.typeOf(info, 'Object');
+                assert.equal(info.name, testPrincipal);
+                assert.doesNotHaveAllKeys(info, ['principal', 'tenant']);
+                assert.containsAllKeys(info, ['name', 'createdAt', 'tenants']);
+            }));
+
         it('should create a new role', () =>
             splunk.identity.createRole(roleInput).then(response => {
                 assert.equal(response.tenant, tenantID);
