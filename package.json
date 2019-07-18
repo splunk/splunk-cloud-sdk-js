@@ -16,8 +16,6 @@
     "build": "node ci/extract_version.js && tsc -p tsconfig.json",
     "build:tests": "tsc -p tsconfig.test.json",
     "clean": "rimraf *.js *.map *.d.ts generated models || true",
-    "codecov": "yarn cover && codecov -f ./coverage/lcov.info -F unit",
-    "codecov:integration": "yarn cover:integration && codecov -f ./coverage-integration/lcov.info -F integration",
     "cover": "NODE_ENV=coverage nyc yarn test",
     "cover:integration": "NODE_ENV=coverage nyc --report-dir coverage-integration yarn test:integration",
     "pretest": "yarn tslint && yarn build",
