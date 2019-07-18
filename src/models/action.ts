@@ -16,15 +16,11 @@
 
 export * from '../generated/action/v1beta2/models';
 
-
-// ActionTriggerResponse for returning status url and id
+/**
+ * Returns the status URL and ID for a triggered action,
+ * these values come from HTTP headers when calling triggerAction().
+ */
 export interface ActionTriggerResponse {
-    statusId?: string;
-    statusUrl?: string;
-}
-
-// TriggerEventResponse for returning status url and id
-export interface TriggerEventResponse {
     statusId?: string;
     statusUrl?: string;
 }

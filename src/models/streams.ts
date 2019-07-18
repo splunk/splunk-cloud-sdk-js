@@ -13,9 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from '../generated/streams/v2beta1/models';
 
-export enum SortDirEnum {
-    Asc = 'ASC',
-    Desc = 'DESC'
-}
+export * from '../generated/streams/v2beta1/models';

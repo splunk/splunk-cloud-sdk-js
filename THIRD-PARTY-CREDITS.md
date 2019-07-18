@@ -9,21 +9,21 @@ We want to thank the contributors to these projects:
 
 Name: @commitlint/cli
 
-Version: 7.2.1
+Version: 8.1.0
 
-License: [MIT](https://github.com/marionebl/commitlint/raw/master/license.md)
+License: [MIT](https://github.com/conventional-changelog/commitlint/raw/master/license.md)
 
-Repository: [https://github.com/marionebl/commitlint](https://github.com/marionebl/commitlint)
+Repository: [https://github.com/conventional-changelog/commitlint](https://github.com/conventional-changelog/commitlint)
 
 ## @commitlint/config-conventional
 
 Name: @commitlint/config-conventional
 
-Version: 7.1.2
+Version: 7.6.0
 
-License: [MIT](https://github.com/marionebl/commitlint/raw/master/license.md)
+License: [MIT](https://github.com/conventional-changelog/commitlint/raw/master/license.md)
 
-Repository: [https://github.com/marionebl/commitlint](https://github.com/marionebl/commitlint)
+Repository: [https://github.com/conventional-changelog/commitlint](https://github.com/conventional-changelog/commitlint)
 
 ## @types/chai
 
@@ -49,7 +49,7 @@ Repository: [https://wwwhub.com/DefinitelyTyped/DefinitelyTyped](https://wwwhub.
 
 Name: @types/mocha
 
-Version: 5.2.5
+Version: 5.2.7
 
 License: [MIT](https://github.com/DefinitelyTyped/DefinitelyTyped/raw/master/LICENSE)
 
@@ -59,7 +59,7 @@ Repository: [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.
 
 Name: @types/node
 
-Version: 10.12.5
+Version: 10.14.13
 
 License: [MIT](https://github.com/DefinitelyTyped/DefinitelyTyped/raw/master/LICENSE)
 
@@ -89,7 +89,7 @@ Repository: [https://github.com/chaijs/chai](https://github.com/chaijs/chai)
 
 Name: codecov
 
-Version: 3.1.0
+Version: 3.5.0
 
 License: [MIT](https://github.com/codecov/codecov-node/raw/master/LICENSE)
 
@@ -99,7 +99,7 @@ Repository: [https://github.com/codecov/codecov-node](https://github.com/codecov
 
 Name: commitizen
 
-Version: 3.0.5
+Version: 4.0.0
 
 License: [MIT](https://github.com/commitizen/cz-cli/raw/master/LICENSE)
 
@@ -119,7 +119,7 @@ Repository: [https://github.com/commitizen/cz-conventional-changelog](https://gi
 
 Name: cz-customizable
 
-Version: 5.3.0
+Version: 5.10.0
 
 License: [MIT](https://github.com/leonardoanalista/cz-customizable/raw/master/LICENSE)
 
@@ -129,7 +129,7 @@ Repository: [https://github.com/leonardoanalista/cz-customizable](https://github
 
 Name: husky
 
-Version: 1.2.0
+Version: 1.3.1
 
 License: [MIT](https://github.com/typicode/husky/raw/master/LICENSE)
 
@@ -145,21 +145,11 @@ License: [MIT](https://github.com/matthew-andrews/isomorphic-fetch/raw/master/LI
 
 Repository: [https://github.com/matthew-andrews/isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch)
 
-## istanbul
-
-Name: istanbul
-
-Version: 0.4.5
-
-License: [BSD-3-Clause](https://github.com/gotwarlost/istanbul/raw/master/LICENSE)
-
-Repository: [https://github.com/gotwarlost/istanbul](https://github.com/gotwarlost/istanbul)
-
 ## js-yaml
 
 Name: js-yaml
 
-Version: 3.12.0
+Version: 3.13.1
 
 License: [MIT](https://github.com/nodeca/js-yaml/raw/master/LICENSE)
 
@@ -169,17 +159,17 @@ Repository: [https://github.com/nodeca/js-yaml](https://github.com/nodeca/js-yam
 
 Name: jsdoc
 
-Version: 3.5.5
+Version: 3.6.3
 
-License: [Apache-2.0](https://github.com/jsdoc3/jsdoc/raw/master/Apache_License_2.0.txt)
+License: [Apache-2.0](https://github.com/jsdoc/jsdoc/raw/master/Apache_License_2.0.txt)
 
-Repository: [https://github.com/jsdoc3/jsdoc](https://github.com/jsdoc3/jsdoc)
+Repository: [https://github.com/jsdoc/jsdoc](https://github.com/jsdoc/jsdoc)
 
 ## markdownlint
 
 Name: markdownlint
 
-Version: 0.14.1
+Version: 0.14.2
 
 License: [MIT](https://github.com/DavidAnson/markdownlint/raw/master/LICENSE)
 
@@ -209,7 +199,7 @@ Repository: [http://github.com/mwittig/npm-license-crawler](http://github.com/mw
 
 Name: nyc
 
-Version: 13.1.0
+Version: 13.3.0
 
 License: [ISC](https://github.com/istanbuljs/nyc/raw/master/LICENSE.txt)
 
@@ -229,7 +219,7 @@ Repository: [https://github.com/Dexus/pem](https://github.com/Dexus/pem)
 
 Name: rimraf
 
-Version: 2.6.2
+Version: 2.6.3
 
 License: [ISC](https://github.com/isaacs/rimraf/raw/master/LICENSE)
 
@@ -249,7 +239,7 @@ Repository: [https://github.com/brummelte/sleep-promise](https://github.com/brum
 
 Name: source-map-support
 
-Version: 0.5.9
+Version: 0.5.12
 
 License: [MIT](https://github.com/evanw/node-source-map-support/raw/master/LICENSE.md)
 
@@ -299,7 +289,7 @@ Repository: [https://github.com/basarat/tsc](https://github.com/basarat/tsc)
 
 Name: tslint-config-airbnb
 
-Version: 5.11.0
+Version: 5.11.1
 
 License: [Apache-2.0](github:progre/tslint-config-airbnb)
 
@@ -309,11 +299,11 @@ Repository: [github:progre/tslint-config-airbnb](github:progre/tslint-config-air
 
 Name: tslint-config-prettier
 
-Version: 1.15.0
+Version: 1.18.0
 
-License: [MIT](https://github.com/alexjoverm/tslint-config-prettier/raw/master/LICENSE)
+License: [MIT](https://github.com/prettier/tslint-config-prettier/raw/master/LICENSE)
 
-Repository: [https://github.com/alexjoverm/tslint-config-prettier](https://github.com/alexjoverm/tslint-config-prettier)
+Repository: [https://github.com/prettier/tslint-config-prettier](https://github.com/prettier/tslint-config-prettier)
 
 ## tslint-eslint-rules
 
@@ -329,7 +319,7 @@ Repository: [https://github.com/buzinas/tslint-eslint-rules](https://github.com/
 
 Name: tslint
 
-Version: 5.11.0
+Version: 5.18.0
 
 License: [Apache-2.0](https://github.com/palantir/tslint/raw/master/LICENSE)
 
@@ -359,7 +349,7 @@ Repository: [https://github.com/TypeStrong/TypeDoc](https://github.com/TypeStron
 
 Name: typescript
 
-Version: 3.1.6
+Version: 3.5.3
 
 License: [Apache-2.0](https://github.com/Microsoft/TypeScript/raw/master/LICENSE.txt)
 

@@ -14,14 +14,3 @@
  * under the License.
  */
 export * from '../generated/kvstore/v1beta1/models';
-
-export interface ListRecordsFilter {
-    count?: number;
-    fields?: string[];
-    offset?: number;
-    orderby?: string[];
-}
-
-export interface QueryRecordsFilter extends ListRecordsFilter {
-    query?: string;
-}

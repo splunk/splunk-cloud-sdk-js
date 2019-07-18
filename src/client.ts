@@ -65,12 +65,10 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
             const json = JSON.parse(text);
 
             if (!json.message) {
-                // TODO: This shouldn't go to production
-                console.log(
-                    `Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`
-                );
+                err = new SplunkError({ message: `Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}` });
+            } else {
+                err = new SplunkError({ message: json.message, code: json.code, moreInfo: json.moreInfo, httpStatusCode: response.status, details: json.details });
             }
-            err = new SplunkError({ message: json.message, code: json.code, moreInfo: json.moreInfo, httpStatusCode: response.status, details: json.details });
         } catch (ex) {
             const message = `${response.statusText} - unable to process response`;
             err = new SplunkError({ message, httpStatusCode: response.status, details: { response: text } });
@@ -170,7 +168,6 @@ export function naiveExponentialBackoff({maxRetries = 5,
  * Do not use this class directly. Instead, use the service proxies that implement
  * the service endpoints.
  */
- // TODO: Add links to actual endpoints, Splunk Cloud name
 export class ServiceClient {
     private readonly tokenSource: () => string;
     private readonly urls: {
@@ -278,8 +275,10 @@ export class ServiceClient {
     }
 
     /**
-     * Builds headers that are required for a request to Splunk Cloud, such as
-     * "auth" and "content-type".
+     * Builds headers that are required for a request to Splunk Cloud, such as:
+     * "Authorization", "Content-Type", and "Splunk-Client".
+     * @param headers Additional headers to use for each request
+     * @return A key-values map of headers
      */
     private buildHeaders = (headers?: RequestHeaders): Headers => {
         // TODO: Cache

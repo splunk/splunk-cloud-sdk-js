@@ -15,35 +15,36 @@
  */
 export * from '../generated/search/v2beta1/models';
 
-export interface FetchResultsRequest {
-    offset?: number;
-    count?: number;
-    /**
-     * A field to return for the result set. You can pass multiple fields of comma-separated values if multiple
-     * fields are required.
-     */
-    field?: string;
-}
-
-export interface ResultObservableOptions {
-    pollInterval?: number;
-    offset?: number;
-    count?: number;
-    field?: string;
-}
-
-export class SplunkSearchCancelError extends Error {
-}
-
-export interface ListEventsSummaryParams {
-    count?: number;
-    offset?: number;
-    field?: string;
-    earliest?: string;
-    latest?: string;
-}
-
-export interface ListFieldsSummaryParams {
-    earliest?: string;
-    latest?: string;
-}
+// TODO: commented out until Search service utility functions are fixed
+// export interface FetchResultsRequest {
+//     offset?: number;
+//     count?: number;
+//     /**
+//      * A field to return for the result set. You can pass multiple fields of comma-separated values if multiple
+//      * fields are required.
+//      */
+//     field?: string;
+// }
+//
+// export interface ResultObservableOptions {
+//     pollInterval?: number;
+//     offset?: number;
+//     count?: number;
+//     field?: string;
+// }
+//
+// export class SplunkSearchCancelError extends Error {
+// }
+//
+// export interface ListEventsSummaryParams {
+//     count?: number;
+//     offset?: number;
+//     field?: string;
+//     earliest?: string;
+//     latest?: string;
+// }
+//
+// export interface ListFieldsSummaryParams {
+//     earliest?: string;
+//     latest?: string;
+// }

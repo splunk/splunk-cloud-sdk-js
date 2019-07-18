@@ -13,6 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
+/**
+ * The AuthManager interface can be used as the tokenSource on a ServiceClientArgs object.
+ * ServiceClient will call the getAccessToken() function to retrieve an access token based
+ * on the implementation.
+ */
 export interface AuthManager {
     isAuthenticated(): boolean;
     getAccessToken(): string;

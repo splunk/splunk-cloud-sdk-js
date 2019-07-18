@@ -22,6 +22,11 @@ interface PromiseInternal<T> {
 }
 
 /**
+ * The default batch size for the EventBatcher.
+ */
+export const DEFAULT_BATCH_SIZE = 1040000;
+
+/**
  * Provides the ability to keep a growing number of events queued up and sends them to
  * the ingest service.
  * The events are flushed on a periodic interval or when the set capacity has been reached.
@@ -29,7 +34,7 @@ interface PromiseInternal<T> {
 export class EventBatcher {
     private ingest: IngestService;
     // Ingest service has a kinesis internal limit, ~1MiB 1048576 bytes
-    private readonly batchSize: number = 1040000;
+    private readonly batchSize: number = DEFAULT_BATCH_SIZE;
     private readonly batchCount: number;
     private readonly timeout: number;
     private queue: ingestModels.Event[];
@@ -45,8 +50,8 @@ export class EventBatcher {
 
     constructor(ingest: IngestService, batchSize: number, batchCount: number, timeout: any) {
         this.ingest = ingest;
-        if (batchSize > 1040000) {
-            this.batchSize = 1040000;
+        if (batchSize > DEFAULT_BATCH_SIZE) {
+            this.batchSize = DEFAULT_BATCH_SIZE;
         } else {
             this.batchSize = batchSize;
         }

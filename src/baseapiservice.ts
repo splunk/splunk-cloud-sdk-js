@@ -39,15 +39,13 @@ export default class BaseApiService {
             let result = ``;
             strings.map((value, index) => {
                 const wordsToBeReplaced = index <= keys.length - 1 ? keys[index] : ``;
-                let replacedValue = ``;
                 if (wordsToBeReplaced in tlMap) {
-                    replacedValue = tlMap[wordsToBeReplaced];
+                    result += value + tlMap[wordsToBeReplaced];
                 } else if(wordsToBeReplaced === ``) {
-                    replacedValue = ``;
+                    result += value;
                 } else {
                     throw Error(`failed to reformat template string. mapping for template expression ${wordsToBeReplaced} is not found in the template literals.`);
                 }
-                result += value + replacedValue;
             });
             return result;
         };
