@@ -25,7 +25,7 @@ export interface SplunkErrorParams {
     message: string;
     code?: string;
     httpStatusCode?: number;
-    details?: object | any[];
+    details?: any | any[];
     moreInfo?: string;
 }
 
@@ -38,6 +38,7 @@ export class SplunkError extends Error implements SplunkErrorParams {
     constructor(errorParams: SplunkErrorParams | string) {
         super(typeof errorParams === 'string' ? errorParams : JSON.stringify(errorParams));
         if (typeof errorParams !== 'string') {
+            this.message = errorParams.message || this.message;
             this.code = errorParams.code;
             this.details = errorParams.details;
             this.moreInfo = errorParams.moreInfo;
@@ -65,7 +66,7 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
             const json = JSON.parse(text);
 
             if (!json.message) {
-                err = new SplunkError({ message: `Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}` });
+                err = new SplunkError(`Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`);
             } else {
                 err = new SplunkError({ message: json.message, code: json.code, moreInfo: json.moreInfo, httpStatusCode: response.status, details: json.details });
             }

@@ -16,7 +16,7 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import { DEFAULT_URLS, ServiceClient } from '../../src/client';
+import { DEFAULT_URLS, ServiceClient, SplunkError, SplunkErrorParams } from '../../src/client';
 
 describe('Test SDK client', () => {
     it('should return a correct url with client tenant', () => {
@@ -72,6 +72,25 @@ describe('ServiceClient.buildUrl()', () => {
         it(`should encode URL correctly - ${JSON.stringify(test)}`, () => {
             const actual = client.buildUrl(test.c, test.p, test.q);
             assert.equal(actual, test.x);
+        });
+    }
+});
+
+describe('SplunkError constructor', () => {
+    // 2 elements per test case: SplunkError() co-or arg, expected SplunkError properties
+    const tests = [
+        { m: 'hello', x: { message: 'hello' } as SplunkErrorParams },
+        { m: { message: 'msg', code: '123', httpStatusCode: 401, details:  { deets: 'detailed!' }, moreInfo: 'less' }, x: { message: 'msg', code: '123', httpStatusCode: 401, details: { deets: 'detailed!' }, moreInfo: 'less' } },
+    ];
+
+    for (const test of tests) {
+        it(`should encode URL correctly - ${JSON.stringify(test)}`, () => {
+            const actual : SplunkError = new SplunkError(test.m);
+            assert.equal(actual.message, test.x.message);
+            assert.equal(actual.code, test.x.code);
+            assert.equal(actual.httpStatusCode, test.x.httpStatusCode);
+            assert.deepEqual(actual.details, test.x.details);
+            assert.equal(actual.moreInfo, test.x.moreInfo);
         });
     }
 });

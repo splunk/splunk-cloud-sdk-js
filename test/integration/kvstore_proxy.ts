@@ -44,7 +44,7 @@ describe('Integration tests for KVStore Endpoints', () => {
             const td = testDataset;
             if (td !== null) {
                 return splunkCloud.catalog
-                    .deleteDataset(td.name as string)
+                    .deleteDataset(td.id as string)
                     .catch(err => console.log(`Error cleaning the test dataset: ${err}`));
             }
         }
