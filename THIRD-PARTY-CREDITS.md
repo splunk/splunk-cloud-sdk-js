@@ -215,6 +215,16 @@ License: [MIT](https://github.com/Dexus/pem/raw/master/LICENSE)
 
 Repository: [https://github.com/Dexus/pem](https://github.com/Dexus/pem)
 
+## replace
+
+Name: replace
+
+Version: 1.1.0
+
+License: [MIT](https://github.com/ALMaclaine/replace/raw/master/LICENSE)
+
+Repository: [https://github.com/ALMaclaine/replace](https://github.com/ALMaclaine/replace)
+
 ## rimraf
 
 Name: rimraf
