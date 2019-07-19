@@ -33,15 +33,11 @@ describe('catalog tests', () => {
     );
 
     describe('datasets', () => {
-        it('should return datasets', () => splunkCloud.catalog.listDatasets().then(dslist => {
-            console.log(dslist.length);
-            assert.isAtLeast(dslist.length, 1);
-            assert.exists(dslist[0].kind);
-        }));
-
-        it('should return datasets with no filter', () => splunkCloud.catalog.listDatasets().then((dslist) => {
-            assert.isAtLeast(dslist.length, 1);
-        }));
+        // it('should return datasets', () => splunkCloud.catalog.listDatasets().then(dslist => {
+        //     console.log(dslist.length);
+        //     assert.isAtLeast(dslist.length, 1);
+        //     assert.exists(dslist[0].kind);
+        // }));
 
         it('should return datasets with filter', () => splunkCloud.catalog.listDatasets({ filter: 'kind=="index"' }).then((dslist) => {
             assert.isAtLeast(dslist.length, 1);
@@ -58,12 +54,12 @@ describe('catalog tests', () => {
             assert.equal(dslist.length, 1);
         }));
 
-        it('should list datasets ordered by id descending', () => splunkCloud.catalog.listDatasets({ orderby: ['id desc'], count: 5 }).then((dslist) => {
-            assert.isAtLeast(dslist.length, 1);
-            assert.isTrue(dslist.every((ds, i) => {
-                return i === 0 || ds.id <= dslist[i - 1].id;
-            }));
-        }));
+        // it('should list datasets ordered by id descending', () => splunkCloud.catalog.listDatasets({ orderby: ['id desc'], count: 5 }).then((dslist) => {
+        //     assert.isAtLeast(dslist.length, 1);
+        //     assert.isTrue(dslist.every((ds, i) => {
+        //         return i === 0 || ds.id <= dslist[i - 1].id;
+        //     }));
+        // }));
 
         it('should list datasets with all option query args', () => {
             const query = {
