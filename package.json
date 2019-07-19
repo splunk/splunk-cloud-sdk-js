@@ -59,6 +59,7 @@
     "npm-license-crawler": "^0.2.1",
     "nyc": "^13.1.0",
     "pem": "^1.14.2",
+    "replace": "^1.1.0",
     "rimraf": "^2.6.2",
     "sleep-promise": "^8.0.1",
     "source-map-support": "^0.5.6",
