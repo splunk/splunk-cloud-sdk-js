@@ -36,6 +36,7 @@ tsconfig.json
 tsconfig.test.json
 .gitlab-ci.yml
 .npmrc
+/sonar-project.properties
 
 # Hide compiled test folders, these appear to be webstorm generated
 /integration
