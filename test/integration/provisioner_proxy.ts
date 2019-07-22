@@ -21,6 +21,7 @@ import { provisionerModels } from '../../provisioner';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
+let testInviteID: string = '';
 const tenantID = 'system';
 const provTestTenantID = 'testprovisionersdks'; //  long-lived  and white-listed tenant
 
@@ -33,11 +34,19 @@ const splunk = new SplunkCloud({
     defaultTenant: tenantID,
 });
 
+const provSplunk = new SplunkCloud({
+    urls: {
+        api: config.stagingApiHost,
+        app: config.stagingAppsHost,
+    },
+    tokenSource: config.stagingAuthToken,
+    defaultTenant: provTestTenantID,
+});
+
 // Scenario:
 // Integration test for Provisioner endpoints
 describe('integration tests for Provisioner Endpoints', () => {
     const bannedName = 'splunk';
-
     let testTenantInfo: provisionerModels.TenantInfo;
 
     it('should error on creating provisioner job', () => {
@@ -49,7 +58,6 @@ describe('integration tests for Provisioner Endpoints', () => {
                 assert.equal(err.httpStatusCode, 422);
             });
     });
-
     it('should error on getting non-existing provisioner job', () => {
         return splunk.provisioner.getProvisionJob('-1' as string)
             .then((provisionerJob: provisionerModels.ProvisionJobInfo) => {
@@ -59,7 +67,6 @@ describe('integration tests for Provisioner Endpoints', () => {
                 assert.equal(err.httpStatusCode, 404);
             });
     });
-
     it('should successfully return an empty list when listing provision job(s)', () => {
         return splunk.provisioner.listProvisionJobs()
             .then((provisionerJobsList: provisionerModels.ProvisionJobs) => {
@@ -68,7 +75,6 @@ describe('integration tests for Provisioner Endpoints', () => {
                 assert.equal(provisionerJobsList.length, 0);
             });
     });
-
     it('should successfully return a tenant when getting an existing tenant', () => {
         return splunk.provisioner.getTenant(provTestTenantID as string)
             .then((tenantInfo: provisionerModels.TenantInfo) => {
@@ -77,7 +83,6 @@ describe('integration tests for Provisioner Endpoints', () => {
                 testTenantInfo = tenantInfo;
             });
     });
-
     it('should successfully return a list of tenant(s) when listing tenant(s)', () => {
         return splunk.provisioner.listTenants()
             .then((tenants: provisionerModels.Tenants) => {
@@ -93,6 +98,52 @@ describe('integration tests for Provisioner Endpoints', () => {
                 }
                 assert.isTrue(isFound);
                 return sleep(2000); // Wait 2s before starting next test
+            });
+    });
+    it.only('should successfully create an invite', () => {
+        return provSplunk.provisioner.createInvite({ email: 'bounce@simulator.amazonses.com', groups: [], comment: 'SDK invite' })
+            .then((invite: provisionerModels.InviteInfo) => {
+                assert.isNotNull(invite);
+                assert.equal(invite.tenant, provTestTenantID);
+                assert.equal(invite.email, 'bounce@simulator.amazonses.com');
+                testInviteID = invite.inviteID;
+            });
+    });
+    it.only('should successfully return the invite when getting an existing invite', () => {
+        return provSplunk.provisioner.getInvite(testInviteID)
+            .then((invite: provisionerModels.InviteInfo) => {
+                assert.isNotNull(invite);
+                assert.equal(invite.inviteID, testInviteID);
+                assert.equal(invite.tenant, provTestTenantID);
+            });
+    });
+    it.only('should successfully return the invite when listing all existing invites', () => {
+        return provSplunk.provisioner.listInvites()
+            .then((invitesList: provisionerModels.Invites) => {
+                assert.isNotNull(invitesList);
+                assert.isArray(invitesList);
+                assert.ok(invitesList.length);
+
+                let isFound: boolean = false;
+                for (const invite of invitesList) {
+                    if (invite.inviteID === testInviteID) {
+                        isFound = true;
+                    }
+                }
+                assert.isTrue(isFound);
+            });
+    });
+    it.only('should successfully resend the invite when updating an existing invite', () => {
+        return provSplunk.provisioner.updateInvite(testInviteID, { action: provisionerModels.UpdateInviteBodyActionEnum.Resend })
+            .then((invite: provisionerModels.InviteInfo) => {
+                assert.isNotNull(invite);
+                assert.equal(invite.inviteID, testInviteID);
+            });
+    });
+    it.only('should successfully delete the invite', () => {
+        return provSplunk.provisioner.deleteInvite(testInviteID)
+            .then(response => {
+                assert.isEmpty(response);
             });
     });
 });

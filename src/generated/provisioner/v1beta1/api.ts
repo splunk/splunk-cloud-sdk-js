@@ -28,10 +28,14 @@
 import BaseApiService from '../../../baseapiservice';
 import {
     CreateProvisionJobBody,
+    InviteBody,
+    InviteInfo,
+    Invites,
     ProvisionJobInfo,
     ProvisionJobs,
     TenantInfo,
     Tenants,
+    UpdateInviteBody,
 } from '../../../models/provisioner';
 import { SplunkError } from '../../../client';
 
@@ -45,6 +49,16 @@ export const PROVISIONER_SERVICE_CLUSTER: string = 'api';
  */
 export abstract class ProvisionerServiceGen extends BaseApiService {
     /**
+     * Creates an invite to invite a person to the tenant using their email address
+     * @param inviteBody
+     * @return InviteInfo
+     */
+    public createInvite = (inviteBody: InviteBody): Promise<InviteInfo> => {
+        const path = `/provisioner/v1beta1/invites`;
+        return this.client.post(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), inviteBody)
+            .then(response => response.body as InviteInfo);
+    }
+    /**
      * Creates a new job that provisions a new tenant and subscribes apps to the tenant
      * @param createProvisionJobBody
      * @return ProvisionJobInfo
@@ -53,6 +67,31 @@ export abstract class ProvisionerServiceGen extends BaseApiService {
         const path = `/system/provisioner/v1beta1/jobs/tenants/provision`;
         return this.client.post(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), createProvisionJobBody)
             .then(response => response.body as ProvisionJobInfo);
+    }
+    /**
+     * Deletes an invite in the given tenant
+     * @param inviteId
+     */
+    public deleteInvite = (inviteId: string): Promise<object> => {
+        const path_params = {
+            inviteId: inviteId
+        };
+        const path = this.template`/provisioner/v1beta1/invites/${'inviteId'}`(path_params);
+        return this.client.delete(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+            .then(response => response.body as object);
+    }
+    /**
+     * Gets an invite in the given tenant
+     * @param inviteId
+     * @return InviteInfo
+     */
+    public getInvite = (inviteId: string): Promise<InviteInfo> => {
+        const path_params = {
+            inviteId: inviteId
+        };
+        const path = this.template`/provisioner/v1beta1/invites/${'inviteId'}`(path_params);
+        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+            .then(response => response.body as InviteInfo);
     }
     /**
      * Gets details of a specific provision job
@@ -81,6 +120,15 @@ export abstract class ProvisionerServiceGen extends BaseApiService {
             .then(response => response.body as TenantInfo);
     }
     /**
+     * Lists the invites in a given tenant
+     * @return Invites
+     */
+    public listInvites = (): Promise<Invites> => {
+        const path = `/provisioner/v1beta1/invites`;
+        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+            .then(response => response.body as Invites);
+    }
+    /**
      * Lists all provision jobs created by the user
      * @return ProvisionJobs
      */
@@ -97,5 +145,19 @@ export abstract class ProvisionerServiceGen extends BaseApiService {
         const path = `/system/provisioner/v1beta1/tenants`;
         return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
             .then(response => response.body as Tenants);
+    }
+    /**
+     * Updates an invite in the given tenant
+     * @param inviteId
+     * @param updateInviteBody
+     * @return InviteInfo
+     */
+    public updateInvite = (inviteId: string, updateInviteBody: UpdateInviteBody): Promise<InviteInfo> => {
+        const path_params = {
+            inviteId: inviteId
+        };
+        const path = this.template`/provisioner/v1beta1/invites/${'inviteId'}`(path_params);
+        return this.client.patch(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateInviteBody)
+            .then(response => response.body as InviteInfo);
     }
 }

@@ -15,7 +15,7 @@
  * under the License.
  *
  * KV Store API
- * With KV store, you can save and retrieve data within your Splunk apps, thereby enabling you to manage and maintain the state of the application.
+ * With the Splunk Cloud KV store service, you can save and retrieve data within your Splunk apps, enabling you to manage and maintain the state of the application.
  *
  * OpenAPI spec version: v1beta1.1
  *
@@ -41,7 +41,7 @@ export const KVSTORE_SERVICE_CLUSTER: string = 'api';
 /**
  * KV Store API
  * Version: v1beta1.1
- * With KV store, you can save and retrieve data within your Splunk apps, thereby enabling you to manage and maintain the state of the application.
+ * With the Splunk Cloud KV store service, you can save and retrieve data within your Splunk apps, enabling you to manage and maintain the state of the application.
  */
 export abstract class KvstoreServiceGen extends BaseApiService {
     /**
@@ -166,11 +166,12 @@ export abstract class KvstoreServiceGen extends BaseApiService {
      * @param args All other arguments.
      * @param args.count Maximum number of records to return.
      * @param args.fields Comma-separated list of fields to include or exclude.
+     * @param args.filters
      * @param args.offset Number of records to skip from the start.
      * @param args.orderby Sort order. Format is `<field>:<sort order>`. Valid sort orders are 1 for ascending, -1 for descending.
      * @return Array<{ [key: string]: any; }>
      */
-    public listRecords = (collection: string, args?: { count?: number, fields?: Array<string>, offset?: number, orderby?: Array<string> }): Promise<Array<{ [key: string]: any; }>> => {
+    public listRecords = (collection: string, args?: { count?: number, fields?: Array<string>, filters?: { [key: string]: any; }, offset?: number, orderby?: Array<string> }): Promise<Array<{ [key: string]: any; }>> => {
         const path_params = {
             collection: collection
         };

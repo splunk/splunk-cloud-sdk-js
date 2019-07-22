@@ -15,7 +15,7 @@
  * under the License.
  *
  * KV Store API
- * With KV store, you can save and retrieve data within your Splunk apps, thereby enabling you to manage and maintain the state of the application.
+ * With the Splunk Cloud KV store service, you can save and retrieve data within your Splunk apps, enabling you to manage and maintain the state of the application.
  *
  * OpenAPI spec version: v1beta1.1
  *

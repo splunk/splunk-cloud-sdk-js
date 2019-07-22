@@ -1,4 +1,9 @@
 export * from './CreateProvisionJobBody';
+export * from './InviteBody';
+export * from './InviteInfo';
+export * from './InviteInfoErrors';
+export * from './InviteInfoErrorsItems';
+export * from './Invites';
 export * from './ModelError';
 export * from './ProvisionJobInfo';
 export * from './ProvisionJobInfoErrors';
@@ -6,3 +11,4 @@ export * from './ProvisionJobInfoErrorsItems';
 export * from './ProvisionJobs';
 export * from './TenantInfo';
 export * from './Tenants';
+export * from './UpdateInviteBody';
