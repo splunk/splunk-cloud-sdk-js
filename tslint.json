@@ -8,7 +8,8 @@
     ],
     "linterOptions": {
         "exclude": [
-            "src/generated/**/*"
+            "src/generated/**/*",
+            "test/data/**/*"
         ]
     },
     "jsRules": {},

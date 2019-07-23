@@ -100,7 +100,7 @@ describe('integration tests for Provisioner Endpoints', () => {
                 return sleep(2000); // Wait 2s before starting next test
             });
     });
-    it.only('should successfully create an invite', () => {
+    it('should successfully create an invite', () => {
         return provSplunk.provisioner.createInvite({ email: 'bounce@simulator.amazonses.com', groups: [], comment: 'SDK invite' })
             .then((invite: provisionerModels.InviteInfo) => {
                 assert.isNotNull(invite);
@@ -109,7 +109,7 @@ describe('integration tests for Provisioner Endpoints', () => {
                 testInviteID = invite.inviteID;
             });
     });
-    it.only('should successfully return the invite when getting an existing invite', () => {
+    it('should successfully return the invite when getting an existing invite', () => {
         return provSplunk.provisioner.getInvite(testInviteID)
             .then((invite: provisionerModels.InviteInfo) => {
                 assert.isNotNull(invite);
@@ -117,7 +117,7 @@ describe('integration tests for Provisioner Endpoints', () => {
                 assert.equal(invite.tenant, provTestTenantID);
             });
     });
-    it.only('should successfully return the invite when listing all existing invites', () => {
+    it('should successfully return the invite when listing all existing invites', () => {
         return provSplunk.provisioner.listInvites()
             .then((invitesList: provisionerModels.Invites) => {
                 assert.isNotNull(invitesList);
@@ -133,14 +133,14 @@ describe('integration tests for Provisioner Endpoints', () => {
                 assert.isTrue(isFound);
             });
     });
-    it.only('should successfully resend the invite when updating an existing invite', () => {
+    it('should successfully resend the invite when updating an existing invite', () => {
         return provSplunk.provisioner.updateInvite(testInviteID, { action: provisionerModels.UpdateInviteBodyActionEnum.Resend })
             .then((invite: provisionerModels.InviteInfo) => {
                 assert.isNotNull(invite);
                 assert.equal(invite.inviteID, testInviteID);
             });
     });
-    it.only('should successfully delete the invite', () => {
+    it('should successfully delete the invite', () => {
         return provSplunk.provisioner.deleteInvite(testInviteID)
             .then(response => {
                 assert.isEmpty(response);
