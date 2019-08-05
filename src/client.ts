@@ -18,7 +18,7 @@ import agent from './version';
 
 export const DEFAULT_URLS = {
     api: 'https://api.scp.splunk.com',
-    app: 'https://apps.scp.splunk.com'
+    app: 'https://app.scp.splunk.com'
 };
 
 export interface SplunkErrorParams {

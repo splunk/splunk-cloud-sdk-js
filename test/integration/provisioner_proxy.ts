@@ -55,7 +55,7 @@ describe('integration tests for Provisioner Endpoints', () => {
                 assert.fail('expected to fail because of banned word');
 
             }).catch(err => {
-                assert.equal(err.httpStatusCode, 422);
+                assert.equal(err.httpStatusCode, 403);
             });
     });
     it('should error on getting non-existing provisioner job', () => {
