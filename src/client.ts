@@ -148,15 +148,17 @@ export function naiveExponentialBackoff({maxRetries = 5,
         let retries = 0;
         let myResponse = response;
         let currentTimeout = timeout;
+        let myRequest = request;
         while (response.status === 429 && retries < maxRetries) {
+            myRequest = request.clone();
             await _sleep(currentTimeout);
             retries += 1;
             currentTimeout *= backoff;
-            myResponse = await fetch(request);
-            onRetry(myResponse, request);
+            myResponse = await fetch(myRequest);
+            onRetry(myResponse, myRequest);
         }
         if (response.status === 429) {
-            onFailure(myResponse, request);
+            onFailure(myResponse, myRequest);
         }
         return myResponse;
     };
