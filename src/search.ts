@@ -204,7 +204,7 @@ export class SearchService extends SearchServiceGen {
                 } else {
                     setTimeout(() => {
                         // Resolving with a promise which will then resolve- recursion with the event loop
-                        return self.waitForJob(sid, interval, callback).then(resolve);
+                        return self.waitForJob(sid, interval, callback).then(resolve, reject);
                     }, interval);
                 }
             }).catch(reject);
