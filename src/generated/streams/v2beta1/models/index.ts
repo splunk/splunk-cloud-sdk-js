@@ -40,6 +40,7 @@ export * from './PreviewSessionStartRequest';
 export * from './PreviewStartResponse';
 export * from './PreviewState';
 export * from './Response';
+export * from './SplCompileRequest';
 export * from './TemplatePatchRequest';
 export * from './TemplatePutRequest';
 export * from './TemplateRequest';

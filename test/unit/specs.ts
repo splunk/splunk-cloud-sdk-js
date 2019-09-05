@@ -28,7 +28,7 @@ services.forEach((svc: string) => {
         return;
     }
 
-    describe(`Checking ${svc} for spec, generated modles & generated API`, () => {
+    describe(`Checking ${svc} for spec, generated models & generated API`, () => {
         const svcVersionsPath = path.join(generatedDir, svc);
         const svcVersions = fs.readdirSync(svcVersionsPath);
         svcVersions.forEach((svcVersion: string) => {
@@ -43,7 +43,7 @@ services.forEach((svc: string) => {
                 let foundAPI = false;
                 for (const filename of svcVersionFiles) {
                     switch(filename) {
-                        case `${svc}.yaml`:
+                        case `openapi.yaml`:
                             foundSpec = true;
                             break;
                         case 'models':
