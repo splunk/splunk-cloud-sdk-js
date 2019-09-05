@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.0-beta.3"></a>
+# [1.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2019-09-05)
+
+
+### Bug Fixes
+
+* **core:** clone request before using in naiveExponentialBackoff ([74bf170](https://github.com/splunk/splunk-cloud-sdk-js/commits/74bf170))
+* **search:** fix unhandled promise in waitForJob ([2485c1b](https://github.com/splunk/splunk-cloud-sdk-js/commits/2485c1b))
+
+
+### Features
+
+* update bindings to lastest service versions ([58e1460](https://github.com/splunk/splunk-cloud-sdk-js/commits/58e1460))
+
+
+
 <a name="1.0.0-beta.2"></a>
 # [1.0.0-beta.2](https://github.com/splunk/splunk-cloud-sdk-js/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2019-07-22)
 
