@@ -27,6 +27,11 @@ interface PromiseInternal<T> {
 export const DEFAULT_BATCH_SIZE = 1040000;
 
 /**
+ * The default batch count for the EventBatcher.
+ */
+export const DEFAULT_BATCH_COUNT = 500;
+
+/**
  * Provides the ability to keep a growing number of events queued up and sends them to
  * the ingest service.
  * The events are flushed on a periodic interval or when the set capacity has been reached.
@@ -35,7 +40,8 @@ export class EventBatcher {
     private ingest: IngestService;
     // Ingest service has a kinesis internal limit, ~1MiB 1048576 bytes
     private readonly batchSize: number = DEFAULT_BATCH_SIZE;
-    private readonly batchCount: number;
+    // Ingest service has a kinesis internal limit, 500 records per PUT
+    private readonly batchCount: number = DEFAULT_BATCH_COUNT;
     private readonly timeout: number;
     private queue: ingestModels.Event[];
     private timer: any;
@@ -50,13 +56,11 @@ export class EventBatcher {
 
     constructor(ingest: IngestService, batchSize: number, batchCount: number, timeout: any) {
         this.ingest = ingest;
-        if (batchSize > DEFAULT_BATCH_SIZE) {
-            this.batchSize = DEFAULT_BATCH_SIZE;
-        } else {
-            this.batchSize = batchSize;
-        }
-        // TODO: set some sane defaults so these 2 can be optional
-        this.batchCount = batchCount;
+
+        this.batchSize = Math.min(batchSize, DEFAULT_BATCH_SIZE);
+        this.batchCount = Math.min(batchCount, DEFAULT_BATCH_COUNT);
+
+        // TODO: set some sane defaults so this can be optional
         this.timeout = timeout;
         this.queue = [];
         this.timer = this.setTimer();
@@ -125,7 +129,6 @@ export class EventBatcher {
      */
     private run = (): Promise<ingestModels.HTTPResponse> => {
         const maxCountReached = (this.queue.length >= this.batchCount);
-        // TODO: is it okay to just import @types/node and call this good?
         const eventByteSize = JSON.stringify(this.queue).length;
 
         if (maxCountReached || eventByteSize >= this.batchSize) {
