@@ -24,53 +24,52 @@
  * Do not edit the class manually.
  */
 
+import {
+    ListSearchResultsResponseFields,
+    Message,
+} from './';
+
 /**
- *
+ * The structure of the preview search results that is returned for the job with the specified search ID (SID). When search is running, it might return incomplete or truncated search results. The isPreviewStable property indicates whether the returned preview results stucture is stable or not. Truncated preview results occur because the number of requested results exceeds the page limit. Follow the &#39;nextLink&#39; URL to retrieve the next page of results.
  * @export
- * @interface ListSearchResultsResponseFields
+ * @interface ListPreviewResultsResponse
  */
-export interface ListSearchResultsResponseFields {
+export interface ListPreviewResultsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ListPreviewResultsResponse
+     */
+    isPreviewStable: boolean;
+    /**
+     * 
+     * @type {Array<{ [key: string]: any; }>}
+     * @memberof ListPreviewResultsResponse
+     */
+    results: Array<{ [key: string]: any; }>;
+    /**
+     * 
+     * @type {Array<ListSearchResultsResponseFields>}
+     * @memberof ListPreviewResultsResponse
+     */
+    fields?: Array<ListSearchResultsResponseFields>;
+    /**
+     * 
+     * @type {Array<Message>}
+     * @memberof ListPreviewResultsResponse
+     */
+    messages?: Array<Message>;
     /**
      * 
      * @type {string}
-     * @memberof ListSearchResultsResponseFields
+     * @memberof ListPreviewResultsResponse
      */
-    name: string;
+    nextLink?: string;
     /**
      * 
      * @type {string}
-     * @memberof ListSearchResultsResponseFields
+     * @memberof ListPreviewResultsResponse
      */
-    dataSource?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ListSearchResultsResponseFields
-     */
-    groupbyRank?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ListSearchResultsResponseFields
-     */
-    splitField?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ListSearchResultsResponseFields
-     */
-    splitValue?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ListSearchResultsResponseFields
-     */
-    splitbySpecial?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ListSearchResultsResponseFields
-     */
-    typeSpecial?: string;
+    wait?: string;
 }
 

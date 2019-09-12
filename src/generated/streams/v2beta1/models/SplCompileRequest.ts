@@ -59,6 +59,9 @@ export enum SplCompileRequestSyntaxEnum {
     REX = 'REX',
     BIN = 'BIN',
     RENAME = 'RENAME',
+    STATS = 'STATS',
+    STATSBY = 'STATS_BY',
+    SELECT = 'SELECT',
     LITERAL = 'LITERAL',
     UNKNOWN = 'UNKNOWN'
 }

@@ -1,4 +1,5 @@
 export * from './FieldsSummary';
+export * from './ListPreviewResultsResponse';
 export * from './ListSearchResultsResponse';
 export * from './ListSearchResultsResponseFields';
 export * from './Message';

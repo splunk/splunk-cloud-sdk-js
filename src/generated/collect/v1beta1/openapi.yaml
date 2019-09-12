@@ -110,6 +110,96 @@ components:
       - code
       - message
       type: object
+    execution:
+      properties:
+        executionUid:
+          readOnly: true
+          title: executionUid
+          type: string
+        jobId:
+          readOnly: true
+          title: jobId
+          type: string
+        status:
+          description: The given status of the execution
+          enum:
+          - pending
+          - running
+          - completed
+          - aborted
+          - canceled
+          readOnly: true
+          title: status
+          type: string
+        tenant:
+          readOnly: true
+          title: tenant
+          type: string
+      title: execution
+      type: object
+    executionConflictError:
+      allOf:
+      - properties:
+          code:
+            title: code
+            type: string
+          details:
+            description: The optional details of the error.
+            title: details
+            type: object
+          message:
+            title: message
+            type: string
+          moreInfo:
+            description: An optional link to a web page with more information on the
+              error.
+            title: moreInfo
+            type: string
+        required:
+        - code
+        - message
+        type: object
+      - properties:
+          data:
+            properties:
+              executionUid:
+                readOnly: true
+                title: executionUid
+                type: string
+              jobId:
+                readOnly: true
+                title: jobId
+                type: string
+              status:
+                description: The given status of the execution
+                enum:
+                - pending
+                - running
+                - completed
+                - aborted
+                - canceled
+                readOnly: true
+                title: status
+                type: string
+              tenant:
+                readOnly: true
+                title: tenant
+                type: string
+            title: execution
+            type: object
+        required:
+        - data
+        type: object
+    executionPatch:
+      properties:
+        status:
+          description: The given status of the execution
+          enum:
+          - canceled
+          title: status
+          type: string
+      title: executionPatch
+      type: object
     job:
       allOf:
       - properties:
@@ -1042,4 +1132,4 @@ paths:
           description: An internal service error occurred.
       summary: Modifies a job based on the job ID.
       x-authz-scope: collect.jobs.update
-# Retrieved from scp-openapi commit 78a292c87627531df44a659672364ffb5ad78fa7 path: collect/v1beta1/openapi.yaml
+# Retrieved from scp-openapi commit 005cdd6919c16c96c9713c138e6e91319e1908bb path: collect/v1beta1/openapi.yaml

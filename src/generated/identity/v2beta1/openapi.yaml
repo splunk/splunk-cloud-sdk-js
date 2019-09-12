@@ -62,6 +62,14 @@ components:
       required: false
       schema:
         type: string
+    key:
+      description: The API key name.
+      in: path
+      name: key
+      required: true
+      schema:
+        type: string
+      x-case-insensitive: true
     member:
       description: The member name.
       in: path
@@ -71,6 +79,16 @@ components:
         minLength: 2
         type: string
       x-case-insensitive: true
+    memberKind:
+      description: 'Kind of member, one of: [user, service_account]'
+      in: query
+      name: kind
+      required: false
+      schema:
+        enum:
+        - user
+        - service_account
+        type: string
     nonce:
       description: Nonce to prevent replay attacks
       in: query
@@ -172,6 +190,16 @@ components:
       schema:
         enum:
         - v2beta1
+        - v2alpha1
+        type: string
+    version2alpha1:
+      description: Service API version 2 alpha 1.
+      in: path
+      name: version2alpha1
+      required: true
+      schema:
+        enum:
+        - v2alpha1
         type: string
     version2beta1:
       description: Service API version 2 beta 1.
@@ -257,6 +285,17 @@ components:
       - username
       - password
       type: object
+    ChangeKeyBody:
+      properties:
+        permissions:
+          items:
+            minLength: 4
+            type: string
+            x-case-insensitive: true
+          type: array
+      required:
+      - permissions
+      type: object
     ChangeSubscriptionBody:
       properties:
         appPermissions:
@@ -299,6 +338,27 @@ components:
           type: string
       required:
       - name
+      type: object
+    CreateKeyBody:
+      properties:
+        expiresAt:
+          format: date-time
+          type: string
+        name:
+          maxLength: 36
+          minLength: 4
+          pattern: ^[_a-z][_.a-z0-9]*$
+          type: string
+        permissions:
+          items:
+            minLength: 4
+            type: string
+            x-case-insensitive: true
+          type: array
+      required:
+      - name
+      - permissions
+      - expiresAt
       type: object
     CreatePrincipalBody:
       description: Payload when creating a principal
@@ -461,6 +521,60 @@ components:
           items:
             $ref: '#/components/schemas/Jwk'
           type: array
+      type: object
+    Key:
+      properties:
+        clientId:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        createdBy:
+          type: string
+        expiresAt:
+          format: date-time
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        permissions:
+          items:
+            type: string
+          type: array
+        rotatedAt:
+          format: date-time
+          type: string
+        tenant:
+          type: string
+      type: object
+    KeySecret:
+      properties:
+        clientId:
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+        createdBy:
+          type: string
+        expiresAt:
+          format: date-time
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        permissions:
+          items:
+            type: string
+          type: array
+        rotatedAt:
+          format: date-time
+          type: string
+        tenant:
+          type: string
+        token:
+          type: string
       type: object
     Member:
       description: Represents a member that belongs to a tenant.
@@ -1490,4 +1604,4 @@ security:
 servers:
 - url: /
 
-# Retrieved from scp-openapi commit 78a292c87627531df44a659672364ffb5ad78fa7 path: identity/v2beta1/openapi.yaml
+# Retrieved from scp-openapi commit 005cdd6919c16c96c9713c138e6e91319e1908bb path: identity/v2beta1/openapi.yaml
