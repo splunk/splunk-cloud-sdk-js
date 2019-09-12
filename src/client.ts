@@ -21,6 +21,8 @@ export const DEFAULT_URLS = {
     app: 'https://app.scp.splunk.com'
 };
 
+const SEARCH_SUBMIT_QUEUE = 'search-submit';
+
 export interface SplunkErrorParams {
     message: string;
     code?: string;
@@ -47,6 +49,190 @@ export class SplunkError extends Error implements SplunkErrorParams {
     }
 }
 
+type ResponseRequest = [Response, Request];
+
+/**
+ * Internal class that holds the state for a pending service request promise (including the promise and it's callbacks).
+ */
+class RequestFutureHolder {
+    private unsetErrorHandler = (reason?: any) => {
+        throw new Error('Unexpectedly don\'t have an error handler');
+    }
+    private unsetSuccessHandler = (value?: (PromiseLike<ResponseRequest> | ResponseRequest)) => {
+        throw new Error('Unexpectedly don\'t have a success handler');
+    }
+    public promise: Promise<ResponseRequest>;
+    public request: Request;
+    public onError: (reason?: any) => void = this.unsetErrorHandler;
+    public onSuccess: (value?: (PromiseLike<ResponseRequest> | ResponseRequest)) => void = this.unsetSuccessHandler;
+
+    constructor(request: Request) {
+        this.request = request;
+        this.promise = new Promise<ResponseRequest>((onSuccess, onError) => {
+            this.onSuccess = onSuccess;
+            this.onError = onError;
+        });
+    }
+}
+
+interface RequestQueueParams {
+    initialTimeout: number;
+    exponent: number;
+    retries: number;
+    maxInFlight: number;
+    enableRetryHeader?: boolean;
+}
+
+/*
+ * These defaults are used when nothing is specified in the client specification. If we decide to enable retries
+ * for all clients by default, this should be removed in favor of DefaultQueueManagerParams below.
+ */
+const DEFAULT_REQUEST_QUEUE_PARAMS = {
+    initialTimeout: 1000,
+    exponent: 2.0,
+    retries: 0,
+    maxInFlight: 3,
+    enableRetryHeader: false,
+};
+
+/**
+ * RequestQueueManagerParams allows for configuration of retry behaviors. The constructor takes two parameters,
+ * the first is the set of parameters to use when there are
+ */
+export class RequestQueueManagerParams {
+    public defaults: RequestQueueParams;
+    public overrides: Map<string, RequestQueueParams>;
+    constructor(defaults: RequestQueueParams = DEFAULT_REQUEST_QUEUE_PARAMS, overrides: Map<string, RequestQueueParams> = new Map()) {
+        this.defaults = defaults;
+        this.overrides = overrides;
+    }
+}
+
+/**
+ * This class holds the future defaults for request queues.
+ */
+export class DefaultQueueManagerParams extends RequestQueueManagerParams {
+    constructor() {
+        super({
+            retries: 4,
+            initialTimeout: 500,
+            exponent: 2,
+            maxInFlight: 3,
+        }, new Map<string, RequestQueueParams>([
+            [SEARCH_SUBMIT_QUEUE, {
+                retries: 6,
+                initialTimeout: 1000,
+                exponent: 1.6,
+                maxInFlight: 3,
+            }]
+        ]));
+    }
+}
+
+/**
+ * Internal class that holds multiple RequestQueues.  Will auto-create a queue for a given name if it doesn't exist.
+ */
+class RequestQueueManager {
+    private queues = new Map<string, RequestQueue>();
+    private params: RequestQueueManagerParams;
+
+    constructor(params: RequestQueueManagerParams = new RequestQueueManagerParams()) {
+        this.params = params;
+    }
+
+    public add(queueName: string, request: Request): Promise<ResponseRequest> {
+        return this.getQueue(queueName).add(request);
+    }
+
+    private getQueue(queueName: string): RequestQueue {
+        if (!this.queues.has(queueName)) {
+            const queue = new RequestQueue(this.params.overrides.get(queueName) || this.params.defaults);
+            this.queues.set(queueName, queue);
+        }
+        return this.queues.get(queueName)!;
+    }
+}
+
+/**
+ * Internal class that manages requests- the intent is to keep the requests largely in order and not flood the server
+ * when it is already overloaded. When the client gets a backoff signal (429), it should not continue to make new
+ * requests until the request is successfully completed. Rather than a strict serial execution, this implementation will
+ * allow a certain number of 'in-flight' requests to lend the specified degree of parallelism.
+ */
+class RequestQueue {
+    private retryStatuses = new Set([429, 503]);
+    private queue: RequestFutureHolder[] = [];
+    private inFlight = new Set<RequestFutureHolder>();
+    private params: RequestQueueParams;
+
+    constructor(params: RequestQueueParams) {
+        this.params = params;
+    }
+
+    /**
+     * Enqueue a request for execution as soon as possible.  Returns a Promise that contains both the final request
+     * used and the resultant response, ready for calling a ResponseHook.
+     */
+    public async add(request: Request): Promise<ResponseRequest> {
+        // TODO: There are optimizations we can make here to prevent pushing/popping when the queue is empty and there is room in inFlight
+        const holder = new RequestFutureHolder(request);
+        this.queue.push(holder);
+        this.dispatch_requests();
+        return holder.promise;
+    }
+
+    /**
+     * Looks for pending requests that can be dispatched, and dispatches them if there is a slot available.
+     */
+    private dispatch_requests() {
+        if (this.inFlight.size < this.params.maxInFlight) {
+            const holder = this.queue.shift();
+            if (holder !== undefined) {
+                this.inFlight.add(holder);
+                // tslint:disable-next-line:no-floating-promises
+                this.dispatch(holder.request)
+                    .then(holder.onSuccess, holder.onError)
+                    .then(() => {
+                        this.inFlight.delete(holder);
+                        this.dispatch_requests();
+                    });
+            }
+        }
+    }
+
+    /**
+     * Actually dispatches a request, retrying if it receives a transient error.
+     */
+    private async dispatch(request: Request): Promise<ResponseRequest> {
+        let retry = 0;
+        let timeout = this.params.initialTimeout;
+        const initialTime = Date.now();
+        let response: Response;
+        let needsRetry = false;
+        let currentRequest: Request;
+        do {
+            currentRequest = request.clone();
+            if (retry > 0 && this.params.enableRetryHeader) {
+                // The following cannot be set unless gateway adds the header to Access-Control-Allow-Headers
+                // TODO: Enable by default when allowed by gateway
+                currentRequest.headers.set('Retry', `${initialTime}:${retry}`);
+            }
+            response = await fetch(currentRequest);
+            if (this.retryStatuses.has(response.status)) {
+                needsRetry = true;
+                retry += 1;
+                if (retry <= this.params.retries) {
+                    await _sleep(timeout);
+                    timeout = timeout * this.params.exponent;
+                }
+            } else {
+                needsRetry = false;
+            }
+        } while (needsRetry && retry <= this.params.retries);
+        return [response, currentRequest];
+    }
+}
+
 /**
  * Interrogates the response. Decodes the response if successful or throws an error.
  */
@@ -68,7 +254,13 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
             if (!json.message) {
                 err = new SplunkError(`Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`);
             } else {
-                err = new SplunkError({ message: json.message, code: json.code, moreInfo: json.moreInfo, httpStatusCode: response.status, details: json.details });
+                err = new SplunkError({
+                    message: json.message,
+                    code: json.code,
+                    moreInfo: json.moreInfo,
+                    httpStatusCode: response.status,
+                    details: json.details
+                });
             }
         } catch (ex) {
             const message = `${response.statusText} - unable to process response`;
@@ -96,6 +288,7 @@ function decodeJson(text: string): object | string {
 
 export type ResponseHook = (response: Response, request: Request) => Promise<Response> | any;
 export type TokenProviderFunction = () => string;
+
 export interface ServiceClientArgs {
     /**
      * The default tenant to use for requests.
@@ -113,57 +306,19 @@ export interface ServiceClientArgs {
     urls?: {
         [key: string]: string;
     };
+
+    /**
+     * Parameters that govern how messages are passed to the service, including how they are retried (and how
+     * back-off is applied) upon transient errors like an HTTP 429.
+     */
+    requestQueueManagerParams?: RequestQueueManagerParams;
 }
 
-const _sleep = (millis: number) : Promise<void> => {
+const _sleep = (millis: number): Promise<void> => {
     return new Promise(resolve => {
         setTimeout(resolve, millis);
     });
 };
-
-/**
- * This function creates a `ResponseHook` that retries requests that receive a 429 Too Many Requests response
- * from the server. By default, 5 retry attempts are made.
- * The ResponseHook increases the wait time with each attempt. By default, the wait starts at 100ms,
- * then doubles with each retry attempt. If none of the retry attempts returns a response
- * other than 429 after the maxiumum number of attempts, the last response that was received is returned.
- *
- * Install the ResponseHook as follows:
- * ```javascript
- * client.addResponseHook(naiveExponentialBackoff({maxRetries: 5, timeout: 100, backoff: 2});
- * ```
- * @param maxRetries The number of times to retry this request before failing.
- * @param timeout The initial time to wait for the first retry attempt.
- * @param backoff The multiplier to apply to the previous timeout for this attempt.
- * @param onRetry A callback that takes a response and a request and is called on every retry attempt.
- * @param onFailure A callback that takes a response and a request and is called after the maximum number of retries are exhausted.
- */
-export function naiveExponentialBackoff({maxRetries = 5,
-                                         timeout = 100,
-                                         backoff = 2.0,
-                                         onRetry=(response: Response, request: Request) => {/**/},
-                                         onFailure=(response: Response, request: Request) =>{/**/}
-                                        } = {}) : ResponseHook {
-    const retry : ResponseHook = async (response: Response, request: Request) => {
-        let retries = 0;
-        let myResponse = response;
-        let currentTimeout = timeout;
-        let myRequest = request;
-        while (response.status === 429 && retries < maxRetries) {
-            myRequest = request.clone();
-            await _sleep(currentTimeout);
-            retries += 1;
-            currentTimeout *= backoff;
-            myResponse = await fetch(myRequest);
-            onRetry(myResponse, myRequest);
-        }
-        if (response.status === 429) {
-            onFailure(myResponse, myRequest);
-        }
-        return myResponse;
-    };
-    return retry;
-}
 
 /**
  * This class acts as a raw proxy for Splunk Cloud, implementing
@@ -178,6 +333,7 @@ export class ServiceClient {
     };
     private readonly tenant?: string;
     private responseHooks: ResponseHook[] = [];
+    private queueManager: RequestQueueManager;
 
     /**
      * Creates a `ServiceClient` object with the given `ServiceClientArgs` object.
@@ -199,6 +355,7 @@ export class ServiceClient {
         }
         this.urls = args.urls || DEFAULT_URLS;
         this.tenant = args.defaultTenant;
+        this.queueManager = new RequestQueueManager(args.requestQueueManagerParams);
     }
 
     /**
@@ -265,7 +422,7 @@ export class ServiceClient {
      * @return A fully-qualified URL.
      */
     public buildUrl = (cluster: string, path: string, query?: QueryArgs): string => {
-        const serviceCluster : string = this.urls[cluster] || DEFAULT_URLS.api;
+        const serviceCluster: string = this.urls[cluster] || DEFAULT_URLS.api;
         const basePath = `${serviceCluster}${escape(path)}`;
         if (query && Object.keys(query).length > 0) {
             const queryEncoded = Object.keys(query)
@@ -332,13 +489,14 @@ export class ServiceClient {
      */
     public fetch = (method: HTTPMethod, cluster: string, path: string, opts: RequestOptions = {}, data?: any): Promise<Response> => {
         const url = this.buildUrl(cluster, path, opts.query);
+        const queue = opts.queue || ServiceClient.queueFromPath(path, method);
         const options = {
             method,
             headers: this.buildHeaders(opts.headers),
             body: typeof data !== 'string' ? JSON.stringify(data) : data,
         };
         const request = new Request(url, options);
-        return fetch(request).then(response => this.invokeHooks(response, request));
+        return this.queueManager.add(queue, request).then(responseRequest => this.invokeHooks(...responseRequest));
     }
 
     /**
@@ -409,6 +567,17 @@ export class ServiceClient {
         return this.fetch('DELETE', cluster, path, opts, data)
             .then(handleResponse);
     }
+
+    private static queueFromPath(path: string, method: HTTPMethod) : string {
+        if (method === 'POST' && path.match('/search/.*/jobs$')) {
+            return SEARCH_SUBMIT_QUEUE;
+        }
+        const service = path.split('/')[2]; // Default is service from the URL
+        if (service) {
+            return service;
+        }
+        return 'default';
+    }
 }
 
 type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -426,6 +595,10 @@ export interface RequestOptions {
      * Additional headers (other than "Authorization") to add to the request.
      */
     headers?: RequestHeaders;
+    /**
+     * Named retry queue to use (default is the name of the service)
+     */
+    queue?: string;
 }
 
 export interface QueryArgs {

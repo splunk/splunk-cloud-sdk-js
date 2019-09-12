@@ -17,9 +17,11 @@
 import { assert } from 'chai';
 import 'isomorphic-fetch';
 import 'mocha';
-import { naiveExponentialBackoff, ServiceClient, SplunkError } from '../../client';
+import sleep = require('sleep-promise');
+import { HTTPResponse, RequestQueueManagerParams, ServiceClient } from '../../client';
 import { QueryArgs } from '../../src/client';
 import config from '../config';
+import { RetryServer } from './test_retry_server';
 
 const stubbyUrl = `http://${config.stubbyHost}:8882`;
 
@@ -146,54 +148,6 @@ describe('Basic client functionality', () => {
                 });
         });
 
-        it('should allow retry on 429', () => {
-            let retries = 0;
-
-            let failed = false;
-            s.addResponseHook(naiveExponentialBackoff({ maxRetries: 3, onRetry: () => retries += 1, onFailure: () => failed = true }));
-            return s.get('api', '/too_many_requests')
-                .then(httpResponse => {
-                    assert.property(httpResponse.body, 'foo');
-                }, (err: SplunkError) => {
-                    assert.equal(err.httpStatusCode, 429);
-                    assert.equal(retries, 3);
-                    assert.ok(failed);
-                }).catch((err) => {
-                    assert.typeOf(err, 'object');
-                });
-        });
-
-        it('should backoff exponentially on 429', () => {
-            const timeout = 50;
-            const backoff = 2;
-            const expectedTime = timeout + timeout * backoff + timeout * backoff * backoff;
-            s.addResponseHook(naiveExponentialBackoff({ timeout, backoff, maxRetries: 3 }));
-            const start = Date.now();
-            return s.get('api', '/too_many_requests')
-                .then(httpResponse => {
-                    assert.property(httpResponse.body, 'foo');
-                }, () => {
-                    const elapsed = Date.now() - start;
-                    // setTimeout is not exact
-                    assert.isAtLeast(elapsed, expectedTime);
-                    assert.isAtMost(elapsed, expectedTime * 2);
-                }).catch((err) => {
-                    assert.typeOf(err, 'object');
-                });
-        });
-
-        it('should succeed with a backoff in place', () => {
-            s.addResponseHook(naiveExponentialBackoff());
-            const promise = s.get('api', '/basic');
-            assert.typeOf(promise, 'Promise');
-            return promise.then((data) => {
-                assert.property(data.body, 'foo');
-                assert.equal(data.status, 200);
-            }).catch((err) => {
-                assert.typeOf(err, 'object');
-            });
-        });
-
         it('should handle exceptions', () => {
             s.addResponseHook(() => {
                 throw new Error('unexpected error');
@@ -205,6 +159,72 @@ describe('Basic client functionality', () => {
                     assert.typeOf(err, 'object');
                 });
         });
+    });
+});
+
+describe('Retry 429 errors', () => {
+    const server = new RetryServer();
+    const [ initialTimeout, exponent, retries ] = [ 100, 1.6, 5 ];
+    const s = new ServiceClient({
+        urls: { local: 'http://localhost:3333' },
+        tokenSource: () => 'None',
+        requestQueueManagerParams: new RequestQueueManagerParams(
+            {
+                initialTimeout,
+                exponent,
+                retries,
+                maxInFlight: 3,
+                enableRetryHeader: true,
+            }
+        )});
+    before(() => {
+        server.start();
+        s.clearResponseHooks();
+    });
+    it('should still throw after retries', () => {
+        let lastResponse : Response | undefined;
+        let lastRequest : Request | undefined;
+        s.addResponseHook((response, request) => {
+            lastResponse = response;
+            lastRequest = request;
+        });
+        return s.get('local', '/always_busy').then((response) => {
+            throw new Error('Should have thrown');
+        }, (error) => {
+            assert(error.httpStatusCode = 429);
+            if (lastRequest !== undefined) {
+                if (lastRequest.headers.has('Retry')) {
+                    const [retryTime, retryCount] = lastRequest.headers.get('Retry')!.split(':');
+                    let expectedRetryElapsed = 0;
+                    for (let i = 0; i < retries; i++) {
+                        expectedRetryElapsed += initialTimeout * exponent ** i;
+                    }
+                    const retryElapsed = Date.now() - parseInt(retryTime, 10);
+                    assert.equal(parseInt(retryCount, 10), retries);
+                    assert.approximately(retryElapsed, expectedRetryElapsed, expectedRetryElapsed * 0.1);
+                } else {
+                    throw new Error('Retry header not set');
+                }
+            } else {
+                throw new Error('Request not set');
+            }
+        });
+    });
+    it('should only allow three requests at a time', async () => {
+        const requests: Array<Promise<HTTPResponse>> = [];
+        for (let i = 0; i < 6; i++) {
+            requests.push(s.get('local', '/logjam'));
+        }
+        const bigPromise = Promise.all(requests);
+        await sleep(50);
+        await s.get('local', '/endjam', { queue: 'control' });
+        const responses = await bigPromise;
+        assert.isTrue(responses.filter(r => r.status !== 200).length === 0);
+        assert.equal(responses.length, 6);
+        assert.equal(responses.filter(r => r.headers.has('Retry')).length, 3); // Only the first 3 blocked
+    });
+    after(() => {
+        server.stop();
     });
 });
 

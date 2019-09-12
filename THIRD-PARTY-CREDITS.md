@@ -35,6 +35,16 @@ License: [MIT](https://github.com/DefinitelyTyped/DefinitelyTyped/raw/master/LIC
 
 Repository: [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)
 
+## @types/express
+
+Name: @types/express
+
+Version: 4.17.1
+
+License: [MIT](https://github.com/DefinitelyTyped/DefinitelyTyped/raw/master/LICENSE)
+
+Repository: [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped)
+
 ## @types/isomorphic-fetch
 
 Name: @types/isomorphic-fetch
@@ -124,6 +134,16 @@ Version: 5.10.0
 License: [MIT](https://github.com/leonardoanalista/cz-customizable/raw/master/LICENSE)
 
 Repository: [https://github.com/leonardoanalista/cz-customizable](https://github.com/leonardoanalista/cz-customizable)
+
+## express
+
+Name: express
+
+Version: 4.17.1
+
+License: [MIT](https://github.com/expressjs/express/raw/master/LICENSE)
+
+Repository: [https://github.com/expressjs/express](https://github.com/expressjs/express)
 
 ## husky
 
