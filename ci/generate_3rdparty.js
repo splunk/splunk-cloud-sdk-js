@@ -29,6 +29,9 @@ function createMarkdown(deps) {
 
     for (const dependencyKey of Object.keys(deps)) {
         // Deps can be in the formats: @scope/name@x.y.z, name@x.y.z so we need to split on the last @
+        if (dependencyKey.startsWith('@splunk')) {
+            continue; // skip @splunk packages, these are first party
+        }
         const splitPosition = dependencyKey.lastIndexOf('@');
         const name = dependencyKey.substring(0, splitPosition);
         const version = dependencyKey.substring(splitPosition+1, dependencyKey.length);
@@ -58,7 +61,10 @@ const crawlerOptions = {
     start: [path.join(__dirname, '..')],
     exclude: [path.join(__dirname, '..', 'node_modules')],
     noColor: true,
-    onlyDirectDependencies: true,
+    onlyDirectDependencies: true
+};
+const crawlerOptionsDev = {
+    ...crawlerOptions,
     development: true
 };
 
@@ -67,30 +73,42 @@ crawler.dumpLicenses(crawlerOptions,(error, res) => {
         throw error;
     }
     else {
-        const thirdPartyCredits = createMarkdown(res);
-        const markdownlintOptions = {
-            strings: { thirdPartyCredits },
-            config: { 'line-length': false }
-        };
-
-        const markdownErrors = markdownlint.sync(markdownlintOptions);
-        if (markdownErrors.thirdPartyCredits.length > 0) {
-            console.log(markdownErrors.toString());
-            throw new Error('Invalid markdown');
-        }
-
-        const currentFile = fs.readFileSync(thirdPartyLicenseFile).toString();
-        if (currentFile === thirdPartyCredits) {
-            console.log(`Nothing to update in ${thirdPartyLicenseFileName}.`);
-        } else {
-            // If running in CI, fail if this file is stale
-            if (process.env.CI) {
-                throw new Error(`${thirdPartyLicenseFileName} is stale, please run 'yarn third-party-licenses'.`);
+        crawler.dumpLicenses(crawlerOptionsDev,(error, resDev) => {
+            if (error) {
+                throw error;
             }
-            else {
-                fs.writeFileSync(thirdPartyLicenseFile, thirdPartyCredits);
-                console.log(`Successfully updated ${thirdPartyLicenseFileName}`);
+            const allRes = {
+                ...res,
+                ...resDev,
+            };
+            const thirdPartyCredits = createMarkdown(allRes);
+            const markdownlintOptions = {
+                strings: { thirdPartyCredits },
+                config: {
+                    'line-length': false,
+                    'no-multiple-blanks': false,
+                }
+            };
+
+            const markdownErrors = markdownlint.sync(markdownlintOptions);
+            if (markdownErrors.thirdPartyCredits.length > 0) {
+                console.log(markdownErrors.toString());
+                throw new Error('Invalid markdown');
             }
-        }
+
+            const currentFile = fs.readFileSync(thirdPartyLicenseFile).toString();
+            if (currentFile === thirdPartyCredits) {
+                console.log(`Nothing to update in ${thirdPartyLicenseFileName}.`);
+            } else {
+                // If running in CI, fail if this file is stale
+                if (process.env.CI) {
+                    throw new Error(`${thirdPartyLicenseFileName} is stale, please run 'yarn third-party-licenses'.`);
+                }
+                else {
+                    fs.writeFileSync(thirdPartyLicenseFile, thirdPartyCredits);
+                    console.log(`Successfully updated ${thirdPartyLicenseFileName}`);
+                }
+            }
+        });
     }
 });
