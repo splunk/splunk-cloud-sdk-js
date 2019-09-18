@@ -16,8 +16,15 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import { SplunkCloud } from '../../splunk';
-import { actionModels } from '../../src/action';
+import {
+    ActionKind,
+    ActionResult, ActionTriggerResponse,
+    EmailAction,
+    RawJSONPayload,
+    TriggerEvent,
+    TriggerEventKind, WebhookAction
+} from '../../services/action';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
 const tenantID = config.stagingTenant;
@@ -35,9 +42,9 @@ describe('integration tests using action service', () => {
     const actionName = `crudemail_${Date.now()}`;
 
     describe('CRUD email actions', () => {
-        const emailAction: actionModels.EmailAction = {
+        const emailAction: EmailAction = {
             name: actionName,
-            kind: actionModels.ActionKind.Email,
+            kind: ActionKind.Email,
             body: '<html><h1>The HTML</h1></html>',
             bodyPlainText: 'The Plain Text Body',
             subject: 'The Subject',
@@ -46,7 +53,7 @@ describe('integration tests using action service', () => {
 
         it('should create action', () =>
             splunkCloud.action.createAction(emailAction).then(response => {
-                const email = response as actionModels.EmailAction;
+                const email = response as EmailAction;
                 assert.equal(email.name, emailAction.name);
                 assert.equal(email.kind, emailAction.kind);
                 assert.equal(email.body, emailAction.body);
@@ -59,7 +66,7 @@ describe('integration tests using action service', () => {
             splunkCloud.action
                 .updateAction(emailAction.name, { subject: 'new subject' })
                 .then(updateResponse => {
-                    const updatedEmail = updateResponse as actionModels.EmailAction;
+                    const updatedEmail = updateResponse as EmailAction;
                     assert.equal(updatedEmail.name, emailAction.name);
                     assert.equal(updatedEmail.kind, emailAction.kind);
                     assert.equal(updatedEmail.body, emailAction.body);
@@ -70,7 +77,7 @@ describe('integration tests using action service', () => {
 
         it('should get actions', () =>
             splunkCloud.action.getAction(emailAction.name).then(response => {
-                const email = response as actionModels.EmailAction;
+                const email = response as EmailAction;
                 assert.equal(email.name, emailAction.name);
                 assert.equal(email.kind, emailAction.kind);
                 assert.equal(email.body, emailAction.body);
@@ -93,9 +100,9 @@ describe('integration tests using action service', () => {
     });
 
     describe('Trigger email actions', () => {
-        const emailAction: actionModels.EmailAction = {
+        const emailAction: EmailAction = {
             name: `crudemail_${Date.now()}`,
-            kind: actionModels.ActionKind.Email,
+            kind: ActionKind.Email,
             body: '<html><h1>The HTML</h1></html>',
             bodyPlainText: 'The Plain Text Body',
             subject: 'The Subject',
@@ -104,7 +111,7 @@ describe('integration tests using action service', () => {
 
         it('should create action', () => {
             return splunkCloud.action.createAction(emailAction).then(response => {
-                const webhook = response as actionModels.EmailAction;
+                const webhook = response as EmailAction;
                 assert.equal(webhook.name, emailAction.name);
                 assert.equal(webhook.kind, emailAction.kind);
                 assert.equal(webhook.title, emailAction.title);
@@ -114,21 +121,21 @@ describe('integration tests using action service', () => {
                 assert.deepEqual(webhook.addresses, emailAction.addresses);
             });
         });
-        const rawPayload: actionModels.RawJSONPayload = {
+        const rawPayload: RawJSONPayload = {
             name: { payload: 'user payload' },
         };
-        const notification: actionModels.TriggerEvent = {
-            kind: actionModels.TriggerEventKind.Trigger,
+        const notification: TriggerEvent = {
+            kind: TriggerEventKind.Trigger,
             tenant: tenantID as string,
             payload: rawPayload
         };
 
         it('should trigger action and get status', () => {
-            let email: actionModels.ActionTriggerResponse;
+            let email: ActionTriggerResponse;
             return splunkCloud.action
                 .triggerAction(emailAction.name, notification)
                 .then(response => {
-                    email = response as actionModels.ActionTriggerResponse;
+                    email = response as ActionTriggerResponse;
                     assert.isNotNull(email.statusId);
                     assert.isNotNull(email.statusUrl);
 
@@ -138,7 +145,7 @@ describe('integration tests using action service', () => {
                     );
                 })
                 .then(res => {
-                    const actionStatus = res as actionModels.ActionResult;
+                    const actionStatus = res as ActionResult;
                     // TODO: Whether the action succeeds or not, depends on the action definition
                     // assert.include([ActionStatusState.running, ActionStatusState.failed], res.state)
                     assert.equal(actionStatus.statusId, email.statusId);
@@ -153,9 +160,9 @@ describe('integration tests using action service', () => {
     });
 
     describe('Trigger webhook actions', () => {
-        const webhookAction: actionModels.WebhookAction = {
+        const webhookAction: WebhookAction = {
             name: `wh_${Date.now()}`,
-            kind: actionModels.ActionKind.Webhook,
+            kind: ActionKind.Webhook,
             title: 'My Title',
             webhookUrl: 'https://foo.slack.com/test',
             webhookPayload: 'some user msg',
@@ -163,7 +170,7 @@ describe('integration tests using action service', () => {
 
         it('should create action', () => {
             return splunkCloud.action.createAction(webhookAction).then(response => {
-                const webhook = response as actionModels.WebhookAction;
+                const webhook = response as WebhookAction;
                 assert.equal(webhook.name, webhookAction.name);
                 assert.equal(webhook.kind, webhookAction.kind);
                 assert.equal(webhook.title, webhookAction.title);
@@ -171,21 +178,21 @@ describe('integration tests using action service', () => {
                 assert.equal(webhook.webhookPayload, webhookAction.webhookPayload);
             });
         });
-        const rawPayload: actionModels.RawJSONPayload = {
+        const rawPayload: RawJSONPayload = {
             name: { payload: 'user payload' },
         };
-        const notification: actionModels.TriggerEvent = {
-            kind: actionModels.TriggerEventKind.Trigger,
+        const notification: TriggerEvent = {
+            kind: TriggerEventKind.Trigger,
             tenant: tenantID as string,
             payload:rawPayload
         };
 
         it('should trigger action and get status', () => {
-            let webhook: actionModels.ActionTriggerResponse;
+            let webhook: ActionTriggerResponse;
             return splunkCloud.action
                 .triggerAction(webhookAction.name, notification)
                 .then(response => {
-                    webhook = response as actionModels.ActionTriggerResponse;
+                    webhook = response as ActionTriggerResponse;
                     assert.isNotNull(webhook.statusId);
                     assert.isNotNull(webhook.statusUrl);
 
@@ -195,7 +202,7 @@ describe('integration tests using action service', () => {
                     );
                 })
                 .then(res => {
-                    const actionStatus = res as actionModels.ActionResult;
+                    const actionStatus = res as ActionResult;
                     // TODO: Whether the action succeeds or not, depends on the action definition
                     // assert.include([ActionStatusState.running, ActionStatusState.failed], res.state)
                     assert.equal(actionStatus.statusId, webhook.statusId);

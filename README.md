@@ -50,7 +50,7 @@ If your app needs to work with one specific service, use a specific client for o
 ```javascript
 require('isomorphic-fetch'); // or a fetch polyfill of your choosing
 
-const { IdentityService } = require('@splunkdev/cloud-sdk/identity');
+const { IdentityService } = require('@splunkdev/cloud-sdk/services/identity');
 
 const ENDPOINT_URL = "https://api.scp.splunk.com";
 

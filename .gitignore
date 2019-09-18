@@ -8,6 +8,9 @@ models/**/**
 /test/**/*.js
 ./common/ # built dir
 !/.eslintrc.js
+/service_extensions/
+/services/
+
 
 # Hide compiled test folders, these appear to be webstorm generated
 /integration

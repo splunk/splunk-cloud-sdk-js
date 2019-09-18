@@ -17,7 +17,7 @@
 import { assert } from 'chai';
 import 'mocha';
 import sleep = require('sleep-promise');
-import { identityModels } from '../../identity';
+import * as identity from '../../services/identity';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
@@ -47,7 +47,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
     const testMember = 'test1@splunk.com';
 
     describe('Test Roles and Permissions Management', () => {
-        const roleInput: identityModels.CreateRoleBody = {
+        const roleInput: identity.CreateRoleBody = {
             name: testRole,
         };
 
@@ -133,10 +133,10 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
         // We don't have permissions to modify other tenants, and this isn't really a useful test
         // it('should update tenant state', () => {
-        //     return Promise.resolve(splunk.identity.updateTenantState(config.stagingMLTenant, { state: identityModels.UpdateTenantBodyStateEnum.Suspend })
+        //     return Promise.resolve(splunk.identity.updateTenantState(config.stagingMLTenant, { state: identity.UpdateTenantBodyStateEnum.Suspend })
         //         .then(body => {
         //             assert.isEmpty(body);
-        //             return splunk.identity.updateTenantState(config.stagingMLTenant, { state: identityModels.UpdateTenantBodyStateEnum.Resume });
+        //             return splunk.identity.updateTenantState(config.stagingMLTenant, { state: identity.UpdateTenantBodyStateEnum.Resume });
         //         }).then(body => {
         //             assert.isEmpty(body);
         //         })
@@ -204,7 +204,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should create a Member', () =>
-            splunk.identity.addMember({ name: testMember } as identityModels.AddGroupMemberBody).then(data => {
+            splunk.identity.addMember({ name: testMember } as identity.AddGroupMemberBody).then(data => {
                 assert.typeOf(data, 'Object');
                 assert.equal(data.name, testMember);
                 assert.equal(data.tenant, tenantID);

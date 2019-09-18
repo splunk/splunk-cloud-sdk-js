@@ -26,6 +26,7 @@
         "max-classes-per-file": false,
         "max-line-length": false,
         "prefer-array-literal": false,
+        "interface-over-type-literal": false,
         "no-increment-decrement": false,
         "ter-indent": [
             true,
@@ -53,7 +54,9 @@
         "no-multi-spaces": true,
         "variable-name": [true, "allow-leading-underscore"],
         "no-floating-promises": true,
-        "no-redundant-jsdoc": true
+        "no-redundant-jsdoc": true,
+        "no-empty-interface": false,
+        "function-name": [false, {}]
     },
     "rulesDirectory": []
 }

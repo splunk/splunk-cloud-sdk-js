@@ -17,7 +17,7 @@
 import { assert } from 'chai';
 import 'mocha';
 import { config as pemConfig, createCertificate, ModuleConfiguration } from 'pem';
-import { forwardersModels } from '../../forwarders';
+import * as forwarders from '../../services/forwarders';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
@@ -51,7 +51,7 @@ describe('Integration tests with forwarders service APIs', () => {
 
     it('should allow listing all certificates on a tenant', () => {
         return splunkCloud.forwarders.listCertificates().then(response => {
-            const certLists = response as forwardersModels.CertificateInfo[];
+            const certLists = response as forwarders.CertificateInfo[];
             assert.equal(certLists.length, 0);
         });
     });

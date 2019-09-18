@@ -16,11 +16,12 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import { ingestModels } from '../../ingest';
 import { EventBatcher } from '../../ingest_event_batcher';
-import { mlModels } from '../../ml';
+import * as ingest from '../../services/ingest';
+import * as ml from '../../services/ml';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
+// @ts-ignore
 import * as rawdata from '../data/ml/iris.json';
 
 const splunkCloud = new SplunkCloud({
@@ -42,7 +43,7 @@ describe('integration tests using ML service', () => {
         const eb: EventBatcher = new EventBatcher(splunkCloud.ingest, 1000, events.length, 3000);
         try {
             for (const e of events) {
-                const event = e as ingestModels.Event;
+                const event = e as ingest.Event;
                 eb.add(event).then(response => {
                     assert.isNotNull(response);
                     assert.deepEqual(response.code, 'SUCCESS');
@@ -97,7 +98,7 @@ describe('integration tests using ML service', () => {
                 assert.isNotNull(workflowBuild.id);
                 buildID = workflowBuild.id as string;
                 assert.isNotNull(workflowBuild.creationTime);
-                assert.notEqual(mlModels.WorkflowBuildStatusEnum.Failed, workflowBuild.status);
+                assert.notEqual(ml.WorkflowBuildStatusEnum.Failed, workflowBuild.status);
             });
         });
         it('should get workflow build', () => {
@@ -109,7 +110,7 @@ describe('integration tests using ML service', () => {
             return newWorkflowRun(workflowID as string, buildID as string).then(workflowRun => {
                 assert.isNotNull(workflowRun.id);
                 runID = workflowRun.id as string;
-                assert.notEqual(mlModels.WorkflowRunStatusEnum.Failed, workflowRun.status);
+                assert.notEqual(ml.WorkflowRunStatusEnum.Failed, workflowRun.status);
             });
         });
         it('should get workflow run', () => {
@@ -118,7 +119,7 @@ describe('integration tests using ML service', () => {
             });
         });
         it('should create workflow deployment', () => {
-            return splunkCloud.ml.createWorkflowDeployment(workflowID as string, buildID as string, { spec: {} } as mlModels.WorkflowDeployment).then(wfd => {
+            return splunkCloud.ml.createWorkflowDeployment(workflowID as string, buildID as string, { spec: {} } as ml.WorkflowDeployment).then(wfd => {
                 assert.isNotNull(wfd.id);
                 deploymentID = wfd.id as string;
             });
@@ -146,10 +147,10 @@ describe('integration tests using ML service', () => {
 
 // Utility functions
 
-function createFitTasks(): mlModels.FitTask[] {
-    const task1: mlModels.FitTask = {
+function createFitTasks(): ml.FitTask[] {
+    const task1: ml.FitTask = {
         name: 'PCA_js',
-        kind: mlModels.FitTaskKindEnum.Fit,
+        kind: ml.FitTaskKindEnum.Fit,
         algorithm: 'PCA',
         fields: {
             features: [
@@ -167,9 +168,9 @@ function createFitTasks(): mlModels.FitTask[] {
         }
     };
 
-    const task2: mlModels.FitTask = {
+    const task2: ml.FitTask = {
         name: 'RandomForestClassifier',
-        kind: mlModels.FitTaskKindEnum.Fit,
+        kind: ml.FitTaskKindEnum.Fit,
         algorithm: 'RandomForestClassifier',
         fields: {
             features: [
@@ -191,17 +192,17 @@ function createFitTasks(): mlModels.FitTask[] {
     return [task1];
 }
 
-function newWorkflowBuild(workflowId: string): Promise<mlModels.WorkflowBuild> {
-    const source: mlModels.RawData = {
+function newWorkflowBuild(workflowId: string): Promise<ml.WorkflowBuild> {
+    const source: ml.RawData = {
         data: base64DATA
     };
 
-    const inputData: mlModels.InputData = {
+    const inputData: ml.InputData = {
         source,
-        kind: mlModels.InputDataKindEnum.RawData,
+        kind: ml.InputDataKindEnum.RawData,
     };
 
-    const workflowBuild: mlModels.WorkflowBuild = {
+    const workflowBuild: ml.WorkflowBuild = {
         input: inputData,
         name: 'testWorkflowbBuildJS'
     };
@@ -209,14 +210,14 @@ function newWorkflowBuild(workflowId: string): Promise<mlModels.WorkflowBuild> {
     return splunkCloud.ml.createWorkflowBuild(workflowId, workflowBuild).then(createdBuild => {
 
         // Wait for the build to complete
-        return new Promise<mlModels.WorkflowBuild>((resolve, reject) => {
+        return new Promise<ml.WorkflowBuild>((resolve, reject) => {
             const interval = setInterval(() => {
                 // We don't return this promise because we're creating an async wait
                 // tslint:disable-next-line
                 splunkCloud.ml.getWorkflowBuild(workflowId, createdBuild.id as string).then(fetchedBuild => {
                     switch (fetchedBuild.status) {
-                        case mlModels.WorkflowBuildStatusEnum.Failed:
-                        case mlModels.WorkflowBuildStatusEnum.Success:
+                        case ml.WorkflowBuildStatusEnum.Failed:
+                        case ml.WorkflowBuildStatusEnum.Success:
                             clearInterval(interval);
                             return resolve(fetchedBuild);
                     }
@@ -229,28 +230,28 @@ function newWorkflowBuild(workflowId: string): Promise<mlModels.WorkflowBuild> {
     });
 }
 
-function newWorkflowRun(workflowId: string, workflowBuildId: string): Promise<mlModels.WorkflowRun> {
-    const source: mlModels.RawData = {
+function newWorkflowRun(workflowId: string, workflowBuildId: string): Promise<ml.WorkflowRun> {
+    const source: ml.RawData = {
         data: base64DATA
     };
 
-    const inputData: mlModels.InputData = {
+    const inputData: ml.InputData = {
         source,
-        kind: mlModels.InputDataKindEnum.RawData
+        kind: ml.InputDataKindEnum.RawData
     };
 
-    const destination: mlModels.OutputDataDestination = {
+    const destination: ml.OutputDataDestination = {
         attributes: {
             key: 'iris.json'
         }
     };
 
-    const outputData: mlModels.OutputData = {
+    const outputData: ml.OutputData = {
         destination,
-        kind: mlModels.OutputDataKindEnum.Events,
+        kind: ml.OutputDataKindEnum.Events,
     };
 
-    const workflowRun: mlModels.WorkflowRun = {
+    const workflowRun: ml.WorkflowRun = {
         name: 'tesWorkflowRunJS',
         input: inputData,
         output: outputData,
@@ -258,13 +259,13 @@ function newWorkflowRun(workflowId: string, workflowBuildId: string): Promise<ml
     return splunkCloud.ml.createWorkflowRun(workflowId, workflowBuildId, workflowRun);
 }
 
-function generateEvents(dataset: any[]): ingestModels.Event[] {
+function generateEvents(dataset: any[]): ingest.Event[] {
     return dataset.map(data => {
         return {
             body: JSON.stringify(data),
             sourcetype: 'json',
             source: 'jssdk-ml-tests',
             attributes: { index: 'main' }
-        } as ingestModels.Event;
+        } as ingest.Event;
     });
 }

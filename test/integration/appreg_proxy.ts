@@ -16,7 +16,7 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import { appRegistryModels } from '../../app-registry';
+import * as appRegistry from '../../services/app-registry';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
@@ -49,12 +49,12 @@ describe('integration tests for app registry Endpoints', () => {
     describe('CRUD app', () => {
         const createApp = {
             name: appName(),
-            kind: appRegistryModels.AppResourceKind.Web,
+            kind: appRegistry.AppResourceKind.Web,
             title: appTitle(),
             redirectUrls: [
                 'https://localhost'
             ]
-        } as appRegistryModels.CreateAppRequest;
+        } as appRegistry.CreateAppRequest;
 
         const updateApp = {
             description: 'new description',
@@ -62,7 +62,7 @@ describe('integration tests for app registry Endpoints', () => {
             redirectUrls: [
                 'https://newlocalhost'
             ]
-        } as appRegistryModels.UpdateAppRequest;
+        } as appRegistry.UpdateAppRequest;
 
         it('should create app', () => {
             return splunk.appreg.createApp(createApp)
@@ -120,12 +120,12 @@ describe('integration tests for app registry Endpoints', () => {
     describe('app secret', () => {
         const createApp = {
             name: appName(),
-            kind: appRegistryModels.AppResourceKind.Web,
+            kind: appRegistry.AppResourceKind.Web,
             title: `${appTitle()}z`,
             redirectUrls: [
                 'https://localhost'
             ]
-        } as appRegistryModels.CreateAppRequest;
+        } as appRegistry.CreateAppRequest;
 
         let oldSecret: string = '';
 
@@ -158,16 +158,16 @@ describe('integration tests for app registry Endpoints', () => {
     describe('CRUD subscriptions', () => {
         const createApp = {
             name: `${appName()}t`,
-            kind: appRegistryModels.AppResourceKind.Native,
+            kind: appRegistry.AppResourceKind.Native,
             title: `${appTitle()}x`,
             redirectUrls: [
                 'https://localhost'
             ]
-        } as appRegistryModels.CreateAppRequest;
+        } as appRegistry.CreateAppRequest;
 
         const createApp2 = {
             name: `${appName()}s`,
-            kind: appRegistryModels.AppResourceKind.Service,
+            kind: appRegistry.AppResourceKind.Service,
             title: appTitle(),
             redirectUrls: [
                 'https://localhost'
@@ -178,7 +178,7 @@ describe('integration tests for app registry Endpoints', () => {
             userPermissionsFilter: [
                 '*:*.*'
             ]
-        } as appRegistryModels.CreateAppRequest;
+        } as appRegistry.CreateAppRequest;
 
         it('should create test app', () => {
             return splunk.appreg.createApp(createApp)
@@ -197,13 +197,13 @@ describe('integration tests for app registry Endpoints', () => {
         });
         it('should list subscriptions', () => {
             return splunk.appreg.listSubscriptions()
-                .then((subscriptions: appRegistryModels.Subscription[]) => {
+                .then((subscriptions: appRegistry.Subscription[]) => {
                     assert.isAtLeast(subscriptions.length, 1);
                 });
         });
         it('should get a subscription by app name', () => {
             return splunk.appreg.getSubscription(createApp.name)
-                .then((subscription: appRegistryModels.Subscription) => {
+                .then((subscription: appRegistry.Subscription) => {
                     assert.equal(subscription.appName, createApp.name);
                 });
         });
@@ -230,7 +230,7 @@ describe('integration tests for app registry Endpoints', () => {
         });
         it('should list subscriptions, and have both', () => {
             return splunk.appreg.listSubscriptions()
-                .then((subscriptions: appRegistryModels.Subscription[]) => {
+                .then((subscriptions: appRegistry.Subscription[]) => {
                     assert.isAtLeast(subscriptions.length, 2);
                     let foundFirst = false;
                     let foundSecond = false;

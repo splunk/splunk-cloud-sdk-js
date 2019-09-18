@@ -16,8 +16,8 @@
 
 import { assert } from 'chai';
 import 'mocha';
+import * as streams from '../../services/streams';
 import { SplunkCloud } from '../../splunk';
-import { streamsModels } from '../../streams';
 import config from '../config';
 
 const splunkCloud = new SplunkCloud({
@@ -59,14 +59,14 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                 })
                 .then(response => {
                     assert.isNotNull(response);
-                    assert.equal(response.status, streamsModels.PipelineResponseStatusEnum.CREATED);
+                    assert.equal(response.status, streams.PipelineResponseStatusEnum.CREATED);
                     assert.equal(response.name, testPipelineName1);
                     assert.equal(response.description, testPipelineDescription);
                     assert.isNotNull(response.id);
                     pipelineId1 = response.id;
                     assert.isNotNull(response.data);
 
-                    const pipeline = response.data as streamsModels.UplPipeline;
+                    const pipeline = response.data as streams.UplPipeline;
                     assert.isNotNull(pipeline.nodes);
                     assert.typeOf(pipeline.nodes, 'array');
                     assert.equal(pipeline.nodes.length, 2);
@@ -96,7 +96,7 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                 })
                 .then(createPipelineResponse2 => {
                     assert.isNotNull(createPipelineResponse2);
-                    assert.equal(createPipelineResponse2.status, streamsModels.PipelineResponseStatusEnum.CREATED);
+                    assert.equal(createPipelineResponse2.status, streams.PipelineResponseStatusEnum.CREATED);
                     assert.equal(createPipelineResponse2.name, testPipelineName2);
                     assert.equal(createPipelineResponse2.description, testPipelineDescription);
                     assert.isNotNull(createPipelineResponse2.id);
@@ -139,7 +139,7 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                             assert.isNotNull(getPipelineResponse);
                             assert.equal(getPipelineResponse.name, testPipelineName1);
                             assert.equal(getPipelineResponse.description, testPipelineDescription);
-                            assert.equal(getPipelineResponse.status, streamsModels.PipelineResponseStatusEnum.ACTIVATED);
+                            assert.equal(getPipelineResponse.status, streams.PipelineResponseStatusEnum.ACTIVATED);
                         });
                 });
         });
@@ -183,7 +183,7 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                 });
                 // .then(getPipelineResponse => {
                 //     assert.isNotNull(getPipelineResponse);
-                //     assert.equal(getPipelineResponse.statusMessage, streamsModels.PipelineStatus.Deactivated);
+                //     assert.equal(getPipelineResponse.statusMessage, streams.PipelineStatus.Deactivated);
                 // });
         });
     });
@@ -200,7 +200,7 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
 });
 
 // Creates a test pipeline request
-function createPipelineRequest(name: string, description: string): Promise<streamsModels.PipelineRequest> {
+function createPipelineRequest(name: string, description: string): Promise<streams.PipelineRequest> {
     const dsl = {
         dsl: 'events = read-splunk-firehose(); write-index(events, "index", "main");',
     };
@@ -214,7 +214,7 @@ function createPipelineRequest(name: string, description: string): Promise<strea
                 bypassValidation: true,
                 createUserId: config.stagingTenant,
                 data: response,
-            } as streamsModels.PipelineRequest;
+            } as streams.PipelineRequest;
         })
         .catch(error => {
             throw error;

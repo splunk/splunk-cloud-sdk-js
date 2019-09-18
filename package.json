@@ -15,7 +15,7 @@
     "docs": "yarn ts:docs",
     "build": "node ci/extract_version.js && tsc -p tsconfig.json",
     "build:tests": "tsc -p tsconfig.test.json",
-    "clean": "rimraf *.js *.map *.d.ts generated models || true",
+    "clean": "rimraf *.js *.map *.d.ts services service_base service_extensions || true",
     "cover": "NODE_ENV=coverage nyc yarn test",
     "cover:integration": "NODE_ENV=coverage nyc --report-dir coverage-integration yarn ci:integration",
     "cover:integration:ml": "NODE_ENV=coverage nyc --report-dir coverage-integration-ml yarn ci:integration:ml",

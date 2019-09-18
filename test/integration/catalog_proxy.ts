@@ -16,7 +16,7 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import { catalogModels } from '../../catalog';
+import * as catalog from '../../services/catalog';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
@@ -76,7 +76,7 @@ describe('catalog tests', () => {
         it('should allow create/delete of datasets', () => {
             const name = `index_${Date.now()}`;
             return createIndexDataset(name).then(res => {
-                const ds = res as catalogModels.Dataset;
+                const ds = res as catalog.Dataset;
                 assert.equal(ds.name, name);
                 assert.equal(ds.kind as string, 'index');
                 return ds.id;
@@ -87,7 +87,7 @@ describe('catalog tests', () => {
             const name = `metric_${Date.now()}`;
             return splunkCloud.catalog.createDataset({
                 name,
-                kind: catalogModels.MetricDatasetKind.Metric,
+                kind: catalog.MetricDatasetKind.Metric,
                 disabled: false
             }).then(() => splunkCloud.catalog.deleteDataset(name));
 
@@ -97,14 +97,14 @@ describe('catalog tests', () => {
             const name = `view_${Date.now()}`;
             return splunkCloud.catalog.createDataset({
                 name,
-                kind: catalogModels.ViewDatasetKind.View,
+                kind: catalog.ViewDatasetKind.View,
                 search: 'search index=main|stats count()'
             }).then(() => splunkCloud.catalog.deleteDataset(name));
 
         });
 
         it('should allow create/delete of import datasets', () => {
-            const kind = catalogModels.MetricDatasetKind.Metric;
+            const kind = catalog.MetricDatasetKind.Metric;
             const metricDS = `metric1_${Date.now()}`;
             const importDS = `import1_${Date.now()}`;
             const metricModule = `metmodule${Date.now()}`;
@@ -113,19 +113,19 @@ describe('catalog tests', () => {
             return splunkCloud.catalog.createDataset({
                 kind, name: metricDS, module: metricModule, disabled: false
             }).then(res => {
-                const ds = res as catalogModels.Dataset;
+                const ds = res as catalog.Dataset;
                 assert.equal(ds.name, metricDS);
                 assert.equal(ds.kind, kind);
 
                 return splunkCloud.catalog.createDataset({
-                    kind: catalogModels.ImportDatasetKind.Import,
+                    kind: catalog.ImportDatasetKind.Import,
                     name: importDS,
                     module: importModule,
                     sourceName: metricDS,
                     sourceModule: metricModule
                 });
             }).then(res => {
-                const ds = res as catalogModels.Dataset;
+                const ds = res as catalog.Dataset;
                 assert.equal(ds.name, importDS);
                 assert.equal(ds.module, importModule);
                 assert.notEqual(ds.module, metricModule);
@@ -152,7 +152,7 @@ describe('catalog tests', () => {
                     return splunkCloud.catalog.createDatasetImportById(ds!.id, { name: ds.name, module: ds2!.module });
                 }).then(importDS => {
                     assert.isNotNull(importDS);
-                    assert.equal(importDS.kind, catalogModels.ImportDatasetKind.Import);
+                    assert.equal(importDS.kind, catalog.ImportDatasetKind.Import);
                     assert.equal(importDS.sourceModule, ds.module);
                     assert.equal(importDS.sourceName, ds.name);
                 }).then(() => splunkCloud.catalog.deleteDataset(`${importModule}.${dsName}`));
@@ -169,7 +169,7 @@ describe('catalog tests', () => {
                     return splunkCloud.catalog.createDatasetImport(ds!.id, { name: ds.name, module: ds2!.module });
                 }).then(importDS => {
                     assert.isNotNull(importDS);
-                    assert.equal(importDS.kind, catalogModels.ImportDatasetKind.Import);
+                    assert.equal(importDS.kind, catalog.ImportDatasetKind.Import);
                     assert.equal(importDS.sourceModule, ds.module);
                     assert.equal(importDS.sourceName, ds.name);
                 }).then(() => splunkCloud.catalog.deleteDataset(`${importModule}.${dsName}`));
@@ -180,7 +180,7 @@ describe('catalog tests', () => {
             const name = `kvds${Date.now()}`;
             return createKVCollectionDataset(name).then(kvds => {
                 assert.isNotNull(kvds);
-                assert.equal(kvds!.kind, catalogModels.KVCollectionDatasetKind.Kvcollection);
+                assert.equal(kvds!.kind, catalog.KVCollectionDatasetKind.Kvcollection);
             }).then(() => splunkCloud.catalog.deleteDataset(name));
         });
 
@@ -202,8 +202,8 @@ describe('catalog tests', () => {
                 return splunkCloud.catalog.updateDatasetById(inxds!.id, { disabled: true });
             }).then(newds => {
                 assert.isNotNull(newds);
-                assert.equal(newds.kind, catalogModels.IndexDatasetKind.Index);
-                const typedNewDS = newds as catalogModels.IndexDataset;
+                assert.equal(newds.kind, catalog.IndexDatasetKind.Index);
+                const typedNewDS = newds as catalog.IndexDataset;
                 assert.equal(typedNewDS.disabled, true);
             }).then(() => splunkCloud.catalog.deleteDataset(name));
         });
@@ -215,8 +215,8 @@ describe('catalog tests', () => {
                 return splunkCloud.catalog.updateDataset(`${inxds!.module}.${inxds!.name}`, { disabled: true });
             }).then(newds => {
                 assert.isNotNull(newds);
-                assert.equal(newds.kind, catalogModels.IndexDatasetKind.Index);
-                const typedNewDS = newds as catalogModels.IndexDataset;
+                assert.equal(newds.kind, catalog.IndexDatasetKind.Index);
+                const typedNewDS = newds as catalog.IndexDataset;
                 assert.equal(typedNewDS.disabled, true);
             }).then(() => splunkCloud.catalog.deleteDataset(name));
         });
@@ -236,7 +236,7 @@ describe('catalog tests', () => {
     describe('rules', () => {
         it('should allow creation, listing, deletion of rules', () => {
             const ruleName = `testrule${Date.now()}`;
-            let rule: catalogModels.Rule;
+            let rule: catalog.Rule;
             return createRule(ruleName).then(res => {
                 rule = res;
                 return splunkCloud.catalog.listRules();
@@ -256,9 +256,9 @@ describe('catalog tests', () => {
         const datasetName = `integfields${Date.now()}`;
         const integrationTestField1 = 'integ_test_field1';
         const integrationTestField2 = 'integ_test_field2';
-        let resultDatasetField1: catalogModels.Field;
-        let resultDatasetField2: catalogModels.Field;
-        let resultDataset: catalogModels.Dataset;
+        let resultDatasetField1: catalog.Field;
+        let resultDatasetField2: catalog.Field;
+        let resultDataset: catalog.Dataset;
 
         // Cleanup the dataset after we're done with fields
         after(() =>
@@ -270,19 +270,19 @@ describe('catalog tests', () => {
         it('should create a test dataset, its fields, list its fields and delete the test dataset', () => {
             return splunkCloud.catalog.createDataset({
                 name: datasetName,
-                kind: catalogModels.LookupDatasetKind.Lookup,
-                externalKind: catalogModels.LookupDatasetExternalKind.Kvcollection,
+                kind: catalog.LookupDatasetKind.Lookup,
+                externalKind: catalog.LookupDatasetExternalKind.Kvcollection,
                 externalName: 'test_externalName'
             }).then(res => {
                 resultDataset = res;
                 return splunkCloud.catalog.createFieldForDatasetById(resultDataset.id, {
                     name: integrationTestField1,
-                    datatype: catalogModels.FieldDataType.STRING,
-                    fieldtype: catalogModels.FieldType.DIMENSION,
-                    prevalence: catalogModels.FieldPrevalence.ALL
+                    datatype: catalog.FieldDataType.STRING,
+                    fieldtype: catalog.FieldType.DIMENSION,
+                    prevalence: catalog.FieldPrevalence.ALL
                 });
             }).then(res => {
-                resultDatasetField1 = res as catalogModels.Field;
+                resultDatasetField1 = res as catalog.Field;
                 return splunkCloud.catalog.getFieldByIdForDatasetById(resultDataset.id, resultDatasetField1.id as string);
             }).then((getResultDatasetField) => {
                 assert.equal(getResultDatasetField.name, integrationTestField1);
@@ -296,12 +296,12 @@ describe('catalog tests', () => {
             }).then(() => {
                 return splunkCloud.catalog.createFieldForDatasetById(resultDataset.id, {
                     name: integrationTestField2,
-                    datatype: catalogModels.FieldDataType.STRING,
-                    fieldtype: catalogModels.FieldType.DIMENSION,
-                    prevalence: catalogModels.FieldPrevalence.ALL
+                    datatype: catalog.FieldDataType.STRING,
+                    fieldtype: catalog.FieldType.DIMENSION,
+                    prevalence: catalog.FieldPrevalence.ALL
                 });
             }).then((res) => {
-                resultDatasetField2 = res as catalogModels.Field;
+                resultDatasetField2 = res as catalog.Field;
                 return splunkCloud.catalog.getFieldByIdForDatasetById(resultDataset.id, resultDatasetField2.id as string);
             }).then((getResultDatasetField) => {
                 assert.equal(getResultDatasetField.name, integrationTestField2);
@@ -337,15 +337,15 @@ describe('catalog tests', () => {
         before(() => {
             return splunkCloud.catalog.createDataset({
                 name: datasetName,
-                kind: catalogModels.LookupDatasetKind.Lookup,
-                externalKind: catalogModels.LookupDatasetExternalKind.Kvcollection,
+                kind: catalog.LookupDatasetKind.Lookup,
+                externalKind: catalog.LookupDatasetExternalKind.Kvcollection,
                 externalName: 'test_externalName'
             }).then(dataset => {
                 return splunkCloud.catalog.createFieldForDatasetById(dataset.id, {
                     name: fieldName,
-                    datatype: catalogModels.FieldDataType.STRING,
-                    fieldtype: catalogModels.FieldType.DIMENSION,
-                    prevalence: catalogModels.FieldPrevalence.ALL
+                    datatype: catalog.FieldDataType.STRING,
+                    fieldtype: catalog.FieldType.DIMENSION,
+                    prevalence: catalog.FieldPrevalence.ALL
                 });
             }).then(() => {
                 return splunkCloud.catalog.createRule({
@@ -372,14 +372,14 @@ describe('catalog tests', () => {
         it('should create/delete ALIAS rule actions', () => {
             return splunkCloud.catalog.createActionForRuleById(ruleId, {
                 alias: 'newalias',
-                kind: catalogModels.AliasActionKind.ALIAS,
+                kind: catalog.AliasActionKind.ALIAS,
                 field: fieldName
-            } as catalogModels.AliasAction).then(res => {
-                const act = res as catalogModels.AliasAction;
+            } as catalog.AliasAction).then(res => {
+                const act = res as catalog.AliasAction;
                 assert.equal(act.field, fieldName);
                 return splunkCloud.catalog.getActionByIdForRuleById(ruleId, act.id as string);
             }).then(res => {
-                const act = res as catalogModels.AliasAction;
+                const act = res as catalog.AliasAction;
                 assert.equal(act.field, fieldName);
                 return splunkCloud.catalog.deleteActionByIdForRuleById(ruleId, act.id);
             });
@@ -387,10 +387,10 @@ describe('catalog tests', () => {
 
         it('should create REGEX rule actions', () => {
             const regex = {
-                pattern: 'mypattern', kind: catalogModels.RegexActionKind.REGEX, field: fieldName, limit: 5,
+                pattern: 'mypattern', kind: catalog.RegexActionKind.REGEX, field: fieldName, limit: 5,
             };
-            return splunkCloud.catalog.createActionForRuleById(ruleId, regex as catalogModels.RegexAction).then(res => {
-                const act = res as catalogModels.RegexAction;
+            return splunkCloud.catalog.createActionForRuleById(ruleId, regex as catalog.RegexAction).then(res => {
+                const act = res as catalog.RegexAction;
                 assert.equal(act.pattern, regex.pattern);
                 assert.equal(act.limit, regex.limit);
                 return splunkCloud.catalog.deleteActionByIdForRule(ruleScope, act.id);
@@ -400,10 +400,10 @@ describe('catalog tests', () => {
 
         it('should create EVAL rule actions', () => {
             const evalAction = {
-                expression: 'myexpr', kind: catalogModels.EvalActionKind.EVAL, field: fieldName
+                expression: 'myexpr', kind: catalog.EvalActionKind.EVAL, field: fieldName
             };
-            return splunkCloud.catalog.createActionForRule(ruleScope, evalAction as catalogModels.EvalAction).then(res => {
-                const act = res as catalogModels.EvalAction;
+            return splunkCloud.catalog.createActionForRule(ruleScope, evalAction as catalog.EvalAction).then(res => {
+                const act = res as catalog.EvalAction;
                 assert.equal(act.expression, evalAction.expression);
                 return splunkCloud.catalog.deleteActionByIdForRuleById(ruleId, act.id);
             });
@@ -411,10 +411,10 @@ describe('catalog tests', () => {
 
         it('should create AUTOKV rule actions', () => {
             const autokvAction = {
-                mode: 'auto', kind: catalogModels.AutoKVActionKind.AUTOKV
+                mode: 'auto', kind: catalog.AutoKVActionKind.AUTOKV
             };
-            return splunkCloud.catalog.createActionForRuleById(ruleId, autokvAction as catalogModels.AutoKVAction).then(res => {
-                const act = res as catalogModels.AutoKVAction;
+            return splunkCloud.catalog.createActionForRuleById(ruleId, autokvAction as catalog.AutoKVAction).then(res => {
+                const act = res as catalog.AutoKVAction;
                 assert.equal(act.mode, autokvAction.mode);
                 return splunkCloud.catalog.deleteActionByIdForRule(ruleScope, act.id);
             });
@@ -422,10 +422,10 @@ describe('catalog tests', () => {
 
         it('should create LOOKUP rule actions', () => {
             const lookup = {
-                expression: 'lookupexpr', kind: catalogModels.LookupActionKind.LOOKUP
+                expression: 'lookupexpr', kind: catalog.LookupActionKind.LOOKUP
             };
-            return splunkCloud.catalog.createActionForRuleById(ruleId, lookup as catalogModels.LookupAction).then(res => {
-                const act = res as catalogModels.LookupAction;
+            return splunkCloud.catalog.createActionForRuleById(ruleId, lookup as catalog.LookupAction).then(res => {
+                const act = res as catalog.LookupAction;
                 assert.equal(act.expression, lookup.expression);
                 return splunkCloud.catalog.deleteActionByIdForRule(ruleScope, act.id);
             });
@@ -438,7 +438,7 @@ describe('catalog tests', () => {
         let dashboardID = '';
 
         before(async () =>
-            splunkCloud.catalog.createDashboard({ name: dashboardName, module:'allmembers', definition: '{"title":"this is my test dashboard"}' } as catalogModels.DashboardPOST)
+            splunkCloud.catalog.createDashboard({ name: dashboardName, module:'allmembers', definition: '{"title":"this is my test dashboard"}' } as catalog.DashboardPOST)
             .then(res => {
                 dashboardID = res.id;
             })
@@ -475,8 +475,8 @@ describe('catalog tests', () => {
         before(() => {
             return splunkCloud.catalog.createDataset({
                 name: lookupDSName,
-                kind: catalogModels.LookupDatasetKind.Lookup,
-                externalKind: catalogModels.LookupDatasetExternalKind.Kvcollection,
+                kind: catalog.LookupDatasetKind.Lookup,
+                externalKind: catalog.LookupDatasetExternalKind.Kvcollection,
                 externalName: 'test_externalName',
                 filter: `kind=="lookup"`,
                 module: lookupMod,
@@ -520,13 +520,13 @@ describe('catalog tests', () => {
     });
 });
 
-export function createIndexDataset(name: string, module: string = ''): Promise<catalogModels.Dataset | null> {
+export function createIndexDataset(name: string, module: string = ''): Promise<catalog.Dataset | null> {
     return splunkCloud.catalog.createDataset({
         name,
         module,
-        kind: catalogModels.IndexDatasetKind.Index,
+        kind: catalog.IndexDatasetKind.Index,
         disabled: false,
-    }).then(response => response as catalogModels.Dataset)
+    }).then(response => response as catalog.Dataset)
     .catch(error => {
         console.log('An error was encountered while creating datasests');
         console.log(error);
@@ -534,11 +534,11 @@ export function createIndexDataset(name: string, module: string = ''): Promise<c
     });
 }
 
-export function createKVCollectionDataset(name: string, module: string = ''): Promise<catalogModels.Dataset | null> {
+export function createKVCollectionDataset(name: string, module: string = ''): Promise<catalog.Dataset | null> {
     return splunkCloud.catalog.createDataset({
         name,
         module,
-        kind: catalogModels.KVCollectionDatasetKind.Kvcollection,
+        kind: catalog.KVCollectionDatasetKind.Kvcollection,
     }).then(response => {
         return response;
     }).catch(error => {

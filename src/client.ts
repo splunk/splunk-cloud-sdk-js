@@ -493,7 +493,7 @@ export class ServiceClient {
         const options = {
             method,
             headers: this.buildHeaders(opts.headers),
-            body: typeof data !== 'string' ? JSON.stringify(data) : data,
+            body: JSON.stringify(data),
         };
         const request = new Request(url, options);
         return this.queueManager.add(queue, request).then(responseRequest => this.invokeHooks(...responseRequest));

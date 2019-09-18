@@ -17,7 +17,7 @@
 import { assert } from 'chai';
 import 'mocha';
 import sleep = require('sleep-promise');
-import { provisionerModels } from '../../provisioner';
+import * as provisioner from '../../services/provisioner';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
@@ -47,11 +47,11 @@ const provSplunk = new SplunkCloud({
 // Integration test for Provisioner endpoints
 describe('integration tests for Provisioner Endpoints', () => {
     const bannedName = 'splunk';
-    let testTenantInfo: provisionerModels.TenantInfo;
+    let testTenantInfo: provisioner.TenantInfo;
 
     it('should error on creating provisioner job', () => {
-        return splunk.provisioner.createProvisionJob({ apps: [], tenant: bannedName } as provisionerModels.CreateProvisionJobBody)
-            .then((provisionerJob: provisionerModels.ProvisionJobInfo) => {
+        return splunk.provisioner.createProvisionJob({ apps: [], tenant: bannedName } as provisioner.CreateProvisionJobBody)
+            .then((provisionerJob: provisioner.ProvisionJobInfo) => {
                 assert.fail('expected to fail because of banned word');
 
             }).catch(err => {
@@ -60,7 +60,7 @@ describe('integration tests for Provisioner Endpoints', () => {
     });
     it('should error on getting non-existing provisioner job', () => {
         return splunk.provisioner.getProvisionJob('-1' as string)
-            .then((provisionerJob: provisionerModels.ProvisionJobInfo) => {
+            .then((provisionerJob: provisioner.ProvisionJobInfo) => {
                 assert.fail('expected to fail because -1 job does not exist');
 
             }).catch(err => {
@@ -69,7 +69,7 @@ describe('integration tests for Provisioner Endpoints', () => {
     });
     it('should successfully return an empty list when listing provision job(s)', () => {
         return splunk.provisioner.listProvisionJobs()
-            .then((provisionerJobsList: provisionerModels.ProvisionJobs) => {
+            .then((provisionerJobsList: provisioner.ProvisionJobs) => {
                 assert.isNotNull(provisionerJobsList);
                 assert.isArray(provisionerJobsList);
                 assert.equal(provisionerJobsList.length, 0);
@@ -77,7 +77,7 @@ describe('integration tests for Provisioner Endpoints', () => {
     });
     it('should successfully return a tenant when getting an existing tenant', () => {
         return splunk.provisioner.getTenant(provTestTenantID as string)
-            .then((tenantInfo: provisionerModels.TenantInfo) => {
+            .then((tenantInfo: provisioner.TenantInfo) => {
                 assert.isNotNull(tenantInfo);
                 assert.equal(tenantInfo.name, provTestTenantID);
                 testTenantInfo = tenantInfo;
@@ -85,7 +85,7 @@ describe('integration tests for Provisioner Endpoints', () => {
     });
     it('should successfully return a list of tenant(s) when listing tenant(s)', () => {
         return splunk.provisioner.listTenants()
-            .then((tenants: provisionerModels.Tenants) => {
+            .then((tenants: provisioner.Tenants) => {
                 assert.isNotNull(tenants);
                 assert.isArray(tenants);
                 assert(tenants.length > 0);
@@ -102,7 +102,7 @@ describe('integration tests for Provisioner Endpoints', () => {
     });
     it('should successfully create an invite', () => {
         return provSplunk.provisioner.createInvite({ email: 'bounce@simulator.amazonses.com', groups: [], comment: 'SDK invite' })
-            .then((invite: provisionerModels.InviteInfo) => {
+            .then((invite: provisioner.InviteInfo) => {
                 assert.isNotNull(invite);
                 assert.equal(invite.tenant, provTestTenantID);
                 assert.equal(invite.email, 'bounce@simulator.amazonses.com');
@@ -111,7 +111,7 @@ describe('integration tests for Provisioner Endpoints', () => {
     });
     it('should successfully return the invite when getting an existing invite', () => {
         return provSplunk.provisioner.getInvite(testInviteID)
-            .then((invite: provisionerModels.InviteInfo) => {
+            .then((invite: provisioner.InviteInfo) => {
                 assert.isNotNull(invite);
                 assert.equal(invite.inviteID, testInviteID);
                 assert.equal(invite.tenant, provTestTenantID);
@@ -119,7 +119,7 @@ describe('integration tests for Provisioner Endpoints', () => {
     });
     it('should successfully return the invite when listing all existing invites', () => {
         return provSplunk.provisioner.listInvites()
-            .then((invitesList: provisionerModels.Invites) => {
+            .then((invitesList: provisioner.Invites) => {
                 assert.isNotNull(invitesList);
                 assert.isArray(invitesList);
                 assert.ok(invitesList.length);
@@ -134,8 +134,8 @@ describe('integration tests for Provisioner Endpoints', () => {
             });
     });
     it('should successfully resend the invite when updating an existing invite', () => {
-        return provSplunk.provisioner.updateInvite(testInviteID, { action: provisionerModels.UpdateInviteBodyActionEnum.Resend })
-            .then((invite: provisionerModels.InviteInfo) => {
+        return provSplunk.provisioner.updateInvite(testInviteID, { action: provisioner.UpdateInviteBodyActionEnum.Resend })
+            .then((invite: provisioner.InviteInfo) => {
                 assert.isNotNull(invite);
                 assert.equal(invite.inviteID, testInviteID);
             });

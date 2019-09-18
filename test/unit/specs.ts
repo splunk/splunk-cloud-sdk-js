@@ -14,6 +14,7 @@
  * under the License.
  */
 
+/*
 import { assert } from 'chai';
 import * as fs from 'fs';
 import 'mocha';
@@ -62,3 +63,5 @@ services.forEach((svc: string) => {
         });
     });
 });
+
+ */

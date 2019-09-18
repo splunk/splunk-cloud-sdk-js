@@ -15,8 +15,8 @@
  */
 
 import { assert } from 'chai';
-import { catalogModels } from '../../catalog';
-import { kvstoreModels } from '../../kvstore';
+import { Dataset } from '../../services/catalog';
+import { PingResponseStatusEnum } from '../../services/kvstore';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 import { createKVCollectionDataset } from './catalog_proxy';
@@ -29,7 +29,7 @@ let testKVCollectionName: string;
 
 
 describe('Integration tests for KVStore Endpoints', () => {
-    let testDataset : catalogModels.Dataset | null;
+    let testDataset : Dataset | null;
 
     before(() => {
         return createKVCollectionDataset(testNamespace, testCollection).then(ds => {
@@ -54,7 +54,7 @@ describe('Integration tests for KVStore Endpoints', () => {
         describe('Ping Endpoint', () => {
             it('Should return a "healthy" response', () => {
                 return splunkCloud.kvstore.ping().then(response => {
-                    assert.equal(response.status, kvstoreModels.PingResponseStatusEnum.Healthy);
+                    assert.equal(response.status, PingResponseStatusEnum.Healthy);
                 });
             });
         });

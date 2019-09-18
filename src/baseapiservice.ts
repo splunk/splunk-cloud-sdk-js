@@ -19,9 +19,11 @@ import { ServiceClient } from './client';
 /**
  * A base class for each of the API proxies.
  */
-export default class BaseApiService {
+export default abstract class BaseApiService {
+    public abstract getServiceCluster() : string;
+    public abstract getServicePrefix() : string;
     // TODO: Document when we have a final auth story
-    protected client: ServiceClient;
+    public client: ServiceClient;
     constructor(client: ServiceClient) {
         this.client = client;
     }

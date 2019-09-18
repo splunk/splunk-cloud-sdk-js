@@ -14,11 +14,21 @@
  * under the License.
  */
 
-import { ingestModels, IngestService } from './ingest';
-
 interface PromiseInternal<T> {
     resolve: (r: T) => void;
     reject: (err: Error) => void;
+}
+
+interface HTTPResponse {
+    code?: string;
+}
+
+interface IngestService {
+    postEvents(buf?: Event[]): Promise<HTTPResponse>;
+}
+
+interface Event {
+
 }
 
 /**
@@ -43,9 +53,9 @@ export class EventBatcher {
     // Ingest service has a kinesis internal limit, 500 records per PUT
     private readonly batchCount: number = DEFAULT_BATCH_COUNT;
     private readonly timeout: number;
-    private queue: ingestModels.Event[];
+    private queue: Event[];
     private timer: any;
-    private promiseQueue: Array<PromiseInternal<ingestModels.HTTPResponse>>;
+    private promiseQueue: Array<PromiseInternal<HTTPResponse>>;
 
     /**
      * @param ingest The proxy for the Ingest service API.
@@ -72,7 +82,7 @@ export class EventBatcher {
      *
      * @param event A single event.
      */
-    public add = (event: ingestModels.Event): Promise<ingestModels.HTTPResponse> => {
+    public add = (event: Event): Promise<HTTPResponse> => {
         this.queue.push(event);
         return this.run();
     }
@@ -102,7 +112,7 @@ export class EventBatcher {
      * Cleans up the events and timer.
      * @return A promise to be completed when the events are accepted by the service.
      */
-    public flush = (): Promise<ingestModels.HTTPResponse> => {
+    public flush = (): Promise<HTTPResponse> => {
         this.resetTimer();
         const data = this.queue;
         this.queue = [];
@@ -127,24 +137,23 @@ export class EventBatcher {
      *
      * @return `null` if the event has not yet been sent.
      */
-    private run = (): Promise<ingestModels.HTTPResponse> => {
+    private run = (): Promise<HTTPResponse> => {
         const maxCountReached = (this.queue.length >= this.batchCount);
         const eventByteSize = JSON.stringify(this.queue).length;
 
         if (maxCountReached || eventByteSize >= this.batchSize) {
             return this.flush();
         }
-        const promise = new Promise<ingestModels.HTTPResponse>((resolve, reject) => this.promiseQueue.push({
+        return new Promise<HTTPResponse>((resolve, reject) => this.promiseQueue.push({
             resolve,
             reject
         }));
-        return promise;
     }
 
     /**
      * Performs a flush operation if the queue is not empty.
      */
-    public stop = (): Promise<ingestModels.HTTPResponse|{}> => {
+    public stop = (): Promise<HTTPResponse|{}> => {
         this.stopTimer();
         if (this.queue !== undefined && this.queue.length > 0) {
             return this.flush();

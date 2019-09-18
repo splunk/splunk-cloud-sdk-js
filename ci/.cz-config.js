@@ -44,6 +44,7 @@ module.exports = {
         { name: 'appreg' },
         { name: 'auth' },
         { name: 'catalog' },
+        { name: 'collect' },
         { name: 'core' },
         { name: 'examples' },
         { name: 'forwarders' },

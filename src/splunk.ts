@@ -14,18 +14,19 @@
  * under the License.
  */
 
-import { ActionService } from './action';
-import { AppRegistryService } from './app-registry';
-import { CatalogService } from './catalog';
 import { ServiceClient, ServiceClientArgs } from './client';
-import { ForwardersService } from './forwarders';
-import { IdentityService } from './identity';
-import { IngestService } from './ingest';
-import { KVStoreService } from './kvstore';
-import { MLService } from './ml';
-import { ProvisionerService } from './provisioner';
-import { SearchService } from './search';
-import { StreamsService } from './streams';
+import { ActionService } from './services/action';
+import { AppRegistryService } from './services/app-registry';
+import { CatalogService } from './services/catalog';
+import { CollectService } from './services/collect';
+import { ForwardersService } from './services/forwarders';
+import { IdentityService } from './services/identity';
+import { IngestService } from './services/ingest';
+import { KVStoreService } from './services/kvstore';
+import { MLService } from './services/ml';
+import { ProvisionerService } from './services/provisioner';
+import { SearchService } from './services/search';
+import { StreamsService } from './services/streams';
 
 /**
  * This class is a Splunk Cloud client.
@@ -39,6 +40,10 @@ export class SplunkCloud {
      * Proxies for the Catalog service APIs.
      */
     public catalog: CatalogService;
+    /**
+     * Proxies for the Collect service APIs.
+     */
+    public collect: CollectService;
     /**
      * Proxies for the Identity service APIs.
      */
@@ -87,6 +92,7 @@ export class SplunkCloud {
         this.client = new ServiceClient(args);
         this.search = new SearchService(this.client);
         this.catalog = new CatalogService(this.client);
+        this.collect = new CollectService(this.client);
         this.identity = new IdentityService(this.client);
         this.ingest = new IngestService(this.client);
         this.kvstore = new KVStoreService(this.client);

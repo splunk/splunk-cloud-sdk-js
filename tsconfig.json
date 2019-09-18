@@ -18,7 +18,8 @@
     // "noUnusedLocals": true,
     "strict": true,
     "target": "es3",
-    "types": []
+    "types": [],
+    "resolveJsonModule": true
   },
   "include": [
     "src"

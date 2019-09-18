@@ -19,13 +19,28 @@ import 'mocha';
 import BaseApiService from '../../src/baseapiservice';
 import { ServiceClient } from '../../src/client';
 
+class TestApiService extends BaseApiService {
+    constructor(service: ServiceClient) {
+        super(service);
+    }
+
+    public getServiceCluster(): string {
+        return 'cluster';
+    }
+
+    public getServicePrefix(): string {
+        return 'prefix';
+    }
+
+}
+
 describe('Test Tagged Template Literal', () => {
     it('should return a string with correct value', () => {
         const testClient = new ServiceClient({
             tokenSource: 'abc',
             defaultTenant: 'tenant'
         });
-        const testService = new BaseApiService(testClient);
+        const testService = new TestApiService(testClient);
         const mapping = {
             my_name: 'myName',
         };
@@ -51,7 +66,7 @@ describe('Test Tagged Template Literal', () => {
         const mapping = {
             myName: 'myName',
         };
-        const testService = new BaseApiService(testClient);
+        const testService = new TestApiService(testClient);
         try {
             testService.template`this is ${'my_name'}`({});
             assert.fail();
