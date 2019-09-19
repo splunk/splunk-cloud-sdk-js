@@ -453,6 +453,12 @@ describe('catalog tests', () => {
                 .catch(err => console.log(`Error cleaning dataset for dashboards: ${err}`))
         );
 
+        it('should return an httpStatusCode when dashboard not found', () => splunkCloud.catalog.getDashboardById('404040404040404040404040').then(dashboards => {
+            assert.fail(true, false, 'getDashboardById should fail with 404 response code');
+        }).catch((e) => {
+            assert.equal(e.httpStatusCode, 404);
+        }));
+
         it('should return dashboards', () => splunkCloud.catalog.listDashboards().then(dashboards => {
             assert.isAtLeast(dashboards.length, 1);
         }));

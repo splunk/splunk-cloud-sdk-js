@@ -250,9 +250,14 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
         let err: Error;
         try {
             const json = JSON.parse(text);
-
             if (!json.message) {
-                err = new SplunkError(`Malformed error message (no message) for endpoint: ${response.url}. Message: ${text}`);
+                err = new SplunkError({
+                    message: `Malformed error message (no message) for endpoint: ${response.url}.`,
+                    httpStatusCode: response.status,
+                    details: {
+                        response: text
+                    }
+                });
             } else {
                 err = new SplunkError({
                     message: json.message,
@@ -263,8 +268,13 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
                 });
             }
         } catch (ex) {
-            const message = `${response.statusText} - unable to process response`;
-            err = new SplunkError({ message, httpStatusCode: response.status, details: { response: text } });
+            err = new SplunkError({
+                message: `${response.statusText} - unable to process response`,
+                httpStatusCode: response.status,
+                details: {
+                    response: text
+                }
+            });
         }
         throw err;
     });
