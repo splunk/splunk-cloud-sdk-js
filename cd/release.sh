@@ -45,7 +45,7 @@ then
     print_header_line
     # This also creates a tag for the version
     echo "Bumping version, making CHANGELOG.md updates, and committing it ..."
-    yarn release --prerelease beta
+    yarn release
 
     print_header_line
     echo "Generating the latest docs ..."
@@ -72,8 +72,6 @@ echo " - Make the tag 'v$NEW_VERSION'"
 echo " - Make the target 'master'"
 echo " - Make the title 'Release v$NEW_VERSION'"
 echo " - Make sure the release includes the change notes in the write section"
-echo " - Make sure the release is marked set as a 'pre-release'"
+echo "Please verify that the release was pushed to public npm"
 echo "Please create a pull request from 'master' targeting 'develop'"
 echo "Please inform relevant parties of the release."
-echo "Deliver the documentation in \"build\/cloud-sdk-$NEW_VERSION.tgz\" to the developer portal team"
-echo "Push the created build artifact to artifactory"

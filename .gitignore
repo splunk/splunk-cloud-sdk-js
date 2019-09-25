@@ -10,7 +10,18 @@ models/**/**
 !/.eslintrc.js
 /service_extensions/
 /services/
-
+/action/
+/app-registry/
+/catalog/
+/collect/
+/forwarders/
+/identity/
+/ingest/
+/kvstore/
+/ml/
+/provisioner/
+/search/
+/streams/
 
 # Hide compiled test folders, these appear to be webstorm generated
 /integration

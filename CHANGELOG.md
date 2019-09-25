@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v1.0.0-beta.4...v1.0.0) (2019-09-25)
+
+
+### Bug Fixes
+
+* **core:** always return the httpStatusCode for error responses even if missing fields ([6372c23](https://github.com/splunk/splunk-cloud-sdk-js/commits/6372c23))
+
+
+### Features
+* add support for multiple service versions ([d9c726d](https://github.com/splunk/splunk-cloud-sdk-js/commits/d9c726d))
+* temporary import stubs to keep from breaking clients ([70230b0](https://github.com/splunk/splunk-cloud-sdk-js/commits/70230b0))
+* update service bindings ([e7505e7](https://github.com/splunk/splunk-cloud-sdk-js/commits/e7505e7))
+* **examples:** add new example for tenant setup ([8e6eedd](https://github.com/splunk/splunk-cloud-sdk-js/commits/8e6eedd))
+
+
+
 <a name="1.0.0-beta.4"></a>
 # [1.0.0-beta.4](https://github.com/splunk/splunk-cloud-sdk-js/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2019-09-12)
 
