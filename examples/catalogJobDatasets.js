@@ -95,7 +95,7 @@ async function main() {
         const job = await splunk.search.createJob({ query: `${query}` });
         const jobID = job.sid;
         console.log(`Created job with sid: ${jobID}`);
-        await splunk.search.waitForJob(jobID);
+        await splunk.search.waitForJob(job);
         const results = await splunk.search.listResults(jobID);
 
         // ***** STEP 4: List Job Datasets using Catalog

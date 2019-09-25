@@ -25,10 +25,6 @@ const { SplunkCloud } = require('../splunk');
 
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
-function exitOnFailure() {
-    process.exit(1);
-}
-
 // define the main workflow
 async function main() {
     //assuming index main pre-exists
@@ -98,36 +94,29 @@ async function main() {
     // ***** STEP 4: Verify the view dataset
     // ***** DESCRIPTION: Execute the view using Search Service and ensure there is one expected result.
 
-    const query = `|from ${viewName}`;
+    const query = `| from ${viewName}`;
     console.log(`Executing the view : '${query}'`);
     const expectedResults = 1;
-
-    splunk.search
-        .createJob({ query: `| from ${viewName}` })
-        .then(job => {
-            console.log(`Created sid: ${job.sid}`);
-            return splunk.search.waitForJob(job.sid);
-        })
-        .then(job => {
-            console.log(`Getting results`);
-            return splunk.search.listResults(job.sid);
-        })
-        .then(resultsResponse => {
-            const success = resultsResponse && resultsResponse.results.length === expectedResults;
-            console.log(`Search results received : ${success}`);
-            if (!success) {
-                exitOnFailure('Results did not match expected after executing the View');
-            }
-        })
-        .then(() => {
-            // Clean up view dataset
-            console.log(`Deleting view ${viewDatasetResponse.id}`);
-            return splunk.catalog.deleteDataset(viewDatasetResponse.id);
-        })
-        .catch(err => {
-            console.log(error);
-            exitOnFailure();
-        });
+    let exitStatus = 0;
+    try {
+        let job = await splunk.search.createJob({ query: `| from ${viewName}` });
+        console.log(`Created sid: ${job.sid}`);
+        job = await splunk.search.waitForJob(job);
+        console.log(`Getting results`);
+        const resultsResponse = await splunk.search.listResults(job.sid);
+        const success = resultsResponse && resultsResponse.results.length === expectedResults;
+        console.log(`Search results received : ${success}`);
+        if (!success) {
+            throw new Error('Results did not match expected after executing the View');
+        }
+    } catch(err) {
+        exitStatus = 1;
+    } finally {
+        // Clean up view dataset
+        console.log(`Deleting view ${viewDatasetResponse.id}`);
+        await splunk.catalog.deleteDataset(viewDatasetResponse.id);
+        process.exit(exitStatus);
+    }
 }
 
 // run the workflow

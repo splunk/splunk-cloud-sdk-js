@@ -102,7 +102,7 @@ async function main() {
                 extractAllFields: true,
                 module: ''
             });
-            await splunk.search.waitForJob(jobObj.sid).catch(err => {throw err;});
+            await splunk.search.waitForJob(jobObj).catch(err => {throw err;});
             let results = await splunk.search.listResults(jobObj.sid, { count: 0, offset: 0 }).catch(err => {throw err;});
             if (results.fields) {
                 results.fields.forEach(field => {

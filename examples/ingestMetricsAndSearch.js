@@ -124,7 +124,7 @@ async function searchResults(splunk, start, timeout, query, expected) {
         .createJob({ query: query })
         .then(job => {
             console.log(`Created sid: ${job.sid}`);
-            return splunk.search.waitForJob(job.sid);
+            return splunk.search.waitForJob(job);
         })
         .then(searchObj => {
             console.log(`Done waiting for job, calling listResults on ${searchObj.sid} ...`);

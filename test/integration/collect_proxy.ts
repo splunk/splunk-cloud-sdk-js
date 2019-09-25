@@ -16,18 +16,8 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import {
-    ActionKind,
-    ActionResult, ActionTriggerResponse,
-    EmailAction,
-    RawJSONPayload,
-    TriggerEvent,
-    TriggerEventKind, WebhookAction
-} from '../../services/action';
 import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
-
-const tenantID = config.stagingTenant;
 
 const splunkCloud = new SplunkCloud({
     urls: {
@@ -35,11 +25,11 @@ const splunkCloud = new SplunkCloud({
         app: config.stagingAppsHost,
     },
     tokenSource: config.stagingAuthToken,
-    defaultTenant: tenantID,
+    defaultTenant: config.stagingTenant,
 });
 
 describe('integration tests using collect service', () => {
-    it('should create action', () =>
+    it('should list collect jobs', () =>
         splunkCloud.collect.listJobs().then(response => {
             if (response.data !== undefined) {
                 assert.isTrue(response.data.length >= 0);

@@ -110,7 +110,7 @@ async function main() {
             .createJob({ query: `| from ${importModule}.${dslist[0].name}`, module: importModule })
             .then(job => {
                 console.log(`Created sid: ${job.sid}`);
-                return splunk.search.waitForJob(job.sid);
+                return splunk.search.waitForJob(job);
             })
             .then(job => {
                 console.log(`Getting results`);
