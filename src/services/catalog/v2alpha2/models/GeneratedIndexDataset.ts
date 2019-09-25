@@ -119,11 +119,46 @@ export interface IndexDataset {
     description?: string;
 
     /**
+     * The timestamp, in seconds, of the earliest event. The timestamp is in UNIX time.
+     * @type {string}
+     * @memberof IndexDataset
+     */
+    earliestEventTime?: string;
+
+    /**
+     * The earliest index time for any of the events in this index.
+     * @type {string}
+     * @memberof IndexDataset
+     */
+    earliestIngestTime?: string;
+
+    /**
      * The frozenTimePeriodInSecs to use for the index
      * @type {number}
      * @memberof IndexDataset
      */
     frozenTimePeriodInSecs?: number;
+
+    /**
+     * The timestamp, in seconds, of the latest event. The timestamp is in UNIX time.
+     * @type {string}
+     * @memberof IndexDataset
+     */
+    latestEventTime?: string;
+
+    /**
+     * The latest index time for any of the events in this index.
+     * @type {string}
+     * @memberof IndexDataset
+     */
+    latestIngestTime?: string;
+
+    /**
+     * The latest time that the index metadata was refreshed.
+     * @type {string}
+     * @memberof IndexDataset
+     */
+    latestMetadataUpdateTime?: string;
 
     /**
      * Summary of the dataset's purpose.
@@ -138,6 +173,20 @@ export interface IndexDataset {
      * @memberof IndexDataset
      */
     title?: string;
+
+    /**
+     * The number of events in the index.
+     * @type {number}
+     * @memberof IndexDataset
+     */
+    totalEventCount?: number;
+
+    /**
+     * The raw size, in bytes, of the uncompressed data in the indexers.
+     * @type {number}
+     * @memberof IndexDataset
+     */
+    totalSize?: number;
 
     /**
      * The catalog version.

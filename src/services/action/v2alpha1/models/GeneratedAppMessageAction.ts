@@ -31,48 +31,97 @@ import {
 /**
  *
  * @export
- * @interface ActionImmutable
+ * @interface AppMessageAction
  */
-export interface ActionImmutable {
+export interface AppMessageAction {
     /**
      * 
      * @type {ActionKind}
-     * @memberof ActionImmutable
+     * @memberof AppMessageAction
      */
     kind: ActionKind;
 
     /**
      * The name of the action, as one or more identifier strings separated by periods. Each identifier string consists of lowercase letters, digits, and underscores, and cannot start with a digit.
      * @type {string}
-     * @memberof ActionImmutable
+     * @memberof AppMessageAction
      */
     name: string;
 
     /**
      * The date and time this action template was created (ISO-8601 date/time with zone).
      * @type {string}
-     * @memberof ActionImmutable
+     * @memberof AppMessageAction
      */
     readonly createdAt?: string;
 
     /**
      * The principal that created this action template.
      * @type {string}
-     * @memberof ActionImmutable
+     * @memberof AppMessageAction
      */
     readonly createdBy?: string;
 
     /**
+     * Unix epoch datetime stamp in UTC indicating when the message should expire.
+     * @type {number}
+     * @memberof AppMessageAction
+     */
+    expirationTimeUTCEpoch?: number;
+
+    /**
+     * An array of tenant groups, whose members should receive the message when it's triggered.
+     * @type {Array<string>}
+     * @memberof AppMessageAction
+     */
+    groups?: Array<string>;
+
+    /**
+     * The icon URL to be displayed along with the message.
+     * @type {string}
+     * @memberof AppMessageAction
+     */
+    iconURL?: string;
+
+    /**
+     * Call to action link for this message.
+     * @type {string}
+     * @memberof AppMessageAction
+     */
+    link?: string;
+
+    /**
+     * An array of tenant member names that should receive the message when it's triggered.
+     * @type {Array<string>}
+     * @memberof AppMessageAction
+     */
+    members?: Array<string>;
+
+    /**
+     * The main message that user needs to receive.
+     * @type {string}
+     * @memberof AppMessageAction
+     */
+    message?: string;
+
+    /**
+     * The title to be displayed for the message.
+     * @type {string}
+     * @memberof AppMessageAction
+     */
+    title?: string;
+
+    /**
      * The date and time this action template was updated (ISO-8601 date/time with zone).
      * @type {string}
-     * @memberof ActionImmutable
+     * @memberof AppMessageAction
      */
     readonly updatedAt?: string;
 
     /**
      * The principal that updated this action template.
      * @type {string}
-     * @memberof ActionImmutable
+     * @memberof AppMessageAction
      */
     readonly updatedBy?: string;
 

@@ -119,11 +119,46 @@ export interface MetricDataset {
     description?: string;
 
     /**
+     * The timestamp, in seconds, of the earliest measure. The timestamp is in UNIX time.
+     * @type {string}
+     * @memberof MetricDataset
+     */
+    earliestEventTime?: string;
+
+    /**
+     * The earliest index time for any of the measures in this index.
+     * @type {string}
+     * @memberof MetricDataset
+     */
+    earliestIngestTime?: string;
+
+    /**
      * The frozenTimePeriodInSecs to use for the index
      * @type {number}
      * @memberof MetricDataset
      */
     frozenTimePeriodInSecs?: number;
+
+    /**
+     * The timestamp, in seconds, of the latest measure. The timestamp is in UNIX time.
+     * @type {string}
+     * @memberof MetricDataset
+     */
+    latestEventTime?: string;
+
+    /**
+     * The earliest index time for any of the measures in this index.
+     * @type {string}
+     * @memberof MetricDataset
+     */
+    latestIngestTime?: string;
+
+    /**
+     * The latest time that the metric index metadata was refreshed.
+     * @type {string}
+     * @memberof MetricDataset
+     */
+    latestMetadataUpdateTime?: string;
 
     /**
      * Summary of the dataset's purpose.
@@ -138,6 +173,20 @@ export interface MetricDataset {
      * @memberof MetricDataset
      */
     title?: string;
+
+    /**
+     * THe number of measures in the metric index.
+     * @type {number}
+     * @memberof MetricDataset
+     */
+    totalEventCount?: number;
+
+    /**
+     * For metrics indexes, the totalSize is set to 0.
+     * @type {number}
+     * @memberof MetricDataset
+     */
+    totalSize?: number;
 
     /**
      * The catalog version.

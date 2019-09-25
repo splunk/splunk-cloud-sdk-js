@@ -929,6 +929,7 @@ components:
     IndexDataset:
       allOf:
       - $ref: '#/components/schemas/IndexDatasetProperties'
+      - $ref: '#/components/schemas/IndexDatasetReadOnlyProperties'
       - $ref: '#/components/schemas/MetadataProperties'
       - $ref: '#/components/schemas/DatasetCommon'
       description: A complete index dataset as rendered in POST, PATCH, and GET responses.
@@ -970,6 +971,36 @@ components:
           type: integer
         kind:
           $ref: '#/components/schemas/IndexDatasetKind'
+      type: object
+    IndexDatasetReadOnlyProperties:
+      description: Properties of index datasets which can only be read through the
+        API.
+      properties:
+        earliestEventTime:
+          description: The timestamp, in seconds, of the earliest event. The timestamp
+            is in UNIX time.
+          type: string
+        earliestIngestTime:
+          description: The earliest index time for any of the events in this index.
+          type: string
+        kind:
+          $ref: '#/components/schemas/IndexDatasetKind'
+        latestEventTime:
+          description: The timestamp, in seconds, of the latest event. The timestamp
+            is in UNIX time.
+          type: string
+        latestIngestTime:
+          description: The latest index time for any of the events in this index.
+          type: string
+        latestMetadataUpdateTime:
+          description: The latest time that the index metadata was refreshed.
+          type: string
+        totalEventCount:
+          description: The number of events in the index.
+          type: integer
+        totalSize:
+          description: The raw size, in bytes, of the uncompressed data in the indexers.
+          type: integer
       type: object
     JobDataset:
       allOf:
@@ -1278,6 +1309,7 @@ components:
     MetricDataset:
       allOf:
       - $ref: '#/components/schemas/MetricDatasetProperties'
+      - $ref: '#/components/schemas/MetricDatasetReadOnlyProperties'
       - $ref: '#/components/schemas/MetadataProperties'
       - $ref: '#/components/schemas/DatasetCommon'
       description: A complete metric dataset as rendered in POST, PATCH, and GET responses.
@@ -1319,6 +1351,36 @@ components:
           type: integer
         kind:
           $ref: '#/components/schemas/MetricDatasetKind'
+      type: object
+    MetricDatasetReadOnlyProperties:
+      description: Properties of metric datasets which can only be read through the
+        API.
+      properties:
+        earliestEventTime:
+          description: The timestamp, in seconds, of the earliest measure. The timestamp
+            is in UNIX time.
+          type: string
+        earliestIngestTime:
+          description: The earliest index time for any of the measures in this index.
+          type: string
+        kind:
+          $ref: '#/components/schemas/MetricDatasetKind'
+        latestEventTime:
+          description: The timestamp, in seconds, of the latest measure. The timestamp
+            is in UNIX time.
+          type: string
+        latestIngestTime:
+          description: The earliest index time for any of the measures in this index.
+          type: string
+        latestMetadataUpdateTime:
+          description: The latest time that the metric index metadata was refreshed.
+          type: string
+        totalEventCount:
+          description: The number of measures in the index.
+          type: integer
+        totalSize:
+          description: For metrics indexes, the totalSize is set to 0.
+          type: integer
       type: object
     Module:
       description: The name of a module.
@@ -2811,6 +2873,13 @@ paths:
           items:
             type: string
           type: array
+      - description: The number of seconds beyond which we will refresh index metadata.
+        in: query
+        name: max-stale
+        required: false
+        schema:
+          minimum: 1
+          type: integer
       responses:
         "200":
           content:
@@ -2875,6 +2944,14 @@ paths:
     get:
       description: Return information about the dataset with the specified ID.
       operationId: getDatasetById
+      parameters:
+      - description: The number of seconds beyond which we will refresh index metadata.
+        in: query
+        name: max-stale
+        required: false
+        schema:
+          minimum: 1
+          type: integer
       responses:
         "200":
           content:
@@ -3233,6 +3310,14 @@ paths:
         module, the resource name format is datasetName. Otherwise, the resource name
         format is module.datasetName.
       operationId: getDataset
+      parameters:
+      - description: The number of seconds beyond which we will refresh index metadata.
+        in: query
+        name: max-stale
+        required: false
+        schema:
+          minimum: 1
+          type: integer
       responses:
         "200":
           content:
@@ -4646,4 +4731,4 @@ paths:
         "404":
           description: The workflow run was not found.
 
-# Retrieved from scp-openapi commit 0f6c9722dc210bd7b371ac205c23d66cb41d09bc path: catalog/v2alpha2/openapi.yaml
+# Retrieved from scp-openapi commit 3798709d56e91d34b34bffe27b054b28357bc3e5 path: catalog/v2alpha2/openapi.yaml

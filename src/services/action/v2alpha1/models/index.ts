@@ -2,6 +2,8 @@ export * from './GeneratedAction';
 export * from './GeneratedActionImmutable';
 export * from './GeneratedActionKind';
 export * from './GeneratedActionMutable';
+export * from './GeneratedAppMessageAction';
+export * from './GeneratedAppMessageActionMutable';
 export * from './GeneratedEmailAction';
 export * from './GeneratedEmailActionMutable';
 export * from './GeneratedPublicWebhookKey';

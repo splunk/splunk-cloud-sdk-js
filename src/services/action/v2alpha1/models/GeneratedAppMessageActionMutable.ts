@@ -24,57 +24,60 @@
  * Do not edit the class manually.
  */
 
-import {
-    ActionKind,
-} from './';
-
 /**
  *
  * @export
- * @interface ActionImmutable
+ * @interface AppMessageActionMutable
  */
-export interface ActionImmutable {
+export interface AppMessageActionMutable {
     /**
-     * 
-     * @type {ActionKind}
-     * @memberof ActionImmutable
+     * Unix epoch datetime stamp in UTC indicating when the message should expire.
+     * @type {number}
+     * @memberof AppMessageActionMutable
      */
-    kind: ActionKind;
+    expirationTimeUTCEpoch?: number;
 
     /**
-     * The name of the action, as one or more identifier strings separated by periods. Each identifier string consists of lowercase letters, digits, and underscores, and cannot start with a digit.
-     * @type {string}
-     * @memberof ActionImmutable
+     * An array of tenant groups, whose members should receive the message when it's triggered.
+     * @type {Array<string>}
+     * @memberof AppMessageActionMutable
      */
-    name: string;
+    groups?: Array<string>;
 
     /**
-     * The date and time this action template was created (ISO-8601 date/time with zone).
+     * The icon URL to be displayed along with the message.
      * @type {string}
-     * @memberof ActionImmutable
+     * @memberof AppMessageActionMutable
      */
-    readonly createdAt?: string;
+    iconURL?: string;
 
     /**
-     * The principal that created this action template.
+     * Call to action link for this message.
      * @type {string}
-     * @memberof ActionImmutable
+     * @memberof AppMessageActionMutable
      */
-    readonly createdBy?: string;
+    link?: string;
 
     /**
-     * The date and time this action template was updated (ISO-8601 date/time with zone).
-     * @type {string}
-     * @memberof ActionImmutable
+     * An array of tenant member names that should receive the message when it's triggered.
+     * @type {Array<string>}
+     * @memberof AppMessageActionMutable
      */
-    readonly updatedAt?: string;
+    members?: Array<string>;
 
     /**
-     * The principal that updated this action template.
+     * The main message that user needs to receive.
      * @type {string}
-     * @memberof ActionImmutable
+     * @memberof AppMessageActionMutable
      */
-    readonly updatedBy?: string;
+    message?: string;
+
+    /**
+     * The title to be displayed for the message.
+     * @type {string}
+     * @memberof AppMessageActionMutable
+     */
+    title?: string;
 
 }
 

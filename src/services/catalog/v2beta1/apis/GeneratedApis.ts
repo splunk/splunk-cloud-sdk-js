@@ -635,27 +635,31 @@ export class GeneratedCatalogService extends BaseApiService {
     /**
      * Return the dataset with the specified resource name. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
+     * @param args All other arguments.
+     * @param args.maxStale The number of seconds beyond which we will refresh index metadata.
      * @return Dataset
      */
-    public getDataset = (datasetresourcename: string): Promise<Dataset> => {
+    public getDataset = (datasetresourcename: string, args?: { maxStale?: number }): Promise<Dataset> => {
         const path_params = {
             datasetresourcename: datasetresourcename
         };
         const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Dataset);
     }
     /**
      * Return information about the dataset with the specified ID.
      * @param datasetid ID of a Dataset.
+     * @param args All other arguments.
+     * @param args.maxStale The number of seconds beyond which we will refresh index metadata.
      * @return Dataset
      */
-    public getDatasetById = (datasetid: string): Promise<Dataset> => {
+    public getDatasetById = (datasetid: string, args?: { maxStale?: number }): Promise<Dataset> => {
         const path_params = {
             datasetid: datasetid
         };
         const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Dataset);
     }
     /**
@@ -906,11 +910,12 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args All other arguments.
      * @param args.count The maximum number of results to return.
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
+     * @param args.maxStale The number of seconds beyond which we will refresh index metadata.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
      * @return Array<Dataset>
      */
-    public listDatasets = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string> }): Promise<Array<Dataset>> => {
+    public listDatasets = (args?: { count?: number, filter?: string, maxStale?: number, offset?: number, orderby?: Array<string> }): Promise<Array<Dataset>> => {
         const path = `/catalog/v2beta1/datasets`;
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<Dataset>);

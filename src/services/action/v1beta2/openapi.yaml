@@ -267,8 +267,6 @@ components:
           format: int32
           minimum: 1
           type: integer
-      required:
-      - kind
       type: object
     TriggerEventKind:
       default: trigger
@@ -308,7 +306,7 @@ info:
   description: |
     With the Splunk Cloud Action service, you can receive incoming trigger events and use pre-defined action templates to turn these events into meaningful actions.
   title: Action Service
-  version: v1beta2.9
+  version: v1beta2.10
 openapi: 3.0.0
 paths:
   /{tenant}/action/v1beta2/actions:
@@ -611,4 +609,4 @@ paths:
       - Webhook Keys
       x-auth-required: false
 
-# Retrieved from scp-openapi commit 0f6c9722dc210bd7b371ac205c23d66cb41d09bc path: action/v1beta2/openapi.yaml
+# Retrieved from scp-openapi commit 3798709d56e91d34b34bffe27b054b28357bc3e5 path: action/v1beta2/openapi.yaml
