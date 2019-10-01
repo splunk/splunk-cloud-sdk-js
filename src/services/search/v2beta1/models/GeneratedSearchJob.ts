@@ -170,6 +170,13 @@ export interface SearchJob {
     readonly resultsAvailable?: number;
 
     /**
+     * The number of the preview search results for the job with the specified search ID (SID)
+     * @type {number}
+     * @memberof SearchJob
+     */
+    readonly resultsPreviewAvailable?: number;
+
+    /**
      * The ID assigned to the search job.
      * @type {string}
      * @memberof SearchJob
