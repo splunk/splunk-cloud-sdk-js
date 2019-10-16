@@ -22,108 +22,102 @@ require('isomorphic-fetch');
 const { SplunkCloud } = require('../splunk');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
-function exitOnFailure() {
-    process.exit(1);
-}
+(async function () {
+    const DATE_NOW = Date.now();
+    const kvcollectionName = `kvcollection${DATE_NOW}`; // kvcollectionName should be unique
+    const lookupName = `lookup${DATE_NOW}`; // lookupName should be unique
 
-async function main() {
     // ***** STEP 1: Get Splunk Cloud client
+    // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authentication token.
     const splunk = new SplunkCloud({
-        urls: { api: SPLUNK_CLOUD_API_HOST, app: SPLUNK_CLOUD_APPS_HOST },
+        urls: {
+            api: SPLUNK_CLOUD_API_HOST,
+            app: SPLUNK_CLOUD_APPS_HOST
+        },
         tokenSource: BEARER_TOKEN,
         defaultTenant: TENANT_ID,
     });
 
     // ***** STEP 2: Create kvcollection
-    let kvcollectionName = `kvcollection${Date.now()}`; // kvcollectionName should be unique
-
-    let kvDataset = await splunk.catalog.createDataset({
+    const kvCollectionDataset = await splunk.catalog.createDataset({
         name: kvcollectionName,
         kind: 'kvcollection',
     });
-    console.log(kvDataset);
+    console.log(`Kvcollection dataset created. name='${kvCollectionDataset.name}'`);
 
     // ***** STEP 3: Create a lookup
-    let lookupName = `lookup${Date.now()}`; // lookupName should be unique
-    let lookupDataset = await splunk.catalog.createDataset({
+    const lookupDataset = await splunk.catalog.createDataset({
         name: lookupName,
         kind: 'lookup',
         externalKind: 'kvcollection',
         externalName: kvcollectionName,
     });
+    console.log(`Lookup dataset created. name='${lookupDataset.name}'`);
     console.log(lookupDataset);
 
-    // ***** STEP 4: Register the fields
-    await splunk.catalog.createFieldForDatasetById(lookupDataset.id, {
-        name: 'a',
-        datatype: 'NUMBER',
-        fieldtype: 'UNKNOWN',
-        prevalence: 'UNKNOWN',
-    });
-    console.log('createFieldForDatasetById a');
-    await splunk.catalog.createFieldForDatasetById(lookupDataset.id, {
-        name: 'b',
-        datatype: 'NUMBER',
-        fieldtype: 'UNKNOWN',
-        prevalence: 'UNKNOWN',
-    });
-    console.log('createFieldForDatasetById b');
-    await splunk.catalog.createFieldForDatasetById(lookupDataset.id, {
-        name: 'c',
-        datatype: 'NUMBER',
-        fieldtype: 'UNKNOWN',
-        prevalence: 'UNKNOWN',
-    });
-    console.log('createFieldForDatasetById c');
+    try {
+        // ***** STEP 4: Register the fields
+        const createFieldForDatasetResponseA = await splunk.catalog.createFieldForDatasetById(lookupDataset.id, {
+            name: 'a',
+            datatype: 'NUMBER',
+            fieldtype: 'UNKNOWN',
+            prevalence: 'UNKNOWN',
+        });
+        console.log(`Field created. name='${createFieldForDatasetResponseA.name}'`);
 
-    // ***** STEP 5: Insert records into the lookup
-    await splunk.kvstore.insertRecords(kvcollectionName, [
-        {
+        const createFieldForDatasetResponseB = await splunk.catalog.createFieldForDatasetById(lookupDataset.id, {
+            name: 'b',
+            datatype: 'NUMBER',
+            fieldtype: 'UNKNOWN',
+            prevalence: 'UNKNOWN',
+        });
+        console.log(`Field created. name='${createFieldForDatasetResponseB.name}'`);
+
+        const createFieldForDatasetResponseC = await splunk.catalog.createFieldForDatasetById(lookupDataset.id, {
+            name: 'c',
+            datatype: 'NUMBER',
+            fieldtype: 'UNKNOWN',
+            prevalence: 'UNKNOWN',
+        });
+        console.log(`Field created. name='${createFieldForDatasetResponseC.name}'`);
+
+        // ***** STEP 5: Insert records into the lookup
+        const kvObject1 = {
             a: '1',
             b: '2',
             c: '3',
-        },
-        {
+        };
+        const kvObject2 = {
             a: '4',
             b: '5',
             c: '6',
-        },
-    ]);
-    console.log(`inserting records into ${kvcollectionName}`);
+        };
+        await splunk.kvstore.insertRecords(kvcollectionName, [kvObject1, kvObject2]);
+        console.log(`KV records inserted into ${kvcollectionName}.`);
 
-    // ***** STEP 6: Search the kvcollection via the lookup
-    splunk.catalog
-        .getDataset(lookupName)
-        .then(dataset => {
-            console.log(`Found ${dataset.name}`);
+        // ***** STEP 6: Search the kvcollection via the lookup
+        const responseDataset = await splunk.catalog.getDataset(lookupName);
+        console.log(`Dataset retrieved. name='${responseDataset.name}'`);
 
-            splunk.search
-                .createJob({ query: `| from ${dataset.name}` })
-                .then(job => {
-                    console.log(`Created sid: ${job.sid}`);
-                    return splunk.search.waitForJob(job);
-                })
-                .then(job => {
-                    console.log(`Getting results`);
-                    return splunk.search.listResults(job.sid);
-                })
-                .then(results => {
-                    console.log(results);
-                })
-                .then(() => {
-                    // Clean up lookup dataset
-                    console.log(`Deleting lookup ${lookupDataset.id}`);
-                    splunk.catalog.deleteDatasetById(lookupDataset.id);
-                })
-                .then(() => {
-                    // Clean up kvcollection dataset
-                    console.log(`Deleting kvcollection ${kvDataset.id}`);
-                    splunk.catalog.deleteDatasetById(kvDataset.id);
-                });
-        })
-        .catch(err => {
-            console.log(err);
-            exitOnFailure();
-        });
-}
-main();
+        const job = await splunk.search.createJob({ query: `| from ${responseDataset.name}` });
+        console.log(`Created sid: ${job.sid}`);
+
+        await splunk.search.waitForJob(job);
+        const searchResults = await splunk.search.listResults(job.sid);
+        if (!searchResults || !searchResults.fields || searchResults.fields.length == 0) {
+            throw new Error('No search result fields returned.');
+        }
+        if (!searchResults || !searchResults.results || searchResults.results.length == 0) {
+            throw new Error('No search results returned.');
+        }
+
+        console.log('Search results returned successfully.');
+        console.log(searchResults);
+    } finally {
+        // ***** STEP 5: Cleanup - Delete all created data sets and kvstores.
+        // ***** DESCRIPTION: Ignoring exceptions on cleanup.
+        console.log('Cleaning up all created datasets.');
+        await splunk.catalog.deleteDatasetById(lookupDataset.id).catch(() => {});
+        await splunk.catalog.deleteDatasetById(kvCollectionDataset.id).catch(() => {});
+    }
+})().catch(error => console.error(error));

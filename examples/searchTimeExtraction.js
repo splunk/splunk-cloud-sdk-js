@@ -21,21 +21,9 @@ require('isomorphic-fetch');
 
 const { SplunkCloud } = require('../splunk');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
+const MAX_RETRIES = 10;
 
-function exitOnFailure(aliasName) {
-    console.log(`failed to find extracted field: ${aliasName}`);
-    process.exit(1);
-}
-
-function exitOnSuccess() {
-    process.exit(0);
-}
-
-function timeout(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function main() {
+(async function () {
     // ***** STEP 1: Get Splunk Cloud client
     const splunk = new SplunkCloud({
         urls: { api: SPLUNK_CLOUD_API_HOST, app: SPLUNK_CLOUD_APPS_HOST },
@@ -44,8 +32,8 @@ async function main() {
     });
 
     // ***** STEP 2: Create a rule
+    const rulename = `uid_${Date.now()}`; // ruleName should be unique
     const timeSec = Math.floor(Date.now() / 1000);
-    const ruleName = `uid_${Date.now()}`; // ruleName should be unique
     const sourcetype = `s_${timeSec}`;
     const fieldName = 'uid';
     const aliasName = `user_${timeSec}`;
@@ -54,69 +42,62 @@ async function main() {
         kind: 'ALIAS',
         field: fieldName,
     };
+
+    const rule = await splunk.catalog.createRule({
+        name: rulename,
+        module: '',
+        match: `sourcetype::${sourcetype}`,
+        actions: [alias],
+    });
+    console.log(`Rule created. '${rule.name}'`);
+    console.log(rule);
+
     try {
-        let rule = await splunk.catalog.createRule({
-            name: ruleName,
-            module: '',
-            match: `sourcetype::${sourcetype}`,
-            actions: [alias],
+        // ***** STEP 3: Ingest data
+        const testEvent = {
+            sourcetype: sourcetype,
+            body: {
+                uid: '123',
+                amount: '10',
+            },
+            attributes: {
+                index: 'main',
+            },
+        };
+
+        const response = await splunk.ingest.postEvents([testEvent]).catch(error => {
+            throw new Error(`Unable to find extracted field '${aliasName}'. message='${error.message}'`);
         });
-        console.log(`rule ${ruleName} created successfully`);
-        console.log(rule);
-    } catch (error) {
-        console.log(error);
-        exitOnFailure(aliasName);
-    }
-
-    // ***** STEP 3: Ingest data
-    const testEvent = {
-        sourcetype: sourcetype,
-        body: {
-            uid: '123',
-            amount: '10',
-        },
-        attributes: {
-            index: 'main',
-        },
-    };
-    try {
-        let response = await splunk.ingest.postEvents([testEvent]);
-        console.log('event ingested successfully');
+        console.log('Successfully ingested event.');
         console.log(response);
-    } catch (error) {
-        console.log(error);
-        exitOnFailure(aliasName);
-    }
 
-    // ***** STEP 4: Search and see if extracted fields are available
-    const maxRetries = 10;
-    let numTries = 0;
-    let found = false;
-    while (maxRetries > numTries && !found) {
-        numTries++;
-        console.log('wait 5s before retry search');
-        await timeout(5000);
-        try {
-            let jobObj = await splunk.search.createJob({
+        // ***** STEP 4: Search and see if extracted fields are available
+        let attempts = 0;
+        while (attempts++ <= MAX_RETRIES) {
+            console.log(`Waiting 5s before retrying search... Attempt: ${attempts}/${MAX_RETRIES}`);
+            await new Promise(resolve => setTimeout(resolve, 5000));
+
+            const searchJob = await splunk.search.createJob({
                 query: `| from main | search uid=${testEvent.body.uid} | fields '*'`,
                 extractAllFields: true,
                 module: ''
             });
-            await splunk.search.waitForJob(jobObj).catch(err => {throw err;});
-            let results = await splunk.search.listResults(jobObj.sid, { count: 0, offset: 0 }).catch(err => {throw err;});
-            if (results.fields) {
-                results.fields.forEach(field => {
-                    if (field.name === aliasName) {
-                        console.log(`extracted field: ${aliasName} found!`);
-                        found = true;
-                    }
-                });
+            console.log(`job created. sid='${searchJob.sid}'`);
+
+            await splunk.search.waitForJob(searchJob);
+            const searchResults = await splunk.search.listResults(searchJob.sid, { count: 0, offset: 0 });
+
+            // Evaluate whether field has been found.
+            if (searchResults && searchResults.fields && searchResults.fields.filter(field => field.name == aliasName).length > 0) {
+                console.log(`Successfully found extracted field '${aliasName}'`);
+                return;
             }
-        } catch (error) {
-            console.log(error);
-            break;
         }
+
+        throw new Error(`Unable to find extracted field '${aliasName}'`);
+    } finally {
+        await splunk.catalog.deleteRule(rulename).catch(() => {
+            // ignoring exceptions on cleanup.
+        });
     }
-    found ? exitOnSuccess() : exitOnFailure(aliasName);
-}
-main();
+})().catch(error => console.error(error));

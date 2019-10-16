@@ -18,79 +18,27 @@
 // different ways, then runs a search to verify the data was added.
 
 require('isomorphic-fetch');
-const sleep = require('sleep-promise');
 
 const { SplunkCloud } = require('../splunk');
-const tenantSetup = require('./tenantSetup');
+const { activatePipeline, cleanupPipeline, createIndex, createPipeline, searchResultsWithRetryTimeout } = require('./helpers/splunkCloudHelper');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
-// define the main workflow
-async function main() {
-    let pipelineId = null;
-    let indexId = null;
-    let exitCode = 0;
-
-    // Get a client of a tenant using an authentication token.
-    const splunk = new SplunkCloud({
-        urls: { api: SPLUNK_CLOUD_API_HOST, app: SPLUNK_CLOUD_APPS_HOST },
-        tokenSource: BEARER_TOKEN,
-        defaultTenant: TENANT_ID,
-    });
-
-    try {
-
-        // Define a new index in the Catalog so that we can send events to the new index.
-        // Includes a 90s sleep
-        const indexName = `jssdkindex${Date.now()}`;
-        const indexId = await tenantSetup.createIndex(splunk, indexName);
-
-        // Configure streams pipeline for the newly created index
-        // Includes a 30s sleep
-        const pipelineName = `pipeline${Date.now()}`;
-        const pipelineId = await tenantSetup.createPipeline(splunk, TENANT_ID, pipelineName, indexName);
-        await tenantSetup.activatePipeline(splunk, pipelineId);
-
-        // Get data in using the Ingest service:
-        // Send a single event, a batch of events, and raw events.
-        const timeSec = Math.floor(Date.now() / 1000);
-        const host = `h-${timeSec}`;
-        const source = `s-${timeSec}`;
-        console.log(`Posting events with host=${host}, source = ${source}`);
-        await sendDataViaIngest(splunk, indexName, host, source);
-
-        // Verify the data:
-        // Search the data to ensure the data was ingested and field extractions are present.
-        // Search for all 3 events that were sent using the Ingest service.
-        const timeout = 90 * 1000;
-        const query = `| from index:${indexName} where host="${host}" and source="${source}"`;
-        console.log(`Searching for events with query: '${query}'`);
-        const expectedResults = 3;
-        const results = await searchResults(splunk, Date.now(), timeout, query, expectedResults);
-        const success = results && results.length >= expectedResults;
-        if (!success) {
-            throw new Error('Search job did not return expected results');
-        }
-    } catch (err) {
-        console.error(err);
-        exitCode = 1;
-    } finally {
-        // Only cleanup in CI
-        if (process.env.CI) {
-            await tenantSetup.cleanup(splunk, pipelineId, indexId);
-        }
-        process.exit(exitCode);
-    }
-}
-
-// Run the workflow
-main();
-
+/**
+ * Sends a set of events via the ingest API.
+ * @param {SplunkCloud} splunk SplunkCloud client.
+ * @param {number} index Index.
+ * @param {string} host Host.
+ * @param {string} source Source.
+ */
 async function sendDataViaIngest(splunk, index, host, source) {
+    console.log(`Posting events with host=${host}, source = ${source}`);
     const event1 = {
         sourcetype: 'splunkd',
         source: source,
         host: host,
-        body: { body: `device_id=aa1 haha0 my new event ${host},${source}` },
+        body: {
+            body: `device_id=aa1 haha0 my new event ${host},${source}`
+        },
         attributes: {
             index: index,
         },
@@ -123,42 +71,61 @@ async function sendDataViaIngest(splunk, index, host, source) {
         console.log('Ingest of events succeeded with response:');
         console.log(response);
     } catch(err) {
-        console.error('Ingest of events failed with err:');
-        console.error(err);
-        process.exit(1);
+        throw new Error(`Ingest of events failed with err:\n${err}`);
     }
 }
 
-// Create a search job and fetch search results
-async function searchResults(splunk, start, timeout, query, expected) {
+// define the main workflow
+(async function () {
+    const DATE_NOW = Date.now();
+    let pipelineId = null;
+    let indexId = null;
+
+    // ***** STEP 1: Get Splunk Cloud client
+    // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authentication token.
+    const splunk = new SplunkCloud({
+        urls: {
+            api: SPLUNK_CLOUD_API_HOST,
+            app: SPLUNK_CLOUD_APPS_HOST
+        },
+        tokenSource: BEARER_TOKEN,
+        defaultTenant: TENANT_ID,
+    });
+
     try {
-        if (Date.now() - start > timeout) {
-            console.error(`TIMEOUT!!!! Search is taking more than ${timeout}ms. Terminate!`);
-            process.exit(1);
-        }
+        // ***** STEP 2: Create a dataset in the catalog and capture the index.
+        // ***** DESCRIPTION: The index is retained so that we can send events to the new index.
+        const indexName = `jssdkindex${DATE_NOW}`;
+        indexId = await createIndex(splunk, indexName);
 
-        // Sleep 5 seconds before retrying the search
-        await sleep(5000);
-        const job = await splunk.search.createJob({ query: query });
-        console.log(`Created search job with sid ${job.sid}, waiting for completion`);
-        await splunk.search.waitForJob(job);
+        // ***** STEP 3: Create a pipeline.
+        // ***** DESCRIPTION: Configures a streams pipeline for the newly created index.
+        const pipelineName = `pipeline${DATE_NOW}`;
+        pipelineId = await createPipeline(splunk, TENANT_ID, pipelineName, indexName);
+        await activatePipeline(splunk, pipelineId);
 
-        console.log(`Done waiting for job, calling listResults on ${job.sid} ...`);
-        const results = await splunk.search.listResults(job.sid);
-        const retNum = results.results.length;
-        console.log(`got ${retNum} results`);
-        if (retNum < expected) {
-            return await searchResults(splunk, start, timeout, query, expected);
-        } else if (retNum > expected) {
-            console.log(retNum);
-            console.log(`Found more events than expected for query ${query}`);
-            return results.results;
-        }
-        console.log(`Successfully found ${retNum} results for query ${query}, Search took ${Date.now() - start}ms to complete`);
-        return results.results;
-    } catch (err) {
-        console.error(err);
-        process.exit(1);
+        // ***** STEP 4: Push data to index using the Ingest service.
+        // ***** DESCRIPTION: Send events.
+        const timeSec = Math.floor(DATE_NOW / 1000);
+        const host = `h-${timeSec}`;
+        const source = `s-${timeSec}`;
+        await sendDataViaIngest(splunk, indexName, host, source);
+
+        // ***** STEP 5: Query for the ingested data by index, host and source.
+        // ***** DESCRIPTION: Data ingestion is not instantaneous. Perform periodic searches for a fixed amount of time.
+        await searchResultsWithRetryTimeout(
+            splunk,
+            `| from index:${indexName} where host="${host}" and source="${source}"`,
+            (result) => {
+                // ***** STEP 6: Verify queried results.
+                // ***** DESCRIPTION: Ensure that the event results are the ones we are looking for.
+                return result.length == 3 && result.filter(event => event.index == indexId && event.host == host && event.source == source).length == 3;
+            });
+    } finally {
+        // ***** STEP 7: Cleanup - Delete all created pipelines and datasets.
+        // ***** DESCRIPTION: Ignoring exceptions on cleanup.
+        await cleanupPipeline(splunk, pipelineId, indexId).catch(() => {
+            // ignoring exceptions on cleanup.
+        });
     }
-}
-
+})().catch(error => console.error(error));

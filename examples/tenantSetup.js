@@ -14,136 +14,50 @@
  * under the License.
  */
 
-const sleep = require('sleep-promise');
-
 require('isomorphic-fetch');
 const { SplunkCloud } = require('../splunk');
-
+const { activatePipeline, cleanupPipeline, createIndex, createPipeline } = require('./helpers/splunkCloudHelper');
+const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 // ***** TITLE: Tenant setup functions
 //
 // ***** DESCRIPTION: This example shows how to begin using Splunk Cloud Platform
 //                    by setting up a new tenant for ingest & search.
-async function main() {
-    const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
+(async function () {
+    const DATE_NOW = Date.now();
+    let pipelineId = null;
+    let indexId = null;
 
+    // ***** STEP 1: Get Splunk Cloud client
+    // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authentication token.
     const splunk = new SplunkCloud({
-        urls: { api: SPLUNK_CLOUD_API_HOST, app: SPLUNK_CLOUD_APPS_HOST },
+        urls: {
+            api: SPLUNK_CLOUD_API_HOST,
+            app: SPLUNK_CLOUD_APPS_HOST
+        },
         tokenSource: BEARER_TOKEN,
         defaultTenant: TENANT_ID,
     });
 
-    const indexName = `index${Date.now()}`;
-    await createIndex(splunk, indexName);
-    const pipelineName = `pipeline${Date.now()}`;
-    const pipelineId = await createPipeline(splunk, TENANT_ID, pipelineName, indexName);
-    await activatePipeline(splunk, pipelineId);
-
-    // Only cleanup in CI
-    if (process.env.CI) {
-        await cleanup(splunk, pipelineId, indexName);
-    }
-}
-// Only run this file as an example if invoked directly (intended for testing purposes)
-if (require.main === module) {
-    main();
-}
-
-/**
- * Creates a new index using the catalog service.
- *
- * @param client instance of an SDK client
- * @param indexName Name of the index to create
- * @return {Promise<string>}
- */
-async function createIndex(client, indexName) {
-    // Don't re-create the main index
-    if (indexName === 'main') {
-        return indexName;
-    }
     try {
-        const dataset = await client.catalog.createDataset({name: indexName, kind: 'index', module: '', disabled: false});
-        console.log('Waiting for 90s for index to be provisioned...');
-        await sleep(90 * 1000);
-        return dataset.name;
-    } catch(err) {
-        console.log(`Unexpected error while creating index.`, err);
-        process.exit(1);
+        // ***** STEP 2: Create a dataset in the catalog and capture the index.
+        // ***** DESCRIPTION: The index is retained so that we can send events to the new index.
+        const indexName = `index${DATE_NOW}`;
+        indexId = await createIndex(splunk, indexName);
+
+        // ***** STEP 3: Create a pipeline.
+        // ***** DESCRIPTION: Configures a streams pipeline for the newly created index.
+        const pipelineName = `pipeline${DATE_NOW}`;
+        pipelineId = await createPipeline(splunk, TENANT_ID, pipelineName, indexName);
+
+        // ***** STEP 4: Push data to index using the Ingest service.
+        // ***** DESCRIPTION: Send events.
+        await activatePipeline(splunk, pipelineId);
+    } finally {
+        // ***** STEP 5: Cleanup - Delete all created pipelines and datasets.
+        // ***** DESCRIPTION: Ignoring exceptions on cleanup.
+        await cleanupPipeline(splunk, pipelineId, indexId).catch(() => {
+            // ignoring exceptions on cleanup.
+        });
     }
-}
-
-/**
- * Creates a new pipeline for ingesting events using the streams service.
- *
- * @param client instance of an SDK client
- * @param tenant the tenant ID to configure this pipeline for
- * @param pipelineName name of the pipeline to create
- * @param indexName name of the index to target for this pipeline
- * @return {Promise<string>} name of the newly created pipeline
- */
-async function createPipeline(client, tenant, pipelineName, indexName) {
-    const dslRequest = {
-        dsl: `events = read-splunk-firehose(); write-index(events, literal(""), literal("${indexName}"));`,
-    };
-
-    try {
-        const uplPipeline = await client.streams.compileDSL(dslRequest);
-        const pipelineRequest = {
-            name: pipelineName,
-            createUserId: tenant,
-            data: uplPipeline,
-            description: `Basic pipeline for ingesting events to the ${indexName} index`,
-        };
-        const createdPipeline = await client.streams.createPipeline(pipelineRequest);
-
-        return createdPipeline.id;
-    } catch(err) {
-        console.log(`Unexpected error while creating a pipeline.`, err);
-        process.exit(1);
-    }
-}
-
-/**
- * Returns successfully once the pipeline has been activated, else the process will exit with status code 1.
- *
- * @param client instance of an SDK client
- * @param id The ID of the pipeline to activate
- * @return {Promise<void>}
- */
-async function activatePipeline(client, id) {
-    try {
-        await client.streams.activatePipeline(id, { activateLatestVersion: true });
-        console.log('Waiting for 30s for pipeline to be activated...');
-        await sleep(30 * 1000);
-    }
-    catch(err) {
-        console.log(`Unable to activate pipeline.`, err);
-        process.exit(1);
-    }
-}
-
-async function cleanup(client, pipelineId, indexId) {
-    try {
-        if (pipelineId) {
-            await client.streams.deactivatePipeline(pipelineId, {});
-            await client.streams.deletePipeline(pipelineId);
-        }
-        // Don't delete the main index
-        if (indexId && indexId !== 'main') {
-            await client.catalog.deleteDatasetById(indexId);
-        }
-    }
-    catch(err) {
-        console.log(err);
-        process.exit(1);
-    }
-}
-
-
-// Export these functions to be usable in other examples
-module.exports = {
-    cleanup,
-    createIndex,
-    createPipeline,
-    activatePipeline
-};
+})().catch((error) => console.error(error));
