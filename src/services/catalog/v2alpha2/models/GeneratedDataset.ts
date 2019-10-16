@@ -31,6 +31,7 @@ import {
     KVCollectionDataset,
     LookupDataset,
     MetricDataset,
+    RecurringSearchDataset,
     ViewDataset,
 } from './';
 
@@ -39,4 +40,4 @@ import {
  * A complete dataset as rendered in POST, PATCH, and GET responses.
  * @export
  */
-export type Dataset = ImportDataset | IndexDataset | JobDataset | KVCollectionDataset | LookupDataset | MetricDataset | ViewDataset;
+export type Dataset = ImportDataset | IndexDataset | JobDataset | KVCollectionDataset | LookupDataset | MetricDataset | RecurringSearchDataset | ViewDataset;

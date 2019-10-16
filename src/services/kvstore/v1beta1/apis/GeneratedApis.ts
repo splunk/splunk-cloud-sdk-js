@@ -15,7 +15,7 @@
  * under the License.
  *
  * KV Store API
- * With the Splunk Cloud KV store service, you can save and retrieve data within your Splunk apps, enabling you to manage and maintain the state of the application.
+ * With the Splunk Cloud KV store service in Splunk Cloud Services, you can save and retrieve data within your Splunk Cloud apps, enabling you to manage and maintain state in your application.
  *
  * OpenAPI spec version: v1beta1.2 (recommended default)
  *
@@ -42,7 +42,7 @@ export const KVSTORE_SERVICE_CLUSTER: string = 'api';
 /**
  * KV Store API
  * Version: v1beta1.2
- * With the Splunk Cloud KV store service, you can save and retrieve data within your Splunk apps, enabling you to manage and maintain the state of the application.
+ * With the Splunk Cloud KV store service in Splunk Cloud Services, you can save and retrieve data within your Splunk Cloud apps, enabling you to manage and maintain state in your application.
  */
 export class GeneratedKVStoreService extends BaseApiService {
     getServiceCluster() : string {
@@ -56,9 +56,10 @@ export class GeneratedKVStoreService extends BaseApiService {
      * Creates an index on a collection.
      * @param collection The name of the collection.
      * @param indexDefinition
+     * @param args parameters to be sent with the request
      * @return IndexDescription
      */
-    public createIndex = (collection: string, indexDefinition?: IndexDefinition): Promise<IndexDescription> => {
+    public createIndex = (collection: string, indexDefinition?: IndexDefinition, args?: object): Promise<IndexDescription> => {
         if (!indexDefinition) {
             throw new SplunkError({ message: `Bad Request: indexDefinition is empty or undefined` });
         }
@@ -66,44 +67,46 @@ export class GeneratedKVStoreService extends BaseApiService {
             collection: collection
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/indexes`(path_params);
-        return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), indexDefinition)
+        return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), indexDefinition, { query: args })
             .then(response => response.body as IndexDescription);
     }
     /**
      * Removes an index from a collection.
      * @param collection The name of the collection.
      * @param index The name of the index.
+     * @param args parameters to be sent with the request
      */
-    public deleteIndex = (collection: string, index: string): Promise<object> => {
+    public deleteIndex = (collection: string, index: string, args?: object): Promise<object> => {
         const path_params = {
             collection: collection,
             index: index
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/indexes/${'index'}`(path_params);
-        return this.client.delete(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
      * Deletes a record with a given key.
      * @param collection The name of the collection.
      * @param key The key of the record.
+     * @param args parameters to be sent with the request
      */
-    public deleteRecordByKey = (collection: string, key: string): Promise<object> => {
+    public deleteRecordByKey = (collection: string, key: string, args?: object): Promise<object> => {
         const path_params = {
             collection: collection,
             key: key
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/records/${'key'}`(path_params);
-        return this.client.delete(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
      * Removes records in a collection that match the query.
      * @param collection The name of the collection.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.query Query JSON expression.
      */
-    public deleteRecords = (collection: string, args?: { query?: string }): Promise<object> => {
+    public deleteRecords = (collection: string, args?: { query?: string, [key: string]: any }): Promise<object> => {
         const path_params = {
             collection: collection
         };
@@ -115,71 +118,74 @@ export class GeneratedKVStoreService extends BaseApiService {
      * Returns a record with a given key.
      * @param collection The name of the collection.
      * @param key The key of the record.
+     * @param args parameters to be sent with the request
      * @return { [key: string]: any; }
      */
-    public getRecordByKey = (collection: string, key: string): Promise<{ [key: string]: any; }> => {
+    public getRecordByKey = (collection: string, key: string, args?: object): Promise<{ [key: string]: any; }> => {
         const path_params = {
             collection: collection,
             key: key
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/records/${'key'}`(path_params);
-        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as { [key: string]: any; });
     }
     /**
      * Inserts a record into a collection.
      * @param collection The name of the collection.
      * @param body Record to add to the collection, formatted as a JSON object.
+     * @param args parameters to be sent with the request
      * @return Key
      */
-    public insertRecord = (collection: string, body: { [key: string]: any; }): Promise<Key> => {
+    public insertRecord = (collection: string, body: { [key: string]: any; }, args?: object): Promise<Key> => {
         const path_params = {
             collection: collection
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}`(path_params);
-        return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body)
+        return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args })
             .then(response => response.body as Key);
     }
     /**
      * Inserts multiple records in a single request.
      * @param collection The name of the collection.
      * @param requestBody Array of records to insert.
+     * @param args parameters to be sent with the request
      * @return Array<string>
      */
-    public insertRecords = (collection: string, requestBody: Array<{ [key: string]: any; }>): Promise<Array<string>> => {
+    public insertRecords = (collection: string, requestBody: Array<{ [key: string]: any; }>, args?: object): Promise<Array<string>> => {
         const path_params = {
             collection: collection
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/batch`(path_params);
-        return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), requestBody)
+        return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), requestBody, { query: args })
             .then(response => response.body as Array<string>);
     }
     /**
      * Returns a list of all indexes on a collection.
      * @param collection The name of the collection.
+     * @param args parameters to be sent with the request
      * @return Array<IndexDefinition>
      */
-    public listIndexes = (collection: string): Promise<Array<IndexDefinition>> => {
+    public listIndexes = (collection: string, args?: object): Promise<Array<IndexDefinition>> => {
         const path_params = {
             collection: collection
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/indexes`(path_params);
-        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<IndexDefinition>);
     }
     /**
      * Use key-value query parameters to filter fields. Fields are implicitly ANDed and values for the same field are implicitly ORed.
      * Returns a list of records in a collection with basic filtering, sorting, pagination and field projection.
      * @param collection The name of the collection.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.count Maximum number of records to return.
      * @param args.fields Comma-separated list of fields to include or exclude.
-     * @param args.filters
      * @param args.offset Number of records to skip from the start.
      * @param args.orderby Sort order. Format is `<field>:<sort order>`. Valid sort orders are 1 for ascending, -1 for descending.
      * @return Array<{ [key: string]: any; }>
      */
-    public listRecords = (collection: string, args?: { count?: number, fields?: Array<string>, filters?: { [key: string]: any; }, offset?: number, orderby?: Array<string> }): Promise<Array<{ [key: string]: any; }>> => {
+    public listRecords = (collection: string, args?: { count?: number, fields?: Array<string>, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<{ [key: string]: any; }>> => {
         const path_params = {
             collection: collection
         };
@@ -189,11 +195,12 @@ export class GeneratedKVStoreService extends BaseApiService {
     }
     /**
      * Returns the health status from the database.
+     * @param args parameters to be sent with the request
      * @return PingResponse
      */
-    public ping = (): Promise<PingResponse> => {
+    public ping = (args?: object): Promise<PingResponse> => {
         const path = `/kvstore/v1beta1/ping`;
-        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as PingResponse);
     }
     /**
@@ -201,21 +208,22 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param collection The name of the collection.
      * @param key The key of the record.
      * @param body Record to add to the collection, formatted as a JSON object.
+     * @param args parameters to be sent with the request
      * @return Key
      */
-    public putRecord = (collection: string, key: string, body: { [key: string]: any; }): Promise<Key> => {
+    public putRecord = (collection: string, key: string, body: { [key: string]: any; }, args?: object): Promise<Key> => {
         const path_params = {
             collection: collection,
             key: key
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/records/${'key'}`(path_params);
-        return this.client.put(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body)
+        return this.client.put(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args })
             .then(response => response.body as Key);
     }
     /**
      * Returns a list of query records in a collection.
      * @param collection The name of the collection.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.count Maximum number of records to return.
      * @param args.fields Comma-separated list of fields to include or exclude.
      * @param args.offset Number of records to skip from the start.
@@ -223,7 +231,7 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param args.query Query JSON expression.
      * @return Array<{ [key: string]: any; }>
      */
-    public queryRecords = (collection: string, args?: { count?: number, fields?: Array<string>, offset?: number, orderby?: Array<string>, query?: string }): Promise<Array<{ [key: string]: any; }>> => {
+    public queryRecords = (collection: string, args?: { count?: number, fields?: Array<string>, offset?: number, orderby?: Array<string>, query?: string, [key: string]: any }): Promise<Array<{ [key: string]: any; }>> => {
         const path_params = {
             collection: collection
         };

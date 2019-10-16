@@ -15,7 +15,7 @@
  * under the License.
  *
  * Provisioner
- * With the Provisioner Service, you can provision your tenant and manage it
+ * With the Provisioner service, you can provision and manage your tenants.
  *
  * OpenAPI spec version: v1beta1.3 (recommended default)
  *

@@ -15,7 +15,7 @@
  * under the License.
  *
  * Ingest API
- * With the Splunk Cloud Ingest service, you can send event or metrics data to the Splunk platform.
+ * Use the Ingest service in Splunk Cloud Services to send event and metrics data, or upload a static file, to Splunk Cloud Services.
  *
  * OpenAPI spec version: v1beta2.2 (recommended default)
  *
@@ -40,7 +40,7 @@ export const INGEST_SERVICE_CLUSTER: string = 'api';
 /**
  * Ingest API
  * Version: v1beta2.2
- * With the Splunk Cloud Ingest service, you can send event or metrics data to the Splunk platform.
+ * Use the Ingest service in Splunk Cloud Services to send event and metrics data, or upload a static file, to Splunk Cloud Services.
  */
 export class GeneratedIngestService extends BaseApiService {
     getServiceCluster() : string {
@@ -53,27 +53,29 @@ export class GeneratedIngestService extends BaseApiService {
     /**
      * Sends events.
      * @param event
+     * @param args parameters to be sent with the request
      * @return HTTPResponse
      */
-    public postEvents = (event?: Array<Event>): Promise<HTTPResponse> => {
+    public postEvents = (event?: Array<Event>, args?: object): Promise<HTTPResponse> => {
         if (!event) {
             throw new SplunkError({ message: `Bad Request: event is empty or undefined` });
         }
         const path = `/ingest/v1beta2/events`;
-        return this.client.post(INGEST_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), event)
+        return this.client.post(INGEST_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), event, { query: args })
             .then(response => response.body as HTTPResponse);
     }
     /**
      * Sends metric events.
      * @param metricEvent
+     * @param args parameters to be sent with the request
      * @return HTTPResponse
      */
-    public postMetrics = (metricEvent?: Array<MetricEvent>): Promise<HTTPResponse> => {
+    public postMetrics = (metricEvent?: Array<MetricEvent>, args?: object): Promise<HTTPResponse> => {
         if (!metricEvent) {
             throw new SplunkError({ message: `Bad Request: metricEvent is empty or undefined` });
         }
         const path = `/ingest/v1beta2/metrics`;
-        return this.client.post(INGEST_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), metricEvent)
+        return this.client.post(INGEST_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), metricEvent, { query: args })
             .then(response => response.body as HTTPResponse);
     }
 }

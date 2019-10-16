@@ -63,25 +63,27 @@ export class GeneratedMLService extends BaseApiService {
     /**
      * Creates a workflow configuration.
      * @param workflow Workflow configuration to be created.
+     * @param args parameters to be sent with the request
      * @return Workflow
      */
-    public createWorkflow = (workflow: Workflow): Promise<Workflow> => {
+    public createWorkflow = (workflow: Workflow, args?: object): Promise<Workflow> => {
         const path = `/ml/v2beta1/workflows`;
-        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflow)
+        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflow, { query: args })
             .then(response => response.body as Workflow);
     }
     /**
      * Creates a workflow build.
      * @param id The workflow ID.
      * @param workflowBuild Input data used to build the workflow.
+     * @param args parameters to be sent with the request
      * @return WorkflowBuild
      */
-    public createWorkflowBuild = (id: string, workflowBuild: WorkflowBuild): Promise<WorkflowBuild> => {
+    public createWorkflowBuild = (id: string, workflowBuild: WorkflowBuild, args?: object): Promise<WorkflowBuild> => {
         const path_params = {
             id: id
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds`(path_params);
-        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowBuild)
+        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowBuild, { query: args })
             .then(response => response.body as WorkflowBuild);
     }
     /**
@@ -89,15 +91,16 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param workflowDeployment Input data used to build the workflow deployment.
+     * @param args parameters to be sent with the request
      * @return WorkflowDeployment
      */
-    public createWorkflowDeployment = (id: string, buildId: string, workflowDeployment: WorkflowDeployment): Promise<WorkflowDeployment> => {
+    public createWorkflowDeployment = (id: string, buildId: string, workflowDeployment: WorkflowDeployment, args?: object): Promise<WorkflowDeployment> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments`(path_params);
-        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowDeployment)
+        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowDeployment, { query: args })
             .then(response => response.body as WorkflowDeployment);
     }
     /**
@@ -106,16 +109,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param deploymentId The workflow deployment ID.
      * @param workflowInference Input data to the inference request.
+     * @param args parameters to be sent with the request
      * @return WorkflowInference
      */
-    public createWorkflowInference = (id: string, buildId: string, deploymentId: string, workflowInference: WorkflowInference): Promise<WorkflowInference> => {
+    public createWorkflowInference = (id: string, buildId: string, deploymentId: string, workflowInference: WorkflowInference, args?: object): Promise<WorkflowInference> => {
         const path_params = {
             id: id,
             buildId: buildId,
             deploymentId: deploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments/${'deploymentId'}/inference`(path_params);
-        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowInference)
+        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowInference, { query: args })
             .then(response => response.body as WorkflowInference);
     }
     /**
@@ -123,15 +127,16 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param workflowRun Input data used to build the workflow.
+     * @param args parameters to be sent with the request
      * @return WorkflowRun
      */
-    public createWorkflowRun = (id: string, buildId: string, workflowRun: WorkflowRun): Promise<WorkflowRun> => {
+    public createWorkflowRun = (id: string, buildId: string, workflowRun: WorkflowRun, args?: object): Promise<WorkflowRun> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/runs`(path_params);
-        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowRun)
+        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowRun, { query: args })
             .then(response => response.body as WorkflowRun);
     }
     /**
@@ -139,41 +144,44 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param workflowStreamDeployment Configuration for the workflow streaming deployment.
+     * @param args parameters to be sent with the request
      * @return WorkflowStreamDeployment
      */
-    public createWorkflowStreamDeployment = (id: string, buildId: string, workflowStreamDeployment: WorkflowStreamDeployment): Promise<WorkflowStreamDeployment> => {
+    public createWorkflowStreamDeployment = (id: string, buildId: string, workflowStreamDeployment: WorkflowStreamDeployment, args?: object): Promise<WorkflowStreamDeployment> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/stream-deployments`(path_params);
-        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowStreamDeployment)
+        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowStreamDeployment, { query: args })
             .then(response => response.body as WorkflowStreamDeployment);
     }
     /**
      * Removes a workflow configuration.
      * @param id The workflow ID.
+     * @param args parameters to be sent with the request
      */
-    public deleteWorkflow = (id: string): Promise<object> => {
+    public deleteWorkflow = (id: string, args?: object): Promise<object> => {
         const path_params = {
             id: id
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}`(path_params);
-        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
      * Removes a workflow build.
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
+     * @param args parameters to be sent with the request
      */
-    public deleteWorkflowBuild = (id: string, buildId: string): Promise<object> => {
+    public deleteWorkflowBuild = (id: string, buildId: string, args?: object): Promise<object> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}`(path_params);
-        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
@@ -181,15 +189,16 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param deploymentId The workflow deployment ID.
+     * @param args parameters to be sent with the request
      */
-    public deleteWorkflowDeployment = (id: string, buildId: string, deploymentId: string): Promise<object> => {
+    public deleteWorkflowDeployment = (id: string, buildId: string, deploymentId: string, args?: object): Promise<object> => {
         const path_params = {
             id: id,
             buildId: buildId,
             deploymentId: deploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments/${'deploymentId'}`(path_params);
-        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
@@ -197,15 +206,16 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param runId The workflow run ID.
+     * @param args parameters to be sent with the request
      */
-    public deleteWorkflowRun = (id: string, buildId: string, runId: string): Promise<object> => {
+    public deleteWorkflowRun = (id: string, buildId: string, runId: string, args?: object): Promise<object> => {
         const path_params = {
             id: id,
             buildId: buildId,
             runId: runId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/runs/${'runId'}`(path_params);
-        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
@@ -213,73 +223,78 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param streamDeploymentId The workflow streaming deployment ID.
+     * @param args parameters to be sent with the request
      */
-    public deleteWorkflowStreamDeployment = (id: string, buildId: string, streamDeploymentId: string): Promise<object> => {
+    public deleteWorkflowStreamDeployment = (id: string, buildId: string, streamDeploymentId: string, args?: object): Promise<object> => {
         const path_params = {
             id: id,
             buildId: buildId,
             streamDeploymentId: streamDeploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/stream-deployments/${'streamDeploymentId'}`(path_params);
-        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
      * Returns a workflow configuration.
      * @param id The workflow ID.
+     * @param args parameters to be sent with the request
      * @return Workflow
      */
-    public getWorkflow = (id: string): Promise<Workflow> => {
+    public getWorkflow = (id: string, args?: object): Promise<Workflow> => {
         const path_params = {
             id: id
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Workflow);
     }
     /**
      * Returns the status of a workflow build.
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
+     * @param args parameters to be sent with the request
      * @return WorkflowBuild
      */
-    public getWorkflowBuild = (id: string, buildId: string): Promise<WorkflowBuild> => {
+    public getWorkflowBuild = (id: string, buildId: string, args?: object): Promise<WorkflowBuild> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as WorkflowBuild);
     }
     /**
      * Returns a list of workflow errors.
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
+     * @param args parameters to be sent with the request
      * @return WorkflowBuildError
      */
-    public getWorkflowBuildError = (id: string, buildId: string): Promise<WorkflowBuildError> => {
+    public getWorkflowBuildError = (id: string, buildId: string, args?: object): Promise<WorkflowBuildError> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/errors`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as WorkflowBuildError);
     }
     /**
      * Returns the logs from a workflow build.
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
+     * @param args parameters to be sent with the request
      * @return WorkflowBuildLog
      */
-    public getWorkflowBuildLog = (id: string, buildId: string): Promise<WorkflowBuildLog> => {
+    public getWorkflowBuildLog = (id: string, buildId: string, args?: object): Promise<WorkflowBuildLog> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/logs`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as WorkflowBuildLog);
     }
     /**
@@ -287,16 +302,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param deploymentId The workflow deployment ID.
+     * @param args parameters to be sent with the request
      * @return WorkflowDeployment
      */
-    public getWorkflowDeployment = (id: string, buildId: string, deploymentId: string): Promise<WorkflowDeployment> => {
+    public getWorkflowDeployment = (id: string, buildId: string, deploymentId: string, args?: object): Promise<WorkflowDeployment> => {
         const path_params = {
             id: id,
             buildId: buildId,
             deploymentId: deploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments/${'deploymentId'}`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as WorkflowDeployment);
     }
     /**
@@ -304,16 +320,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param deploymentId The workflow deployment ID.
+     * @param args parameters to be sent with the request
      * @return WorkflowDeploymentError
      */
-    public getWorkflowDeploymentError = (id: string, buildId: string, deploymentId: string): Promise<WorkflowDeploymentError> => {
+    public getWorkflowDeploymentError = (id: string, buildId: string, deploymentId: string, args?: object): Promise<WorkflowDeploymentError> => {
         const path_params = {
             id: id,
             buildId: buildId,
             deploymentId: deploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments/${'deploymentId'}/errors`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as WorkflowDeploymentError);
     }
     /**
@@ -321,16 +338,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param deploymentId The workflow deployment ID.
+     * @param args parameters to be sent with the request
      * @return WorkflowDeploymentLog
      */
-    public getWorkflowDeploymentLog = (id: string, buildId: string, deploymentId: string): Promise<WorkflowDeploymentLog> => {
+    public getWorkflowDeploymentLog = (id: string, buildId: string, deploymentId: string, args?: object): Promise<WorkflowDeploymentLog> => {
         const path_params = {
             id: id,
             buildId: buildId,
             deploymentId: deploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments/${'deploymentId'}/logs`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as WorkflowDeploymentLog);
     }
     /**
@@ -338,16 +356,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param runId The workflow run ID.
+     * @param args parameters to be sent with the request
      * @return WorkflowRun
      */
-    public getWorkflowRun = (id: string, buildId: string, runId: string): Promise<WorkflowRun> => {
+    public getWorkflowRun = (id: string, buildId: string, runId: string, args?: object): Promise<WorkflowRun> => {
         const path_params = {
             id: id,
             buildId: buildId,
             runId: runId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/runs/${'runId'}`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as WorkflowRun);
     }
     /**
@@ -355,16 +374,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param runId The workflow run ID.
+     * @param args parameters to be sent with the request
      * @return WorkflowRunError
      */
-    public getWorkflowRunError = (id: string, buildId: string, runId: string): Promise<WorkflowRunError> => {
+    public getWorkflowRunError = (id: string, buildId: string, runId: string, args?: object): Promise<WorkflowRunError> => {
         const path_params = {
             id: id,
             buildId: buildId,
             runId: runId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/runs/${'runId'}/errors`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as WorkflowRunError);
     }
     /**
@@ -372,16 +392,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param runId The workflow run ID.
+     * @param args parameters to be sent with the request
      * @return WorkflowRunLog
      */
-    public getWorkflowRunLog = (id: string, buildId: string, runId: string): Promise<WorkflowRunLog> => {
+    public getWorkflowRunLog = (id: string, buildId: string, runId: string, args?: object): Promise<WorkflowRunLog> => {
         const path_params = {
             id: id,
             buildId: buildId,
             runId: runId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/runs/${'runId'}/logs`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as WorkflowRunLog);
     }
     /**
@@ -389,68 +410,73 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param streamDeploymentId The workflow streaming deployment ID.
+     * @param args parameters to be sent with the request
      * @return WorkflowStreamDeployment
      */
-    public getWorkflowStreamDeployment = (id: string, buildId: string, streamDeploymentId: string): Promise<WorkflowStreamDeployment> => {
+    public getWorkflowStreamDeployment = (id: string, buildId: string, streamDeploymentId: string, args?: object): Promise<WorkflowStreamDeployment> => {
         const path_params = {
             id: id,
             buildId: buildId,
             streamDeploymentId: streamDeploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/stream-deployments/${'streamDeploymentId'}`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as WorkflowStreamDeployment);
     }
     /**
      * Returns a list of workflow builds.
      * @param id The workflow ID.
+     * @param args parameters to be sent with the request
      * @return Array<WorkflowBuild>
      */
-    public listWorkflowBuilds = (id: string): Promise<Array<WorkflowBuild>> => {
+    public listWorkflowBuilds = (id: string, args?: object): Promise<Array<WorkflowBuild>> => {
         const path_params = {
             id: id
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<WorkflowBuild>);
     }
     /**
      * Returns a list of workflow deployments.
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
+     * @param args parameters to be sent with the request
      * @return Array<WorkflowDeployment>
      */
-    public listWorkflowDeployments = (id: string, buildId: string): Promise<Array<WorkflowDeployment>> => {
+    public listWorkflowDeployments = (id: string, buildId: string, args?: object): Promise<Array<WorkflowDeployment>> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<WorkflowDeployment>);
     }
     /**
      * Returns a list of workflow runs.
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
+     * @param args parameters to be sent with the request
      * @return Array<WorkflowRun>
      */
-    public listWorkflowRuns = (id: string, buildId: string): Promise<Array<WorkflowRun>> => {
+    public listWorkflowRuns = (id: string, buildId: string, args?: object): Promise<Array<WorkflowRun>> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/runs`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<WorkflowRun>);
     }
     /**
      * Returns a list of workflow configurations.
+     * @param args parameters to be sent with the request
      * @return Array<WorkflowsGetResponse>
      */
-    public listWorkflows = (): Promise<Array<WorkflowsGetResponse>> => {
+    public listWorkflows = (args?: object): Promise<Array<WorkflowsGetResponse>> => {
         const path = `/ml/v2beta1/workflows`;
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<WorkflowsGetResponse>);
     }
 }

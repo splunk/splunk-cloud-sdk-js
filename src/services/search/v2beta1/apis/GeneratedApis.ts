@@ -57,33 +57,35 @@ export class GeneratedSearchService extends BaseApiService {
     /**
      * Creates a search job.
      * @param searchJob
+     * @param args parameters to be sent with the request
      * @return SearchJob
      */
-    public createJob = (searchJob?: SearchJob): Promise<SearchJob> => {
+    public createJob = (searchJob?: SearchJob, args?: object): Promise<SearchJob> => {
         if (!searchJob) {
             throw new SplunkError({ message: `Bad Request: searchJob is empty or undefined` });
         }
         const path = `/search/v2beta1/jobs`;
-        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), searchJob)
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), searchJob, { query: args })
             .then(response => response.body as SearchJob);
     }
     /**
      * Return the search job with the specified search ID (SID).
      * @param sid The search ID.
+     * @param args parameters to be sent with the request
      * @return SearchJob
      */
-    public getJob = (sid: string): Promise<SearchJob> => {
+    public getJob = (sid: string, args?: object): Promise<SearchJob> => {
         const path_params = {
             sid: sid
         };
         const path = this.template`/search/v2beta1/jobs/${'sid'}`(path_params);
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as SearchJob);
     }
     /**
      * Return events summary, for search ID (SID) search.
      * @param sid The search ID.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
      * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
      * @param args.field A field to return for the result set. You can specify multiple fields of comma-separated values if multiple fields are required. 
@@ -91,7 +93,7 @@ export class GeneratedSearchService extends BaseApiService {
      * @param args.offset Index of first item to return.
      * @return ListSearchResultsResponse
      */
-    public listEventsSummary = (sid: string, args?: { count?: number, earliest?: string, field?: string, latest?: string, offset?: number }): Promise<ListSearchResultsResponse> => {
+    public listEventsSummary = (sid: string, args?: { count?: number, earliest?: string, field?: string, latest?: string, offset?: number, [key: string]: any }): Promise<ListSearchResultsResponse> => {
         const path_params = {
             sid: sid
         };
@@ -102,12 +104,12 @@ export class GeneratedSearchService extends BaseApiService {
     /**
      * Return fields stats summary of the events to-date, for search ID (SID) search.
      * @param sid The search ID.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
      * @param args.latest The latest time filter in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
      * @return FieldsSummary
      */
-    public listFieldsSummary = (sid: string, args?: { earliest?: string, latest?: string }): Promise<FieldsSummary> => {
+    public listFieldsSummary = (sid: string, args?: { earliest?: string, latest?: string, [key: string]: any }): Promise<FieldsSummary> => {
         const path_params = {
             sid: sid
         };
@@ -117,12 +119,12 @@ export class GeneratedSearchService extends BaseApiService {
     }
     /**
      * Return the matching list of search jobs.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.count The maximum number of jobs that you want to return the status entries for. 
      * @param args.status Filter the list of jobs by status. Valid status values are 'running', 'done', 'canceled', or 'failed'. 
      * @return Array<SearchJob>
      */
-    public listJobs = (args?: { count?: number, status?: SearchStatus }): Promise<Array<SearchJob>> => {
+    public listJobs = (args?: { count?: number, status?: SearchStatus, [key: string]: any }): Promise<Array<SearchJob>> => {
         const path = `/search/v2beta1/jobs`;
         return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<SearchJob>);
@@ -130,12 +132,12 @@ export class GeneratedSearchService extends BaseApiService {
     /**
      * Return the preview search results for the job with the specified search ID (SID). Can be used when a job is running to return interim results.
      * @param sid The search ID.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
      * @param args.offset Index of first item to return.
      * @return ListPreviewResultsResponse
      */
-    public listPreviewResults = (sid: string, args?: { count?: number, offset?: number }): Promise<ListPreviewResultsResponse> => {
+    public listPreviewResults = (sid: string, args?: { count?: number, offset?: number, [key: string]: any }): Promise<ListPreviewResultsResponse> => {
         const path_params = {
             sid: sid
         };
@@ -146,13 +148,13 @@ export class GeneratedSearchService extends BaseApiService {
     /**
      * Return the search results for the job with the specified search ID (SID).
      * @param sid The search ID.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
      * @param args.field A field to return for the result set. You can specify multiple fields of comma-separated values if multiple fields are required. 
      * @param args.offset Index of first item to return.
      * @return ListSearchResultsResponse
      */
-    public listResults = (sid: string, args?: { count?: number, field?: string, offset?: number }): Promise<ListSearchResultsResponse> => {
+    public listResults = (sid: string, args?: { count?: number, field?: string, offset?: number, [key: string]: any }): Promise<ListSearchResultsResponse> => {
         const path_params = {
             sid: sid
         };
@@ -163,23 +165,25 @@ export class GeneratedSearchService extends BaseApiService {
     /**
      * Return event distribution over time of the untransformed events read to-date, for search ID(SID) search.
      * @param sid The search ID.
+     * @param args parameters to be sent with the request
      * @return TimeBucketsSummary
      */
-    public listTimeBuckets = (sid: string): Promise<TimeBucketsSummary> => {
+    public listTimeBuckets = (sid: string, args?: object): Promise<TimeBucketsSummary> => {
         const path_params = {
             sid: sid
         };
         const path = this.template`/search/v2beta1/jobs/${'sid'}/timeline-metadata/auto/time-buckets`(path_params);
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as TimeBucketsSummary);
     }
     /**
      * Update the search job with the specified search ID (SID) with an action.
      * @param sid The search ID.
      * @param updateJob
+     * @param args parameters to be sent with the request
      * @return SearchJob
      */
-    public updateJob = (sid: string, updateJob?: UpdateJob): Promise<SearchJob> => {
+    public updateJob = (sid: string, updateJob?: UpdateJob, args?: object): Promise<SearchJob> => {
         if (!updateJob) {
             throw new SplunkError({ message: `Bad Request: updateJob is empty or undefined` });
         }
@@ -187,7 +191,7 @@ export class GeneratedSearchService extends BaseApiService {
             sid: sid
         };
         const path = this.template`/search/v2beta1/jobs/${'sid'}`(path_params);
-        return this.client.patch(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateJob)
+        return this.client.patch(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateJob, { query: args })
             .then(response => response.body as SearchJob);
     }
 }

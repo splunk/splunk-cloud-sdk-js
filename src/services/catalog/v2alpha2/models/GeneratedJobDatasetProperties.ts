@@ -120,6 +120,13 @@ export interface JobDatasetProperties {
     parameters?: { [key: string]: any; };
 
     /**
+     * The parent's ID of the search job.
+     * @type {string}
+     * @memberof JobDatasetProperties
+     */
+    parent?: string;
+
+    /**
      * An estimate of how complete the search job is.
      * @type {number}
      * @memberof JobDatasetProperties

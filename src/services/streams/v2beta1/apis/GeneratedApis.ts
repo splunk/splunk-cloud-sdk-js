@@ -15,7 +15,7 @@
  * under the License.
  *
  * Data Stream Processing REST API
- * With the Splunk Cloud Data Stream Processing service, you can perform create, read, update, and delete (CRUD) operations on your data pipeline. The Streams API also has metrics and preview session endpoints and gives you full control over your data pipeline
+ * With the Streams service in Splunk Cloud Services, you can perform create, read, update, and delete (CRUD) operations on your data pipeline.The Streams service in Splunk Cloud Services also has metrics and preview session endpoints and gives you full control over your data pipeline.
  *
  * OpenAPI spec version: v2beta1.2 (recommended default)
  *
@@ -78,7 +78,7 @@ export const STREAMS_SERVICE_CLUSTER: string = 'api';
 /**
  * Data Stream Processing REST API
  * Version: v2beta1.2
- * With the Splunk Cloud Data Stream Processing service, you can perform create, read, update, and delete (CRUD) operations on your data pipeline. The Streams API also has metrics and preview session endpoints and gives you full control over your data pipeline
+ * With the Streams service in Splunk Cloud Services, you can perform create, read, update, and delete (CRUD) operations on your data pipeline.The Streams service in Splunk Cloud Services also has metrics and preview session endpoints and gives you full control over your data pipeline.
  */
 export class GeneratedStreamsService extends BaseApiService {
     getServiceCluster() : string {
@@ -92,204 +92,221 @@ export class GeneratedStreamsService extends BaseApiService {
      * Activates an existing pipeline.
      * @param id id of the pipeline to activate
      * @param activatePipelineRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return Response
      */
-    public activatePipeline = (id: string, activatePipelineRequest: ActivatePipelineRequest): Promise<Response> => {
+    public activatePipeline = (id: string, activatePipelineRequest: ActivatePipelineRequest, args?: object): Promise<Response> => {
         const path_params = {
             id: id
         };
         const path = this.template`/streams/v2beta1/pipelines/${'id'}/activate`(path_params);
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), activatePipelineRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), activatePipelineRequest, { query: args })
             .then(response => response.body as Response);
     }
     /**
      * Compiles the Streams DSL and returns Streams JSON.
      * @param dslCompilationRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return UplPipeline
      */
-    public compileDSL = (dslCompilationRequest: DslCompilationRequest): Promise<UplPipeline> => {
+    public compileDSL = (dslCompilationRequest: DslCompilationRequest, args?: object): Promise<UplPipeline> => {
         const path = `/streams/v2beta1/pipelines/compile-dsl`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dslCompilationRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dslCompilationRequest, { query: args })
             .then(response => response.body as UplPipeline);
     }
     /**
      * Compiles SPL2 and returns Streams JSON.
      * @param splCompileRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return UplPipeline
      */
-    public compileSPL = (splCompileRequest: SplCompileRequest): Promise<UplPipeline> => {
+    public compileSPL = (splCompileRequest: SplCompileRequest, args?: object): Promise<UplPipeline> => {
         const path = `/streams/v2beta1/pipelines/compile-spl`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), splCompileRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), splCompileRequest, { query: args })
             .then(response => response.body as UplPipeline);
     }
     /**
      * Create a new DSP connection.
      * @param connectionRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return ConnectionSaveResponse
      */
-    public createConnection = (connectionRequest: ConnectionRequest): Promise<ConnectionSaveResponse> => {
+    public createConnection = (connectionRequest: ConnectionRequest, args?: object): Promise<ConnectionSaveResponse> => {
         const path = `/streams/v2beta1/connections`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), connectionRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), connectionRequest, { query: args })
             .then(response => response.body as ConnectionSaveResponse);
     }
     /**
      * Create a new group function by combining the Streams JSON of two or more functions.
      * @param groupRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return GroupResponse
      */
-    public createGroup = (groupRequest: GroupRequest): Promise<GroupResponse> => {
+    public createGroup = (groupRequest: GroupRequest, args?: object): Promise<GroupResponse> => {
         const path = `/streams/v2beta1/groups`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), groupRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), groupRequest, { query: args })
             .then(response => response.body as GroupResponse);
     }
     /**
      * Creates a pipeline.
      * @param pipelineRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return PipelineResponse
      */
-    public createPipeline = (pipelineRequest: PipelineRequest): Promise<PipelineResponse> => {
+    public createPipeline = (pipelineRequest: PipelineRequest, args?: object): Promise<PipelineResponse> => {
         const path = `/streams/v2beta1/pipelines`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pipelineRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pipelineRequest, { query: args })
             .then(response => response.body as PipelineResponse);
     }
     /**
      * Creates a template for a tenant.
      * @param templateRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return TemplateResponse
      */
-    public createTemplate = (templateRequest: TemplateRequest): Promise<TemplateResponse> => {
+    public createTemplate = (templateRequest: TemplateRequest, args?: object): Promise<TemplateResponse> => {
         const path = `/streams/v2beta1/templates`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), templateRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), templateRequest, { query: args })
             .then(response => response.body as TemplateResponse);
     }
     /**
      * Deactivates an existing pipeline.
      * @param id id of the pipeline to deactivate
      * @param deactivatePipelineRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return Response
      */
-    public deactivatePipeline = (id: string, deactivatePipelineRequest: DeactivatePipelineRequest): Promise<Response> => {
+    public deactivatePipeline = (id: string, deactivatePipelineRequest: DeactivatePipelineRequest, args?: object): Promise<Response> => {
         const path_params = {
             id: id
         };
         const path = this.template`/streams/v2beta1/pipelines/${'id'}/deactivate`(path_params);
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), deactivatePipelineRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), deactivatePipelineRequest, { query: args })
             .then(response => response.body as Response);
     }
     /**
      * Delete all versions of a connection by its id.
      * @param connectionId ID of the connection
+     * @param args parameters to be sent with the request
      */
-    public deleteConnection = (connectionId: string): Promise<object> => {
+    public deleteConnection = (connectionId: string, args?: object): Promise<object> => {
         const path_params = {
             connectionId: connectionId
         };
         const path = this.template`/streams/v2beta1/connections/${'connectionId'}`(path_params);
-        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
      * Removes an existing group.
      * @param groupId The group function's ID from the function registry
+     * @param args parameters to be sent with the request
      */
-    public deleteGroup = (groupId: string): Promise<object> => {
+    public deleteGroup = (groupId: string, args?: object): Promise<object> => {
         const path_params = {
             groupId: groupId
         };
         const path = this.template`/streams/v2beta1/groups/${'groupId'}`(path_params);
-        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
      * Removes a pipeline.
      * @param id id of the pipeline to delete
+     * @param args parameters to be sent with the request
      * @return PipelineDeleteResponse
      */
-    public deletePipeline = (id: string): Promise<PipelineDeleteResponse> => {
+    public deletePipeline = (id: string, args?: object): Promise<PipelineDeleteResponse> => {
         const path_params = {
             id: id
         };
         const path = this.template`/streams/v2beta1/pipelines/${'id'}`(path_params);
-        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as PipelineDeleteResponse);
     }
     /**
      * Removes a template with a specific ID.
      * @param templateId ID of the template to delete
+     * @param args parameters to be sent with the request
      */
-    public deleteTemplate = (templateId: string): Promise<object> => {
+    public deleteTemplate = (templateId: string, args?: object): Promise<object> => {
         const path_params = {
             templateId: templateId
         };
         const path = this.template`/streams/v2beta1/templates/${'templateId'}`(path_params);
-        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
      * Creates and returns the expanded version of a group.
      * @param groupId The group function's ID from the function registry
      * @param groupExpandRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return UplPipeline
      */
-    public expandGroup = (groupId: string, groupExpandRequest: GroupExpandRequest): Promise<UplPipeline> => {
+    public expandGroup = (groupId: string, groupExpandRequest: GroupExpandRequest, args?: object): Promise<UplPipeline> => {
         const path_params = {
             groupId: groupId
         };
         const path = this.template`/streams/v2beta1/groups/${'groupId'}/expand`(path_params);
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), groupExpandRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), groupExpandRequest, { query: args })
             .then(response => response.body as UplPipeline);
     }
     /**
      * Returns the entire Streams JSON, including the expanded Streams JSON of any group functions in the pipeline.
      * @param uplPipeline Request JSON
+     * @param args parameters to be sent with the request
      * @return UplPipeline
      */
-    public expandPipeline = (uplPipeline: UplPipeline): Promise<UplPipeline> => {
+    public expandPipeline = (uplPipeline: UplPipeline, args?: object): Promise<UplPipeline> => {
         const path = `/streams/v2beta1/pipelines/expand`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), uplPipeline)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), uplPipeline, { query: args })
             .then(response => response.body as UplPipeline);
     }
     /**
      * Returns the full Streams JSON of a group.
      * @param groupId The group function's ID from the function registry
+     * @param args parameters to be sent with the request
      * @return GroupResponse
      */
-    public getGroup = (groupId: string): Promise<GroupResponse> => {
+    public getGroup = (groupId: string, args?: object): Promise<GroupResponse> => {
         const path_params = {
             groupId: groupId
         };
         const path = this.template`/streams/v2beta1/groups/${'groupId'}`(path_params);
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as GroupResponse);
     }
     /**
      * Returns the input schema for a function in a pipeline.
      * @param getInputSchemaRequest Input Schema Request
+     * @param args parameters to be sent with the request
      * @return UplType
      */
-    public getInputSchema = (getInputSchemaRequest: GetInputSchemaRequest): Promise<UplType> => {
+    public getInputSchema = (getInputSchemaRequest: GetInputSchemaRequest, args?: object): Promise<UplType> => {
         const path = `/streams/v2beta1/pipelines/input-schema`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), getInputSchemaRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), getInputSchemaRequest, { query: args })
             .then(response => response.body as UplType);
     }
     /**
      * Returns the output schema for a specified function in a pipeline. If no function ID is  specified, the request returns the output schema for all functions in a pipeline.
      * @param getOutputSchemaRequest Output Schema Request
+     * @param args parameters to be sent with the request
      * @return { [key: string]: UplType; }
      */
-    public getOutputSchema = (getOutputSchemaRequest: GetOutputSchemaRequest): Promise<{ [key: string]: UplType; }> => {
+    public getOutputSchema = (getOutputSchemaRequest: GetOutputSchemaRequest, args?: object): Promise<{ [key: string]: UplType; }> => {
         const path = `/streams/v2beta1/pipelines/output-schema`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), getOutputSchemaRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), getOutputSchemaRequest, { query: args })
             .then(response => response.body as { [key: string]: UplType; });
     }
     /**
      * Returns an individual pipeline by version.
      * @param id id of the pipeline to get
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.version version
      * @return PipelineResponse
      */
-    public getPipeline = (id: string, args?: { version?: string }): Promise<PipelineResponse> => {
+    public getPipeline = (id: string, args?: { version?: string, [key: string]: any }): Promise<PipelineResponse> => {
         const path_params = {
             id: id
         };
@@ -300,19 +317,20 @@ export class GeneratedStreamsService extends BaseApiService {
     /**
      * Returns the latest metrics for a single pipeline.
      * @param id ID of the pipeline to get metrics for
+     * @param args parameters to be sent with the request
      * @return MetricsResponse
      */
-    public getPipelineLatestMetrics = (id: string): Promise<MetricsResponse> => {
+    public getPipelineLatestMetrics = (id: string, args?: object): Promise<MetricsResponse> => {
         const path_params = {
             id: id
         };
         const path = this.template`/streams/v2beta1/pipelines/${'id'}/metrics/latest`(path_params);
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as MetricsResponse);
     }
     /**
      * Returns the status of pipelines from the underlying streaming system.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.activated activated
      * @param args.createUserId createUserId
      * @param args.name name
@@ -322,7 +340,7 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param args.sortField sortField
      * @return PaginatedResponseOfPipelineJobStatus
      */
-    public getPipelinesStatus = (args?: { activated?: boolean, createUserId?: string, name?: string, offset?: number, pageSize?: number, sortDir?: string, sortField?: string }): Promise<PaginatedResponseOfPipelineJobStatus> => {
+    public getPipelinesStatus = (args?: { activated?: boolean, createUserId?: string, name?: string, offset?: number, pageSize?: number, sortDir?: string, sortField?: string, [key: string]: any }): Promise<PaginatedResponseOfPipelineJobStatus> => {
         const path = `/streams/v2beta1/pipelines/status`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as PaginatedResponseOfPipelineJobStatus);
@@ -330,49 +348,52 @@ export class GeneratedStreamsService extends BaseApiService {
     /**
      * Returns the preview data for a session.
      * @param previewSessionId ID of the preview session
+     * @param args parameters to be sent with the request
      * @return PreviewData
      */
-    public getPreviewData = (previewSessionId: number): Promise<PreviewData> => {
+    public getPreviewData = (previewSessionId: number, args?: object): Promise<PreviewData> => {
         const path_params = {
             previewSessionId: previewSessionId.toString()
         };
         const path = this.template`/streams/v2beta1/preview-data/${'previewSessionId'}`(path_params);
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as PreviewData);
     }
     /**
      * Returns information from a preview session.
      * @param previewSessionId ID of the preview session
+     * @param args parameters to be sent with the request
      * @return PreviewState
      */
-    public getPreviewSession = (previewSessionId: number): Promise<PreviewState> => {
+    public getPreviewSession = (previewSessionId: number, args?: object): Promise<PreviewState> => {
         const path_params = {
             previewSessionId: previewSessionId.toString()
         };
         const path = this.template`/streams/v2beta1/preview-session/${'previewSessionId'}`(path_params);
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as PreviewState);
     }
     /**
      * Returns the latest metrics for a preview session.
      * @param previewSessionId ID of the preview session
+     * @param args parameters to be sent with the request
      * @return MetricsResponse
      */
-    public getPreviewSessionLatestMetrics = (previewSessionId: number): Promise<MetricsResponse> => {
+    public getPreviewSessionLatestMetrics = (previewSessionId: number, args?: object): Promise<MetricsResponse> => {
         const path_params = {
             previewSessionId: previewSessionId.toString()
         };
         const path = this.template`/streams/v2beta1/preview-session/${'previewSessionId'}/metrics/latest`(path_params);
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as MetricsResponse);
     }
     /**
      * Returns all functions in JSON format.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.local local
      * @return UplRegistry
      */
-    public getRegistry = (args?: { local?: boolean }): Promise<UplRegistry> => {
+    public getRegistry = (args?: { local?: boolean, [key: string]: any }): Promise<UplRegistry> => {
         const path = `/streams/v2beta1/pipelines/registry`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as UplRegistry);
@@ -380,11 +401,11 @@ export class GeneratedStreamsService extends BaseApiService {
     /**
      * Returns an individual template by version.
      * @param templateId ID of the template
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.version version of the template
      * @return TemplateResponse
      */
-    public getTemplate = (templateId: string, args?: { version?: number }): Promise<TemplateResponse> => {
+    public getTemplate = (templateId: string, args?: { version?: number, [key: string]: any }): Promise<TemplateResponse> => {
         const path_params = {
             templateId: templateId
         };
@@ -394,7 +415,7 @@ export class GeneratedStreamsService extends BaseApiService {
     }
     /**
      * Returns a list of connections (latest versions only) by tenant ID.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.connectorId
      * @param args.createUserId
      * @param args.functionId
@@ -406,23 +427,24 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param args.sortField
      * @return PaginatedResponseOfConnectionResponse
      */
-    public listConnections = (args?: { connectorId?: string, createUserId?: string, functionId?: string, name?: string, offset?: number, pageSize?: number, showSecretNames?: string, sortDir?: string, sortField?: string }): Promise<PaginatedResponseOfConnectionResponse> => {
+    public listConnections = (args?: { connectorId?: string, createUserId?: string, functionId?: string, name?: string, offset?: number, pageSize?: number, showSecretNames?: string, sortDir?: string, sortField?: string, [key: string]: any }): Promise<PaginatedResponseOfConnectionResponse> => {
         const path = `/streams/v2beta1/connections`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as PaginatedResponseOfConnectionResponse);
     }
     /**
      * Returns a list of the available connectors.
+     * @param args parameters to be sent with the request
      * @return PaginatedResponseOfConnectorResponse
      */
-    public listConnectors = (): Promise<PaginatedResponseOfConnectorResponse> => {
+    public listConnectors = (args?: object): Promise<PaginatedResponseOfConnectorResponse> => {
         const path = `/streams/v2beta1/connectors`;
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as PaginatedResponseOfConnectorResponse);
     }
     /**
      * Returns all pipelines.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.activated activated
      * @param args.createUserId createUserId
      * @param args.includeData includeData
@@ -433,21 +455,21 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param args.sortField sortField
      * @return PaginatedResponseOfPipelineResponse
      */
-    public listPipelines = (args?: { activated?: boolean, createUserId?: string, includeData?: boolean, name?: string, offset?: number, pageSize?: number, sortDir?: string, sortField?: string }): Promise<PaginatedResponseOfPipelineResponse> => {
+    public listPipelines = (args?: { activated?: boolean, createUserId?: string, includeData?: boolean, name?: string, offset?: number, pageSize?: number, sortDir?: string, sortField?: string, [key: string]: any }): Promise<PaginatedResponseOfPipelineResponse> => {
         const path = `/streams/v2beta1/pipelines`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as PaginatedResponseOfPipelineResponse);
     }
     /**
      * Returns a list of all templates.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.offset offset
      * @param args.pageSize pageSize
      * @param args.sortDir sortDir
      * @param args.sortField sortField
      * @return PaginatedResponseOfTemplateResponse
      */
-    public listTemplates = (args?: { offset?: number, pageSize?: number, sortDir?: string, sortField?: string }): Promise<PaginatedResponseOfTemplateResponse> => {
+    public listTemplates = (args?: { offset?: number, pageSize?: number, sortDir?: string, sortField?: string, [key: string]: any }): Promise<PaginatedResponseOfTemplateResponse> => {
         const path = `/streams/v2beta1/templates`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as PaginatedResponseOfTemplateResponse);
@@ -455,155 +477,167 @@ export class GeneratedStreamsService extends BaseApiService {
     /**
      * Combines two Streams JSON programs.
      * @param pipelinesMergeRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return UplPipeline
      */
-    public mergePipelines = (pipelinesMergeRequest: PipelinesMergeRequest): Promise<UplPipeline> => {
+    public mergePipelines = (pipelinesMergeRequest: PipelinesMergeRequest, args?: object): Promise<UplPipeline> => {
         const path = `/streams/v2beta1/pipelines/merge`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pipelinesMergeRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pipelinesMergeRequest, { query: args })
             .then(response => response.body as UplPipeline);
     }
     /**
      * Modifies an existing DSP connection.
      * @param connectionId ID of the connection
      * @param connectionPutRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return ConnectionSaveResponse
      */
-    public putConnection = (connectionId: string, connectionPutRequest: ConnectionPutRequest): Promise<ConnectionSaveResponse> => {
+    public putConnection = (connectionId: string, connectionPutRequest: ConnectionPutRequest, args?: object): Promise<ConnectionSaveResponse> => {
         const path_params = {
             connectionId: connectionId
         };
         const path = this.template`/streams/v2beta1/connections/${'connectionId'}`(path_params);
-        return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), connectionPutRequest)
+        return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), connectionPutRequest, { query: args })
             .then(response => response.body as ConnectionSaveResponse);
     }
     /**
      * Update a group function combining the Streams JSON of two or more functions.
      * @param groupId The group function's ID from the function registry
      * @param groupPutRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return GroupResponse
      */
-    public putGroup = (groupId: string, groupPutRequest: GroupPutRequest): Promise<GroupResponse> => {
+    public putGroup = (groupId: string, groupPutRequest: GroupPutRequest, args?: object): Promise<GroupResponse> => {
         const path_params = {
             groupId: groupId
         };
         const path = this.template`/streams/v2beta1/groups/${'groupId'}`(path_params);
-        return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), groupPutRequest)
+        return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), groupPutRequest, { query: args })
             .then(response => response.body as GroupResponse);
     }
     /**
      * Updates an existing template.
      * @param templateId ID of the template
      * @param templatePutRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return TemplateResponse
      */
-    public putTemplate = (templateId: string, templatePutRequest: TemplatePutRequest): Promise<TemplateResponse> => {
+    public putTemplate = (templateId: string, templatePutRequest: TemplatePutRequest, args?: object): Promise<TemplateResponse> => {
         const path_params = {
             templateId: templateId
         };
         const path = this.template`/streams/v2beta1/templates/${'templateId'}`(path_params);
-        return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), templatePutRequest)
+        return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), templatePutRequest, { query: args })
             .then(response => response.body as TemplateResponse);
     }
     /**
      * Reactivate a pipeline
      * @param id Pipeline UUID to reactivate
+     * @param args parameters to be sent with the request
      * @return PipelineReactivateResponse
      */
-    public reactivatePipeline = (id: string): Promise<PipelineReactivateResponse> => {
+    public reactivatePipeline = (id: string, args?: object): Promise<PipelineReactivateResponse> => {
         const path_params = {
             id: id
         };
         const path = this.template`/streams/v2beta1/pipelines/${'id'}/reactivate`(path_params);
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as PipelineReactivateResponse);
     }
     /**
      * Creates a preview session for a pipeline.
      * @param previewSessionStartRequest Parameters to start a new Preview session
+     * @param args parameters to be sent with the request
      * @return PreviewStartResponse
      */
-    public startPreview = (previewSessionStartRequest: PreviewSessionStartRequest): Promise<PreviewStartResponse> => {
+    public startPreview = (previewSessionStartRequest: PreviewSessionStartRequest, args?: object): Promise<PreviewStartResponse> => {
         const path = `/streams/v2beta1/preview-session`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), previewSessionStartRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), previewSessionStartRequest, { query: args })
             .then(response => response.body as PreviewStartResponse);
     }
     /**
      * Stops a preview session.
      * @param previewSessionId ID of the preview session
+     * @param args parameters to be sent with the request
      * @return string
      */
-    public stopPreview = (previewSessionId: number): Promise<string> => {
+    public stopPreview = (previewSessionId: number, args?: object): Promise<string> => {
         const path_params = {
             previewSessionId: previewSessionId.toString()
         };
         const path = this.template`/streams/v2beta1/preview-session/${'previewSessionId'}`(path_params);
-        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as string);
     }
     /**
      * Partially modifies an existing DSP connection.
      * @param connectionId ID of the connection
      * @param connectionPatchRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return ConnectionSaveResponse
      */
-    public updateConnection = (connectionId: string, connectionPatchRequest: ConnectionPatchRequest): Promise<ConnectionSaveResponse> => {
+    public updateConnection = (connectionId: string, connectionPatchRequest: ConnectionPatchRequest, args?: object): Promise<ConnectionSaveResponse> => {
         const path_params = {
             connectionId: connectionId
         };
         const path = this.template`/streams/v2beta1/connections/${'connectionId'}`(path_params);
-        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), connectionPatchRequest)
+        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), connectionPatchRequest, { query: args })
             .then(response => response.body as ConnectionSaveResponse);
     }
     /**
      * Modify a group function by combining the Streams JSON of two or more functions.
      * @param groupId The group function's ID from the function registry
      * @param groupPatchRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return GroupResponse
      */
-    public updateGroup = (groupId: string, groupPatchRequest: GroupPatchRequest): Promise<GroupResponse> => {
+    public updateGroup = (groupId: string, groupPatchRequest: GroupPatchRequest, args?: object): Promise<GroupResponse> => {
         const path_params = {
             groupId: groupId
         };
         const path = this.template`/streams/v2beta1/groups/${'groupId'}`(path_params);
-        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), groupPatchRequest)
+        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), groupPatchRequest, { query: args })
             .then(response => response.body as GroupResponse);
     }
     /**
      * Partially modifies an existing pipeline.
      * @param id id of the pipeline to update
      * @param pipelinePatchRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return PipelineResponse
      */
-    public updatePipeline = (id: string, pipelinePatchRequest: PipelinePatchRequest): Promise<PipelineResponse> => {
+    public updatePipeline = (id: string, pipelinePatchRequest: PipelinePatchRequest, args?: object): Promise<PipelineResponse> => {
         const path_params = {
             id: id
         };
         const path = this.template`/streams/v2beta1/pipelines/${'id'}`(path_params);
-        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pipelinePatchRequest)
+        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pipelinePatchRequest, { query: args })
             .then(response => response.body as PipelineResponse);
     }
     /**
      * Partially modifies an existing template.
      * @param templateId ID of the template
      * @param templatePatchRequest Request JSON
+     * @param args parameters to be sent with the request
      * @return TemplateResponse
      */
-    public updateTemplate = (templateId: string, templatePatchRequest: TemplatePatchRequest): Promise<TemplateResponse> => {
+    public updateTemplate = (templateId: string, templatePatchRequest: TemplatePatchRequest, args?: object): Promise<TemplateResponse> => {
         const path_params = {
             templateId: templateId
         };
         const path = this.template`/streams/v2beta1/templates/${'templateId'}`(path_params);
-        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), templatePatchRequest)
+        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), templatePatchRequest, { query: args })
             .then(response => response.body as TemplateResponse);
     }
     /**
      * Verifies whether the Streams JSON is valid.
      * @param validateRequest JSON UPL to validate
+     * @param args parameters to be sent with the request
      * @return ValidateResponse
      */
-    public validatePipeline = (validateRequest: ValidateRequest): Promise<ValidateResponse> => {
+    public validatePipeline = (validateRequest: ValidateRequest, args?: object): Promise<ValidateResponse> => {
         const path = `/streams/v2beta1/pipelines/validate`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), validateRequest)
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), validateRequest, { query: args })
             .then(response => response.body as ValidateResponse);
     }
 }

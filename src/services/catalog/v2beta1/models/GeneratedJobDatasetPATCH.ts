@@ -141,6 +141,13 @@ export interface JobDatasetPATCH {
     parameters?: { [key: string]: any; };
 
     /**
+     * The parent's ID of the search job.
+     * @type {string}
+     * @memberof JobDatasetPATCH
+     */
+    parent?: string;
+
+    /**
      * An estimate of how complete the search job is.
      * @type {number}
      * @memberof JobDatasetPATCH

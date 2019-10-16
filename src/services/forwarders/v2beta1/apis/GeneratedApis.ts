@@ -15,7 +15,7 @@
  * under the License.
  *
  * Splunk Forwarder Service
- * Send data from a heavy forwarder to the Splunk Forwarder Service.
+ * Send data from a Splunk forwarder to the Splunk Forwarder service in Splunk Cloud Services.
  *
  * OpenAPI spec version: v2beta1.1 (recommended default)
  *
@@ -39,7 +39,7 @@ export const FORWARDERS_SERVICE_CLUSTER: string = 'api';
 /**
  * Splunk Forwarder Service
  * Version: v2beta1.1
- * Send data from a heavy forwarder to the Splunk Forwarder Service.
+ * Send data from a Splunk forwarder to the Splunk Forwarder service in Splunk Cloud Services.
  */
 export class GeneratedForwardersService extends BaseApiService {
     getServiceCluster() : string {
@@ -53,43 +53,47 @@ export class GeneratedForwardersService extends BaseApiService {
      * Each tenant can have up to five certificates.
      * Adds a certificate to a vacant slot on a tenant.
      * @param certificate
+     * @param args parameters to be sent with the request
      * @return CertificateInfo
      */
-    public addCertificate = (certificate?: Certificate): Promise<CertificateInfo> => {
+    public addCertificate = (certificate?: Certificate, args?: object): Promise<CertificateInfo> => {
         if (!certificate) {
             throw new SplunkError({ message: `Bad Request: certificate is empty or undefined` });
         }
         const path = `/forwarders/v2beta1/certificates`;
-        return this.client.post(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), certificate)
+        return this.client.post(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), certificate, { query: args })
             .then(response => response.body as CertificateInfo);
     }
     /**
      * Removes a certificate on a particular slot on a tenant.
      * @param slot
+     * @param args parameters to be sent with the request
      */
-    public deleteCertificate = (slot: string): Promise<object> => {
+    public deleteCertificate = (slot: string, args?: object): Promise<object> => {
         const path_params = {
             slot: slot
         };
         const path = this.template`/forwarders/v2beta1/certificates/${'slot'}`(path_params);
-        return this.client.delete(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
      * Removes all certificates on a tenant.
+     * @param args parameters to be sent with the request
      */
-    public deleteCertificates = (): Promise<object> => {
+    public deleteCertificates = (args?: object): Promise<object> => {
         const path = `/forwarders/v2beta1/certificates`;
-        return this.client.delete(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
      * Returns a list of all certificates for a tenant.
+     * @param args parameters to be sent with the request
      * @return Array<CertificateInfo>
      */
-    public listCertificates = (): Promise<Array<CertificateInfo>> => {
+    public listCertificates = (args?: object): Promise<Array<CertificateInfo>> => {
         const path = `/forwarders/v2beta1/certificates`;
-        return this.client.get(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<CertificateInfo>);
     }
 }
