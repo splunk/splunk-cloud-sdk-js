@@ -110,6 +110,7 @@ describe('integration tests for Provisioner Endpoints', () => {
             });
     });
     it('should successfully return the invite when getting an existing invite', () => {
+        assert.ok(testInviteID, 'Invite ID was null, nothing to get');
         return provSplunk.provisioner.getInvite(testInviteID)
             .then((invite: provisioner.InviteInfo) => {
                 assert.isNotNull(invite);
@@ -118,6 +119,7 @@ describe('integration tests for Provisioner Endpoints', () => {
             });
     });
     it('should successfully return the invite when listing all existing invites', () => {
+        assert.ok(testInviteID, 'Invite ID was null, nothing to list');
         return provSplunk.provisioner.listInvites()
             .then((invitesList: provisioner.Invites) => {
                 assert.isNotNull(invitesList);
@@ -134,6 +136,7 @@ describe('integration tests for Provisioner Endpoints', () => {
             });
     });
     it('should successfully resend the invite when updating an existing invite', () => {
+        assert.ok(testInviteID, 'Invite ID was null, nothing to update');
         return provSplunk.provisioner.updateInvite(testInviteID, { action: provisioner.UpdateInviteBodyActionEnum.Resend })
             .then((invite: provisioner.InviteInfo) => {
                 assert.isNotNull(invite);
@@ -141,6 +144,7 @@ describe('integration tests for Provisioner Endpoints', () => {
             });
     });
     it('should successfully delete the invite', () => {
+        assert.ok(testInviteID, 'Invite ID was null, nothing to delete');
         return provSplunk.provisioner.deleteInvite(testInviteID)
             .then(response => {
                 assert.isEmpty(response);

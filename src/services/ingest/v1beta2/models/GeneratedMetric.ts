@@ -15,7 +15,7 @@
  * under the License.
  *
  * Ingest API
- * With the Splunk Cloud Ingest service, you can send event or metrics data to the Splunk platform.
+ * Use the Ingest service in Splunk Cloud Services to send event and metrics data, or upload a static file, to Splunk Cloud Services.
  *
  * OpenAPI spec version: v1beta2.2 (recommended default)
  *

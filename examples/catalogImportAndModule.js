@@ -23,11 +23,14 @@ require('isomorphic-fetch');
 const { SplunkCloud } = require('../splunk');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
-function exitOnFailure() {
-    process.exit(1);
-}
+(async function () {
+    const DATE_NOW = Date.now();
+    const collectionModule = `collectionmodule`;
+    const kvcollectionName = `kvcollection${DATE_NOW}`;
+    const lookupName = `testlookup${DATE_NOW}`;
+    const importModule = `importmodule${DATE_NOW}`;
+    const importLookup = `importlookup${DATE_NOW}`;
 
-async function main() {
     // ***** STEP 1: Get Splunk Cloud client
     // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authentication token.
     const splunk = new SplunkCloud({
@@ -37,33 +40,28 @@ async function main() {
     });
 
     try {
-        // ***** STEP 2: Create kvcollection
-        const collectionModule = `collectionmodule`;
-        const kvcollectionName = `kvcollection${Date.now()}`; // kvcollectionName should be unique
-
-        let kvDataset = await splunk.catalog.createDataset({
+        // ***** STEP 2: Create kvcollection dataset
+        const kvCollectionDataset = await splunk.catalog.createDataset({
             name: kvcollectionName,
             module: collectionModule,
             kind: 'kvcollection',
         });
-        console.log('KVCollection dataset created with response: ');
-        console.log(kvDataset);
+        console.log(`Kvcollection dataset created. name='${kvCollectionDataset.name}'`);
+        console.log(kvCollectionDataset);
 
-        // ***** STEP 3: Create a lookup
-        const lookupName = `testlookup${Date.now()}`; // lookupName should be unique
-
-        let lookupDataset = await splunk.catalog.createDataset({
+        // ***** STEP 3: Create a lookup dataset with external kvcollection dataset.
+        const lookupDataset = await splunk.catalog.createDataset({
             name: lookupName,
             kind: 'lookup',
             module: collectionModule,
             externalKind: 'kvcollection',
             externalName: kvcollectionName,
         });
-        console.log('Lookup dataset created with response: ');
+        console.log('Lookup dataset created.');
         console.log(lookupDataset);
 
-        // ***** STEP 4: Register the fields
-        let postDataFieldResponse = await splunk.catalog.createFieldForDatasetById(
+        // ***** STEP 4: Create field for lookup dataset.
+        const createFieldForDatasetResponse = await splunk.catalog.createFieldForDatasetById(
             lookupDataset.id,
             {
                 name: 'a',
@@ -72,72 +70,54 @@ async function main() {
                 prevalence: 'UNKNOWN',
             }
         );
-        console.log('Datafield created with response.');
-        console.log(postDataFieldResponse);
+        console.log(`Field created. name='${createFieldForDatasetResponse.name}'`);
 
-        // ***** STEP 5: Insert records into the lookup
+        // ***** STEP 5: Insert record into the lookup
         const moduleName = collectionModule + '.' + kvcollectionName;
-
-        let recordResponse = await splunk.kvstore.insertRecords(moduleName, [
+        const insertRecordResponse = await splunk.kvstore.insertRecords(moduleName, [
             {
                 a: '1',
             },
         ]);
-        console.log('Dataset records created.');
-        console.log(recordResponse);
+        console.log(`KV record inserted into ${moduleName}. id='${insertRecordResponse[0]}'`);
 
         // ***** STEP 6: Import the lookup/kvcollection into another module
-        const importModule = `importmodule${Date.now()}`;
-        const importLookup = `importlookup${Date.now()}`;
-        let query = {
-            filter: `module=="${importModule}"`,
-            count: 1,
-            orderby: 'id Descending',
-        };
-        let importResponse = await splunk.catalog.createDataset({
+        const importDataset = await splunk.catalog.createDataset({
             kind: 'import',
             name: importLookup,
             module: importModule,
             sourceName: lookupName,
             sourceModule: collectionModule,
         });
-        console.log('Import Response.');
-        console.log(importResponse);
-        // ***** STEP 7: Validate - Search the kvcollection via the lookup and validate expected data in the new imported module
-        let dslist = await splunk.catalog.listDatasets(query);
+        console.log(`Import dataset created.\n${importDataset}`);
 
-        splunk.search
-            .createJob({ query: `| from ${importModule}.${dslist[0].name}`, module: importModule })
-            .then(job => {
-                console.log(`Created sid: ${job.sid}`);
-                return splunk.search.waitForJob(job);
-            })
-            .then(job => {
-                console.log(`Getting results`);
-                return splunk.search.listResults(job.sid);
-            })
-            .then(results => {
-                console.log(results);
-                const success = results && results.results.length === 1;
-                console.log(`Search results received : ${success}`);
-                if (!success) {
-                    exitOnFailure('Results did not match expected after executing the View');
-                }
-            })
-            .then(() => {
-                // Clean up original lookup dataset
-                console.log(`Deleting collection module dataset ${collectionModule}.${lookupName}`);
-                splunk.catalog.deleteDataset(`${collectionModule}.${kvcollectionName}`);
-                splunk.catalog.deleteDataset(`${collectionModule}.${lookupName}`);
-            })
-            .then(() => {
-                // Clean up import lookup dataset
-                console.log(`Deleting import module dataset ${importModule}.${importLookup}`);
-                splunk.catalog.deleteDataset(`${importModule}.${importLookup}`);
-            });
-    } catch (err) {
-        console.log(err);
-        exitOnFailure();
-    }
-}
-main();
+        // ***** STEP 7: Validate - Search the kvcollection via the lookup and validate expected data in the new imported module
+        const datasetQuery = {
+            filter: `module=="${importModule}"`,
+            count: 1,
+            orderby: 'id Descending',
+        };
+        const datasetList = await splunk.catalog.listDatasets(datasetQuery);
+        const searchJob = await splunk.search.createJob({
+            query: `| from ${importModule}.${datasetList[0].name}`,
+            module: importModule
+        });
+        console.log(`Job created. sid='${searchJob.sid}'`);
+
+        await splunk.search.waitForJob(searchJob);
+        const searchResults = await splunk.search.listResults(searchJob.sid);
+        if (!searchResults || !searchResults.results || searchResults.results.length == 0) {
+            throw new Error('No results returned from search job.');
+        }
+
+        console.log(`Search results found. count=${searchResults.results.length}`);
+        console.log(searchResults);
+    } finally {
+        // ***** STEP 8: Cleanup - Delete all created data sets.
+        // ***** DESCRIPTION: Ignoring exceptions on cleanup.
+        console.log('Cleaning up all created datasets.');
+        await splunk.catalog.deleteDataset(`${importModule}.${importLookup}`).catch(() => {});
+        await splunk.catalog.deleteDataset(`${collectionModule}.${lookupName}`).catch(() => {});
+        await splunk.catalog.deleteDataset(`${collectionModule}.${kvcollectionName}`).catch(() => {});
+    };
+})().catch(error => console.error(error));

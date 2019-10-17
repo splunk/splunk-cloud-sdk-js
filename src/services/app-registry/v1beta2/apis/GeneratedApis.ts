@@ -15,7 +15,7 @@
  * under the License.
  *
  * App Registry
- * With the Splunk Cloud App Registry service, you can create, update, and manage apps built with Splunk Developer Cloud.
+ * With the App Registry service in Splunk Cloud Services, you can create, update, and manage your apps.
  *
  * OpenAPI spec version: v1beta2.0 (recommended default)
  *
@@ -45,7 +45,7 @@ export const APPREGISTRY_SERVICE_CLUSTER: string = 'api';
 /**
  * App Registry
  * Version: v1beta2.0
- * With the Splunk Cloud App Registry service, you can create, update, and manage apps built with Splunk Developer Cloud.
+ * With the App Registry service in Splunk Cloud Services, you can create, update, and manage your apps.
  */
 export class GeneratedAppRegistryService extends BaseApiService {
     getServiceCluster() : string {
@@ -58,110 +58,119 @@ export class GeneratedAppRegistryService extends BaseApiService {
     /**
      * Creates an app.
      * @param createAppRequest Creates a new app.
+     * @param args parameters to be sent with the request
      * @return AppResponseCreateUpdate
      */
-    public createApp = (createAppRequest: CreateAppRequest): Promise<AppResponseCreateUpdate> => {
+    public createApp = (createAppRequest: CreateAppRequest, args?: object): Promise<AppResponseCreateUpdate> => {
         const path = `/app-registry/v1beta2/apps`;
-        return this.client.post(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), createAppRequest)
+        return this.client.post(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), createAppRequest, { query: args })
             .then(response => response.body as AppResponseCreateUpdate);
     }
     /**
      * Creates a subscription.
      * @param appName Creates a subscription between a tenant and an app.
+     * @param args parameters to be sent with the request
      */
-    public createSubscription = (appName: AppName): Promise<object> => {
+    public createSubscription = (appName: AppName, args?: object): Promise<object> => {
         const path = `/app-registry/v1beta2/subscriptions`;
-        return this.client.post(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), appName)
+        return this.client.post(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), appName, { query: args })
             .then(response => response.body as object);
     }
     /**
      * Removes an app.
      * @param appName App name.
+     * @param args parameters to be sent with the request
      */
-    public deleteApp = (appName: string): Promise<object> => {
+    public deleteApp = (appName: string, args?: object): Promise<object> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/apps/${'appName'}`(path_params);
-        return this.client.delete(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
      * Removes a subscription.
      * @param appName App name.
+     * @param args parameters to be sent with the request
      */
-    public deleteSubscription = (appName: string): Promise<object> => {
+    public deleteSubscription = (appName: string, args?: object): Promise<object> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/subscriptions/${'appName'}`(path_params);
-        return this.client.delete(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
      * Returns the metadata of an app.
      * @param appName App name.
+     * @param args parameters to be sent with the request
      * @return AppResponseGetList
      */
-    public getApp = (appName: string): Promise<AppResponseGetList> => {
+    public getApp = (appName: string, args?: object): Promise<AppResponseGetList> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/apps/${'appName'}`(path_params);
-        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as AppResponseGetList);
     }
     /**
      * Returns a list of the public keys used for verifying signed webhook requests.
+     * @param args parameters to be sent with the request
      * @return Array<Key>
      */
-    public getKeys = (): Promise<Array<Key>> => {
+    public getKeys = (args?: object): Promise<Array<Key>> => {
         const path = `/system/app-registry/v1beta2/keys`;
-        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<Key>);
     }
     /**
      * Returns or validates a subscription.
      * @param appName App name.
+     * @param args parameters to be sent with the request
      * @return Subscription
      */
-    public getSubscription = (appName: string): Promise<Subscription> => {
+    public getSubscription = (appName: string, args?: object): Promise<Subscription> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/subscriptions/${'appName'}`(path_params);
-        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Subscription);
     }
     /**
      * Returns the collection of subscriptions to an app.
      * @param appName App name.
+     * @param args parameters to be sent with the request
      * @return Array<Subscription>
      */
-    public listAppSubscriptions = (appName: string): Promise<Array<Subscription>> => {
+    public listAppSubscriptions = (appName: string, args?: object): Promise<Array<Subscription>> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/apps/${'appName'}/subscriptions`(path_params);
-        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<Subscription>);
     }
     /**
      * Returns a list of apps.
+     * @param args parameters to be sent with the request
      * @return Array<AppResponseGetList>
      */
-    public listApps = (): Promise<Array<AppResponseGetList>> => {
+    public listApps = (args?: object): Promise<Array<AppResponseGetList>> => {
         const path = `/app-registry/v1beta2/apps`;
-        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<AppResponseGetList>);
     }
     /**
      * Returns the tenant subscriptions.
-     * @param args All other arguments.
+     * @param args parameters to be sent with the request
      * @param args.kind The kind of application. 
      * @return Array<Subscription>
      */
-    public listSubscriptions = (args?: { kind?: AppResourceKind }): Promise<Array<Subscription>> => {
+    public listSubscriptions = (args?: { kind?: AppResourceKind, [key: string]: any }): Promise<Array<Subscription>> => {
         const path = `/app-registry/v1beta2/subscriptions`;
         return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<Subscription>);
@@ -169,28 +178,30 @@ export class GeneratedAppRegistryService extends BaseApiService {
     /**
      * Rotates the client secret for an app.
      * @param appName App name.
+     * @param args parameters to be sent with the request
      * @return AppResponseCreateUpdate
      */
-    public rotateSecret = (appName: string): Promise<AppResponseCreateUpdate> => {
+    public rotateSecret = (appName: string, args?: object): Promise<AppResponseCreateUpdate> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/apps/${'appName'}/rotate-secret`(path_params);
-        return this.client.post(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.post(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as AppResponseCreateUpdate);
     }
     /**
      * Updates an app.
      * @param appName App name.
      * @param updateAppRequest Updates app contents.
+     * @param args parameters to be sent with the request
      * @return AppResponseCreateUpdate
      */
-    public updateApp = (appName: string, updateAppRequest: UpdateAppRequest): Promise<AppResponseCreateUpdate> => {
+    public updateApp = (appName: string, updateAppRequest: UpdateAppRequest, args?: object): Promise<AppResponseCreateUpdate> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/apps/${'appName'}`(path_params);
-        return this.client.put(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateAppRequest)
+        return this.client.put(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateAppRequest, { query: args })
             .then(response => response.body as AppResponseCreateUpdate);
     }
 }

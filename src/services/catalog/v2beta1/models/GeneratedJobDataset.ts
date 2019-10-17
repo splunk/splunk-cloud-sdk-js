@@ -218,6 +218,13 @@ export interface JobDataset {
     maxTime?: number;
 
     /**
+     * The parent's ID of the search job.
+     * @type {string}
+     * @memberof JobDataset
+     */
+    parent?: string;
+
+    /**
      * An estimate of how complete the search job is.
      * @type {number}
      * @memberof JobDataset

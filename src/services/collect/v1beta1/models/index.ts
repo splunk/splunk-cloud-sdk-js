@@ -1,4 +1,5 @@
 export * from './GeneratedBaseJob';
+export * from './GeneratedBaseJobPatch';
 export * from './GeneratedDeleteJobsResponse';
 export * from './GeneratedError';
 export * from './GeneratedEventExtraField';

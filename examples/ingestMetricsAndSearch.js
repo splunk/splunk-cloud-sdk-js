@@ -20,10 +20,12 @@
 require('isomorphic-fetch');
 
 const { SplunkCloud } = require('../splunk');
+const { searchResultsWithRetryTimeout } = require('./helpers/splunkCloudHelper');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 // Call to the ingest service to insert data
 async function sendDataViaIngest(splunk, host, source) {
+    console.log(`Posting metrics with host=${host}, source=${source}`);
     const metricEvent1 = {
         attributes: {
             defaultDimensions: {},
@@ -89,75 +91,22 @@ async function sendDataViaIngest(splunk, host, source) {
     };
 
     // Use the Ingest Service metrics endpoint to send the metrics data
-    await splunk.ingest
-        .postMetrics([metricEvent1, metricEvent2])
-        .then(response => {
-            console.log('Ingest of metrics succeeded with response:');
-            console.log(response);
-        })
-        .catch(err => {
-            console.log('Ingest of metrics failed with err:');
-            console.log(err);
-            exitOnFailure();
-        });
-}
+    await splunk.ingest.postMetrics([metricEvent1, metricEvent2]).catch(error => {
+        throw new Error(`Ingest of metrics failed with err=${error}`);
+    });
 
-function exitOnFailure() {
-    process.exit(1);
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// Creates a search job and fetches search results
-async function searchResults(splunk, start, timeout, query, expected) {
-    if ((Date.now() - start) > timeout) {
-        console.log(`TIMEOUT!!!! Search is taking more than ${timeout}ms. Terminate!`);
-        return false;
-    }
-
-    // sleep 5 seconds before to retry the search
-    await sleep(5000);
-
-    return splunk.search
-        .createJob({ query: query })
-        .then(job => {
-            console.log(`Created sid: ${job.sid}`);
-            return splunk.search.waitForJob(job);
-        })
-        .then(searchObj => {
-            console.log(`Done waiting for job, calling listResults on ${searchObj.sid} ...`);
-            return splunk.search.listResults(searchObj.sid);
-        })
-        .then(resultResponse => {
-            const retNum = resultResponse.results.length;
-            console.log(`got ${retNum} results`);
-            if (retNum < expected) {
-                return searchResults(splunk, start, timeout, query, expected);
-            } else if (retNum > expected) {
-                console.log(retNum);
-                console.log(`find more events than expected for query ${query}`);
-                return resultResponse.results;
-            }
-            console.log(
-                `Successfully found ${retNum} event for query ${query}, total spent ${Date.now() -
-                    start}ms`
-            );
-            return resultResponse.results;
-        })
-        .catch(err => {
-            console.log(err);
-            return [];
-        });
+    console.log('Ingestion of metrics succeeded.');
 }
 
 // Define the main workflow
-async function main() {
-    // ***** STEP 1: Get Splunk SSC client
-    // ***** DESCRIPTION: Get Splunk SSC client of a tenant using an authentication token.
+(async function() {
+    // ***** STEP 1: Get Splunk Cloud client
+    // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authentication token.
     const splunk = new SplunkCloud({
-        urls: { api: SPLUNK_CLOUD_API_HOST, app: SPLUNK_CLOUD_APPS_HOST },
+        urls: {
+            api: SPLUNK_CLOUD_API_HOST,
+            app: SPLUNK_CLOUD_APPS_HOST
+        },
         tokenSource: BEARER_TOKEN,
         defaultTenant: TENANT_ID,
     });
@@ -167,30 +116,18 @@ async function main() {
     const timeSec = Math.floor(Date.now() / 1000);
     const host = `h-${timeSec}`;
     const source = `s-${timeSec}`;
-    console.log(`Posting metrics with host=${host}, source=${source}`);
     await sendDataViaIngest(splunk, host, source);
 
     // ***** STEP 3: Verify the data
     // ***** DESCRIPTION: Search the data to ensure the metrics data was ingested.
-    const timeout = 90 * 1000;
-    const query = `| from metrics group by host select host, avg(CPU) as avg_cpu, avg(Memory) as avg_mem, avg(Disk) as avg_disk | search host="${host}"`;
-    console.log(`Searching for metrics with query: '${query}'`);
-    await searchResults(splunk, Date.now(), timeout, query, 1)
-        .then(results => {
-            // TODO: Known issue with duplicate events in ingest service,
-            // allow more results than expected for now
-            const success = results && results.length >= 0;
-            if (!success) {
-                console.log('Searching for metrics returned no results.');
-                exitOnFailure();
-            }
-        })
-        .catch(err => {
-            console.log('Searching for metrics failed with err:');
-            console.log(err);
-            exitOnFailure();
+    const searchResultsResponse = await searchResultsWithRetryTimeout(
+        splunk,
+        `| from metrics group by host select host, avg(CPU) as avg_cpu, avg(Memory) as avg_mem, avg(Disk) as avg_disk | search host="${host}"`,
+        (result) => {
+            return result.length >= 1;
+        }).catch(error => {
+            throw new Error(`Results search for metrics failed with error=${error}`);
         });
-}
 
-// Run the workflow
-main();
+    console.log(searchResultsResponse);
+})().catch(error => console.error(error));

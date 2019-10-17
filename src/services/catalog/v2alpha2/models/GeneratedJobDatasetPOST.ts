@@ -177,6 +177,13 @@ export interface JobDatasetPOST {
     module?: string;
 
     /**
+     * The parent's ID of the search job.
+     * @type {string}
+     * @memberof JobDatasetPOST
+     */
+    parent?: string;
+
+    /**
      * An estimate of how complete the search job is.
      * @type {number}
      * @memberof JobDatasetPOST

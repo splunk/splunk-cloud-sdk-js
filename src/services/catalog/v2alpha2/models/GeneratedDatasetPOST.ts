@@ -31,6 +31,7 @@ import {
     KVCollectionDatasetPOST,
     LookupDatasetPOST,
     MetricDatasetPOST,
+    RecurringSearchDataset,
     ViewDatasetPOST,
 } from './';
 
@@ -39,4 +40,4 @@ import {
  * Initial property values for creating a new action using a POST request.
  * @export
  */
-export type DatasetPOST = ImportDatasetPOST | IndexDatasetPOST | JobDatasetPOST | KVCollectionDatasetPOST | LookupDatasetPOST | MetricDatasetPOST | ViewDatasetPOST;
+export type DatasetPOST = ImportDatasetPOST | IndexDatasetPOST | JobDatasetPOST | KVCollectionDatasetPOST | LookupDatasetPOST | MetricDatasetPOST | RecurringSearchDataset | ViewDatasetPOST;

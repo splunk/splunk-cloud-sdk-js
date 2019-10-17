@@ -15,7 +15,7 @@
  * under the License.
  *
  * Splunk Forwarder Service
- * Send data from a heavy forwarder to the Splunk Forwarder Service.
+ * Send data from a Splunk forwarder to the Splunk Forwarder service in Splunk Cloud Services.
  *
  * OpenAPI spec version: v2beta1.1 (recommended default)
  *

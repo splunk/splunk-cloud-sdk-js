@@ -30,10 +30,6 @@ echo "Building resouces for documentation ..."
 yarn build
 
 print_header_line
-echo "Updating docs ..."
-yarn run docs
-
-print_header_line
 echo "Showing changes with 'git status' ..."
 git status
 
@@ -45,11 +41,7 @@ then
     print_header_line
     # This also creates a tag for the version
     echo "Bumping version, making CHANGELOG.md updates, and committing it ..."
-    yarn release
-
-    print_header_line
-    echo "Generating the latest docs ..."
-    yarn docs
+    yarn standard-version --release-as $NEW_VERSION
 
     print_header_line
     echo "Pushing branch $BRANCH_NAME ..."

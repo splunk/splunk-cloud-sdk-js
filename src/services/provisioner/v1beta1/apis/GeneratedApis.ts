@@ -15,7 +15,7 @@
  * under the License.
  *
  * Provisioner
- * With the Provisioner Service, you can provision your tenant and manage it
+ * With the Provisioner service, you can provision and manage your tenants.
  *
  * OpenAPI spec version: v1beta1.3 (recommended default)
  *
@@ -46,7 +46,7 @@ export const PROVISIONER_SERVICE_CLUSTER: string = 'api';
 /**
  * Provisioner
  * Version: v1beta1.3
- * With the Provisioner Service, you can provision your tenant and manage it
+ * With the Provisioner service, you can provision and manage your tenants.
  */
 export class GeneratedProvisionerService extends BaseApiService {
     getServiceCluster() : string {
@@ -57,115 +57,125 @@ export class GeneratedProvisionerService extends BaseApiService {
         return PROVISIONER_SERVICE_PREFIX;
     }
     /**
-     * Creates an invite to invite a person to the tenant using their email address
+     * Creates an invitation for a person to join the tenant using their email address.
      * @param inviteBody
+     * @param args parameters to be sent with the request
      * @return InviteInfo
      */
-    public createInvite = (inviteBody: InviteBody): Promise<InviteInfo> => {
+    public createInvite = (inviteBody: InviteBody, args?: object): Promise<InviteInfo> => {
         const path = `/provisioner/v1beta1/invites`;
-        return this.client.post(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), inviteBody)
+        return this.client.post(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), inviteBody, { query: args })
             .then(response => response.body as InviteInfo);
     }
     /**
-     * Creates a new job that provisions a new tenant and subscribes apps to the tenant
+     * Creates a new job that provisions a new tenant and subscribes apps to the tenant.
      * @param createProvisionJobBody
+     * @param args parameters to be sent with the request
      * @return ProvisionJobInfo
      */
-    public createProvisionJob = (createProvisionJobBody: CreateProvisionJobBody): Promise<ProvisionJobInfo> => {
+    public createProvisionJob = (createProvisionJobBody: CreateProvisionJobBody, args?: object): Promise<ProvisionJobInfo> => {
         const path = `/system/provisioner/v1beta1/jobs/tenants/provision`;
-        return this.client.post(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), createProvisionJobBody)
+        return this.client.post(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), createProvisionJobBody, { query: args })
             .then(response => response.body as ProvisionJobInfo);
     }
     /**
-     * Deletes an invite in the given tenant
+     * Removes an invitation in the given tenant.
      * @param inviteId
+     * @param args parameters to be sent with the request
      */
-    public deleteInvite = (inviteId: string): Promise<object> => {
+    public deleteInvite = (inviteId: string, args?: object): Promise<object> => {
         const path_params = {
             inviteId: inviteId
         };
         const path = this.template`/provisioner/v1beta1/invites/${'inviteId'}`(path_params);
-        return this.client.delete(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.delete(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**
-     * Gets an invite in the given tenant
+     * Returns an invitation in the given tenant.
      * @param inviteId
+     * @param args parameters to be sent with the request
      * @return InviteInfo
      */
-    public getInvite = (inviteId: string): Promise<InviteInfo> => {
+    public getInvite = (inviteId: string, args?: object): Promise<InviteInfo> => {
         const path_params = {
             inviteId: inviteId
         };
         const path = this.template`/provisioner/v1beta1/invites/${'inviteId'}`(path_params);
-        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as InviteInfo);
     }
     /**
-     * Gets details of a specific provision job
+     * Returns details of a specific provision job.
      * @param jobId
+     * @param args parameters to be sent with the request
      * @return ProvisionJobInfo
      */
-    public getProvisionJob = (jobId: string): Promise<ProvisionJobInfo> => {
+    public getProvisionJob = (jobId: string, args?: object): Promise<ProvisionJobInfo> => {
         const path_params = {
             jobId: jobId
         };
         const path = this.template`/system/provisioner/v1beta1/jobs/tenants/provision/${'jobId'}`(path_params);
-        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as ProvisionJobInfo);
     }
     /**
-     * Gets a specific tenant
+     * Returns a specific tenant.
      * @param tenantName
+     * @param args parameters to be sent with the request
      * @return TenantInfo
      */
-    public getTenant = (tenantName: string): Promise<TenantInfo> => {
+    public getTenant = (tenantName: string, args?: object): Promise<TenantInfo> => {
         const path_params = {
             tenantName: tenantName
         };
         const path = this.template`/system/provisioner/v1beta1/tenants/${'tenantName'}`(path_params);
-        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as TenantInfo);
     }
     /**
-     * Lists the invites in a given tenant
+     * Returns a list of invitations in a given tenant.
+     * @param args parameters to be sent with the request
      * @return Invites
      */
-    public listInvites = (): Promise<Invites> => {
+    public listInvites = (args?: object): Promise<Invites> => {
         const path = `/provisioner/v1beta1/invites`;
-        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Invites);
     }
     /**
-     * Lists all provision jobs created by the user
+     * Returns a list of all provision jobs created by the user.
+     * @param args parameters to be sent with the request
      * @return ProvisionJobs
      */
-    public listProvisionJobs = (): Promise<ProvisionJobs> => {
+    public listProvisionJobs = (args?: object): Promise<ProvisionJobs> => {
         const path = `/system/provisioner/v1beta1/jobs/tenants/provision`;
-        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as ProvisionJobs);
     }
     /**
-     * Lists all tenants that the user can read
+     * Returns all tenants that the user can read.
+     * @param args parameters to be sent with the request
      * @return Tenants
      */
-    public listTenants = (): Promise<Tenants> => {
+    public listTenants = (args?: object): Promise<Tenants> => {
         const path = `/system/provisioner/v1beta1/tenants`;
-        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)))
+        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Tenants);
     }
     /**
-     * Updates an invite in the given tenant
+     * Modifies an invitation in the given tenant.
      * @param inviteId
      * @param updateInviteBody
+     * @param args parameters to be sent with the request
      * @return InviteInfo
      */
-    public updateInvite = (inviteId: string, updateInviteBody: UpdateInviteBody): Promise<InviteInfo> => {
+    public updateInvite = (inviteId: string, updateInviteBody: UpdateInviteBody, args?: object): Promise<InviteInfo> => {
         const path_params = {
             inviteId: inviteId
         };
         const path = this.template`/provisioner/v1beta1/invites/${'inviteId'}`(path_params);
-        return this.client.patch(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateInviteBody)
+        return this.client.patch(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateInviteBody, { query: args })
             .then(response => response.body as InviteInfo);
     }
 }

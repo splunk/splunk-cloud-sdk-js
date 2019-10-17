@@ -15,7 +15,7 @@
  * under the License.
  *
  * Data Stream Processing REST API
- * With the Splunk Cloud Data Stream Processing service, you can perform create, read, update, and delete (CRUD) operations on your data pipeline. The Streams API also has metrics and preview session endpoints and gives you full control over your data pipeline
+ * With the Streams service in Splunk Cloud Services, you can perform create, read, update, and delete (CRUD) operations on your data pipeline.The Streams service in Splunk Cloud Services also has metrics and preview session endpoints and gives you full control over your data pipeline.
  *
  * OpenAPI spec version: v2beta1.2 (recommended default)
  *
