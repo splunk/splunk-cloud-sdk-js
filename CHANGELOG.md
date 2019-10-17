@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v1.1.0...v2.0.0) (2019-10-16)
+
+
+### Features
+
+* **collect:** BREAKING CHANGE: scalePolicy is now defined as a ScalePolicy model rather than a simple object. ([2d58bac](https://github.com/splunk/splunk-cloud-sdk-js/commits/2d58bac))
+* **streams:** 'Expression' value exposed as part of the SplCompileRequestSyntax enumeration. ([2d58bac](https://github.com/splunk/splunk-cloud-sdk-js/commits/2d58bac))
+* **identity:** ValidateInfoKindEnum exposed as a field in ValidateInfo interface. ([2d58bac](https://github.com/splunk/splunk-cloud-sdk-js/commits/2d58bac))
+* **all:** arbitrary query parameters exposed as an optional parameter in all public APIs. ([2d58bac](https://github.com/splunk/splunk-cloud-sdk-js/commits/2d58bac))
+* **examples:** updating samples with common formatting around logging, await vs promise chaining, adding teardowns for cleanup. ([75370a7](https://github.com/splunk/splunk-cloud-sdk-js/commits/75370a7))
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v1.0.1...v1.1.0) (2019-10-01)
 
