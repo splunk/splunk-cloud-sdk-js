@@ -9,8 +9,8 @@ To use the Splunk Cloud SDKs, you must be included in the Splunk Investigates Be
 Sign up here: https://si.scp.splunk.com/.
 
 ## Terms of Service (TOS)
-[Splunk Cloud Terms of Service](https://www.splunk.com/en_us/legal/terms/splunk-cloud-pre-release-terms-of-service.html)
 
+Log in to [Splunk Investigate](https://si.scp.splunk.com/) and accept the Terms of Service when prompted.
 
 ## Get started
 
