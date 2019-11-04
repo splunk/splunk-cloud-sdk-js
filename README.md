@@ -1,14 +1,15 @@
-# Splunk Cloud SDK for JavaScript
+# Splunk Cloud Services SDK for JavaScript
 
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-The Splunk Cloud software development kit (SDK) for JavaScript contains library code and examples to enable you to build apps using the Splunk Cloud services with the JavaScript programming language.
+The Splunk Cloud Services software development kit (SDK) for JavaScript contains library code and examples to enable you to build apps using the Splunk Cloud Services services with the JavaScript programming language.
 
-To use the Splunk Cloud SDKs, you must be included in the Splunk Investigates Beta Program.
+To use the Splunk Cloud Services SDKs, you must be included in the Splunk Investigates Beta Program.
 Sign up here: https://si.scp.splunk.com/.
 
 ## Terms of Service (TOS)
+[Splunk Cloud Services Terms of Service](https://auth.scp.splunk.com/tos)
 
 Log in to [Splunk Investigate](https://si.scp.splunk.com/) and accept the Terms of Service when prompted.
 
@@ -16,7 +17,7 @@ Log in to [Splunk Investigate](https://si.scp.splunk.com/) and accept the Terms 
 
 ### Install the SDK
 
-Install the SDK to enable your app project to interact with Splunk Cloud services.
+Install the SDK to enable your app project to interact with Splunk Cloud Services services.
 
 Run the following command from your project directory:
 
@@ -64,13 +65,13 @@ identity.getPrincipal(PRINCIPAL_NAME);
 ```
 
 ## Documentation
-For general documentation, see the [Splunk Developer Cloud Portal](https://sdc.splunkbeta.com/).
+For general documentation, see the [Splunk Developer Portal](https://developer.splunk.com/scs/).
 
-For reference documentation, see the [Splunk Cloud SDK for JavaScript API Reference](https://sdc.splunkbeta.com/reference/sdk/splunk-cloud-sdk-js).
+For reference documentation, see the [Splunk Cloud Services SDK for JavaScript API Reference](https://developer.splunk.com/scs/reference/sdk/splunk-cloud-sdk-js).
 
 ## Contributing
 
 Do not directly edit any source file in the `/src/generated` directory because these files were generated from service specifications.
 
 ## Contact
-If you have questions, reach out to us on [Slack](https://splunkdevplatform.slack.com) in the **#sdc** channel or email us at _sdcbeta@splunk.com_.
+If you have questions, reach out to us on [Slack](https://splunkdevplatform.slack.com) in the **#sdc** channel or email us at _devinfo@splunk.com_.
