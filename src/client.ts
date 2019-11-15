@@ -297,7 +297,7 @@ function decodeJson(text: string): object | string {
 }
 
 export type ResponseHook = (response: Response, request: Request) => Promise<Response> | any;
-export type TokenProviderFunction = () => string;
+export type TokenProviderAsyncFunction = () => Promise<string>;
 
 export interface ServiceClientArgs {
     /**
@@ -305,10 +305,10 @@ export interface ServiceClientArgs {
      */
     defaultTenant?: string;
     /**
-     * A function that returns a token, a string that is a token, or an object that contains a
-     * function named `getAccessToken` that returns a token.
+     * An async function that returns a token, a string that is a token, or an object that contains an
+     * async function named `getAccessToken` that returns a token.
      */
-    tokenSource: AuthManager | string | TokenProviderFunction;
+    tokenSource: AuthManager | string | TokenProviderAsyncFunction;
     /**
      * An object of key-value pairs, where the keys represent a Splunk Cloud Platform cluster, and values are the base URL for the cluster.
      * Example: `{ "api": "https://api.scp.splunk.com" }`
@@ -337,11 +337,12 @@ const _sleep = (millis: number): Promise<void> => {
  * the service endpoints.
  */
 export class ServiceClient {
-    private readonly tokenSource: () => string;
+    private readonly tokenSource: () => Promise<string>;
     private readonly urls: {
         [key: string]: string;
     };
     private readonly tenant?: string;
+    private readonly authManager?: AuthManager;
     private responseHooks: ResponseHook[] = [];
     private queueManager: RequestQueueManager;
 
@@ -352,14 +353,19 @@ export class ServiceClient {
     constructor(args: ServiceClientArgs) {
         const tokenSourceProvider = args.tokenSource;
         if (typeof tokenSourceProvider === 'string') {
-            // If we have a string, wrap it in a lambda
-            this.tokenSource = () => tokenSourceProvider;
+            // If we have a string, wrap it in a promise
+            this.tokenSource = () => new Promise<string>((resolve) => resolve(tokenSourceProvider));
         } else if (typeof tokenSourceProvider === 'function') {
-            // If we have a function, just call it when we need a token
+            // If we have an async function, just call it when we need a token
             this.tokenSource = tokenSourceProvider;
         } else if (typeof tokenSourceProvider !== 'undefined' && 'getAccessToken' in tokenSourceProvider) {
             // Else wrap a token manager.
-            this.tokenSource = () => tokenSourceProvider.getAccessToken();
+            this.authManager = tokenSourceProvider;
+            this.tokenSource = (() => {
+                const authManager = this.authManager;
+                return () => authManager.getAccessToken();
+            })();
+
         } else {
             throw new SplunkError({ message: 'Unsupported token source' });
         }
@@ -450,11 +456,12 @@ export class ServiceClient {
      * @param headers Additional headers to use for each request
      * @return A key-values map of headers
      */
-    private buildHeaders = (headers?: RequestHeaders): Headers => {
+    private buildHeaders = async (headers?: RequestHeaders): Promise<Headers> => {
         // TODO: Cache
 
+        const token = await this.tokenSource();
         const requestParamHeaders: Headers = new Headers({
-            'Authorization': `Bearer ${this.tokenSource()}`,
+            'Authorization': `Bearer ${token}`,
             'Content-Type': ContentType.JSON,
             'Splunk-Client': `${agent.useragent}/${agent.version}`,
         });
@@ -497,12 +504,13 @@ export class ServiceClient {
      * @param opts Request options.
      * @param data Data for the request body. Objects are converted to strings.
      */
-    public fetch = (method: HTTPMethod, cluster: string, path: string, opts: RequestOptions = {}, data?: any): Promise<Response> => {
+    public fetch = async (method: HTTPMethod, cluster: string, path: string, opts: RequestOptions = {}, data?: any): Promise<Response> => {
         const url = this.buildUrl(cluster, path, opts.query);
         const queue = opts.queue || ServiceClient.queueFromPath(path, method);
+        const headers = await this.buildHeaders(opts.headers);
         const options = {
             method,
-            headers: this.buildHeaders(opts.headers),
+            headers,
             body: JSON.stringify(data),
         };
         const request = new Request(url, options);

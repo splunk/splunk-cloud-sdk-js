@@ -35,7 +35,7 @@ const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID }
     // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authentication token.
     const splunk = new SplunkCloud({
         urls: { api: SPLUNK_CLOUD_API_HOST, app: SPLUNK_CLOUD_APPS_HOST },
-        tokenSource: BEARER_TOKEN,
+        tokenSource: () => new Promise((resolve) => resolve(BEARER_TOKEN)),
         defaultTenant: TENANT_ID,
     });
 

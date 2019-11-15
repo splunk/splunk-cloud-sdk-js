@@ -28,7 +28,7 @@ const stubbyUrl = `http://${config.stubbyHost}:8882`;
 describe('Basic client functionality', () => {
     const s = new ServiceClient({
         urls: { api: stubbyUrl },
-        tokenSource: () => config.stubbyAuthToken,
+        tokenSource: () => new Promise<string>((resolve) => resolve(config.stubbyAuthToken)),
         defaultTenant: config.stubbyTenant
     });
     describe('GET', () => {
@@ -167,7 +167,7 @@ describe('Retry 429 errors', () => {
     const [ initialTimeout, exponent, retries ] = [ 100, 1.6, 5 ];
     const s = new ServiceClient({
         urls: { local: 'http://localhost:3333' },
-        tokenSource: () => 'None',
+        tokenSource: () => new Promise<string>((resolve) => resolve('None')),
         requestQueueManagerParams: new RequestQueueManagerParams(
             {
                 initialTimeout,
@@ -232,7 +232,7 @@ describe('Service client args', () => {
     it('should take a url, a token, and a tenant', () => {
         const s = new ServiceClient({
             urls: { api: stubbyUrl },
-            tokenSource: () => config.stubbyAuthToken,
+            tokenSource: () => new Promise<string>((resolve) => resolve(config.stubbyAuthToken)),
             defaultTenant: config.stubbyTenant
         });
         assert.equal(s.buildPath('/prefix', ['path']), `/${config.stubbyTenant}/prefix/path`);
@@ -262,7 +262,7 @@ describe('Service client args', () => {
     it('should take a function that returns a token', () => {
         const s = new ServiceClient({
             urls: { api: stubbyUrl },
-            tokenSource: () => config.stubbyAuthToken,
+            tokenSource: () => new Promise<string>((resolve) => resolve(config.stubbyAuthToken)),
             defaultTenant: config.stubbyTenant
         });
         assert.equal(s.buildPath('/prefix', ['path']), `/${config.stubbyTenant}/prefix/path`);
@@ -275,7 +275,7 @@ describe('Service client args', () => {
     });
 
     it('should take a token manager (like splunk-cloud-auth)', () => {
-        function getAccessToken () { return config.stubbyAuthToken; }
+        function getAccessToken() { return new Promise<string>((resolve) => resolve(config.stubbyAuthToken)); }
 
         const s = new ServiceClient({
             urls: { api: stubbyUrl },
