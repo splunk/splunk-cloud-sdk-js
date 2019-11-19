@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v2.0.0...v3.0.0) (2019-11-19)
+
+
+### Features
+
+* serviceClientArgs.tokenSource accepts only async functions that return Promise to return th ([f406862](https://github.com/splunk/splunk-cloud-sdk-js/commits/f406862))
+* **auth:** remove checkAuthentication from AuthManager interface ([ab78288](https://github.com/splunk/splunk-cloud-sdk-js/commits/ab78288))
+
+
+### BREAKING CHANGES
+
+* **auth:** remove checkAuthentication from AuthManager interface
+* serviceClientArgs.tokenSource no long accepts synchronous functions to return the token
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v1.1.0...v2.0.0) (2019-10-16)
 
