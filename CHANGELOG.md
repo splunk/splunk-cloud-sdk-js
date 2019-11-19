@@ -6,16 +6,10 @@ All notable changes to this project will be documented in this file. See [standa
 # [3.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v2.0.0...v3.0.0) (2019-11-19)
 
 
-### Features
-
-* serviceClientArgs.tokenSource accepts only async functions that return Promise to return th ([f406862](https://github.com/splunk/splunk-cloud-sdk-js/commits/f406862))
-* **auth:** remove checkAuthentication from AuthManager interface ([ab78288](https://github.com/splunk/splunk-cloud-sdk-js/commits/ab78288))
-
-
 ### BREAKING CHANGES
 
-* **auth:** remove checkAuthentication from AuthManager interface
-* serviceClientArgs.tokenSource no long accepts synchronous functions to return the token
+* **auth:** remove checkAuthentication from AuthManager interface ([f406862](https://github.com/splunk/splunk-cloud-sdk-js/commits/f406862))
+* **auth:** serviceClientArgs.tokenSource no long accepts synchronous functions to return the token ([ab78288](https://github.com/splunk/splunk-cloud-sdk-js/commits/ab78288))
 
 
 
