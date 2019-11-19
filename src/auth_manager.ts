@@ -22,5 +22,4 @@
 export interface AuthManager {
     isAuthenticated(): boolean;
     getAccessToken(): Promise<string>;
-    checkAuthentication(): Promise<boolean>;
 }
