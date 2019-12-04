@@ -58,9 +58,9 @@ export interface PipelineReactivateResponse {
  */
 export enum PipelineReactivateResponsePipelineReactivationStatusEnum {
     Activated = 'activated',
-    AlreadyActivatedWithCurrentVersion = 'alreadyActivatedWithCurrentVersion',
     CurrentVersionInvalid = 'currentVersionInvalid',
     FailedToDeactivateCurrentVersion = 'failedToDeactivateCurrentVersion',
+    NotActivated = 'notActivated',
     RolledBack = 'rolledBack',
     RolledBackError = 'rolledBackError'
 }

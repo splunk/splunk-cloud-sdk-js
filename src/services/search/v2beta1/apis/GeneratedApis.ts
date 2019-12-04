@@ -14,8 +14,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *
- * Splunk Search Service
- * Use the Search service to dispatch, review, and manage searches and search jobs. You can also finalize or cancel running search jobs, retrieve search results and events, and request search-related configurations from the Metadata Catalog service.
+ * Splunk Search service
+ * Use the Search service in Splunk Cloud Services to dispatch, review, and manage searches and search jobs. You can finalize or cancel jobs, retrieve search results, and request search-related configurations from the Metadata Catalog service in Splunk Cloud Services.
  *
  * OpenAPI spec version: v2beta1.1 (recommended default)
  *
@@ -42,9 +42,9 @@ export const SEARCH_SERVICE_PREFIX: string = '/search/v2beta1';
 export const SEARCH_SERVICE_CLUSTER: string = 'api';
 
 /**
- * Splunk Search Service
+ * Splunk Search service
  * Version: v2beta1.1
- * Use the Search service to dispatch, review, and manage searches and search jobs. You can also finalize or cancel running search jobs, retrieve search results and events, and request search-related configurations from the Metadata Catalog service.
+ * Use the Search service in Splunk Cloud Services to dispatch, review, and manage searches and search jobs. You can finalize or cancel jobs, retrieve search results, and request search-related configurations from the Metadata Catalog service in Splunk Cloud Services.
  */
 export class GeneratedSearchService extends BaseApiService {
     getServiceCluster() : string {

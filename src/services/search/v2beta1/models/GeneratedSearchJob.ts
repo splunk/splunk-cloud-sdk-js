@@ -14,8 +14,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *
- * Splunk Search Service
- * Use the Search service to dispatch, review, and manage searches and search jobs. You can also finalize or cancel running search jobs, retrieve search results and events, and request search-related configurations from the Metadata Catalog service.
+ * Splunk Search service
+ * Use the Search service in Splunk Cloud Services to dispatch, review, and manage searches and search jobs. You can finalize or cancel jobs, retrieve search results, and request search-related configurations from the Metadata Catalog service in Splunk Cloud Services.
  *
  * OpenAPI spec version: v2beta1.1 (recommended default)
  *
@@ -147,6 +147,13 @@ export interface SearchJob {
      * @memberof SearchJob
      */
     queryParameters?: QueryParameters;
+
+    /**
+     * Specifies a maximum time interval, in seconds, between identical existing searches. The 'requiredFreshness' parameter is used to determine if an existing search with the same query and the same time boundaries can be reused, instead of running the same search again. Freshness is applied to the resolvedEarliest and resolvedLatest parameters. If an existing search has the same exact criteria as this search and the resolvedEarliest and resolvedLatest values are within the freshness interval, the existing search metadata is returned instead of initiating a new search job. By default, the requiredFreshness parameter is set to 0 which means that the platform does not attempt to use an existing search. 
+     * @type {number}
+     * @memberof SearchJob
+     */
+    requiredFreshness?: number;
 
     /**
      * The earliest time speciifed as an absolute value in GMT. The time is computed based on the values you specify for the 'timezone' and 'earliest' queryParameters. 

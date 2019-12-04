@@ -31,7 +31,6 @@ import {
     KVCollectionDatasetPATCH,
     LookupDatasetPATCH,
     MetricDatasetPATCH,
-    RecurringSearchDataset,
     ViewDatasetPATCH,
 } from './';
 
@@ -40,4 +39,4 @@ import {
  * Property values to be set in an existing dataset using a PATCH request.
  * @export
  */
-export type DatasetPATCH = ImportDatasetPATCH | IndexDatasetPATCH | JobDatasetPATCH | KVCollectionDatasetPATCH | LookupDatasetPATCH | MetricDatasetPATCH | RecurringSearchDataset | ViewDatasetPATCH;
+export type DatasetPATCH = ImportDatasetPATCH | IndexDatasetPATCH | JobDatasetPATCH | KVCollectionDatasetPATCH | LookupDatasetPATCH | MetricDatasetPATCH | ViewDatasetPATCH;

@@ -56,13 +56,6 @@ export interface PipelineRequest {
     bypassValidation?: boolean;
 
     /**
-     * The user that created the pipeline. Deprecated.
-     * @type {string}
-     * @memberof PipelineRequest
-     */
-    createUserId?: string;
-
-    /**
      * The description of the pipeline. Defaults to null.
      * @type {string}
      * @memberof PipelineRequest

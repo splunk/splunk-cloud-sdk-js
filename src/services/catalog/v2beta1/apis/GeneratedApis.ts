@@ -14,8 +14,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *
- * Metadata Catalog
- * With the Metadata Catalog you can create and manage knowledge objects such as datasets, fields, rules, actions, dashboards, and workflows.
+ * Metadata Catalog service
+ * With the Metadata Catalog in Splunk Cloud Services you can create and manage knowledge objects such as datasets, fields, rules, actions, dashboards, and workflows.
  *
  * OpenAPI spec version: v2beta1.4 (recommended default)
  *
@@ -66,9 +66,9 @@ export const CATALOG_SERVICE_PREFIX: string = '/catalog/v2beta1';
 export const CATALOG_SERVICE_CLUSTER: string = 'api';
 
 /**
- * Metadata Catalog
+ * Metadata Catalog service
  * Version: v2beta1.4
- * With the Metadata Catalog you can create and manage knowledge objects such as datasets, fields, rules, actions, dashboards, and workflows.
+ * With the Metadata Catalog in Splunk Cloud Services you can create and manage knowledge objects such as datasets, fields, rules, actions, dashboards, and workflows.
  */
 export class GeneratedCatalogService extends BaseApiService {
     getServiceCluster() : string {
