@@ -3,12 +3,18 @@
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
 <a name="3.1.0"></a>
-# [3.1.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v3.0.0...v3.1.0) (2019-12-05)
+## [3.1.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v3.0.0...v3.1.0) (2019-12-05)
 
 
 ### Features
 
-* updating generated APIs (1c4b60b97229cab171981c763edf0b1545afad4f) ([c1fbebd](https://github.com/splunk/splunk-cloud-sdk-js/commits/c1fbebd))
+* **search:** Expose optional requiredFreshness field on SearchJob interface ([c1fbebd](https://github.com/splunk/splunk-cloud-sdk-js/commits/c1fbebd))
+* **streams:** Expose NotActivated on PipelineReactivateResponsePipelineReactivationStatusEnum ([c1fbebd](https://github.com/splunk/splunk-cloud-sdk-js/commits/c1fbebd))
+
+### BREAKING CHANGES
+
+* **streams:** Remove AlreadyActivatedWithCurrentVersion from PipelineReactivateResponsePipelineReactivationStatusEnum ([c1fbebd](https://github.com/splunk/splunk-cloud-sdk-js/commits/c1fbebd))
+* **streams:** Remove optional createUserId field on GeneratedPipelineRequest ([c1fbebd](https://github.com/splunk/splunk-cloud-sdk-js/commits/c1fbebd))
 
 
 
