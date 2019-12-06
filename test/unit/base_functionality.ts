@@ -18,8 +18,7 @@ import { assert } from 'chai';
 import 'isomorphic-fetch';
 import 'mocha';
 import sleep = require('sleep-promise');
-import { HTTPResponse, RequestQueueManagerParams, ServiceClient } from '../../client';
-import { QueryArgs } from '../../src/client';
+import { HTTPResponse, QueryArgs, RequestQueueManagerParams, ServiceClient } from '../../src/client';
 import config from '../config';
 import { RetryServer } from './test_retry_server';
 
@@ -164,7 +163,7 @@ describe('Basic client functionality', () => {
 
 describe('Retry 429 errors', () => {
     const server = new RetryServer();
-    const [ initialTimeout, exponent, retries ] = [ 100, 1.6, 5 ];
+    const [initialTimeout, exponent, retries] = [100, 1.6, 5];
     const s = new ServiceClient({
         urls: { local: 'http://localhost:3333' },
         tokenSource: () => new Promise<string>((resolve) => resolve('None')),
@@ -176,14 +175,15 @@ describe('Retry 429 errors', () => {
                 maxInFlight: 3,
                 enableRetryHeader: true,
             }
-        )});
+        )
+    });
     before(() => {
         server.start();
         s.clearResponseHooks();
     });
     it('should still throw after retries', () => {
-        let lastResponse : Response | undefined;
-        let lastRequest : Request | undefined;
+        let lastResponse: Response | undefined;
+        let lastRequest: Request | undefined;
         s.addResponseHook((response, request) => {
             lastResponse = response;
             lastRequest = request;
@@ -312,4 +312,3 @@ describe('Service client args', () => {
         assert.equal(actual, `https://api.scp.splunk.com/test?foo=${encodeURIComponent('1,2')}`);
     });
 });
-

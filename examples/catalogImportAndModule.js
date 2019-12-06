@@ -20,7 +20,7 @@
 //              import into a new module and search the collection via the lookup in the imported module.
 require('isomorphic-fetch');
 
-const { SplunkCloud } = require('../splunk');
+const { SplunkCloud } = require('../src/splunk');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 (async function () {
@@ -116,8 +116,8 @@ const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID }
         // ***** STEP 8: Cleanup - Delete all created data sets.
         // ***** DESCRIPTION: Ignoring exceptions on cleanup.
         console.log('Cleaning up all created datasets.');
-        await splunk.catalog.deleteDataset(`${importModule}.${importLookup}`).catch(() => {});
-        await splunk.catalog.deleteDataset(`${collectionModule}.${lookupName}`).catch(() => {});
-        await splunk.catalog.deleteDataset(`${collectionModule}.${kvcollectionName}`).catch(() => {});
+        await splunk.catalog.deleteDataset(`${importModule}.${importLookup}`).catch(() => { });
+        await splunk.catalog.deleteDataset(`${collectionModule}.${lookupName}`).catch(() => { });
+        await splunk.catalog.deleteDataset(`${collectionModule}.${kvcollectionName}`).catch(() => { });
     };
 })().catch(error => console.error(error));

@@ -19,7 +19,7 @@
 //              and search the collection via the lookup.
 require('isomorphic-fetch');
 
-const { SplunkCloud } = require('../splunk');
+const { SplunkCloud } = require('../src/splunk');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 (async function () {
@@ -117,7 +117,7 @@ const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID }
         // ***** STEP 5: Cleanup - Delete all created data sets and kvstores.
         // ***** DESCRIPTION: Ignoring exceptions on cleanup.
         console.log('Cleaning up all created datasets.');
-        await splunk.catalog.deleteDatasetById(lookupDataset.id).catch(() => {});
-        await splunk.catalog.deleteDatasetById(kvCollectionDataset.id).catch(() => {});
+        await splunk.catalog.deleteDatasetById(lookupDataset.id).catch(() => { });
+        await splunk.catalog.deleteDatasetById(kvCollectionDataset.id).catch(() => { });
     }
 })().catch(error => console.error(error));

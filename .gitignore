@@ -4,6 +4,8 @@ generated/**/**
 models/**/**
 /src/*.js
 /src/*.d.ts
+/src/**/*.js
+/src/**/*.d.ts
 /test/**/*.d.ts
 /test/**/*.js
 ./common/ # built dir

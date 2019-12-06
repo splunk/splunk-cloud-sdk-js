@@ -2,7 +2,16 @@
   "name": "@splunkdev/cloud-sdk",
   "version": "3.1.0",
   "description": "Splunk Cloud SDK for Javascript",
-  "main": "splunk.js",
+  "main": "./src/splunk.js",
+  "types": "./src/splunk.d.ts",
+  "files": [
+    "/src/*.js",
+    "/src/*.js.map",
+    "/src/*.d.ts",
+    "/src/**/*.js",
+    "/src/**/*.js.map",
+    "/src/**/*.d.ts"
+  ],
   "scripts": {
     "commit": "yarn git-cz",
     "tslint": "tslint -p tsconfig.json -c tslint.json && yarn tslint:tests",
@@ -15,12 +24,13 @@
     "docs": "yarn ts:docs",
     "build": "node ci/extract_version.js && tsc -p tsconfig.json",
     "build:tests": "tsc -p tsconfig.test.json",
-    "clean": "rimraf *.js *.map *.d.ts services service_base service_extensions || true",
-    "cover": "NODE_ENV=coverage nyc yarn test",
-    "cover:integration": "NODE_ENV=coverage nyc --report-dir coverage-integration yarn ci:integration",
-    "cover:integration:ml": "NODE_ENV=coverage nyc --report-dir coverage-integration-ml yarn ci:integration:ml",
+    "clean": "rimraf *.js *.map *.d.ts src/**/*.js src/**/*.js.map src/**/*.d.ts src/*.js src/*.js.map src/*.d.ts services service_base service_extensions && yarn run clean:coverage || true",
+    "clean:coverage": "rm -rf coverage",
+    "cover": "yarn run clean:coverage && NODE_ENV=coverage nyc npm run test",
+    "cover:integration": "NODE_ENV=coverage nyc --report-dir coverage-integration npm ci:integration",
+    "cover:integration:ml": "NODE_ENV=coverage nyc --report-dir coverage-integration-ml npm ci:integration:ml",
     "pretest": "yarn tslint && yarn build",
-    "test": "ts-mocha -p tsconfig.test.json test/unit/*.ts --timeout=900000 --exclude test/unit/*.d.ts",
+    "test": "ts-mocha \"test/unit/**/*.ts\" -p tsconfig.test.json --exclude \"test/unit/*.d.ts\" --exit --timeout=900000 --recursive",
     "test:integration": "ts-mocha -p tsconfig.test.json --timeout=900000 test/integration/*.ts --exclude test/integration/ml_proxy.ts",
     "test:integration:ml": "ts-mocha -p tsconfig.test.json --timeout=900000 test/integration/ml_proxy.ts",
     "test:examples": "ts-mocha -p tsconfig.test.json --timeout=900000 test/examples/*.ts",
@@ -82,27 +92,40 @@
     "rxjs": "^6.3.2"
   },
   "nyc": {
-    "reporter": [
-      "lcov",
-      "text-summary"
-    ],
+    "all": true,
+    "branches": 10,
+    "lines": 10,
+    "functions": 10,
+    "statements": 10,
+    "cache": false,
+    "check-coverage": false,
     "extension": [
-      ".ts"
+      ".ts",
+      ".js"
     ],
     "exclude": [
-      ".tmp",
-      "ci",
-      "coverage",
-      "dist",
-      "node_modules",
-      "test",
-      "tmp",
-      ".eslintrc.js",
-      "tslint.json",
-      "tsconfig.json",
-      "docs",
-      ".template"
-    ]
+      "src/version.ts",
+      "src/**/index.ts",
+      "src/**/Generated*.ts",
+      "src/**/models.ts",
+      "src/**/*.d.ts"
+    ],
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.js"
+    ],
+    "instrument": true,
+    "reporter": [
+      "lcov",
+      "text-summary",
+      "text",
+      "html"
+    ],
+    "require": [
+      "ts-node/register",
+      "source-map-support/register"
+    ],
+    "sourceMap": true
   },
   "husky": {
     "hooks": {

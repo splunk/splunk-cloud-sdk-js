@@ -1,8 +1,5 @@
 {
   "compilerOptions": {
-    "noEmit": true,
-    "strict": true,
-    "resolveJsonModule": true,
     "lib": [
       "es5",
       "es2015.iterable",
@@ -12,12 +9,22 @@
       "es2015.symbol.wellknown",
       "dom"
     ],
-    "types": ["node"]
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es5",
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "test/**/*.ts"
   ],
   "exclude": [
+    "coverage",
     "node_modules",
     "test/**/*.d.ts",
     "test/**/*.js",

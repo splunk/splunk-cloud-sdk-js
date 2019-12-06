@@ -19,7 +19,7 @@
 
 require('isomorphic-fetch');
 
-const { SplunkCloud } = require('../splunk');
+const { SplunkCloud } = require('../src/splunk');
 const { activatePipeline, cleanupPipeline, createIndex, createPipeline, searchResultsWithRetryTimeout } = require('./helpers/splunkCloudHelper');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
@@ -70,7 +70,7 @@ async function sendDataViaIngest(splunk, index, host, source) {
         const response = await splunk.ingest.postEvents([event1, event2, event3]);
         console.log('Ingest of events succeeded with response:');
         console.log(response);
-    } catch(err) {
+    } catch (err) {
         throw new Error(`Ingest of events failed with err:\n${err}`);
     }
 }

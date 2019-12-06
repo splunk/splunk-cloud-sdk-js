@@ -19,7 +19,7 @@
 //              and search the collection via the lookup.
 require('isomorphic-fetch');
 
-const { SplunkCloud } = require('../splunk');
+const { SplunkCloud } = require('../src/splunk');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 const MAX_RETRIES = 10;
 
