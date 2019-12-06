@@ -2,19 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-<a name="3.1.0"></a>
-## [3.1.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v3.0.0...v3.1.0) (2019-12-05)
-
+<a name="4.0.0"></a>
+# [4.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v3.0.0...v4.0.0) (2019-12-06)
 
 ### Features
 
-* **search:** Expose optional requiredFreshness field on SearchJob interface ([c1fbebd](https://github.com/splunk/splunk-cloud-sdk-js/commits/c1fbebd))
-* **streams:** Expose NotActivated on PipelineReactivateResponsePipelineReactivationStatusEnum ([c1fbebd](https://github.com/splunk/splunk-cloud-sdk-js/commits/c1fbebd))
+* **search:** Expose optional requiredFreshness field on SearchJob interface ([d92c7af](https://github.com/splunk/splunk-cloud-sdk-js/commits/d92c7af))
+* **streams:** Expose NotActivated on PipelineReactivateResponsePipelineReactivationStatusEnum ([d92c7af](https://github.com/splunk/splunk-cloud-sdk-js/commits/d92c7af))
 
 ### BREAKING CHANGES
 
-* **streams:** Remove AlreadyActivatedWithCurrentVersion from PipelineReactivateResponsePipelineReactivationStatusEnum ([c1fbebd](https://github.com/splunk/splunk-cloud-sdk-js/commits/c1fbebd))
-* **streams:** Remove optional createUserId field on GeneratedPipelineRequest ([c1fbebd](https://github.com/splunk/splunk-cloud-sdk-js/commits/c1fbebd))
+* **streams:** Remove AlreadyActivatedWithCurrentVersion from PipelineReactivateResponsePipelineReactivationStatusEnum ([d92c7af](https://github.com/splunk/splunk-cloud-sdk-js/commits/d92c7af))
+* **streams:** Remove optional createUserId field on GeneratedPipelineRequest ([d92c7af](https://github.com/splunk/splunk-cloud-sdk-js/commits/d92c7af))
 
 
 

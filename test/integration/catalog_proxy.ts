@@ -16,8 +16,8 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import * as catalog from '../../services/catalog';
-import { SplunkCloud } from '../../splunk';
+import * as catalog from '../../src/services/catalog';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
 const splunkCloud = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
@@ -176,7 +176,7 @@ describe('catalog tests', () => {
             });
         });
 
-        it('should allow create / delete KVCollection Dataset', () =>{
+        it('should allow create / delete KVCollection Dataset', () => {
             const name = `kvds${Date.now()}`;
             return createKVCollectionDataset(name).then(kvds => {
                 assert.isNotNull(kvds);
@@ -438,14 +438,14 @@ describe('catalog tests', () => {
         let dashboardID = '';
 
         before(async () =>
-            splunkCloud.catalog.createDashboard({ name: dashboardName, module:'allmembers', definition: '{"title":"this is my test dashboard"}' } as catalog.DashboardPOST)
-            .then(res => {
-                dashboardID = res.id;
-            })
-            .catch(err => {
-                console.log('An error was encountered while creating dashboard datasests');
-                console.log(err);
-            }));
+            splunkCloud.catalog.createDashboard({ name: dashboardName, module: 'allmembers', definition: '{"title":"this is my test dashboard"}' } as catalog.DashboardPOST)
+                .then(res => {
+                    dashboardID = res.id;
+                })
+                .catch(err => {
+                    console.log('An error was encountered while creating dashboard datasests');
+                    console.log(err);
+                }));
         // Cleanup the dataset after we're done with dashboards
         after(() =>
             splunkCloud.catalog
@@ -533,11 +533,11 @@ export function createIndexDataset(name: string, module: string = ''): Promise<c
         kind: catalog.IndexDatasetKind.Index,
         disabled: false,
     }).then(response => response as catalog.Dataset)
-    .catch(error => {
-        console.log('An error was encountered while creating datasests');
-        console.log(error);
-        return null;
-    });
+        .catch(error => {
+            console.log('An error was encountered while creating datasests');
+            console.log(error);
+            return null;
+        });
 }
 
 export function createKVCollectionDataset(name: string, module: string = ''): Promise<catalog.Dataset | null> {
@@ -590,5 +590,3 @@ export function createRule(ruleName: string): Promise<any> {
             console.log(error);
         });
 }
-
-

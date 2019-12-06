@@ -16,9 +16,9 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import { EventBatcher } from '../../ingest_event_batcher';
-import { Event, HTTPResponse, Metric, MetricEvent } from '../../services/ingest';
-import { SplunkCloud } from '../../splunk';
+import { EventBatcher } from '../../src/ingest_event_batcher';
+import { Event, HTTPResponse, Metric, MetricEvent } from '../../src/services/ingest';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
 const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
@@ -96,7 +96,7 @@ describe('integration tests for Ingest Endpoints', () => {
                 try {
                     for (const e of events) {
                         const event = e as Event;
-                        const addPromise = eb.add(event) as Promise<HTTPResponse|{}>;
+                        const addPromise = eb.add(event) as Promise<HTTPResponse | {}>;
                         addPromise.then(response => {
                             console.log(response);
                             assert.deepEqual(response, successResponse);
@@ -121,7 +121,7 @@ describe('integration tests for Ingest Endpoints', () => {
                 try {
                     for (const e of events) {
                         const event = e as Event;
-                        const addPromise = eb.add(event) as Promise<HTTPResponse|{}>;
+                        const addPromise = eb.add(event) as Promise<HTTPResponse | {}>;
                         addPromise.then(response => {
                             console.log(response);
                             assert.deepEqual(response, successResponse);
@@ -146,7 +146,7 @@ describe('integration tests for Ingest Endpoints', () => {
                 try {
                     for (const e of events) {
                         const event = e as Event;
-                        const addPromise = eb.add(event) as Promise<HTTPResponse|{}>;
+                        const addPromise = eb.add(event) as Promise<HTTPResponse | {}>;
                         addPromise.then(response => {
                             console.log(response);
                         }).catch(err => console.log(err));
@@ -164,7 +164,7 @@ describe('integration tests for Ingest Endpoints', () => {
                 // 1 total events, batch size 50000, batch count 10, 3000 ms
                 const eb: EventBatcher = new EventBatcher(splunk.ingest, 5000, 10, 3000);
                 try {
-                    const addPromise = eb.add(event1) as Promise<HTTPResponse|{}>;
+                    const addPromise = eb.add(event1) as Promise<HTTPResponse | {}>;
                     addPromise.then(response => {
                         console.log(response);
                     }).catch(err => console.log(err));

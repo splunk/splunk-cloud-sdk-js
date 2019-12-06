@@ -17,8 +17,8 @@
 import { assert } from 'chai';
 import 'mocha';
 import sleep = require('sleep-promise');
-import * as identity from '../../services/identity';
-import { SplunkCloud } from '../../splunk';
+import * as identity from '../../src/services/identity';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
 const tenantID = config.stagingTenant;

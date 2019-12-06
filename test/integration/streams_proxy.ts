@@ -16,8 +16,8 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import * as streams from '../../services/streams';
-import { SplunkCloud } from '../../splunk';
+import * as streams from '../../src/services/streams';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
 const splunkCloud = new SplunkCloud({
@@ -181,10 +181,10 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                     assert.include(deactivatePipelineResponse.deactivated as string, pipelineId1);
                     // return splunkCloud.streams.getPipeline(pipelineId1 as string);
                 });
-                // .then(getPipelineResponse => {
-                //     assert.isNotNull(getPipelineResponse);
-                //     assert.equal(getPipelineResponse.statusMessage, streams.PipelineStatus.Deactivated);
-                // });
+            // .then(getPipelineResponse => {
+            //     assert.isNotNull(getPipelineResponse);
+            //     assert.equal(getPipelineResponse.statusMessage, streams.PipelineStatus.Deactivated);
+            // });
         });
     });
 

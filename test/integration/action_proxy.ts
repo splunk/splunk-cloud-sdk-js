@@ -23,7 +23,7 @@ import {
     RawJSONPayload,
     TriggerEvent,
     TriggerEventKind, WebhookAction
-} from '../../services/action';
+} from '../../src/services/action';
 import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
@@ -184,7 +184,7 @@ describe('integration tests using action service', () => {
         const notification: TriggerEvent = {
             kind: TriggerEventKind.Trigger,
             tenant: tenantID as string,
-            payload:rawPayload
+            payload: rawPayload
         };
 
         it('should trigger action and get status', () => {

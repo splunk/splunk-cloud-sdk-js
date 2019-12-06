@@ -15,7 +15,7 @@
  */
 
 import { assert } from 'chai';
-import { SplunkCloud } from '../../splunk';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 import { createKVCollectionDataset } from './catalog_proxy';
 
@@ -41,7 +41,7 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     };
     // Required for `createKVCollectionDataset` helper
     let testKVCollectionName: string;
-    let initialListRecordsResponse: Array<{[key: string]: string}>;
+    let initialListRecordsResponse: Array<{ [key: string]: string }>;
     let testKVCollectionID: string;
 
     before(() => {
@@ -50,7 +50,7 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
             testKVCollectionID = kvds!.id;
             testKVCollectionName = `${kvds!.module}.${kvds!.name}`;
             return splunkCloud.kvstore.listRecords(testKVCollectionName).then(res => {
-                initialListRecordsResponse = res as Array<{[key: string]: string}>;
+                initialListRecordsResponse = res as Array<{ [key: string]: string }>;
             });
         });
     });
@@ -103,14 +103,14 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     // -------------------------------------------------------------------------
     describe('Test GET ?fields= parameter Requests', () => {
         it('Should return all records when using empty filter', () => splunkCloud.kvstore.listRecords(testKVCollectionName)
-                .then(listRecordsResponse => {
-                    const firstRecord = listRecordsResponse[0];
+            .then(listRecordsResponse => {
+                const firstRecord = listRecordsResponse[0];
 
-                    assert.equal(listRecordsResponse.length, 3);
-                    assert.equal(firstRecord.TEST_KEY_01, 'A');
-                    assert.equal(firstRecord.TEST_KEY_02, 'B');
-                    assert.equal(firstRecord.TEST_KEY_03, 'C');
-                })
+                assert.equal(listRecordsResponse.length, 3);
+                assert.equal(firstRecord.TEST_KEY_01, 'A');
+                assert.equal(firstRecord.TEST_KEY_02, 'B');
+                assert.equal(firstRecord.TEST_KEY_03, 'C');
+            })
         );
         it('Should filter records correctly using the fields parameter for include selection', () => {
             const queryParameters = { fields: ['TEST_KEY_01'] };
@@ -219,7 +219,7 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
 });
 
 export function createRecord(collection: string, record: object): Promise<object> {
-    return splunkCloud.kvstore.insertRecord(collection, record as {[key: string]: string})
+    return splunkCloud.kvstore.insertRecord(collection, record as { [key: string]: string })
         .then(response => {
             assert.notEqual(response._key, null);
             assert.typeOf(response._key, 'string');

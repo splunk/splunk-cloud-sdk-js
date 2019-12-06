@@ -15,9 +15,9 @@
  */
 
 import { assert } from 'chai';
-import { Dataset } from '../../services/catalog';
-import { PingResponseStatusEnum } from '../../services/kvstore';
-import { SplunkCloud } from '../../splunk';
+import { Dataset } from '../../src/services/catalog';
+import { PingResponseStatusEnum } from '../../src/services/kvstore';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 import { createKVCollectionDataset } from './catalog_proxy';
 
@@ -29,7 +29,7 @@ let testKVCollectionName: string;
 
 
 describe('Integration tests for KVStore Endpoints', () => {
-    let testDataset : Dataset | null;
+    let testDataset: Dataset | null;
 
     before(() => {
         return createKVCollectionDataset(testNamespace, testCollection).then(ds => {
@@ -100,10 +100,11 @@ describe('Integration tests for KVStore Endpoints', () => {
         describe('index endpoints - Error scenarios', () => {
             it('should throw 404 Not Found error because the namespace or the collection does not exist', () => {
                 return splunkCloud.kvstore.createIndex(
-                        `missing${Date.now()}`, {
-                            fields,
-                            name: testIndex,
-                        })
+                    `missing${Date.now()}`,
+                    {
+                        fields,
+                        name: testIndex,
+                    })
                     .then(response => assert.fail(response), err => assert.equal(err.httpStatusCode, 404));
             });
 
@@ -218,7 +219,7 @@ describe('Integration tests for KVStore Endpoints', () => {
 
                     const keyElements: string[] = [];
                     response.forEach(val => {
-                        const v = val as {[key: string]: string};
+                        const v = val as { [key: string]: string };
                         keyElements.push(v._key);
                     });
 
@@ -238,9 +239,9 @@ describe('Integration tests for KVStore Endpoints', () => {
             it('should delete the records based on a query', () => {
                 const query = '{ name: "test_record", count_of_fields: 3, }';
                 return splunkCloud.kvstore.deleteRecords(testKVCollectionName, { query })
-                .then(response => {
-                    assert.isEmpty(response);
-                });
+                    .then(response => {
+                        assert.isEmpty(response);
+                    });
             });
 
             it('validate that after calling deleteRecords() based on query, no record is left', () => {

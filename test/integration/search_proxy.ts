@@ -16,8 +16,8 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import * as search from '../../services/search';
-import { SplunkCloud } from '../../splunk';
+import * as search from '../../src/services/search';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
 const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
@@ -51,7 +51,7 @@ describe('integration tests Using Search APIs', () => {
     before(() => {
         const events = [];
         for (let i = 0; i < 10; i++) {
-            events.push({ body: { message:`Test event #${i}` } });
+            events.push({ body: { message: `Test event #${i}` } });
         }
         return splunk.ingest.postEvents(events);
     });
@@ -63,7 +63,7 @@ describe('integration tests Using Search APIs', () => {
                 assert.property(searchObj, 'status');
                 return splunk.search.waitForJob(searchObj);
             }).then(searchObj => { // Ensure we have events when done
-                assert.equal(searchObj.status, search.SearchStatus.Done );
+                assert.equal(searchObj.status, search.SearchStatus.Done);
                 assert.equal(searchObj.resultsAvailable, 5);
                 return splunk.search.listResults(searchObj.sid as string)
                     .then(resultResponse => {
@@ -168,7 +168,7 @@ describe('integration tests Using Search APIs', () => {
                 assert.property(searchObj, 'status');
                 return splunk.search.waitForJob(searchObj);
             }).then(searchObj => { // Ensure we have events when done
-                assert.equal(searchObj.status, search.SearchStatus.Done );
+                assert.equal(searchObj.status, search.SearchStatus.Done);
                 assert.equal(searchObj.resultsAvailable, 5);
                 return splunk.search.listResults(searchObj.sid as string, { field: 'host' })
                     .then(resultResponse => {
@@ -187,7 +187,7 @@ describe('integration tests Using Search APIs', () => {
                 assert.property(searchObj, 'status');
                 return splunk.search.waitForJob(searchObj);
             }).then(searchObj => { // Ensure we have events when done
-                assert.equal(searchObj.status, search.SearchStatus.Done );
+                assert.equal(searchObj.status, search.SearchStatus.Done);
                 return splunk.search.listEventsSummary(searchObj.sid as string, { field: '_raw' })
                     .then(resultResponse => {
                         const response = resultResponse as search.ListSearchResultsResponse;
@@ -206,7 +206,7 @@ describe('integration tests Using Search APIs', () => {
                 assert.property(searchObj, 'status');
                 return splunk.search.waitForJob(searchObj);
             }).then(searchObj => { // Ensure we have events when done
-                assert.equal(searchObj.status, search.SearchStatus.Done );
+                assert.equal(searchObj.status, search.SearchStatus.Done);
                 return splunk.search.listFieldsSummary(searchObj.sid as string, { earliest: '-1m' })
                     .then(resultResponse => {
                         const response = resultResponse as search.FieldsSummary;
@@ -223,7 +223,7 @@ describe('integration tests Using Search APIs', () => {
                 assert.property(searchObj, 'status');
                 return splunk.search.waitForJob(searchObj);
             }).then(searchObj => { // Ensure we have events when done
-                assert.equal(searchObj.status, search.SearchStatus.Done );
+                assert.equal(searchObj.status, search.SearchStatus.Done);
                 return splunk.search.listTimeBuckets(searchObj.sid as string)
                     .then(resultResponse => {
                         const response = resultResponse as search.TimeBucketsSummary;
@@ -245,143 +245,142 @@ describe('integration tests Using Search APIs', () => {
     });
 
     // describe('Search composite', () => {
-        // it('should allow for easy job status', () => {
-        //     return splunk.search.submitSearch(standardQuery).then(search => {
-        //         return search.status()
-        //             .then(status => assert.property(status, 'status'));
-        //     });
-        // });
+    // it('should allow for easy job status', () => {
+    //     return splunk.search.submitSearch(standardQuery).then(search => {
+    //         return search.status()
+    //             .then(status => assert.property(status, 'status'));
+    //     });
+    // });
 
-        // it('should allow for easy cancellation', () => {
-        //     return splunk.search.submitSearch(standardQuery).then(search => {
-        //         return search.cancel()
-        //             .then(() => splunk.search.getJob(search.jobId))
-        //             .then(() => assert.fail('Should have thrown'), (err) => assert.equal(err.httpStatusCode, 404));
-        //     });
-        // });
+    // it('should allow for easy cancellation', () => {
+    //     return splunk.search.submitSearch(standardQuery).then(search => {
+    //         return search.cancel()
+    //             .then(() => splunk.search.getJob(search.jobId))
+    //             .then(() => assert.fail('Should have thrown'), (err) => assert.equal(err.httpStatusCode, 404));
+    //     });
+    // });
 
-        // it('should throw a cancellation message when cancelled', () => {
-        //     return splunk.search.submitSearch(standardQuery).then(search => {
-        //         return search.cancel()
-        //             .then(() => search.wait())
-        //             .then(() => assert.fail('should have received error'), (err) => {
-        //                 assert.property(err, 'message');
-        //             });
-        //     });
-        // });
+    // it('should throw a cancellation message when cancelled', () => {
+    //     return splunk.search.submitSearch(standardQuery).then(search => {
+    //         return search.cancel()
+    //             .then(() => search.wait())
+    //             .then(() => assert.fail('should have received error'), (err) => {
+    //                 assert.property(err, 'message');
+    //             });
+    //     });
+    // });
 
 
-        // describe('Get results via promise', () => {
-        //     it('should allow retrieving all results', () => {
-        //         return splunk.search.submitSearch(standardQuery).then(search => {
-        //             return search.wait()
-        //                 .then(() => search.getResults().then((res) => {
-        //                     const results = res as search.SearchResults;
-        //                     assert.typeOf(results.results, 'array');
-        //                     assert.equal(results.results.length, 5);
-        //                 }));
-        //         });
-        //     });
+    // describe('Get results via promise', () => {
+    //     it('should allow retrieving all results', () => {
+    //         return splunk.search.submitSearch(standardQuery).then(search => {
+    //             return search.wait()
+    //                 .then(() => search.getResults().then((res) => {
+    //                     const results = res as search.SearchResults;
+    //                     assert.typeOf(results.results, 'array');
+    //                     assert.equal(results.results.length, 5);
+    //                 }));
+    //         });
+    //     });
 
-        //     it('should allow retrieving result window', () => {
-        //         return splunk.search.submitSearch(standardQuery).then(search => {
-        //             return search.wait()
-        //                 .then(() => search.getResults({ offset: 0, count: 2 }).then((res) => {
-        //                     const results = res as search.SearchResults;
-        //                     assert.typeOf(results.results, 'array');
-        //                     assert.equal(results.results.length, 2);
-        //                 }));
-        //         });
-        //     });
-        // });
+    //     it('should allow retrieving result window', () => {
+    //         return splunk.search.submitSearch(standardQuery).then(search => {
+    //             return search.wait()
+    //                 .then(() => search.getResults({ offset: 0, count: 2 }).then((res) => {
+    //                     const results = res as search.SearchResults;
+    //                     assert.typeOf(results.results, 'array');
+    //                     assert.equal(results.results.length, 2);
+    //                 }));
+    //         });
+    //     });
+    // });
 
-        // describe('Results Observable', () => {
-        //     it('should allow results observable', () => {
-        //         return splunk.search.submitSearch(standardQuery).then(search => {
-        //             return new Promise((resolve, reject) => {
-        //                 let results: search.SearchResults;
-        //                 search.resultObservable().subscribe(r => {
-        //                     results = r;
-        //                 }, reject, () => {
-        //                     try {
-        //                         assert.typeOf(results.results, 'array');
-        //                         assert.equal(results.results.length, 5);
-        //                         resolve();
-        //                     } catch (e) {
-        //                         reject(e);
-        //                     }
-        //                 });
-        //             });
-        //         });
-        //     });
+    // describe('Results Observable', () => {
+    //     it('should allow results observable', () => {
+    //         return splunk.search.submitSearch(standardQuery).then(search => {
+    //             return new Promise((resolve, reject) => {
+    //                 let results: search.SearchResults;
+    //                 search.resultObservable().subscribe(r => {
+    //                     results = r;
+    //                 }, reject, () => {
+    //                     try {
+    //                         assert.typeOf(results.results, 'array');
+    //                         assert.equal(results.results.length, 5);
+    //                         resolve();
+    //                     } catch (e) {
+    //                         reject(e);
+    //                     }
+    //                 });
+    //             });
+    //         });
+    //     });
 
-        //     it('should allow results observable with window', () => {
-        //         return splunk.search.submitSearch(standardQuery).then(search => {
-        //             return new Promise((resolve, reject) => {
-        //                 let results: search.SearchResults;
-        //                 search.resultObservable({ offset: 0, count: 2 }).subscribe(r => {
-        //                     results = r;
-        //                 }, reject, () => {
-        //                     try {
-        //                         assert.typeOf(results.results, 'array');
-        //                         assert.equal(results.results.length, 2);
-        //                         resolve();
-        //                     } catch (e) {
-        //                         reject(e);
-        //                     }
-        //                 });
-        //             });
-        //         });
-        //     });
-        //     it('should allow results observable with polling rate', () => {
-        //         return splunk.search.submitSearch(standardQuery).then(search => {
-        //             return new Promise((resolve, reject) => {
-        //                 let results: search.SearchResults;
-        //                 search.resultObservable({ pollInterval: 150 }).subscribe(r => {
-        //                     results = r;
-        //                 }, reject, () => {
-        //                     try {
-        //                         assert.typeOf(results.results, 'array');
-        //                         assert.equal(results.results.length, 5);
-        //                         resolve();
-        //                     } catch (e) {
-        //                         reject(e);
-        //                     }
-        //                 });
-        //             });
-        //         });
-        //     });
-        // });
+    //     it('should allow results observable with window', () => {
+    //         return splunk.search.submitSearch(standardQuery).then(search => {
+    //             return new Promise((resolve, reject) => {
+    //                 let results: search.SearchResults;
+    //                 search.resultObservable({ offset: 0, count: 2 }).subscribe(r => {
+    //                     results = r;
+    //                 }, reject, () => {
+    //                     try {
+    //                         assert.typeOf(results.results, 'array');
+    //                         assert.equal(results.results.length, 2);
+    //                         resolve();
+    //                     } catch (e) {
+    //                         reject(e);
+    //                     }
+    //                 });
+    //             });
+    //         });
+    //     });
+    //     it('should allow results observable with polling rate', () => {
+    //         return splunk.search.submitSearch(standardQuery).then(search => {
+    //             return new Promise((resolve, reject) => {
+    //                 let results: search.SearchResults;
+    //                 search.resultObservable({ pollInterval: 150 }).subscribe(r => {
+    //                     results = r;
+    //                 }, reject, () => {
+    //                     try {
+    //                         assert.typeOf(results.results, 'array');
+    //                         assert.equal(results.results.length, 5);
+    //                         resolve();
+    //                     } catch (e) {
+    //                         reject(e);
+    //                     }
+    //                 });
+    //             });
+    //         });
+    //     });
+    // });
 
-        // it('should allow status subscription', () => {
-        //     // Ensure we can pass functions around but they still have access to
-        //     // their embedded client.
-        //     const fun = splunk.search.submitSearch;
-        //     return fun(standardQuery).then(search => {
-        //         return new Promise((resolve, reject) => {
-        //             let count = 0;
-        //             search.statusObservable(10).subscribe(
-        //                 status => {
-        //                     count += 1;
-        //                     try {
-        //                         assert.containsAllKeys(status, ['sid', 'resultsAvailable', 'status']);
-        //                     } catch (e) {
-        //                         reject(e);
-        //                     }
-        //                 },
-        //                 reject,
-        //                 () => {
-        //                     try {
-        //                         assert.isAtLeast(count, 1, 'We should have gotten at least one status');
-        //                     } catch (e) {
-        //                         reject(e);
-        //                     }
-        //                     resolve();
-        //                 });
-        //         });
-        //     });
-        // });
+    // it('should allow status subscription', () => {
+    //     // Ensure we can pass functions around but they still have access to
+    //     // their embedded client.
+    //     const fun = splunk.search.submitSearch;
+    //     return fun(standardQuery).then(search => {
+    //         return new Promise((resolve, reject) => {
+    //             let count = 0;
+    //             search.statusObservable(10).subscribe(
+    //                 status => {
+    //                     count += 1;
+    //                     try {
+    //                         assert.containsAllKeys(status, ['sid', 'resultsAvailable', 'status']);
+    //                     } catch (e) {
+    //                         reject(e);
+    //                     }
+    //                 },
+    //                 reject,
+    //                 () => {
+    //                     try {
+    //                         assert.isAtLeast(count, 1, 'We should have gotten at least one status');
+    //                     } catch (e) {
+    //                         reject(e);
+    //                     }
+    //                     resolve();
+    //                 });
+    //         });
+    //     });
+    // });
     // });
 
 });
-

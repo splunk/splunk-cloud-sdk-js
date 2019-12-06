@@ -17,8 +17,8 @@
 import { assert } from 'chai';
 import 'mocha';
 import sleep = require('sleep-promise');
-import * as provisioner from '../../services/provisioner';
-import { SplunkCloud } from '../../splunk';
+import * as provisioner from '../../src/services/provisioner';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
 let testInviteID: string = '';

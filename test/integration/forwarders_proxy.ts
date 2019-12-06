@@ -17,8 +17,8 @@
 import { assert } from 'chai';
 import 'mocha';
 import { config as pemConfig, createCertificate, ModuleConfiguration } from 'pem';
-import * as forwarders from '../../services/forwarders';
-import { SplunkCloud } from '../../splunk';
+import * as forwarders from '../../src/services/forwarders';
+import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 
 if (process.env.CI) {
@@ -68,11 +68,11 @@ describe('Integration tests with forwarders service APIs', () => {
             state: 'California',
             locality: 'San Francisco',
             organization: 'Splunk',
-            commonName:'forwarder_01',
+            commonName: 'forwarder_01',
             selfSigned: true
         };
         return createCertificate(certOptions, async (err, keys) => {
-            assert.notOk(err, err ? err.message: 'known error');
+            assert.notOk(err, err ? err.message : 'known error');
 
             const pem = keys.certificate;
             const certInfo = await splunkCloud.forwarders.addCertificate({ pem });
