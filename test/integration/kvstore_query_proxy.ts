@@ -15,7 +15,7 @@
  */
 
 import { assert } from 'chai';
-import { SplunkCloud } from '../../src/splunk';
+import { SplunkCloud } from '../../splunk';
 import config from '../config';
 import { createKVCollectionDataset } from './catalog_proxy';
 import { createRecord } from './kvstore_collections_proxy';

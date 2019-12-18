@@ -20,7 +20,7 @@
 //              import into a new module and search the collection via the lookup in the imported module.
 require('isomorphic-fetch');
 
-const { SplunkCloud } = require('../src/splunk');
+const { SplunkCloud } = require('../splunk');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 
 (async function () {

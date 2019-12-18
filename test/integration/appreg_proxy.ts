@@ -16,8 +16,8 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import * as appRegistry from '../../src/services/app-registry';
-import { SplunkCloud } from '../../src/splunk';
+import * as appRegistry from '../../services/app-registry';
+import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
 function date() {

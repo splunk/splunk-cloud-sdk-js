@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "declarationDir": "./src",
     "downlevelIteration": true,
     "esModuleInterop": true,
     "lib": [
@@ -13,12 +12,10 @@
       "es2015.symbol.wellknown",
       "dom"
     ],
-    "module": "commonjs",
-    "moduleResolution": "node",
     "noImplicitAny": true,
     // comment this out to avoid compile error in generated files
     // "noUnusedLocals": true,
-    "outDir": "./src",
+    "outDir": ".",
     "removeComments": false,
     "resolveJsonModule": true,
     "sourceMap": true,
@@ -31,10 +28,6 @@
     "src/generated/**/*"
   ],
   "include": [
-    "src/**/*"
-  ],
-  "typedocOptions": {
-    "mode": "modules",
-    "out": "docs"
-  }
+    "src"
+  ]
 }

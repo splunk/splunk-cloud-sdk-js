@@ -15,9 +15,9 @@
  */
 
 import { assert } from 'chai';
-import { Dataset } from '../../src/services/catalog';
-import { PingResponseStatusEnum } from '../../src/services/kvstore';
-import { SplunkCloud } from '../../src/splunk';
+import { Dataset } from '../../services/catalog';
+import { PingResponseStatusEnum } from '../../services/kvstore';
+import { SplunkCloud } from '../../splunk';
 import config from '../config';
 import { createKVCollectionDataset } from './catalog_proxy';
 

@@ -16,7 +16,7 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import { SplunkCloud } from '../../src/splunk';
+import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
 const splunkCloud = new SplunkCloud({

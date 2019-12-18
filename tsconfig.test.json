@@ -10,7 +10,6 @@
       "dom"
     ],
     "module": "commonjs",
-    "moduleResolution": "node",
     "noEmit": true,
     "resolveJsonModule": true,
     "sourceMap": true,

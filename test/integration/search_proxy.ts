@@ -16,8 +16,8 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import * as search from '../../src/services/search';
-import { SplunkCloud } from '../../src/splunk';
+import * as search from '../../services/search';
+import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
 const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });

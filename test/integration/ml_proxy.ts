@@ -16,10 +16,10 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import { EventBatcher } from '../../src/ingest_event_batcher';
-import * as ingest from '../../src/services/ingest';
-import * as ml from '../../src/services/ml';
-import { SplunkCloud } from '../../src/splunk';
+import { EventBatcher } from '../../ingest_event_batcher';
+import * as ingest from '../../services/ingest';
+import * as ml from '../../services/ml';
+import { SplunkCloud } from '../../splunk';
 import config from '../config';
 // @ts-ignore
 import * as rawdata from '../data/ml/iris.json';

@@ -23,7 +23,7 @@ import {
     RawJSONPayload,
     TriggerEvent,
     TriggerEventKind, WebhookAction
-} from '../../src/services/action';
+} from '../../services/action';
 import { SplunkCloud } from '../../src/splunk';
 import config from '../config';
 

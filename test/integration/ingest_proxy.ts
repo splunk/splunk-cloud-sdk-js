@@ -16,9 +16,9 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import { EventBatcher } from '../../src/ingest_event_batcher';
-import { Event, HTTPResponse, Metric, MetricEvent } from '../../src/services/ingest';
-import { SplunkCloud } from '../../src/splunk';
+import { EventBatcher } from '../../ingest_event_batcher';
+import { Event, HTTPResponse, Metric, MetricEvent } from '../../services/ingest';
+import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
 const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });

@@ -2,16 +2,8 @@
   "name": "@splunkdev/cloud-sdk",
   "version": "4.0.0",
   "description": "Splunk Cloud SDK for Javascript",
-  "main": "./src/splunk.js",
-  "types": "./src/splunk.d.ts",
-  "files": [
-    "/src/*.js",
-    "/src/*.js.map",
-    "/src/*.d.ts",
-    "/src/**/*.js",
-    "/src/**/*.js.map",
-    "/src/**/*.d.ts"
-  ],
+  "main": "splunk.js",
+  "types": "splunk.d.ts",
   "scripts": {
     "commit": "yarn git-cz",
     "tslint": "tslint -p tsconfig.json -c tslint.json && yarn tslint:tests",
@@ -24,7 +16,7 @@
     "docs": "yarn ts:docs",
     "build": "node ci/extract_version.js && tsc -p tsconfig.json",
     "build:tests": "tsc -p tsconfig.test.json",
-    "clean": "rimraf *.js *.map *.d.ts src/**/*.js src/**/*.js.map src/**/*.d.ts src/*.js src/*.js.map src/*.d.ts services service_base service_extensions && yarn run clean:coverage || true",
+    "clean": "rimraf *.js *.map *.d.ts **/*.js **/*.js.map **/*.d.ts services service_base service_extensions && yarn run clean:coverage || true",
     "clean:coverage": "rm -rf coverage",
     "cover": "yarn run clean:coverage && NODE_ENV=coverage nyc npm run test",
     "cover:integration": "NODE_ENV=coverage nyc --report-dir coverage-integration npm run ci:integration",
@@ -108,11 +100,16 @@
       "src/**/index.ts",
       "src/**/Generated*.ts",
       "src/**/models.ts",
-      "src/**/*.d.ts"
+      "src/**/*.d.ts",
+      "cd/**/*",
+      "ci/**/*",
+      "coverage*/**/*",
+      "docs/**/*",
+      "examples/**/*"
     ],
     "include": [
       "src/**/*.ts",
-      "src/**/*.js"
+      "**/*.js"
     ],
     "instrument": true,
     "reporter": [

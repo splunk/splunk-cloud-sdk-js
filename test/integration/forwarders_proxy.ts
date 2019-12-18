@@ -17,8 +17,8 @@
 import { assert } from 'chai';
 import 'mocha';
 import { config as pemConfig, createCertificate, ModuleConfiguration } from 'pem';
-import * as forwarders from '../../src/services/forwarders';
-import { SplunkCloud } from '../../src/splunk';
+import * as forwarders from '../../services/forwarders';
+import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
 if (process.env.CI) {
