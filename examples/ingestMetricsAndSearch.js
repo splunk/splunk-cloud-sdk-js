@@ -22,6 +22,7 @@ require('isomorphic-fetch');
 const { SplunkCloud } = require('../splunk');
 const { searchResultsWithRetryTimeout } = require('./helpers/splunkCloudHelper');
 const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
+const METRICS_INDEX_NAME = 'metrics_integration';
 
 // Call to the ingest service to insert data
 async function sendDataViaIngest(splunk, host, source) {
@@ -122,7 +123,7 @@ async function sendDataViaIngest(splunk, host, source) {
     // ***** DESCRIPTION: Search the data to ensure the metrics data was ingested.
     const searchResultsResponse = await searchResultsWithRetryTimeout(
         splunk,
-        `| from metrics group by host select host, avg(CPU) as avg_cpu, avg(Memory) as avg_mem, avg(Disk) as avg_disk | search host="${host}"`,
+        `| from ${METRICS_INDEX_NAME} group by host select host, avg(CPU) as avg_cpu, avg(Memory) as avg_mem, avg(Disk) as avg_disk | search host="${host}"`,
         (result) => {
             return result.length >= 1;
         }).catch(error => {
