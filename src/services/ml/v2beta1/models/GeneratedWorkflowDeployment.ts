@@ -100,6 +100,7 @@ export enum WorkflowDeploymentStatusEnum {
     Running = 'running',
     Failed = 'failed',
     Success = 'success',
-    Scheduled = 'scheduled'
+    Scheduled = 'scheduled',
+    Initializing = 'initializing'
 }
 

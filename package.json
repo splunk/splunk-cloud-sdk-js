@@ -113,7 +113,6 @@
     ],
     "instrument": true,
     "reporter": [
-      "lcov",
       "text-summary",
       "text",
       "html"
