@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Features
 
-* **ml:** added `initializing` values to `WorkflowDeploymentStatusEnum` model
+* **ml:** added `initializing` values to `WorkflowDeploymentStatusEnum` model ([91e68ba4](https://github.com/splunk/splunk-cloud-sdk-js/commits/91e68ba4))
 
 ### BREAKING CHANGES
 
