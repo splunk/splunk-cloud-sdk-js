@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="5.0.0"></a>
+# [5.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v4.0.0...v5.0.0) (2019-12-20)
+
+### Features
+
+* **ml:** added `initializing` values to `WorkflowDeploymentStatusEnum` model ([91e68ba4](https://github.com/splunk/splunk-cloud-sdk-js/commits/91e68ba4))
+
+### BREAKING CHANGES
+
+* revert repathing of transpiled JS under `src` directory introduced in v4.0.0 - users upgrading from v3.x.x or earlier to v5.0.0 should be unaffected ([afafe4a](https://github.com/splunk/splunk-cloud-sdk-js/commits/afafe4a))
+
+
 <a name="4.0.0"></a>
 # [4.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v3.0.0...v4.0.0) (2019-12-06)
 
