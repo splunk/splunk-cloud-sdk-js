@@ -55,6 +55,7 @@ lib-cov
 # Coverage directory used by tools like istanbul
 coverage
 coverage-integration
+coverage-integration-ml
 
 # nyc test coverage
 .nyc_output

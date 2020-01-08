@@ -229,7 +229,7 @@ Repository: [http://github.com/mwittig/npm-license-crawler](http://github.com/mw
 
 Name: nyc
 
-Version: 13.3.0
+Version: 15.0.0
 
 License: [ISC](https://github.com/istanbuljs/nyc/raw/master/LICENSE.txt)
 
