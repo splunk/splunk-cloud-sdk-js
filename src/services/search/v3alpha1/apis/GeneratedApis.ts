@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2019 Splunk, Inc.
+ * Copyright 2020 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -85,7 +85,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as RecurringSearch);
     }
     /**
-     * Delete the recurring search with the  specified recurring search ID (rsid). 
+     * Deletes a recurring search with a  specified recurring search ID (rsid). 
      * @param rsid The recurring job ID.
      * @param args parameters to be sent with the request
      * @return RecurringSearch
@@ -99,7 +99,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as RecurringSearch);
     }
     /**
-     * Return all search jobs associated with this  recurring search with the specified recurring search ID (rsid). 
+     * Returns all search jobs associated with a recurring search with a specified recurring search ID (rsid). 
      * @param rsid The recurring job ID.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
@@ -114,7 +114,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as Array<SearchJob>);
     }
     /**
-     * Return the search job with the specified search ID (sid).
+     * Returns a search job with a specified search ID (sid).
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @return SearchJob
@@ -128,7 +128,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as SearchJob);
     }
     /**
-     * Return the most recent search job associated with this  recurring search with the specified recurring search ID (rsid). 
+     * Returns the most recent search job associated with a  recurring search with a specified recurring search ID (rsid). 
      * @param rsid The recurring job ID.
      * @param args parameters to be sent with the request
      * @return SearchJob
@@ -142,7 +142,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as SearchJob);
     }
     /**
-     * Return the recurring search with the specified  recurring search ID (rsid). 
+     * Returns a recurring search job with a specified  recurring search ID (rsid). 
      * @param rsid The recurring job ID.
      * @param args parameters to be sent with the request
      * @return RecurringSearch
@@ -156,14 +156,14 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as RecurringSearch);
     }
     /**
-     * Return the events summary for the job with  specified search ID (sid). 
+     * Returns an events summary for a job with  specified search ID (sid). 
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
      * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC  in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC.  Any offset specified is ignored. 
-     * @param args.field A field to return for the result set. You can specify multiple fields of comma-separated values if multiple fields  are required. 
+     * @param args.field The field to return for the result set. Specify multiple fields of comma-separated values if multiple fields  are required. 
      * @param args.latest The latest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC  in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC.  Any offset specified is ignored. 
-     * @param args.offset Index of first item to return.
+     * @param args.offset The index of the first item to return.
      * @return ListSearchResultsResponse
      */
     public listEventsSummary = (sid: string, args?: { count?: number, earliest?: string, field?: string, latest?: string, offset?: number, [key: string]: any }): Promise<ListSearchResultsResponse> => {
@@ -175,7 +175,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as ListSearchResultsResponse);
     }
     /**
-     * Return the fields stats summary of the events to-date  for job with the specified search ID (sid). 
+     * Returns a fields status summary of the events to-date for a job with a specified search ID (sid). 
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC  in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC.  Any offset specified is ignored. 
@@ -191,7 +191,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as FieldsSummary);
     }
     /**
-     * Return the matching list of search jobs.
+     * Returns a matching list of search jobs.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of jobs that you want to return the status entries for. 
      * @param args.status Filter the list of jobs by status. Valid status values are  'running', 'done', 'canceled', or 'failed'. 
@@ -203,11 +203,11 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as Array<SearchJob>);
     }
     /**
-     * Return the preview search results for the job with the  specified search ID (sid). Can be used when a job is running to  return interim results. 
+     * Returns a preview search results for a job with the specified search ID (sid). Can be used when a job is running to return interim results. 
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
-     * @param args.offset Index of first item to return.
+     * @param args.offset The index of the first item to return.
      * @return ListPreviewResultsResponse
      */
     public listPreviewResults = (sid: string, args?: { count?: number, offset?: number, [key: string]: any }): Promise<ListPreviewResultsResponse> => {
@@ -219,7 +219,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as ListPreviewResultsResponse);
     }
     /**
-     * Return the matching list of all recurring searches.
+     * Returns a matching list of all recurring searches.
      * @param args parameters to be sent with the request
      * @return Array<RecurringSearch>
      */
@@ -229,12 +229,12 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as Array<RecurringSearch>);
     }
     /**
-     * Return the search results for the job with the  specified search ID (sid). 
+     * Returns search results for a job with a  specified search ID (sid). 
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
-     * @param args.field A field to return for the result set. You can specify multiple fields of comma-separated values if multiple fields  are required. 
-     * @param args.offset Index of first item to return.
+     * @param args.field The field to return for the result set. Specify multiple fields of comma-separated values if multiple fields  are required. 
+     * @param args.offset The index of the first item to return.
      * @return ListSearchResultsResponse
      */
     public listResults = (sid: string, args?: { count?: number, field?: string, offset?: number, [key: string]: any }): Promise<ListSearchResultsResponse> => {
@@ -246,7 +246,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as ListSearchResultsResponse);
     }
     /**
-     * Return an event distribution over time of the untransformed  events read to-date for job with the specified search ID (sid). 
+     * Returns an event distribution over time of the untransformed  events that are read to-date for a job with a specified search ID (sid). 
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @return TimeBucketsSummary
@@ -260,7 +260,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as TimeBucketsSummary);
     }
     /**
-     * Update the search job with the specified  search ID (sid) with an action. 
+     * Modifies a search job with a specified  search ID (sid) with an action. 
      * @param sid The search ID.
      * @param updateJob
      * @param args parameters to be sent with the request
@@ -278,7 +278,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as SearchJob);
     }
     /**
-     * Update the recurring search with the specified  recurring search ID (rsid). 
+     * Modifies a recurring search with a specified  recurring search ID (rsid). 
      * @param rsid The recurring job ID.
      * @param updateRecurringSearch
      * @param args parameters to be sent with the request
