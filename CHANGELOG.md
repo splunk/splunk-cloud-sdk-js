@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.0.0"></a>
+# [6.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v5.0.0...v6.0.0) (2020-01-16)
+
+### BREAKING CHANGES
+
+*  **catalog:** `AnnotationPOST` generated model and related `createAnnotation*` APIs now accurately capturing properties and additionalProperties. Request bodies have been changed from simple maps to `AnnotationPOST` model ([4790776](https://github.com/splunk/splunk-cloud-sdk-js/commits/4790776))
+
+
 <a name="5.0.0"></a>
 # [5.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v4.0.0...v5.0.0) (2019-12-20)
 
