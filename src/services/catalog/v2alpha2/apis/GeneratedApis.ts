@@ -30,6 +30,7 @@ import {
     ActionPATCH,
     ActionPOST,
     Annotation,
+    AnnotationPOST,
     Dashboard,
     DashboardPATCH,
     DashboardPOST,
@@ -110,61 +111,61 @@ export class GeneratedCatalogService extends BaseApiService {
     /**
      * Create a new annotation for a specific dashboard.
      * @param dashboardid ID of a dashboard.
-     * @param requestBody The JSON representation of the annotation to be persisted.
+     * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
      * @return Annotation
      */
-    public createAnnotationForDashboardbyId = (dashboardid: string, requestBody: { [key: string]: string; }, args?: object): Promise<Annotation> => {
+    public createAnnotationForDashboardbyId = (dashboardid: string, annotationPOST: AnnotationPOST, args?: object): Promise<Annotation> => {
         const path_params = {
             dashboardid: dashboardid
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardid'}/annotations`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), requestBody, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args })
             .then(response => response.body as Annotation);
     }
     /**
      * Create a new annotation for a specific dataset.
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
-     * @param requestBody The JSON representation of the annotation to be persisted.
+     * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
      * @return Annotation
      */
-    public createAnnotationForDashboardsByResourceName = (dashboardresourcename: string, requestBody: { [key: string]: string; }, args?: object): Promise<Annotation> => {
+    public createAnnotationForDashboardsByResourceName = (dashboardresourcename: string, annotationPOST: AnnotationPOST, args?: object): Promise<Annotation> => {
         const path_params = {
             dashboardresourcename: dashboardresourcename
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardresourcename'}/annotations`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), requestBody, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args })
             .then(response => response.body as Annotation);
     }
     /**
      * Create a new annotation for a specific dataset.
      * @param datasetid ID of a Dataset.
-     * @param requestBody The JSON representation of the annotation to be persisted.
+     * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
      * @return Annotation
      */
-    public createAnnotationForDatasetById = (datasetid: string, requestBody: { [key: string]: string; }, args?: object): Promise<Annotation> => {
+    public createAnnotationForDatasetById = (datasetid: string, annotationPOST: AnnotationPOST, args?: object): Promise<Annotation> => {
         const path_params = {
             datasetid: datasetid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}/annotations`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), requestBody, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args })
             .then(response => response.body as Annotation);
     }
     /**
      * Create a new annotation for a specific dataset.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
-     * @param requestBody The JSON representation of the annotation to be persisted.
+     * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
      * @return Annotation
      */
-    public createAnnotationForDatasetByResourceName = (datasetresourcename: string, requestBody: { [key: string]: string; }, args?: object): Promise<Annotation> => {
+    public createAnnotationForDatasetByResourceName = (datasetresourcename: string, annotationPOST: AnnotationPOST, args?: object): Promise<Annotation> => {
         const path_params = {
             datasetresourcename: datasetresourcename
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}/annotations`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), requestBody, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args })
             .then(response => response.body as Annotation);
     }
     /**
