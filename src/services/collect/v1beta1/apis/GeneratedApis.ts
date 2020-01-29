@@ -56,7 +56,7 @@ export class GeneratedCollectService extends BaseApiService {
     }
     /**
      * This API returns `403` if the number of collect workers is over a certain limit.
-     * Creates a job
+     * Creates a job.
      * @param job The API request schema for the job.
      * @param args parameters to be sent with the request
      * @return SingleJobResponse

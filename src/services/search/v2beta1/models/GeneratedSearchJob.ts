@@ -100,7 +100,7 @@ export interface SearchJob {
     extractAllFields?: boolean;
 
     /**
-     * The number of seconds to run the search before finalizing the search. The maximum value is 21600 seconds (6 hours). 
+     * The number of seconds to run the search before finalizing the search. The maximum value is 3600 seconds (1 hour). 
      * @type {number}
      * @memberof SearchJob
      */

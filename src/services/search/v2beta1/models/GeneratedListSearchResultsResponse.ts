@@ -30,7 +30,7 @@ import {
 } from './';
 
 /**
- * The structure of the  search results or events metadata that is returned for the job with the specified search ID (SID). When search is running, it might return incomplete or truncated search results. Incomplete search results occur when a search has not completed. Wait until search completes for full result set. Truncated search results occur because the number of requested results exceeds the page limit. Follow the &#39;nextLink&#39; URL to retrieve the next page of results. 
+ * The structure of the  search results or events metadata that is returned for the job with the specified search ID (SID). When search is running, it might return incomplete or truncated search results. Incomplete search results occur when a search has not completed. Wait until search completes for full result set. Truncated search results occur because the number of requested results exceeds the page limit. Use the &#39;nextLink&#39; URL to retrieve the next page of results. 
  * @export
  * @interface ListSearchResultsResponse
  */

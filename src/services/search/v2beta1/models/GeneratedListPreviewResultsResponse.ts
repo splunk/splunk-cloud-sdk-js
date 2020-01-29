@@ -30,7 +30,7 @@ import {
 } from './';
 
 /**
- * The structure of the preview search results that is returned for the job with the specified search ID (SID). When search is running, it might return incomplete or truncated search results. The isPreviewStable property indicates whether the returned preview results stucture is stable or not. Truncated preview results occur because the number of requested results exceeds the page limit. Follow the &#39;nextLink&#39; URL to retrieve the next page of results.
+ * The structure of the response body for the preview search results that is returned for the job with the specified search ID (SID). When search is running, it might return incomplete or truncated search results. The isPreviewStable property indicates whether the returned preview results stucture is stable or not. Truncated preview results occur because the number of requested results exceeds the page limit. Follow the &#39;nextLink&#39; URL to retrieve the next page of results.
  * @export
  * @interface ListPreviewResultsResponse
  */

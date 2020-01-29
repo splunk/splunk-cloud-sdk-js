@@ -156,7 +156,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as RecurringSearch);
     }
     /**
-     * Returns an events summary for a job with  specified search ID (sid). 
+     * Return events summary, for search ID (SID) search.
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
@@ -175,7 +175,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as ListSearchResultsResponse);
     }
     /**
-     * Returns a fields status summary of the events to-date for a job with a specified search ID (sid). 
+     * Return fields stats summary of the events to-date, for search ID (SID) search.
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC  in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC.  Any offset specified is ignored. 
@@ -194,16 +194,17 @@ export class GeneratedSearchService extends BaseApiService {
      * Returns a matching list of search jobs.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of jobs that you want to return the status entries for. 
-     * @param args.status Filter the list of jobs by status. Valid status values are  'running', 'done', 'canceled', or 'failed'. 
+     * @param args.filter Filter the list of jobs by sid. Valid format is  `sid IN ({comma separated list of SIDs in quotes})`. A maximum of 50 SIDs can be specified in one query. 
+     * @param args.status Filter the list of jobs by status. Valid status values are 'running', 'done', 'canceled', or 'failed'. 
      * @return Array<SearchJob>
      */
-    public listJobs = (args?: { count?: number, status?: SearchStatus, [key: string]: any }): Promise<Array<SearchJob>> => {
+    public listJobs = (args?: { count?: number, filter?: string, status?: SearchStatus, [key: string]: any }): Promise<Array<SearchJob>> => {
         const path = `/search/v3alpha1/jobs`;
         return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<SearchJob>);
     }
     /**
-     * Returns a preview search results for a job with the specified search ID (sid). Can be used when a job is running to return interim results. 
+     * Return the preview search results for the job with the specified search ID (SID). Can be used when a job is running to return interim results.
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
@@ -229,7 +230,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as Array<RecurringSearch>);
     }
     /**
-     * Returns search results for a job with a  specified search ID (sid). 
+     * Returns search results for a job with a specified search ID (sid).
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
@@ -246,7 +247,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as ListSearchResultsResponse);
     }
     /**
-     * Returns an event distribution over time of the untransformed  events that are read to-date for a job with a specified search ID (sid). 
+     * Returns an event distribution over time of the untransformed events that are read to-date for a job with a specified search ID (sid).
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @return TimeBucketsSummary

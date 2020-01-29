@@ -121,10 +121,11 @@ export class GeneratedSearchService extends BaseApiService {
      * Return the matching list of search jobs.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of jobs that you want to return the status entries for. 
+     * @param args.filter Filter the list of jobs by sid. Valid format is  `sid IN ({comma separated list of SIDs in quotes})`. A maximum of 50 SIDs can be specified in one query. 
      * @param args.status Filter the list of jobs by status. Valid status values are 'running', 'done', 'canceled', or 'failed'. 
      * @return Array<SearchJob>
      */
-    public listJobs = (args?: { count?: number, status?: SearchStatus, [key: string]: any }): Promise<Array<SearchJob>> => {
+    public listJobs = (args?: { count?: number, filter?: string, status?: SearchStatus, [key: string]: any }): Promise<Array<SearchJob>> => {
         const path = `/search/v2beta1/jobs`;
         return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<SearchJob>);
