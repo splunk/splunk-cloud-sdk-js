@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="6.1.0"></a>
+# [6.1.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v6.0.0...v6.1.0) (2020-01-31)
+
+
+### Features
+
+* update with code-generated api bindings and models performed 2020-01-08 ([181c10b](https://github.com/splunk/splunk-cloud-sdk-js/commits/181c10b))
+* update with code-generated api bindings and models performed 2020-01-16 ([4790776](https://github.com/splunk/splunk-cloud-sdk-js/commits/4790776))
+* update with code-generated api bindings and models performed 2020-01-29 ([60fd2ef](https://github.com/splunk/splunk-cloud-sdk-js/commits/60fd2ef))
+
+
+
 <a name="6.0.0"></a>
 # [6.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v5.0.0...v6.0.0) (2020-01-16)
 
