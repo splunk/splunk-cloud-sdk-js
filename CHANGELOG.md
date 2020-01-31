@@ -8,10 +8,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Features
 
-* update with code-generated api bindings and models performed 2020-01-08 ([181c10b](https://github.com/splunk/splunk-cloud-sdk-js/commits/181c10b))
-* update with code-generated api bindings and models performed 2020-01-16 ([4790776](https://github.com/splunk/splunk-cloud-sdk-js/commits/4790776))
-* update with code-generated api bindings and models performed 2020-01-29 ([60fd2ef](https://github.com/splunk/splunk-cloud-sdk-js/commits/60fd2ef))
-
+* Added `filter` parameter to search listJobs endpoint ([60fd2ef](https://github.com/splunk/splunk-cloud-sdk-js/commits/60fd2ef))
 
 
 <a name="6.0.0"></a>
