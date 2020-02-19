@@ -35,21 +35,21 @@ export interface AppMetadataInternal {
      * @type {string}
      * @memberof AppMetadataInternal
      */
-    readonly clientId: string;
+    readonly clientId?: string;
 
     /**
      * The date that the app was created.
      * @type {string}
      * @memberof AppMetadataInternal
      */
-    readonly createdAt: string;
+    readonly createdAt?: string;
 
     /**
      * The principal who created this app.
      * @type {string}
      * @memberof AppMetadataInternal
      */
-    readonly createdBy: string;
+    readonly createdBy?: string;
 
 }
 

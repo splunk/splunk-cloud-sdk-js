@@ -34,6 +34,7 @@ export enum TenantStatus {
     Ready = 'ready',
     Deleting = 'deleting',
     Deleted = 'deleted',
+    Tombstoned = 'tombstoned',
     Suspended = 'suspended'
 }
 

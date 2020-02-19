@@ -167,7 +167,7 @@ export class GeneratedAppRegistryService extends BaseApiService {
     /**
      * Returns the tenant subscriptions.
      * @param args parameters to be sent with the request
-     * @param args.kind The kind of application. 
+     * @param args.kind The kind of application.
      * @return Array<Subscription>
      */
     public listSubscriptions = (args?: { kind?: AppResourceKind, [key: string]: any }): Promise<Array<Subscription>> => {

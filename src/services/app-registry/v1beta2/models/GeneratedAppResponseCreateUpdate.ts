@@ -25,119 +25,13 @@
  */
 
 import {
-    AppResourceKind,
+    NativeApp,
+    ServiceApp,
+    WebApp,
 } from './';
 
 /**
- *
+ * @type AppResponseCreateUpdate
  * @export
- * @interface AppResponseCreateUpdate
  */
-export interface AppResponseCreateUpdate {
-    /**
-     * OAuth 2.0 Client ID.
-     * @type {string}
-     * @memberof AppResponseCreateUpdate
-     */
-    readonly clientId: string;
-
-    /**
-     * OAuth 2.0 Client Secret string (used for confidential clients).
-     * @type {string}
-     * @memberof AppResponseCreateUpdate
-     */
-    readonly clientSecret: string;
-
-    /**
-     * The date that the app was created.
-     * @type {string}
-     * @memberof AppResponseCreateUpdate
-     */
-    readonly createdAt: string;
-
-    /**
-     * The principal who created this app.
-     * @type {string}
-     * @memberof AppResponseCreateUpdate
-     */
-    readonly createdBy: string;
-
-    /**
-     * 
-     * @type {AppResourceKind}
-     * @memberof AppResponseCreateUpdate
-     */
-    kind: AppResourceKind;
-
-    /**
-     * App name that is unique within Splunk Cloud Platform.
-     * @type {string}
-     * @memberof AppResponseCreateUpdate
-     */
-    name: string;
-
-    /**
-     * Human-readable title for the app.
-     * @type {string}
-     * @memberof AppResponseCreateUpdate
-     */
-    title: string;
-
-    /**
-     * Array of permission templates that are used to grant permission to the app principal when a tenant subscribes.
-     * @type {Array<string>}
-     * @memberof AppResponseCreateUpdate
-     */
-    appPrincipalPermissions?: Array<string>;
-
-    /**
-     * Short paragraph describing the app.
-     * @type {string}
-     * @memberof AppResponseCreateUpdate
-     */
-    description?: string;
-
-    /**
-     * The URL used to log in to the app.
-     * @type {string}
-     * @memberof AppResponseCreateUpdate
-     */
-    loginUrl?: string;
-
-    /**
-     * The URL used to display the app's logo.
-     * @type {string}
-     * @memberof AppResponseCreateUpdate
-     */
-    logoUrl?: string;
-
-    /**
-     * Array of URLs that can be used for redirect after logging into the app.
-     * @type {Array<string>}
-     * @memberof AppResponseCreateUpdate
-     */
-    redirectUrls?: Array<string>;
-
-    /**
-     * URL to redirect to after a subscription is created.
-     * @type {string}
-     * @memberof AppResponseCreateUpdate
-     */
-    setupUrl?: string;
-
-    /**
-     * Array of permission filter templates that are used to intersect with a user's permissions when using the app.
-     * @type {Array<string>}
-     * @memberof AppResponseCreateUpdate
-     */
-    userPermissionsFilter?: Array<string>;
-
-    /**
-     * URL that webhook events are sent to.
-     * @type {string}
-     * @memberof AppResponseCreateUpdate
-     */
-    webhookUrl?: string;
-
-}
-
+export type AppResponseCreateUpdate = NativeApp | ServiceApp | WebApp;

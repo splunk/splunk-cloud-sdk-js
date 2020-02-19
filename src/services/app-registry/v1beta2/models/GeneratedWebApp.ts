@@ -24,53 +24,120 @@
  * Do not edit the class manually.
  */
 
+import {
+    AppResourceKind,
+} from './';
+
 /**
- *
+ * A web kind app.
  * @export
- * @interface AppMetadataPublic
+ * @interface WebApp
  */
-export interface AppMetadataPublic {
+export interface WebApp {
+    /**
+     * OAuth 2.0 Client ID.
+     * @type {string}
+     * @memberof WebApp
+     */
+    readonly clientId: string;
+
+    /**
+     * OAuth 2.0 Client Secret string (used for confidential clients).
+     * @type {string}
+     * @memberof WebApp
+     */
+    readonly clientSecret: string;
+
+    /**
+     * The date that the app was created.
+     * @type {string}
+     * @memberof WebApp
+     */
+    readonly createdAt: string;
+
+    /**
+     * The principal who created this app.
+     * @type {string}
+     * @memberof WebApp
+     */
+    readonly createdBy: string;
+
+    /**
+     * 
+     * @type {AppResourceKind}
+     * @memberof WebApp
+     */
+    kind: AppResourceKind;
+
+    /**
+     * App name that is unique within Splunk Cloud Platform.
+     * @type {string}
+     * @memberof WebApp
+     */
+    name: string;
+
+    /**
+     * Array of URLs that can be used for redirect after logging into the app.
+     * @type {Array<string>}
+     * @memberof WebApp
+     */
+    redirectUrls: Array<string>;
+
+    /**
+     * Human-readable title for the app.
+     * @type {string}
+     * @memberof WebApp
+     */
+    title: string;
+
     /**
      * Array of permission templates that are used to grant permission to the app principal when a tenant subscribes.
      * @type {Array<string>}
-     * @memberof AppMetadataPublic
+     * @memberof WebApp
      */
     appPrincipalPermissions?: Array<string>;
 
     /**
      * Short paragraph describing the app.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof WebApp
      */
     description?: string;
 
     /**
      * The URL used to log in to the app.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof WebApp
      */
     loginUrl?: string;
 
     /**
      * The URL used to display the app's logo.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof WebApp
      */
     logoUrl?: string;
 
     /**
-     * Human-readable title for the app.
+     * URL to redirect to after a subscription is created.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof WebApp
      */
-    title?: string;
+    setupUrl?: string;
 
     /**
      * Array of permission filter templates that are used to intersect with a user's permissions when using the app.
      * @type {Array<string>}
-     * @memberof AppMetadataPublic
+     * @memberof WebApp
      */
     userPermissionsFilter?: Array<string>;
+
+    /**
+     * URL that webhook events are sent to.
+     * @type {string}
+     * @memberof WebApp
+     */
+    webhookUrl?: string;
 
 }
 

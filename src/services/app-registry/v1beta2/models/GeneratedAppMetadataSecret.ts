@@ -35,7 +35,7 @@ export interface AppMetadataSecret {
      * @type {string}
      * @memberof AppMetadataSecret
      */
-    readonly clientSecret: string;
+    readonly clientSecret?: string;
 
 }
 

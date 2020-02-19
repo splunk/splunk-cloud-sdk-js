@@ -24,25 +24,22 @@
  * Do not edit the class manually.
  */
 
+import {
+    Execution,
+} from './';
+
 /**
  *
  * @export
- * @interface EventExtraField
+ * @interface SingleExecutionResponse
  */
-export interface EventExtraField {
+export interface SingleExecutionResponse {
     /**
-     * Field name
-     * @type {string}
-     * @memberof EventExtraField
+     * 
+     * @type {Execution}
+     * @memberof SingleExecutionResponse
      */
-    name: string;
-
-    /**
-     * Field value
-     * @type {string}
-     * @memberof EventExtraField
-     */
-    value: string;
+    data: Execution;
 
 }
 

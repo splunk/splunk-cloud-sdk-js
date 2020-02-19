@@ -24,53 +24,92 @@
  * Do not edit the class manually.
  */
 
+import {
+    AppResourceKind,
+} from './';
+
 /**
- *
+ * Required input for creating a native kind app.
  * @export
- * @interface AppMetadataPublic
+ * @interface NativeAppPOST
  */
-export interface AppMetadataPublic {
+export interface NativeAppPOST {
+    /**
+     * 
+     * @type {AppResourceKind}
+     * @memberof NativeAppPOST
+     */
+    kind: AppResourceKind;
+
+    /**
+     * App name that is unique within Splunk Cloud Platform.
+     * @type {string}
+     * @memberof NativeAppPOST
+     */
+    name: string;
+
+    /**
+     * Human-readable title for the app.
+     * @type {string}
+     * @memberof NativeAppPOST
+     */
+    title: string;
+
     /**
      * Array of permission templates that are used to grant permission to the app principal when a tenant subscribes.
      * @type {Array<string>}
-     * @memberof AppMetadataPublic
+     * @memberof NativeAppPOST
      */
     appPrincipalPermissions?: Array<string>;
 
     /**
      * Short paragraph describing the app.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof NativeAppPOST
      */
     description?: string;
 
     /**
      * The URL used to log in to the app.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof NativeAppPOST
      */
     loginUrl?: string;
 
     /**
      * The URL used to display the app's logo.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof NativeAppPOST
      */
     logoUrl?: string;
 
     /**
-     * Human-readable title for the app.
-     * @type {string}
-     * @memberof AppMetadataPublic
+     * Array of URLs that can be used for redirect after logging into the app.
+     * @type {Array<string>}
+     * @memberof NativeAppPOST
      */
-    title?: string;
+    redirectUrls?: Array<string>;
+
+    /**
+     * URL to redirect to after a subscription is created.
+     * @type {string}
+     * @memberof NativeAppPOST
+     */
+    setupUrl?: string;
 
     /**
      * Array of permission filter templates that are used to intersect with a user's permissions when using the app.
      * @type {Array<string>}
-     * @memberof AppMetadataPublic
+     * @memberof NativeAppPOST
      */
     userPermissionsFilter?: Array<string>;
+
+    /**
+     * URL that webhook events are sent to.
+     * @type {string}
+     * @memberof NativeAppPOST
+     */
+    webhookUrl?: string;
 
 }
 

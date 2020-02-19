@@ -24,25 +24,50 @@
  * Do not edit the class manually.
  */
 
+import {
+    Execution,
+} from './';
+
 /**
  *
  * @export
- * @interface EventExtraField
+ * @interface ExecutionConflictError
  */
-export interface EventExtraField {
+export interface ExecutionConflictError {
     /**
-     * Field name
+     * 
      * @type {string}
-     * @memberof EventExtraField
+     * @memberof ExecutionConflictError
      */
-    name: string;
+    code: string;
 
     /**
-     * Field value
-     * @type {string}
-     * @memberof EventExtraField
+     * 
+     * @type {Execution}
+     * @memberof ExecutionConflictError
      */
-    value: string;
+    data: Execution;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ExecutionConflictError
+     */
+    message: string;
+
+    /**
+     * The optional details of the error.
+     * @type {{ [key: string]: any; }}
+     * @memberof ExecutionConflictError
+     */
+    details?: { [key: string]: any; };
+
+    /**
+     * An optional link to a web page with more information on the error.
+     * @type {string}
+     * @memberof ExecutionConflictError
+     */
+    moreInfo?: string;
 
 }
 

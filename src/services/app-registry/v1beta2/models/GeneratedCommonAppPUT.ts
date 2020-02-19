@@ -27,50 +27,71 @@
 /**
  *
  * @export
- * @interface AppMetadataPublic
+ * @interface CommonAppPUT
  */
-export interface AppMetadataPublic {
+export interface CommonAppPUT {
+    /**
+     * Human-readable title for the app.
+     * @type {string}
+     * @memberof CommonAppPUT
+     */
+    title: string;
+
     /**
      * Array of permission templates that are used to grant permission to the app principal when a tenant subscribes.
      * @type {Array<string>}
-     * @memberof AppMetadataPublic
+     * @memberof CommonAppPUT
      */
     appPrincipalPermissions?: Array<string>;
 
     /**
      * Short paragraph describing the app.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof CommonAppPUT
      */
     description?: string;
 
     /**
      * The URL used to log in to the app.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof CommonAppPUT
      */
     loginUrl?: string;
 
     /**
      * The URL used to display the app's logo.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof CommonAppPUT
      */
     logoUrl?: string;
 
     /**
-     * Human-readable title for the app.
-     * @type {string}
-     * @memberof AppMetadataPublic
+     * Array of URLs that can be used for redirect after logging into the app.
+     * @type {Array<string>}
+     * @memberof CommonAppPUT
      */
-    title?: string;
+    redirectUrls?: Array<string>;
+
+    /**
+     * URL to redirect to after a subscription is created.
+     * @type {string}
+     * @memberof CommonAppPUT
+     */
+    setupUrl?: string;
 
     /**
      * Array of permission filter templates that are used to intersect with a user's permissions when using the app.
      * @type {Array<string>}
-     * @memberof AppMetadataPublic
+     * @memberof CommonAppPUT
      */
     userPermissionsFilter?: Array<string>;
+
+    /**
+     * URL that webhook events are sent to.
+     * @type {string}
+     * @memberof CommonAppPUT
+     */
+    webhookUrl?: string;
 
 }
 

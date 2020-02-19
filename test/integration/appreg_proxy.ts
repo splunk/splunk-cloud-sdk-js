@@ -136,15 +136,17 @@ describe('integration tests for app registry Endpoints', () => {
                     assert.equal(createApp.name, app.name);
                     assert.equal(createApp.title, app.title);
                     assert.sameMembers(createApp.redirectUrls as string[], app.redirectUrls as string[]);
-                    oldSecret = app.clientSecret as string;
+                    const newApp = app as appRegistry.WebApp;
+                    oldSecret = newApp.clientSecret as string;
                 });
         });
         it('should rotate app secret', () => {
             assert.notEqual(oldSecret, '');
-
             return splunk.appreg.rotateSecret(createApp.name)
                 .then((app) => {
-                    assert.notEqual(app.clientSecret, oldSecret);
+                    const newApp = app as appRegistry.WebApp;
+                    const newSecret = newApp.clientSecret as string;
+                    assert.notEqual(newSecret, oldSecret);
                 });
         });
         it('should delete app', () => {

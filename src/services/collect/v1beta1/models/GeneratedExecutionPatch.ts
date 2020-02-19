@@ -27,22 +27,22 @@
 /**
  *
  * @export
- * @interface EventExtraField
+ * @interface ExecutionPatch
  */
-export interface EventExtraField {
+export interface ExecutionPatch {
     /**
-     * Field name
+     * The given status of the execution
      * @type {string}
-     * @memberof EventExtraField
+     * @memberof ExecutionPatch
      */
-    name: string;
+    status?: ExecutionPatchStatusEnum;
 
-    /**
-     * Field value
-     * @type {string}
-     * @memberof EventExtraField
-     */
-    value: string;
+}
 
+/**
+ * @export
+ */
+export enum ExecutionPatchStatusEnum {
+    Canceled = 'canceled'
 }
 

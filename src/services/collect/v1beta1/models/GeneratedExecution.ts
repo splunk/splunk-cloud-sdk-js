@@ -27,22 +27,47 @@
 /**
  *
  * @export
- * @interface EventExtraField
+ * @interface Execution
  */
-export interface EventExtraField {
+export interface Execution {
     /**
-     * Field name
+     * 
      * @type {string}
-     * @memberof EventExtraField
+     * @memberof Execution
      */
-    name: string;
+    readonly executionUid?: string;
 
     /**
-     * Field value
+     * 
      * @type {string}
-     * @memberof EventExtraField
+     * @memberof Execution
      */
-    value: string;
+    readonly jobId?: string;
 
+    /**
+     * The given status of the execution
+     * @type {string}
+     * @memberof Execution
+     */
+    readonly status?: ExecutionStatusEnum;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof Execution
+     */
+    readonly tenant?: string;
+
+}
+
+/**
+ * @export
+ */
+export enum ExecutionStatusEnum {
+    Pending = 'pending',
+    Running = 'running',
+    Completed = 'completed',
+    Aborted = 'aborted',
+    Canceled = 'canceled'
 }
 

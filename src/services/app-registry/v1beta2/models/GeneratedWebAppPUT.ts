@@ -27,50 +27,71 @@
 /**
  *
  * @export
- * @interface AppMetadataPublic
+ * @interface WebAppPUT
  */
-export interface AppMetadataPublic {
+export interface WebAppPUT {
+    /**
+     * Array of URLs that can be used for redirect after logging into the app.
+     * @type {Array<string>}
+     * @memberof WebAppPUT
+     */
+    redirectUrls: Array<string>;
+
+    /**
+     * Human-readable title for the app.
+     * @type {string}
+     * @memberof WebAppPUT
+     */
+    title: string;
+
     /**
      * Array of permission templates that are used to grant permission to the app principal when a tenant subscribes.
      * @type {Array<string>}
-     * @memberof AppMetadataPublic
+     * @memberof WebAppPUT
      */
     appPrincipalPermissions?: Array<string>;
 
     /**
      * Short paragraph describing the app.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof WebAppPUT
      */
     description?: string;
 
     /**
      * The URL used to log in to the app.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof WebAppPUT
      */
     loginUrl?: string;
 
     /**
      * The URL used to display the app's logo.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof WebAppPUT
      */
     logoUrl?: string;
 
     /**
-     * Human-readable title for the app.
+     * URL to redirect to after a subscription is created.
      * @type {string}
-     * @memberof AppMetadataPublic
+     * @memberof WebAppPUT
      */
-    title?: string;
+    setupUrl?: string;
 
     /**
      * Array of permission filter templates that are used to intersect with a user's permissions when using the app.
      * @type {Array<string>}
-     * @memberof AppMetadataPublic
+     * @memberof WebAppPUT
      */
     userPermissionsFilter?: Array<string>;
+
+    /**
+     * URL that webhook events are sent to.
+     * @type {string}
+     * @memberof WebAppPUT
+     */
+    webhookUrl?: string;
 
 }
 
