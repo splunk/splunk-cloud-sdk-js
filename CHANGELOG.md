@@ -6,11 +6,15 @@ All notable changes to this project will be documented in this file. See [standa
 # [7.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v6.1.0...v7.0.0) (2020-02-20)
 
 
-### Features
+### BREAKING CHANGES
 
-* update with code-generated api bindings and models performed 2020-02-12 ([6ecb56e](https://github.com/splunk/splunk-cloud-sdk-js/commits/6ecb56e))
+* Appregistry models `AppResponseCreateUpdate`, 
+ `UpdateAppRequest`, `CreateAppRequest`, `AppResponseCreateUpdat`,`AppResponseGetList` 
+ have been refactored from single model encompassing all app related properties to discriminator based app kind specific models - `NativeApp/NativeAppPost/NativeAppPut`, `Webapp/WebAppPost/WebAppPut`,`ServiceApp/ServiceAppPost/ServiceAppPut` models
 
-
+### FEATURES
+* Collect service has support for new endpoints - `CreateExecution`, `GetExecution`, `PatchExecution` for scheduled jobs
+* Identity service has New Enum value for TenantStatus - `tombstones`
 
 <a name="6.1.0"></a>
 # [6.1.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v6.0.0...v6.1.0) (2020-01-31)
