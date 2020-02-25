@@ -109,7 +109,7 @@ Repository: [https://github.com/chaijs/chai](https://github.com/chaijs/chai)
 
 Name: codecov
 
-Version: 3.5.0
+Version: 3.6.5
 
 License: [MIT](https://github.com/codecov/codecov-node/raw/master/LICENSE)
 
