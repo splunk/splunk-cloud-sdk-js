@@ -35,7 +35,7 @@ export interface ExecutionPatch {
      * @type {string}
      * @memberof ExecutionPatch
      */
-    status?: ExecutionPatchStatusEnum;
+    status: ExecutionPatchStatusEnum;
 
 }
 

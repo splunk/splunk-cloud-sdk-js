@@ -26,7 +26,9 @@
 
 
 import {
+    CreateEntitlementsJobBody,
     CreateProvisionJobBody,
+    EntitlementsJobInfo,
     InviteBody,
     InviteInfo,
     Invites,
@@ -55,6 +57,23 @@ export class GeneratedProvisionerService extends BaseApiService {
 
     getServicePrefix() : string {
         return PROVISIONER_SERVICE_PREFIX;
+    }
+    /**
+     * Creates an entitlements job.
+     * @param tenantName
+     * @param jobId
+     * @param createEntitlementsJobBody
+     * @param args parameters to be sent with the request
+     * @return EntitlementsJobInfo
+     */
+    public createEntitlementsJob = (tenantName: string, jobId: string, createEntitlementsJobBody: CreateEntitlementsJobBody, args?: object): Promise<EntitlementsJobInfo> => {
+        const path_params = {
+            tenantName: tenantName,
+            jobId: jobId
+        };
+        const path = this.template`/system/provisioner/v1beta1/jobs/tenants/${'tenantName'}/entitlements/${'jobId'}`(path_params);
+        return this.client.put(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), createEntitlementsJobBody, { query: args })
+            .then(response => response.body as EntitlementsJobInfo);
     }
     /**
      * Creates an invitation for a person to join the tenant using their email address.
@@ -90,6 +109,22 @@ export class GeneratedProvisionerService extends BaseApiService {
         const path = this.template`/provisioner/v1beta1/invites/${'inviteId'}`(path_params);
         return this.client.delete(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
+    }
+    /**
+     * Returns details of a specific entitlements job.
+     * @param tenantName
+     * @param jobId
+     * @param args parameters to be sent with the request
+     * @return EntitlementsJobInfo
+     */
+    public getEntitlementsJob = (tenantName: string, jobId: string, args?: object): Promise<EntitlementsJobInfo> => {
+        const path_params = {
+            tenantName: tenantName,
+            jobId: jobId
+        };
+        const path = this.template`/system/provisioner/v1beta1/jobs/tenants/${'tenantName'}/entitlements/${'jobId'}`(path_params);
+        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+            .then(response => response.body as EntitlementsJobInfo);
     }
     /**
      * Returns an invitation in the given tenant.

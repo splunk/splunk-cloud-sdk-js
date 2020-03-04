@@ -299,9 +299,10 @@ export class GeneratedIdentityService extends BaseApiService {
     /**
      * List the groups that exist in a given tenant.
      * @param args parameters to be sent with the request
+     * @param args.access List only the groups with specified access permission.
      * @return Array<string>
      */
-    public listGroups = (args?: object): Promise<Array<string>> => {
+    public listGroups = (args?: { access?: AccessEnum, [key: string]: any }): Promise<Array<string>> => {
         const path = `/identity/v2beta1/groups`;
         return this.client.get(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as Array<string>);
@@ -462,6 +463,19 @@ export class GeneratedIdentityService extends BaseApiService {
         };
         const path = this.template`/identity/v2beta1/roles/${'role'}/permissions/${'permission'}`(path_params);
         return this.client.delete(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+            .then(response => response.body as object);
+    }
+    /**
+     * Revoke all existing tokens issued to a principal
+     * @param principal The principal name.
+     * @param args parameters to be sent with the request
+     */
+    public revokePrincipalAuthTokens = (principal: string, args?: object): Promise<object> => {
+        const path_params = {
+            principal: principal
+        };
+        const path = this.template`/system/identity/v2beta1/principals/${'principal'}/revoke`(path_params);
+        return this.client.post(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as object);
     }
     /**

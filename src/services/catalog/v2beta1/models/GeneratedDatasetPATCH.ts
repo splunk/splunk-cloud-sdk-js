@@ -27,7 +27,6 @@
 import {
     ImportDatasetPATCH,
     IndexDatasetPATCH,
-    JobDatasetPATCH,
     KVCollectionDatasetPATCH,
     LookupDatasetPATCH,
     MetricDatasetPATCH,
@@ -39,4 +38,4 @@ import {
  * Property values to be set in an existing dataset using a PATCH request.
  * @export
  */
-export type DatasetPATCH = ImportDatasetPATCH | IndexDatasetPATCH | JobDatasetPATCH | KVCollectionDatasetPATCH | LookupDatasetPATCH | MetricDatasetPATCH | ViewDatasetPATCH;
+export type DatasetPATCH = ImportDatasetPATCH | IndexDatasetPATCH | KVCollectionDatasetPATCH | LookupDatasetPATCH | MetricDatasetPATCH | ViewDatasetPATCH;

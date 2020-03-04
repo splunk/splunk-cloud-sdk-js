@@ -35,7 +35,7 @@ export interface Certificate {
      * @type {string}
      * @memberof Certificate
      */
-    pem?: string;
+    pem: string;
 
 }
 

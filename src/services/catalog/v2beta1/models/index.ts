@@ -58,8 +58,6 @@ export * from './GeneratedJobDataset';
 export * from './GeneratedJobDatasetEventSummaryAvailableStatus';
 export * from './GeneratedJobDatasetFieldSummaryAvailableStatus';
 export * from './GeneratedJobDatasetKind';
-export * from './GeneratedJobDatasetPATCH';
-export * from './GeneratedJobDatasetPOST';
 export * from './GeneratedJobDatasetProperties';
 export * from './GeneratedJobDatasetPropertiesTimelineMetadata';
 export * from './GeneratedJobDatasetPropertiesTimelineMetadataAuto';
