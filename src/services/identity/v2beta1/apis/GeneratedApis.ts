@@ -47,6 +47,10 @@ import { SplunkError } from '../../../../client';
 export const IDENTITY_SERVICE_PREFIX: string = '/identity/v2beta1';
 export const IDENTITY_SERVICE_CLUSTER: string = 'api';
 
+export enum AccessEnum {
+    Write = 'write'
+}
+
 /**
  * Identity
  * Version: v2beta1.17
@@ -322,7 +326,7 @@ export class GeneratedIdentityService extends BaseApiService {
             .then(response => response.body as Array<string>);
     }
     /**
-     * Returns a set of permissions granted to the member within the tenant. 
+     * Returns a set of permissions granted to the member within the tenant.
      * @param member The member name.
      * @param args parameters to be sent with the request
      * @return Array<string>
@@ -336,7 +340,7 @@ export class GeneratedIdentityService extends BaseApiService {
             .then(response => response.body as Array<string>);
     }
     /**
-     * Returns a set of roles that a given member holds within the tenant. 
+     * Returns a set of roles that a given member holds within the tenant.
      * @param member The member name.
      * @param args parameters to be sent with the request
      * @return Array<string>
@@ -479,7 +483,7 @@ export class GeneratedIdentityService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Validates the access token obtained from the authorization header and returns the principal name and tenant memberships. 
+     * Validates the access token obtained from the authorization header and returns the principal name and tenant memberships.
      * @param args parameters to be sent with the request
      * @param args.include Include additional information to return when validating tenant membership. Valid parameters [tenant, principal]
      * @return ValidateInfo

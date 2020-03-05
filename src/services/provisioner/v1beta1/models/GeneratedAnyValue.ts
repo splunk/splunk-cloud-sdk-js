@@ -25,9 +25,9 @@
  */
 
 /**
- * 
+ *
  * @export
  * @interface AnyValue
  */
-export type AnyValue = { any };
+export type AnyValue = { };
 
