@@ -14,40 +14,17 @@
  * under the License.
  */
 import { AuthManager } from './auth_manager';
+import { buildSplunkError, SplunkError, SplunkErrorParams } from './errors';
 import agent from './version';
+
+export { SplunkError, SplunkErrorParams };
 
 export const DEFAULT_URLS = {
     api: 'https://api.scp.splunk.com',
-    app: 'https://app.scp.splunk.com'
+    app: 'https://app.scp.splunk.com',
 };
 
 const SEARCH_SUBMIT_QUEUE = 'search-submit';
-
-export interface SplunkErrorParams {
-    message: string;
-    code?: string;
-    httpStatusCode?: number;
-    details?: any | any[];
-    moreInfo?: string;
-}
-
-export class SplunkError extends Error implements SplunkErrorParams {
-    public code?: string;
-    public httpStatusCode?: number;
-    public details?: object | any[];
-    public moreInfo?: string;
-
-    constructor(errorParams: SplunkErrorParams | string) {
-        super(typeof errorParams === 'string' ? errorParams : JSON.stringify(errorParams));
-        if (typeof errorParams !== 'string') {
-            this.message = errorParams.message || this.message;
-            this.code = errorParams.code;
-            this.details = errorParams.details;
-            this.moreInfo = errorParams.moreInfo;
-            this.httpStatusCode = errorParams.httpStatusCode;
-        }
-    }
-}
 
 type ResponseRequest = [Response, Request];
 
@@ -58,13 +35,14 @@ class RequestFutureHolder {
     private unsetErrorHandler = (reason?: any) => {
         throw new Error('Unexpectedly don\'t have an error handler');
     }
-    private unsetSuccessHandler = (value?: (PromiseLike<ResponseRequest> | ResponseRequest)) => {
+    private unsetSuccessHandler = (value?: PromiseLike<ResponseRequest> | ResponseRequest) => {
         throw new Error('Unexpectedly don\'t have a success handler');
     }
     public promise: Promise<ResponseRequest>;
     public request: Request;
     public onError: (reason?: any) => void = this.unsetErrorHandler;
-    public onSuccess: (value?: (PromiseLike<ResponseRequest> | ResponseRequest)) => void = this.unsetSuccessHandler;
+    public onSuccess: (value?: PromiseLike<ResponseRequest> | ResponseRequest) => void = this
+        .unsetSuccessHandler;
 
     constructor(request: Request) {
         this.request = request;
@@ -102,7 +80,10 @@ const DEFAULT_REQUEST_QUEUE_PARAMS = {
 export class RequestQueueManagerParams {
     public defaults: RequestQueueParams;
     public overrides: Map<string, RequestQueueParams>;
-    constructor(defaults: RequestQueueParams = DEFAULT_REQUEST_QUEUE_PARAMS, overrides: Map<string, RequestQueueParams> = new Map()) {
+    constructor(
+        defaults: RequestQueueParams = DEFAULT_REQUEST_QUEUE_PARAMS,
+        overrides: Map<string, RequestQueueParams> = new Map()
+    ) {
         this.defaults = defaults;
         this.overrides = overrides;
     }
@@ -113,19 +94,25 @@ export class RequestQueueManagerParams {
  */
 export class DefaultQueueManagerParams extends RequestQueueManagerParams {
     constructor() {
-        super({
-            retries: 4,
-            initialTimeout: 500,
-            exponent: 2,
-            maxInFlight: 3,
-        }, new Map<string, RequestQueueParams>([
-            [SEARCH_SUBMIT_QUEUE, {
-                retries: 6,
-                initialTimeout: 1000,
-                exponent: 1.6,
+        super(
+            {
+                retries: 4,
+                initialTimeout: 500,
+                exponent: 2,
                 maxInFlight: 3,
-            }]
-        ]));
+            },
+            new Map<string, RequestQueueParams>([
+                [
+                    SEARCH_SUBMIT_QUEUE,
+                    {
+                        retries: 6,
+                        initialTimeout: 1000,
+                        exponent: 1.6,
+                        maxInFlight: 3,
+                    },
+                ],
+            ])
+        );
     }
 }
 
@@ -146,7 +133,9 @@ class RequestQueueManager {
 
     private getQueue(queueName: string): RequestQueue {
         if (!this.queues.has(queueName)) {
-            const queue = new RequestQueue(this.params.overrides.get(queueName) || this.params.defaults);
+            const queue = new RequestQueue(
+                this.params.overrides.get(queueName) || this.params.defaults
+            );
             this.queues.set(queueName, queue);
         }
         return this.queues.get(queueName)!;
@@ -238,11 +227,16 @@ class RequestQueue {
  */
 function handleResponse(response: Response): Promise<HTTPResponse> {
     if (response.ok) {
-        if (response.headers.get('Content-Type') === ContentType.CSV || response.headers.get('Content-Type') === ContentType.GZIP) {
-            return response.text()
+        if (
+            response.headers.get('Content-Type') === ContentType.CSV ||
+            response.headers.get('Content-Type') === ContentType.GZIP
+        ) {
+            return response
+                .text()
                 .then(text => ({ body: text, headers: response.headers, status: response.status }));
         } // else
-        return response.text()
+        return response
+            .text()
             .then(decodeJson)
             .then(json => ({ body: json, headers: response.headers, status: response.status }));
     } // else
@@ -251,29 +245,29 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
         try {
             const json = JSON.parse(text);
             if (!json.message) {
-                err = new SplunkError({
+                err = buildSplunkError({
                     message: `Malformed error message (no message) for endpoint: ${response.url}.`,
                     httpStatusCode: response.status,
                     details: {
-                        response: text
-                    }
+                        response: text,
+                    },
                 });
             } else {
-                err = new SplunkError({
+                err = buildSplunkError({
                     message: json.message,
                     code: json.code,
                     moreInfo: json.moreInfo,
                     httpStatusCode: response.status,
-                    details: json.details
+                    details: json.details,
                 });
             }
         } catch (ex) {
-            err = new SplunkError({
+            err = buildSplunkError({
                 message: `${response.statusText} - unable to process response`,
                 httpStatusCode: response.status,
                 details: {
-                    response: text
-                }
+                    response: text,
+                },
             });
         }
         throw err;
@@ -354,18 +348,20 @@ export class ServiceClient {
         const tokenSourceProvider = args.tokenSource;
         if (typeof tokenSourceProvider === 'string') {
             // If we have a string, wrap it in a promise
-            this.tokenSource = () => new Promise<string>((resolve) => resolve(tokenSourceProvider));
+            this.tokenSource = () => new Promise<string>(resolve => resolve(tokenSourceProvider));
         } else if (typeof tokenSourceProvider === 'function') {
             // If we have an async function, just call it when we need a token
             this.tokenSource = tokenSourceProvider;
-        } else if (typeof tokenSourceProvider !== 'undefined' && 'getAccessToken' in tokenSourceProvider) {
+        } else if (
+            typeof tokenSourceProvider !== 'undefined' &&
+            'getAccessToken' in tokenSourceProvider
+        ) {
             // Else wrap a token manager.
             this.authManager = tokenSourceProvider;
             this.tokenSource = (() => {
                 const authManager = this.authManager;
                 return () => authManager.getAccessToken();
             })();
-
         } else {
             throw new SplunkError({ message: 'Unsupported token source' });
         }
@@ -395,9 +391,11 @@ export class ServiceClient {
     }
 
     private invokeHooks = (response: Response, request: Request): Promise<Response> => {
-        return this.responseHooks.reduce((result: Promise<Response>, cb: ResponseHook): Promise<Response> => {
+        return this.responseHooks.reduce((result: Promise<Response>, cb: ResponseHook): Promise<
+            Response
+        > => {
             // Result starts as a known good Promise<Result>
-            return result.then((chainResponse) => {
+            return result.then(chainResponse => {
                 // Call the callback, get the result
                 let cbResult;
                 try {
@@ -481,12 +479,19 @@ export class ServiceClient {
      * @param overrideTenant The tenant to use instead of the tenant that is associated with this client object.
      * @return A fully-qualified path to the resource.
      */
-    public buildPath = (servicePrefix: string, segments: string[], overrideTenant?: string): string => {
+    public buildPath = (
+        servicePrefix: string,
+        segments: string[],
+        overrideTenant?: string
+    ): string => {
         const effectiveTenant = overrideTenant || this.tenant;
         if (!effectiveTenant && segments[0] !== 'system') {
             throw new Error('No tenant specified');
         }
-        const path = segments[0] === 'system' ? `/${segments.join('/')}` : `/${effectiveTenant}${servicePrefix}/${segments.join('/')}`;
+        const path =
+            segments[0] === 'system'
+                ? `/${segments.join('/')}`
+                : `/${effectiveTenant}${servicePrefix}/${segments.join('/')}`;
         for (const elem of segments) {
             if (elem && elem.trim() === '') {
                 throw new Error(`Empty elements in path: ${path}`);
@@ -504,7 +509,13 @@ export class ServiceClient {
      * @param opts Request options.
      * @param data Data for the request body. Objects are converted to strings.
      */
-    public fetch = async (method: HTTPMethod, cluster: string, path: string, opts: RequestOptions = {}, data?: any): Promise<Response> => {
+    public fetch = async (
+        method: HTTPMethod,
+        cluster: string,
+        path: string,
+        opts: RequestOptions = {},
+        data?: any
+    ): Promise<Response> => {
         const url = this.buildUrl(cluster, path, opts.query);
         const queue = opts.queue || ServiceClient.queueFromPath(path, method);
         const headers = await this.buildHeaders(opts.headers);
@@ -514,7 +525,9 @@ export class ServiceClient {
             body: JSON.stringify(data),
         };
         const request = new Request(url, options);
-        return this.queueManager.add(queue, request).then(responseRequest => this.invokeHooks(...responseRequest));
+        return this.queueManager
+            .add(queue, request)
+            .then(responseRequest => this.invokeHooks(...responseRequest));
     }
 
     /**
@@ -525,9 +538,12 @@ export class ServiceClient {
      * @param opts Request options.
      * @return An `HTTPResponse` object.
      */
-    public get = (cluster: string, path: string, opts: RequestOptions = {}): Promise<HTTPResponse> => {
-        return this.fetch('GET', cluster, path, opts)
-            .then(handleResponse);
+    public get = (
+        cluster: string,
+        path: string,
+        opts: RequestOptions = {}
+    ): Promise<HTTPResponse> => {
+        return this.fetch('GET', cluster, path, opts).then(handleResponse);
     }
 
     /**
@@ -539,9 +555,13 @@ export class ServiceClient {
      * @param opts Request options.
      * @return An `HTTPResponse` object.
      */
-    public post = (cluster: string, path: string, data: any = null, opts: RequestOptions = {}): Promise<HTTPResponse> => {
-        return this.fetch('POST', cluster, path, opts, data)
-            .then(handleResponse);
+    public post = (
+        cluster: string,
+        path: string,
+        data: any = null,
+        opts: RequestOptions = {}
+    ): Promise<HTTPResponse> => {
+        return this.fetch('POST', cluster, path, opts, data).then(handleResponse);
     }
 
     /**
@@ -553,9 +573,13 @@ export class ServiceClient {
      * @param opts Request options.
      * @return An `HTTPResponse` object.
      */
-    public put = (cluster: string, path: string, data: any, opts: RequestOptions = {}): Promise<HTTPResponse> => {
-        return this.fetch('PUT', cluster, path, opts, data)
-            .then(handleResponse);
+    public put = (
+        cluster: string,
+        path: string,
+        data: any,
+        opts: RequestOptions = {}
+    ): Promise<HTTPResponse> => {
+        return this.fetch('PUT', cluster, path, opts, data).then(handleResponse);
     }
 
     /**
@@ -567,9 +591,13 @@ export class ServiceClient {
      * @param opts Request options.
      * @return An `HTTPResponse` object.
      */
-    public patch = (cluster: string, path: string, data: object, opts: RequestOptions = {}): Promise<HTTPResponse> => {
-        return this.fetch('PATCH', cluster, path, opts, data)
-            .then(handleResponse);
+    public patch = (
+        cluster: string,
+        path: string,
+        data: object,
+        opts: RequestOptions = {}
+    ): Promise<HTTPResponse> => {
+        return this.fetch('PATCH', cluster, path, opts, data).then(handleResponse);
     }
 
     /**
@@ -581,12 +609,16 @@ export class ServiceClient {
      * @param opts Request options.
      * @return An `HTTPResponse` object.
      */
-    public delete = (cluster: string, path: string, data: object = {}, opts: RequestOptions = {}): Promise<HTTPResponse> => {
-        return this.fetch('DELETE', cluster, path, opts, data)
-            .then(handleResponse);
+    public delete = (
+        cluster: string,
+        path: string,
+        data: object = {},
+        opts: RequestOptions = {}
+    ): Promise<HTTPResponse> => {
+        return this.fetch('DELETE', cluster, path, opts, data).then(handleResponse);
     }
 
-    private static queueFromPath(path: string, method: HTTPMethod) : string {
+    private static queueFromPath(path: string, method: HTTPMethod): string {
         if (method === 'POST' && path.match('/search/.*/jobs$')) {
             return SEARCH_SUBMIT_QUEUE;
         }
@@ -599,7 +631,6 @@ export class ServiceClient {
 }
 
 type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-
 
 /**
  * Optional arguments for the HTTP request

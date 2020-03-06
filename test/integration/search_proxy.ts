@@ -20,31 +20,35 @@ import * as search from '../../services/search';
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
-const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
+const splunk = new SplunkCloud({
+    urls: { api: config.stagingApiHost, app: config.stagingAppsHost },
+    tokenSource: config.stagingAuthToken,
+    defaultTenant: config.stagingTenant,
+});
 
 const standardQuery = {
-    query: '| from index:main | head 5'
+    query: '| from index:main | head 5',
 };
 
 const moduleQuery = {
     query: '| from index:main | head 5',
     // catalog service isn't ready for handling module
-    module: ''
+    module: '',
 };
 
 const searchJobWithEventSummary = {
     query: '| from index:main | head 5',
-    collectEventSummary: true
+    collectEventSummary: true,
 };
 
 const searchJobWithFieldSummary = {
     query: '| from index:main | head 5',
-    collectFieldSummary: true
+    collectFieldSummary: true,
 };
 
 const searchJobWithTimeBucket = {
     query: '| from index:main | head 5',
-    collectTimeBuckets: true
+    collectTimeBuckets: true,
 };
 
 describe('integration tests Using Search APIs', () => {
@@ -57,77 +61,104 @@ describe('integration tests Using Search APIs', () => {
     });
 
     describe('Search', () => {
-        it('should allow submitting a search and getting results', () => splunk.search.createJob(standardQuery)
-            .then(searchObj => { // Check the state of the job
+        it('should allow submitting a search and getting results', () =>
+            splunk.search
+                .createJob(standardQuery)
+                .then(searchObj => {
+                    // Check the state of the job
+                    assert.property(searchObj, 'sid');
+                    assert.property(searchObj, 'status');
+                    return splunk.search.waitForJob(searchObj);
+                })
+                .then(searchObj => {
+                    // Ensure we have events when done
+                    assert.equal(searchObj.status, search.SearchStatus.Done);
+                    assert.equal(searchObj.resultsAvailable, 5);
+                    return splunk.search
+                        .listResults(searchObj.sid as string)
+                        .then(resultResponse => {
+                            const response = resultResponse as search.ListSearchResultsResponse;
+                            assert.equal(response.results.length, 5);
+                            assert.property(response, 'fields');
+                        });
+                }));
+
+        it('should allow submitting a search with module field and getting results', () =>
+            splunk.search
+                .createJob(moduleQuery)
+                .then(searchObj => {
+                    // Check the state of the job
+                    assert.property(searchObj, 'sid');
+                    assert.property(searchObj, 'status');
+                    return splunk.search.waitForJob(searchObj);
+                })
+                .then(searchObj => {
+                    // Ensure we have events when done
+                    assert.equal(searchObj.status, search.SearchStatus.Done);
+                    assert.equal(searchObj.resultsAvailable, 5);
+                    return splunk.search
+                        .listResults(searchObj.sid as string)
+                        .then(resultResponse => {
+                            const response = resultResponse as search.ListSearchResultsResponse;
+                            assert.equal(response.results.length, 5);
+                            assert.property(response, 'fields');
+                        });
+                }));
+
+        it('should return a wait request if the job is not ready', () =>
+            splunk.search.createJob(moduleQuery).then(searchObj => {
+                // Check the state of the job
                 assert.property(searchObj, 'sid');
                 assert.property(searchObj, 'status');
-                return splunk.search.waitForJob(searchObj);
-            }).then(searchObj => { // Ensure we have events when done
-                assert.equal(searchObj.status, search.SearchStatus.Done);
-                assert.equal(searchObj.resultsAvailable, 5);
-                return splunk.search.listResults(searchObj.sid as string)
-                    .then(resultResponse => {
-                        const response = resultResponse as search.ListSearchResultsResponse;
-                        assert.equal(response.results.length, 5);
-                        assert.property(response, 'fields');
-                    });
+                return splunk.search.listResults(searchObj.sid as string).then(res => {
+                    if ((res as search.ListSearchResultsResponse).nextLink) {
+                        const resultsNotReady = res as search.ListSearchResultsResponse;
+                        assert.property(resultsNotReady, 'nextLink');
+                        assert.property(resultsNotReady, 'wait');
+                    } else {
+                        const resultsResponse = res as search.ListSearchResultsResponse;
+                        assert.property(resultsResponse, 'results');
+                        assert.property(resultsResponse, 'fields');
+                    }
+                });
             }));
 
-        it('should allow submitting a search with module field and getting results', () => splunk.search.createJob(moduleQuery)
-            .then(searchObj => { // Check the state of the job
-                assert.property(searchObj, 'sid');
-                assert.property(searchObj, 'status');
-                return splunk.search.waitForJob(searchObj);
-            }).then(searchObj => { // Ensure we have events when done
-                assert.equal(searchObj.status, search.SearchStatus.Done);
-                assert.equal(searchObj.resultsAvailable, 5);
-                return splunk.search.listResults(searchObj.sid as string)
-                    .then(resultResponse => {
-                        const response = resultResponse as search.ListSearchResultsResponse;
-                        assert.equal(response.results.length, 5);
-                        assert.property(response, 'fields');
-                    });
-            }));
-
-        it('should return a wait request if the job is not ready', () => splunk.search.createJob(moduleQuery)
-            .then(searchObj => { // Check the state of the job
-                assert.property(searchObj, 'sid');
-                assert.property(searchObj, 'status');
-                return splunk.search.listResults(searchObj.sid as string)
+        it('should allow pagination of results', () =>
+            splunk.search.createJob(standardQuery).then(createdJob =>
+                splunk.search
+                    .waitForJob(createdJob)
+                    .then(job => {
+                        // As a child to keep sid in the closure
+                        assert.equal(job.resultsAvailable, 5);
+                        return splunk.search.listResults(job.sid as string, {
+                            offset: 0,
+                            count: 3,
+                        });
+                    })
                     .then(res => {
-                        if ((res as search.ListSearchResultsResponse).nextLink) {
-                            const resultsNotReady = res as search.ListSearchResultsResponse;
-                            assert.property(resultsNotReady, 'nextLink');
-                            assert.property(resultsNotReady, 'wait');
-                        } else {
-                            const resultsResponse = res as search.ListSearchResultsResponse;
-                            assert.property(resultsResponse, 'results');
-                            assert.property(resultsResponse, 'fields');
-                        }
-                    });
-            }));
+                        const results = res as search.ListSearchResultsResponse;
+                        assert.equal(results.results.length, 3);
+                        return splunk.search.listResults(createdJob.sid as string, {
+                            offset: 3,
+                            count: 5,
+                        });
+                    })
+                    .then(res => {
+                        const results = res as search.ListSearchResultsResponse;
+                        assert.equal(results.results.length, 2, 'Only two events should remain');
+                        return splunk.search.listResults(createdJob.sid as string, {
+                            offset: 10,
+                            count: 10,
+                        });
+                    })
+                    .then(res => {
+                        const results = res as search.ListSearchResultsResponse;
+                        assert.equal(results.results.length, 0);
+                    })
+            ));
 
-        it('should allow pagination of results', () => splunk.search.createJob(standardQuery)
-            .then(createdJob => splunk.search.waitForJob(createdJob)
-                .then(job => { // As a child to keep sid in the closure
-                    assert.equal(job.resultsAvailable, 5);
-                    return splunk.search.listResults(job.sid as string, { offset: 0, count: 3 });
-                }).then(res => {
-                    const results = res as search.ListSearchResultsResponse;
-                    assert.equal(results.results.length, 3);
-                    return splunk.search.listResults(createdJob.sid as string, { offset: 3, count: 5 });
-                }).then(res => {
-                    const results = res as search.ListSearchResultsResponse;
-                    assert.equal(results.results.length, 2, 'Only two events should remain');
-                    return splunk.search.listResults(createdJob.sid as string, { offset: 10, count: 10 });
-                }).then(res => {
-                    const results = res as search.ListSearchResultsResponse;
-                    assert.equal(results.results.length, 0);
-                })));
-
-
-        it('should allow retrieval of jobs', () => splunk.search.listJobs()
-            .then(results => {
+        it('should allow retrieval of jobs', () =>
+            splunk.search.listJobs().then(results => {
                 assert.typeOf(results, 'array');
                 assert.ok(results.length > 0);
                 assert.property(results[0], 'sid');
@@ -138,8 +169,8 @@ describe('integration tests Using Search APIs', () => {
                 assert.property(results[0], 'percentComplete');
             }));
 
-        it('should allow retrieval of jobs with query single status', () => splunk.search.listJobs()
-            .then(results => {
+        it('should allow retrieval of jobs with query single status', () =>
+            splunk.search.listJobs().then(results => {
                 assert.typeOf(results, 'array');
                 assert.ok(results.length > 0);
                 assert.property(results[0], 'sid');
@@ -150,8 +181,8 @@ describe('integration tests Using Search APIs', () => {
                 assert.property(results[0], 'percentComplete');
             }));
 
-        it('should allow retrieval of jobs with query multiple status', () => splunk.search.listJobs()
-            .then(results => {
+        it('should allow retrieval of jobs with query multiple status', () =>
+            splunk.search.listJobs().then(results => {
                 assert.typeOf(results, 'array');
                 assert.ok(results.length > 0);
                 assert.property(results[0], 'sid');
@@ -162,86 +193,106 @@ describe('integration tests Using Search APIs', () => {
                 assert.property(results[0], 'percentComplete');
             }));
 
-        it('should allow query params for listing search results', () => splunk.search.createJob(standardQuery)
-            .then(searchObj => {
-                assert.property(searchObj, 'sid');
-                assert.property(searchObj, 'status');
-                return splunk.search.waitForJob(searchObj);
-            }).then(searchObj => { // Ensure we have events when done
-                assert.equal(searchObj.status, search.SearchStatus.Done);
-                assert.equal(searchObj.resultsAvailable, 5);
-                return splunk.search.listResults(searchObj.sid as string, { field: 'host' })
-                    .then(resultResponse => {
-                        const response = resultResponse as search.ListSearchResultsResponse;
-                        assert.equal(response.results.length, 5);
-                        assert.property(response, 'fields');
-                        // should only return host field in results
-                        assert.equal(Object.keys(response.results[0]).length, 1);
-                        assert.isTrue(Object.keys(response.results[0]).indexOf('host') > -1);
-                    });
-            }));
+        it('should allow query params for listing search results', () =>
+            splunk.search
+                .createJob(standardQuery)
+                .then(searchObj => {
+                    assert.property(searchObj, 'sid');
+                    assert.property(searchObj, 'status');
+                    return splunk.search.waitForJob(searchObj);
+                })
+                .then(searchObj => {
+                    // Ensure we have events when done
+                    assert.equal(searchObj.status, search.SearchStatus.Done);
+                    assert.equal(searchObj.resultsAvailable, 5);
+                    return splunk.search
+                        .listResults(searchObj.sid as string, { field: 'host' })
+                        .then(resultResponse => {
+                            const response = resultResponse as search.ListSearchResultsResponse;
+                            assert.equal(response.results.length, 5);
+                            assert.property(response, 'fields');
+                            // should only return host field in results
+                            assert.equal(Object.keys(response.results[0]).length, 1);
+                            assert.isTrue(Object.keys(response.results[0]).indexOf('host') > -1);
+                        });
+                }));
 
-        it('should allow listing events summary', () => splunk.search.createJob(searchJobWithEventSummary)
-            .then(searchObj => {
-                assert.property(searchObj, 'sid');
-                assert.property(searchObj, 'status');
-                return splunk.search.waitForJob(searchObj);
-            }).then(searchObj => { // Ensure we have events when done
-                assert.equal(searchObj.status, search.SearchStatus.Done);
-                return splunk.search.listEventsSummary(searchObj.sid as string, { field: '_raw' })
-                    .then(resultResponse => {
-                        const response = resultResponse as search.ListSearchResultsResponse;
-                        assert.equal(response.results.length, 5);
-                        assert.property(response, 'fields');
-                        assert.property(response, 'messages');
-                        // should only return host field in results
-                        assert.equal(Object.keys(response.results[0]).length, 1);
-                        assert.isTrue(Object.keys(response.results[0]).indexOf('_raw') > -1);
-                    });
-            }));
+        it('should allow listing events summary', () =>
+            splunk.search
+                .createJob(searchJobWithEventSummary)
+                .then(searchObj => {
+                    assert.property(searchObj, 'sid');
+                    assert.property(searchObj, 'status');
+                    return splunk.search.waitForJob(searchObj);
+                })
+                .then(searchObj => {
+                    // Ensure we have events when done
+                    assert.equal(searchObj.status, search.SearchStatus.Done);
+                    return splunk.search
+                        .listEventsSummary(searchObj.sid as string, { field: '_raw' })
+                        .then(resultResponse => {
+                            const response = resultResponse as search.ListSearchResultsResponse;
+                            assert.equal(response.results.length, 5);
+                            assert.property(response, 'fields');
+                            assert.property(response, 'messages');
+                            // should only return host field in results
+                            assert.equal(Object.keys(response.results[0]).length, 1);
+                            assert.isTrue(Object.keys(response.results[0]).indexOf('_raw') > -1);
+                        });
+                }));
 
-        it('should allow listing fields summary', () => splunk.search.createJob(searchJobWithFieldSummary)
-            .then(searchObj => {
-                assert.property(searchObj, 'sid');
-                assert.property(searchObj, 'status');
-                return splunk.search.waitForJob(searchObj);
-            }).then(searchObj => { // Ensure we have events when done
-                assert.equal(searchObj.status, search.SearchStatus.Done);
-                return splunk.search.listFieldsSummary(searchObj.sid as string, { earliest: '-1m' })
-                    .then(resultResponse => {
-                        const response = resultResponse as search.FieldsSummary;
-                        assert.equal(response.eventCount, 5);
-                        assert.property(response, 'earliestTime');
-                        assert.property(response, 'latestTime');
-                        assert.property(response, 'fields');
-                    });
-            }));
+        it('should allow listing fields summary', () =>
+            splunk.search
+                .createJob(searchJobWithFieldSummary)
+                .then(searchObj => {
+                    assert.property(searchObj, 'sid');
+                    assert.property(searchObj, 'status');
+                    return splunk.search.waitForJob(searchObj);
+                })
+                .then(searchObj => {
+                    // Ensure we have events when done
+                    assert.equal(searchObj.status, search.SearchStatus.Done);
+                    return splunk.search
+                        .listFieldsSummary(searchObj.sid as string, { earliest: '-1m' })
+                        .then(resultResponse => {
+                            const response = resultResponse as search.FieldsSummary;
+                            assert.equal(response.eventCount, 5);
+                            assert.property(response, 'earliestTime');
+                            assert.property(response, 'latestTime');
+                            assert.property(response, 'fields');
+                        });
+                }));
 
-        it('should allow listing time buckets', () => splunk.search.createJob(searchJobWithTimeBucket)
-            .then(searchObj => {
-                assert.property(searchObj, 'sid');
-                assert.property(searchObj, 'status');
-                return splunk.search.waitForJob(searchObj);
-            }).then(searchObj => { // Ensure we have events when done
-                assert.equal(searchObj.status, search.SearchStatus.Done);
-                return splunk.search.listTimeBuckets(searchObj.sid as string)
-                    .then(resultResponse => {
-                        const response = resultResponse as search.TimeBucketsSummary;
-                        assert.equal(response.eventCount, 5);
-                        assert.property(response, 'buckets');
-                        assert.property(response, 'isTimeCursored');
-                        assert.property(response, 'cursorTime');
-                        assert.isArray(response.buckets);
-                        assert.isTrue(response.buckets!.length > 0);
-                        const firstBucket = response.buckets![0] as search.SingleTimeBucket;
-                        assert.property(firstBucket, 'availableCount');
-                        assert.property(firstBucket, 'duration');
-                        assert.property(firstBucket, 'earliestTime');
-                        assert.property(firstBucket, 'earliestStrfTime');
-                        assert.property(firstBucket, 'isFinalized');
-                        assert.property(firstBucket, 'totalCount');
-                    });
-            }));
+        it('should allow listing time buckets', () =>
+            splunk.search
+                .createJob(searchJobWithTimeBucket)
+                .then(searchObj => {
+                    assert.property(searchObj, 'sid');
+                    assert.property(searchObj, 'status');
+                    return splunk.search.waitForJob(searchObj);
+                })
+                .then(searchObj => {
+                    // Ensure we have events when done
+                    assert.equal(searchObj.status, search.SearchStatus.Done);
+                    return splunk.search
+                        .listTimeBuckets(searchObj.sid as string)
+                        .then(resultResponse => {
+                            const response = resultResponse as search.TimeBucketsSummary;
+                            assert.equal(response.eventCount, 5);
+                            assert.property(response, 'buckets');
+                            assert.property(response, 'isTimeCursored');
+                            assert.property(response, 'cursorTime');
+                            assert.isArray(response.buckets);
+                            assert.isTrue(response.buckets!.length > 0);
+                            const firstBucket = response.buckets![0] as search.SingleTimeBucket;
+                            assert.property(firstBucket, 'availableCount');
+                            assert.property(firstBucket, 'duration');
+                            assert.property(firstBucket, 'earliestTime');
+                            assert.property(firstBucket, 'earliestStrfTime');
+                            assert.property(firstBucket, 'isFinalized');
+                            assert.property(firstBucket, 'totalCount');
+                        });
+                }));
     });
 
     // describe('Search composite', () => {
@@ -269,7 +320,6 @@ describe('integration tests Using Search APIs', () => {
     //             });
     //     });
     // });
-
 
     // describe('Get results via promise', () => {
     //     it('should allow retrieving all results', () => {
@@ -382,5 +432,4 @@ describe('integration tests Using Search APIs', () => {
     //     });
     // });
     // });
-
 });
