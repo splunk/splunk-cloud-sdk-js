@@ -25,5 +25,8 @@ update_dependencies:
 test:
 	yarn test
 
+token:
+	sh ./ci/scripts/token.sh
+
 deploy:
 	yarn release
