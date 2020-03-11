@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="8.0.0"></a>
+# [8.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v7.0.0...v8.0.0) (2020-03-11)
+
+
+### Features
+
+* make 500 errors more visible ([ee4fb63](https://github.com/splunk/splunk-cloud-sdk-js/commits/ee4fb63))
+* update codecov to 3.6.5+ ([8e26560](https://github.com/splunk/splunk-cloud-sdk-js/commits/8e26560))
+* update with code-generated api bindings and models performed 2020-03-04 ([a40726d](https://github.com/splunk/splunk-cloud-sdk-js/commits/a40726d))
+
+
+
 <a name="7.0.0"></a>
 # [7.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v6.1.0...v7.0.0) (2020-02-20)
 
