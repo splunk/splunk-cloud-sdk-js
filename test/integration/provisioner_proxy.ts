@@ -100,54 +100,65 @@ describe('integration tests for Provisioner Endpoints', () => {
                 return sleep(2000); // Wait 2s before starting next test
             });
     });
-    it('should successfully create an invite', () => {
-        return provSplunk.provisioner.createInvite({ email: 'bounce@simulator.amazonses.com', groups: [], comment: 'SDK invite' })
-            .then((invite: provisioner.InviteInfo) => {
-                assert.isNotNull(invite);
-                assert.equal(invite.tenant, provTestTenantID);
-                assert.equal(invite.email, 'bounce@simulator.amazonses.com');
-                testInviteID = invite.inviteID;
-            });
-    });
-    it('should successfully return the invite when getting an existing invite', () => {
-        assert.ok(testInviteID, 'Invite ID was null, nothing to get');
-        return provSplunk.provisioner.getInvite(testInviteID)
-            .then((invite: provisioner.InviteInfo) => {
-                assert.isNotNull(invite);
-                assert.equal(invite.inviteID, testInviteID);
-                assert.equal(invite.tenant, provTestTenantID);
-            });
-    });
-    it('should successfully return the invite when listing all existing invites', () => {
-        assert.ok(testInviteID, 'Invite ID was null, nothing to list');
-        return provSplunk.provisioner.listInvites()
-            .then((invitesList: provisioner.Invites) => {
-                assert.isNotNull(invitesList);
-                assert.isArray(invitesList);
-                assert.ok(invitesList.length);
 
-                let isFound: boolean = false;
-                for (const invite of invitesList) {
-                    if (invite.inviteID === testInviteID) {
-                        isFound = true;
+    describe('invites', () => {
+        before(async () => {
+            const invites = await provSplunk.provisioner.listInvites();
+
+            for (const invite of invites) {
+                await provSplunk.provisioner.deleteInvite(invite.inviteID);
+            }
+        });
+
+        it('should successfully create an invite', () => {
+            return provSplunk.provisioner.createInvite({ email: 'bounce@simulator.amazonses.com', groups: [], comment: 'SDK invite' })
+                .then((invite: provisioner.InviteInfo) => {
+                    assert.isNotNull(invite);
+                    assert.equal(invite.tenant, provTestTenantID);
+                    assert.equal(invite.email, 'bounce@simulator.amazonses.com');
+                    testInviteID = invite.inviteID;
+                });
+        });
+        it('should successfully return the invite when getting an existing invite', () => {
+            assert.ok(testInviteID, 'Invite ID was null, nothing to get');
+            return provSplunk.provisioner.getInvite(testInviteID)
+                .then((invite: provisioner.InviteInfo) => {
+                    assert.isNotNull(invite);
+                    assert.equal(invite.inviteID, testInviteID);
+                    assert.equal(invite.tenant, provTestTenantID);
+                });
+        });
+        it('should successfully return the invite when listing all existing invites', () => {
+            assert.ok(testInviteID, 'Invite ID was null, nothing to list');
+            return provSplunk.provisioner.listInvites()
+                .then((invitesList: provisioner.Invites) => {
+                    assert.isNotNull(invitesList);
+                    assert.isArray(invitesList);
+                    assert.ok(invitesList.length);
+
+                    let isFound: boolean = false;
+                    for (const invite of invitesList) {
+                        if (invite.inviteID === testInviteID) {
+                            isFound = true;
+                        }
                     }
-                }
-                assert.isTrue(isFound);
-            });
-    });
-    it('should successfully resend the invite when updating an existing invite', () => {
-        assert.ok(testInviteID, 'Invite ID was null, nothing to update');
-        return provSplunk.provisioner.updateInvite(testInviteID, { action: provisioner.UpdateInviteBodyActionEnum.Resend })
-            .then((invite: provisioner.InviteInfo) => {
-                assert.isNotNull(invite);
-                assert.equal(invite.inviteID, testInviteID);
-            });
-    });
-    it('should successfully delete the invite', () => {
-        assert.ok(testInviteID, 'Invite ID was null, nothing to delete');
-        return provSplunk.provisioner.deleteInvite(testInviteID)
-            .then(response => {
-                assert.isEmpty(response);
-            });
+                    assert.isTrue(isFound);
+                });
+        });
+        it('should successfully resend the invite when updating an existing invite', () => {
+            assert.ok(testInviteID, 'Invite ID was null, nothing to update');
+            return provSplunk.provisioner.updateInvite(testInviteID, { action: provisioner.UpdateInviteBodyActionEnum.Resend })
+                .then((invite: provisioner.InviteInfo) => {
+                    assert.isNotNull(invite);
+                    assert.equal(invite.inviteID, testInviteID);
+                });
+        });
+        it('should successfully delete the invite', () => {
+            assert.ok(testInviteID, 'Invite ID was null, nothing to delete');
+            return provSplunk.provisioner.deleteInvite(testInviteID)
+                .then(response => {
+                    assert.isEmpty(response);
+                });
+        });
     });
 });
