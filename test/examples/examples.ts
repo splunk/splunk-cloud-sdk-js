@@ -16,9 +16,12 @@
 
 import { assert } from 'chai';
 import { execFile } from 'child_process';
+import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import 'mocha';
 import * as path from 'path';
+
+dotenv.config();
 
 // Reads all examples in and executes them using the appropriate runner
 

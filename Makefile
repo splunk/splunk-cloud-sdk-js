@@ -22,13 +22,17 @@ generate:
 update_dependencies:
 	yarn update
 
-test: test_unit test_integration
-
-test_unit:
+test: token
 	yarn test
 
-test_integration:
-	@yarn ci:integration
+test_unit:
+	@yarn test:unit
+
+test_integration: token
+	@yarn test:integration
+
+test_specific:
+	sh ./ci/scripts/test_specific.sh
 
 token:
 	sh ./ci/scripts/token.sh

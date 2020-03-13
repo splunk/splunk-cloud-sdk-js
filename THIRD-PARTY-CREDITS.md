@@ -145,6 +145,16 @@ License: [MIT](https://github.com/leonardoanalista/cz-customizable/raw/master/LI
 
 Repository: [https://github.com/leonardoanalista/cz-customizable](https://github.com/leonardoanalista/cz-customizable)
 
+## dotenv
+
+Name: dotenv
+
+Version: 8.2.0
+
+License: [BSD-2-Clause](https://github.com/motdotla/dotenv/raw/master/LICENSE)
+
+Repository: [https://github.com/motdotla/dotenv](https://github.com/motdotla/dotenv)
+
 ## express
 
 Name: express

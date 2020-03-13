@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import * as dotenv from 'dotenv';
 import 'isomorphic-fetch';
 /*
  * Do not touch this process type declaration unless
@@ -29,6 +30,8 @@ declare var process: {
         [key: string]: string;
     }
 };
+
+dotenv.config();
 
 export default {
     stubbyHost: process.env.CI ? 'splunk-cloud-sdk-shared-stubby' : 'localhost',
