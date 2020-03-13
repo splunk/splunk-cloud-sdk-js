@@ -20,6 +20,8 @@ export function buildSplunkError(errorParams: SplunkErrorParams | string) {
     }
 
     switch (errorParams.httpStatusCode) {
+        case 401:
+            return new SplunkUnauthorizedError(errorParams);
         case 500:
             return new SplunkServerError(errorParams);
         default:
@@ -54,6 +56,12 @@ export class SplunkError extends Error implements SplunkErrorParams {
 }
 
 export class SplunkServerError extends SplunkError implements SplunkErrorParams {
+    constructor(errorParams: SplunkErrorParams | string) {
+        super(errorParams);
+    }
+}
+
+export class SplunkUnauthorizedError extends SplunkError implements SplunkErrorParams {
     constructor(errorParams: SplunkErrorParams | string) {
         super(errorParams);
     }

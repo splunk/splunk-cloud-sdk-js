@@ -443,7 +443,7 @@ describe('catalog tests', () => {
                     dashboardID = res.id;
                 })
                 .catch(err => {
-                    console.log('An error was encountered while creating dashboard datasests');
+                    console.log('An error was encountered while creating dashboard datasets');
                     console.log(err);
                 }));
         // Cleanup the dataset after we're done with dashboards
@@ -534,7 +534,7 @@ export function createIndexDataset(name: string, module: string = ''): Promise<c
         disabled: false,
     }).then(response => response as catalog.Dataset)
         .catch(error => {
-            console.log('An error was encountered while creating datasests');
+            console.log('An error was encountered while creating datasets');
             console.log(error);
             return null;
         });
@@ -548,7 +548,7 @@ export function createKVCollectionDataset(name: string, module: string = ''): Pr
     }).then(response => {
         return response;
     }).catch(error => {
-        console.log('An error was encountered while cleaning up datasests');
+        console.log('An error was encountered while cleaning up datasets');
         console.log(error);
         return null;
     });
