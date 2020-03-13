@@ -63,6 +63,7 @@
     "jsdoc": "^3.5.5",
     "markdownlint": "^0.14.1",
     "mocha": "^5.0.4",
+    "mocha-steps": "^1.3.0",
     "npm-license-crawler": "^0.2.1",
     "nyc": "^15.0.0",
     "pem": "^1.14.2",

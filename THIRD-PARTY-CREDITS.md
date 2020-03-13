@@ -215,6 +215,16 @@ License: [MIT](https://github.com/DavidAnson/markdownlint/raw/master/LICENSE)
 
 Repository: [https://github.com/DavidAnson/markdownlint](https://github.com/DavidAnson/markdownlint)
 
+## mocha-steps
+
+Name: mocha-steps
+
+Version: 1.3.0
+
+License: [MIT](https://github.com/rprieto/mocha-steps)
+
+Repository: [https://github.com/rprieto/mocha-steps](https://github.com/rprieto/mocha-steps)
+
 ## mocha
 
 Name: mocha
