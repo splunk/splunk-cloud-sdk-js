@@ -154,7 +154,7 @@ describe('integration tests for Provisioner Endpoints', () => {
                     assert.equal(invite.inviteID, testInviteID);
                 });
         });
-        it('delete the invite', () => {
+        step('delete the invite', () => {
             return provSplunk.provisioner.deleteInvite(testInviteID)
                 .then(response => {
                     assert.isEmpty(response);
