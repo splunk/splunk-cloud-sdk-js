@@ -44,11 +44,11 @@ export interface SearchJob {
     query: string;
 
     /**
-     * Specifies whether a search that contains commands with side effects (with possible security risks) is allowed to run. type: boolean default: false 
-     * @type {any}
+     * Specifies whether a search that contains commands with side effects (with possible security risks) is allowed to run. 
+     * @type {boolean}
      * @memberof SearchJob
      */
-    allowSideEffects?: any;
+    allowSideEffects?: boolean;
 
     /**
      * Specified whether a search is allowed to collect events summary during the run time. 

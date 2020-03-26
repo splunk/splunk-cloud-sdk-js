@@ -80,7 +80,7 @@ export class GeneratedCatalogService extends BaseApiService {
         return CATALOG_SERVICE_PREFIX;
     }
     /**
-     * Create a new action for a rule associated with a specific resource name.
+     * Creates a new action for a rule with the specified resource name.
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param actionPOST The JSON representation of the action to be persisted.
      * @param args parameters to be sent with the request
@@ -95,7 +95,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Action);
     }
     /**
-     * Create a new action for a specific rule.
+     * Creates a new action for the specified rule.
      * @param ruleid ID of a Field.
      * @param actionPOST The JSON representation of the action to be persisted.
      * @param args parameters to be sent with the request
@@ -110,7 +110,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Action);
     }
     /**
-     * Create a new annotation for a specific dashboard.
+     * Creates a new annotation for the specified dashboard.
      * @param dashboardid ID of a dashboard.
      * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
@@ -125,7 +125,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Annotation);
     }
     /**
-     * Create a new annotation for a specific dataset.
+     * Creates a new annotation for the specified dataset resource name.
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
@@ -140,7 +140,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Annotation);
     }
     /**
-     * Create a new annotation for a specific dataset.
+     * Creates a new annotation for the specified dataset.
      * @param datasetid ID of a Dataset.
      * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
@@ -155,7 +155,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Annotation);
     }
     /**
-     * Create a new annotation for a specific dataset.
+     * Creates a new annotation for the specified dataset.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
@@ -170,7 +170,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Annotation);
     }
     /**
-     * Create a new dashboard.
+     * Creates a new dashboard.
      * @param dashboardPOST The JSON representation of the Dashboard to be persisted.
      * @param args parameters to be sent with the request
      * @return Dashboard
@@ -181,7 +181,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Dashboard);
     }
     /**
-     * Create a new dataset.
+     * Creates a new dataset.
      * @param datasetPOST JSON representation of the DatasetInfo to be persisted
      * @param args parameters to be sent with the request
      * @return Dataset
@@ -192,7 +192,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Dataset);
     }
     /**
-     * Create a new dataset import.
+     * Creates a new dataset import using the resource name of the imported dataset.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetImportedBy
      * @param args parameters to be sent with the request
@@ -210,7 +210,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as ImportDataset);
     }
     /**
-     * Create a new dataset import.
+     * Creates a new dataset import using the ID of the imported dataset.
      * @param datasetid ID of a Dataset.
      * @param datasetImportedBy
      * @param args parameters to be sent with the request
@@ -228,7 +228,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as ImportDataset);
     }
     /**
-     * Create a new dataset import.
+     * Creates a new dataset import using the ID of the imported dataset.
      * @param datasetid ID of a Dataset.
      * @param datasetImportedBy
      * @param args parameters to be sent with the request
@@ -246,7 +246,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as DatasetImportedBy);
     }
     /**
-     * Create a new dataset import.
+     * Creates a new dataset import using the resource name of the imported dataset.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetImportedBy
      * @param args parameters to be sent with the request
@@ -264,7 +264,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Dataset);
     }
     /**
-     * Create a new field on a specific dataset.
+     * Creates a new field in the dataset with the specified resource name.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param fieldPOST The JSON representation of the field to be persisted.
      * @param args parameters to be sent with the request
@@ -279,7 +279,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Field);
     }
     /**
-     * Add a new field to a dataset.
+     * Adds a new field to the dataset with the specified ID.
      * @param datasetid ID of a Dataset.
      * @param fieldPOST The JSON representation of the field to be persisted.
      * @param args parameters to be sent with the request
@@ -294,7 +294,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Field);
     }
     /**
-     * Create a new relationship.
+     * Creates a new relationship.
      * @param relationshipPOST The JSON representation of the relationship to persist.
      * @param args parameters to be sent with the request
      * @return Relationship
@@ -305,7 +305,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Relationship);
     }
     /**
-     * Create a new rule.
+     * Creates a new rule.
      * @param rulePOST The JSON representation of the rule to be persisted.
      * @param args parameters to be sent with the request
      * @return Rule
@@ -316,7 +316,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Rule);
     }
     /**
-     * Create a new workflow configuration.
+     * Creates a new workflow configuration.
      * @param workflowPOST The JSON representation of the workflow to be persisted.
      * @param args parameters to be sent with the request
      * @return Workflow
@@ -327,7 +327,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Workflow);
     }
     /**
-     * Create a new workflow build.
+     * Creates a new workflow build.
      * @param workflowid ID of a workflow.
      * @param workflowBuildPOST The JSON representation of the workflow build to be persisted.
      * @param args parameters to be sent with the request
@@ -342,7 +342,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as WorkflowBuild);
     }
     /**
-     * Create a new workflow run for the specified workflow build ID.
+     * Creates a new workflow run for the specified workflow build ID.
      * @param workflowid ID of a workflow.
      * @param workflowbuildid ID of a workflow build.
      * @param workflowRunPOST The JSON representation of the workflow run to be persisted.
@@ -359,7 +359,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as WorkflowRun);
     }
     /**
-     * Delete an action on a rule.
+     * Deletes the action with the specified ID that is associated with the specified rule resource name.
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param actionid ID of an Action.
      * @param args parameters to be sent with the request
@@ -374,7 +374,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete an action that is part of a specific rule.
+     * Deletes the action with the specified ID that is associated with the specified rule.
      * @param ruleid ID of a Field.
      * @param actionid ID of an Action.
      * @param args parameters to be sent with the request
@@ -389,7 +389,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete a specific annotation of a dashboard.
+     * Deletes the annotation with the speciifed ID that is associted with the specified dashboard.
      * @param dashboardid ID of a dashboard.
      * @param annotationid ID of a annotation.
      * @param args parameters to be sent with the request
@@ -404,7 +404,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete a specific annotation of a dashboard.
+     * Deletes the annotation with the specified ID that is associated with the specified dashboard resource name.
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param annotationid ID of a annotation.
      * @param args parameters to be sent with the request
@@ -419,7 +419,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete a specific annotation of a dataset.
+     * Deletes the annotation with the specified ID that is associated with the specified dataset.
      * @param datasetid ID of a Dataset.
      * @param annotationid ID of a annotation.
      * @param args parameters to be sent with the request
@@ -434,7 +434,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete a specific annotation of a dataset.
+     * Deletes the annotation with the specified iD that is associated with the specified dataset resource name.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param annotationid ID of a annotation.
      * @param args parameters to be sent with the request
@@ -449,7 +449,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete the dashboard with the specified ID.
+     * Deletes the dashboard with the specified ID.
      * @param dashboardid ID of a dashboard.
      * @param args parameters to be sent with the request
      */
@@ -462,7 +462,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete the dashboard with the specified resource name.
+     * Deletes the dashboard with the specified resource name.
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param args parameters to be sent with the request
      */
@@ -475,7 +475,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete the dataset with the specified resource name, along with its dependencies. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
+     * Deletes the dataset with the specified resource name, along with its dependencies. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param args parameters to be sent with the request
      */
@@ -488,7 +488,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete a specific dataset. Deleting a dataset also deletes its dependent objects, such as fields.
+     * Deletes the dataset with the specified ID. Deleting a dataset also deletes its dependent objects, such as fields.
      * @param datasetid ID of a Dataset.
      * @param args parameters to be sent with the request
      */
@@ -501,7 +501,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete a field that is part of a specific dataset.
+     * Deletes the field with the specified ID that is part of the specified dataset.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
@@ -516,7 +516,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete a field that is part of a specific dataset.
+     * Deletes the field with the specified ID that is part of the specified dataset.
      * @param datasetid ID of a Dataset.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
@@ -531,7 +531,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete a specific relationship. Deleting a relationship also deleletes any objects that are dependents of that relationship, such as relationship fields.
+     * Deletes the relationship with the specified relationship ID. Deleting a relationship also deletes any objects that are dependents of that relationship, such as relationship fields.
      * @param relationshipid ID of a relationship.
      * @param args parameters to be sent with the request
      */
@@ -544,7 +544,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete the rule with the specified resource name and its dependencies.
+     * Deletes the rule with the specified resource name and its dependencies.
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param args parameters to be sent with the request
      */
@@ -557,7 +557,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete a specific rule. Deleting a rule also deleletes any objects that are dependents of that rule, such as rule actions.
+     * Deletes the rule with the specfied ID. Deleting a rule also deleletes any objects that are dependents of that rule, such as rule actions.
      * @param ruleid ID of a Field.
      * @param args parameters to be sent with the request
      */
@@ -570,7 +570,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete the workflow build with the specified workflow build ID.
+     * Deletes the workflow build with the specified workflow build ID.
      * @param workflowid ID of a workflow.
      * @param workflowbuildid ID of a workflow build.
      * @param args parameters to be sent with the request
@@ -585,7 +585,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete the workflow with the specified workflow ID.
+     * Deletes the workflow with the specified workflow ID.
      * @param workflowid ID of a workflow.
      * @param args parameters to be sent with the request
      */
@@ -598,7 +598,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete the workflow run with the specified workflow run ID.
+     * Deletes the workflow run with the specified workflow run ID.
      * @param workflowid ID of a workflow.
      * @param workflowbuildid ID of a workflow build.
      * @param workflowrunid ID of a workflow run.
@@ -615,7 +615,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Return an action that is part of a specified rule.
+     * Returns the action with the specified ID that is associated with the specified rule resource name.
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param actionid ID of an Action.
      * @param args parameters to be sent with the request
@@ -631,7 +631,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Action);
     }
     /**
-     * Return information about an action that is part of a specific rule.
+     * Returns information about the action with the specified ID that is associated with the specified rule.
      * @param ruleid ID of a Field.
      * @param actionid ID of an Action.
      * @param args parameters to be sent with the request
@@ -647,7 +647,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Action);
     }
     /**
-     * Return information about a dashboard with the specified ID.
+     * Returns information about the dashboard with the specified ID.
      * @param dashboardid ID of a dashboard.
      * @param args parameters to be sent with the request
      * @return Dashboard
@@ -661,7 +661,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Dashboard);
     }
     /**
-     * Return information about a dashboard with the specified resource name.
+     * Returns information about the dashboard with the specified resource name.
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param args parameters to be sent with the request
      * @return Dashboard
@@ -675,7 +675,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Dashboard);
     }
     /**
-     * Return the dataset with the specified resource name. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
+     * Returns the dataset with the specified resource name. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param args parameters to be sent with the request
      * @param args.maxstale The number of seconds beyond which we will refresh index metadata.
@@ -690,7 +690,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Dataset);
     }
     /**
-     * Return information about the dataset with the specified ID.
+     * Returns information about the dataset with the specified ID.
      * @param datasetid ID of a Dataset.
      * @param args parameters to be sent with the request
      * @param args.maxstale The number of seconds beyond which we will refresh index metadata.
@@ -705,7 +705,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Dataset);
     }
     /**
-     * Get a field that corresponds to a specific field ID.
+     * Returns the field with the specified field ID.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
      * @return Field
@@ -719,7 +719,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Field);
     }
     /**
-     * Return a field that is part of a specific dataset.
+     * Returns the field with the specified ID that is part of the specified dataset.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
@@ -735,7 +735,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Field);
     }
     /**
-     * Return a field that is part of a specific dataset.
+     * Returns the field with the specified ID that is part of the specified dataset.
      * @param datasetid ID of a Dataset.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
@@ -751,7 +751,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Field);
     }
     /**
-     * Get a specific relationship.
+     * Returns the relationship with the specified relationship ID.
      * @param relationshipid ID of a relationship.
      * @param args parameters to be sent with the request
      * @return Relationship
@@ -765,7 +765,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Relationship);
     }
     /**
-     * Get a rule with a specified resource name.
+     * Returrns the rule with the specified resource name.
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param args parameters to be sent with the request
      * @return Rule
@@ -779,7 +779,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Rule);
     }
     /**
-     * Get information about a specific rule.
+     * Returns information about rule with the specified rule ID.
      * @param ruleid ID of a Field.
      * @param args parameters to be sent with the request
      * @return Rule
@@ -793,7 +793,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Rule);
     }
     /**
-     * Return information about the workflow build with the specified workflow build ID.
+     * Returns information about the workflow build with the specified workflow build ID.
      * @param workflowid ID of a workflow.
      * @param workflowbuildid ID of a workflow build.
      * @param args parameters to be sent with the request
@@ -809,7 +809,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as WorkflowBuild);
     }
     /**
-     * Return information about a workflow with the specified workflow ID.
+     * Returns information about the workflow with the specified workflow ID.
      * @param workflowid ID of a workflow.
      * @param args parameters to be sent with the request
      * @return Workflow
@@ -823,7 +823,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Workflow);
     }
     /**
-     * Return information about the workflow run with the specified workflow build ID.
+     * Returns information about the workflow run with the specified workflow build ID.
      * @param workflowid ID of a workflow.
      * @param workflowbuildid ID of a workflow build.
      * @param workflowrunid ID of a workflow run.
@@ -841,7 +841,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as WorkflowRun);
     }
     /**
-     * Return the list of actions that are part of a specified rule.
+     * Returns the list of actions that are associated with the specified rule.
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
@@ -859,7 +859,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Action>);
     }
     /**
-     * Return the set of actions that are part of a rule.
+     * Returns the set of actions that are part of the specified rule.
      * @param ruleid ID of a Field.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
@@ -877,7 +877,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Action>);
     }
     /**
-     * Return the set of annotations across all objects.
+     * Returns the set of annotations across all objects.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
@@ -891,7 +891,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Annotation>);
     }
     /**
-     * Return the set of annotations that are part of a dashboard.
+     * Returns the set of annotations that are associated with the specified dashboard.
      * @param dashboardid ID of a dashboard.
      * @param args parameters to be sent with the request
      * @param args.filter A filter query to apply to the annotations.
@@ -906,7 +906,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Annotation>);
     }
     /**
-     * Return the set of annotations that are part of a dashboard.
+     * Returns the set of annotations that are associated with the specified dashboard resource name.
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param args parameters to be sent with the request
      * @param args.filter A filter query to apply to the annotations.
@@ -921,7 +921,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Annotation>);
     }
     /**
-     * Return the set of annotations that are part of a dataset.
+     * Returns the set of annotations that are associated with the specified dataset.
      * @param datasetid ID of a Dataset.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
@@ -939,7 +939,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Annotation>);
     }
     /**
-     * Return the set of annotations that are part of a dataset.
+     * Returns the set of annotations that are associated with the specified dataset resource name.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
@@ -957,7 +957,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Annotation>);
     }
     /**
-     * Return a list of Dashboards.
+     * Returns a list of dashboards.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
@@ -971,7 +971,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Dashboard>);
     }
     /**
-     * Returns a list of all datasets, unless you specify a filter. Use a filter to return a specific list of datasets.
+     * Returns a list of all datasets. Use a filter to return a specific list of datasets.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
@@ -986,7 +986,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Dataset>);
     }
     /**
-     * Get a list of all fields in the Catalog.
+     * Returns a list of all fields in the Metadata Catalog.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
@@ -1000,13 +1000,13 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Field>);
     }
     /**
-     * Return the list of fields that are part of a specified dataset.
+     * Returns the list of fields in the specified dataset.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
-     * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param args.orderby A list of fields to order the results by. You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
      * @return Array<Field>
      */
     public listFieldsForDataset = (datasetresourcename: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Field>> => {
@@ -1018,13 +1018,13 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Field>);
     }
     /**
-     * Return the set of fields for the specified dataset.
+     * Returns the set of fields for the the dataset with the specified ID.
      * @param datasetid ID of a Dataset.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
-     * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param args.orderby A list of fields to order the results by. You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
      * @return Array<Field>
      */
     public listFieldsForDatasetById = (datasetid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Field>> => {
@@ -1036,7 +1036,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Field>);
     }
     /**
-     * Return a list of all modules, unless you specify a filter. Use a filter to return a specific list of modules.
+     * Returns a list of all modules. Use a filter to return a specific list of modules.
      * @param args parameters to be sent with the request
      * @param args.filter A filter to apply to the modules.
      * @return Array<Module>
@@ -1047,7 +1047,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Module>);
     }
     /**
-     * Returns a list of all relationships, unless you specify a filter. Use a filter to return a specific list of relationships.
+     * Returns a list of all relationships. Use a filter to return a specific list of relationships.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
@@ -1061,7 +1061,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Relationship>);
     }
     /**
-     * Return a list of rules that match a filter query if it is given, otherwise return all rules.
+     * Returns a list of rules that match a filter, if specified, otherwise returns all rules.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
@@ -1075,7 +1075,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Rule>);
     }
     /**
-     * Return a list of Machine Learning workflow builds.
+     * Returns a list of Machine Learning workflow builds.
      * @param workflowid ID of a workflow.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
@@ -1093,7 +1093,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<WorkflowBuild>);
     }
     /**
-     * Return a list of Machine Learning workflow runs for specified workflow build ID.
+     * Returns a list of Machine Learning workflow runs for specified workflow build ID.
      * @param workflowid ID of a workflow.
      * @param workflowbuildid ID of a workflow build.
      * @param args parameters to be sent with the request
@@ -1127,7 +1127,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Workflow>);
     }
     /**
-     * Update the Action with the specified id for the specified Rule
+     * Modifies the action with the specified ID that is associated with the specified rule resource name.
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param actionid ID of an Action.
      * @param actionPATCH The fields to update in the specified action.
@@ -1144,7 +1144,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Action);
     }
     /**
-     * Update an action for a specific rule.
+     * Modifies the action with the specified ID that is associated with the specified rule.
      * @param ruleid ID of a Field.
      * @param actionid ID of an Action.
      * @param actionPATCH The properties to update in the specified action.
@@ -1161,7 +1161,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Action);
     }
     /**
-     * Update the dashboard with the specified ID.
+     * Modifies the dashboard with the specified ID.
      * @param dashboardid ID of a dashboard.
      * @param dashboardPATCH An updated representation of the dashboard to be persisted.
      * @param args parameters to be sent with the request
@@ -1176,7 +1176,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Dashboard);
     }
     /**
-     * Update the dashboard with the specified resource name.
+     * Modifies the dashboard with the specified resource name.
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param dashboardPATCH An updated representation of the dashboard to be persisted.
      * @param args parameters to be sent with the request
@@ -1190,7 +1190,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Update the dataset with the specified resource name. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
+     * Modifies the dataset with the specified resource name. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetPATCH An updated representation of the dataset to be persisted.
      * @param args parameters to be sent with the request
@@ -1205,7 +1205,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Dataset);
     }
     /**
-     * Update a specific dataset.
+     * Modifies the dataset with the specified ID.
      * @param datasetid ID of a Dataset.
      * @param datasetPATCH An updated representation of the dataset to be persisted.
      * @param args parameters to be sent with the request
@@ -1220,7 +1220,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Dataset);
     }
     /**
-     * Update a field with a specified ID for a specified dataset.
+     * Modifies the field with the specified ID that is part of the specified dataset.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param fieldid ID of a Field.
      * @param fieldPATCH The properties to update in the specified field.
@@ -1237,7 +1237,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Field);
     }
     /**
-     * Update a field for a specific dataset.
+     * Modifies the field with the specified ID that is part of the specified dataset.
      * @param datasetid ID of a Dataset.
      * @param fieldid ID of a Field.
      * @param fieldPATCH The properties to update in the specified field.
@@ -1254,7 +1254,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Field);
     }
     /**
-     * Update a specific relationship.
+     * Modifies the relationship with the specified relationship ID.
      * @param relationshipid ID of a relationship.
      * @param relationshipPATCH The properties to update in the specified relationship.
      * @param args parameters to be sent with the request
@@ -1269,7 +1269,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Relationship);
     }
     /**
-     * Update the Rule with the specified resourcename
+     * Modifies the rule with the specified resource name.
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param rulePATCH The properties to update in the specified rule.
      * @param args parameters to be sent with the request
@@ -1284,7 +1284,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Rule);
     }
     /**
-     * Update a specific rule.
+     * Modifies the rule with the specified rule ID.
      * @param ruleid ID of a Field.
      * @param rulePATCH The properties to update in the specified rule.
      * @param args parameters to be sent with the request
@@ -1299,7 +1299,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Rule);
     }
     /**
-     * Update the workflow build with the specified workflow build ID.
+     * Modifies the workflow build with the specified workflow build ID.
      * @param workflowid ID of a workflow.
      * @param workflowbuildid ID of a workflow build.
      * @param workflowBuildPATCH An updated representation of the workflow build to be persisted.
@@ -1315,7 +1315,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Update the workflow with the specified workflow ID.
+     * Modifies the workflow with the specified workflow ID.
      * @param workflowid ID of a workflow.
      * @param workflowPATCH An updated representation of the workflow to be persisted.
      * @param args parameters to be sent with the request
@@ -1329,7 +1329,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Update the workflow run with the specified workflow run ID.
+     * Modifies the workflow run with the specified workflow run ID.
      * @param workflowid ID of a workflow.
      * @param workflowbuildid ID of a workflow build.
      * @param workflowrunid ID of a workflow run.

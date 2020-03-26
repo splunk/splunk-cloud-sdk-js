@@ -15,7 +15,7 @@
  * under the License.
  *
  * Data Stream Processing REST API
- * With the Streams service in Splunk Cloud Services, you can perform create, read, update, and delete (CRUD) operations on your data pipeline.The Streams service in Splunk Cloud Services also has metrics and preview session endpoints and gives you full control over your data pipeline.
+ * Use the Streams service to perform create, read, update, and delete (CRUD) operations on your data pipeline. The Streams service also has metrics and preview session endpoints and gives you full control over your data pipeline.
  *
  * OpenAPI spec version: v2beta1.3 (recommended default)
  *
@@ -78,7 +78,7 @@ export const STREAMS_SERVICE_CLUSTER: string = 'api';
 /**
  * Data Stream Processing REST API
  * Version: v2beta1.3
- * With the Streams service in Splunk Cloud Services, you can perform create, read, update, and delete (CRUD) operations on your data pipeline.The Streams service in Splunk Cloud Services also has metrics and preview session endpoints and gives you full control over your data pipeline.
+ * Use the Streams service to perform create, read, update, and delete (CRUD) operations on your data pipeline. The Streams service also has metrics and preview session endpoints and gives you full control over your data pipeline.
  */
 export class GeneratedStreamsService extends BaseApiService {
     getServiceCluster() : string {
