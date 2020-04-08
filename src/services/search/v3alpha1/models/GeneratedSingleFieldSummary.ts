@@ -46,7 +46,7 @@ export interface SingleFieldSummary {
      * @type {number}
      * @memberof SingleFieldSummary
      */
-    distictCount?: number;
+    distinctCount?: number;
 
     /**
      * Specifies if the 'distinctCount' is accurate.  The 'isExact' property is FALSE when the 'distinctCount'  exceeds the maximum count and an exact count is not available. 

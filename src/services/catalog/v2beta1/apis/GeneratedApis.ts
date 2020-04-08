@@ -974,10 +974,10 @@ export class GeneratedCatalogService extends BaseApiService {
      * Returns a list of all datasets. Use a filter to return a specific list of datasets.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
-     * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
+     * @param args.filter A filter to apply to the dataset list. The filter must be a SPL predicate expression.
      * @param args.maxstale The number of seconds beyond which we will refresh index metadata.
-     * @param args.offset The number of results to skip before the first one returned.
-     * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param args.offset The number of results to skip before the first result is returned.
+     * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc\".  Ascending order is the default.
      * @return Array<Dataset>
      */
     public listDatasets = (args?: { count?: number, filter?: string, maxstale?: number, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Dataset>> => {
