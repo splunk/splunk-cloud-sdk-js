@@ -1,3 +1,4 @@
+export * from './GeneratedDeleteSearchJob';
 export * from './GeneratedFieldsSummary';
 export * from './GeneratedListPreviewResultsResponse';
 export * from './GeneratedListSearchResultsResponse';

@@ -705,7 +705,7 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Dataset);
     }
     /**
-     * Returns the field with the specified field ID.
+     * Returns the field with the specified ID.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
      * @return Field
@@ -986,10 +986,10 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Dataset>);
     }
     /**
-     * Returns a list of all fields in the Metadata Catalog.
+     * Returns a list of all of the fields in the Metadata Catalog.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
-     * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
+     * @param args.filter A filter to apply to the dataset list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
      * @return Array<Field>
@@ -1004,7 +1004,7 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
-     * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
+     * @param args.filter A filter to apply to the dataset list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by. You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
      * @return Array<Field>
@@ -1018,11 +1018,11 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Field>);
     }
     /**
-     * Returns the set of fields for the the dataset with the specified ID.
+     * Returns the set of fields for the dataset with the specified ID.
      * @param datasetid ID of a Dataset.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
-     * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
+     * @param args.filter A filter to apply to the dataset list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by. You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
      * @return Array<Field>
@@ -1240,7 +1240,7 @@ export class GeneratedCatalogService extends BaseApiService {
      * Modifies the field with the specified ID that is part of the specified dataset.
      * @param datasetid ID of a Dataset.
      * @param fieldid ID of a Field.
-     * @param fieldPATCH The properties to update in the specified field.
+     * @param fieldPATCH The properties to update in the specified field, or the requesting user lacks catalog.datasets.read permission for them.
      * @param args parameters to be sent with the request
      * @return Field
      */

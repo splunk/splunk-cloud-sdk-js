@@ -25,31 +25,45 @@
  */
 
 /**
- *
+ * POST  /collector/tokens
  * @export
- * @interface ModelError
+ * @interface HECTokenCreateRequest
  */
-export interface ModelError {
+export interface HECTokenCreateRequest {
     /**
-     * 
+     * name is the name of the token (unique within the tenant that it belongs to).  type: string
      * @type {string}
-     * @memberof ModelError
+     * @memberof HECTokenCreateRequest
      */
-    code?: string;
+    name: string;
 
     /**
-     * 
-     * @type {{ [key: string]: any; }}
-     * @memberof ModelError
+     * description is an optional description of the token.  type: string
+     * @type {string}
+     * @memberof HECTokenCreateRequest
      */
-    details?: { [key: string]: any; };
+    description?: string;
 
     /**
-     * 
+     * index is the default value of the index field for records collected using this token.  type: string
      * @type {string}
-     * @memberof ModelError
+     * @memberof HECTokenCreateRequest
      */
-    message?: string;
+    index?: string;
+
+    /**
+     * source is the default value of the source field for records collected using this token.   type: string
+     * @type {string}
+     * @memberof HECTokenCreateRequest
+     */
+    source?: string;
+
+    /**
+     * sourcetype is the default value of the sourcetype field for records collected using this token.  type: string
+     * @type {string}
+     * @memberof HECTokenCreateRequest
+     */
+    sourcetype?: string;
 
 }
 

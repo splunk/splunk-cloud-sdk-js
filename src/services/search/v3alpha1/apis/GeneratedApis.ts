@@ -26,6 +26,7 @@
 
 
 import {
+    DeleteSearchJob,
     FieldsSummary,
     ListPreviewResultsResponse,
     ListSearchResultsResponse,
@@ -83,6 +84,16 @@ export class GeneratedSearchService extends BaseApiService {
         const path = `/search/v3alpha1/recurring-searches`;
         return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), recurringSearch, { query: args })
             .then(response => response.body as RecurringSearch);
+    }
+    /**
+     * Creates a search job that deletes events from an index. The events are deleted from the index in the specified module, based on the search criteria as specified by the predicate. 
+     * @param args parameters to be sent with the request
+     * @return DeleteSearchJob
+     */
+    public deleteJob = (args?: object): Promise<DeleteSearchJob> => {
+        const path = `/search/v3alpha1/jobs/delete`;
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+            .then(response => response.body as DeleteSearchJob);
     }
     /**
      * Deletes a recurring search with a  specified recurring search ID (rsid). 

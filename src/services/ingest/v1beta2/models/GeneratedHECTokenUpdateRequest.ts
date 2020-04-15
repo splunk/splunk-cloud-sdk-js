@@ -25,31 +25,38 @@
  */
 
 /**
- *
+ * PUT  /collector/tokens/{tokenName}
  * @export
- * @interface ModelError
+ * @interface HECTokenUpdateRequest
  */
-export interface ModelError {
+export interface HECTokenUpdateRequest {
     /**
-     * 
+     * description is an optional description of the token.  type: string
      * @type {string}
-     * @memberof ModelError
+     * @memberof HECTokenUpdateRequest
      */
-    code?: string;
+    description?: string;
 
     /**
-     * 
-     * @type {{ [key: string]: any; }}
-     * @memberof ModelError
+     * index is the default value of the index field for records collected using this token  type: string
+     * @type {string}
+     * @memberof HECTokenUpdateRequest
      */
-    details?: { [key: string]: any; };
+    index?: string;
 
     /**
-     * 
+     * source is the default value of the source field for records collected using this token  type: string
      * @type {string}
-     * @memberof ModelError
+     * @memberof HECTokenUpdateRequest
      */
-    message?: string;
+    source?: string;
+
+    /**
+     * sourcetype is the default value of the sourcetype field for records collected using this token  type: string
+     * @type {string}
+     * @memberof HECTokenUpdateRequest
+     */
+    sourcetype?: string;
 
 }
 
