@@ -24,10 +24,6 @@
  * Do not edit the class manually.
  */
 
-import {
-    JsonNode,
-} from './';
-
 /**
  *
  * @export
@@ -36,10 +32,10 @@ import {
 export interface LookupTableResponse {
     /**
      * 
-     * @type {Array<JsonNode>}
+     * @type {Array<{ [key: string]: any; }>}
      * @memberof LookupTableResponse
      */
-    data?: Array<JsonNode>;
+    data?: Array<{ [key: string]: any; }>;
 
     /**
      * 

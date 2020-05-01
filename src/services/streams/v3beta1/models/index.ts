@@ -15,7 +15,6 @@ export * from './GeneratedFilesMetaDataResponse';
 export * from './GeneratedFunctionModel';
 export * from './GeneratedGetInputSchemaRequest';
 export * from './GeneratedGetOutputSchemaRequest';
-export * from './GeneratedJsonNode';
 export * from './GeneratedLookupTableResponse';
 export * from './GeneratedMapOfstringAndobject';
 export * from './GeneratedMapOfstringAndstring';
