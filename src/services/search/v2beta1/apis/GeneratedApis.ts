@@ -26,6 +26,7 @@
 
 
 import {
+    DeleteSearchJob,
     FieldsSummary,
     ListPreviewResultsResponse,
     ListSearchResultsResponse,
@@ -67,6 +68,16 @@ export class GeneratedSearchService extends BaseApiService {
         const path = `/search/v2beta1/jobs`;
         return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), searchJob, { query: args })
             .then(response => response.body as SearchJob);
+    }
+    /**
+     * Creates a search job that deletes events from an index. The events are deleted from the index in the specified module, based on the search criteria as specified by the predicate. 
+     * @param args parameters to be sent with the request
+     * @return DeleteSearchJob
+     */
+    public deleteJob = (args?: object): Promise<DeleteSearchJob> => {
+        const path = `/search/v2beta1/jobs/delete`;
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+            .then(response => response.body as DeleteSearchJob);
     }
     /**
      * Return the search job with the specified search ID (SID).

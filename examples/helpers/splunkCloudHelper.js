@@ -73,17 +73,18 @@ async function createIndex(client, indexName) {
  * @return {Promise<string>} name of the newly created pipeline
  */
 async function createPipeline(client, tenant, pipelineName, indexName) {
-    const dslRequest = {
-        dsl: `events = read-splunk-firehose(); write-index(events, literal(""), literal("${indexName}"));`,
+    const splCompileRequest = {
+        spl: `| from read_splunk_firehose() | into write_index("", "${indexName}");`,
+        validate: true,
     };
 
     console.log(`Creating pipeline. name=${pipelineName}`);
     try {
-        const uplPipeline = await client.streams.compileDSL(dslRequest);
+        const pipeline = await client.streams.compile(splCompileRequest);
         const pipelineRequest = {
             name: pipelineName,
             createUserId: tenant,
-            data: uplPipeline,
+            data: pipeline,
             description: `Basic pipeline for ingesting events to the ${indexName} index`,
         };
         const createdPipeline = await client.streams.createPipeline(pipelineRequest);

@@ -44,6 +44,13 @@ export interface DeleteSearchJob {
     index: string;
 
     /**
+     * The module to run the delete search job in. The default module is used if module field is empty.
+     * @type {string}
+     * @memberof DeleteSearchJob
+     */
+    module: string;
+
+    /**
      * Specifies that the delete search job will contain side effects, with possible security risks. 
      * @type {boolean}
      * @memberof DeleteSearchJob
@@ -114,13 +121,6 @@ export interface DeleteSearchJob {
     messages?: Array<Message>;
 
     /**
-     * The module to run the delete search job in. The default module is used if a module is not specified.
-     * @type {string}
-     * @memberof DeleteSearchJob
-     */
-    module?: string;
-
-    /**
      * The name of the created search job.
      * @type {string}
      * @memberof DeleteSearchJob
@@ -135,7 +135,7 @@ export interface DeleteSearchJob {
     readonly percentComplete?: number;
 
     /**
-     * Events satisfying this predicate are going to be deleted.
+     * Events satisfying this predicate are going to be deleted. To delete all events from the index, \"true\" should be specified for this field.
      * @type {string}
      * @memberof DeleteSearchJob
      */

@@ -66,7 +66,7 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                     pipelineId1 = response.id;
                     assert.isNotNull(response.data);
 
-                    const pipeline = response.data as streams.UplPipeline;
+                    const pipeline = response.data!;
                     assert.isNotNull(pipeline.nodes);
                     assert.typeOf(pipeline.nodes, 'array');
                     assert.equal(pipeline.nodes.length, 2);
@@ -201,11 +201,13 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
 
 // Creates a test pipeline request
 function createPipelineRequest(name: string, description: string): Promise<streams.PipelineRequest> {
-    const dsl = {
-        dsl: 'events = read-splunk-firehose(); write-index(events, "index", "main");',
+    const splCompileRequest: streams.SplCompileRequest = {
+        spl: '| from read_splunk_firehose() | into write_index("index", "main");',
+        validate: true,
     };
+
     return splunkCloud.streams
-        .compileDSL(dsl)
+        .compile(splCompileRequest)
         .then(response => {
             assert.isNotNull(response);
             return {
