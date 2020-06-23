@@ -112,6 +112,20 @@ export interface MetricDataset {
     resourcename: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof MetricDataset
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof MetricDataset
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * Detailed description of the dataset.
      * @type {string}
      * @memberof MetricDataset

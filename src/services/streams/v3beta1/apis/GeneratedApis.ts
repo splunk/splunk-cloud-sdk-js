@@ -224,6 +224,20 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
+     * Get file metadata.
+     * @param fileId File ID
+     * @param args parameters to be sent with the request
+     * @return UploadFile
+     */
+    public getFileMetadata = (fileId: string, args?: object): Promise<UploadFile> => {
+        const path_params = {
+            fileId: fileId
+        };
+        const path = this.template`/streams/v3beta1/files/${'fileId'}`(path_params);
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+            .then(response => response.body as UploadFile);
+    }
+    /**
      * Returns files metadata.
      * @param args parameters to be sent with the request
      * @return FilesMetaDataResponse
@@ -399,7 +413,7 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param args.sortField
      * @return PaginatedResponseOfConnectionResponse
      */
-    public listConnections = (args?: { connectorId?: string, createUserId?: string, functionId?: string, name?: string, offset?: number, pageSize?: number, showSecretNames?: string, sortDir?: string, sortField?: string, [key: string]: any }): Promise<PaginatedResponseOfConnectionResponse> => {
+    public listConnections = (args?: { connectorId?: Array<string>, createUserId?: string, functionId?: string, name?: string, offset?: number, pageSize?: number, showSecretNames?: string, sortDir?: string, sortField?: string, [key: string]: any }): Promise<PaginatedResponseOfConnectionResponse> => {
         const path = `/streams/v3beta1/connections`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as PaginatedResponseOfConnectionResponse);
@@ -573,16 +587,6 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = this.template`/streams/v3beta1/templates/${'templateId'}`(path_params);
         return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), templatePatchRequest, { query: args })
             .then(response => response.body as TemplateResponse);
-    }
-    /**
-     * Upload new file.
-     * @param args parameters to be sent with the request
-     * @return UploadFile
-     */
-    public uploadFile = (args?: object): Promise<UploadFile> => {
-        const path = `/streams/v3beta1/files`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
-            .then(response => response.body as UploadFile);
     }
     /**
      * Verifies whether the Streams JSON is valid.

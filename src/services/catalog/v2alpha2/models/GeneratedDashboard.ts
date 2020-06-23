@@ -94,6 +94,20 @@ export interface Dashboard {
     readonly owner: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof Dashboard
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof Dashboard
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * Whether the dashboard is active or not.
      * @type {boolean}
      * @memberof Dashboard

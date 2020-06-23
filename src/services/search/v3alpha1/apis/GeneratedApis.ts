@@ -87,12 +87,16 @@ export class GeneratedSearchService extends BaseApiService {
     }
     /**
      * Creates a search job that deletes events from an index. The events are deleted from the index in the specified module, based on the search criteria as specified by the predicate. 
+     * @param deleteSearchJob
      * @param args parameters to be sent with the request
      * @return DeleteSearchJob
      */
-    public deleteJob = (args?: object): Promise<DeleteSearchJob> => {
+    public deleteJob = (deleteSearchJob?: DeleteSearchJob, args?: object): Promise<DeleteSearchJob> => {
+        if (!deleteSearchJob) {
+            throw new SplunkError({ message: `Bad Request: deleteSearchJob is empty or undefined` });
+        }
         const path = `/search/v3alpha1/jobs/delete`;
-        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), deleteSearchJob, { query: args })
             .then(response => response.body as DeleteSearchJob);
     }
     /**

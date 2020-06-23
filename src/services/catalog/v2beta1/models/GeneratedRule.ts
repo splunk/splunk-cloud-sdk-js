@@ -112,6 +112,20 @@ export interface Rule {
     resourcename: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof Rule
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof Rule
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * The catalog version.
      * @type {number}
      * @memberof Rule

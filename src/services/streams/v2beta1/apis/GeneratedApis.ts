@@ -427,7 +427,7 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param args.sortField
      * @return PaginatedResponseOfConnectionResponse
      */
-    public listConnections = (args?: { connectorId?: string, createUserId?: string, functionId?: string, name?: string, offset?: number, pageSize?: number, showSecretNames?: string, sortDir?: string, sortField?: string, [key: string]: any }): Promise<PaginatedResponseOfConnectionResponse> => {
+    public listConnections = (args?: { connectorId?: Array<string>, createUserId?: string, functionId?: string, name?: string, offset?: number, pageSize?: number, showSecretNames?: string, sortDir?: string, sortField?: string, [key: string]: any }): Promise<PaginatedResponseOfConnectionResponse> => {
         const path = `/streams/v2beta1/connections`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
             .then(response => response.body as PaginatedResponseOfConnectionResponse);

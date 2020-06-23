@@ -59,6 +59,20 @@ export interface DatasetCommon {
     resourcename: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof DatasetCommon
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof DatasetCommon
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * Detailed description of the dataset.
      * @type {string}
      * @memberof DatasetCommon

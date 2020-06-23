@@ -105,6 +105,20 @@ export interface AliasAction {
     ruleid: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof AliasAction
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof AliasAction
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * The catalog version.
      * @type {number}
      * @memberof AliasAction

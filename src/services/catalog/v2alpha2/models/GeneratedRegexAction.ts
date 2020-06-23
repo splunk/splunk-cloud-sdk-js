@@ -105,6 +105,20 @@ export interface RegexAction {
     ruleid: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof RegexAction
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof RegexAction
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * The maximum number of times per event to attempt to match fields with the regular expression.
      * @type {number}
      * @memberof RegexAction

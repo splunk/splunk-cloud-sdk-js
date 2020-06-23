@@ -112,6 +112,20 @@ export interface ViewDataset {
     search: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof ViewDataset
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof ViewDataset
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * Detailed description of the dataset.
      * @type {string}
      * @memberof ViewDataset

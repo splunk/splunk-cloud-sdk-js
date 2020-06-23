@@ -98,6 +98,20 @@ export interface AutoKVAction {
     ruleid: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof AutoKVAction
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof AutoKVAction
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * The catalog version.
      * @type {number}
      * @memberof AutoKVAction

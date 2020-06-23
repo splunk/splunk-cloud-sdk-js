@@ -51,6 +51,13 @@ export interface DeleteSearchJob {
     module: string;
 
     /**
+     * The predicate expression that identifies the events to delete from the index. This expression must return true or false. To delete all events from the index, specify \"true\" instead of an expression.
+     * @type {string}
+     * @memberof DeleteSearchJob
+     */
+    predicate: string;
+
+    /**
      * Specifies that the delete search job will contain side effects, with possible security risks. 
      * @type {boolean}
      * @memberof DeleteSearchJob
@@ -133,13 +140,6 @@ export interface DeleteSearchJob {
      * @memberof DeleteSearchJob
      */
     readonly percentComplete?: number;
-
-    /**
-     * Events satisfying this predicate are going to be deleted. To delete all events from the index, \"true\" should be specified for this field.
-     * @type {string}
-     * @memberof DeleteSearchJob
-     */
-    prediate?: string;
 
     /**
      * This field does not apply to delete search jobs and is defaulted to false.

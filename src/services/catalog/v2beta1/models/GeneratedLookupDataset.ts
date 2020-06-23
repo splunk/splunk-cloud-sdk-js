@@ -120,6 +120,20 @@ export interface LookupDataset {
     resourcename: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof LookupDataset
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof LookupDataset
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * Match case-sensitively against the lookup.
      * @type {boolean}
      * @memberof LookupDataset

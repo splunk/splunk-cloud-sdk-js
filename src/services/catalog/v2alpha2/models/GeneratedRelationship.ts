@@ -127,6 +127,20 @@ export interface Relationship {
     version: number;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof Relationship
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof Relationship
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * The source dataset name qualified by module name. Either the sourceid or sourceresourcename property must be specified.
      * @type {string}
      * @memberof Relationship

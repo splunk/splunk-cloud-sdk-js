@@ -80,6 +80,20 @@ export interface Annotation {
     readonly owner: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof Annotation
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof Annotation
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * The dashboard ID.
      * @type {string}
      * @memberof Annotation

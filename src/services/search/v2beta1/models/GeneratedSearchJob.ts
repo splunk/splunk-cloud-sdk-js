@@ -93,7 +93,7 @@ export interface SearchJob {
     enablePreview?: boolean;
 
     /**
-     * Specifies whether the Search service should extract all of the available fields in the data, including fields not mentioned in the SPL for the search job. Set to 'false' for better search peformance. 
+     * Specifies whether the Search service should extract all of the available fields in the data,  including fields not mentioned in the SPL for the search job.  Set to 'false' for better search performance. 
      * @type {boolean}
      * @memberof SearchJob
      */

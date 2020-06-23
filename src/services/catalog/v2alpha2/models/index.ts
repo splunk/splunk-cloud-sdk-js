@@ -11,6 +11,7 @@ export * from './GeneratedAliasActionProperties';
 export * from './GeneratedAnnotation';
 export * from './GeneratedAnnotationPOST';
 export * from './GeneratedAnnotationsProperties';
+export * from './GeneratedAppClientIDProperties';
 export * from './GeneratedAutoKVAction';
 export * from './GeneratedAutoKVActionKind';
 export * from './GeneratedAutoKVActionPATCH';
