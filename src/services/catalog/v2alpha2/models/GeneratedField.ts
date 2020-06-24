@@ -93,6 +93,20 @@ export interface Field {
     prevalence: FieldPrevalence;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof Field
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof Field
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * The field description.
      * @type {string}
      * @memberof Field

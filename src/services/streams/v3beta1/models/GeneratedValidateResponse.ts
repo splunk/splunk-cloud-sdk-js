@@ -35,6 +35,13 @@ export interface ValidateResponse {
      * @type {string}
      * @memberof ValidateResponse
      */
+    nodeId?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ValidateResponse
+     */
     spl?: string;
 
     /**

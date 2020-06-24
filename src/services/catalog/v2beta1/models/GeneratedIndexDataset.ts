@@ -112,6 +112,20 @@ export interface IndexDataset {
     resourcename: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof IndexDataset
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof IndexDataset
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * Detailed description of the dataset.
      * @type {string}
      * @memberof IndexDataset

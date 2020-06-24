@@ -98,6 +98,20 @@ export interface LookupAction {
     ruleid: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof LookupAction
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof LookupAction
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * The catalog version.
      * @type {number}
      * @memberof LookupAction

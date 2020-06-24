@@ -105,6 +105,20 @@ export interface EvalAction {
     ruleid: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof EvalAction
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof EvalAction
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * The catalog version.
      * @type {number}
      * @memberof EvalAction

@@ -162,6 +162,20 @@ export interface JobDataset {
     sid: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof JobDataset
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof JobDataset
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * Was the event summary requested for this searhc job?
      * @type {boolean}
      * @memberof JobDataset

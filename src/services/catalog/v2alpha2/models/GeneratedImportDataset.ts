@@ -119,6 +119,20 @@ export interface ImportDataset {
     sourceName: string;
 
     /**
+     * AppClinetId of the creator app of the dataset.
+     * @type {string}
+     * @memberof ImportDataset
+     */
+    appclientidcreatedby?: string;
+
+    /**
+     * AppClinetId of the modifier app of the dataset.
+     * @type {string}
+     * @memberof ImportDataset
+     */
+    appclientidmodifiedby?: string;
+
+    /**
      * Detailed description of the dataset.
      * @type {string}
      * @memberof ImportDataset
