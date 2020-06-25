@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 
 <a name="11.0.0"></a>
-## [11.0.1](https://github.com/splunk/splunk-cloud-sdk-js/compare/v10.0.0...v11.0.0) (2020-06-25)
+## [11.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v10.0.0...v11.0.0) (2020-06-25)
 
 ### Breaking Changes
 
