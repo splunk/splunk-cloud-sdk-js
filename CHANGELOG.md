@@ -6,6 +6,28 @@ All notable changes to this project will be documented in this file. See [standa
 ## [11.0.1](https://github.com/splunk/splunk-cloud-sdk-js/compare/v11.0.0...v11.0.1) (2020-06-25)
 
 
+<a name="11.0.0"></a>
+## [11.0.1](https://github.com/splunk/splunk-cloud-sdk-js/compare/v10.0.0...v11.0.0) (2020-06-25)
+
+### Breaking Changes
+
+* Streams
+  * In v3beta
+       * Modified `connectorId` parameter to be Array<string> in `ListConnections` endpoint
+       * Removed `UploadFile` endpoint as it is not supported
+
+### Non-Breaking Changes
+* Catalog
+   * In v2beta1
+       * `AppClientIDProperties` model has been added
+* Identity
+   * In v2beta
+       *  Added `scopeFilter` parameter to `listMemberPermission` endpoint
+* Streams	
+   * In v3beta
+       * New `getFileMetadata` endpoint
+
+
 
 <a name="10.0.0"></a>
 # [10.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v9.0.0...v10.0.0) (2020-05-01)
