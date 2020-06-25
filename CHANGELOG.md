@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. See [standa
 ## [11.0.1](https://github.com/splunk/splunk-cloud-sdk-js/compare/v11.0.0...v11.0.1) (2020-06-25)
 
 ### BugFix
-Update CHANGELOG.md for v11.0.0
+Adding CHANGELOG.md
 
 <a name="11.0.0"></a>
 ## [11.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v10.0.0...v11.0.0) (2020-06-25)
