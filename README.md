@@ -68,6 +68,8 @@ For reference documentation, see the [Splunk Cloud Services SDK for JavaScript A
 
 ## Contributing
 
+A detailed quickstart guide for setting up a development environment and contributing to this project [can be found here](https://github.com/splunk/splunk-cloud-sdk-js/wiki/Development).
+
 Do not directly edit any source file in the `/src/generated` directory because these files were generated from service specifications.
 
 ## Contact
