@@ -343,7 +343,7 @@ describe('requestStatusCallback functionality', () => {
         const expectedStatuses: string[] = [REQUEST_STATUS.queued];
         const statuses: string[] = [];
 
-        async function callback(requestStatus : RequestStatus) {
+        function callback(requestStatus : RequestStatus) {
             statuses.push(requestStatus.status);
         }
 
@@ -355,7 +355,7 @@ describe('requestStatusCallback functionality', () => {
         const expectedStatuses: string[] = [REQUEST_STATUS.queued,REQUEST_STATUS.retried, REQUEST_STATUS.retried];
         const statuses: string[] = [];
 
-        async function callback(requestStatus : RequestStatus) {
+        function callback(requestStatus : RequestStatus) {
             statuses.push(requestStatus.status);
         }
 
