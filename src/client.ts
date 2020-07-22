@@ -24,6 +24,11 @@ export const DEFAULT_URLS = {
     app: 'https://app.scp.splunk.com',
 };
 
+export const REQUEST_STATUS = {
+    queued: 'queued',
+    retried: 'retried'
+};
+
 const SEARCH_SUBMIT_QUEUE = 'search-submit';
 
 type ResponseRequest = [Response, Request];
@@ -43,13 +48,15 @@ class RequestFutureHolder {
     public onError: (reason?: any) => void = this.unsetErrorHandler;
     public onSuccess: (value?: PromiseLike<ResponseRequest> | ResponseRequest) => void = this
         .unsetSuccessHandler;
+    public statusCallback?: (requestStatus: RequestStatus) => Promise<void>;
 
-    constructor(request: Request) {
+    constructor(request: Request, requestStatusCallback?: (requestStatus: RequestStatus) => Promise<void>) {
         this.request = request;
         this.promise = new Promise<ResponseRequest>((onSuccess, onError) => {
             this.onSuccess = onSuccess;
             this.onError = onError;
         });
+        this.statusCallback = requestStatusCallback;
     }
 }
 
@@ -127,8 +134,8 @@ class RequestQueueManager {
         this.params = params;
     }
 
-    public add(queueName: string, request: Request): Promise<ResponseRequest> {
-        return this.getQueue(queueName).add(request);
+    public add(queueName: string, request: Request, requestStatusCallback?: (requestStatus: RequestStatus) => Promise<void>): Promise<ResponseRequest> {
+        return this.getQueue(queueName).add(request, requestStatusCallback);
     }
 
     private getQueue(queueName: string): RequestQueue {
@@ -162,10 +169,14 @@ class RequestQueue {
      * Enqueue a request for execution as soon as possible.  Returns a Promise that contains both the final request
      * used and the resultant response, ready for calling a ResponseHook.
      */
-    public async add(request: Request): Promise<ResponseRequest> {
+    public async add(request: Request, requestStatusCallback?: (requestStatus: RequestStatus) => Promise<void>): Promise<ResponseRequest> {
         // TODO: There are optimizations we can make here to prevent pushing/popping when the queue is empty and there is room in inFlight
-        const holder = new RequestFutureHolder(request);
+        const holder = new RequestFutureHolder(request, requestStatusCallback);
         this.queue.push(holder);
+        if (holder.statusCallback !== undefined) {
+            // tslint:disable-next-line:no-floating-promises
+            holder.statusCallback({ status: REQUEST_STATUS.queued });
+        }
         this.dispatch_requests();
         return holder.promise;
     }
@@ -179,7 +190,7 @@ class RequestQueue {
             if (holder !== undefined) {
                 this.inFlight.add(holder);
                 // tslint:disable-next-line:no-floating-promises
-                this.dispatch(holder.request)
+                this.dispatch(holder)
                     .then(holder.onSuccess, holder.onError)
                     .then(() => {
                         this.inFlight.delete(holder);
@@ -192,7 +203,7 @@ class RequestQueue {
     /**
      * Actually dispatches a request, retrying if it receives a transient error.
      */
-    private async dispatch(request: Request): Promise<ResponseRequest> {
+    private async dispatch(holder: RequestFutureHolder): Promise<ResponseRequest> {
         let retry = 0;
         let timeout = this.params.initialTimeout;
         const initialTime = Date.now();
@@ -200,11 +211,15 @@ class RequestQueue {
         let needsRetry = false;
         let currentRequest: Request;
         do {
-            currentRequest = request.clone();
+            currentRequest = holder.request.clone();
             if (retry > 0 && this.params.enableRetryHeader) {
                 // The following cannot be set unless gateway adds the header to Access-Control-Allow-Headers
                 // TODO: Enable by default when allowed by gateway
                 currentRequest.headers.set('Retry', `${initialTime}:${retry}`);
+                if (holder.statusCallback !== undefined) {
+                    // tslint:disable-next-line:no-floating-promises
+                    holder.statusCallback({ status: REQUEST_STATUS.retried, request: currentRequest });
+                }
             }
             response = await fetch(currentRequest);
             if (this.retryStatuses.has(response.status)) {
@@ -525,8 +540,9 @@ export class ServiceClient {
             body: JSON.stringify(data),
         };
         const request = new Request(url, options);
+        const requestStatusCallback = opts.statusCallback;
         return this.queueManager
-            .add(queue, request)
+            .add(queue, request, requestStatusCallback)
             .then(responseRequest => this.invokeHooks(...responseRequest));
     }
 
@@ -648,6 +664,10 @@ export interface RequestOptions {
      * Named retry queue to use (default is the name of the service)
      */
     queue?: string;
+    /**
+     * Callback function used to retrieve the status of a request
+     */
+    statusCallback? : (requestStatus: RequestStatus) => Promise<void>;
 }
 
 export interface QueryArgs {
@@ -668,4 +688,9 @@ export interface HTTPResponse {
     body?: string | object;
     headers: Headers;
     status: number;
+}
+
+export interface RequestStatus {
+    status: string;
+    request?: object;
 }

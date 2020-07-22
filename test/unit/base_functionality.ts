@@ -14,11 +14,12 @@
  * under the License.
  */
 
+import asserts = require('assert');
 import { assert } from 'chai';
 import 'isomorphic-fetch';
 import 'mocha';
 import sleep = require('sleep-promise');
-import { HTTPResponse, QueryArgs, RequestQueueManagerParams, ServiceClient } from '../../src/client';
+import { HTTPResponse, QueryArgs, REQUEST_STATUS, RequestQueueManagerParams, RequestStatus, ServiceClient } from '../../src/client';
 import config from '../config';
 import { RetryServer } from './test_retry_server';
 
@@ -310,5 +311,55 @@ describe('Service client args', () => {
         const actual = s.buildUrl('api', '/test', query);
 
         assert.equal(actual, `https://api.scp.splunk.com/test?foo=${encodeURIComponent('1,2')}`);
+    });
+});
+
+describe('requestStatusCallback functionality', () => {
+    const server = new RetryServer();
+    const [initialTimeout, exponent, retries] = [100, 1.6, 2];
+    const client = new ServiceClient({
+        urls: { local: 'http://localhost:3333' },
+        tokenSource: async () => 'None',
+        requestQueueManagerParams: new RequestQueueManagerParams(
+            {
+                initialTimeout,
+                exponent,
+                retries,
+                maxInFlight: 3,
+                enableRetryHeader: true,
+            }
+        )
+    });
+
+    before(() => {
+        server.start();
+    });
+
+    after(() => {
+        server.stop();
+    });
+
+    it('should receive queued status', async () => {
+        const expectedStatuses: string[] = [REQUEST_STATUS.queued];
+        const statuses: string[] = [];
+
+        async function callback(requestStatus : RequestStatus) {
+            statuses.push(requestStatus.status);
+        }
+
+        await client.get('local', '/endjam', { statusCallback: callback });
+        assert.deepEqual(statuses, expectedStatuses);
+    });
+
+    it('should receive retried status', async () => {
+        const expectedStatuses: string[] = [REQUEST_STATUS.queued,REQUEST_STATUS.retried, REQUEST_STATUS.retried];
+        const statuses: string[] = [];
+
+        async function callback(requestStatus : RequestStatus) {
+            statuses.push(requestStatus.status);
+        }
+
+        await asserts.rejects(client.get('local', '/always_busy', { statusCallback: callback }), { message:'Busy.  Go away.  Try again later' });
+        assert.deepEqual(statuses, expectedStatuses);
     });
 });
