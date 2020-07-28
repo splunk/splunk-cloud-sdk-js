@@ -60,7 +60,7 @@ import {
 } from '../models';
 import BaseApiService from "../../../../baseapiservice";
 import { CatalogServiceExtensions } from "../../../../service_extensions/catalog";
-import { SplunkError } from '../../../../client';
+import { SplunkError, RequestStatus } from '../../../../client';
 
 export const CATALOG_SERVICE_PREFIX: string = '/catalog/v2alpha2';
 export const CATALOG_SERVICE_CLUSTER: string = 'api';
@@ -83,14 +83,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param actionPOST The JSON representation of the action to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public createActionForRule = (ruleresourcename: string, actionPOST: ActionPOST, args?: object): Promise<Action> => {
+    public createActionForRule = (ruleresourcename: string, actionPOST: ActionPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
             ruleresourcename: ruleresourcename
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleresourcename'}/actions`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
@@ -98,14 +99,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param ruleid ID of a Field.
      * @param actionPOST The JSON representation of the action to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public createActionForRuleById = (ruleid: string, actionPOST: ActionPOST, args?: object): Promise<Action> => {
+    public createActionForRuleById = (ruleid: string, actionPOST: ActionPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
             ruleid: ruleid
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleid'}/actions`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
@@ -113,14 +115,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param dashboardid ID of a dashboard.
      * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Annotation
      */
-    public createAnnotationForDashboardbyId = (dashboardid: string, annotationPOST: AnnotationPOST, args?: object): Promise<Annotation> => {
+    public createAnnotationForDashboardbyId = (dashboardid: string, annotationPOST: AnnotationPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Annotation> => {
         const path_params = {
             dashboardid: dashboardid
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardid'}/annotations`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Annotation);
     }
     /**
@@ -128,14 +131,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Annotation
      */
-    public createAnnotationForDashboardsByResourceName = (dashboardresourcename: string, annotationPOST: AnnotationPOST, args?: object): Promise<Annotation> => {
+    public createAnnotationForDashboardsByResourceName = (dashboardresourcename: string, annotationPOST: AnnotationPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Annotation> => {
         const path_params = {
             dashboardresourcename: dashboardresourcename
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardresourcename'}/annotations`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Annotation);
     }
     /**
@@ -143,14 +147,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetid ID of a Dataset.
      * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Annotation
      */
-    public createAnnotationForDatasetById = (datasetid: string, annotationPOST: AnnotationPOST, args?: object): Promise<Annotation> => {
+    public createAnnotationForDatasetById = (datasetid: string, annotationPOST: AnnotationPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Annotation> => {
         const path_params = {
             datasetid: datasetid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}/annotations`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Annotation);
     }
     /**
@@ -158,36 +163,39 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Annotation
      */
-    public createAnnotationForDatasetByResourceName = (datasetresourcename: string, annotationPOST: AnnotationPOST, args?: object): Promise<Annotation> => {
+    public createAnnotationForDatasetByResourceName = (datasetresourcename: string, annotationPOST: AnnotationPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Annotation> => {
         const path_params = {
             datasetresourcename: datasetresourcename
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}/annotations`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Annotation);
     }
     /**
      * Create a new dashboard.
      * @param dashboardPOST The JSON representation of the Dashboard to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dashboard
      */
-    public createDashboard = (dashboardPOST: DashboardPOST, args?: object): Promise<Dashboard> => {
+    public createDashboard = (dashboardPOST: DashboardPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dashboard> => {
         const path = `/catalog/v2alpha2/dashboards`;
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dashboardPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dashboardPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dashboard);
     }
     /**
      * Create a new dataset.
      * @param datasetPOST JSON representation of the DatasetInfo to be persisted
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dataset
      */
-    public createDataset = (datasetPOST: DatasetPOST, args?: object): Promise<Dataset> => {
+    public createDataset = (datasetPOST: DatasetPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
         const path = `/catalog/v2alpha2/datasets`;
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dataset);
     }
     /**
@@ -195,9 +203,10 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetImportedBy
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dataset
      */
-    public createDatasetImport = (datasetresourcename: string, datasetImportedBy?: DatasetImportedBy, args?: object): Promise<Dataset> => {
+    public createDatasetImport = (datasetresourcename: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
         if (!datasetImportedBy) {
             throw new SplunkError({ message: `Bad Request: datasetImportedBy is empty or undefined` });
         }
@@ -205,7 +214,7 @@ export class GeneratedCatalogService extends BaseApiService {
             datasetresourcename: datasetresourcename
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}/imported-by`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dataset);
     }
     /**
@@ -213,9 +222,10 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetid ID of a Dataset.
      * @param datasetImportedBy
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return DatasetImportedBy
      */
-    public createDatasetImportById = (datasetid: string, datasetImportedBy?: DatasetImportedBy, args?: object): Promise<DatasetImportedBy> => {
+    public createDatasetImportById = (datasetid: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DatasetImportedBy> => {
         if (!datasetImportedBy) {
             throw new SplunkError({ message: `Bad Request: datasetImportedBy is empty or undefined` });
         }
@@ -223,7 +233,7 @@ export class GeneratedCatalogService extends BaseApiService {
             datasetid: datasetid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}/imported-by`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as DatasetImportedBy);
     }
     /**
@@ -231,9 +241,10 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetid ID of a Dataset.
      * @param datasetImportedBy
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return DatasetImportedBy
      */
-    public createDatasetImportByIdv1 = (datasetid: string, datasetImportedBy?: DatasetImportedBy, args?: object): Promise<DatasetImportedBy> => {
+    public createDatasetImportByIdv1 = (datasetid: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DatasetImportedBy> => {
         if (!datasetImportedBy) {
             throw new SplunkError({ message: `Bad Request: datasetImportedBy is empty or undefined` });
         }
@@ -241,7 +252,7 @@ export class GeneratedCatalogService extends BaseApiService {
             datasetid: datasetid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}/importedby`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as DatasetImportedBy);
     }
     /**
@@ -249,9 +260,10 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetImportedBy
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dataset
      */
-    public createDatasetImportv1 = (datasetresourcename: string, datasetImportedBy?: DatasetImportedBy, args?: object): Promise<Dataset> => {
+    public createDatasetImportv1 = (datasetresourcename: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
         if (!datasetImportedBy) {
             throw new SplunkError({ message: `Bad Request: datasetImportedBy is empty or undefined` });
         }
@@ -259,7 +271,7 @@ export class GeneratedCatalogService extends BaseApiService {
             datasetresourcename: datasetresourcename
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}/importedby`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dataset);
     }
     /**
@@ -267,14 +279,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param fieldPOST The JSON representation of the field to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Field
      */
-    public createFieldForDataset = (datasetresourcename: string, fieldPOST: FieldPOST, args?: object): Promise<Field> => {
+    public createFieldForDataset = (datasetresourcename: string, fieldPOST: FieldPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
         const path_params = {
             datasetresourcename: datasetresourcename
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}/fields`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), fieldPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), fieldPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Field);
     }
     /**
@@ -282,47 +295,51 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetid ID of a Dataset.
      * @param fieldPOST The JSON representation of the field to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Field
      */
-    public createFieldForDatasetById = (datasetid: string, fieldPOST: FieldPOST, args?: object): Promise<Field> => {
+    public createFieldForDatasetById = (datasetid: string, fieldPOST: FieldPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
         const path_params = {
             datasetid: datasetid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}/fields`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), fieldPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), fieldPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Field);
     }
     /**
      * Create a new relationship.
      * @param relationshipPOST The JSON representation of the relationship to persist.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Relationship
      */
-    public createRelationship = (relationshipPOST: RelationshipPOST, args?: object): Promise<Relationship> => {
+    public createRelationship = (relationshipPOST: RelationshipPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Relationship> => {
         const path = `/catalog/v2alpha2/relationships`;
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), relationshipPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), relationshipPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Relationship);
     }
     /**
      * Create a new rule.
      * @param rulePOST The JSON representation of the rule to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Rule
      */
-    public createRule = (rulePOST: RulePOST, args?: object): Promise<Rule> => {
+    public createRule = (rulePOST: RulePOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Rule> => {
         const path = `/catalog/v2alpha2/rules`;
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), rulePOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), rulePOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Rule);
     }
     /**
      * Create a new workflow configuration.
      * @param workflowPOST The JSON representation of the workflow to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Workflow
      */
-    public createWorkflow = (workflowPOST: WorkflowPOST, args?: object): Promise<Workflow> => {
+    public createWorkflow = (workflowPOST: WorkflowPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Workflow> => {
         const path = `/catalog/v2alpha2/workflows`;
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Workflow);
     }
     /**
@@ -330,14 +347,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param workflowid ID of a workflow.
      * @param workflowBuildPOST The JSON representation of the workflow build to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowBuild
      */
-    public createWorkflowBuild = (workflowid: string, workflowBuildPOST: WorkflowBuildPOST, args?: object): Promise<WorkflowBuild> => {
+    public createWorkflowBuild = (workflowid: string, workflowBuildPOST: WorkflowBuildPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowBuild> => {
         const path_params = {
             workflowid: workflowid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}/builds`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowBuildPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowBuildPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowBuild);
     }
     /**
@@ -346,15 +364,16 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param workflowbuildid ID of a workflow build.
      * @param workflowRunPOST The JSON representation of the workflow run to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowRun
      */
-    public createWorkflowRun = (workflowid: string, workflowbuildid: string, workflowRunPOST: WorkflowRunPOST, args?: object): Promise<WorkflowRun> => {
+    public createWorkflowRun = (workflowid: string, workflowbuildid: string, workflowRunPOST: WorkflowRunPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowRun> => {
         const path_params = {
             workflowid: workflowid,
             workflowbuildid: workflowbuildid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}/builds/${'workflowbuildid'}/runs`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowRunPOST, { query: args })
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowRunPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowRun);
     }
     /**
@@ -362,14 +381,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param actionid ID of an Action.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteActionByIdForRule = (ruleresourcename: string, actionid: string, args?: object): Promise<object> => {
+    public deleteActionByIdForRule = (ruleresourcename: string, actionid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             ruleresourcename: ruleresourcename,
             actionid: actionid
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleresourcename'}/actions/${'actionid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -377,14 +397,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param ruleid ID of a Field.
      * @param actionid ID of an Action.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteActionByIdForRuleById = (ruleid: string, actionid: string, args?: object): Promise<object> => {
+    public deleteActionByIdForRuleById = (ruleid: string, actionid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             ruleid: ruleid,
             actionid: actionid
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleid'}/actions/${'actionid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -392,14 +413,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param dashboardid ID of a dashboard.
      * @param annotationid ID of a annotation.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteAnnotationOfDashboardById = (dashboardid: string, annotationid: string, args?: object): Promise<object> => {
+    public deleteAnnotationOfDashboardById = (dashboardid: string, annotationid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             dashboardid: dashboardid,
             annotationid: annotationid
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardid'}/annotations/${'annotationid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -407,14 +429,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param annotationid ID of a annotation.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteAnnotationOfDashboardByResourceName = (dashboardresourcename: string, annotationid: string, args?: object): Promise<object> => {
+    public deleteAnnotationOfDashboardByResourceName = (dashboardresourcename: string, annotationid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             dashboardresourcename: dashboardresourcename,
             annotationid: annotationid
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardresourcename'}/annotations/${'annotationid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -422,14 +445,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetid ID of a Dataset.
      * @param annotationid ID of a annotation.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteAnnotationOfDatasetById = (datasetid: string, annotationid: string, args?: object): Promise<object> => {
+    public deleteAnnotationOfDatasetById = (datasetid: string, annotationid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             datasetid: datasetid,
             annotationid: annotationid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}/annotations/${'annotationid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -437,66 +461,71 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param annotationid ID of a annotation.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteAnnotationOfDatasetByResourceName = (datasetresourcename: string, annotationid: string, args?: object): Promise<object> => {
+    public deleteAnnotationOfDatasetByResourceName = (datasetresourcename: string, annotationid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             datasetresourcename: datasetresourcename,
             annotationid: annotationid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}/annotations/${'annotationid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Delete the dashboard with the specified ID.
      * @param dashboardid ID of a dashboard.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteDashboardById = (dashboardid: string, args?: object): Promise<object> => {
+    public deleteDashboardById = (dashboardid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             dashboardid: dashboardid
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Delete the dashboard with the specified resource name.
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteDashboardByResourceName = (dashboardresourcename: string, args?: object): Promise<object> => {
+    public deleteDashboardByResourceName = (dashboardresourcename: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             dashboardresourcename: dashboardresourcename
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardresourcename'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Delete the dataset with the specified resource name, along with its dependencies. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteDataset = (datasetresourcename: string, args?: object): Promise<object> => {
+    public deleteDataset = (datasetresourcename: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             datasetresourcename: datasetresourcename
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Delete a specific dataset. Deleting a dataset also deletes its dependent objects, such as fields.
      * @param datasetid ID of a Dataset.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteDatasetById = (datasetid: string, args?: object): Promise<object> => {
+    public deleteDatasetById = (datasetid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             datasetid: datasetid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -504,14 +533,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteFieldByIdForDataset = (datasetresourcename: string, fieldid: string, args?: object): Promise<object> => {
+    public deleteFieldByIdForDataset = (datasetresourcename: string, fieldid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             datasetresourcename: datasetresourcename,
             fieldid: fieldid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}/fields/${'fieldid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -519,53 +549,57 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetid ID of a Dataset.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteFieldByIdForDatasetById = (datasetid: string, fieldid: string, args?: object): Promise<object> => {
+    public deleteFieldByIdForDatasetById = (datasetid: string, fieldid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             datasetid: datasetid,
             fieldid: fieldid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}/fields/${'fieldid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Delete a specific relationship. Deleting a relationship also deleletes any objects that are dependents of that relationship, such as relationship fields.
      * @param relationshipid ID of a relationship.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteRelationshipById = (relationshipid: string, args?: object): Promise<object> => {
+    public deleteRelationshipById = (relationshipid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             relationshipid: relationshipid
         };
         const path = this.template`/catalog/v2alpha2/relationships/${'relationshipid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Delete the rule with the specified resource name and its dependencies.
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteRule = (ruleresourcename: string, args?: object): Promise<object> => {
+    public deleteRule = (ruleresourcename: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             ruleresourcename: ruleresourcename
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleresourcename'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Delete a specific rule. Deleting a rule also deleletes any objects that are dependents of that rule, such as rule actions.
      * @param ruleid ID of a Field.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteRuleById = (ruleid: string, args?: object): Promise<object> => {
+    public deleteRuleById = (ruleid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             ruleid: ruleid
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -573,27 +607,29 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param workflowid ID of a workflow.
      * @param workflowbuildid ID of a workflow build.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteWorkflowBuildById = (workflowid: string, workflowbuildid: string, args?: object): Promise<object> => {
+    public deleteWorkflowBuildById = (workflowid: string, workflowbuildid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             workflowid: workflowid,
             workflowbuildid: workflowbuildid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}/builds/${'workflowbuildid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Delete the workflow with the specified workflow ID.
      * @param workflowid ID of a workflow.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteWorkflowById = (workflowid: string, args?: object): Promise<object> => {
+    public deleteWorkflowById = (workflowid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             workflowid: workflowid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -602,15 +638,16 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param workflowbuildid ID of a workflow build.
      * @param workflowrunid ID of a workflow run.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteWorkflowRunById = (workflowid: string, workflowbuildid: string, workflowrunid: string, args?: object): Promise<object> => {
+    public deleteWorkflowRunById = (workflowid: string, workflowbuildid: string, workflowrunid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             workflowid: workflowid,
             workflowbuildid: workflowbuildid,
             workflowrunid: workflowrunid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}/builds/${'workflowbuildid'}/runs/${'workflowrunid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -618,15 +655,16 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param actionid ID of an Action.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public getActionByIdForRule = (ruleresourcename: string, actionid: string, args?: object): Promise<Action> => {
+    public getActionByIdForRule = (ruleresourcename: string, actionid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
             ruleresourcename: ruleresourcename,
             actionid: actionid
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleresourcename'}/actions/${'actionid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
@@ -634,43 +672,46 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param ruleid ID of a Field.
      * @param actionid ID of an Action.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public getActionByIdForRuleById = (ruleid: string, actionid: string, args?: object): Promise<Action> => {
+    public getActionByIdForRuleById = (ruleid: string, actionid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
             ruleid: ruleid,
             actionid: actionid
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleid'}/actions/${'actionid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
      * Return information about a dashboard with the specified ID.
      * @param dashboardid ID of a dashboard.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dashboard
      */
-    public getDashboardById = (dashboardid: string, args?: object): Promise<Dashboard> => {
+    public getDashboardById = (dashboardid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dashboard> => {
         const path_params = {
             dashboardid: dashboardid
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dashboard);
     }
     /**
      * Return information about a dashboard with the specified resource name.
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dashboard
      */
-    public getDashboardByResourceName = (dashboardresourcename: string, args?: object): Promise<Dashboard> => {
+    public getDashboardByResourceName = (dashboardresourcename: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dashboard> => {
         const path_params = {
             dashboardresourcename: dashboardresourcename
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardresourcename'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dashboard);
     }
     /**
@@ -678,14 +719,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param args parameters to be sent with the request
      * @param args.maxstale The number of seconds beyond which we will refresh index metadata.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dataset
      */
-    public getDataset = (datasetresourcename: string, args?: { maxstale?: number, [key: string]: any }): Promise<Dataset> => {
+    public getDataset = (datasetresourcename: string, args?: { maxstale?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
         const path_params = {
             datasetresourcename: datasetresourcename
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dataset);
     }
     /**
@@ -693,28 +735,30 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetid ID of a Dataset.
      * @param args parameters to be sent with the request
      * @param args.maxstale The number of seconds beyond which we will refresh index metadata.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dataset
      */
-    public getDatasetById = (datasetid: string, args?: { maxstale?: number, [key: string]: any }): Promise<Dataset> => {
+    public getDatasetById = (datasetid: string, args?: { maxstale?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
         const path_params = {
             datasetid: datasetid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dataset);
     }
     /**
      * Get a field that corresponds to a specific field ID.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Field
      */
-    public getFieldById = (fieldid: string, args?: object): Promise<Field> => {
+    public getFieldById = (fieldid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
         const path_params = {
             fieldid: fieldid
         };
         const path = this.template`/catalog/v2alpha2/fields/${'fieldid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Field);
     }
     /**
@@ -722,15 +766,16 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Field
      */
-    public getFieldByIdForDataset = (datasetresourcename: string, fieldid: string, args?: object): Promise<Field> => {
+    public getFieldByIdForDataset = (datasetresourcename: string, fieldid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
         const path_params = {
             datasetresourcename: datasetresourcename,
             fieldid: fieldid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}/fields/${'fieldid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Field);
     }
     /**
@@ -738,57 +783,61 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetid ID of a Dataset.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Field
      */
-    public getFieldByIdForDatasetById = (datasetid: string, fieldid: string, args?: object): Promise<Field> => {
+    public getFieldByIdForDatasetById = (datasetid: string, fieldid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
         const path_params = {
             datasetid: datasetid,
             fieldid: fieldid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}/fields/${'fieldid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Field);
     }
     /**
      * Get a specific relationship.
      * @param relationshipid ID of a relationship.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Relationship
      */
-    public getRelationshipById = (relationshipid: string, args?: object): Promise<Relationship> => {
+    public getRelationshipById = (relationshipid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Relationship> => {
         const path_params = {
             relationshipid: relationshipid
         };
         const path = this.template`/catalog/v2alpha2/relationships/${'relationshipid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Relationship);
     }
     /**
      * Get a rule with a specified resource name.
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Rule
      */
-    public getRule = (ruleresourcename: string, args?: object): Promise<Rule> => {
+    public getRule = (ruleresourcename: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Rule> => {
         const path_params = {
             ruleresourcename: ruleresourcename
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleresourcename'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Rule);
     }
     /**
      * Get information about a specific rule.
      * @param ruleid ID of a Field.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Rule
      */
-    public getRuleById = (ruleid: string, args?: object): Promise<Rule> => {
+    public getRuleById = (ruleid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Rule> => {
         const path_params = {
             ruleid: ruleid
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Rule);
     }
     /**
@@ -796,29 +845,31 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param workflowid ID of a workflow.
      * @param workflowbuildid ID of a workflow build.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowBuild
      */
-    public getWorkflowBuildById = (workflowid: string, workflowbuildid: string, args?: object): Promise<WorkflowBuild> => {
+    public getWorkflowBuildById = (workflowid: string, workflowbuildid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowBuild> => {
         const path_params = {
             workflowid: workflowid,
             workflowbuildid: workflowbuildid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}/builds/${'workflowbuildid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowBuild);
     }
     /**
      * Return information about a workflow with the specified workflow ID.
      * @param workflowid ID of a workflow.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Workflow
      */
-    public getWorkflowById = (workflowid: string, args?: object): Promise<Workflow> => {
+    public getWorkflowById = (workflowid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Workflow> => {
         const path_params = {
             workflowid: workflowid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Workflow);
     }
     /**
@@ -827,16 +878,17 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param workflowbuildid ID of a workflow build.
      * @param workflowrunid ID of a workflow run.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowRun
      */
-    public getWorkflowRunById = (workflowid: string, workflowbuildid: string, workflowrunid: string, args?: object): Promise<WorkflowRun> => {
+    public getWorkflowRunById = (workflowid: string, workflowbuildid: string, workflowrunid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowRun> => {
         const path_params = {
             workflowid: workflowid,
             workflowbuildid: workflowbuildid,
             workflowrunid: workflowrunid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}/builds/${'workflowbuildid'}/runs/${'workflowrunid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowRun);
     }
     /**
@@ -847,14 +899,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Action>
      */
-    public listActionsForRule = (ruleresourcename: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Action>> => {
+    public listActionsForRule = (ruleresourcename: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Action>> => {
         const path_params = {
             ruleresourcename: ruleresourcename
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleresourcename'}/actions`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Action>);
     }
     /**
@@ -865,14 +918,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Action>
      */
-    public listActionsForRuleById = (ruleid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Action>> => {
+    public listActionsForRuleById = (ruleid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Action>> => {
         const path_params = {
             ruleid: ruleid
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleid'}/actions`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Action>);
     }
     /**
@@ -882,11 +936,12 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Annotation>
      */
-    public listAnnotations = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Annotation>> => {
+    public listAnnotations = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Annotation>> => {
         const path = `/catalog/v2beta1/annotations`;
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Annotation>);
     }
     /**
@@ -894,14 +949,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param dashboardid ID of a dashboard.
      * @param args parameters to be sent with the request
      * @param args.filter A filter query to apply to the annotations.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Annotation>
      */
-    public listAnnotationsForDashboardById = (dashboardid: string, args?: { filter?: string, [key: string]: any }): Promise<Array<Annotation>> => {
+    public listAnnotationsForDashboardById = (dashboardid: string, args?: { filter?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Annotation>> => {
         const path_params = {
             dashboardid: dashboardid
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardid'}/annotations`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Annotation>);
     }
     /**
@@ -909,14 +965,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param args parameters to be sent with the request
      * @param args.filter A filter query to apply to the annotations.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Annotation>
      */
-    public listAnnotationsForDashboardByResourceName = (dashboardresourcename: string, args?: { filter?: string, [key: string]: any }): Promise<Array<Annotation>> => {
+    public listAnnotationsForDashboardByResourceName = (dashboardresourcename: string, args?: { filter?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Annotation>> => {
         const path_params = {
             dashboardresourcename: dashboardresourcename
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardresourcename'}/annotations`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Annotation>);
     }
     /**
@@ -927,14 +984,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Annotation>
      */
-    public listAnnotationsForDatasetById = (datasetid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Annotation>> => {
+    public listAnnotationsForDatasetById = (datasetid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Annotation>> => {
         const path_params = {
             datasetid: datasetid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}/annotations`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Annotation>);
     }
     /**
@@ -945,14 +1003,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Annotation>
      */
-    public listAnnotationsForDatasetByResourceName = (datasetresourcename: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Annotation>> => {
+    public listAnnotationsForDatasetByResourceName = (datasetresourcename: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Annotation>> => {
         const path_params = {
             datasetresourcename: datasetresourcename
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}/annotations`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Annotation>);
     }
     /**
@@ -962,11 +1021,12 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Dashboard>
      */
-    public listDashboards = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Dashboard>> => {
+    public listDashboards = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Dashboard>> => {
         const path = `/catalog/v2alpha2/dashboards`;
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Dashboard>);
     }
     /**
@@ -977,11 +1037,12 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.maxstale The number of seconds beyond which we will refresh index metadata.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc\".  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Dataset>
      */
-    public listDatasets = (args?: { count?: number, filter?: string, maxstale?: number, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Dataset>> => {
+    public listDatasets = (args?: { count?: number, filter?: string, maxstale?: number, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Dataset>> => {
         const path = `/catalog/v2alpha2/datasets`;
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Dataset>);
     }
     /**
@@ -991,11 +1052,12 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Field>
      */
-    public listFields = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Field>> => {
+    public listFields = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Field>> => {
         const path = `/catalog/v2alpha2/fields`;
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Field>);
     }
     /**
@@ -1006,14 +1068,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Field>
      */
-    public listFieldsForDataset = (datasetresourcename: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Field>> => {
+    public listFieldsForDataset = (datasetresourcename: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Field>> => {
         const path_params = {
             datasetresourcename: datasetresourcename
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}/fields`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Field>);
     }
     /**
@@ -1024,25 +1087,27 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Field>
      */
-    public listFieldsForDatasetById = (datasetid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Field>> => {
+    public listFieldsForDatasetById = (datasetid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Field>> => {
         const path_params = {
             datasetid: datasetid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}/fields`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Field>);
     }
     /**
      * Return a list of all modules, unless you specify a filter. Use a filter to return a specific list of modules.
      * @param args parameters to be sent with the request
      * @param args.filter A filter to apply to the modules.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Module>
      */
-    public listModules = (args?: { filter?: string, [key: string]: any }): Promise<Array<Module>> => {
+    public listModules = (args?: { filter?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Module>> => {
         const path = `/catalog/v2alpha2/modules`;
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Module>);
     }
     /**
@@ -1052,11 +1117,12 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Relationship>
      */
-    public listRelationships = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Relationship>> => {
+    public listRelationships = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Relationship>> => {
         const path = `/catalog/v2alpha2/relationships`;
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Relationship>);
     }
     /**
@@ -1066,11 +1132,12 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Rule>
      */
-    public listRules = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Rule>> => {
+    public listRules = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Rule>> => {
         const path = `/catalog/v2alpha2/rules`;
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Rule>);
     }
     /**
@@ -1081,14 +1148,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<WorkflowBuild>
      */
-    public listWorkflowBuilds = (workflowid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<WorkflowBuild>> => {
+    public listWorkflowBuilds = (workflowid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<WorkflowBuild>> => {
         const path_params = {
             workflowid: workflowid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}/builds`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<WorkflowBuild>);
     }
     /**
@@ -1100,15 +1168,16 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<WorkflowRun>
      */
-    public listWorkflowRuns = (workflowid: string, workflowbuildid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<WorkflowRun>> => {
+    public listWorkflowRuns = (workflowid: string, workflowbuildid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<WorkflowRun>> => {
         const path_params = {
             workflowid: workflowid,
             workflowbuildid: workflowbuildid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}/builds/${'workflowbuildid'}/runs`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<WorkflowRun>);
     }
     /**
@@ -1118,11 +1187,12 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
      * @param args.offset The number of results to skip before the first one returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Workflow>
      */
-    public listWorkflows = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<Workflow>> => {
+    public listWorkflows = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Workflow>> => {
         const path = `/catalog/v2alpha2/workflows`;
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Workflow>);
     }
     /**
@@ -1131,15 +1201,16 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param actionid ID of an Action.
      * @param actionPATCH The fields to update in the specified action.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public updateActionByIdForRule = (ruleresourcename: string, actionid: string, actionPATCH: ActionPATCH, args?: object): Promise<Action> => {
+    public updateActionByIdForRule = (ruleresourcename: string, actionid: string, actionPATCH: ActionPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
             ruleresourcename: ruleresourcename,
             actionid: actionid
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleresourcename'}/actions/${'actionid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionPATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
@@ -1148,15 +1219,16 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param actionid ID of an Action.
      * @param actionPATCH The properties to update in the specified action.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public updateActionByIdForRuleById = (ruleid: string, actionid: string, actionPATCH: ActionPATCH, args?: object): Promise<Action> => {
+    public updateActionByIdForRuleById = (ruleid: string, actionid: string, actionPATCH: ActionPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
             ruleid: ruleid,
             actionid: actionid
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleid'}/actions/${'actionid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionPATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
@@ -1164,14 +1236,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param dashboardid ID of a dashboard.
      * @param dashboardPATCH An updated representation of the dashboard to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dashboard
      */
-    public updateDashboardById = (dashboardid: string, dashboardPATCH: DashboardPATCH, args?: object): Promise<Dashboard> => {
+    public updateDashboardById = (dashboardid: string, dashboardPATCH: DashboardPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dashboard> => {
         const path_params = {
             dashboardid: dashboardid
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dashboardPATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dashboardPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dashboard);
     }
     /**
@@ -1179,13 +1252,14 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param dashboardPATCH An updated representation of the dashboard to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public updateDashboardByResourceName = (dashboardresourcename: string, dashboardPATCH: DashboardPATCH, args?: object): Promise<object> => {
+    public updateDashboardByResourceName = (dashboardresourcename: string, dashboardPATCH: DashboardPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             dashboardresourcename: dashboardresourcename
         };
         const path = this.template`/catalog/v2alpha2/dashboards/${'dashboardresourcename'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dashboardPATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dashboardPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -1193,14 +1267,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetPATCH An updated representation of the dataset to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dataset
      */
-    public updateDataset = (datasetresourcename: string, datasetPATCH: DatasetPATCH, args?: object): Promise<Dataset> => {
+    public updateDataset = (datasetresourcename: string, datasetPATCH: DatasetPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
         const path_params = {
             datasetresourcename: datasetresourcename
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetPATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dataset);
     }
     /**
@@ -1208,14 +1283,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetid ID of a Dataset.
      * @param datasetPATCH An updated representation of the dataset to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dataset
      */
-    public updateDatasetById = (datasetid: string, datasetPATCH: DatasetPATCH, args?: object): Promise<Dataset> => {
+    public updateDatasetById = (datasetid: string, datasetPATCH: DatasetPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
         const path_params = {
             datasetid: datasetid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetPATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dataset);
     }
     /**
@@ -1224,15 +1300,16 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param fieldid ID of a Field.
      * @param fieldPATCH The properties to update in the specified field.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Field
      */
-    public updateFieldByIdForDataset = (datasetresourcename: string, fieldid: string, fieldPATCH: FieldPATCH, args?: object): Promise<Field> => {
+    public updateFieldByIdForDataset = (datasetresourcename: string, fieldid: string, fieldPATCH: FieldPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
         const path_params = {
             datasetresourcename: datasetresourcename,
             fieldid: fieldid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetresourcename'}/fields/${'fieldid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), fieldPATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), fieldPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Field);
     }
     /**
@@ -1241,15 +1318,16 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param fieldid ID of a Field.
      * @param fieldPATCH The properties to update in the specified field.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Field
      */
-    public updateFieldByIdForDatasetById = (datasetid: string, fieldid: string, fieldPATCH: FieldPATCH, args?: object): Promise<Field> => {
+    public updateFieldByIdForDatasetById = (datasetid: string, fieldid: string, fieldPATCH: FieldPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
         const path_params = {
             datasetid: datasetid,
             fieldid: fieldid
         };
         const path = this.template`/catalog/v2alpha2/datasets/${'datasetid'}/fields/${'fieldid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), fieldPATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), fieldPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Field);
     }
     /**
@@ -1257,14 +1335,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param relationshipid ID of a relationship.
      * @param relationshipPATCH The properties to update in the specified relationship.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Relationship
      */
-    public updateRelationshipById = (relationshipid: string, relationshipPATCH: RelationshipPATCH, args?: object): Promise<Relationship> => {
+    public updateRelationshipById = (relationshipid: string, relationshipPATCH: RelationshipPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Relationship> => {
         const path_params = {
             relationshipid: relationshipid
         };
         const path = this.template`/catalog/v2alpha2/relationships/${'relationshipid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), relationshipPATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), relationshipPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Relationship);
     }
     /**
@@ -1272,14 +1351,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param rulePATCH The properties to update in the specified rule.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Rule
      */
-    public updateRule = (ruleresourcename: string, rulePATCH: RulePATCH, args?: object): Promise<Rule> => {
+    public updateRule = (ruleresourcename: string, rulePATCH: RulePATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Rule> => {
         const path_params = {
             ruleresourcename: ruleresourcename
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleresourcename'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), rulePATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), rulePATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Rule);
     }
     /**
@@ -1287,14 +1367,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param ruleid ID of a Field.
      * @param rulePATCH The properties to update in the specified rule.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Rule
      */
-    public updateRuleById = (ruleid: string, rulePATCH: RulePATCH, args?: object): Promise<Rule> => {
+    public updateRuleById = (ruleid: string, rulePATCH: RulePATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Rule> => {
         const path_params = {
             ruleid: ruleid
         };
         const path = this.template`/catalog/v2alpha2/rules/${'ruleid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), rulePATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), rulePATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Rule);
     }
     /**
@@ -1303,14 +1384,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param workflowbuildid ID of a workflow build.
      * @param workflowBuildPATCH An updated representation of the workflow build to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public updateWorkflowBuildById = (workflowid: string, workflowbuildid: string, workflowBuildPATCH: WorkflowBuildPATCH, args?: object): Promise<object> => {
+    public updateWorkflowBuildById = (workflowid: string, workflowbuildid: string, workflowBuildPATCH: WorkflowBuildPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             workflowid: workflowid,
             workflowbuildid: workflowbuildid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}/builds/${'workflowbuildid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowBuildPATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowBuildPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -1318,13 +1400,14 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param workflowid ID of a workflow.
      * @param workflowPATCH An updated representation of the workflow to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public updateWorkflowById = (workflowid: string, workflowPATCH: WorkflowPATCH, args?: object): Promise<object> => {
+    public updateWorkflowById = (workflowid: string, workflowPATCH: WorkflowPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             workflowid: workflowid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowPATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -1334,15 +1417,16 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param workflowrunid ID of a workflow run.
      * @param workflowRunPATCH An updated representation of the workflow run to be persisted.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public updateWorkflowRunById = (workflowid: string, workflowbuildid: string, workflowrunid: string, workflowRunPATCH: WorkflowRunPATCH, args?: object): Promise<object> => {
+    public updateWorkflowRunById = (workflowid: string, workflowbuildid: string, workflowrunid: string, workflowRunPATCH: WorkflowRunPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             workflowid: workflowid,
             workflowbuildid: workflowbuildid,
             workflowrunid: workflowrunid
         };
         const path = this.template`/catalog/v2alpha2/workflows/${'workflowid'}/builds/${'workflowbuildid'}/runs/${'workflowrunid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowRunPATCH, { query: args })
+        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowRunPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
 }

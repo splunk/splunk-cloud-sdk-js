@@ -27,50 +27,99 @@
 /**
  *
  * @export
- * @interface PipelineNode
+ * @interface CollectJobResponse
  */
-export interface PipelineNode {
+export interface CollectJobResponse {
     /**
      * 
-     * @type {{ [key: string]: any; }}
-     * @memberof PipelineNode
+     * @type {Array<object>}
+     * @memberof CollectJobResponse
      */
-    arguments?: { [key: string]: any; };
-
-    /**
-     * 
-     * @type {{ [key: string]: any; }}
-     * @memberof PipelineNode
-     */
-    attributes?: { [key: string]: any; };
+    activePipelinesUsing?: Array<object>;
 
     /**
      * 
      * @type {string}
-     * @memberof PipelineNode
+     * @memberof CollectJobResponse
+     */
+    connectionId?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CollectJobResponse
+     */
+    connectorId?: string;
+
+    /**
+     * 
+     * @type {number}
+     * @memberof CollectJobResponse
+     */
+    createDate?: number;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CollectJobResponse
+     */
+    createUserId?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CollectJobResponse
+     */
+    description?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CollectJobResponse
      */
     id?: string;
 
     /**
      * 
-     * @type {string}
-     * @memberof PipelineNode
+     * @type {number}
+     * @memberof CollectJobResponse
      */
-    op?: string;
+    lastUpdateDate?: number;
 
     /**
      * 
      * @type {string}
-     * @memberof PipelineNode
+     * @memberof CollectJobResponse
      */
-    resolvedId?: string;
+    lastUpdateUserId?: string;
 
     /**
      * 
      * @type {string}
-     * @memberof PipelineNode
+     * @memberof CollectJobResponse
      */
-    statementName?: string;
+    name?: string;
+
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof CollectJobResponse
+     */
+    parameters?: { [key: string]: any; };
+
+    /**
+     * 
+     * @type {string}
+     * @memberof CollectJobResponse
+     */
+    status?: string;
+
+    /**
+     * 
+     * @type {number}
+     * @memberof CollectJobResponse
+     */
+    version?: number;
 
 }
 

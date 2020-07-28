@@ -37,7 +37,7 @@ import {
 } from '../models';
 import BaseApiService from "../../../../baseapiservice";
 import { AppRegistryServiceExtensions } from "../../../../service_extensions/app-registry";
-import { SplunkError } from '../../../../client';
+import { SplunkError, RequestStatus } from '../../../../client';
 
 export const APPREGISTRY_SERVICE_PREFIX: string = '/app-registry/v1beta2';
 export const APPREGISTRY_SERVICE_CLUSTER: string = 'api';
@@ -59,134 +59,145 @@ export class GeneratedAppRegistryService extends BaseApiService {
      * Creates an app.
      * @param createAppRequest Creates a new app.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return AppResponseCreateUpdate
      */
-    public createApp = (createAppRequest: CreateAppRequest, args?: object): Promise<AppResponseCreateUpdate> => {
+    public createApp = (createAppRequest: CreateAppRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<AppResponseCreateUpdate> => {
         const path = `/app-registry/v1beta2/apps`;
-        return this.client.post(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), createAppRequest, { query: args })
+        return this.client.post(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), createAppRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as AppResponseCreateUpdate);
     }
     /**
      * Creates a subscription.
      * @param appName Creates a subscription between a tenant and an app.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public createSubscription = (appName: AppName, args?: object): Promise<object> => {
+    public createSubscription = (appName: AppName, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path = `/app-registry/v1beta2/subscriptions`;
-        return this.client.post(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), appName, { query: args })
+        return this.client.post(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), appName, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Removes an app.
      * @param appName App name.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteApp = (appName: string, args?: object): Promise<object> => {
+    public deleteApp = (appName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/apps/${'appName'}`(path_params);
-        return this.client.delete(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Removes a subscription.
      * @param appName App name.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteSubscription = (appName: string, args?: object): Promise<object> => {
+    public deleteSubscription = (appName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/subscriptions/${'appName'}`(path_params);
-        return this.client.delete(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Returns the metadata of an app.
      * @param appName App name.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return AppResponseGetList
      */
-    public getApp = (appName: string, args?: object): Promise<AppResponseGetList> => {
+    public getApp = (appName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<AppResponseGetList> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/apps/${'appName'}`(path_params);
-        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as AppResponseGetList);
     }
     /**
      * Returns a list of the public keys used for verifying signed webhook requests.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Key>
      */
-    public getKeys = (args?: object): Promise<Array<Key>> => {
+    public getKeys = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Key>> => {
         const path = `/system/app-registry/v1beta2/keys`;
-        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Key>);
     }
     /**
      * Returns or validates a subscription.
      * @param appName App name.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Subscription
      */
-    public getSubscription = (appName: string, args?: object): Promise<Subscription> => {
+    public getSubscription = (appName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Subscription> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/subscriptions/${'appName'}`(path_params);
-        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Subscription);
     }
     /**
      * Returns the collection of subscriptions to an app.
      * @param appName App name.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Subscription>
      */
-    public listAppSubscriptions = (appName: string, args?: object): Promise<Array<Subscription>> => {
+    public listAppSubscriptions = (appName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Subscription>> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/apps/${'appName'}/subscriptions`(path_params);
-        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Subscription>);
     }
     /**
      * Returns a list of apps.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<AppResponseGetList>
      */
-    public listApps = (args?: object): Promise<Array<AppResponseGetList>> => {
+    public listApps = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<AppResponseGetList>> => {
         const path = `/app-registry/v1beta2/apps`;
-        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<AppResponseGetList>);
     }
     /**
      * Returns the tenant subscriptions.
      * @param args parameters to be sent with the request
      * @param args.kind The kind of application.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Subscription>
      */
-    public listSubscriptions = (args?: { kind?: AppResourceKind, [key: string]: any }): Promise<Array<Subscription>> => {
+    public listSubscriptions = (args?: { kind?: AppResourceKind, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Subscription>> => {
         const path = `/app-registry/v1beta2/subscriptions`;
-        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Subscription>);
     }
     /**
      * Rotates the client secret for an app.
      * @param appName App name.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return AppResponseCreateUpdate
      */
-    public rotateSecret = (appName: string, args?: object): Promise<AppResponseCreateUpdate> => {
+    public rotateSecret = (appName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<AppResponseCreateUpdate> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/apps/${'appName'}/rotate-secret`(path_params);
-        return this.client.post(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.post(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as AppResponseCreateUpdate);
     }
     /**
@@ -194,14 +205,15 @@ export class GeneratedAppRegistryService extends BaseApiService {
      * @param appName App name.
      * @param updateAppRequest Updates app contents.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return AppResponseCreateUpdate
      */
-    public updateApp = (appName: string, updateAppRequest: UpdateAppRequest, args?: object): Promise<AppResponseCreateUpdate> => {
+    public updateApp = (appName: string, updateAppRequest: UpdateAppRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<AppResponseCreateUpdate> => {
         const path_params = {
             appName: appName
         };
         const path = this.template`/app-registry/v1beta2/apps/${'appName'}`(path_params);
-        return this.client.put(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateAppRequest, { query: args })
+        return this.client.put(APPREGISTRY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateAppRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as AppResponseCreateUpdate);
     }
 }

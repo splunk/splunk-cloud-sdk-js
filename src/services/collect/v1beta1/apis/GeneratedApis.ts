@@ -39,7 +39,7 @@ import {
 } from '../models';
 import BaseApiService from "../../../../baseapiservice";
 import { CollectServiceExtensions } from "../../../../service_extensions/collect";
-import { SplunkError } from '../../../../client';
+import { SplunkError, RequestStatus } from '../../../../client';
 
 export const COLLECT_SERVICE_PREFIX: string = '/collect/v1beta1';
 export const COLLECT_SERVICE_CLUSTER: string = 'api';
@@ -61,14 +61,15 @@ export class GeneratedCollectService extends BaseApiService {
      * Creates an execution for a scheduled job based on the job ID.
      * @param jobId The job ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return SingleExecutionResponse
      */
-    public createExecution = (jobId: string, args?: object): Promise<SingleExecutionResponse> => {
+    public createExecution = (jobId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<SingleExecutionResponse> => {
         const path_params = {
             jobId: jobId
         };
         const path = this.template`/collect/v1beta1/jobs/${'jobId'}/executions`(path_params);
-        return this.client.post(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.post(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as SingleExecutionResponse);
     }
     /**
@@ -76,34 +77,37 @@ export class GeneratedCollectService extends BaseApiService {
      * Creates a job.
      * @param job The API request schema for the job.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return SingleJobResponse
      */
-    public createJob = (job: Job, args?: object): Promise<SingleJobResponse> => {
+    public createJob = (job: Job, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<SingleJobResponse> => {
         const path = `/collect/v1beta1/jobs`;
-        return this.client.post(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), job, { query: args })
+        return this.client.post(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), job, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as SingleJobResponse);
     }
     /**
      * Removes a job based on the job ID.
      * @param jobId The job ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteJob = (jobId: string, args?: object): Promise<object> => {
+    public deleteJob = (jobId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             jobId: jobId
         };
         const path = this.template`/collect/v1beta1/jobs/${'jobId'}`(path_params);
-        return this.client.delete(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Removes all jobs on a tenant.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return DeleteJobsResponse
      */
-    public deleteJobs = (args?: object): Promise<DeleteJobsResponse> => {
+    public deleteJobs = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DeleteJobsResponse> => {
         const path = `/collect/v1beta1/jobs`;
-        return this.client.delete(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as DeleteJobsResponse);
     }
     /**
@@ -111,40 +115,43 @@ export class GeneratedCollectService extends BaseApiService {
      * @param jobId The job ID.
      * @param executionUid The execution UID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return SingleExecutionResponse
      */
-    public getExecution = (jobId: string, executionUid: string, args?: object): Promise<SingleExecutionResponse> => {
+    public getExecution = (jobId: string, executionUid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<SingleExecutionResponse> => {
         const path_params = {
             jobId: jobId,
             executionUid: executionUid
         };
         const path = this.template`/collect/v1beta1/jobs/${'jobId'}/executions/${'executionUid'}`(path_params);
-        return this.client.get(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as SingleExecutionResponse);
     }
     /**
      * Returns a job based on the job ID.
      * @param jobId The job ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return SingleJobResponse
      */
-    public getJob = (jobId: string, args?: object): Promise<SingleJobResponse> => {
+    public getJob = (jobId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<SingleJobResponse> => {
         const path_params = {
             jobId: jobId
         };
         const path = this.template`/collect/v1beta1/jobs/${'jobId'}`(path_params);
-        return this.client.get(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as SingleJobResponse);
     }
     /**
      * Returns a list of all jobs that belong to a tenant.
      * @param args parameters to be sent with the request
      * @param args.connectorID Specifies the connector ID used to filter jobs. A tailing wildcard is supported for the connector ID tag. If no wildcard is used then an exact match is used. Examples: * `my-connector:v1.0.0` selects `my-connector` connector with an exact match with tag \"v1.0.0\" * `my-connector` selects `my-connector` connector with an exact match. Note as no tag is specified it actually refers to \"latest\". * `my-connector:v1.*` selects all `my-connector` connectors with tags starting with \"v1.\", e.g. \"v1.0\", \"v1.1.1\", \"v1.2-alpha\", etc. * `my-connector:*` selects all `my-connector` connectors with any tag. 
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return ListJobsResponse
      */
-    public listJobs = (args?: { connectorID?: string, [key: string]: any }): Promise<ListJobsResponse> => {
+    public listJobs = (args?: { connectorID?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ListJobsResponse> => {
         const path = `/collect/v1beta1/jobs`;
-        return this.client.get(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as ListJobsResponse);
     }
     /**
@@ -153,14 +160,15 @@ export class GeneratedCollectService extends BaseApiService {
      * @param executionUid The execution UID.
      * @param executionPatch The API request schema for patching an execution.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public patchExecution = (jobId: string, executionUid: string, executionPatch: ExecutionPatch, args?: object): Promise<object> => {
+    public patchExecution = (jobId: string, executionUid: string, executionPatch: ExecutionPatch, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             jobId: jobId,
             executionUid: executionUid
         };
         const path = this.template`/collect/v1beta1/jobs/${'jobId'}/executions/${'executionUid'}`(path_params);
-        return this.client.patch(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), executionPatch, { query: args })
+        return this.client.patch(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), executionPatch, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -169,14 +177,15 @@ export class GeneratedCollectService extends BaseApiService {
      * @param jobId The job ID.
      * @param jobPatch The API request schema for patching a job.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return SingleJobResponse
      */
-    public patchJob = (jobId: string, jobPatch: JobPatch, args?: object): Promise<SingleJobResponse> => {
+    public patchJob = (jobId: string, jobPatch: JobPatch, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<SingleJobResponse> => {
         const path_params = {
             jobId: jobId
         };
         const path = this.template`/collect/v1beta1/jobs/${'jobId'}`(path_params);
-        return this.client.patch(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), jobPatch, { query: args })
+        return this.client.patch(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), jobPatch, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as SingleJobResponse);
     }
     /**
@@ -186,11 +195,12 @@ export class GeneratedCollectService extends BaseApiService {
      * @param args parameters to be sent with the request
      * @param args.connectorID Specifies the connector ID used to filter jobs. A tailing wildcard is supported for the connector ID tag. If no wildcard is used then an exact match is used. Examples: * `my-connector:v1.0.0` selects `my-connector` connector with an exact match with tag \"v1.0.0\" * `my-connector` selects `my-connector` connector with an exact match. Note as no tag is specified it actually refers to \"latest\". * `my-connector:v1.*` selects all `my-connector` connectors with tags starting with \"v1.\", e.g. \"v1.0\", \"v1.1.1\", \"v1.2-alpha\", etc. * `my-connector:*` selects all `my-connector` connectors with any tag. 
      * @param args.jobIDs The job ID list.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return PatchJobsResponse
      */
-    public patchJobs = (jobsPatch: JobsPatch, args?: { connectorID?: string, jobIDs?: Array<string>, [key: string]: any }): Promise<PatchJobsResponse> => {
+    public patchJobs = (jobsPatch: JobsPatch, args?: { connectorID?: string, jobIDs?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PatchJobsResponse> => {
         const path = `/collect/v1beta1/jobs`;
-        return this.client.patch(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), jobsPatch, { query: args })
+        return this.client.patch(COLLECT_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), jobsPatch, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PatchJobsResponse);
     }
 }

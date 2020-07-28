@@ -42,6 +42,7 @@ export * from './GeneratedPreviewNode';
 export * from './GeneratedPreviewSessionStartRequest';
 export * from './GeneratedPreviewStartResponse';
 export * from './GeneratedPreviewState';
+export * from './GeneratedReactivatePipelineRequest';
 export * from './GeneratedResponse';
 export * from './GeneratedSplCompileRequest';
 export * from './GeneratedTemplatePatchRequest';

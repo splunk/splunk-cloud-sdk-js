@@ -24,18 +24,22 @@
  * Do not edit the class manually.
  */
 
+import {
+    ECJwk,
+} from './';
+
 /**
  *
  * @export
- * @interface AddGroupMemberBody
+ * @interface ECJwks
  */
-export interface AddGroupMemberBody {
+export interface ECJwks {
     /**
      * 
-     * @type {string}
-     * @memberof AddGroupMemberBody
+     * @type {Array<ECJwk>}
+     * @memberof ECJwks
      */
-    name: string;
+    keys?: Array<ECJwk>;
 
 }
 

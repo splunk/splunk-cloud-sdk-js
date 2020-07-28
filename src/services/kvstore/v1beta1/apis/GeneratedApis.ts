@@ -34,7 +34,7 @@ import {
 } from '../models';
 import BaseApiService from "../../../../baseapiservice";
 import { KVStoreServiceExtensions } from "../../../../service_extensions/kvstore";
-import { SplunkError } from '../../../../client';
+import { SplunkError, RequestStatus } from '../../../../client';
 
 export const KVSTORE_SERVICE_PREFIX: string = '/kvstore/v1beta1';
 export const KVSTORE_SERVICE_CLUSTER: string = 'api';
@@ -57,9 +57,10 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param collection The name of the collection.
      * @param indexDefinition
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return IndexDescription
      */
-    public createIndex = (collection: string, indexDefinition?: IndexDefinition, args?: object): Promise<IndexDescription> => {
+    public createIndex = (collection: string, indexDefinition?: IndexDefinition, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<IndexDescription> => {
         if (!indexDefinition) {
             throw new SplunkError({ message: `Bad Request: indexDefinition is empty or undefined` });
         }
@@ -67,7 +68,7 @@ export class GeneratedKVStoreService extends BaseApiService {
             collection: collection
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/indexes`(path_params);
-        return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), indexDefinition, { query: args })
+        return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), indexDefinition, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as IndexDescription);
     }
     /**
@@ -75,14 +76,15 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param collection The name of the collection.
      * @param index The name of the index.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteIndex = (collection: string, index: string, args?: object): Promise<object> => {
+    public deleteIndex = (collection: string, index: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             collection: collection,
             index: index
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/indexes/${'index'}`(path_params);
-        return this.client.delete(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -90,14 +92,15 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param collection The name of the collection.
      * @param key The key of the record.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteRecordByKey = (collection: string, key: string, args?: object): Promise<object> => {
+    public deleteRecordByKey = (collection: string, key: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             collection: collection,
             key: key
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/records/${'key'}`(path_params);
-        return this.client.delete(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -105,13 +108,14 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param collection The name of the collection.
      * @param args parameters to be sent with the request
      * @param args.query Query JSON expression.
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteRecords = (collection: string, args?: { query?: string, [key: string]: any }): Promise<object> => {
+    public deleteRecords = (collection: string, args?: { query?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             collection: collection
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/query`(path_params);
-        return this.client.delete(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -119,15 +123,16 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param collection The name of the collection.
      * @param key The key of the record.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return { [key: string]: any; }
      */
-    public getRecordByKey = (collection: string, key: string, args?: object): Promise<{ [key: string]: any; }> => {
+    public getRecordByKey = (collection: string, key: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<{ [key: string]: any; }> => {
         const path_params = {
             collection: collection,
             key: key
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/records/${'key'}`(path_params);
-        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as { [key: string]: any; });
     }
     /**
@@ -135,14 +140,15 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param collection The name of the collection.
      * @param body Record to add to the collection, formatted as a JSON object.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Key
      */
-    public insertRecord = (collection: string, body: { [key: string]: any; }, args?: object): Promise<Key> => {
+    public insertRecord = (collection: string, body: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Key> => {
         const path_params = {
             collection: collection
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}`(path_params);
-        return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args })
+        return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Key);
     }
     /**
@@ -150,28 +156,30 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param collection The name of the collection.
      * @param requestBody Array of records to insert.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<string>
      */
-    public insertRecords = (collection: string, requestBody: Array<{ [key: string]: any; }>, args?: object): Promise<Array<string>> => {
+    public insertRecords = (collection: string, requestBody: Array<{ [key: string]: any; }>, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<string>> => {
         const path_params = {
             collection: collection
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/batch`(path_params);
-        return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), requestBody, { query: args })
+        return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), requestBody, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<string>);
     }
     /**
      * Returns a list of all indexes on a collection.
      * @param collection The name of the collection.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<IndexDefinition>
      */
-    public listIndexes = (collection: string, args?: object): Promise<Array<IndexDefinition>> => {
+    public listIndexes = (collection: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<IndexDefinition>> => {
         const path_params = {
             collection: collection
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/indexes`(path_params);
-        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<IndexDefinition>);
     }
     /**
@@ -183,24 +191,26 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param args.fields Comma-separated list of fields to include or exclude.
      * @param args.offset Number of records to skip from the start.
      * @param args.orderby Sort order. Format is `<field>:<sort order>`. Valid sort orders are 1 for ascending, -1 for descending.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<{ [key: string]: any; }>
      */
-    public listRecords = (collection: string, args?: { count?: number, fields?: Array<string>, offset?: number, orderby?: Array<string>, [key: string]: any }): Promise<Array<{ [key: string]: any; }>> => {
+    public listRecords = (collection: string, args?: { count?: number, fields?: Array<string>, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<{ [key: string]: any; }>> => {
         const path_params = {
             collection: collection
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}`(path_params);
-        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<{ [key: string]: any; }>);
     }
     /**
      * Returns the health status from the database.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return PingResponse
      */
-    public ping = (args?: object): Promise<PingResponse> => {
+    public ping = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PingResponse> => {
         const path = `/kvstore/v1beta1/ping`;
-        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PingResponse);
     }
     /**
@@ -209,15 +219,16 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param key The key of the record.
      * @param body Record to add to the collection, formatted as a JSON object.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Key
      */
-    public putRecord = (collection: string, key: string, body: { [key: string]: any; }, args?: object): Promise<Key> => {
+    public putRecord = (collection: string, key: string, body: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Key> => {
         const path_params = {
             collection: collection,
             key: key
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/records/${'key'}`(path_params);
-        return this.client.put(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args })
+        return this.client.put(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Key);
     }
     /**
@@ -229,14 +240,15 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param args.offset Number of records to skip from the start.
      * @param args.orderby Sort order. Format is `<field>:<sort order>`. Valid sort orders are 1 for ascending, -1 for descending.
      * @param args.query Query JSON expression.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<{ [key: string]: any; }>
      */
-    public queryRecords = (collection: string, args?: { count?: number, fields?: Array<string>, offset?: number, orderby?: Array<string>, query?: string, [key: string]: any }): Promise<Array<{ [key: string]: any; }>> => {
+    public queryRecords = (collection: string, args?: { count?: number, fields?: Array<string>, offset?: number, orderby?: Array<string>, query?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<{ [key: string]: any; }>> => {
         const path_params = {
             collection: collection
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/query`(path_params);
-        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<{ [key: string]: any; }>);
     }
 }

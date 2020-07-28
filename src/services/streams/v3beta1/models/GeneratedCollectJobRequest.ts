@@ -27,50 +27,43 @@
 /**
  *
  * @export
- * @interface PipelineNode
+ * @interface CollectJobRequest
  */
-export interface PipelineNode {
+export interface CollectJobRequest {
     /**
-     * 
+     * The ID of the connection that is assigned to this collect job.
+     * @type {string}
+     * @memberof CollectJobRequest
+     */
+    connectionId: string;
+
+    /**
+     * The ID of the connector this collect job uses.
+     * @type {string}
+     * @memberof CollectJobRequest
+     */
+    connectorId: string;
+
+    /**
+     * The description of the collect job.
+     * @type {string}
+     * @memberof CollectJobRequest
+     */
+    description: string;
+
+    /**
+     * The name of the collect job.
+     * @type {string}
+     * @memberof CollectJobRequest
+     */
+    name: string;
+
+    /**
+     * The key-value pairs of parameters for this collect job. Collect jobs may have some configurations that are required, which all collect jobs must provide values for. For configuration values of type BYTES, the provided values must be Base64 encoded.
      * @type {{ [key: string]: any; }}
-     * @memberof PipelineNode
+     * @memberof CollectJobRequest
      */
-    arguments?: { [key: string]: any; };
-
-    /**
-     * 
-     * @type {{ [key: string]: any; }}
-     * @memberof PipelineNode
-     */
-    attributes?: { [key: string]: any; };
-
-    /**
-     * 
-     * @type {string}
-     * @memberof PipelineNode
-     */
-    id?: string;
-
-    /**
-     * 
-     * @type {string}
-     * @memberof PipelineNode
-     */
-    op?: string;
-
-    /**
-     * 
-     * @type {string}
-     * @memberof PipelineNode
-     */
-    resolvedId?: string;
-
-    /**
-     * 
-     * @type {string}
-     * @memberof PipelineNode
-     */
-    statementName?: string;
+    parameters: { [key: string]: any; };
 
 }
 

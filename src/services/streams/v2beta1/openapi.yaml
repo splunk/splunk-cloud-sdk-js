@@ -997,6 +997,21 @@ components:
           format: int32
           type: integer
       type: object
+    ReactivatePipelineRequest:
+      description: ""
+      properties:
+        allowNonRestoredState:
+          description: Set to true to allow the pipeline to ignore any unused progress
+            states. In some cases, when a data pipeline is changed, the progress state
+            will be stored for functions that no longer exist, so this must be set
+            to reactivate a pipeline in this state. Defaults to false.
+          type: boolean
+        skipRestoreState:
+          description: Set to true to start reading from the latest input rather than
+            from where the pipeline's previous run left off, which can cause data
+            loss. Defaults to false.
+          type: boolean
+      type: object
     Response:
       description: ""
       properties:
@@ -2215,6 +2230,13 @@ paths:
         required: true
         schema:
           type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReactivatePipelineRequest'
+        description: Request JSON
+        required: false
       responses:
         "200":
           content:
@@ -3098,4 +3120,4 @@ tags:
 - description: V2Beta1 Preview API Endpoints
   name: apiv-2-beta-1-preview-controller
 
-# Retrieved from scp-openapi commit 2552e9a85ce32779e55e91977eddb123f9082103 path: streams/v2beta1/openapi.yaml
+# Retrieved from scp-openapi commit 6b2702598460f7909f10e1b235f9ff8d5e94c448 path: streams/v2beta1/openapi.yaml

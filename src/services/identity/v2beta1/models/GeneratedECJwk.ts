@@ -27,15 +27,73 @@
 /**
  *
  * @export
- * @interface AddGroupMemberBody
+ * @interface ECJwk
  */
-export interface AddGroupMemberBody {
+export interface ECJwk {
     /**
      * 
      * @type {string}
-     * @memberof AddGroupMemberBody
+     * @memberof ECJwk
      */
-    name: string;
+    alg?: ECJwkAlgEnum;
 
+    /**
+     * 
+     * @type {string}
+     * @memberof ECJwk
+     */
+    crv?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ECJwk
+     */
+    d?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ECJwk
+     */
+    kid?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ECJwk
+     */
+    kty?: ECJwkKtyEnum;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ECJwk
+     */
+    x?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof ECJwk
+     */
+    y?: string;
+
+}
+
+/**
+ * @export
+ */
+export enum ECJwkAlgEnum {
+    ES256 = 'ES256',
+    ES384 = 'ES384',
+    ES512 = 'ES512'
+}
+
+/**
+ * @export
+ */
+export enum ECJwkKtyEnum {
+    EC = 'EC'
 }
 

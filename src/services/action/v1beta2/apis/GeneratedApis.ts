@@ -36,7 +36,7 @@ import {
 } from '../models';
 import BaseApiService from "../../../../baseapiservice";
 import { ActionServiceExtensions } from "../../../../service_extensions/action";
-import { SplunkError } from '../../../../client';
+import { SplunkError, RequestStatus } from '../../../../client';
 
 export const ACTION_SERVICE_PREFIX: string = '/action/v1beta2';
 export const ACTION_SERVICE_CLUSTER: string = 'api';
@@ -58,38 +58,41 @@ export class GeneratedActionService extends BaseApiService {
      * Creates an action template.
      * @param action The action template to create.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public createAction = (action: Action, args?: object): Promise<Action> => {
+    public createAction = (action: Action, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path = `/action/v1beta2/actions`;
-        return this.client.post(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), action, { query: args })
+        return this.client.post(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), action, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
      * Removes an action template.
      * @param actionName The name of the action as one or more identifier strings separated by periods. Each identifier string consists of lowercase letters, digits, and underscores, and cannot start with a digit.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteAction = (actionName: string, args?: object): Promise<object> => {
+    public deleteAction = (actionName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             action_name: actionName
         };
         const path = this.template`/action/v1beta2/actions/${'action_name'}`(path_params);
-        return this.client.delete(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Returns a specific action template.
      * @param actionName The name of the action as one or more identifier strings separated by periods. Each identifier string consists of lowercase letters, digits, and underscores, and cannot start with a digit.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public getAction = (actionName: string, args?: object): Promise<Action> => {
+    public getAction = (actionName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
             action_name: actionName
         };
         const path = this.template`/action/v1beta2/actions/${'action_name'}`(path_params);
-        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
@@ -97,15 +100,16 @@ export class GeneratedActionService extends BaseApiService {
      * @param actionName The name of the action as one or more identifier strings separated by periods. Each identifier string consists of lowercase letters, digits, and underscores, and cannot start with a digit.
      * @param statusId The ID of the action status.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return ActionResult
      */
-    public getActionStatus = (actionName: string, statusId: string, args?: object): Promise<ActionResult> => {
+    public getActionStatus = (actionName: string, statusId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ActionResult> => {
         const path_params = {
             action_name: actionName,
             status_id: statusId
         };
         const path = this.template`/action/v1beta2/actions/${'action_name'}/status/${'status_id'}`(path_params);
-        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as ActionResult);
     }
     /**
@@ -113,35 +117,38 @@ export class GeneratedActionService extends BaseApiService {
      * @param actionName The name of the action as one or more identifier strings separated by periods. Each identifier string consists of lowercase letters, digits, and underscores, and cannot start with a digit.
      * @param statusId The ID of the action status.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<ActionResultEmailDetail>
      */
-    public getActionStatusDetails = (actionName: string, statusId: string, args?: object): Promise<Array<ActionResultEmailDetail>> => {
+    public getActionStatusDetails = (actionName: string, statusId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<ActionResultEmailDetail>> => {
         const path_params = {
             action_name: actionName,
             status_id: statusId
         };
         const path = this.template`/action/v1beta2/actions/${'action_name'}/status/${'status_id'}/details`(path_params);
-        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<ActionResultEmailDetail>);
     }
     /**
      * Returns an array of one or two webhook keys. The first key is active. The second key, if present, is expired.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<PublicWebhookKey>
      */
-    public getPublicWebhookKeys = (args?: object): Promise<Array<PublicWebhookKey>> => {
+    public getPublicWebhookKeys = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<PublicWebhookKey>> => {
         const path = `/system/action/v1beta2/webhook/keys`;
-        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<PublicWebhookKey>);
     }
     /**
      * Returns the list of action templates.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Action>
      */
-    public listActions = (args?: object): Promise<Array<Action>> => {
+    public listActions = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Action>> => {
         const path = `/action/v1beta2/actions`;
-        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Action>);
     }
     /**
@@ -149,13 +156,14 @@ export class GeneratedActionService extends BaseApiService {
      * @param actionName The name of the action as one or more identifier strings separated by periods. Each identifier string consists of lowercase letters, digits, and underscores, and cannot start with a digit.
      * @param triggerEvent The action payload, which should include values for any templated fields.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public triggerAction = (actionName: string, triggerEvent: TriggerEvent, args?: object): Promise<object> => {
+    public triggerAction = (actionName: string, triggerEvent: TriggerEvent, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             action_name: actionName
         };
         const path = this.template`/action/v1beta2/actions/${'action_name'}`(path_params);
-        return this.client.post(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), triggerEvent, { query: args })
+        return this.client.post(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), triggerEvent, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -163,14 +171,15 @@ export class GeneratedActionService extends BaseApiService {
      * @param actionName The name of the action as one or more identifier strings separated by periods. Each identifier string consists of lowercase letters, digits, and underscores, and cannot start with a digit.
      * @param actionMutable Updates to the action template.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public updateAction = (actionName: string, actionMutable: ActionMutable, args?: object): Promise<Action> => {
+    public updateAction = (actionName: string, actionMutable: ActionMutable, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
             action_name: actionName
         };
         const path = this.template`/action/v1beta2/actions/${'action_name'}`(path_params);
-        return this.client.patch(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionMutable, { query: args })
+        return this.client.patch(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionMutable, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
 }

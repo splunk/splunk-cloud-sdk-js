@@ -27,50 +27,22 @@
 /**
  *
  * @export
- * @interface PipelineNode
+ * @interface ReactivatePipelineRequest
  */
-export interface PipelineNode {
+export interface ReactivatePipelineRequest {
     /**
-     * 
-     * @type {{ [key: string]: any; }}
-     * @memberof PipelineNode
+     * Set to true to allow the pipeline to ignore any unused progress states. In some cases, when a data pipeline is changed, the progress state will be stored for functions that no longer exist, so this must be set to reactivate a pipeline in this state. Defaults to false.
+     * @type {boolean}
+     * @memberof ReactivatePipelineRequest
      */
-    arguments?: { [key: string]: any; };
+    allowNonRestoredState?: boolean;
 
     /**
-     * 
-     * @type {{ [key: string]: any; }}
-     * @memberof PipelineNode
+     * Set to true to start reading from the latest input rather than from where the pipeline's previous run left off, which can cause data loss. Defaults to false.
+     * @type {boolean}
+     * @memberof ReactivatePipelineRequest
      */
-    attributes?: { [key: string]: any; };
-
-    /**
-     * 
-     * @type {string}
-     * @memberof PipelineNode
-     */
-    id?: string;
-
-    /**
-     * 
-     * @type {string}
-     * @memberof PipelineNode
-     */
-    op?: string;
-
-    /**
-     * 
-     * @type {string}
-     * @memberof PipelineNode
-     */
-    resolvedId?: string;
-
-    /**
-     * 
-     * @type {string}
-     * @memberof PipelineNode
-     */
-    statementName?: string;
+    skipRestoreState?: boolean;
 
 }
 

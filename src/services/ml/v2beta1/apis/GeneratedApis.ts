@@ -42,7 +42,7 @@ import {
 } from '../models';
 import BaseApiService from "../../../../baseapiservice";
 import { MLServiceExtensions } from "../../../../service_extensions/ml";
-import { SplunkError } from '../../../../client';
+import { SplunkError, RequestStatus } from '../../../../client';
 
 export const ML_SERVICE_PREFIX: string = '/ml/v2beta1';
 export const ML_SERVICE_CLUSTER: string = 'api';
@@ -64,11 +64,12 @@ export class GeneratedMLService extends BaseApiService {
      * Creates a workflow configuration.
      * @param workflow Workflow configuration to be created.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Workflow
      */
-    public createWorkflow = (workflow: Workflow, args?: object): Promise<Workflow> => {
+    public createWorkflow = (workflow: Workflow, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Workflow> => {
         const path = `/ml/v2beta1/workflows`;
-        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflow, { query: args })
+        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflow, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Workflow);
     }
     /**
@@ -76,14 +77,15 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param workflowBuild Input data used to build the workflow.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowBuild
      */
-    public createWorkflowBuild = (id: string, workflowBuild: WorkflowBuild, args?: object): Promise<WorkflowBuild> => {
+    public createWorkflowBuild = (id: string, workflowBuild: WorkflowBuild, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowBuild> => {
         const path_params = {
             id: id
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds`(path_params);
-        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowBuild, { query: args })
+        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowBuild, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowBuild);
     }
     /**
@@ -92,15 +94,16 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param workflowDeployment Input data used to build the workflow deployment.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowDeployment
      */
-    public createWorkflowDeployment = (id: string, buildId: string, workflowDeployment: WorkflowDeployment, args?: object): Promise<WorkflowDeployment> => {
+    public createWorkflowDeployment = (id: string, buildId: string, workflowDeployment: WorkflowDeployment, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowDeployment> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments`(path_params);
-        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowDeployment, { query: args })
+        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowDeployment, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowDeployment);
     }
     /**
@@ -110,16 +113,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param deploymentId The workflow deployment ID.
      * @param workflowInference Input data to the inference request.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowInference
      */
-    public createWorkflowInference = (id: string, buildId: string, deploymentId: string, workflowInference: WorkflowInference, args?: object): Promise<WorkflowInference> => {
+    public createWorkflowInference = (id: string, buildId: string, deploymentId: string, workflowInference: WorkflowInference, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowInference> => {
         const path_params = {
             id: id,
             buildId: buildId,
             deploymentId: deploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments/${'deploymentId'}/inference`(path_params);
-        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowInference, { query: args })
+        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowInference, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowInference);
     }
     /**
@@ -128,15 +132,16 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param workflowRun Input data used to build the workflow.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowRun
      */
-    public createWorkflowRun = (id: string, buildId: string, workflowRun: WorkflowRun, args?: object): Promise<WorkflowRun> => {
+    public createWorkflowRun = (id: string, buildId: string, workflowRun: WorkflowRun, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowRun> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/runs`(path_params);
-        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowRun, { query: args })
+        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowRun, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowRun);
     }
     /**
@@ -145,28 +150,30 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param workflowStreamDeployment Configuration for the workflow streaming deployment.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowStreamDeployment
      */
-    public createWorkflowStreamDeployment = (id: string, buildId: string, workflowStreamDeployment: WorkflowStreamDeployment, args?: object): Promise<WorkflowStreamDeployment> => {
+    public createWorkflowStreamDeployment = (id: string, buildId: string, workflowStreamDeployment: WorkflowStreamDeployment, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowStreamDeployment> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/stream-deployments`(path_params);
-        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowStreamDeployment, { query: args })
+        return this.client.post(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowStreamDeployment, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowStreamDeployment);
     }
     /**
      * Removes a workflow configuration.
      * @param id The workflow ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteWorkflow = (id: string, args?: object): Promise<object> => {
+    public deleteWorkflow = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             id: id
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}`(path_params);
-        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -174,14 +181,15 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteWorkflowBuild = (id: string, buildId: string, args?: object): Promise<object> => {
+    public deleteWorkflowBuild = (id: string, buildId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}`(path_params);
-        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -190,15 +198,16 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param deploymentId The workflow deployment ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteWorkflowDeployment = (id: string, buildId: string, deploymentId: string, args?: object): Promise<object> => {
+    public deleteWorkflowDeployment = (id: string, buildId: string, deploymentId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             id: id,
             buildId: buildId,
             deploymentId: deploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments/${'deploymentId'}`(path_params);
-        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -207,15 +216,16 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param runId The workflow run ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteWorkflowRun = (id: string, buildId: string, runId: string, args?: object): Promise<object> => {
+    public deleteWorkflowRun = (id: string, buildId: string, runId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             id: id,
             buildId: buildId,
             runId: runId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/runs/${'runId'}`(path_params);
-        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -224,29 +234,31 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param streamDeploymentId The workflow streaming deployment ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteWorkflowStreamDeployment = (id: string, buildId: string, streamDeploymentId: string, args?: object): Promise<object> => {
+    public deleteWorkflowStreamDeployment = (id: string, buildId: string, streamDeploymentId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             id: id,
             buildId: buildId,
             streamDeploymentId: streamDeploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/stream-deployments/${'streamDeploymentId'}`(path_params);
-        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Returns a workflow configuration.
      * @param id The workflow ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Workflow
      */
-    public getWorkflow = (id: string, args?: object): Promise<Workflow> => {
+    public getWorkflow = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Workflow> => {
         const path_params = {
             id: id
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Workflow);
     }
     /**
@@ -254,15 +266,16 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowBuild
      */
-    public getWorkflowBuild = (id: string, buildId: string, args?: object): Promise<WorkflowBuild> => {
+    public getWorkflowBuild = (id: string, buildId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowBuild> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowBuild);
     }
     /**
@@ -270,15 +283,16 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowBuildError
      */
-    public getWorkflowBuildError = (id: string, buildId: string, args?: object): Promise<WorkflowBuildError> => {
+    public getWorkflowBuildError = (id: string, buildId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowBuildError> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/errors`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowBuildError);
     }
     /**
@@ -286,15 +300,16 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowBuildLog
      */
-    public getWorkflowBuildLog = (id: string, buildId: string, args?: object): Promise<WorkflowBuildLog> => {
+    public getWorkflowBuildLog = (id: string, buildId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowBuildLog> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/logs`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowBuildLog);
     }
     /**
@@ -303,16 +318,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param deploymentId The workflow deployment ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowDeployment
      */
-    public getWorkflowDeployment = (id: string, buildId: string, deploymentId: string, args?: object): Promise<WorkflowDeployment> => {
+    public getWorkflowDeployment = (id: string, buildId: string, deploymentId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowDeployment> => {
         const path_params = {
             id: id,
             buildId: buildId,
             deploymentId: deploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments/${'deploymentId'}`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowDeployment);
     }
     /**
@@ -321,16 +337,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param deploymentId The workflow deployment ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowDeploymentError
      */
-    public getWorkflowDeploymentError = (id: string, buildId: string, deploymentId: string, args?: object): Promise<WorkflowDeploymentError> => {
+    public getWorkflowDeploymentError = (id: string, buildId: string, deploymentId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowDeploymentError> => {
         const path_params = {
             id: id,
             buildId: buildId,
             deploymentId: deploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments/${'deploymentId'}/errors`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowDeploymentError);
     }
     /**
@@ -339,16 +356,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param deploymentId The workflow deployment ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowDeploymentLog
      */
-    public getWorkflowDeploymentLog = (id: string, buildId: string, deploymentId: string, args?: object): Promise<WorkflowDeploymentLog> => {
+    public getWorkflowDeploymentLog = (id: string, buildId: string, deploymentId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowDeploymentLog> => {
         const path_params = {
             id: id,
             buildId: buildId,
             deploymentId: deploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments/${'deploymentId'}/logs`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowDeploymentLog);
     }
     /**
@@ -357,16 +375,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param runId The workflow run ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowRun
      */
-    public getWorkflowRun = (id: string, buildId: string, runId: string, args?: object): Promise<WorkflowRun> => {
+    public getWorkflowRun = (id: string, buildId: string, runId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowRun> => {
         const path_params = {
             id: id,
             buildId: buildId,
             runId: runId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/runs/${'runId'}`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowRun);
     }
     /**
@@ -375,16 +394,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param runId The workflow run ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowRunError
      */
-    public getWorkflowRunError = (id: string, buildId: string, runId: string, args?: object): Promise<WorkflowRunError> => {
+    public getWorkflowRunError = (id: string, buildId: string, runId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowRunError> => {
         const path_params = {
             id: id,
             buildId: buildId,
             runId: runId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/runs/${'runId'}/errors`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowRunError);
     }
     /**
@@ -393,16 +413,17 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param runId The workflow run ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowRunLog
      */
-    public getWorkflowRunLog = (id: string, buildId: string, runId: string, args?: object): Promise<WorkflowRunLog> => {
+    public getWorkflowRunLog = (id: string, buildId: string, runId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowRunLog> => {
         const path_params = {
             id: id,
             buildId: buildId,
             runId: runId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/runs/${'runId'}/logs`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowRunLog);
     }
     /**
@@ -411,30 +432,32 @@ export class GeneratedMLService extends BaseApiService {
      * @param buildId The workflow build ID.
      * @param streamDeploymentId The workflow streaming deployment ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return WorkflowStreamDeployment
      */
-    public getWorkflowStreamDeployment = (id: string, buildId: string, streamDeploymentId: string, args?: object): Promise<WorkflowStreamDeployment> => {
+    public getWorkflowStreamDeployment = (id: string, buildId: string, streamDeploymentId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowStreamDeployment> => {
         const path_params = {
             id: id,
             buildId: buildId,
             streamDeploymentId: streamDeploymentId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/stream-deployments/${'streamDeploymentId'}`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as WorkflowStreamDeployment);
     }
     /**
      * Returns a list of workflow builds.
      * @param id The workflow ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<WorkflowBuild>
      */
-    public listWorkflowBuilds = (id: string, args?: object): Promise<Array<WorkflowBuild>> => {
+    public listWorkflowBuilds = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<WorkflowBuild>> => {
         const path_params = {
             id: id
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<WorkflowBuild>);
     }
     /**
@@ -442,15 +465,16 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<WorkflowDeployment>
      */
-    public listWorkflowDeployments = (id: string, buildId: string, args?: object): Promise<Array<WorkflowDeployment>> => {
+    public listWorkflowDeployments = (id: string, buildId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<WorkflowDeployment>> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/deployments`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<WorkflowDeployment>);
     }
     /**
@@ -458,25 +482,27 @@ export class GeneratedMLService extends BaseApiService {
      * @param id The workflow ID.
      * @param buildId The workflow build ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<WorkflowRun>
      */
-    public listWorkflowRuns = (id: string, buildId: string, args?: object): Promise<Array<WorkflowRun>> => {
+    public listWorkflowRuns = (id: string, buildId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<WorkflowRun>> => {
         const path_params = {
             id: id,
             buildId: buildId
         };
         const path = this.template`/ml/v2beta1/workflows/${'id'}/builds/${'buildId'}/runs`(path_params);
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<WorkflowRun>);
     }
     /**
      * Returns a list of workflow configurations.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<WorkflowsGetResponse>
      */
-    public listWorkflows = (args?: object): Promise<Array<WorkflowsGetResponse>> => {
+    public listWorkflows = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<WorkflowsGetResponse>> => {
         const path = `/ml/v2beta1/workflows`;
-        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ML_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<WorkflowsGetResponse>);
     }
 }

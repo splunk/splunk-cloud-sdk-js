@@ -33,7 +33,7 @@ import {
 } from '../models';
 import BaseApiService from "../../../../baseapiservice";
 import { ActionServiceExtensions } from "../../../../service_extensions/action";
-import { SplunkError } from '../../../../client';
+import { SplunkError, RequestStatus } from '../../../../client';
 
 export const ACTION_SERVICE_PREFIX: string = '/action/v2alpha1';
 export const ACTION_SERVICE_CLUSTER: string = 'api';
@@ -55,58 +55,63 @@ export class GeneratedActionService extends BaseApiService {
      * Creates an action template.
      * @param action The action template to create.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public createAction = (action: Action, args?: object): Promise<Action> => {
+    public createAction = (action: Action, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path = `/action/v2alpha1/actions`;
-        return this.client.post(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), action, { query: args })
+        return this.client.post(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), action, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
      * Removes an action template.
      * @param actionName The name of the action as one or more identifier strings separated by periods. Each identifier string consists of lowercase letters, digits, and underscores, and cannot start with a digit.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteAction = (actionName: string, args?: object): Promise<object> => {
+    public deleteAction = (actionName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             action_name: actionName
         };
         const path = this.template`/action/v2alpha1/actions/${'action_name'}`(path_params);
-        return this.client.delete(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Returns a specific action template.
      * @param actionName The name of the action as one or more identifier strings separated by periods. Each identifier string consists of lowercase letters, digits, and underscores, and cannot start with a digit.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public getAction = (actionName: string, args?: object): Promise<Action> => {
+    public getAction = (actionName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
             action_name: actionName
         };
         const path = this.template`/action/v2alpha1/actions/${'action_name'}`(path_params);
-        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
      * Get the current webhook key(s). If multiple keys were returned, one is active and one is expired.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<PublicWebhookKey>
      */
-    public getPublicWebhookKeys = (args?: object): Promise<Array<PublicWebhookKey>> => {
+    public getPublicWebhookKeys = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<PublicWebhookKey>> => {
         const path = `/system/action/v2alpha1/webhook/keys`;
-        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<PublicWebhookKey>);
     }
     /**
      * Returns the list of action templates.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Action>
      */
-    public listActions = (args?: object): Promise<Array<Action>> => {
+    public listActions = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Action>> => {
         const path = `/action/v2alpha1/actions`;
-        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Action>);
     }
     /**
@@ -114,14 +119,15 @@ export class GeneratedActionService extends BaseApiService {
      * @param actionName The name of the action as one or more identifier strings separated by periods. Each identifier string consists of lowercase letters, digits, and underscores, and cannot start with a digit.
      * @param actionMutable Updates to the action template.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public updateAction = (actionName: string, actionMutable: ActionMutable, args?: object): Promise<Action> => {
+    public updateAction = (actionName: string, actionMutable: ActionMutable, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
             action_name: actionName
         };
         const path = this.template`/action/v2alpha1/actions/${'action_name'}`(path_params);
-        return this.client.patch(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionMutable, { query: args })
+        return this.client.patch(ACTION_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionMutable, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
 }

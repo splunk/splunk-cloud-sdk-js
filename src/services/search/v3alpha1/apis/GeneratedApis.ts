@@ -39,7 +39,7 @@ import {
 } from '../models';
 import BaseApiService from "../../../../baseapiservice";
 import { SearchServiceExtensions } from "../../../../service_extensions/search";
-import { SplunkError } from '../../../../client';
+import { SplunkError, RequestStatus } from '../../../../client';
 
 export const SEARCH_SERVICE_PREFIX: string = '/search/v3alpha1';
 export const SEARCH_SERVICE_CLUSTER: string = 'api';
@@ -61,56 +61,60 @@ export class GeneratedSearchService extends BaseApiService {
      * Creates a search job.
      * @param searchJob
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return SearchJob
      */
-    public createJob = (searchJob?: SearchJob, args?: object): Promise<SearchJob> => {
+    public createJob = (searchJob?: SearchJob, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<SearchJob> => {
         if (!searchJob) {
             throw new SplunkError({ message: `Bad Request: searchJob is empty or undefined` });
         }
         const path = `/search/v3alpha1/jobs`;
-        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), searchJob, { query: args })
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), searchJob, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as SearchJob);
     }
     /**
      * Creates a recurring search job.
      * @param recurringSearch
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return RecurringSearch
      */
-    public createRecurringSearch = (recurringSearch?: RecurringSearch, args?: object): Promise<RecurringSearch> => {
+    public createRecurringSearch = (recurringSearch?: RecurringSearch, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<RecurringSearch> => {
         if (!recurringSearch) {
             throw new SplunkError({ message: `Bad Request: recurringSearch is empty or undefined` });
         }
         const path = `/search/v3alpha1/recurring-searches`;
-        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), recurringSearch, { query: args })
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), recurringSearch, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as RecurringSearch);
     }
     /**
      * Creates a search job that deletes events from an index. The events are deleted from the index in the specified module, based on the search criteria as specified by the predicate. 
      * @param deleteSearchJob
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return DeleteSearchJob
      */
-    public deleteJob = (deleteSearchJob?: DeleteSearchJob, args?: object): Promise<DeleteSearchJob> => {
+    public deleteJob = (deleteSearchJob?: DeleteSearchJob, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DeleteSearchJob> => {
         if (!deleteSearchJob) {
             throw new SplunkError({ message: `Bad Request: deleteSearchJob is empty or undefined` });
         }
         const path = `/search/v3alpha1/jobs/delete`;
-        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), deleteSearchJob, { query: args })
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), deleteSearchJob, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as DeleteSearchJob);
     }
     /**
      * Deletes a recurring search with a  specified recurring search ID (rsid). 
      * @param rsid The recurring job ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return RecurringSearch
      */
-    public deleteRecurringSearch = (rsid: string, args?: object): Promise<RecurringSearch> => {
+    public deleteRecurringSearch = (rsid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<RecurringSearch> => {
         const path_params = {
             rsid: rsid
         };
         const path = this.template`/search/v3alpha1/recurring-searches/${'rsid'}`(path_params);
-        return this.client.delete(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as RecurringSearch);
     }
     /**
@@ -118,56 +122,60 @@ export class GeneratedSearchService extends BaseApiService {
      * @param rsid The recurring job ID.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<SearchJob>
      */
-    public getAllJobsForRecurringSearch = (rsid: string, args?: { count?: number, [key: string]: any }): Promise<Array<SearchJob>> => {
+    public getAllJobsForRecurringSearch = (rsid: string, args?: { count?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<SearchJob>> => {
         const path_params = {
             rsid: rsid
         };
         const path = this.template`/search/v3alpha1/recurring-searches/${'rsid'}/jobs`(path_params);
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<SearchJob>);
     }
     /**
      * Returns a search job with a specified search ID (sid).
      * @param sid The search ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return SearchJob
      */
-    public getJob = (sid: string, args?: object): Promise<SearchJob> => {
+    public getJob = (sid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<SearchJob> => {
         const path_params = {
             sid: sid
         };
         const path = this.template`/search/v3alpha1/jobs/${'sid'}`(path_params);
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as SearchJob);
     }
     /**
      * Returns the most recent search job associated with a  recurring search with a specified recurring search ID (rsid). 
      * @param rsid The recurring job ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return SearchJob
      */
-    public getJobForRecurringSearch = (rsid: string, args?: object): Promise<SearchJob> => {
+    public getJobForRecurringSearch = (rsid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<SearchJob> => {
         const path_params = {
             rsid: rsid
         };
         const path = this.template`/search/v3alpha1/recurring-searches/${'rsid'}/most-recent`(path_params);
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as SearchJob);
     }
     /**
      * Returns a recurring search job with a specified  recurring search ID (rsid). 
      * @param rsid The recurring job ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return RecurringSearch
      */
-    public getRecurringSearch = (rsid: string, args?: object): Promise<RecurringSearch> => {
+    public getRecurringSearch = (rsid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<RecurringSearch> => {
         const path_params = {
             rsid: rsid
         };
         const path = this.template`/search/v3alpha1/recurring-searches/${'rsid'}`(path_params);
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as RecurringSearch);
     }
     /**
@@ -179,14 +187,15 @@ export class GeneratedSearchService extends BaseApiService {
      * @param args.field The field to return for the result set. Specify multiple fields of comma-separated values if multiple fields  are required. 
      * @param args.latest The latest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC  in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC.  Any offset specified is ignored. 
      * @param args.offset The index of the first item to return.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return ListSearchResultsResponse
      */
-    public listEventsSummary = (sid: string, args?: { count?: number, earliest?: string, field?: string, latest?: string, offset?: number, [key: string]: any }): Promise<ListSearchResultsResponse> => {
+    public listEventsSummary = (sid: string, args?: { count?: number, earliest?: string, field?: string, latest?: string, offset?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ListSearchResultsResponse> => {
         const path_params = {
             sid: sid
         };
         const path = this.template`/search/v3alpha1/jobs/${'sid'}/timeline-metadata/auto/events-summary`(path_params);
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as ListSearchResultsResponse);
     }
     /**
@@ -195,14 +204,15 @@ export class GeneratedSearchService extends BaseApiService {
      * @param args parameters to be sent with the request
      * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC  in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC.  Any offset specified is ignored. 
      * @param args.latest The latest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC  in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC.  Any offset specified is ignored. 
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return FieldsSummary
      */
-    public listFieldsSummary = (sid: string, args?: { earliest?: string, latest?: string, [key: string]: any }): Promise<FieldsSummary> => {
+    public listFieldsSummary = (sid: string, args?: { earliest?: string, latest?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<FieldsSummary> => {
         const path_params = {
             sid: sid
         };
         const path = this.template`/search/v3alpha1/jobs/${'sid'}/timeline-metadata/auto/fields-summary`(path_params);
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as FieldsSummary);
     }
     /**
@@ -211,11 +221,12 @@ export class GeneratedSearchService extends BaseApiService {
      * @param args.count The maximum number of jobs that you want to return the status entries for. 
      * @param args.filter Filter the list of jobs by sid. Valid format is  `sid IN ({comma separated list of SIDs in quotes})`. A maximum of 50 SIDs can be specified in one query. 
      * @param args.status Filter the list of jobs by status. Valid status values are 'running', 'done', 'canceled', or 'failed'. 
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<SearchJob>
      */
-    public listJobs = (args?: { count?: number, filter?: string, status?: SearchStatus, [key: string]: any }): Promise<Array<SearchJob>> => {
+    public listJobs = (args?: { count?: number, filter?: string, status?: SearchStatus, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<SearchJob>> => {
         const path = `/search/v3alpha1/jobs`;
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<SearchJob>);
     }
     /**
@@ -224,24 +235,26 @@ export class GeneratedSearchService extends BaseApiService {
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
      * @param args.offset The index of the first item to return.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return ListPreviewResultsResponse
      */
-    public listPreviewResults = (sid: string, args?: { count?: number, offset?: number, [key: string]: any }): Promise<ListPreviewResultsResponse> => {
+    public listPreviewResults = (sid: string, args?: { count?: number, offset?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ListPreviewResultsResponse> => {
         const path_params = {
             sid: sid
         };
         const path = this.template`/search/v3alpha1/jobs/${'sid'}/results-preview`(path_params);
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as ListPreviewResultsResponse);
     }
     /**
      * Returns a matching list of all recurring searches.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<RecurringSearch>
      */
-    public listRecurringSearches = (args?: object): Promise<Array<RecurringSearch>> => {
+    public listRecurringSearches = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<RecurringSearch>> => {
         const path = `/search/v3alpha1/recurring-searches`;
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<RecurringSearch>);
     }
     /**
@@ -251,28 +264,30 @@ export class GeneratedSearchService extends BaseApiService {
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
      * @param args.field The field to return for the result set. Specify multiple fields of comma-separated values if multiple fields  are required. 
      * @param args.offset The index of the first item to return.
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return ListSearchResultsResponse
      */
-    public listResults = (sid: string, args?: { count?: number, field?: string, offset?: number, [key: string]: any }): Promise<ListSearchResultsResponse> => {
+    public listResults = (sid: string, args?: { count?: number, field?: string, offset?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ListSearchResultsResponse> => {
         const path_params = {
             sid: sid
         };
         const path = this.template`/search/v3alpha1/jobs/${'sid'}/results`(path_params);
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as ListSearchResultsResponse);
     }
     /**
      * Returns an event distribution over time of the untransformed events that are read to-date for a job with a specified search ID (sid).
      * @param sid The search ID.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return TimeBucketsSummary
      */
-    public listTimeBuckets = (sid: string, args?: object): Promise<TimeBucketsSummary> => {
+    public listTimeBuckets = (sid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<TimeBucketsSummary> => {
         const path_params = {
             sid: sid
         };
         const path = this.template`/search/v3alpha1/jobs/${'sid'}/timeline-metadata/auto/time-buckets`(path_params);
-        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as TimeBucketsSummary);
     }
     /**
@@ -280,9 +295,10 @@ export class GeneratedSearchService extends BaseApiService {
      * @param sid The search ID.
      * @param updateJob
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return SearchJob
      */
-    public updateJob = (sid: string, updateJob?: UpdateJob, args?: object): Promise<SearchJob> => {
+    public updateJob = (sid: string, updateJob?: UpdateJob, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<SearchJob> => {
         if (!updateJob) {
             throw new SplunkError({ message: `Bad Request: updateJob is empty or undefined` });
         }
@@ -290,7 +306,7 @@ export class GeneratedSearchService extends BaseApiService {
             sid: sid
         };
         const path = this.template`/search/v3alpha1/jobs/${'sid'}`(path_params);
-        return this.client.patch(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateJob, { query: args })
+        return this.client.patch(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateJob, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as SearchJob);
     }
     /**
@@ -298,9 +314,10 @@ export class GeneratedSearchService extends BaseApiService {
      * @param rsid The recurring job ID.
      * @param updateRecurringSearch
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return RecurringSearch
      */
-    public updateRecurringSearch = (rsid: string, updateRecurringSearch?: UpdateRecurringSearch, args?: object): Promise<RecurringSearch> => {
+    public updateRecurringSearch = (rsid: string, updateRecurringSearch?: UpdateRecurringSearch, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<RecurringSearch> => {
         if (!updateRecurringSearch) {
             throw new SplunkError({ message: `Bad Request: updateRecurringSearch is empty or undefined` });
         }
@@ -308,7 +325,7 @@ export class GeneratedSearchService extends BaseApiService {
             rsid: rsid
         };
         const path = this.template`/search/v3alpha1/recurring-searches/${'rsid'}`(path_params);
-        return this.client.patch(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateRecurringSearch, { query: args })
+        return this.client.patch(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), updateRecurringSearch, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as RecurringSearch);
     }
 }

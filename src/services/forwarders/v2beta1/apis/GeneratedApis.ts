@@ -31,7 +31,7 @@ import {
 } from '../models';
 import BaseApiService from "../../../../baseapiservice";
 import { ForwardersServiceExtensions } from "../../../../service_extensions/forwarders";
-import { SplunkError } from '../../../../client';
+import { SplunkError, RequestStatus } from '../../../../client';
 
 export const FORWARDERS_SERVICE_PREFIX: string = '/forwarders/v2beta1';
 export const FORWARDERS_SERVICE_CLUSTER: string = 'api';
@@ -53,46 +53,50 @@ export class GeneratedForwardersService extends BaseApiService {
      * Adds a certificate to a vacant slot on a tenant.
      * @param certificate
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return CertificateInfo
      */
-    public addCertificate = (certificate?: Certificate, args?: object): Promise<CertificateInfo> => {
+    public addCertificate = (certificate?: Certificate, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<CertificateInfo> => {
         if (!certificate) {
             throw new SplunkError({ message: `Bad Request: certificate is empty or undefined` });
         }
         const path = `/forwarders/v2beta1/certificates`;
-        return this.client.post(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), certificate, { query: args })
+        return this.client.post(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), certificate, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as CertificateInfo);
     }
     /**
      * Removes a certificate on a particular slot on a tenant.
      * @param slot
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteCertificate = (slot: string, args?: object): Promise<object> => {
+    public deleteCertificate = (slot: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             slot: slot
         };
         const path = this.template`/forwarders/v2beta1/certificates/${'slot'}`(path_params);
-        return this.client.delete(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Removes all certificates on a tenant.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteCertificates = (args?: object): Promise<object> => {
+    public deleteCertificates = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path = `/forwarders/v2beta1/certificates`;
-        return this.client.delete(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.delete(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Returns a list of all certificates for a tenant.
      * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<CertificateInfo>
      */
-    public listCertificates = (args?: object): Promise<Array<CertificateInfo>> => {
+    public listCertificates = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<CertificateInfo>> => {
         const path = `/forwarders/v2beta1/certificates`;
-        return this.client.get(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args })
+        return this.client.get(FORWARDERS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<CertificateInfo>);
     }
 }

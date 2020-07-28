@@ -3,6 +3,8 @@ export * from './GeneratedAddGroupRoleBody';
 export * from './GeneratedAddMemberBody';
 export * from './GeneratedCreateGroupBody';
 export * from './GeneratedCreateRoleBody';
+export * from './GeneratedECJwk';
+export * from './GeneratedECJwks';
 export * from './GeneratedGroup';
 export * from './GeneratedGroupMember';
 export * from './GeneratedGroupRole';

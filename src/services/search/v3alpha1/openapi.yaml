@@ -1229,4 +1229,4 @@ paths:
     - $ref: '#/components/parameters/tenant'
     - $ref: '#/components/parameters/rsid'
 
-# Retrieved from scp-openapi commit 2552e9a85ce32779e55e91977eddb123f9082103 path: search/v3alpha1/openapi.yaml
+# Retrieved from scp-openapi commit 6b2702598460f7909f10e1b235f9ff8d5e94c448 path: search/v3alpha1/openapi.yaml

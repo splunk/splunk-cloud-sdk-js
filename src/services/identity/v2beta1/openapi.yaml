@@ -96,6 +96,15 @@ components:
         minItems: 0
         type: array
         uniqueItems: true
+    includeDetails:
+      description: Switch for returning object details in list
+      in: query
+      name: include
+      required: false
+      schema:
+        enum:
+        - details
+        type: string
     inviteId:
       description: The invite ID.
       in: query
@@ -134,6 +143,30 @@ components:
       description: Nonce to prevent replay attacks
       in: query
       name: nonce
+      required: false
+      schema:
+        type: string
+    orderBy:
+      description: The sorting order for returning list.
+      in: query
+      name: orderby
+      required: false
+      schema:
+        type: string
+    pageSize:
+      description: The maximize return items count of a list.
+      in: query
+      name: page_size
+      required: false
+      schema:
+        format: int32
+        maximum: 1000
+        minimum: 1
+        type: integer
+    pageToken:
+      description: The cursor to then next page.
+      in: query
+      name: page_token
       required: false
       schema:
         type: string
@@ -232,6 +265,17 @@ components:
         enum:
         - v2beta1
         - v2alpha1
+        - v3alpha1
+        type: string
+    version2:
+      description: Service API v2alpha1 and v2beta1.
+      in: path
+      name: version2
+      required: true
+      schema:
+        enum:
+        - v2alpha1
+        - v2beta1
         type: string
     version2alpha1:
       description: Service API version 2 alpha 1.
@@ -243,14 +287,55 @@ components:
         - v2alpha1
         type: string
     version2beta1:
-      description: Service API version 2 beta 1.
+      description: Service API version 2 beta 1 and higher.
       in: path
       name: version2beta1
       required: true
       schema:
         enum:
         - v2beta1
+        - v3alpha1
         type: string
+    version3alpha1:
+      description: Service API version 3 alpha 1.
+      in: path
+      name: version3alpha1
+      required: true
+      schema:
+        enum:
+        - v3alpha1
+        type: string
+  requestBodies:
+    createTokenAuth:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            properties:
+              accept_tos:
+                type: string
+              client_assertion:
+                type: string
+              client_assertion_type:
+                type: string
+              client_id:
+                type: string
+              client_secret:
+                type: string
+              code:
+                type: string
+              code_verifier:
+                type: string
+              grant_type:
+                type: string
+              redirect_uri:
+                type: string
+              refresh_token:
+                type: string
+              scope:
+                type: string
+            required:
+            - grant_type
+            type: object
   schemas:
     AddGroupMemberAsAnAdminBody:
       properties:
@@ -292,12 +377,14 @@ components:
       - name
       type: object
     AddRolePermissionBody:
-      maxLength: 1024
-      minLength: 4
-      type: string
-      x-case-insensitive: true
+      properties:
+        permission:
+          $ref: '#/components/schemas/PermissionString'
+      required:
+      - permission
+      type: object
     App:
-      description: Represents an app regsitration
+      description: Represents an app registration
       properties:
         createdAt:
           format: date-time
@@ -467,6 +554,10 @@ components:
     CreatePrincipalBody:
       description: Payload when creating a principal
       properties:
+        keys:
+          items:
+            $ref: '#/components/schemas/ECJwk'
+          type: array
         kind:
           $ref: '#/components/schemas/PrincipalKind'
         name:
@@ -568,6 +659,43 @@ components:
           type: string
         idp:
           type: string
+      type: object
+    ECJwk:
+      properties:
+        alg:
+          enum:
+          - ES256
+          - ES384
+          - ES512
+          maxLength: 64
+          type: string
+        crv:
+          maxLength: 64
+          type: string
+        d:
+          maxLength: 4096
+          type: string
+        kid:
+          maxLength: 1024
+          type: string
+        kty:
+          enum:
+          - EC
+          maxLength: 64
+          type: string
+        x:
+          maxLength: 4096
+          type: string
+        "y":
+          maxLength: 4096
+          type: string
+      type: object
+    ECJwks:
+      properties:
+        keys:
+          items:
+            $ref: '#/components/schemas/ECJwk'
+          type: array
       type: object
     Group:
       properties:
@@ -760,6 +888,26 @@ components:
       - addedBy
       - groupCount
       type: object
+    MemberList:
+      description: A list of Members belonging to a particular Tenant.
+      properties:
+        count:
+          type: integer
+        details:
+          additionalProperties:
+            $ref: '#/components/schemas/Member'
+          type: object
+          x-omitempty: true
+        items:
+          items:
+            type: string
+          type: array
+        nextLink:
+          type: string
+      required:
+      - items
+      - nextLink
+      type: object
     OAuth2Client:
       properties:
         application_type:
@@ -825,6 +973,11 @@ components:
       items:
         $ref: '#/components/schemas/PermissionSet'
       type: array
+    PermissionString:
+      maxLength: 1024
+      minLength: 4
+      type: string
+      x-case-insensitive: true
     Principal:
       properties:
         createdAt:
@@ -861,6 +1014,26 @@ components:
       - user
       - service_account
       type: string
+    PrincipalList:
+      description: A list of Principals.
+      properties:
+        count:
+          type: integer
+        details:
+          additionalProperties:
+            $ref: '#/components/schemas/Principal'
+          type: object
+          x-omitempty: true
+        items:
+          items:
+            type: string
+          type: array
+        nextLink:
+          type: string
+      required:
+      - items
+      - nextLink
+      type: object
     PrincipalProfile:
       description: Profile information for a principal
       properties:
@@ -1083,18 +1256,28 @@ components:
           type: string
         createdBy:
           type: string
+        deletedAt:
+          format: date-time
+          type: string
+        deletedBy:
+          type: string
         name:
           $ref: '#/components/schemas/TenantName'
         proxiedBy:
           type: string
         status:
           $ref: '#/components/schemas/TenantStatus'
+        useDefaultIDP:
+          type: boolean
       required:
       - name
       - status
       - createdAt
       - createdBy
       - proxiedBy
+      - deletedAt
+      - deletedBy
+      - useDefaultIDP
       type: object
     TenantIdp:
       properties:
@@ -1223,7 +1406,7 @@ info:
   description: With the Identity service in Splunk Cloud Services, you can authenticate
     and authorize Splunk Cloud Services users.
   title: Identity
-  version: v2beta1.19
+  version: v2beta1.20
 openapi: 3.0.0
 paths:
   /{tenant}/identity/v2beta1/groups:
@@ -1861,7 +2044,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddRolePermissionBody'
+              $ref: '#/components/schemas/PermissionString'
         description: The permission to add to a role.
         required: true
       responses:
@@ -2012,6 +2195,13 @@ paths:
     put:
       description: Set principal public keys
       operationId: setPrincipalPublicKeys
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ECJwks'
+        description: Principal public keys.
+        required: true
       responses:
         "204":
           description: Public keys have been updated
@@ -2049,4 +2239,4 @@ security:
 servers:
 - url: /
 
-# Retrieved from scp-openapi commit 2552e9a85ce32779e55e91977eddb123f9082103 path: identity/v2beta1/openapi.yaml
+# Retrieved from scp-openapi commit 6b2702598460f7909f10e1b235f9ff8d5e94c448 path: identity/v2beta1/openapi.yaml
