@@ -84,9 +84,7 @@
     "typedoc-plugin-markdown": "^1.2.1",
     "typescript": "^3.0.3"
   },
-  "dependencies": {
-    "rxjs": "^6.3.2"
-  },
+  "dependencies": {},
   "nyc": {
     "all": true,
     "branches": 10,

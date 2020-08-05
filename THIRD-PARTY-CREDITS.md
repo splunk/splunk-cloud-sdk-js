@@ -5,16 +5,6 @@ The Splunk Developer Cloud SDK for JavaScript contains some libraries that were 
 
 We want to thank the contributors to these projects:
 
-## rxjs
-
-Name: rxjs
-
-Version: 6.5.2
-
-License: [Apache-2.0](https://github.com/reactivex/rxjs/raw/master/LICENSE.txt)
-
-Repository: [https://github.com/reactivex/rxjs](https://github.com/reactivex/rxjs)
-
 ## @commitlint/cli
 
 Name: @commitlint/cli
