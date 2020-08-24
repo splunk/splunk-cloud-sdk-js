@@ -25,138 +25,138 @@
  */
 
 import {
-    ViewDatasetKind,
+    Splv1sinkDatasetKind,
 } from './';
 
 /**
- * A complete view dataset as rendered in POST, PATCH, and GET responses.
+ * A complete catalog dataset as rendered in GET responses.
  * @export
- * @interface ViewDataset
+ * @interface Splv1sinkDataset
  */
-export interface ViewDataset {
+export interface Splv1sinkDataset {
     /**
      * The date and time object was created.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     readonly created: string;
 
     /**
      * The name of the user who created the object. This value is obtained from the bearer token and may not be changed.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     readonly createdby: string;
 
     /**
      * A unique dataset ID.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     id: string;
 
     /**
      * 
-     * @type {ViewDatasetKind}
-     * @memberof ViewDataset
+     * @type {Splv1sinkDatasetKind}
+     * @memberof Splv1sinkDataset
      */
-    kind: ViewDatasetKind;
+    kind: Splv1sinkDatasetKind;
 
     /**
      * The date and time object was modified.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     readonly modified: string;
 
     /**
      * The name of the user who most recently modified the object.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     readonly modifiedby: string;
 
     /**
      * The name of the module that contains the dataset.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     module: string;
 
     /**
      * The dataset name. Dataset names must be unique within each module.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     name: string;
 
     /**
      * The name of the object's owner.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     readonly owner: string;
 
     /**
      * The dataset name qualified by the module name.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     resourcename: string;
 
     /**
-     * A valid SPL-defined search.
+     * Internal use by common-ast, contains the converted SPL for a SPL2 search query.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
-    search: string;
+    splv1: string;
 
     /**
      * AppClinetId of the creator app of the dataset.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     appclientidcreatedby?: string;
 
     /**
      * AppClinetId of the modifier app of the dataset.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     appclientidmodifiedby?: string;
 
     /**
      * Detailed description of the dataset.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     description?: string;
 
     /**
      * The dataset name qualified by the module name, primarily used to distinguish between index/metric versus other datasets. Index/metric datasets have a distinct underscore separator (_____) between name and module. Internal use only.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     readonly internalname?: string;
 
     /**
      * Summary of the dataset's purpose.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     summary?: string;
 
     /**
      * The title of the dataset.  Does not have to be unique.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     title?: string;
 
     /**
      * The catalog version.
      * @type {number}
-     * @memberof ViewDataset
+     * @memberof Splv1sinkDataset
      */
     version?: number;
 

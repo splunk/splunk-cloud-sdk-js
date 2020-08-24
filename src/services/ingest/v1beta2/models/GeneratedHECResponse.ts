@@ -42,7 +42,7 @@ export interface HECResponse {
      * @type {number}
      * @memberof HECResponse
      */
-    invalidEventNumber?: number;
+    invalid_event_number?: number;
 
     /**
      * text describes the response status

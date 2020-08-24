@@ -24,10 +24,6 @@
  * Do not edit the class manually.
  */
 
-import {
-    ObjectNode,
-} from './';
-
 /**
  *
  * @export
@@ -43,10 +39,10 @@ export interface PreviewNode {
 
     /**
      * 
-     * @type {Array<ObjectNode>}
+     * @type {Array<object>}
      * @memberof PreviewNode
      */
-    records?: Array<ObjectNode>;
+    records?: Array<object>;
 
 }
 

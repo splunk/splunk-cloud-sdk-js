@@ -35,6 +35,7 @@ import {
     DashboardPATCH,
     DashboardPOST,
     Dataset,
+    DatasetGet,
     DatasetImportedBy,
     DatasetPATCH,
     DatasetPOST,
@@ -721,15 +722,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args parameters to be sent with the request
      * @param args.maxstale The number of seconds beyond which we will refresh index metadata.
      * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Dataset
+     * @return DatasetGet
      */
-    public getDataset = (datasetresourcename: string, args?: { maxstale?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
+    public getDataset = (datasetresourcename: string, args?: { maxstale?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DatasetGet> => {
         const path_params = {
             datasetresourcename: datasetresourcename
         };
         const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}`(path_params);
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Dataset);
+            .then(response => response.body as DatasetGet);
     }
     /**
      * Returns information about the dataset with the specified ID.
@@ -737,15 +738,15 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args parameters to be sent with the request
      * @param args.maxstale The number of seconds beyond which we will refresh index metadata.
      * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Dataset
+     * @return DatasetGet
      */
-    public getDatasetById = (datasetid: string, args?: { maxstale?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
+    public getDatasetById = (datasetid: string, args?: { maxstale?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DatasetGet> => {
         const path_params = {
             datasetid: datasetid
         };
         const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}`(path_params);
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Dataset);
+            .then(response => response.body as DatasetGet);
     }
     /**
      * Returns the field with the specified ID.
@@ -1039,12 +1040,12 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param args.offset The number of results to skip before the first result is returned.
      * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc\".  Ascending order is the default.
      * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Array<Dataset>
+     * @return Array<DatasetGet>
      */
-    public listDatasets = (args?: { count?: number, filter?: string, maxstale?: number, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Dataset>> => {
+    public listDatasets = (args?: { count?: number, filter?: string, maxstale?: number, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<DatasetGet>> => {
         const path = `/catalog/v2beta1/datasets`;
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Array<Dataset>);
+            .then(response => response.body as Array<DatasetGet>);
     }
     /**
      * Returns a list of all of the fields in the Metadata Catalog.

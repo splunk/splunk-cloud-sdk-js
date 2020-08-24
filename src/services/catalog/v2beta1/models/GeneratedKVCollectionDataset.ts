@@ -126,6 +126,13 @@ export interface KVCollectionDataset {
     description?: string;
 
     /**
+     * The dataset name qualified by the module name, primarily used to distinguish between index/metric versus other datasets. Index/metric datasets have a distinct underscore separator (_____) between name and module. Internal use only.
+     * @type {string}
+     * @memberof KVCollectionDataset
+     */
+    readonly internalname?: string;
+
+    /**
      * Summary of the dataset's purpose.
      * @type {string}
      * @memberof KVCollectionDataset

@@ -154,6 +154,13 @@ export interface IndexDataset {
     frozenTimePeriodInSecs?: number;
 
     /**
+     * The dataset name qualified by the module name, primarily used to distinguish between index/metric versus other datasets. Index/metric datasets have a distinct underscore separator (_____) between name and module. Internal use only.
+     * @type {string}
+     * @memberof IndexDataset
+     */
+    readonly internalname?: string;
+
+    /**
      * The timestamp, in seconds, of the latest event. The timestamp is in UNIX time.
      * @type {string}
      * @memberof IndexDataset

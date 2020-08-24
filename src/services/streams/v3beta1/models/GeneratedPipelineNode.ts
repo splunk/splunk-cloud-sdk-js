@@ -31,42 +31,42 @@
  */
 export interface PipelineNode {
     /**
-     * 
+     * A unique identifier for the function.
+     * @type {string}
+     * @memberof PipelineNode
+     */
+    id: string;
+
+    /**
+     * The operation name.
+     * @type {string}
+     * @memberof PipelineNode
+     */
+    op: string;
+
+    /**
+     * Function arguments keyed by argument name.
      * @type {{ [key: string]: any; }}
      * @memberof PipelineNode
      */
     arguments?: { [key: string]: any; };
 
     /**
-     * 
+     * For internal use only. This field is ignored.
      * @type {{ [key: string]: any; }}
      * @memberof PipelineNode
      */
     attributes?: { [key: string]: any; };
 
     /**
-     * 
-     * @type {string}
-     * @memberof PipelineNode
-     */
-    id?: string;
-
-    /**
-     * 
-     * @type {string}
-     * @memberof PipelineNode
-     */
-    op?: string;
-
-    /**
-     * 
+     * The identifier describing the operation name and required argument types. This field is ignored.
      * @type {string}
      * @memberof PipelineNode
      */
     resolvedId?: string;
 
     /**
-     * 
+     * If present, creates a named statement when decompiling to SPL2. For example, \"$events = | from splunk_firehose();\".
      * @type {string}
      * @memberof PipelineNode
      */

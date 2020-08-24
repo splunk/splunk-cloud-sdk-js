@@ -149,7 +149,7 @@ describe('catalog tests', () => {
                 return createIndexDataset(dsName, importModule).then(ds2 => {
                     assert.isNotNull(ds2);
                     // use non-null assertion operator ! since we already checked ds2 is not null
-                    return splunkCloud.catalog.createDatasetImportById(ds!.id, { name: ds.name, module: ds2!.module });
+                    return splunkCloud.catalog.createDatasetImportById(ds!.id as string, { name: ds.name, module: ds2!.module });
                 }).then(importDS => {
                     assert.isNotNull(importDS);
                     assert.equal(importDS.kind, catalog.ImportDatasetKind.Import);
@@ -166,7 +166,7 @@ describe('catalog tests', () => {
                 assert.isNotNull(ds);
                 return createIndexDataset(dsName, importModule).then(ds2 => {
                     assert.isNotNull(ds2);
-                    return splunkCloud.catalog.createDatasetImport(ds!.id, { name: ds.name, module: ds2!.module });
+                    return splunkCloud.catalog.createDatasetImport(ds!.id as string, { name: ds.name, module: ds2!.module });
                 }).then(importDS => {
                     assert.isNotNull(importDS);
                     assert.equal(importDS.kind, catalog.ImportDatasetKind.Import);
@@ -503,7 +503,7 @@ describe('catalog tests', () => {
             const defaultAnnotationTypeId = '00000000000000000000008b';
             let annoID: string;
             return splunkCloud.catalog.getDatasetById(dsID).then(ds => {
-                return splunkCloud.catalog.createAnnotationForDatasetById(ds.id, { annotationtypeid: defaultAnnotationTypeId });
+                return splunkCloud.catalog.createAnnotationForDatasetById(ds.id as string, { annotationtypeid: defaultAnnotationTypeId });
             }).then(anno => {
                 assert.equal(anno.annotationtypeid, defaultAnnotationTypeId);
                 return splunkCloud.catalog.deleteAnnotationOfDatasetById(dsID, anno.id);

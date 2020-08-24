@@ -25,138 +25,138 @@
  */
 
 import {
-    ViewDatasetKind,
+    CatalogDatasetKind,
 } from './';
 
 /**
- * A complete view dataset as rendered in POST, PATCH, and GET responses.
+ * A complete catalog dataset as rendered in POST, PATCH, and GET responses.
  * @export
- * @interface ViewDataset
+ * @interface CatalogDataset
  */
-export interface ViewDataset {
+export interface CatalogDataset {
     /**
      * The date and time object was created.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     readonly created: string;
 
     /**
      * The name of the user who created the object. This value is obtained from the bearer token and may not be changed.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     readonly createdby: string;
 
     /**
      * A unique dataset ID.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     id: string;
 
     /**
      * 
-     * @type {ViewDatasetKind}
-     * @memberof ViewDataset
+     * @type {CatalogDatasetKind}
+     * @memberof CatalogDataset
      */
-    kind: ViewDatasetKind;
+    kind: CatalogDatasetKind;
 
     /**
      * The date and time object was modified.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     readonly modified: string;
 
     /**
      * The name of the user who most recently modified the object.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     readonly modifiedby: string;
 
     /**
      * The name of the module that contains the dataset.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     module: string;
 
     /**
      * The dataset name. Dataset names must be unique within each module.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     name: string;
 
     /**
      * The name of the object's owner.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     readonly owner: string;
 
     /**
      * The dataset name qualified by the module name.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     resourcename: string;
 
     /**
-     * A valid SPL-defined search.
-     * @type {string}
-     * @memberof ViewDataset
-     */
-    search: string;
-
-    /**
      * AppClinetId of the creator app of the dataset.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     appclientidcreatedby?: string;
 
     /**
      * AppClinetId of the modifier app of the dataset.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     appclientidmodifiedby?: string;
 
     /**
      * Detailed description of the dataset.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     description?: string;
 
     /**
      * The dataset name qualified by the module name, primarily used to distinguish between index/metric versus other datasets. Index/metric datasets have a distinct underscore separator (_____) between name and module. Internal use only.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     readonly internalname?: string;
 
     /**
      * Summary of the dataset's purpose.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     summary?: string;
 
     /**
      * The title of the dataset.  Does not have to be unique.
      * @type {string}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     title?: string;
 
     /**
+     * Internal use only.
+     * @type {string}
+     * @memberof CatalogDataset
+     */
+    url?: string;
+
+    /**
      * The catalog version.
      * @type {number}
-     * @memberof ViewDataset
+     * @memberof CatalogDataset
      */
     version?: number;
 

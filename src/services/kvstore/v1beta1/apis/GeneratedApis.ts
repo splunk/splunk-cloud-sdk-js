@@ -156,10 +156,11 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param collection The name of the collection.
      * @param requestBody Array of records to insert.
      * @param args parameters to be sent with the request
+     * @param args.allowUpdates Allow records with keys included to update their respective records in the database
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<string>
      */
-    public insertRecords = (collection: string, requestBody: Array<{ [key: string]: any; }>, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<string>> => {
+    public insertRecords = (collection: string, requestBody: Array<{ [key: string]: any; }>, args?: { allowUpdates?: boolean, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<string>> => {
         const path_params = {
             collection: collection
         };

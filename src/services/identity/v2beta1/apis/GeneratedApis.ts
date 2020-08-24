@@ -31,12 +31,15 @@ import {
     AddMemberBody,
     CreateGroupBody,
     CreateRoleBody,
-    ECJwks,
+    ECJwk,
     Group,
     GroupMember,
     GroupRole,
     Member,
     Principal,
+    PrincipalPublicKey,
+    PrincipalPublicKeyStatusBody,
+    PrincipalPublicKeys,
     Role,
     RolePermission,
     ValidateInfo,
@@ -111,6 +114,22 @@ export class GeneratedIdentityService extends BaseApiService {
             .then(response => response.body as Member);
     }
     /**
+     * Add service principal public key
+     * @param principal The principal name.
+     * @param eCJwk Service principal public key
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return PrincipalPublicKey
+     */
+    public addPrincipalPublicKey = (principal: string, eCJwk: ECJwk, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PrincipalPublicKey> => {
+        const path_params = {
+            principal: principal
+        };
+        const path = this.template`/system/identity/v2beta1/principals/${'principal'}/keys`(path_params);
+        return this.client.post(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), eCJwk, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as PrincipalPublicKey);
+    }
+    /**
      * Adds permissions to a role in a given tenant.
      * @param role The role name.
      * @param body The permission to add to a role.
@@ -161,6 +180,22 @@ export class GeneratedIdentityService extends BaseApiService {
             group: group
         };
         const path = this.template`/identity/v2beta1/groups/${'group'}`(path_params);
+        return this.client.delete(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
+    /**
+     * Deletes principal public key
+     * @param principal The principal name.
+     * @param keyId Identifier of a public key.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public deletePrincipalPublicKey = (principal: string, keyId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path_params = {
+            principal: principal,
+            keyId: keyId
+        };
+        const path = this.template`/system/identity/v2beta1/principals/${'principal'}/keys/${'keyId'}`(path_params);
         return this.client.delete(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
@@ -256,6 +291,38 @@ export class GeneratedIdentityService extends BaseApiService {
         const path = this.template`/system/identity/v2beta1/principals/${'principal'}`(path_params);
         return this.client.get(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Principal);
+    }
+    /**
+     * Returns principal public key
+     * @param principal The principal name.
+     * @param keyId Identifier of a public key.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return PrincipalPublicKey
+     */
+    public getPrincipalPublicKey = (principal: string, keyId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PrincipalPublicKey> => {
+        const path_params = {
+            principal: principal,
+            keyId: keyId
+        };
+        const path = this.template`/system/identity/v2beta1/principals/${'principal'}/keys/${'keyId'}`(path_params);
+        return this.client.get(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as PrincipalPublicKey);
+    }
+    /**
+     * Returns principal public keys
+     * @param principal The principal name.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return PrincipalPublicKeys
+     */
+    public getPrincipalPublicKeys = (principal: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PrincipalPublicKeys> => {
+        const path_params = {
+            principal: principal
+        };
+        const path = this.template`/system/identity/v2beta1/principals/${'principal'}/keys`(path_params);
+        return this.client.get(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as PrincipalPublicKeys);
     }
     /**
      * Returns a role for a given tenant.
@@ -517,19 +584,22 @@ export class GeneratedIdentityService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Set principal public keys
+     * Update principal public key
      * @param principal The principal name.
-     * @param eCJwks Principal public keys.
+     * @param keyId Identifier of a public key.
+     * @param principalPublicKeyStatusBody Status of the public key
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
+     * @return PrincipalPublicKey
      */
-    public setPrincipalPublicKeys = (principal: string, eCJwks: ECJwks, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+    public updatePrincipalPublicKey = (principal: string, keyId: string, principalPublicKeyStatusBody: PrincipalPublicKeyStatusBody, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PrincipalPublicKey> => {
         const path_params = {
-            principal: principal
+            principal: principal,
+            keyId: keyId
         };
-        const path = this.template`/system/identity/v2beta1/principals/${'principal'}/keys`(path_params);
-        return this.client.put(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), eCJwks, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
+        const path = this.template`/system/identity/v2beta1/principals/${'principal'}/keys/${'keyId'}`(path_params);
+        return this.client.put(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), principalPublicKeyStatusBody, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as PrincipalPublicKey);
     }
     /**
      * Validates the access token obtained from the authorization header and returns the principal name and tenant memberships. 

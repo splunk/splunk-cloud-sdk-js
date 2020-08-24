@@ -25,281 +25,212 @@
  */
 
 import {
+    FieldPOST,
     JobDatasetKind,
     JobDatasetPropertiesTimelineMetadata,
 } from './';
 
 /**
- * A complete job dataset as rendered in POST, PATCH, and GET responses.
+ * Job dataset as rendered in POST response for dataset API endpoint.
  * @export
- * @interface JobDataset
+ * @interface JobDatasetGET
  */
-export interface JobDataset {
+export interface JobDatasetGET {
     /**
      * Time that the job was completed
      * @type {string}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     completionTime: string;
 
     /**
-     * The date and time object was created.
-     * @type {string}
-     * @memberof JobDataset
-     */
-    readonly created: string;
-
-    /**
-     * The name of the user who created the object. This value is obtained from the bearer token and may not be changed.
-     * @type {string}
-     * @memberof JobDataset
-     */
-    readonly createdby: string;
-
-    /**
      * The time the dataset will be available in S3.
      * @type {string}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     deleteTime: string;
 
     /**
      * Time that the job was dispatched
      * @type {string}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     dispatchTime: string;
 
     /**
-     * A unique dataset ID.
-     * @type {string}
-     * @memberof JobDataset
-     */
-    id: string;
-
-    /**
      * 
      * @type {JobDatasetKind}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     kind: JobDatasetKind;
 
     /**
-     * The date and time object was modified.
-     * @type {string}
-     * @memberof JobDataset
-     */
-    readonly modified: string;
-
-    /**
-     * The name of the user who most recently modified the object.
-     * @type {string}
-     * @memberof JobDataset
-     */
-    readonly modifiedby: string;
-
-    /**
-     * The name of the module that contains the dataset.
-     * @type {string}
-     * @memberof JobDataset
-     */
-    module: string;
-
-    /**
      * The dataset name. Dataset names must be unique within each module.
      * @type {string}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     name: string;
 
     /**
-     * The name of the object's owner.
-     * @type {string}
-     * @memberof JobDataset
-     */
-    readonly owner: string;
-
-    /**
      * Parameters for the search job, mainly earliest, latest, timezone, and relativeTimeAnchor.
      * @type {{ [key: string]: any; }}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     parameters: { [key: string]: any; };
 
     /**
      * The SPL query string for the search job.
      * @type {string}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     query: string;
 
     /**
      * Resolved earliest time for the job
      * @type {string}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     resolvedEarliest: string;
 
     /**
      * Resolved latest time for the job
      * @type {string}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     resolvedLatest: string;
 
     /**
-     * The dataset name qualified by the module name.
-     * @type {string}
-     * @memberof JobDataset
-     */
-    resourcename: string;
-
-    /**
      * The ID assigned to the search job.
      * @type {string}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     sid: string;
 
     /**
-     * AppClinetId of the creator app of the dataset.
-     * @type {string}
-     * @memberof JobDataset
-     */
-    appclientidcreatedby?: string;
-
-    /**
-     * AppClinetId of the modifier app of the dataset.
-     * @type {string}
-     * @memberof JobDataset
-     */
-    appclientidmodifiedby?: string;
-
-    /**
      * Was the event summary requested for this searhc job?
      * @type {boolean}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     collectEventSummary?: boolean;
 
     /**
      * Was the field summary requested for this searhc job?
      * @type {boolean}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     collectFieldSummary?: boolean;
 
     /**
      * Were the time bucketes requested for this searhc job?
      * @type {boolean}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     collectTimeBuckets?: boolean;
 
     /**
-     * Detailed description of the dataset.
-     * @type {string}
-     * @memberof JobDataset
+     * Specifies whether a search is allowed to collect preview results during the runtime, internal search service use only.
+     * @type {boolean}
+     * @memberof JobDatasetGET
      */
-    description?: string;
+    enablePreview?: boolean;
 
     /**
      * The runtime of the search in seconds.
      * @type {number}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     executionTime?: number;
 
     /**
      * Should the search produce all fields (including those not explicity mentioned in the SPL)?
      * @type {boolean}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     extractAllFields?: boolean;
 
     /**
+     * The fields to be associated with this dataset.
+     * @type {Array<FieldPOST>}
+     * @memberof JobDatasetGET
+     */
+    fields?: Array<FieldPOST>;
+
+    /**
      * Did the SPL query cause any side effects on a dataset?
      * @type {boolean}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     hasSideEffects?: boolean;
 
     /**
+     * A unique dataset ID. Random ID used if not provided.
+     * @type {string}
+     * @memberof JobDatasetGET
+     */
+    id?: string;
+
+    /**
      * The maximum number of seconds to run this search before finishing.
      * @type {number}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     maxTime?: number;
 
     /**
+     * The name of the module to create the new dataset in.
+     * @type {string}
+     * @memberof JobDatasetGET
+     */
+    module?: string;
+
+    /**
      * The parent's ID of the search job.
      * @type {string}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     parent?: string;
 
     /**
      * An estimate of how complete the search job is.
      * @type {number}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     percentComplete?: number;
 
     /**
      * The instantaneous number of results produced by the search job.
      * @type {number}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     resultsAvailable?: number;
 
     /**
      * The search head that started this search job.
      * @type {string}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     searchHead?: string;
 
     /**
      * The SPLv2 version of the search job query string.
      * @type {string}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     spl?: string;
 
     /**
      * The current status of the search job.
      * @type {string}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     status?: string;
 
     /**
-     * Summary of the dataset's purpose.
-     * @type {string}
-     * @memberof JobDataset
-     */
-    summary?: string;
-
-    /**
      * 
      * @type {JobDatasetPropertiesTimelineMetadata}
-     * @memberof JobDataset
+     * @memberof JobDatasetGET
      */
     timelineMetadata?: JobDatasetPropertiesTimelineMetadata;
-
-    /**
-     * The title of the dataset.  Does not have to be unique.
-     * @type {string}
-     * @memberof JobDataset
-     */
-    title?: string;
-
-    /**
-     * The catalog version.
-     * @type {number}
-     * @memberof JobDataset
-     */
-    version?: number;
 
 }
 

@@ -120,6 +120,13 @@ components:
       schema:
         type: string
       x-case-insensitive: true
+    keyId:
+      description: Identifier of a public key.
+      in: path
+      name: keyId
+      required: true
+      schema:
+        type: string
     member:
       description: The member name.
       in: path
@@ -130,7 +137,7 @@ components:
         type: string
       x-case-insensitive: true
     memberKind:
-      description: 'Kind of member, one of: [user, service_account]'
+      description: 'Kind of member, one of: [user, service_account, service]'
       in: query
       name: kind
       required: false
@@ -138,6 +145,7 @@ components:
         enum:
         - user
         - service_account
+        - service
         type: string
     nonce:
       description: Nonce to prevent replay attacks
@@ -398,6 +406,26 @@ components:
         tenant:
           type: string
       type: object
+    AppList:
+      description: A list of app.
+      properties:
+        count:
+          type: integer
+        details:
+          additionalProperties:
+            $ref: '#/components/schemas/App'
+          type: object
+          x-omitempty: true
+        items:
+          items:
+            type: string
+          type: array
+        nextLink:
+          type: string
+      required:
+      - items
+      - nextLink
+      type: object
     Authn:
       properties:
         description:
@@ -554,10 +582,8 @@ components:
     CreatePrincipalBody:
       description: Payload when creating a principal
       properties:
-        keys:
-          items:
-            $ref: '#/components/schemas/ECJwk'
-          type: array
+        key:
+          $ref: '#/components/schemas/ECJwk'
         kind:
           $ref: '#/components/schemas/PrincipalKind'
         name:
@@ -676,7 +702,9 @@ components:
           maxLength: 4096
           type: string
         kid:
-          maxLength: 1024
+          maxLength: 64
+          minLength: 3
+          pattern: ^[_\-a-zA-Z0-9]*$
           type: string
         kty:
           enum:
@@ -719,6 +747,26 @@ components:
       - createdBy
       - memberCount
       - roleCount
+      type: object
+    GroupList:
+      description: A list of group.
+      properties:
+        count:
+          type: integer
+        details:
+          additionalProperties:
+            $ref: '#/components/schemas/Group'
+          type: object
+          x-omitempty: true
+        items:
+          items:
+            type: string
+          type: array
+        nextLink:
+          type: string
+      required:
+      - items
+      - nextLink
       type: object
     GroupMember:
       description: Represents a member that belongs to a group
@@ -779,6 +827,26 @@ components:
           type: string
       type: object
     IdentityProviderList:
+      description: A list of identity provider.
+      properties:
+        count:
+          type: integer
+        details:
+          additionalProperties:
+            $ref: '#/components/schemas/IdentityProvider'
+          type: object
+          x-omitempty: true
+        items:
+          items:
+            type: string
+          type: array
+        nextLink:
+          type: string
+      required:
+      - items
+      - nextLink
+      type: object
+    IdentityProviders:
       items:
         $ref: '#/components/schemas/IdentityProvider'
       type: array
@@ -948,6 +1016,55 @@ components:
     OktaApp:
       description: Represents an Okta App (https://developer.okta.com/docs/reference/api/apps/#application-model)
       type: object
+    Permission:
+      properties:
+        addedAt:
+          format: date-time
+          type: string
+        addedBy:
+          type: string
+        app:
+          description: App name for app permission
+          type: string
+        permission:
+          type: string
+        role:
+          description: Role name for role permission
+          type: string
+        service:
+          description: Service name for service permission
+          type: string
+        tenant:
+          type: string
+        type:
+          enum:
+          - role
+          - service
+          - app
+          type: string
+      required:
+      - type
+      - tenant
+      - permission
+      type: object
+    PermissionList:
+      description: A list of permissions.
+      properties:
+        details:
+          additionalProperties:
+            $ref: '#/components/schemas/Permission'
+          type: object
+          x-omitempty: true
+        items:
+          items:
+            type: string
+          type: array
+        nextLink:
+          type: string
+      required:
+      - items
+      - nextLink
+      type: object
     PermissionSet:
       properties:
         kind:
@@ -1013,6 +1130,7 @@ components:
       enum:
       - user
       - service_account
+      - service
       type: string
     PrincipalList:
       description: A list of Principals.
@@ -1042,6 +1160,48 @@ components:
         fullName:
           type: string
       type: object
+    PrincipalPublicKey:
+      properties:
+        createdAt:
+          format: date-time
+          type: string
+        createdBy:
+          type: string
+        key:
+          $ref: '#/components/schemas/ECJwk'
+        status:
+          enum:
+          - active
+          - inactive
+          - deleted
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
+        updatedBy:
+          type: string
+      required:
+      - status
+      - key
+      - createdBy
+      - createdAt
+      - updatedBy
+      - updatedAt
+      type: object
+    PrincipalPublicKeyStatusBody:
+      properties:
+        status:
+          enum:
+          - active
+          - inactive
+          type: string
+      required:
+      - status
+      type: object
+    PrincipalPublicKeys:
+      items:
+        $ref: '#/components/schemas/PrincipalPublicKey'
+      type: array
     PrincipalTos:
       properties:
         hasAccepted:
@@ -1116,6 +1276,10 @@ components:
           type: string
         name:
           type: string
+        permissions:
+          items:
+            type: string
+          type: array
         tenant:
           type: string
       required:
@@ -1123,6 +1287,26 @@ components:
       - name
       - createdAt
       - createdBy
+      type: object
+    RoleList:
+      description: A list of role.
+      properties:
+        count:
+          type: integer
+        details:
+          additionalProperties:
+            $ref: '#/components/schemas/Role'
+          type: object
+          x-omitempty: true
+        items:
+          items:
+            type: string
+          type: array
+        nextLink:
+          type: string
+      required:
+      - items
+      - nextLink
       type: object
     RolePermission:
       properties:
@@ -1144,6 +1328,26 @@ components:
       - addedAt
       - addedBy
       type: object
+    RolePermissionList:
+      description: A list of role permissions.
+      properties:
+        count:
+          type: integer
+        details:
+          additionalProperties:
+            $ref: '#/components/schemas/RolePermission'
+          type: object
+          x-omitempty: true
+        items:
+          items:
+            type: string
+          type: array
+        nextLink:
+          type: string
+      required:
+      - items
+      - nextLink
+      type: object
     SensitiveTenants:
       items:
         type: string
@@ -1152,10 +1356,6 @@ components:
       properties:
         appName:
           type: string
-        defaultpermissions:
-          items:
-            type: string
-          type: array
         name:
           type: string
         permissions:
@@ -1164,6 +1364,26 @@ components:
           type: array
         principal:
           type: string
+      type: object
+    ServiceAccountList:
+      description: A list of service account.
+      properties:
+        count:
+          type: integer
+        details:
+          additionalProperties:
+            $ref: '#/components/schemas/ServiceAccount'
+          type: object
+          x-omitempty: true
+        items:
+          items:
+            type: string
+          type: array
+        nextLink:
+          type: string
+      required:
+      - items
+      - nextLink
       type: object
     ServiceAccountPeer:
       properties:
@@ -1207,6 +1427,26 @@ components:
             type: string
           type: array
       type: object
+    SubscriptionList:
+      description: A list of subscription.
+      properties:
+        count:
+          type: integer
+        details:
+          additionalProperties:
+            $ref: '#/components/schemas/Subscription'
+          type: object
+          x-omitempty: true
+        items:
+          items:
+            type: string
+          type: array
+        nextLink:
+          type: string
+      required:
+      - items
+      - nextLink
+      type: object
     TakedownPrincipal:
       properties:
         addedAt:
@@ -1229,6 +1469,26 @@ components:
           type: string
       required:
       - reason
+      type: object
+    TakedownPrincipalList:
+      description: A list of takedown principals.
+      properties:
+        count:
+          type: integer
+        details:
+          additionalProperties:
+            $ref: '#/components/schemas/TakedownPrincipal'
+          type: object
+          x-omitempty: true
+        items:
+          items:
+            type: string
+          type: array
+        nextLink:
+          type: string
+      required:
+      - items
+      - nextLink
       type: object
     Tenant:
       properties:
@@ -1290,6 +1550,26 @@ components:
           type: string
         tenant:
           type: string
+      type: object
+    TenantList:
+      description: A list of tenant.
+      properties:
+        count:
+          type: integer
+        details:
+          additionalProperties:
+            $ref: '#/components/schemas/Tenant'
+          type: object
+          x-omitempty: true
+        items:
+          items:
+            type: string
+          type: array
+        nextLink:
+          type: string
+      required:
+      - items
+      - nextLink
       type: object
     TenantName:
       maxLength: 36
@@ -2190,21 +2470,106 @@ paths:
     parameters:
     - $ref: '#/components/parameters/principal'
   /system/identity/v2beta1/principals/{principal}/keys:
+    get:
+      description: Returns principal public keys
+      operationId: getPrincipalPublicKeys
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrincipalPublicKeys'
+          description: Successful operation
+        "400":
+          description: The request isn't valid.
+        "401":
+          description: The user isn't authenticated.
+        "403":
+          description: The operation isn't authorized.
+        "404":
+          description: The resource wasn't found.
+      x-authz-scope: identity.principals.read
     parameters:
     - $ref: '#/components/parameters/principal'
-    put:
-      description: Set principal public keys
-      operationId: setPrincipalPublicKeys
+    post:
+      description: Add service principal public key
+      operationId: addPrincipalPublicKey
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ECJwks'
-        description: Principal public keys.
+              $ref: '#/components/schemas/ECJwk'
+        description: Service principal public key
         required: true
       responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrincipalPublicKey'
+          description: Public keys have been added
+        "400":
+          description: The request isn't valid.
+        "401":
+          description: The user isn't authenticated.
+        "403":
+          description: The operation isn't authorized.
+        "404":
+          description: The resource wasn't found.
+      x-authz-scope: identity.principalkeys.write
+  /system/identity/v2beta1/principals/{principal}/keys/{keyId}:
+    delete:
+      description: Deletes principal public key
+      operationId: deletePrincipalPublicKey
+      responses:
         "204":
-          description: Public keys have been updated
+          description: Successful operation
+        "401":
+          description: The user isn't authenticated.
+        "403":
+          description: The operation isn't authorized.
+        "404":
+          description: The resource wasn't found.
+      x-authz-scope: identity.principalkeys.write
+    get:
+      description: Returns principal public key
+      operationId: getPrincipalPublicKey
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrincipalPublicKey'
+          description: Successful operation
+        "400":
+          description: The request isn't valid.
+        "401":
+          description: The user isn't authenticated.
+        "403":
+          description: The operation isn't authorized.
+        "404":
+          description: The resource wasn't found.
+      x-authz-scope: identity.principals.read
+    parameters:
+    - $ref: '#/components/parameters/principal'
+    - $ref: '#/components/parameters/keyId'
+    put:
+      description: Update principal public key
+      operationId: updatePrincipalPublicKey
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrincipalPublicKeyStatusBody'
+        description: Status of the public key
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PrincipalPublicKey'
+          description: Successful operation
         "400":
           description: The request isn't valid.
         "401":
@@ -2239,4 +2604,4 @@ security:
 servers:
 - url: /
 
-# Retrieved from scp-openapi commit 6b2702598460f7909f10e1b235f9ff8d5e94c448 path: identity/v2beta1/openapi.yaml
+# Retrieved from scp-openapi commit 1899bf005088f76091287fccf1b37a5268609818 path: identity/v2beta1/openapi.yaml

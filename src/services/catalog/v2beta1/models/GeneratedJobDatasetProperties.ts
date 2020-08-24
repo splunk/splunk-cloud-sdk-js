@@ -78,6 +78,13 @@ export interface JobDatasetProperties {
     dispatchTime?: string;
 
     /**
+     * Specifies whether a search is allowed to collect preview results during the runtime, internal search service use only.
+     * @type {boolean}
+     * @memberof JobDatasetProperties
+     */
+    enablePreview?: boolean;
+
+    /**
      * The runtime of the search in seconds.
      * @type {number}
      * @memberof JobDatasetProperties

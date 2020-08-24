@@ -25,21 +25,13 @@
  */
 
 import {
-    ECJwk,
+    PrincipalPublicKey,
 } from './';
 
 /**
- *
+ * 
  * @export
- * @interface ECJwks
+ * @interface PrincipalPublicKeys
  */
-export interface ECJwks {
-    /**
-     * 
-     * @type {Array<ECJwk>}
-     * @memberof ECJwks
-     */
-    keys?: Array<ECJwk>;
-
-}
+export type PrincipalPublicKeys = Array<PrincipalPublicKey>;
 

@@ -27,7 +27,6 @@
 import {
     ImportDataset,
     IndexDataset,
-    JobDataset,
     KVCollectionDataset,
     LookupDataset,
     MetricDataset,
@@ -36,7 +35,7 @@ import {
 
 /**
  * @type Dataset
- * A complete dataset as rendered in POST, PATCH, and GET responses.
+ * A complete dataset as rendered in POST, PATCH responses.
  * @export
  */
-export type Dataset = ImportDataset | IndexDataset | JobDataset | KVCollectionDataset | LookupDataset | MetricDataset | ViewDataset;
+export type Dataset = ImportDataset | IndexDataset | KVCollectionDataset | LookupDataset | MetricDataset | ViewDataset;

@@ -24,10 +24,6 @@
  * Do not edit the class manually.
  */
 
-import {
-    ObjectNode,
-} from './';
-
 /**
  *
  * @export
@@ -50,10 +46,10 @@ export interface ConnectionVersionResponse {
 
     /**
      * 
-     * @type {ObjectNode}
+     * @type {{ [key: string]: any; }}
      * @memberof ConnectionVersionResponse
      */
-    data?: ObjectNode;
+    data?: { [key: string]: any; };
 
     /**
      * 

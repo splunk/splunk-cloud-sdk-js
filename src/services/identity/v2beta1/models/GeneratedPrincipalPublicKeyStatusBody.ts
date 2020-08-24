@@ -25,20 +25,25 @@
  */
 
 /**
- * 
+ *
+ * @export
+ * @interface PrincipalPublicKeyStatusBody
+ */
+export interface PrincipalPublicKeyStatusBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof PrincipalPublicKeyStatusBody
+     */
+    status: PrincipalPublicKeyStatusBodyStatusEnum;
+
+}
+
+/**
  * @export
  */
-export enum PrincipalKind {
-    User = 'user',
-    ServiceAccount = 'service_account',
-    Service = 'service'
-}
-
-export function PrincipalKindFromJSON(json: any): PrincipalKind {
-    return json as PrincipalKind;
-}
-
-export function PrincipalKindToJSON(value?: PrincipalKind): any {
-    return value as any;
+export enum PrincipalPublicKeyStatusBodyStatusEnum {
+    Active = 'active',
+    Inactive = 'inactive'
 }
 

@@ -24,10 +24,6 @@
  * Do not edit the class manually.
  */
 
-import {
-    ObjectNode,
-} from './';
-
 /**
  *
  * @export
@@ -36,10 +32,10 @@ import {
 export interface ConnectorResponse {
     /**
      * 
-     * @type {ObjectNode}
+     * @type {{ [key: string]: any; }}
      * @memberof ConnectorResponse
      */
-    config?: ObjectNode;
+    config?: { [key: string]: any; };
 
     /**
      * 

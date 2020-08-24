@@ -100,6 +100,14 @@ components:
           format: int64
           type: integer
       type: object
+    CollectJobStartStopResponse:
+      description: ""
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+      type: object
     ConnectionPatchRequest:
       description: ""
       properties:
@@ -537,19 +545,36 @@ components:
       description: ""
       properties:
         arguments:
+          description: Function arguments keyed by argument name.
+          example: ""
           properties: {}
           type: object
         attributes:
+          description: For internal use only. This field is ignored.
+          example: ""
           properties: {}
           type: object
         id:
+          description: A unique identifier for the function.
+          example: ""
           type: string
         op:
+          description: The operation name.
+          example: ""
           type: string
         resolvedId:
+          description: The identifier describing the operation name and required argument
+            types. This field is ignored.
+          example: ""
           type: string
         statementName:
+          description: If present, creates a named statement when decompiling to SPL2.
+            For example, "$events = | from splunk_firehose();".
+          example: ""
           type: string
+      required:
+      - id
+      - op
       type: object
     PipelinePatchRequest:
       description: ""
@@ -1250,6 +1275,160 @@ paths:
       tags:
       - collectJobs
       x-authz-scope: streams.collectjobs.read
+      x-internal: "true"
+  /{tenantId}/streams/v3beta1/collect-jobs/{id}/start:
+    post:
+      deprecated: false
+      operationId: startCollectJob
+      parameters:
+      - description: Tenant ID
+        in: path
+        name: tenantId
+        required: true
+        schema:
+          type: string
+      - description: Collect Job ID
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectJobStartStopResponse'
+          description: The collect job was started successfully.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The request isn't well-formed or is incorrect.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The user isn?t authenticated.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The operation isn?t authorized.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The resource wasn?t found.
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: There is a conflict with the existing state of your pipeline.
+        "415":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The media type isn't supported.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The provided fields aren't valid
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: An internal service error has occurred.
+      summary: Start a collect job.
+      tags:
+      - collectJobs
+      x-authz-scope: streams.collectjobs.start
+      x-internal: "true"
+  /{tenantId}/streams/v3beta1/collect-jobs/{id}/stop:
+    post:
+      deprecated: false
+      operationId: stopCollectJob
+      parameters:
+      - description: Tenant ID
+        in: path
+        name: tenantId
+        required: true
+        schema:
+          type: string
+      - description: Collect Job ID
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectJobStartStopResponse'
+          description: The collect job was stopped successfully.
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The request isn't well-formed or is incorrect.
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The user isn?t authenticated.
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The operation isn?t authorized.
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The resource wasn?t found.
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: There is a conflict with the existing state of your pipeline.
+        "415":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The media type isn't supported.
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: The provided fields aren't valid
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: An internal service error has occurred.
+      summary: Stop a collect job.
+      tags:
+      - collectJobs
+      x-authz-scope: streams.collectjobs.stop
       x-internal: "true"
   /{tenantId}/streams/v3beta1/connections:
     get:
@@ -4796,6 +4975,7 @@ paths:
     post:
       deprecated: false
       operationId: uploadPlugin
+      x-hidden: true
       parameters:
       - description: Plugin ID
         in: path
@@ -4892,4 +5072,4 @@ tags:
 - description: V3Beta1 Preview API Endpoints
   name: preview
 
-# Retrieved from scp-openapi commit 6b2702598460f7909f10e1b235f9ff8d5e94c448 path: streams/v3beta1/openapi.yaml
+# Retrieved from scp-openapi commit 1899bf005088f76091287fccf1b37a5268609818 path: streams/v3beta1/openapi.yaml

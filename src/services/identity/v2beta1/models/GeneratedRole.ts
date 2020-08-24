@@ -58,5 +58,12 @@ export interface Role {
      */
     tenant: string;
 
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Role
+     */
+    permissions?: Array<string>;
+
 }
 
