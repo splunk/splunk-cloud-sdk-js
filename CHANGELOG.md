@@ -13,9 +13,25 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Features
 
-* update with code-generated api bindings and models performed 2020-07-22 ([488b84b](https://github.com/splunk/splunk-cloud-sdk-js/commits/488b84b))
 * update with code-generated api bindings and models performed 2020-08-19 ([7fc330b](https://github.com/splunk/splunk-cloud-sdk-js/commits/7fc330b))
 
+### Breaking Changes
+`Catalog service v2beta1`: getDataset,  getDatasetById and listDatasets endpoints now return data type of DatasetGet instead of Dataset
+
+`Identify service v2beta1`: remove endpoint of setPrincipalPublicKeys
+
+`Kvstore service v1beta1`:  insertRecords endpoint has a new parameter of allowUpdates
+
+`Stream service v3beta1`: remove endpoint of uploadPlugin
+
+
+### Non-Breaking Changes
+
+`Identify service v2beta1`: 
+- new endpoints added addPrincipalPublicKey, getPrincipalPublicKey, getPrincipalPublicKeys, deletePrincipalPublicKey, and updatePrincipalPublicKey 
+
+`Stream service v3beta1`: 
+- new endpoints added: startCollectJob and stopCollectJob
 
 
 <a name="11.0.1"></a>
