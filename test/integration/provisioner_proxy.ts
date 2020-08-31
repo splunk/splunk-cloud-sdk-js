@@ -24,7 +24,7 @@ import config from '../config';
 
 let testInviteID: string = '';
 const tenantID = 'system';
-const provTestTenantID = 'testprovisionersdks'; //  long-lived  and white-listed tenant
+const provTestTenantID = 'testprovisionersdks'; //  long-lived and allowlisted tenant
 
 const splunk = new SplunkCloud({
     urls: {
