@@ -43,11 +43,13 @@ import {
     GetOutputSchemaRequest,
     LookupTableResponse,
     MetricsResponse,
+    PaginatedResponseOfCollectJobResponse,
     PaginatedResponseOfConnectionResponse,
     PaginatedResponseOfConnectorResponse,
     PaginatedResponseOfPipelineJobStatus,
     PaginatedResponseOfPipelineResponse,
     PaginatedResponseOfPlugin,
+    PaginatedResponseOfRulesResponse,
     PaginatedResponseOfTemplateResponse,
     Pipeline,
     PipelinePatchRequest,
@@ -64,6 +66,8 @@ import {
     ReactivatePipelineRequest,
     RegistryModel,
     Response,
+    RulesRequest,
+    RulesResponse,
     SplCompileRequest,
     TemplatePatchRequest,
     TemplatePutRequest,
@@ -157,6 +161,18 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = `/streams/v3beta1/pipelines`;
         return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pipelineRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PipelineResponse);
+    }
+    /**
+     * Creates a new RulesPackage
+     * @param rulesRequest Request JSON
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return RulesResponse
+     */
+    public createRulesPackage = (rulesRequest: RulesRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<RulesResponse> => {
+        const path = `/streams/v3beta1/rules`;
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), rulesRequest, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as RulesResponse);
     }
     /**
      * Creates a template for a tenant.
@@ -488,6 +504,21 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as RegistryModel);
     }
     /**
+     * Returns the rules package with specific id
+     * @param externalId RulesPackage ID
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return RulesResponse
+     */
+    public getRulesPackage = (externalId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<RulesResponse> => {
+        const path_params = {
+            externalId: externalId
+        };
+        const path = this.template`/streams/v3beta1/rules/${'externalId'}`(path_params);
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as RulesResponse);
+    }
+    /**
      * Returns an individual template by version.
      * @param templateId Template ID
      * @param args parameters to be sent with the request
@@ -502,6 +533,17 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = this.template`/streams/v3beta1/templates/${'templateId'}`(path_params);
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as TemplateResponse);
+    }
+    /**
+     * Get all collect jobs.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return PaginatedResponseOfCollectJobResponse
+     */
+    public listCollectJobs = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfCollectJobResponse> => {
+        const path = `/streams/v3beta1/collect-jobs`;
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as PaginatedResponseOfCollectJobResponse);
     }
     /**
      * Returns a list of connections (latest versions only) by tenant ID.
@@ -552,6 +594,19 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = `/streams/v3beta1/pipelines`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PaginatedResponseOfPipelineResponse);
+    }
+    /**
+     * Returns all rules packages.
+     * @param args parameters to be sent with the request
+     * @param args.sortDir sortDir
+     * @param args.sortField sortField
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return PaginatedResponseOfRulesResponse
+     */
+    public listRulesPackages = (args?: { sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfRulesResponse> => {
+        const path = `/streams/v3beta1/rules`;
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as PaginatedResponseOfRulesResponse);
     }
     /**
      * Returns a list of all templates.

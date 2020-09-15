@@ -17,4 +17,3 @@ export * from './GeneratedServiceAppPOST';
 export * from './GeneratedSubscription';
 export * from './GeneratedUpdateAppRequest';
 export * from './GeneratedWebApp';
-export * from './GeneratedWebAppPOST';

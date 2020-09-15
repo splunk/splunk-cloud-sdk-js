@@ -99,6 +99,13 @@ export interface JobDatasetProperties {
     extractAllFields?: boolean;
 
     /**
+     * The fields to extract. Valid values are all, none, or indexed.
+     * @type {string}
+     * @memberof JobDatasetProperties
+     */
+    extractFields?: string;
+
+    /**
      * Did the SPL query cause any side effects on a dataset?
      * @type {boolean}
      * @memberof JobDatasetProperties

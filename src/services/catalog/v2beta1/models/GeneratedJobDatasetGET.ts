@@ -149,6 +149,13 @@ export interface JobDatasetGET {
     extractAllFields?: boolean;
 
     /**
+     * The fields to extract. Valid values are all, none, or indexed.
+     * @type {string}
+     * @memberof JobDatasetGET
+     */
+    extractFields?: string;
+
+    /**
      * The fields to be associated with this dataset.
      * @type {Array<FieldPOST>}
      * @memberof JobDatasetGET

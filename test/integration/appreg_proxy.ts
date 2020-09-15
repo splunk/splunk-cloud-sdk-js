@@ -49,7 +49,7 @@ describe('integration tests for app registry Endpoints', () => {
     describe('CRUD app', () => {
         const createApp = {
             name: appName(),
-            kind: appRegistry.AppResourceKind.Web,
+            kind: appRegistry.AppResourceKind.Service,
             title: appTitle(),
             redirectUrls: [
                 'https://localhost'
@@ -120,7 +120,7 @@ describe('integration tests for app registry Endpoints', () => {
     describe('app secret', () => {
         const createApp = {
             name: appName(),
-            kind: appRegistry.AppResourceKind.Web,
+            kind: appRegistry.AppResourceKind.Native,
             title: `${appTitle()}z`,
             redirectUrls: [
                 'https://localhost'
@@ -136,7 +136,7 @@ describe('integration tests for app registry Endpoints', () => {
                     assert.equal(createApp.name, app.name);
                     assert.equal(createApp.title, app.title);
                     assert.sameMembers(createApp.redirectUrls as string[], app.redirectUrls as string[]);
-                    const newApp = app as appRegistry.WebApp;
+                    const newApp = app as appRegistry.ServiceApp;
                     oldSecret = newApp.clientSecret as string;
                 });
         });
@@ -144,7 +144,7 @@ describe('integration tests for app registry Endpoints', () => {
             assert.notEqual(oldSecret, '');
             return splunk.appreg.rotateSecret(createApp.name)
                 .then((app) => {
-                    const newApp = app as appRegistry.WebApp;
+                    const newApp = app as appRegistry.ServiceApp;
                     const newSecret = newApp.clientSecret as string;
                     assert.notEqual(newSecret, oldSecret);
                 });

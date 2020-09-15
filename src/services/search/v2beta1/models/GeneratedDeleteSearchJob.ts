@@ -107,11 +107,18 @@ export interface DeleteSearchJob {
     readonly enablePreview?: boolean;
 
     /**
-     * Specifies whether the Search service should extract all of the available fields in the data, including fields not mentioned in the SPL for the search job. Set to 'false' for better search peformance. 
+     * Specifies whether the Search service should extract all of the available fields in the data, including fields not mentioned in the SPL for the search job. Set to 'false' for better search performance. The 'extractAllFields' parameter is deprecated as of version v3alpha1. Although this parameter continues to function, it might be removed in a future version. Use the 'extractFields' parameter instead. 
      * @type {boolean}
      * @memberof DeleteSearchJob
      */
     extractAllFields?: boolean;
+
+    /**
+     * Specifies how the Search service should extract fields. Valid values include 'all', 'none', or 'indexed'. 'all' will extract all fields, 'indexed' will extract only indexed fields, and 'none' will extract only the default fields. This parameter overwrites the value of the 'extractAllFields' parameter. Set to 'none' for better search performance. 
+     * @type {string}
+     * @memberof DeleteSearchJob
+     */
+    extractFields?: string;
 
     /**
      * The amount of time, in seconds, to run the delete search job before finalizing the search. The maximum value is 3600 seconds (1 hour). 
