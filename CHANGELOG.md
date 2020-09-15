@@ -9,16 +9,24 @@ All notable changes to this project will be documented in this file. See [standa
 ### Bug Fixes
 
 * whitelist to allowlist ([dde9eb0](https://github.com/splunk/splunk-cloud-sdk-js/commits/dde9eb0))
-* fix requestStatusCallback to be not be async ([e87ba5d](https://github.com/splunk/splunk-cloud-sdk-js/commits/e87ba5d))
 
+### Breaking Changes
+- App Registry
+	- `WebAppPOST`  has been removed
 
-### Features
+### Non-Breaking Changes
 
-* update with code-generated api bindings and models performed 2020-07-22 ([488b84b](https://github.com/splunk/splunk-cloud-sdk-js/commits/488b84b))
-* update with code-generated api bindings and models performed 2020-08-19 ([7fc330b](https://github.com/splunk/splunk-cloud-sdk-js/commits/7fc330b))
-* update with code-generated api bindings and models performed 2020-09-11 ([7a31147](https://github.com/splunk/splunk-cloud-sdk-js/commits/7a31147))
-
-
+- Catalog
+	- `extract_fields` has been added
+- Search
+    - `extract_fields` has been added
+- Streams
+    - `PaginatedResponseOfCollectJobResponse` has been added
+    - `RulesResponse` has been added
+    - `RulesSourcetypesResponse` has been added
+    - `RulesActionsResponse` has been added
+    - `PaginatedResponseOfRulesResponse` has been added
+    - `RulesRequest` has been added
 
 <a name="12.0.0"></a>
 # [12.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v11.0.1...v12.0.0) (2020-08-25)
