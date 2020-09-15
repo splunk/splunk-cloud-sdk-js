@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="13.0.0"></a>
+# [13.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v11.0.1...v13.0.0) (2020-09-15)
+
+
+### Bug Fixes
+
+* whitelist to allowlist ([dde9eb0](https://github.com/splunk/splunk-cloud-sdk-js/commits/dde9eb0))
+* fix requestStatusCallback to be not be async ([e87ba5d](https://github.com/splunk/splunk-cloud-sdk-js/commits/e87ba5d))
+
+
+### Features
+
+* update with code-generated api bindings and models performed 2020-07-22 ([488b84b](https://github.com/splunk/splunk-cloud-sdk-js/commits/488b84b))
+* update with code-generated api bindings and models performed 2020-08-19 ([7fc330b](https://github.com/splunk/splunk-cloud-sdk-js/commits/7fc330b))
+* update with code-generated api bindings and models performed 2020-09-11 ([7a31147](https://github.com/splunk/splunk-cloud-sdk-js/commits/7a31147))
+
+
+
 <a name="12.0.0"></a>
 # [12.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v11.0.1...v12.0.0) (2020-08-25)
 
