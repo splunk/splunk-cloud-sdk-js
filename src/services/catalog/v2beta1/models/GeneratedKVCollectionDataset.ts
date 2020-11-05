@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *
- * Metadata Catalog
+ * Metadata Catalog service
  * With the Metadata Catalog in Splunk Cloud Services you can create and manage knowledge objects such as datasets, fields, rules, actions, dashboards, and workflows.
  *
  * OpenAPI spec version: v2beta1.4 (recommended default)

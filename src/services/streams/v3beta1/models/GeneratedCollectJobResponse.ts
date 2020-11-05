@@ -24,6 +24,10 @@
  * Do not edit the class manually.
  */
 
+import {
+    CollectJobSchedule,
+} from './';
+
 /**
  *
  * @export
@@ -109,6 +113,13 @@ export interface CollectJobResponse {
 
     /**
      * 
+     * @type {CollectJobSchedule}
+     * @memberof CollectJobResponse
+     */
+    schedule?: CollectJobSchedule;
+
+    /**
+     * 
      * @type {string}
      * @memberof CollectJobResponse
      */
@@ -120,6 +131,13 @@ export interface CollectJobResponse {
      * @memberof CollectJobResponse
      */
     version?: number;
+
+    /**
+     * 
+     * @type {number}
+     * @memberof CollectJobResponse
+     */
+    workers?: number;
 
 }
 

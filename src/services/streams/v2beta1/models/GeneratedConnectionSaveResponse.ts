@@ -74,6 +74,13 @@ export interface ConnectionSaveResponse {
 
     /**
      * 
+     * @type {Array<string>}
+     * @memberof ConnectionSaveResponse
+     */
+    messages?: Array<string>;
+
+    /**
+     * 
      * @type {string}
      * @memberof ConnectionSaveResponse
      */

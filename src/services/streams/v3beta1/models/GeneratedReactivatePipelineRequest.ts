@@ -31,6 +31,13 @@
  */
 export interface ReactivatePipelineRequest {
     /**
+     * Set to true to activate the latest version of the pipeline. Set to false to use the previously activated version of the pipeline. Defaults to true.
+     * @type {boolean}
+     * @memberof ReactivatePipelineRequest
+     */
+    activateLatestVersion?: boolean;
+
+    /**
      * Set to true to allow the pipeline to ignore any unused progress states. In some cases, when a data pipeline is changed, the progress state will be stored for functions that no longer exist, so this must be set to reactivate a pipeline in this state. Defaults to false.
      * @type {boolean}
      * @memberof ReactivatePipelineRequest

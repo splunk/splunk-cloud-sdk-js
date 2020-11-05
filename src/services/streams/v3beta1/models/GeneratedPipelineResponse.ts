@@ -60,6 +60,13 @@ export interface PipelineResponse {
      * @type {number}
      * @memberof PipelineResponse
      */
+    complexity?: number;
+
+    /**
+     * 
+     * @type {number}
+     * @memberof PipelineResponse
+     */
     createDate?: number;
 
     /**

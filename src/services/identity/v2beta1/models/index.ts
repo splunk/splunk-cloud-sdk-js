@@ -1,5 +1,6 @@
 export * from './GeneratedAddGroupMemberBody';
 export * from './GeneratedAddGroupRoleBody';
+export * from './GeneratedAddInvisibleMemberBody';
 export * from './GeneratedAddMemberBody';
 export * from './GeneratedCreateGroupBody';
 export * from './GeneratedCreateRoleBody';

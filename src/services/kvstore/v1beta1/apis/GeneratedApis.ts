@@ -252,6 +252,20 @@ export class GeneratedKVStoreService extends BaseApiService {
         return this.client.get(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<{ [key: string]: any; }>);
     }
+    /**
+     * Deletes all the records in a collection.
+     * @param collection The name of the collection.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public truncateRecords = (collection: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path_params = {
+            collection: collection
+        };
+        const path = this.template`/kvstore/v1beta1/collections/${'collection'}/truncate`(path_params);
+        return this.client.delete(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
 }
 export type KVStoreService = GeneratedKVStoreService & KVStoreServiceExtensions;
 export const KVStoreService = KVStoreServiceExtensions(GeneratedKVStoreService);

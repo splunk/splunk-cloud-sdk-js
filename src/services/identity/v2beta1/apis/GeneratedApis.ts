@@ -28,6 +28,7 @@
 import {
     AddGroupMemberBody,
     AddGroupRoleBody,
+    AddInvisibleMemberBody,
     AddMemberBody,
     CreateGroupBody,
     CreateRoleBody,
@@ -56,7 +57,15 @@ export const IDENTITY_SERVICE_CLUSTER: string = 'api';
  export enum AccessEnum {
      Write = 'write'
  }
-/**
+
+// VersionEnum (manual fix, need to be fixed in codegen)
+export enum VersionEnum {
+    V2beta1 = "v2beta1",
+    V2alpha1 = "v2alpha1",
+    V3alpha1 = "v3alpha1"
+}
+
+    /**
  * Identity
  * Version: v2beta1.20
  * With the Identity service in Splunk Cloud Services, you can authenticate and authorize Splunk Cloud Services users.
@@ -100,6 +109,22 @@ export class GeneratedIdentityService extends BaseApiService {
         const path = this.template`/identity/v2beta1/groups/${'group'}/roles`(path_params);
         return this.client.post(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), addGroupRoleBody, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as GroupRole);
+    }
+    /**
+     * Adds an invisible member in a given tenant.
+     * @param version The service API version.
+     * @param addInvisibleMemberBody The invisible member to add to the tenant.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Member
+     */
+    public addInvisibleMember = (version: VersionEnum, addInvisibleMemberBody: AddInvisibleMemberBody, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Member> => {
+        const path_params = {
+            version: version
+        };
+        const path = this.template`/identity/${'version'}/admin/escalate`(path_params);
+        return this.client.post(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), addInvisibleMemberBody, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Member);
     }
     /**
      * Adds a member to a given tenant.
@@ -274,6 +299,23 @@ export class GeneratedIdentityService extends BaseApiService {
             member: member
         };
         const path = this.template`/identity/v2beta1/members/${'member'}`(path_params);
+        return this.client.get(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Member);
+    }
+    /**
+     * Gets a member in a tenant.
+     * @param version The service API version.
+     * @param member The member name.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Member
+     */
+    public getMemberAdmin = (version: VersionEnum, member: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Member> => {
+        const path_params = {
+            version: version,
+            member: member
+        };
+        const path = this.template`/identity/${'version'}/admin/members/${'member'}`(path_params);
         return this.client.get(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Member);
     }
@@ -550,6 +592,22 @@ export class GeneratedIdentityService extends BaseApiService {
             member: member
         };
         const path = this.template`/identity/v2beta1/members/${'member'}`(path_params);
+        return this.client.delete(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
+    /**
+     * Remove a member in a tenant.
+     * @param version The service API version.
+     * @param member The member name.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public removeMemberAdmin = (version: VersionEnum, member: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path_params = {
+            version: version,
+            member: member
+        };
+        const path = this.template`/identity/${'version'}/admin/members/${'member'}`(path_params);
         return this.client.delete(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }

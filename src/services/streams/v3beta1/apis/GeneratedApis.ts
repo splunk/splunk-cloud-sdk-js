@@ -27,6 +27,7 @@
 
 import {
     ActivatePipelineRequest,
+    CollectJobPatchRequest,
     CollectJobRequest,
     CollectJobResponse,
     CollectJobStartStopResponse,
@@ -34,9 +35,14 @@ import {
     ConnectionPutRequest,
     ConnectionRequest,
     ConnectionSaveResponse,
+    DataStream,
+    DataStreamRequest,
+    DataStreamResponse,
     DeactivatePipelineRequest,
     DecompileRequest,
     DecompileResponse,
+    EntitlementRequest,
+    EntitlementResponse,
     ErrorResponse,
     FilesMetaDataResponse,
     GetInputSchemaRequest,
@@ -49,6 +55,7 @@ import {
     PaginatedResponseOfPipelineJobStatus,
     PaginatedResponseOfPipelineResponse,
     PaginatedResponseOfPlugin,
+    PaginatedResponseOfRulesKind,
     PaginatedResponseOfRulesResponse,
     PaginatedResponseOfTemplateResponse,
     Pipeline,
@@ -59,6 +66,7 @@ import {
     Plugin,
     PluginPatchRequest,
     PluginRequest,
+    PluginResponse,
     PreviewData,
     PreviewSessionStartRequest,
     PreviewStartResponse,
@@ -151,6 +159,18 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as ConnectionSaveResponse);
     }
     /**
+     * Creates a data stream for a tenant.
+     * @param dataStreamRequest Request JSON
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return DataStreamResponse
+     */
+    public createDataStream = (dataStreamRequest: DataStreamRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DataStreamResponse> => {
+        const path = `/streams/v3beta1/datastreams`;
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dataStreamRequest, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as DataStreamResponse);
+    }
+    /**
      * Creates a pipeline.
      * @param pipelineRequest Request JSON
      * @param args parameters to be sent with the request
@@ -215,12 +235,22 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as DecompileResponse);
     }
     /**
+     * Delete all collect jobs.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public deleteCollectJob = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path = `/streams/v3beta1/collect-jobs`;
+        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
+    /**
      * Delete a collect job.
      * @param id Collect Job ID
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteCollectJob = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+    public deleteCollectJob0 = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             id: id
         };
@@ -240,6 +270,35 @@ export class GeneratedStreamsService extends BaseApiService {
         };
         const path = this.template`/streams/v3beta1/connections/${'connectionId'}`(path_params);
         return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
+    /**
+     * Deletes a data stream for a tenant.
+     * @param id ID
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public deleteDataStream = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path_params = {
+            id: id
+        };
+        const path = this.template`/streams/v3beta1/datastreams/${'id'}`(path_params);
+        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
+    /**
+     * Delete known entitlements
+     * @param appClientId App Client ID
+     * @param requestBody Request JSON
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public deleteEntitlements = (appClientId: string, requestBody: Array<string>, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path_params = {
+            appClientId: appClientId
+        };
+        const path = this.template`/streams/v3beta1/commerce/subscribed-apps/${'appClientId'}/entitlements`(path_params);
+        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), requestBody, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
@@ -286,6 +345,20 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as string);
     }
     /**
+     * Delete a rules package with a specific id
+     * @param externalId Rules Package ID
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public deleteRulesPackage = (externalId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path_params = {
+            externalId: externalId
+        };
+        const path = this.template`/streams/v3beta1/rules/${'externalId'}`(path_params);
+        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
+    /**
      * Removes a template with a specific ID.
      * @param templateId Template ID
      * @param args parameters to be sent with the request
@@ -298,6 +371,21 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = this.template`/streams/v3beta1/templates/${'templateId'}`(path_params);
         return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
+    }
+    /**
+     * Describes a data stream for a tenant.
+     * @param id ID
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return DataStreamResponse
+     */
+    public describeDataStream = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DataStreamResponse> => {
+        const path_params = {
+            id: id
+        };
+        const path = this.template`/streams/v3beta1/datastreams/${'id'}`(path_params);
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as DataStreamResponse);
     }
     /**
      * Get a collect job.
@@ -314,6 +402,21 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = this.template`/streams/v3beta1/collect-jobs/${'id'}`(path_params);
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as CollectJobResponse);
+    }
+    /**
+     * Get known entitlements
+     * @param appClientId App Client ID
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Array<EntitlementResponse>
+     */
+    public getEntitlements = (appClientId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<EntitlementResponse>> => {
+        const path_params = {
+            appClientId: appClientId
+        };
+        const path = this.template`/streams/v3beta1/commerce/subscribed-apps/${'appClientId'}/entitlements`(path_params);
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Array<EntitlementResponse>);
     }
     /**
      * Get file metadata.
@@ -510,7 +613,7 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return RulesResponse
      */
-    public getRulesPackage = (externalId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<RulesResponse> => {
+    public getRulesPackageById = (externalId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<RulesResponse> => {
         const path_params = {
             externalId: externalId
         };
@@ -577,6 +680,21 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as PaginatedResponseOfConnectorResponse);
     }
     /**
+     * Returns a list of datastreams for a tenant.
+     * @param args parameters to be sent with the request
+     * @param args.offset offset
+     * @param args.pageSize pageSize
+     * @param args.sortDir sortDir
+     * @param args.sortField sortField
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Array<DataStreamResponse>
+     */
+    public listDataStreams = (args?: { offset?: number, pageSize?: number, sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<DataStreamResponse>> => {
+        const path = `/streams/v3beta1/datastreams`;
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Array<DataStreamResponse>);
+    }
+    /**
      * Returns all pipelines.
      * @param args parameters to be sent with the request
      * @param args.activated activated
@@ -594,6 +712,17 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = `/streams/v3beta1/pipelines`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PaginatedResponseOfPipelineResponse);
+    }
+    /**
+     * Returns all rules kinds.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return PaginatedResponseOfRulesKind
+     */
+    public listRulesKinds = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfRulesKind> => {
+        const path = `/streams/v3beta1/rules/kinds`;
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as PaginatedResponseOfRulesKind);
     }
     /**
      * Returns all rules packages.
@@ -722,6 +851,33 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as Plugin);
     }
     /**
+     * Provides commit sha for release
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return { [key: string]: string; }
+     */
+    public releaseInfo = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<{ [key: string]: string; }> => {
+        const path = `/streams/v3beta1/releaseInfo`;
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as { [key: string]: string; });
+    }
+    /**
+     * Create or update entitlements
+     * @param appClientId App Client ID
+     * @param entitlementRequest Request JSON
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Array<EntitlementResponse>
+     */
+    public setEntitlements = (appClientId: string, entitlementRequest: Array<EntitlementRequest>, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<EntitlementResponse>> => {
+        const path_params = {
+            appClientId: appClientId
+        };
+        const path = this.template`/streams/v3beta1/commerce/subscribed-apps/${'appClientId'}/entitlements`(path_params);
+        return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), entitlementRequest, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Array<EntitlementResponse>);
+    }
+    /**
      * Start a collect job.
      * @param id Collect Job ID
      * @param args parameters to be sent with the request
@@ -778,6 +934,22 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
+     * Patches an existing collect job.
+     * @param id Collect Job ID
+     * @param collectJobPatchRequest Request JSON
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return CollectJobResponse
+     */
+    public updateCollectJob = (id: string, collectJobPatchRequest: CollectJobPatchRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<CollectJobResponse> => {
+        const path_params = {
+            id: id
+        };
+        const path = this.template`/streams/v3beta1/collect-jobs/${'id'}`(path_params);
+        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), collectJobPatchRequest, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as CollectJobResponse);
+    }
+    /**
      * Patches an existing DSP connection.
      * @param connectionId Connection ID
      * @param connectionPatchRequest Request JSON
@@ -792,6 +964,22 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = this.template`/streams/v3beta1/connections/${'connectionId'}`(path_params);
         return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), connectionPatchRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as ConnectionSaveResponse);
+    }
+    /**
+     * Patches an existing data stream for a tenant.
+     * @param id ID
+     * @param dataStreamRequest Request JSON
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return DataStream
+     */
+    public updateDataStream = (id: string, dataStreamRequest: DataStreamRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DataStream> => {
+        const path_params = {
+            id: id
+        };
+        const path = this.template`/streams/v3beta1/datastreams/${'id'}`(path_params);
+        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dataStreamRequest, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as DataStream);
     }
     /**
      * Updates an existing pipeline.
@@ -827,6 +1015,22 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = this.template`/system/streams/v3beta1/plugins/${'pluginId'}`(path_params);
         return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pluginRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Plugin);
+    }
+    /**
+     * Updates the rules package with specific id
+     * @param externalId RulesPackage ID
+     * @param rulesRequest Request JSON
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return RulesResponse
+     */
+    public updateRulesPackageById = (externalId: string, rulesRequest: RulesRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<RulesResponse> => {
+        const path_params = {
+            externalId: externalId
+        };
+        const path = this.template`/streams/v3beta1/rules/${'externalId'}`(path_params);
+        return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), rulesRequest, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as RulesResponse);
     }
     /**
      * Patches an existing template.

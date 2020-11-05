@@ -149,12 +149,11 @@ describe('catalog tests', () => {
                 return createIndexDataset(dsName, importModule).then(ds2 => {
                     assert.isNotNull(ds2);
                     // use non-null assertion operator ! since we already checked ds2 is not null
-                    return splunkCloud.catalog.createDatasetImportById(ds!.id as string, { name: ds.name, module: ds2!.module });
+                    return splunkCloud.catalog.createDatasetImportById(ds!.id as string, { name: ds.name, module: ds2!.module, owner: 'testOwner' });
                 }).then(importDS => {
                     assert.isNotNull(importDS);
-                    assert.equal(importDS.kind, catalog.ImportDatasetKind.Import);
-                    assert.equal(importDS.sourceModule, ds.module);
-                    assert.equal(importDS.sourceName, ds.name);
+                    assert.equal(importDS.module, ds.module);
+                    assert.equal(importDS.name, ds.name);
                 }).then(() => splunkCloud.catalog.deleteDataset(`${importModule}.${dsName}`));
             });
         });
@@ -166,12 +165,11 @@ describe('catalog tests', () => {
                 assert.isNotNull(ds);
                 return createIndexDataset(dsName, importModule).then(ds2 => {
                     assert.isNotNull(ds2);
-                    return splunkCloud.catalog.createDatasetImport(ds!.id as string, { name: ds.name, module: ds2!.module });
+                    return splunkCloud.catalog.createDatasetImport(ds!.id as string, { name: ds.name, module: ds2!.module, owner: 'testOwner' });
                 }).then(importDS => {
                     assert.isNotNull(importDS);
-                    assert.equal(importDS.kind, catalog.ImportDatasetKind.Import);
-                    assert.equal(importDS.sourceModule, ds.module);
-                    assert.equal(importDS.sourceName, ds.name);
+                    assert.equal(importDS.module, ds.module);
+                    assert.equal(importDS.name, ds.name);
                 }).then(() => splunkCloud.catalog.deleteDataset(`${importModule}.${dsName}`));
             });
         });

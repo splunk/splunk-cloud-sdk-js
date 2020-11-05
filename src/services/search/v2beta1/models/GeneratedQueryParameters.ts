@@ -31,28 +31,28 @@
  */
 export interface QueryParameters {
     /**
-     * The earliest time, in absolute or relative format, to retrieve events.  When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
+     * The earliest time, in absolute or relative format, to retrieve events. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
      * @type {string}
      * @memberof QueryParameters
      */
     earliest?: string;
 
     /**
-     * The latest time, in absolute or relative format, to retrieve events.  When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
+     * The latest time, in absolute or relative format, to retrieve events. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
      * @type {string}
      * @memberof QueryParameters
      */
     latest?: string;
 
     /**
-     * Relative values for the 'earliest' and 'latest' parameters snap to the unit that you specify.  For example, if 'earliest' is set to -d@d, the unit is day. If the 'relativeTimeAnchor' is is set to '1994-11-05T13:15:30Z'  then 'resolvedEarliest' is snapped to '1994-11-05T00:00:00Z', which is the day. Hours, minutes, and seconds are dropped.  If no 'relativeTimeAnchor' is specified, the default value is set to the time the search job was created. 
+     * Relative values for the 'earliest' and 'latest' parameters snap to the unit that you specify. For example, if 'earliest' is set to -d@d, the unit is day. If the 'relativeTimeAnchor' is is set to '2020-10-05T13:15:30Z' then 'resolvedEarliest' is snapped to '2020-10-05T00:00:00Z', which is the day. Hours, minutes, and seconds are dropped. If no 'relativeTimeAnchor' is specified, the default value is set to the time the search job was created. 
      * @type {string}
      * @memberof QueryParameters
      */
     relativeTimeAnchor?: string;
 
     /**
-     * The timezone that relative time specifiers are based off of. Timezone only applies to relative time literals  for 'earliest' and 'latest'. If UNIX time or UTC format is used for 'earliest' and 'latest', this field is ignored. For the list of supported timezone formats, see https://docs.splunk.com/Documentation/Splunk/latest/Data/Applytimezoneoffsetstotimestamps#zoneinfo_.28TZ.29_database type: string default: \"GMT\" 
+     * The timezone that relative time specifiers are based off of. Timezone only applies to relative time literals for 'earliest' and 'latest'. If UNIX time or UTC format is used for 'earliest' and 'latest', this field is ignored. For the list of supported timezone formats, see https://docs.splunk.com/Documentation/Splunk/latest/Data/Applytimezoneoffsetstotimestamps#zoneinfo_.28TZ.29_database type: string default: \"GMT\" 
      * @type {any}
      * @memberof QueryParameters
      */

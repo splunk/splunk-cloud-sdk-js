@@ -25,7 +25,7 @@
  */
 
 import {
-    RulesSourcetypesResponse,
+    RulesPackageSourcetypes,
 } from './';
 
 /**
@@ -34,6 +34,34 @@ import {
  * @interface RulesResponse
  */
 export interface RulesResponse {
+    /**
+     * Unique id of the rules package
+     * @type {string}
+     * @memberof RulesResponse
+     */
+    externalId: string;
+
+    /**
+     * The name of the rules
+     * @type {string}
+     * @memberof RulesResponse
+     */
+    name: string;
+
+    /**
+     * The sourcetype that the rules has to be applied
+     * @type {{ [key: string]: RulesPackageSourcetypes; }}
+     * @memberof RulesResponse
+     */
+    sourcetypes: { [key: string]: RulesPackageSourcetypes; };
+
+    /**
+     * The version of the rules
+     * @type {string}
+     * @memberof RulesResponse
+     */
+    version: string;
+
     /**
      * 
      * @type {number}
@@ -50,20 +78,6 @@ export interface RulesResponse {
 
     /**
      * 
-     * @type {string}
-     * @memberof RulesResponse
-     */
-    description?: string;
-
-    /**
-     * 
-     * @type {string}
-     * @memberof RulesResponse
-     */
-    externalId?: string;
-
-    /**
-     * 
      * @type {number}
      * @memberof RulesResponse
      */
@@ -77,18 +91,11 @@ export interface RulesResponse {
     lastUpdateUserId?: string;
 
     /**
-     * 
+     * The description of the rules. Defaults to null.
      * @type {string}
      * @memberof RulesResponse
      */
-    name?: string;
-
-    /**
-     * 
-     * @type {{ [key: string]: RulesSourcetypesResponse; }}
-     * @memberof RulesResponse
-     */
-    sourcetypes?: { [key: string]: RulesSourcetypesResponse; };
+    rulesDescription?: string;
 
     /**
      * 
@@ -96,13 +103,6 @@ export interface RulesResponse {
      * @memberof RulesResponse
      */
     tenantId?: string;
-
-    /**
-     * 
-     * @type {string}
-     * @memberof RulesResponse
-     */
-    version?: string;
 
 }
 

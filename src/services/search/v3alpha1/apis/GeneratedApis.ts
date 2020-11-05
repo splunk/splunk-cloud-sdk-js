@@ -32,6 +32,7 @@ import {
     ListSearchResultsResponse,
     RecurringSearch,
     SearchJob,
+    SearchModule,
     SearchStatus,
     TimeBucketsSummary,
     UpdateJob,
@@ -73,6 +74,21 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as SearchJob);
     }
     /**
+     * Create a multi-statement module with inter-dependencies between statements.
+     * @param searchModule
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return SearchModule
+     */
+    public createMultiSearch = (searchModule?: SearchModule, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<SearchModule> => {
+        if (!searchModule) {
+            throw new SplunkError({ message: `Bad Request: searchModule is empty or undefined` });
+        }
+        const path = `/search/v3alpha1/multisearch`;
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), searchModule, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as SearchModule);
+    }
+    /**
      * Creates a recurring search job.
      * @param recurringSearch
      * @param args parameters to be sent with the request
@@ -86,6 +102,21 @@ export class GeneratedSearchService extends BaseApiService {
         const path = `/search/v3alpha1/recurring-searches`;
         return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), recurringSearch, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as RecurringSearch);
+    }
+    /**
+     * Create a multi-statement module with inter-dependencies between statements.
+     * @param searchModule
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return SearchModule
+     */
+    public createSearchStatements = (searchModule?: SearchModule, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<SearchModule> => {
+        if (!searchModule) {
+            throw new SplunkError({ message: `Bad Request: searchModule is empty or undefined` });
+        }
+        const path = `/search/v3alpha1/dispatch`;
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), searchModule, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as SearchModule);
     }
     /**
      * Creates a search job that deletes events from an index. The events are deleted from the index in the specified module, based on the search criteria as specified by the predicate. 

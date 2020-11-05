@@ -45,7 +45,7 @@ export interface QueryParameters {
     latest?: string;
 
     /**
-     * Relative values for the 'earliest' and 'latest' parameters  snap to the unit that you specify.  For example, if 'earliest' is set to -d@d, the unit is day.  If the 'relativeTimeAnchor' is is set to '1994-11-05T13:15:30Z'  then 'resolvedEarliest' is snapped to '1994-11-05T00:00:00Z',  which is the day. Hours, minutes, and seconds are dropped.  If no 'relativeTimeAnchor' is specified, the default value  is set to the time the search job was created. 
+     * Relative values for the 'earliest' and 'latest' parameters  snap to the unit that you specify.  For example, if 'earliest' is set to -d@d, the unit is day.  If the 'relativeTimeAnchor' is is set to '2020-10-05T13:15:30Z'  then 'resolvedEarliest' is snapped to '2020-10-05T00:00:00Z',  which is the day. Hours, minutes, and seconds are dropped.  If no 'relativeTimeAnchor' is specified, the default value  is set to the time the search job was created. 
      * @type {string}
      * @memberof QueryParameters
      */

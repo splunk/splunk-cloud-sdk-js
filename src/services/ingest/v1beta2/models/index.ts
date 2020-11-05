@@ -1,4 +1,5 @@
 export * from './GeneratedEvent';
+export * from './GeneratedFileUploadDetails';
 export * from './GeneratedHECResponse';
 export * from './GeneratedHECTokenAccessResponse';
 export * from './GeneratedHECTokenCreateRequest';
@@ -10,3 +11,4 @@ export * from './GeneratedMetric';
 export * from './GeneratedMetricAttribute';
 export * from './GeneratedMetricEvent';
 export * from './GeneratedModelError';
+export * from './GeneratedUploadSuccessResponse';

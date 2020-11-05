@@ -24,6 +24,10 @@
  * Do not edit the class manually.
  */
 
+import {
+    RulesPackageSourcetypes,
+} from './';
+
 /**
  *
  * @export
@@ -31,25 +35,11 @@
  */
 export interface RulesRequest {
     /**
-     * The arguments for the rules
-     * @type {{ [key: string]: any; }}
-     * @memberof RulesRequest
-     */
-    arguments: { [key: string]: any; };
-
-    /**
      * Unique id of the rules package
      * @type {string}
      * @memberof RulesRequest
      */
     externalId: string;
-
-    /**
-     * Rules kind
-     * @type {string}
-     * @memberof RulesRequest
-     */
-    kind: string;
 
     /**
      * The name of the rules
@@ -60,17 +50,10 @@ export interface RulesRequest {
 
     /**
      * The sourcetype that the rules has to be applied
-     * @type {string}
+     * @type {{ [key: string]: RulesPackageSourcetypes; }}
      * @memberof RulesRequest
      */
-    sourcetype: string;
-
-    /**
-     * Sourcetype definition
-     * @type {string}
-     * @memberof RulesRequest
-     */
-    sourcetypeDefinition: string;
+    sourcetypes: { [key: string]: RulesPackageSourcetypes; };
 
     /**
      * The version of the rules
@@ -80,25 +63,11 @@ export interface RulesRequest {
     version: string;
 
     /**
-     * 
-     * @type {string}
-     * @memberof RulesRequest
-     */
-    description?: string;
-
-    /**
      * The description of the rules. Defaults to null.
      * @type {string}
      * @memberof RulesRequest
      */
     rulesDescription?: string;
-
-    /**
-     * Sourcetype description
-     * @type {string}
-     * @memberof RulesRequest
-     */
-    sourcetypeDescription?: string;
 
 }
 

@@ -93,7 +93,7 @@ export interface SearchJob {
     enablePreview?: boolean;
 
     /**
-     * Specifies whether the Search service should extract all of the available fields in the data,  including fields not mentioned in the SPL for the search job.  Set to 'false' for better search performance. The 'extractAllFields' parameter is deprecated as of version v3alpha1. Although this parameter continues to function, it might be removed in a future version. Use the 'extractFields' parameter instead. 
+     * Specifies whether the Search service should extract all of the available fields in the data, including fields not mentioned in the SPL for the search job. Set to 'false' for better search performance. The 'extractAllFields' parameter is deprecated as of version v3alpha1. Although this parameter continues to function, it might be removed in a future version. Use the 'extractFields' parameter instead. 
      * @type {boolean}
      * @memberof SearchJob
      */

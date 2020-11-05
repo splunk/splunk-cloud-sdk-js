@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *
- * Metadata Catalog
+ * Metadata Catalog service
  * With the Metadata Catalog in Splunk Cloud Services you can create and manage knowledge objects such as datasets, fields, rules, actions, dashboards, and workflows.
  *
  * OpenAPI spec version: v2beta1.4 (recommended default)
@@ -42,7 +42,6 @@ import {
     Field,
     FieldPATCH,
     FieldPOST,
-    ImportDataset,
     Module,
     Relationship,
     RelationshipPATCH,
@@ -68,7 +67,7 @@ export const CATALOG_SERVICE_PREFIX: string = '/catalog/v2beta1';
 export const CATALOG_SERVICE_CLUSTER: string = 'api';
 
 /**
- * Metadata Catalog
+ * Metadata Catalog service
  * Version: v2beta1.4
  * With the Metadata Catalog in Splunk Cloud Services you can create and manage knowledge objects such as datasets, fields, rules, actions, dashboards, and workflows.
  */
@@ -206,9 +205,9 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetImportedBy
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
-     * @return ImportDataset
+     * @return Dataset
      */
-    public createDatasetImport = (datasetresourcename: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ImportDataset> => {
+    public createDatasetImport = (datasetresourcename: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
         if (!datasetImportedBy) {
             throw new SplunkError({ message: `Bad Request: datasetImportedBy is empty or undefined` });
         }
@@ -217,7 +216,7 @@ export class GeneratedCatalogService extends BaseApiService {
         };
         const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}/imported-by`(path_params);
         return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as ImportDataset);
+            .then(response => response.body as Dataset);
     }
     /**
      * Creates a new dataset import using the ID of the imported dataset.
@@ -225,9 +224,9 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param datasetImportedBy
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
-     * @return ImportDataset
+     * @return DatasetImportedBy
      */
-    public createDatasetImportById = (datasetid: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ImportDataset> => {
+    public createDatasetImportById = (datasetid: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DatasetImportedBy> => {
         if (!datasetImportedBy) {
             throw new SplunkError({ message: `Bad Request: datasetImportedBy is empty or undefined` });
         }
@@ -236,7 +235,7 @@ export class GeneratedCatalogService extends BaseApiService {
         };
         const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}/imported-by`(path_params);
         return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as ImportDataset);
+            .then(response => response.body as DatasetImportedBy);
     }
     /**
      * Creates a new dataset import using the ID of the imported dataset.

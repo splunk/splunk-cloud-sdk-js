@@ -25,7 +25,7 @@
  */
 
 import {
-    ListSearchResultsResponseFields,
+    ListPreviewResultsResponseFields,
     Message,
 } from './';
 
@@ -44,10 +44,10 @@ export interface ListSearchResultsResponse {
 
     /**
      * 
-     * @type {Array<ListSearchResultsResponseFields>}
+     * @type {Array<ListPreviewResultsResponseFields>}
      * @memberof ListSearchResultsResponse
      */
-    fields?: Array<ListSearchResultsResponseFields>;
+    fields?: Array<ListPreviewResultsResponseFields>;
 
     /**
      * 

@@ -24,6 +24,10 @@
  * Do not edit the class manually.
  */
 
+import {
+    CollectJobSchedule,
+} from './';
+
 /**
  *
  * @export
@@ -64,6 +68,20 @@ export interface CollectJobRequest {
      * @memberof CollectJobRequest
      */
     parameters: { [key: string]: any; };
+
+    /**
+     * 
+     * @type {CollectJobSchedule}
+     * @memberof CollectJobRequest
+     */
+    schedule: CollectJobSchedule;
+
+    /**
+     * The number of workers for collecting data.
+     * @type {number}
+     * @memberof CollectJobRequest
+     */
+    workers: number;
 
 }
 

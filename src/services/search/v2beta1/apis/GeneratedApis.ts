@@ -105,9 +105,9 @@ export class GeneratedSearchService extends BaseApiService {
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
-     * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
+     * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
      * @param args.field A field to return for the result set. You can specify multiple fields of comma-separated values if multiple fields are required. 
-     * @param args.latest The latest time filter in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
+     * @param args.latest The latest time filter in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
      * @param args.offset Index of first item to return.
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return ListSearchResultsResponse
@@ -124,8 +124,8 @@ export class GeneratedSearchService extends BaseApiService {
      * Return fields stats summary of the events to-date, for search ID (SID) search.
      * @param sid The search ID.
      * @param args parameters to be sent with the request
-     * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
-     * @param args.latest The latest time filter in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format.  For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
+     * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
+     * @param args.latest The latest time filter in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return FieldsSummary
      */

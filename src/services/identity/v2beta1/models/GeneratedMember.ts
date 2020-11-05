@@ -71,10 +71,24 @@ export interface Member {
 
     /**
      * 
+     * @type {string}
+     * @memberof Member
+     */
+    expiresAt?: string;
+
+    /**
+     * 
      * @type {PrincipalProfile}
      * @memberof Member
      */
     profile?: PrincipalProfile;
+
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Member
+     */
+    visible?: boolean;
 
 }
 
