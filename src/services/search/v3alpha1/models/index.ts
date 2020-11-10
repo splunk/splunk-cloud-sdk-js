@@ -13,7 +13,6 @@ export * from './GeneratedSingleFieldSummary';
 export * from './GeneratedSingleStatementQueryParameters';
 export * from './GeneratedSingleTimeBucket';
 export * from './GeneratedSingleValueMode';
-export * from './GeneratedStatementDispatchStatus';
 export * from './GeneratedTimeBucketsSummary';
 export * from './GeneratedUpdateJob';
 export * from './GeneratedUpdateRecurringSearch';

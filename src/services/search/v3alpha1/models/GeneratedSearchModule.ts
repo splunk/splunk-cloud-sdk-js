@@ -26,7 +26,6 @@
 
 import {
     SingleStatementQueryParameters,
-    StatementDispatchStatus,
 } from './';
 
 /**
@@ -35,13 +34,6 @@ import {
  * @interface SearchModule
  */
 export interface SearchModule {
-    /**
-     * The status of each execute statement in the module. 
-     * @type {{ [key: string]: StatementDispatchStatus; }}
-     * @memberof SearchModule
-     */
-    readonly executionState?: { [key: string]: StatementDispatchStatus; };
-
     /**
      * Multi-statement module with inter-dependencies between statements. Statements are separated by semicolons.
      * @type {string}

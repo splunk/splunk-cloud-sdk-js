@@ -239,7 +239,7 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteCollectJob = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+    public deleteCollectJobs = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path = `/streams/v3beta1/collect-jobs`;
         return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
@@ -250,7 +250,7 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteCollectJob0 = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+    public deleteCollectJob = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             id: id
         };

@@ -63,14 +63,16 @@ export const IDENTITY_SERVICE_CLUSTER: string = 'api';
   */
  export enum AccessEnum {
      Write = 'write'
- }/**
-  * @export
-  */
- export enum KindEnum {
-     User = 'user',
-     ServiceAccount = 'service_account',
-     Service = 'service'
  }
+
+/**
+ * @export
+ */
+export enum KindEnum {
+    User = "user",
+    ServiceAccount = "service_account",
+    Service = "service"
+}
 
 // VersionEnum (manual fix, need to be fixed in codegen)
 export enum VersionEnum {
@@ -640,6 +642,22 @@ export class GeneratedIdentityService extends BaseApiService {
             member: member
         };
         const path = this.template`/identity/v3alpha1/members/${'member'}`(path_params);
+        return this.client.delete(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
+    /**
+     * Remove a member in a tenant.
+     * @param version The service API version.
+     * @param member The member name.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public removeMemberAdmin = (version: VersionEnum, member: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path_params = {
+            version: version,
+            member: member
+        };
+        const path = this.template`/identity/${'version'}/admin/members/${'member'}`(path_params);
         return this.client.delete(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }

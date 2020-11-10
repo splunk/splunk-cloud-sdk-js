@@ -1702,6 +1702,21 @@ paths:
           description: The resource is locked.
       x-authz-scope: identity.admin.members.write
   /{tenant}/identity/{version}/admin/members/{member}:
+    delete:
+      description: Remove a member in a tenant.
+      operationId: removeMemberAdmin
+      responses:
+        "204":
+          description: Member successfully removed.
+        "401":
+          description: The user isn't authenticated.
+        "403":
+          description: The user isn't authorized.
+        "404":
+          description: The resource wasn't found.
+        "423":
+          description: The resource is locked.
+      x-authz-scope: identity.admin.members.write
     get:
       description: Gets a member in a tenant.
       operationId: getMemberAdmin
@@ -2661,4 +2676,4 @@ security:
 servers:
 - url: /
 
-# Retrieved from scp-openapi commit c9817fc99c2926c88e26857c97e218e7f4e6d80e path: identity/v3alpha1/openapi.yaml
+# Retrieved from scp-openapi commit 2a83a71fc5f034d6a6308d40793cf42658bfbf9a path: identity/v3alpha1/openapi.yaml

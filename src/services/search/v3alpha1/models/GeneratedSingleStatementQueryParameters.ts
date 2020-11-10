@@ -95,10 +95,10 @@ export interface SingleStatementQueryParameters {
 
     /**
      * Reuse the results from the previous search ID (sid) for the statement. For customized default queryParameters, the sid is ignored. 
-     * @type {boolean}
+     * @type {string}
      * @memberof SingleStatementQueryParameters
      */
-    sid?: boolean;
+    sid?: string;
 
     /**
      * The timezone that relative time specifiers are based off of. Timezone only applies to relative time literals for 'earliest' and 'latest'. If UNIX time or UTC format is used for 'earliest' and 'latest', this field is ignored. For the list of supported timezone formats, see https://docs.splunk.com/Documentation/Splunk/latest/Data/Applytimezoneoffsetstotimestamps#zoneinfo_.28TZ.29_database type: string default: \"GMT\" 

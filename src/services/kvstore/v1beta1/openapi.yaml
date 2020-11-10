@@ -39,13 +39,14 @@ components:
       schema:
         type: object
       style: form
-    IfMatchHeaderParam:
-      description: Record version identifier.
-      in: header
-      name: If-Match
-      required: false
-      schema:
-        type: string
+    # TODO: in our backlog as "Add support for request header params in code generation"
+    #IfMatchHeaderParam:
+    #  description: Record version identifier.
+    #  in: header
+    #  name: If-Match
+    #  required: false
+    #  schema:
+    #    type: string
     IndexParam:
       description: The name of the index.
       in: path
@@ -769,8 +770,9 @@ paths:
     - $ref: '#/components/parameters/KeyParam'
     put:
       operationId: putRecord
-      parameters:
-      - $ref: '#/components/parameters/IfMatchHeaderParam'
+      # TODO: in our backlog as "Add support for request header params in code generation" 
+      # parameters:
+      #- $ref: '#/components/parameters/IfMatchHeaderParam'
       requestBody:
         $ref: '#/components/requestBodies/insertRecordRecord'
       responses:
@@ -866,4 +868,4 @@ paths:
 servers:
 - url: /
 
-# Retrieved from scp-openapi commit c9817fc99c2926c88e26857c97e218e7f4e6d80e path: kvstore/v1beta1/openapi.yaml
+# Retrieved from scp-openapi commit 2a83a71fc5f034d6a6308d40793cf42658bfbf9a path: kvstore/v1beta1/openapi.yaml

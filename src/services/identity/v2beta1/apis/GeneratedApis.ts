@@ -65,7 +65,7 @@ export enum VersionEnum {
     V3alpha1 = "v3alpha1"
 }
 
-    /**
+/**
  * Identity
  * Version: v2beta1.20
  * With the Identity service in Splunk Cloud Services, you can authenticate and authorize Splunk Cloud Services users.

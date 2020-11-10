@@ -591,13 +591,6 @@ components:
     SearchModule:
       description: A fully-constructed multi-statement Module, including read-only fields.
       properties:
-        executionState:
-          additionalProperties:
-            $ref: '#/components/schemas/StatementDispatchStatus'
-          description: |
-            The status of each execute statement in the module.
-          readOnly: true
-          type: object
         module:
           description: Multi-statement module with inter-dependencies between statements. Statements are separated by semicolons.
           type: string
@@ -719,7 +712,7 @@ components:
           default: ""
           description: |
             Reuse the results from the previous search ID (sid) for the statement. For customized default queryParameters, the sid is ignored.
-          type: boolean
+          type: string
         timezone:
           description: |
             The timezone that relative time specifiers are based off of. Timezone only applies to relative time literals for 'earliest' and 'latest'. If UNIX time or UTC format is used for 'earliest' and 'latest', this field is ignored. For the list of supported timezone formats, see https://docs.splunk.com/Documentation/Splunk/latest/Data/Applytimezoneoffsetstotimestamps#zoneinfo_.28TZ.29_database type: string default: "GMT"
@@ -1379,4 +1372,4 @@ paths:
     - $ref: '#/components/parameters/tenant'
     - $ref: '#/components/parameters/rsid'
 
-# Retrieved from scp-openapi commit c9817fc99c2926c88e26857c97e218e7f4e6d80e path: search/v3alpha1/openapi.yaml
+# Retrieved from scp-openapi commit 2a83a71fc5f034d6a6308d40793cf42658bfbf9a path: search/v3alpha1/openapi.yaml
