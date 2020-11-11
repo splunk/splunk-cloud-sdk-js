@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="14.0.0"></a>
+# [14.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v13.0.0...v14.0.0) (2020-11-11)
+
+
+### Features
+
+* update the commit number to fix sonaqube template access issue ([ac04052](https://github.com/splunk/splunk-cloud-sdk-js/commits/ac04052))
+* update with code-generated api bindings and models performed 2020-11-04 ([d6d37c1](https://github.com/splunk/splunk-cloud-sdk-js/commits/d6d37c1))
+* update with code-generated api bindings and models performed 2020-11-05 ([fc6389b](https://github.com/splunk/splunk-cloud-sdk-js/commits/fc6389b))
+
+
+
 <a name="13.0.0"></a>
 # [13.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v11.0.1...v13.0.0) (2020-09-15)
 
