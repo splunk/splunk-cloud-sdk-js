@@ -17,18 +17,6 @@ All notable changes to this project will be documented in this file. See [standa
     - `createDatasetImportById` returns `DatasetImportedby` (replaced 'ImportDataset')
     - `DatasetImportedBy` has a new property `owner` and property `name` is now optional
 
-- Identity service v2beta1:
-    - Property `encodeState` added to `ResolveBody` model
-    - Property `count` removed from model `IdentityProviderList`
-    - Property `name` removed from model `SenstiveTenant`
-    - Properties `count` and `details` removed from models `ServiceAccountList`, `TakedownPrincipalList`, `TenantList`
-    - Property `items` in model `ServiceAccountList` has a reference to `ServiceAccount`
-    - Property `items` in model `TakedownPrincipalList` has a reference to `TakedownPrincipal`
-    - Property `items` in model `TenantList` has a reference to `Tenant`
-
-- Ingest v1beta2: 
-    - New properties `ackEnabled`, `allowQueryStringAuth`, `diabled` and `indexes` added to models `HecTokenAccessResponse`, `HecTokenCretaeRequest`, `HecTokenCreateResponse`, `HecTokenUpdateRequest`
-
 - Provisioner v1beta1:
     - Model `ECStackName` renamed to `EcStackName`
 
