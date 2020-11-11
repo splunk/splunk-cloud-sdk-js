@@ -6,79 +6,13 @@ All notable changes to this project will be documented in this file. See [standa
 # [14.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v13.0.0...v14.0.0) (2020-11-11)
 
 
-### Services
+### Features
 
-#### Breaking Changes
+* update the commit number to fix sonaqube template access issue ([ac04052](https://github.com/splunk/splunk-cloud-sdk-js/commits/ac04052))
+* update with code-generated api bindings and models performed 2020-11-04 ([d6d37c1](https://github.com/splunk/splunk-cloud-sdk-js/commits/d6d37c1))
+* update with code-generated api bindings and models performed 2020-11-05 ([fc6389b](https://github.com/splunk/splunk-cloud-sdk-js/commits/fc6389b))
 
-##### Features
 
-- Catalog v2beta1:
-    - `createDatasetImport` returns datatype of `Dataset` (replaced 'ImportDataset')
-    - `createDatasetImportById` returns `DatasetImportedby` (replaced 'ImportDataset')
-    - `DatasetImportedBy` has a new property `owner` and property `name` is now optional
-
-- Identity service v2beta1:
-    - Property `encodeState` added to `ResolveBody` model
-    - Property `count` removed from model `IdentityProviderList`
-    - Property `name` removed from model `SenstiveTenant`
-    - Properties `count` and `details` removed from models `ServiceAccountList`, `TakedownPrincipalList`, `TenantList`
-    - Property `items` in model `ServiceAccountList` has a reference to `ServiceAccount`
-    - Property `items` in model `TakedownPrincipalList` has a reference to `TakedownPrincipal`
-    - Property `items` in model `TenantList` has a reference to `Tenant`
-
-- Ingest v1beta2: 
-    - New properties `ackEnabled`, `allowQueryStringAuth`, `diabled` and `indexes` added to models `HecTokenAccessResponse`, `HecTokenCretaeRequest`, `HecTokenCreateResponse`, `HecTokenUpdateRequest`
-
-- Provisioner v1beta1:
-    - Model `ECStackName` renamed to `EcStackName`
-
-- Search v2beta1:
-    - Model `ListSearchResultsResponseFields` renamed to `ListPreiviewResultsResponseFields`
-
-- Search v3alpha1:
-    - Model `ListSearchResultsResponseFields` renamed to `ListPreiviewResultsResponseFields`
-
-- Stream v3beta1: 
-    - Model `RulesSourcetypesResponse` renamed to `RulesPackageSourcetypes`
-    - Model `RulesActionsResponse` renamed to `RulesPackageActions`
-    
-#### Non-Breaking Changes
-
-##### Features
-
-- Auth 
-    - `ServicePrincipalAuthManager` added to Auth service
-
-- Identity v2beta1:
-    - New model `AddInvisibleMemberBody` added
-    - New endpoints `addInvisibleMember`, `getMemberAdmin` and `removeMemberAdmin` added
-    - New properties `expiresAt` and `visible` added to `Member` model
-    - New models `DeviceAuthInfo` and `UpdateRoleBody` added
-
-- Identity v3alpha1: 
-    - New version introduced
-
-- Ingest v1beta2: 
-    - New models `UploadSuccessResponse` and `FileUploadDetails`  added
-
-- KVStore v1beta1:
-    - New endpoint `truncateRecords` added
-
-- Search v3alpha1:
-    - New models `SearchModule`, `StatementDispatchStatus`, and `SingleSatatementQueryParamters` added
-    - New endpoints `createMultiSearchMethod` and `createSearchStatements` added
-
-- Streams v2beta1:
-    - New property `messages` added to model `ConnectionSaveResponse`
-    - New property `complexity` added to model `PipelineResponse`
-    - New property `activateLatestVersion` added to model `ReactivatePipelineRequest`
-
-- Streams v3beta1:
-    - New models `CollectJobPatchRequest`, `DataStream`, `DataStreamRequest`, `DataStreamResponse`, `EntitlementRequest`,
-     `EntitlementResponse`, `PaginatedResponseOfRuleKind`, `RulesKind` and `PluginResponse`
-    - New endpoints `createDataStream`, `deleteCollectJob`, `deletedatastream`, `deleteEntitlements`, `deleteRulesPackage`, 
-     `describeDataStream`, `getEntitlements`, `getRulesPackageById`, `listDataStreams`, `listRuleKinds`, `releaseInfo`, 
-     `setEntitlements`, `updateCollectJob`, `updateDataStream` and `updateRulesPackageById` added
 
 <a name="13.0.0"></a>
 # [13.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v11.0.1...v13.0.0) (2020-09-15)
