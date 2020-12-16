@@ -85,8 +85,9 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
         it('should return the roles for the tenant', () =>
             splunk.identity.listRoles().then(roles => {
-                assert.typeOf(roles, 'Array');
-                assert.include(roles, testRole);
+                assert.typeOf(roles, 'Object');
+                assert.include(JSON.stringify(roles.items), testRole);
+
             }));
 
         it('should return the role for the tenant and role name', () =>
@@ -97,7 +98,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should create new permissions for an existing role', () =>
-            splunk.identity.addRolePermission(testRole, testPerm1).then(rolePermission => {
+            splunk.identity.addRolePermission(testRole, { permission: testPerm1 }).then(rolePermission => {
                 assert.typeOf(rolePermission, 'Object');
                 assert.equal(rolePermission.permission, testPerm1);
                 assert.equal(rolePermission.role, testRole);
@@ -105,7 +106,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
             }));
 
         it('should create new escaped permissions for an existing role', () =>
-            splunk.identity.addRolePermission(testRole, testPerm2).then(rolePermission => {
+            splunk.identity.addRolePermission(testRole, { permission: testPerm2 }).then(rolePermission => {
                 assert.typeOf(rolePermission, 'Object');
                 assert.equal(rolePermission.permission, testPerm2);
                 assert.equal(rolePermission.role, testRole);
@@ -114,13 +115,13 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
         it('should return the permissions for the role name', () =>
             splunk.identity.listRolePermissions(testRole).then(perms => {
-                assert.typeOf(perms, 'Array');
-                assert.equal(perms[0], testPerm1);
+                assert.typeOf(perms, 'Object');
+                assert.equal(perms.items[0].permission, testPerm1);
             }));
 
         it('should return the groups for the role name', () =>
             splunk.identity.listRoleGroups(testRole).then(perms => {
-                assert.typeOf(perms, 'Array');
+                assert.typeOf(perms, 'Object');
             }));
 
         it('should return the permission for the tenant, role name, and permissionName', () =>
@@ -175,8 +176,8 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
         it('should return the Groups for the tenant', () =>
             splunk.identity.listGroups().then(data => {
-                assert.typeOf(data, 'Array');
-                assert.include(data, testGroupName);
+                assert.typeOf(data, 'Object');
+                assert.include(JSON.stringify(data.items), testGroupName);
             }));
 
         it('should add a Role to the Group', () =>
@@ -199,8 +200,8 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
         it('should return the Groups for the tenant', () =>
             splunk.identity.listGroupRoles(testGroupName).then(data => {
-                assert.typeOf(data, 'Array');
-                assert.include(data, testRole);
+                assert.typeOf(data, 'Object');
+                assert.include(data.items[0].role, testRole);
             }));
 
         it('should create a Member', () =>
@@ -221,14 +222,8 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
         it('should return the Members for the tenant', () =>
             splunk.identity.listMembers().then(data => {
-                assert.typeOf(data, 'Array');
-                assert.include(data, testMember);
-            }));
-
-        it('should return the Members for the tenant', () =>
-            splunk.identity.listMembers().then(data => {
-                assert.typeOf(data, 'Array');
-                assert.include(data, testMember);
+                assert.typeOf(data, 'Object');
+                assert.include(JSON.stringify(data.items), testMember);
             }));
 
         it('should delete the member from the tenant and group ignore response', () =>
@@ -254,27 +249,26 @@ describe('integration tests for Identity Tenant Endpoints', () => {
 
         it('should retrieve all the Members from the Group', () =>
             splunk.identity.listGroupMembers(testGroupName).then(data => {
-                assert.typeOf(data, 'Array');
-                assert.include(data, testPrincipal);
+                assert.typeOf(data, 'Object');
+                assert.include(data.items[0].principal, testPrincipal);
             }));
 
         it('should retrieve all the Groups for the given Member', () =>
             splunk.identity.listMemberGroups(testPrincipal).then(data => {
-                assert.typeOf(data, 'Array');
-                assert.include(data, 'identity.members', JSON.stringify(data));
-                assert.include(data, testGroupName);
+                assert.typeOf(data, 'Object');
+                assert.include(JSON.stringify(data.items), 'identity.members');
             }));
 
         it('should retrieve all the permission for the given Member', () =>
             splunk.identity.listMemberPermissions(testPrincipal).then(data => {
-                assert.typeOf(data, 'Array');
-                assert.include(data, 'testsdks:*:*', JSON.stringify(data));
+                assert.typeOf(data, 'Object');
+                assert.include(data.items, 'testsdks:*:*', JSON.stringify(data));
             }));
 
         it('should retrieve all the roles for the given Member', () =>
             splunk.identity.listMemberRoles(testPrincipal).then(data => {
-                assert.typeOf(data, 'Array');
-                assert.include(data, 'tenant.admin', JSON.stringify(data));
+                assert.typeOf(data, 'Object');
+                assert.include(JSON.stringify(data.items), 'tenant.admin');
             }));
     });
 

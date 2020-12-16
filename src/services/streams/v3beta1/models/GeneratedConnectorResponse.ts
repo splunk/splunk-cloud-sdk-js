@@ -35,6 +35,13 @@ export interface ConnectorResponse {
      * @type {{ [key: string]: any; }}
      * @memberof ConnectorResponse
      */
+    attributes?: { [key: string]: any; };
+
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof ConnectorResponse
+     */
     config?: { [key: string]: any; };
 
     /**

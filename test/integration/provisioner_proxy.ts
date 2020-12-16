@@ -49,33 +49,6 @@ const provSplunk = new SplunkCloud({
 describe('integration tests for Provisioner Endpoints', () => {
     const bannedName = 'splunk';
     let testTenantInfo: provisioner.TenantInfo;
-
-    it('should error on creating provisioner job', () => {
-        return splunk.provisioner.createProvisionJob({ apps: [], tenant: bannedName } as provisioner.CreateProvisionJobBody)
-            .then((provisionerJob: provisioner.ProvisionJobInfo) => {
-                assert.fail('expected to fail because of banned word');
-
-            }).catch(err => {
-                assert.equal(err.httpStatusCode, 403);
-            });
-    });
-    it('should error on getting non-existing provisioner job', () => {
-        return splunk.provisioner.getProvisionJob('-1' as string)
-            .then((provisionerJob: provisioner.ProvisionJobInfo) => {
-                assert.fail('expected to fail because -1 job does not exist');
-
-            }).catch(err => {
-                assert.equal(err.httpStatusCode, 404);
-            });
-    });
-    it('should successfully return an empty list when listing provision job(s)', () => {
-        return splunk.provisioner.listProvisionJobs()
-            .then((provisionerJobsList: provisioner.ProvisionJobs) => {
-                assert.isNotNull(provisionerJobsList);
-                assert.isArray(provisionerJobsList);
-                assert.equal(provisionerJobsList.length, 0);
-            });
-    });
     it('should successfully return a tenant when getting an existing tenant', () => {
         return splunk.provisioner.getTenant(provTestTenantID as string)
             .then((tenantInfo: provisioner.TenantInfo) => {

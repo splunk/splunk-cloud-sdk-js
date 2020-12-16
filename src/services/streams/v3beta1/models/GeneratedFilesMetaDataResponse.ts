@@ -25,7 +25,7 @@
  */
 
 import {
-    UploadFile,
+    UploadFileResponse,
 } from './';
 
 /**
@@ -36,10 +36,10 @@ import {
 export interface FilesMetaDataResponse {
     /**
      * 
-     * @type {Array<UploadFile>}
+     * @type {Array<UploadFileResponse>}
      * @memberof FilesMetaDataResponse
      */
-    files?: Array<UploadFile>;
+    files?: Array<UploadFileResponse>;
 
 }
 

@@ -27,10 +27,6 @@
 
 import {
     ActivatePipelineRequest,
-    CollectJobPatchRequest,
-    CollectJobRequest,
-    CollectJobResponse,
-    CollectJobStartStopResponse,
     ConnectionPatchRequest,
     ConnectionPutRequest,
     ConnectionRequest,
@@ -41,32 +37,22 @@ import {
     DeactivatePipelineRequest,
     DecompileRequest,
     DecompileResponse,
-    EntitlementRequest,
-    EntitlementResponse,
     ErrorResponse,
     FilesMetaDataResponse,
     GetInputSchemaRequest,
     GetOutputSchemaRequest,
     LookupTableResponse,
     MetricsResponse,
-    PaginatedResponseOfCollectJobResponse,
     PaginatedResponseOfConnectionResponse,
     PaginatedResponseOfConnectorResponse,
     PaginatedResponseOfPipelineJobStatus,
     PaginatedResponseOfPipelineResponse,
-    PaginatedResponseOfPlugin,
-    PaginatedResponseOfRulesKind,
-    PaginatedResponseOfRulesResponse,
     PaginatedResponseOfTemplateResponse,
     Pipeline,
     PipelinePatchRequest,
     PipelineReactivateResponse,
     PipelineRequest,
     PipelineResponse,
-    Plugin,
-    PluginPatchRequest,
-    PluginRequest,
-    PluginResponse,
     PreviewData,
     PreviewSessionStartRequest,
     PreviewStartResponse,
@@ -74,15 +60,13 @@ import {
     ReactivatePipelineRequest,
     RegistryModel,
     Response,
-    RulesRequest,
-    RulesResponse,
     SplCompileRequest,
     TemplatePatchRequest,
     TemplatePutRequest,
     TemplateRequest,
     TemplateResponse,
     UplType,
-    UploadFile,
+    UploadFileResponse,
     ValidateRequest,
     ValidateResponse,
 } from '../models';
@@ -135,18 +119,6 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as Pipeline);
     }
     /**
-     * Create a new collect job.
-     * @param collectJobRequest Request JSON
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return CollectJobResponse
-     */
-    public createCollectJob = (collectJobRequest: CollectJobRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<CollectJobResponse> => {
-        const path = `/streams/v3beta1/collect-jobs`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), collectJobRequest, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as CollectJobResponse);
-    }
-    /**
      * Create a new DSP connection.
      * @param connectionRequest Request JSON
      * @param args parameters to be sent with the request
@@ -181,18 +153,6 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = `/streams/v3beta1/pipelines`;
         return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pipelineRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PipelineResponse);
-    }
-    /**
-     * Creates a new RulesPackage
-     * @param rulesRequest Request JSON
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return RulesResponse
-     */
-    public createRulesPackage = (rulesRequest: RulesRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<RulesResponse> => {
-        const path = `/streams/v3beta1/rules`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), rulesRequest, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as RulesResponse);
     }
     /**
      * Creates a template for a tenant.
@@ -235,30 +195,6 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as DecompileResponse);
     }
     /**
-     * Delete all collect jobs.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteCollectJobs = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path = `/streams/v3beta1/collect-jobs`;
-        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Delete a collect job.
-     * @param id Collect Job ID
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteCollectJob = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            id: id
-        };
-        const path = this.template`/streams/v3beta1/collect-jobs/${'id'}`(path_params);
-        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
      * Delete all versions of a connection by its id.
      * @param connectionId Connection ID
      * @param args parameters to be sent with the request
@@ -287,21 +223,6 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Delete known entitlements
-     * @param appClientId App Client ID
-     * @param requestBody Request JSON
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteEntitlements = (appClientId: string, requestBody: Array<string>, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            appClientId: appClientId
-        };
-        const path = this.template`/streams/v3beta1/commerce/subscribed-apps/${'appClientId'}/entitlements`(path_params);
-        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), requestBody, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
      * Delete file.
      * @param fileId File ID
      * @param args parameters to be sent with the request
@@ -316,6 +237,20 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
+     * Delete lookup file.
+     * @param fileId File ID
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public deleteLookupFile = (fileId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path_params = {
+            fileId: fileId
+        };
+        const path = this.template`/streams/v3beta1/lookups/files/${'fileId'}`(path_params);
+        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
+    /**
      * Removes a pipeline.
      * @param id Pipeline ID
      * @param args parameters to be sent with the request
@@ -326,35 +261,6 @@ export class GeneratedStreamsService extends BaseApiService {
             id: id
         };
         const path = this.template`/streams/v3beta1/pipelines/${'id'}`(path_params);
-        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Delete an admin plugin
-     * @param pluginId Plugin ID
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return string
-     */
-    public deletePlugin = (pluginId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<string> => {
-        const path_params = {
-            pluginId: pluginId
-        };
-        const path = this.template`/system/streams/v3beta1/plugins/${'pluginId'}`(path_params);
-        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as string);
-    }
-    /**
-     * Delete a rules package with a specific id
-     * @param externalId Rules Package ID
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteRulesPackage = (externalId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            externalId: externalId
-        };
-        const path = this.template`/streams/v3beta1/rules/${'externalId'}`(path_params);
         return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
@@ -388,50 +294,19 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as DataStreamResponse);
     }
     /**
-     * Get a collect job.
-     * @param id Collect Job ID
-     * @param args parameters to be sent with the request
-     * @param args.version version
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return CollectJobResponse
-     */
-    public getCollectJob = (id: string, args?: { version?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<CollectJobResponse> => {
-        const path_params = {
-            id: id
-        };
-        const path = this.template`/streams/v3beta1/collect-jobs/${'id'}`(path_params);
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as CollectJobResponse);
-    }
-    /**
-     * Get known entitlements
-     * @param appClientId App Client ID
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Array<EntitlementResponse>
-     */
-    public getEntitlements = (appClientId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<EntitlementResponse>> => {
-        const path_params = {
-            appClientId: appClientId
-        };
-        const path = this.template`/streams/v3beta1/commerce/subscribed-apps/${'appClientId'}/entitlements`(path_params);
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Array<EntitlementResponse>);
-    }
-    /**
      * Get file metadata.
      * @param fileId File ID
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
-     * @return UploadFile
+     * @return UploadFileResponse
      */
-    public getFileMetadata = (fileId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<UploadFile> => {
+    public getFileMetadata = (fileId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<UploadFileResponse> => {
         const path_params = {
             fileId: fileId
         };
         const path = this.template`/streams/v3beta1/files/${'fileId'}`(path_params);
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as UploadFile);
+            .then(response => response.body as UploadFileResponse);
     }
     /**
      * Returns files metadata.
@@ -455,6 +330,32 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = `/streams/v3beta1/pipelines/input-schema`;
         return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), getInputSchemaRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as UplType);
+    }
+    /**
+     * Get lookup file metadata.
+     * @param fileId File ID
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return UploadFileResponse
+     */
+    public getLookupFileMetadata = (fileId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<UploadFileResponse> => {
+        const path_params = {
+            fileId: fileId
+        };
+        const path = this.template`/streams/v3beta1/lookups/files/${'fileId'}`(path_params);
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as UploadFileResponse);
+    }
+    /**
+     * Returns lookup files metadata.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return FilesMetaDataResponse
+     */
+    public getLookupFilesMetadata = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<FilesMetaDataResponse> => {
+        const path = `/streams/v3beta1/lookups/files`;
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as FilesMetaDataResponse);
     }
     /**
      * Returns lookup table results.
@@ -535,21 +436,6 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as PaginatedResponseOfPipelineJobStatus);
     }
     /**
-     * Returns all the plugins that are available for all tenants.
-     * @param args parameters to be sent with the request
-     * @param args.offset offset
-     * @param args.pageSize pageSize
-     * @param args.sortDir sortDir
-     * @param args.sortField sortField
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return PaginatedResponseOfPlugin
-     */
-    public getPlugins = (args?: { offset?: number, pageSize?: number, sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfPlugin> => {
-        const path = `/system/streams/v3beta1/plugins`;
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as PaginatedResponseOfPlugin);
-    }
-    /**
      * Returns the preview data for a session.
      * @param previewSessionId Preview Session ID
      * @param args parameters to be sent with the request
@@ -607,21 +493,6 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as RegistryModel);
     }
     /**
-     * Returns the rules package with specific id
-     * @param externalId RulesPackage ID
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return RulesResponse
-     */
-    public getRulesPackageById = (externalId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<RulesResponse> => {
-        const path_params = {
-            externalId: externalId
-        };
-        const path = this.template`/streams/v3beta1/rules/${'externalId'}`(path_params);
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as RulesResponse);
-    }
-    /**
      * Returns an individual template by version.
      * @param templateId Template ID
      * @param args parameters to be sent with the request
@@ -638,22 +509,12 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as TemplateResponse);
     }
     /**
-     * Get all collect jobs.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return PaginatedResponseOfCollectJobResponse
-     */
-    public listCollectJobs = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfCollectJobResponse> => {
-        const path = `/streams/v3beta1/collect-jobs`;
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as PaginatedResponseOfCollectJobResponse);
-    }
-    /**
      * Returns a list of connections (latest versions only) by tenant ID.
      * @param args parameters to be sent with the request
      * @param args.connectorId
      * @param args.createUserId
      * @param args.functionId
+     * @param args.functionOp
      * @param args.name
      * @param args.offset
      * @param args.pageSize
@@ -663,7 +524,7 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return PaginatedResponseOfConnectionResponse
      */
-    public listConnections = (args?: { connectorId?: Array<string>, createUserId?: string, functionId?: string, name?: string, offset?: number, pageSize?: number, showSecretNames?: string, sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfConnectionResponse> => {
+    public listConnections = (args?: { connectorId?: Array<string>, createUserId?: string, functionId?: string, functionOp?: string, name?: string, offset?: number, pageSize?: number, showSecretNames?: string, sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfConnectionResponse> => {
         const path = `/streams/v3beta1/connections`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PaginatedResponseOfConnectionResponse);
@@ -714,30 +575,6 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as PaginatedResponseOfPipelineResponse);
     }
     /**
-     * Returns all rules kinds.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return PaginatedResponseOfRulesKind
-     */
-    public listRulesKinds = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfRulesKind> => {
-        const path = `/streams/v3beta1/rules/kinds`;
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as PaginatedResponseOfRulesKind);
-    }
-    /**
-     * Returns all rules packages.
-     * @param args parameters to be sent with the request
-     * @param args.sortDir sortDir
-     * @param args.sortField sortField
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return PaginatedResponseOfRulesResponse
-     */
-    public listRulesPackages = (args?: { sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfRulesResponse> => {
-        const path = `/streams/v3beta1/rules`;
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as PaginatedResponseOfRulesResponse);
-    }
-    /**
      * Returns a list of all templates.
      * @param args parameters to be sent with the request
      * @param args.offset offset
@@ -767,25 +604,6 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = this.template`/streams/v3beta1/pipelines/${'id'}`(path_params);
         return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pipelinePatchRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PipelineResponse);
-    }
-    /**
-     * Patch an existing admin plugin.
-     * @param pluginId Plugin ID
-     * @param pluginPatchRequest PluginRequest JSON
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Plugin
-     */
-    public patchPlugin = (pluginId: string, pluginPatchRequest?: PluginPatchRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Plugin> => {
-        if (!pluginPatchRequest) {
-            throw new SplunkError({ message: `Bad Request: pluginPatchRequest is empty or undefined` });
-        }
-        const path_params = {
-            pluginId: pluginId
-        };
-        const path = this.template`/system/streams/v3beta1/plugins/${'pluginId'}`(path_params);
-        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pluginPatchRequest, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Plugin);
     }
     /**
      * Updates an existing DSP connection.
@@ -839,60 +657,6 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as PipelineReactivateResponse);
     }
     /**
-     * Register a new plugin that's available for all tenants.
-     * @param pluginRequest Request JSON
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Plugin
-     */
-    public registerPlugin = (pluginRequest: PluginRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Plugin> => {
-        const path = `/system/streams/v3beta1/plugins`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pluginRequest, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Plugin);
-    }
-    /**
-     * Provides commit sha for release
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return { [key: string]: string; }
-     */
-    public releaseInfo = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<{ [key: string]: string; }> => {
-        const path = `/streams/v3beta1/releaseInfo`;
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as { [key: string]: string; });
-    }
-    /**
-     * Create or update entitlements
-     * @param appClientId App Client ID
-     * @param entitlementRequest Request JSON
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Array<EntitlementResponse>
-     */
-    public setEntitlements = (appClientId: string, entitlementRequest: Array<EntitlementRequest>, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<EntitlementResponse>> => {
-        const path_params = {
-            appClientId: appClientId
-        };
-        const path = this.template`/streams/v3beta1/commerce/subscribed-apps/${'appClientId'}/entitlements`(path_params);
-        return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), entitlementRequest, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Array<EntitlementResponse>);
-    }
-    /**
-     * Start a collect job.
-     * @param id Collect Job ID
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return CollectJobStartStopResponse
-     */
-    public startCollectJob = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<CollectJobStartStopResponse> => {
-        const path_params = {
-            id: id
-        };
-        const path = this.template`/streams/v3beta1/collect-jobs/${'id'}/start`(path_params);
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as CollectJobStartStopResponse);
-    }
-    /**
      * Creates a preview session for a pipeline.
      * @param previewSessionStartRequest Parameters to start a new Preview session
      * @param args parameters to be sent with the request
@@ -903,21 +667,6 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = `/streams/v3beta1/preview-session`;
         return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), previewSessionStartRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PreviewStartResponse);
-    }
-    /**
-     * Stop a collect job.
-     * @param id Collect Job ID
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return CollectJobStartStopResponse
-     */
-    public stopCollectJob = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<CollectJobStartStopResponse> => {
-        const path_params = {
-            id: id
-        };
-        const path = this.template`/streams/v3beta1/collect-jobs/${'id'}/stop`(path_params);
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as CollectJobStartStopResponse);
     }
     /**
      * Stops a preview session.
@@ -932,22 +681,6 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = this.template`/streams/v3beta1/preview-session/${'previewSessionId'}`(path_params);
         return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
-    }
-    /**
-     * Patches an existing collect job.
-     * @param id Collect Job ID
-     * @param collectJobPatchRequest Request JSON
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return CollectJobResponse
-     */
-    public updateCollectJob = (id: string, collectJobPatchRequest: CollectJobPatchRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<CollectJobResponse> => {
-        const path_params = {
-            id: id
-        };
-        const path = this.template`/streams/v3beta1/collect-jobs/${'id'}`(path_params);
-        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), collectJobPatchRequest, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as CollectJobResponse);
     }
     /**
      * Patches an existing DSP connection.
@@ -996,41 +729,6 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = this.template`/streams/v3beta1/pipelines/${'id'}`(path_params);
         return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pipelineRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PipelineResponse);
-    }
-    /**
-     * Update admin plugin info.
-     * @param pluginId Plugin ID
-     * @param pluginRequest PluginRequest JSON
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Plugin
-     */
-    public updatePlugin = (pluginId: string, pluginRequest?: PluginRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Plugin> => {
-        if (!pluginRequest) {
-            throw new SplunkError({ message: `Bad Request: pluginRequest is empty or undefined` });
-        }
-        const path_params = {
-            pluginId: pluginId
-        };
-        const path = this.template`/system/streams/v3beta1/plugins/${'pluginId'}`(path_params);
-        return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), pluginRequest, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Plugin);
-    }
-    /**
-     * Updates the rules package with specific id
-     * @param externalId RulesPackage ID
-     * @param rulesRequest Request JSON
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return RulesResponse
-     */
-    public updateRulesPackageById = (externalId: string, rulesRequest: RulesRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<RulesResponse> => {
-        const path_params = {
-            externalId: externalId
-        };
-        const path = this.template`/streams/v3beta1/rules/${'externalId'}`(path_params);
-        return this.client.put(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), rulesRequest, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as RulesResponse);
     }
     /**
      * Patches an existing template.

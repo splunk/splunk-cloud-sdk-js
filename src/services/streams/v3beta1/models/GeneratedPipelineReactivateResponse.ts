@@ -51,6 +51,13 @@ export interface PipelineReactivateResponse {
      */
     pipelineReactivationStatus?: PipelineReactivateResponsePipelineReactivationStatusEnum;
 
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof PipelineReactivateResponse
+     */
+    statusDescription?: { [key: string]: string; };
+
 }
 
 /**

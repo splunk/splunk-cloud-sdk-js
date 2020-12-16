@@ -26,12 +26,9 @@
 
 
 import {
-    CreateProvisionJobBody,
     InviteBody,
     InviteInfo,
     Invites,
-    ProvisionJobInfo,
-    ProvisionJobs,
     TenantInfo,
     Tenants,
     UpdateInviteBody,
@@ -69,18 +66,6 @@ export class GeneratedProvisionerService extends BaseApiService {
             .then(response => response.body as InviteInfo);
     }
     /**
-     * Creates a new job that provisions a new tenant and subscribes apps to the tenant.
-     * @param createProvisionJobBody
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return ProvisionJobInfo
-     */
-    public createProvisionJob = (createProvisionJobBody: CreateProvisionJobBody, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ProvisionJobInfo> => {
-        const path = `/system/provisioner/v1beta1/jobs/tenants/provision`;
-        return this.client.post(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), createProvisionJobBody, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as ProvisionJobInfo);
-    }
-    /**
      * Removes an invitation in the given tenant.
      * @param inviteId
      * @param args parameters to be sent with the request
@@ -110,21 +95,6 @@ export class GeneratedProvisionerService extends BaseApiService {
             .then(response => response.body as InviteInfo);
     }
     /**
-     * Returns details of a specific provision job.
-     * @param jobId
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return ProvisionJobInfo
-     */
-    public getProvisionJob = (jobId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ProvisionJobInfo> => {
-        const path_params = {
-            jobId: jobId
-        };
-        const path = this.template`/system/provisioner/v1beta1/jobs/tenants/provision/${'jobId'}`(path_params);
-        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as ProvisionJobInfo);
-    }
-    /**
      * Returns a specific tenant.
      * @param tenantName
      * @param args parameters to be sent with the request
@@ -149,17 +119,6 @@ export class GeneratedProvisionerService extends BaseApiService {
         const path = `/provisioner/v1beta1/invites`;
         return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Invites);
-    }
-    /**
-     * Returns a list of all provision jobs created by the user.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return ProvisionJobs
-     */
-    public listProvisionJobs = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ProvisionJobs> => {
-        const path = `/system/provisioner/v1beta1/jobs/tenants/provision`;
-        return this.client.get(PROVISIONER_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as ProvisionJobs);
     }
     /**
      * Returns all tenants that the user can read.

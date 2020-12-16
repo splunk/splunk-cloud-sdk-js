@@ -209,10 +209,10 @@ describe('integration tests for app registry Endpoints', () => {
                     assert.equal(subscription.appName, createApp.name);
                 });
         });
-        it('should 404 trying to get a subscription for non-existent app', () => {
+        it('should get 503 trying to get a subscription for non-existent app', () => {
             return splunk.appreg.getSubscription('doesnotexist').catch((err) => {
                 assert.ok(err);
-                assert.equal(err.httpStatusCode, 404);
+                assert.equal(err.httpStatusCode, 503);
             });
         });
         it('should create second test app', () => {

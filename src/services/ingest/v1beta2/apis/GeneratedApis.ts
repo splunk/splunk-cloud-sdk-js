@@ -111,6 +111,46 @@ export class GeneratedIngestService extends BaseApiService {
             .then(response => response.body as Array<HECTokenAccessResponse>);
     }
     /**
+     * Sends collector raw events.
+     * @param body The payload uses concatenated JSON format. See https://docs.splunk.com/Documentation/Splunk/latest/Data/FormateventsforHTTPEventCollector#Event_data for more information.
+     * @param args parameters to be sent with the request
+     * @param args.host Sets a default host field value for all events in the request.
+     * @param args.index Sets a default index field value for all events in the request.
+     * @param args.source Sets a default source field value for all events in the request.
+     * @param args.sourcetype Sets a default sourcetype field value for all events in the request.
+     * @param args.time Sets a default time field value for all events in the request.
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return HECResponse
+     */
+    public postCollectorRaw = (body?: string, args?: { host?: string, index?: string, source?: string, sourcetype?: string, time?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<HECResponse> => {
+        if (!body) {
+            throw new SplunkError({ message: `Bad Request: body is empty or undefined` });
+        }
+        const path = `/ingest/v1beta2/collector/raw`;
+        return this.client.post(INGEST_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as HECResponse);
+    }
+    /**
+     * Sends collector raw events.
+     * @param body The payload uses concatenated JSON format. See https://docs.splunk.com/Documentation/Splunk/latest/Data/FormateventsforHTTPEventCollector#Event_data for more information.
+     * @param args parameters to be sent with the request
+     * @param args.host Sets a default host field value for all events in the request.
+     * @param args.index Sets a default index field value for all events in the request.
+     * @param args.source Sets a default source field value for all events in the request.
+     * @param args.sourcetype Sets a default sourcetype field value for all events in the request.
+     * @param args.time Sets a default time field value for all events in the request.
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return HECResponse
+     */
+    public postCollectorRawV1 = (body?: string, args?: { host?: string, index?: string, source?: string, sourcetype?: string, time?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<HECResponse> => {
+        if (!body) {
+            throw new SplunkError({ message: `Bad Request: body is empty or undefined` });
+        }
+        const path = `/ingest/v1beta2/collector/raw/1.0`;
+        return this.client.post(INGEST_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as HECResponse);
+    }
+    /**
      * Creates dsphec tokens.
      * @param hECTokenCreateRequest The API request schema for the token.
      * @param args parameters to be sent with the request

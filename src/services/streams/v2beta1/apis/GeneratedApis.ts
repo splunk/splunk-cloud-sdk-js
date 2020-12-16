@@ -445,6 +445,7 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param args.connectorId
      * @param args.createUserId
      * @param args.functionId
+     * @param args.functionOp
      * @param args.name
      * @param args.offset
      * @param args.pageSize
@@ -454,7 +455,7 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return PaginatedResponseOfConnectionResponse
      */
-    public listConnections = (args?: { connectorId?: Array<string>, createUserId?: string, functionId?: string, name?: string, offset?: number, pageSize?: number, showSecretNames?: string, sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfConnectionResponse> => {
+    public listConnections = (args?: { connectorId?: Array<string>, createUserId?: string, functionId?: string, functionOp?: string, name?: string, offset?: number, pageSize?: number, showSecretNames?: string, sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfConnectionResponse> => {
         const path = `/streams/v2beta1/connections`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PaginatedResponseOfConnectionResponse);
