@@ -2,6 +2,65 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="15.0.0"></a>
+# [15.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v14.0.0...v15.0.0) (2020-12-16)
+
+
+### Services
+
+#### Breaking Changes
+
+##### Features
+
+- Identity v2beta1:
+    - Model `AddInvisibleMemberBody` removed
+    - Enpoints `addInvisibleMember`, `getMemberAdmin` and `removeMemberAdmin` removed
+
+- Provisioner v1beta1
+    - Models `CreateProvisionJobBody`, `ProvisionJobInfo`, `ProvisionJobInfoErrors`, `ProvisionJobInfoErrors` and 
+    `ProvisionJobs` removed
+    - Endpoints `createProvisionJob`, `getProvisionJob` and `listProvisionJobs` removed
+
+- Streams v3beta1:
+    - Models `CollectJobPatchRequest`, `CollectJobRequest`, `CollectJobResponse`, `CollectJobStartStopResponse`, 
+    `EntitlementRequest`, `EntitlementResponse`, `PaginatedResponseOfCollectJobResponse`, `PaginatedResponseOfPlugin`, 
+    `PaginatedResponseOfRulesResponse`,  `PaginatedResponseOfRuleKind`, `Plugin`, `PluginPatchRequest`, `PluginRequest`, 
+    `PluginResponse`, `RulesRequest` and `RulesResponse` removed
+
+    - Model `UploadFile` renamed to `UploadFileResponse`
+
+    - Endpoints `createCollectJob`, `createRulesPackage`, `deleteCollectJobs`, `deleteCollectJob`, `deleteEntitlements`, 
+    `deletePlugin`, `deleteRulesPackage`, `getCollectJob`, `getEntitlements`, `getPlugins`, `getRulesPackageById`, 
+    `listCollectJobs`, `listRulesKinds`, `listRulesPackages`, `patchPlugin`, `registerPlugin`, `releaseInfo`, 
+    `setEntitlements`, `startCollectJob`, `stopCollectJob`, `updateCollectJob`, `updatePlugin` and `updateRulesPackageById` 
+    removed  
+
+#### Non-Breaking Changes
+
+##### Features
+
+- Identity v2beta1:
+    - New model `CreatePrincipalBody` added
+    - New endpoint `createPrincipal` added
+
+- Identity v3: 
+    - New version introduced
+
+- Identity v3alpha1
+    - New models `GroupMemberList` and `GroupRoleList`added
+
+- Ingest v1beta2: 
+    - New endpoints `postCollectorRaw` and `postCollectorRawV1` added
+
+- Streams v2beta1:
+    - New property `attributes` added to `ConnectorResponse`
+    - New property `statusDescription` added to `PipelineReactivateResponse`
+    - New parameter `functionOp`added to `listConnections`
+
+- Streams v3beta1
+    - New model `UploadFileResponse` added
+    - New endpoint `deleteLookupFile`, `getLookupFileMetadata` and `getLookupFilesMetadata` added
+
 <a name="14.0.0"></a>
 # [14.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v13.0.0...v14.0.0) (2020-11-11)
 
