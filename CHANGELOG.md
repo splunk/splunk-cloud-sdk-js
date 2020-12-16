@@ -2,6 +2,72 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="14.0.0"></a>
+# [14.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v13.0.0...v14.0.0) (2020-11-11)
+
+
+### Services
+
+#### Breaking Changes
+
+##### Features
+
+- Catalog v2beta1:
+    - `createDatasetImport` returns datatype of `Dataset` (replaced 'ImportDataset')
+    - `createDatasetImportById` returns `DatasetImportedby` (replaced 'ImportDataset')
+    - `DatasetImportedBy` has a new property `owner` and property `name` is now optional
+
+- Provisioner v1beta1:
+    - Model `ECStackName` renamed to `EcStackName`
+
+- Search v2beta1:
+    - Model `ListSearchResultsResponseFields` renamed to `ListPreiviewResultsResponseFields`
+
+- Search v3alpha1:
+    - Model `ListSearchResultsResponseFields` renamed to `ListPreiviewResultsResponseFields`
+
+- Stream v3beta1: 
+    - Model `RulesSourcetypesResponse` renamed to `RulesPackageSourcetypes`
+    - Model `RulesActionsResponse` renamed to `RulesPackageActions`
+    
+#### Non-Breaking Changes
+
+##### Features
+
+- Auth 
+    - `ServicePrincipalAuthManager` added to Auth service
+
+- Identity v2beta1:
+    - New model `AddInvisibleMemberBody` added
+    - New endpoints `addInvisibleMember`, `getMemberAdmin` and `removeMemberAdmin` added
+    - New properties `expiresAt` and `visible` added to `Member` model
+    - New models `DeviceAuthInfo` and `UpdateRoleBody` added
+
+- Identity v3alpha1: 
+    - New version introduced
+
+- Ingest v1beta2: 
+    - New models `UploadSuccessResponse` and `FileUploadDetails`  added
+
+- KVStore v1beta1:
+    - New endpoint `truncateRecords` added
+
+- Search v3alpha1:
+    - New models `SearchModule`, `StatementDispatchStatus`, and `SingleSatatementQueryParamters` added
+    - New endpoints `createMultiSearchMethod` and `createSearchStatements` added
+
+- Streams v2beta1:
+    - New property `messages` added to model `ConnectionSaveResponse`
+    - New property `complexity` added to model `PipelineResponse`
+    - New property `activateLatestVersion` added to model `ReactivatePipelineRequest`
+
+- Streams v3beta1:
+    - New models `CollectJobPatchRequest`, `DataStream`, `DataStreamRequest`, `DataStreamResponse`, `EntitlementRequest`,
+     `EntitlementResponse`, `PaginatedResponseOfRuleKind`, `RulesKind` and `PluginResponse`
+    - New endpoints `createDataStream`, `deleteCollectJob`, `deletedatastream`, `deleteEntitlements`, `deleteRulesPackage`, 
+     `describeDataStream`, `getEntitlements`, `getRulesPackageById`, `listDataStreams`, `listRuleKinds`, `releaseInfo`, 
+     `setEntitlements`, `updateCollectJob`, `updateDataStream` and `updateRulesPackageById` added
+
 <a name="13.0.0"></a>
 # [13.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v11.0.1...v13.0.0) (2020-09-15)
 
