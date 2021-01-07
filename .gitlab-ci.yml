@@ -1,4 +1,4 @@
 include:
   - project: 'devplat-pr-32/gitlab-central'
-    ref: 'c4fa68ec4048428bbc5dff3a40e1b5227b8c5e9e'
+    ref: '2e71396ade8b0e1d894ad2a6fac35a047073ee62'
     file: '/splunk-cloud-sdk-js/.gitlab-ci.yml'
