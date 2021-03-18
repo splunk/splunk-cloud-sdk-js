@@ -83,31 +83,31 @@ const DEFAULT_REQUEST_QUEUE_PARAMS = {
 export class Hostname {
     private domain: string;
     private region: string;
-    private port: string
-    private scheme: string
+    private port: string;
+    private scheme: string;
 
     constructor(scheme: string, domain: string, region: string, port: string) {
-        this.domain = domain.trim()
-        if (this.domain.charAt(this.domain.length - 1) == '/') {
-            this.domain = this.domain.substring(0, this.domain.length - 1)
+        this.domain = domain.trim();
+        if (this.domain.charAt(this.domain.length - 1) === '/') {
+            this.domain = this.domain.substring(0, this.domain.length - 1);
         }
 
         this.region = region;
         this.port = port;
-        this.scheme = scheme
+        this.scheme = scheme;
     }
 
-    public getHostname(tenant: string): string {
-        var hostname = `${this.scheme}://`
+    public getHostname(tenant?: string): string {
+        let hostname = `${this.scheme}://`;
 
-        if (tenant != 'system') {
+        if (tenant !== 'system') {
             hostname = `${hostname}${tenant}.${escape(this.domain)}`;
         } else {
             hostname = `${hostname}region-${this.region}.${escape(this.domain)}`;
         }
 
-        if (this.port.trim() != "") {
-            hostname = `${hostname}:${this.port}`
+        if (this.port.trim() !== '') {
+            hostname = `${hostname}:${this.port}`;
         }
 
         return hostname;
@@ -121,6 +121,7 @@ export class Hostname {
 export class RequestQueueManagerParams {
     public defaults: RequestQueueParams;
     public overrides: Map<string, RequestQueueParams>;
+
     constructor(
         defaults: RequestQueueParams = DEFAULT_REQUEST_QUEUE_PARAMS,
         overrides: Map<string, RequestQueueParams> = new Map()
@@ -250,7 +251,7 @@ class RequestQueue {
                 // TODO: Enable by default when allowed by gateway
                 currentRequest.headers.set('Retry', `${initialTime}:${retry}`);
                 if (holder.statusCallback !== undefined) {
-                    setTimeout(holder.statusCallback, 0, { status: REQUEST_STATUS.retried, request: currentRequest } );
+                    setTimeout(holder.statusCallback, 0, { status: REQUEST_STATUS.retried, request: currentRequest });
                 }
             }
             response = await fetch(currentRequest);
@@ -385,7 +386,7 @@ export class ServiceClient {
         [key: string]: string;
     };
     private readonly tenant?: string;
-    private readonly hostname?: Hostname;
+    private readonly hostname: Hostname | null;
 
     private readonly authManager?: AuthManager;
     private responseHooks: ResponseHook[] = [];
@@ -414,11 +415,11 @@ export class ServiceClient {
                 return () => authManager.getAccessToken();
             })();
         } else {
-            throw new SplunkError({message: 'Unsupported token source'});
+            throw new SplunkError({ message: 'Unsupported token source' });
         }
         this.urls = args.urls || DEFAULT_URLS;
         this.tenant = args.defaultTenant;
-        this.hostname = args.hostname;
+        this.hostname = args.hostname || null;
 
         this.queueManager = new RequestQueueManager(args.requestQueueManagerParams);
     }
@@ -444,9 +445,7 @@ export class ServiceClient {
     }
 
     private invokeHooks = (response: Response, request: Request): Promise<Response> => {
-        return this.responseHooks.reduce((result: Promise<Response>, cb: ResponseHook): Promise<
-            Response
-        > => {
+        return this.responseHooks.reduce((result: Promise<Response>, cb: ResponseHook): Promise<Response> => {
             // Result starts as a known good Promise<Result>
             return result.then(chainResponse => {
                 // Call the callback, get the result
@@ -490,11 +489,8 @@ export class ServiceClient {
      */
     public buildUrl = (cluster: string, path: string, query?: QueryArgs): string => {
 
-        var hostname = this.urls[cluster] || DEFAULT_URLS.api;
 
-        if (this.hostname != null && this.tenant != null) {
-            hostname = this.hostname.getHostname(this.tenant)
-        }
+        const hostname = this.hostname !== null ? this.hostname.getHostname(this.tenant) : this.urls[cluster] || DEFAULT_URLS.api;
 
         const basePath = `${hostname}${escape(path)}`;
 
@@ -712,7 +708,7 @@ export interface RequestOptions {
     /**
      * Callback function used to retrieve the status of a request
      */
-    statusCallback? : (requestStatus: RequestStatus) => void;
+    statusCallback?: (requestStatus: RequestStatus) => void;
 }
 
 export interface QueryArgs {
