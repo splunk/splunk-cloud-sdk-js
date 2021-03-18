@@ -80,6 +80,40 @@ const DEFAULT_REQUEST_QUEUE_PARAMS = {
     enableRetryHeader: false,
 };
 
+export class Hostname {
+    private domain: string;
+    private region: string;
+    private port: string
+    private scheme: string
+
+    constructor(scheme: string, domain: string, region: string, port: string) {
+        this.domain = domain.trim()
+        if (this.domain.charAt(this.domain.length - 1) == '/') {
+            this.domain = this.domain.substring(0, this.domain.length - 1)
+        }
+
+        this.region = region;
+        this.port = port;
+        this.scheme = scheme
+    }
+
+    public getHostname(tenant: string): string {
+        var hostname = `${this.scheme}://`
+
+        if (tenant != 'system') {
+            hostname = `${hostname}${tenant}.${escape(this.domain)}`;
+        } else {
+            hostname = `${hostname}region-${this.region}.${escape(this.domain)}`;
+        }
+
+        if (this.port.trim() != "") {
+            hostname = `${hostname}:${this.port}`
+        }
+
+        return hostname;
+    }
+}
+
 /**
  * RequestQueueManagerParams allows for configuration of retry behaviors. The constructor takes two parameters,
  * the first is the set of parameters to use when there are
@@ -329,6 +363,8 @@ export interface ServiceClientArgs {
      * back-off is applied) upon transient errors like an HTTP 429.
      */
     requestQueueManagerParams?: RequestQueueManagerParams;
+
+    hostname?: Hostname;
 }
 
 const _sleep = (millis: number): Promise<void> => {
@@ -349,6 +385,8 @@ export class ServiceClient {
         [key: string]: string;
     };
     private readonly tenant?: string;
+    private readonly hostname?: Hostname;
+
     private readonly authManager?: AuthManager;
     private responseHooks: ResponseHook[] = [];
     private queueManager: RequestQueueManager;
@@ -376,10 +414,12 @@ export class ServiceClient {
                 return () => authManager.getAccessToken();
             })();
         } else {
-            throw new SplunkError({ message: 'Unsupported token source' });
+            throw new SplunkError({message: 'Unsupported token source'});
         }
         this.urls = args.urls || DEFAULT_URLS;
         this.tenant = args.defaultTenant;
+        this.hostname = args.hostname;
+
         this.queueManager = new RequestQueueManager(args.requestQueueManagerParams);
     }
 
@@ -449,8 +489,15 @@ export class ServiceClient {
      * @return A fully-qualified URL.
      */
     public buildUrl = (cluster: string, path: string, query?: QueryArgs): string => {
-        const serviceCluster: string = this.urls[cluster] || DEFAULT_URLS.api;
-        const basePath = `${serviceCluster}${escape(path)}`;
+
+        var hostname = this.urls[cluster] || DEFAULT_URLS.api;
+
+        if (this.hostname != null && this.tenant != null) {
+            hostname = this.hostname.getHostname(this.tenant)
+        }
+
+        const basePath = `${hostname}${escape(path)}`;
+
         if (query && Object.keys(query).length > 0) {
             const queryEncoded = Object.keys(query)
                 .filter(k => query[k] !== undefined && query[k] !== null) // filter out undefined and null
