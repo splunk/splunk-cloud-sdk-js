@@ -19,11 +19,20 @@ import { assert } from 'chai';
 import 'isomorphic-fetch';
 import 'mocha';
 import sleep = require('sleep-promise');
-import { HTTPResponse, QueryArgs, REQUEST_STATUS, RequestQueueManagerParams, RequestStatus, ServiceClient } from '../../src/client';
+import {
+    Hostname,
+    HTTPResponse,
+    QueryArgs,
+    REQUEST_STATUS,
+    RequestQueueManagerParams,
+    RequestStatus,
+    ServiceClient
+} from '../../src/client';
 import config from '../config';
 import { RetryServer } from './test_retry_server';
 
 const stubbyUrl = `http://${config.stubbyHost}:8882`;
+const stubbyDomain='api.scs.splunk.com';
 
 describe('Basic client functionality', () => {
     const s = new ServiceClient({
@@ -311,6 +320,17 @@ describe('Service client args', () => {
         const actual = s.buildUrl('api', '/test', query);
 
         assert.equal(actual, `https://api.scp.splunk.com/test?foo=${encodeURIComponent('1,2')}`);
+    });
+
+    it('can take a hostname that will overwrite the urls', () => {
+        const s = new ServiceClient({
+            urls: { api: stubbyUrl },
+            tokenSource: () => new Promise<string>((resolve) => resolve(config.stubbyAuthToken)),
+            defaultTenant: config.stubbyTenant,
+            hostname : new Hostname('https',stubbyDomain,'','')
+        });
+
+        assert.equal(s.buildUrl('api',s.buildPath('/prefix',['path'])), `https://${config.stubbyTenant}.${stubbyDomain}/${config.stubbyTenant}/prefix/path`);
     });
 });
 
