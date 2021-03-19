@@ -80,23 +80,27 @@ const DEFAULT_REQUEST_QUEUE_PARAMS = {
     enableRetryHeader: false,
 };
 
+/*
+ * Define hostname in the format of scheme://domain:port and can get a hostname with tenant scope enabled
+ */
 export class Hostname {
     private domain: string;
     private region: string;
     private port: string;
     private scheme: string;
 
-    constructor(scheme: string, domain: string, region: string, port: string) {
+    constructor(domain: string, region: string, scheme?: string, port?: string|'') {
         this.domain = domain.trim();
         if (this.domain.charAt(this.domain.length - 1) === '/') {
             this.domain = this.domain.substring(0, this.domain.length - 1);
         }
 
         this.region = region;
-        this.port = port;
-        this.scheme = scheme;
+        this.port = port ? port : '';
+        this.scheme = scheme ? scheme : 'https';
     }
 
+    // Get a hostname with region/tenant prefix added
     public getHostname(tenant?: string): string {
         let hostname = `${this.scheme}://`;
 

@@ -327,7 +327,7 @@ describe('Service client args', () => {
             urls: { api: stubbyUrl },
             tokenSource: () => new Promise<string>((resolve) => resolve(config.stubbyAuthToken)),
             defaultTenant: config.stubbyTenant,
-            hostname : new Hostname('https',stubbyDomain,'','')
+            hostname : new Hostname(stubbyDomain,'')
         });
 
         assert.equal(s.buildUrl('api',s.buildPath('/prefix',['path'])), `https://${config.stubbyTenant}.${stubbyDomain}/${config.stubbyTenant}/prefix/path`);
