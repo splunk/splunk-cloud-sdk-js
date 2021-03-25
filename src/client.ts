@@ -89,7 +89,7 @@ export class Hostname {
     private port: string;
     private scheme: string;
 
-    constructor(domain: string, region: string, scheme?: string, port?: string|'') {
+    constructor(domain: string, region: string, scheme?: string, port?: string | '') {
         this.domain = domain.trim();
         if (this.domain.charAt(this.domain.length - 1) === '/') {
             this.domain = this.domain.substring(0, this.domain.length - 1);
@@ -101,13 +101,13 @@ export class Hostname {
     }
 
     // Get a hostname with region/tenant prefix added
-    public getHostname(tenant?: string): string {
+    public getHostname(path: string, tenant?: string,): string {
         let hostname = `${this.scheme}://`;
 
-        if (tenant !== 'system') {
-            hostname = `${hostname}${tenant}.${escape(this.domain)}`;
-        } else {
+        if (tenant !== 'system' && path.substring(0, 7).toLowerCase() === '/system') {
             hostname = `${hostname}region-${this.region}.${escape(this.domain)}`;
+        } else {
+            hostname = `${hostname}${tenant}.${escape(this.domain)}`;
         }
 
         if (this.port.trim() !== '') {
@@ -494,7 +494,7 @@ export class ServiceClient {
     public buildUrl = (cluster: string, path: string, query?: QueryArgs): string => {
 
 
-        const hostname = this.hostname !== null ? this.hostname.getHostname(this.tenant) : this.urls[cluster] || DEFAULT_URLS.api;
+        const hostname = this.hostname !== null ? this.hostname.getHostname(path, this.tenant) : this.urls[cluster] || DEFAULT_URLS.api;
 
         const basePath = `${hostname}${escape(path)}`;
 
