@@ -16,7 +16,7 @@
 
 import { assert } from 'chai';
 import 'mocha';
-import { DEFAULT_URLS, ServiceClient, SplunkError, SplunkErrorParams } from '../../src/client';
+import { DEFAULT_URLS, Hostname, ServiceClient, SplunkError, SplunkErrorParams } from '../../src/client';
 
 describe('Test SDK client', () => {
     it('should return a correct url with client tenant', () => {
@@ -56,6 +56,20 @@ describe('Test SDK client', () => {
         } catch (err) {
             assert.equal(err.message, 'No tenant specified');
         }
+    });
+
+    it('should return a tenant scoped url with hostname set', () => {
+        const testClient = new ServiceClient(
+            { tokenSource:'abc',
+                defaultTenant: 'test',
+                hostname: new Hostname('scs.splunk.com','region1')
+            });
+
+        let path = testClient.buildUrl('','/test/search/v2alpha2', );
+        assert.equal(path, 'https://test.scs.splunk.com/test/search/v2alpha2');
+
+        path = testClient.buildUrl('','/system/search/v2alpha2', );
+        assert.equal(path, 'https://region-region1.scs.splunk.com/system/search/v2alpha2');
     });
 });
 

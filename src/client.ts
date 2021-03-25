@@ -104,7 +104,11 @@ export class Hostname {
     public getHostname(path: string, tenant?: string,): string {
         let hostname = `${this.scheme}://`;
 
-        if (tenant !== 'system' && path.substring(0, 7).toLowerCase() === '/system') {
+        if (path.substring(0, 7).toLowerCase() === '/system') {
+            if (this.region === '') {
+                throw Error('region value can not be empty.');
+            }
+
             hostname = `${hostname}region-${this.region}.${escape(this.domain)}`;
         } else {
             hostname = `${hostname}${tenant}.${escape(this.domain)}`;
