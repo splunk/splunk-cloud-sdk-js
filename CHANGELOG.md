@@ -6,10 +6,21 @@ All notable changes to this project will be documented in this file. See [standa
 # [16.0.0-beta1](https://github.com/splunk/splunk-cloud-sdk-js/compare/v15.0.0...v16.0.0-beta1) (2021-03-31)
 
 
-### Bug Fixes
+### Services
 
-* **auth:** some updates ([8c80cb2](https://github.com/splunk/splunk-cloud-sdk-js/commits/8c80cb2))
-* **auth:** use path also to determin if use region url ([70ee981](https://github.com/splunk/splunk-cloud-sdk-js/commits/70ee981))
+##### Features
+
+- Add support to tenant-scoped hostname: initiate the client with `hostname` set to enable the client visit endpoints using tenant-scoped url. Example: 
+
+
+`new ServiceClient(
+                                                         { tokenSource:'your-token-source',
+                                                             defaultTenant: 'your-tenant',
+                                                             hostname: new Hostname('domain','region')
+                                                         });`
+
+
+
 
 
 
