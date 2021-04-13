@@ -303,6 +303,8 @@ function handleResponse(response: Response): Promise<HTTPResponse> {
             if (!json.message) {
                 err = buildSplunkError({
                     message: `Malformed error message (no message) for endpoint: ${response.url}.`,
+                    code: json.code,
+                    moreInfo: json.moreInfo,
                     httpStatusCode: response.status,
                     details: {
                         response: text,
