@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2020 Splunk, Inc.
+ * Copyright 2021 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -27,13 +27,11 @@
 
 import {
     ActivatePipelineRequest,
+    Blob,
     ConnectionPatchRequest,
     ConnectionPutRequest,
     ConnectionRequest,
     ConnectionSaveResponse,
-    DataStream,
-    DataStreamRequest,
-    DataStreamResponse,
     DeactivatePipelineRequest,
     DecompileRequest,
     DecompileResponse,
@@ -131,18 +129,6 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as ConnectionSaveResponse);
     }
     /**
-     * Creates a data stream for a tenant.
-     * @param dataStreamRequest Request JSON
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return DataStreamResponse
-     */
-    public createDataStream = (dataStreamRequest: DataStreamRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DataStreamResponse> => {
-        const path = `/streams/v3beta1/datastreams`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dataStreamRequest, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as DataStreamResponse);
-    }
-    /**
      * Creates a pipeline.
      * @param pipelineRequest Request JSON
      * @param args parameters to be sent with the request
@@ -209,21 +195,8 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Deletes a data stream for a tenant.
-     * @param id ID
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteDataStream = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            id: id
-        };
-        const path = this.template`/streams/v3beta1/datastreams/${'id'}`(path_params);
-        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
      * Delete file.
+     * @deprecated
      * @param fileId File ID
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
@@ -279,22 +252,8 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Describes a data stream for a tenant.
-     * @param id ID
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return DataStreamResponse
-     */
-    public describeDataStream = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DataStreamResponse> => {
-        const path_params = {
-            id: id
-        };
-        const path = this.template`/streams/v3beta1/datastreams/${'id'}`(path_params);
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as DataStreamResponse);
-    }
-    /**
      * Get file metadata.
+     * @deprecated
      * @param fileId File ID
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
@@ -310,6 +269,7 @@ export class GeneratedStreamsService extends BaseApiService {
     }
     /**
      * Returns files metadata.
+     * @deprecated
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return FilesMetaDataResponse
@@ -541,21 +501,6 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as PaginatedResponseOfConnectorResponse);
     }
     /**
-     * Returns a list of datastreams for a tenant.
-     * @param args parameters to be sent with the request
-     * @param args.offset offset
-     * @param args.pageSize pageSize
-     * @param args.sortDir sortDir
-     * @param args.sortField sortField
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Array<DataStreamResponse>
-     */
-    public listDataStreams = (args?: { offset?: number, pageSize?: number, sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<DataStreamResponse>> => {
-        const path = `/streams/v3beta1/datastreams`;
-        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Array<DataStreamResponse>);
-    }
-    /**
      * Returns all pipelines.
      * @param args parameters to be sent with the request
      * @param args.activated activated
@@ -699,22 +644,6 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as ConnectionSaveResponse);
     }
     /**
-     * Patches an existing data stream for a tenant.
-     * @param id ID
-     * @param dataStreamRequest Request JSON
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return DataStream
-     */
-    public updateDataStream = (id: string, dataStreamRequest: DataStreamRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DataStream> => {
-        const path_params = {
-            id: id
-        };
-        const path = this.template`/streams/v3beta1/datastreams/${'id'}`(path_params);
-        return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dataStreamRequest, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as DataStream);
-    }
-    /**
      * Updates an existing pipeline.
      * @param id Pipeline ID
      * @param pipelineRequest Request JSON
@@ -745,6 +674,29 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = this.template`/streams/v3beta1/templates/${'templateId'}`(path_params);
         return this.client.patch(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), templatePatchRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as TemplateResponse);
+    }
+    /**
+     * Upload new file.
+     * @deprecated
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return UploadFileResponse
+     */
+    public uploadFile = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<UploadFileResponse> => {
+        const path = `/streams/v3beta1/files`;
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as UploadFileResponse);
+    }
+    /**
+     * Upload new lookup file.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return UploadFileResponse
+     */
+    public uploadLookupFile = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<UploadFileResponse> => {
+        const path = `/streams/v3beta1/lookups/files`;
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as UploadFileResponse);
     }
     /**
      * Verifies whether the Streams JSON is valid.

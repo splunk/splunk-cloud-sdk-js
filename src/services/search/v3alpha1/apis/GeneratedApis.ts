@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2020 Splunk, Inc.
+ * Copyright 2021 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -26,10 +26,12 @@
 
 
 import {
+    Dataset,
     DeleteSearchJob,
     FieldsSummary,
     ListPreviewResultsResponse,
     ListSearchResultsResponse,
+    Module,
     RecurringSearch,
     SearchJob,
     SearchModule,
@@ -44,7 +46,13 @@ import { SplunkError, RequestStatus } from '../../../../client';
 
 export const SEARCH_SERVICE_PREFIX: string = '/search/v3alpha1';
 export const SEARCH_SERVICE_CLUSTER: string = 'api';
-
+/**
+  * @export
+  */
+ export enum OutputModeEnum {
+     Csv = 'csv',
+     Json = 'json'
+ }
 /**
  * Splunk Search service
  * Version: v3alpha1
@@ -57,6 +65,21 @@ export class GeneratedSearchService extends BaseApiService {
 
     getServicePrefix() : string {
         return SEARCH_SERVICE_PREFIX;
+    }
+    /**
+     * Creates a dataset.
+     * @param dataset
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Dataset
+     */
+    public createDataset = (dataset?: Dataset, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
+        if (!dataset) {
+            throw new SplunkError({ message: `Bad Request: dataset is empty or undefined` });
+        }
+        const path = `/search/v3alpha1/datasets`;
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dataset, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Dataset);
     }
     /**
      * Creates a search job.
@@ -72,21 +95,6 @@ export class GeneratedSearchService extends BaseApiService {
         const path = `/search/v3alpha1/jobs`;
         return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), searchJob, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as SearchJob);
-    }
-    /**
-     * Create a multi-statement module with inter-dependencies between statements.
-     * @param searchModule
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return SearchModule
-     */
-    public createMultiSearch = (searchModule?: SearchModule, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<SearchModule> => {
-        if (!searchModule) {
-            throw new SplunkError({ message: `Bad Request: searchModule is empty or undefined` });
-        }
-        const path = `/search/v3alpha1/multisearch`;
-        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), searchModule, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as SearchModule);
     }
     /**
      * Creates a recurring search job.
@@ -119,6 +127,40 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as SearchModule);
     }
     /**
+     * Modifies/Creates a module with a specified  resource name (resourceName). 
+     * @param resourceName The resource name.
+     * @param module
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Module
+     */
+    public createSpl2Module = (resourceName: string, module?: Module, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Module> => {
+        if (!module) {
+            throw new SplunkError({ message: `Bad Request: module is empty or undefined` });
+        }
+        const path_params = {
+            resourceName: resourceName
+        };
+        const path = this.template`/search/v3alpha1/spl2-modules/${'resourceName'}`(path_params);
+        return this.client.put(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), module, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Module);
+    }
+    /**
+     * Deletes a dataset with a  specified dataset ID (datasetid). 
+     * @param datasetid The dataset ID.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Dataset
+     */
+    public deleteDatasetById = (datasetid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
+        const path_params = {
+            datasetid: datasetid
+        };
+        const path = this.template`/search/v3alpha1/datasets/${'datasetid'}`(path_params);
+        return this.client.delete(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Dataset);
+    }
+    /**
      * Creates a search job that deletes events from an index. The events are deleted from the index in the specified module, based on the search criteria as specified by the predicate. 
      * @param deleteSearchJob
      * @param args parameters to be sent with the request
@@ -149,6 +191,39 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as RecurringSearch);
     }
     /**
+     * Deletes a module with a  specified resource name (resourceName). 
+     * @param resourceName The resource name.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Module
+     */
+    public deleteSpl2ModuleByResourceName = (resourceName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Module> => {
+        const path_params = {
+            resourceName: resourceName
+        };
+        const path = this.template`/search/v3alpha1/spl2-modules/${'resourceName'}`(path_params);
+        return this.client.delete(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Module);
+    }
+    /**
+     * Export the search results for the job with the specified search ID (SID). Export the results as a csv file or json file.
+     * @param sid The search ID.
+     * @param args parameters to be sent with the request
+     * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
+     * @param args.filename The export results filename. Default: exportResults 
+     * @param args.outputMode Specifies the format for the returned output. 
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return { [key: string]: any; }
+     */
+    public exportResults = (sid: string, args?: { count?: number, filename?: string, outputMode?: OutputModeEnum, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<{ [key: string]: any; }> => {
+        const path_params = {
+            sid: sid
+        };
+        const path = this.template`/search/v2beta1/jobs/${'sid'}/export`(path_params);
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as { [key: string]: any; });
+    }
+    /**
      * Returns all search jobs associated with a recurring search with a specified recurring search ID (rsid). 
      * @param rsid The recurring job ID.
      * @param args parameters to be sent with the request
@@ -163,6 +238,21 @@ export class GeneratedSearchService extends BaseApiService {
         const path = this.template`/search/v3alpha1/recurring-searches/${'rsid'}/jobs`(path_params);
         return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<SearchJob>);
+    }
+    /**
+     * Returns a dataset with a specified  dataset ID (datasetid). 
+     * @param datasetid The dataset ID.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Dataset
+     */
+    public getDatasetById = (datasetid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
+        const path_params = {
+            datasetid: datasetid
+        };
+        const path = this.template`/search/v3alpha1/datasets/${'datasetid'}`(path_params);
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Dataset);
     }
     /**
      * Returns a search job with a specified search ID (sid).
@@ -208,6 +298,21 @@ export class GeneratedSearchService extends BaseApiService {
         const path = this.template`/search/v3alpha1/recurring-searches/${'rsid'}`(path_params);
         return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as RecurringSearch);
+    }
+    /**
+     * Returns a module with a specified  resource name (resourceName). 
+     * @param resourceName The resource name.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Module
+     */
+    public getSpl2ModuleByResourceName = (resourceName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Module> => {
+        const path_params = {
+            resourceName: resourceName
+        };
+        const path = this.template`/search/v3alpha1/spl2-modules/${'resourceName'}`(path_params);
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Module);
     }
     /**
      * Return events summary, for search ID (SID) search.
@@ -307,6 +412,17 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as ListSearchResultsResponse);
     }
     /**
+     * gets a list of modules.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Array<Module>
+     */
+    public listSpl2Modules = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Module>> => {
+        const path = `/search/v3alpha1/spl2-modules`;
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Array<Module>);
+    }
+    /**
      * Returns an event distribution over time of the untransformed events that are read to-date for a job with a specified search ID (sid).
      * @param sid The search ID.
      * @param args parameters to be sent with the request
@@ -320,6 +436,25 @@ export class GeneratedSearchService extends BaseApiService {
         const path = this.template`/search/v3alpha1/jobs/${'sid'}/timeline-metadata/auto/time-buckets`(path_params);
         return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as TimeBucketsSummary);
+    }
+    /**
+     * Modifies a dataset with a specified  dataset ID (datasetid). 
+     * @param datasetid The dataset ID.
+     * @param dataset
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Dataset
+     */
+    public updateDatasetById = (datasetid: string, dataset?: Dataset, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
+        if (!dataset) {
+            throw new SplunkError({ message: `Bad Request: dataset is empty or undefined` });
+        }
+        const path_params = {
+            datasetid: datasetid
+        };
+        const path = this.template`/search/v3alpha1/datasets/${'datasetid'}`(path_params);
+        return this.client.patch(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dataset, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Dataset);
     }
     /**
      * Modifies a search job with a specified  search ID (sid) with an action. 

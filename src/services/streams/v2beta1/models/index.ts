@@ -44,6 +44,7 @@ export * from './GeneratedPreviewStartResponse';
 export * from './GeneratedPreviewState';
 export * from './GeneratedReactivatePipelineRequest';
 export * from './GeneratedResponse';
+export * from './GeneratedSource';
 export * from './GeneratedSplCompileRequest';
 export * from './GeneratedTemplatePatchRequest';
 export * from './GeneratedTemplatePutRequest';

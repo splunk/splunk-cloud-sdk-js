@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2020 Splunk, Inc.
+ * Copyright 2021 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -26,6 +26,7 @@
 
 import {
     ConnectionVersionResponse,
+    Source,
 } from './';
 
 /**
@@ -40,6 +41,13 @@ export interface ConnectionResponse {
      * @memberof ConnectionResponse
      */
     activePipelinesUsing?: Array<object>;
+
+    /**
+     * 
+     * @type {Array<Source>}
+     * @memberof ConnectionResponse
+     */
+    activeSourcesUsing?: Array<Source>;
 
     /**
      * 

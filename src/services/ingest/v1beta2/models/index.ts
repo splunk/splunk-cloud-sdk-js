@@ -7,6 +7,7 @@ export * from './GeneratedHECTokenCreateResponse';
 export * from './GeneratedHECTokenDeleteResponse';
 export * from './GeneratedHECTokenUpdateRequest';
 export * from './GeneratedHTTPResponse';
+export * from './GeneratedInlineObject';
 export * from './GeneratedMetric';
 export * from './GeneratedMetricAttribute';
 export * from './GeneratedMetricEvent';

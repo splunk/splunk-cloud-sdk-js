@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2020 Splunk, Inc.
+ * Copyright 2021 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -36,6 +36,8 @@ import {
     Group,
     GroupMember,
     GroupRole,
+    IdentityProviderBody,
+    IdentityProviderConfigBody,
     Member,
     Principal,
     PrincipalPublicKey,
@@ -159,6 +161,18 @@ export class GeneratedIdentityService extends BaseApiService {
             .then(response => response.body as Group);
     }
     /**
+     * Create an Identity Provider.
+     * @param identityProviderConfigBody The Identity Provider to create.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return IdentityProviderBody
+     */
+    public createIdentityProvider = (identityProviderConfigBody: IdentityProviderConfigBody, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<IdentityProviderBody> => {
+        const path = `/identity/v2beta1/identityproviders`;
+        return this.client.post(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), identityProviderConfigBody, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as IdentityProviderBody);
+    }
+    /**
      * Create a new principal
      * @param createPrincipalBody The new principal to add to the system.
      * @param args parameters to be sent with the request
@@ -194,6 +208,20 @@ export class GeneratedIdentityService extends BaseApiService {
             group: group
         };
         const path = this.template`/identity/v2beta1/groups/${'group'}`(path_params);
+        return this.client.delete(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
+    /**
+     * Deletes the Identity Provider.
+     * @param idp The Identity Provider name.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public deleteIdentityProvider = (idp: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path_params = {
+            idp: idp
+        };
+        const path = this.template`/identity/v2beta1/identityproviders/${'idp'}`(path_params);
         return this.client.delete(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
@@ -275,6 +303,21 @@ export class GeneratedIdentityService extends BaseApiService {
         const path = this.template`/identity/v2beta1/groups/${'group'}/roles/${'role'}`(path_params);
         return this.client.get(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as GroupRole);
+    }
+    /**
+     * Returns the Identity Provider for the given tenant.
+     * @param idp The Identity Provider name.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return IdentityProviderBody
+     */
+    public getIdentityProvider = (idp: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<IdentityProviderBody> => {
+        const path_params = {
+            idp: idp
+        };
+        const path = this.template`/identity/v2beta1/identityproviders/${'idp'}`(path_params);
+        return this.client.get(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as IdentityProviderBody);
     }
     /**
      * Returns a member of a given tenant.
@@ -411,6 +454,17 @@ export class GeneratedIdentityService extends BaseApiService {
         const path = `/identity/v2beta1/groups`;
         return this.client.get(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<string>);
+    }
+    /**
+     * Returns the list of Identity Providers for the given tenant.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Array<IdentityProviderBody>
+     */
+    public listIdentityProvider = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<IdentityProviderBody>> => {
+        const path = `/identity/v2beta1/identityproviders`;
+        return this.client.get(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Array<IdentityProviderBody>);
     }
     /**
      * Returns a list of groups that a member belongs to within a tenant.
@@ -596,6 +650,22 @@ export class GeneratedIdentityService extends BaseApiService {
         const path = this.template`/system/identity/v2beta1/principals/${'principal'}/revoke`(path_params);
         return this.client.post(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
+    }
+    /**
+     * Update the configuration for an Identity Provider.
+     * @param idp The Identity Provider name.
+     * @param identityProviderConfigBody The properties to update the Identity Provider with.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return IdentityProviderBody
+     */
+    public updateIdentityProvider = (idp: string, identityProviderConfigBody: IdentityProviderConfigBody, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<IdentityProviderBody> => {
+        const path_params = {
+            idp: idp
+        };
+        const path = this.template`/identity/v2beta1/identityproviders/${'idp'}`(path_params);
+        return this.client.put(IDENTITY_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), identityProviderConfigBody, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as IdentityProviderBody);
     }
     /**
      * Update principal public key
