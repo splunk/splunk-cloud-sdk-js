@@ -26,7 +26,8 @@
 
 import {
     DataStreamProperties,
-} from './';
+
+} from './GeneratedDataStreamProperties';
 
 /**
  *
