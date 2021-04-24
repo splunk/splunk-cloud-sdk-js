@@ -24,10 +24,6 @@
  * Do not edit the class manually.
  */
 
-import {
-    Blob,
-} from './';
-
 /**
  *
  * @export
@@ -35,7 +31,7 @@ import {
  */
 export interface InlineObject {
     /**
-     * 
+     *
      * @type {Blob}
      * @memberof InlineObject
      */
