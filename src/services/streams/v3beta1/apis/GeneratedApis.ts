@@ -27,7 +27,6 @@
 
 import {
     ActivatePipelineRequest,
-    Blob,
     ConnectionPatchRequest,
     ConnectionPutRequest,
     ConnectionRequest,
