@@ -6,31 +6,33 @@ All notable changes to this project will be documented in this file. See [standa
 # [16.0.0-beta2](https://github.com/splunk/splunk-cloud-sdk-js/compare/v16.0.0-beta1...v16.0.0-beta2) (2021-04-26)
 
 
-### Bug Fixes
-
-* fix import blob issue ([34172bd](https://github.com/splunk/splunk-cloud-sdk-js/commits/34172bd))
-* **client:** handle partial error payloads ([0fcac3a](https://github.com/splunk/splunk-cloud-sdk-js/commits/0fcac3a))
-
 
 ### Features
-
-* update with code-generated api bindings and models performed 2021-04-21 ([72239e3](https://github.com/splunk/splunk-cloud-sdk-js/commits/72239e3))
-
-
-
-<a name="16.0.0-beta2"></a>
-# [16.0.0-beta2](https://github.com/splunk/splunk-cloud-sdk-js/compare/v16.0.0-beta1...v16.0.0-beta2) (2021-04-26)
+#### Breaking Changes
+* Identity service: `useDefaultIdp` optional property was removed from `Tenant` model in v2beta1 and v3
 
 
-### Bug Fixes
+* Ingest service:
+ 
+     - `postCollectorRaw` and `postCollectorRawV1` APIs were removed from v1beta2
+     - In v1beta2/GeneratedHECResponse: `invalid_event_number`  was renamed as `invalidEventNumber`
+     - In v1beta2/GeneratedHECTokenAccessResponse: `ack_enabled` was  renamed as `ackEnabled`
+    , `allow_query_string_auth` was renamed as `allowQueryStringAuth`, `created_at` was renamed as `createdAt`,
+ `created_by` was renamed as `createdBy`, `last_modified_at` was renamed as `lastModifiedAt`, `last_modified_by` was renamed as `lastModifiedBy`
+     - In  v1beta2/GeneratedHECTokenUpdateRequest, `ack_enabled` was renamed as `ackEnabled`, `allow_query_string_auth` was renamed as `allowQueryStringAuth`
 
-* fix import blob issue ([34172bd](https://github.com/splunk/splunk-cloud-sdk-js/commits/34172bd))
-* **client:** handle partial error payloads ([0fcac3a](https://github.com/splunk/splunk-cloud-sdk-js/commits/0fcac3a))
+* Streams service: `createDataStream`, `deleteDataStream`, `describeDataStream`, `listDataStreams`, and `updateDataStream` APIs were removed in v3beta1
+
+#### Non-Breaking Changes
+* Search service: updated to target v2 endpoints (previously v2beta1) including new endpoint of `exportResults`
+
+* Identity service: 
+     - added new APIs of `createIdentityProvider`, `deleteIdentityProvider`, `getIdentityProvider`, `listIdentityProvider`, and `updateIdentityProvider` in v2beta1 and v3
+
+     - New optional property `acceptTos` for `CreatePrincipalBody` was added in v2beta1 and v3
 
 
-### Features
-
-* update with code-generated api bindings and models performed 2021-04-21 ([72239e3](https://github.com/splunk/splunk-cloud-sdk-js/commits/72239e3))
+* Streams service: Added new APIs of `uploadFile` and `uploadLookupFile`
 
 
 
