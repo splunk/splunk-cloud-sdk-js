@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="16.0.0-beta1"></a>
+# [16.0.0-beta1](https://github.com/splunk/splunk-cloud-sdk-js/compare/v15.0.0...v16.0.0-beta1) (2021-03-31)
+
+
+### Services
+
+##### Features
+
+- Add support to tenant-scoped hostname: initiate the client with `hostname` set to enable the client visit endpoints using tenant-scoped url. Example: 
+
+
+`new ServiceClient(
+                                                         { tokenSource:'your-token-source',
+                                                             defaultTenant: 'your-tenant',
+                                                             hostname: new Hostname('domain','region')
+                                                         });`
+
+
+
+
+
+
 <a name="15.0.0"></a>
 # [15.0.0](https://github.com/splunk/splunk-cloud-sdk-js/compare/v14.0.0...v15.0.0) (2020-12-16)
 
