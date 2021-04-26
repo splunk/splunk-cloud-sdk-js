@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="16.0.0-beta2"></a>
+# [16.0.0-beta2](https://github.com/splunk/splunk-cloud-sdk-js/compare/v16.0.0-beta1...v16.0.0-beta2) (2021-04-26)
+
+
+### Bug Fixes
+
+* fix import blob issue ([34172bd](https://github.com/splunk/splunk-cloud-sdk-js/commits/34172bd))
+* **client:** handle partial error payloads ([0fcac3a](https://github.com/splunk/splunk-cloud-sdk-js/commits/0fcac3a))
+
+
+### Features
+
+* update with code-generated api bindings and models performed 2021-04-21 ([72239e3](https://github.com/splunk/splunk-cloud-sdk-js/commits/72239e3))
+
+
+
 <a name="16.0.0-beta1"></a>
 # [16.0.0-beta1](https://github.com/splunk/splunk-cloud-sdk-js/compare/v15.0.0...v16.0.0-beta1) (2021-03-31)
 
