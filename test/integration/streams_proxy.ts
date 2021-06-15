@@ -105,6 +105,15 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
         });
     });
 
+    describe('Stream upload file', () => {
+        const path = require('path');
+        it('should return a successful response', () => {
+            return splunkCloud.streams.uploadFile(path.join(__dirname, 'data', 'fileupload.csv')).then(response => {
+                assert.equal(response.filename, 'fileupload.csv');
+            });
+        });
+    });
+
     describe('Test GET a Pipeline by id', () => {
         it('Should expected pipeline', () => {
             return splunkCloud.streams

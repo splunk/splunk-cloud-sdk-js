@@ -24,7 +24,8 @@
  * Do not edit the class manually.
  */
 
-
+import FormData from 'form-data';
+import { createReadStream } from 'fs';
 import {
     ActivatePipelineRequest,
     ConnectionPatchRequest,
@@ -677,24 +678,34 @@ export class GeneratedStreamsService extends BaseApiService {
     /**
      * Upload new file.
      * @deprecated
+     * @param fileName file to be uploaded
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return UploadFileResponse
      */
-    public uploadFile = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<UploadFileResponse> => {
+    public uploadFile = (fileName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<UploadFileResponse> => {
         const path = `/streams/v3beta1/files`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+        var formData = new FormData();
+        const readStream = createReadStream(fileName);
+        formData.append("file", readStream);
+        const formHeaders = formData.getHeaders(); 
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), formData, { query: args, headers: formHeaders, statusCallback:  requestStatusCallback})
             .then(response => response.body as UploadFileResponse);
     }
     /**
      * Upload new lookup file.
+     * @param fileName file to be uploaded
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return UploadFileResponse
      */
-    public uploadLookupFile = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<UploadFileResponse> => {
+    public uploadLookupFile = (fileName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<UploadFileResponse> => {
         const path = `/streams/v3beta1/lookups/files`;
-        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+        var formData = new FormData();
+        const readStream = createReadStream(fileName);
+        formData.append("file", readStream);
+        const formHeaders = formData.getHeaders(); 
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), formData, { query: args, headers: formHeaders, statusCallback:  requestStatusCallback})
             .then(response => response.body as UploadFileResponse);
     }
     /**

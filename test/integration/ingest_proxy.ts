@@ -53,6 +53,16 @@ describe('integration tests for Ingest Endpoints', () => {
             });
         });
 
+        describe('Ingest upload file', () => {
+            const path = require('path');
+            it('should return a successful response', () => {
+                return splunk.ingest.uploadFiles(path.join(__dirname, 'data', 'fileupload.csv')).then(response => {
+                    assert.equal(response.message, 'Uploaded file successfully.');
+                    assert.equal(response.code, 'SUCCESS');
+                });
+            });
+        });
+
         describe('Post events with bad auth token', () => {
             it('should return a 401 response', () => {
                 const events = [event1, event2, event3];

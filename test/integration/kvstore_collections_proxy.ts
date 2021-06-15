@@ -221,8 +221,8 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
 export function createRecord(collection: string, record: object): Promise<object> {
     return splunkCloud.kvstore.insertRecord(collection, record as { [key: string]: string })
         .then(response => {
-            assert.notEqual(response._key, null);
-            assert.typeOf(response._key, 'string');
+            assert.notEqual(response.key, null);
+            assert.typeOf(response.key, 'string');
             return response;
         });
 }

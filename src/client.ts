@@ -529,10 +529,13 @@ export class ServiceClient {
             'Content-Type': ContentType.JSON,
             'Splunk-Client': `${agent.useragent}/${agent.version}`,
         });
-
         if (headers !== undefined && headers !== {}) {
             Object.keys(headers).forEach(key => {
-                requestParamHeaders.append(key, headers[key]);
+                if (key.toLowerCase() === 'content-type') {
+                    requestParamHeaders.set(key, headers[key]);
+                } else {
+                    requestParamHeaders.append(key, headers[key]);
+                }
             });
         }
         return requestParamHeaders;
@@ -585,10 +588,15 @@ export class ServiceClient {
         const url = this.buildUrl(cluster, path, opts.query);
         const queue = opts.queue || ServiceClient.queueFromPath(path, method);
         const headers = await this.buildHeaders(opts.headers);
+        const type = headers.get('Content-Type');
+        let contentTypeForm = false;
+        if (type !== null) {
+            contentTypeForm = type.includes('multipart/form-data');
+        }
         const options = {
             method,
             headers,
-            body: JSON.stringify(data),
+            body: contentTypeForm ? data : JSON.stringify(data),
         };
         const request = new Request(url, options);
         const requestStatusCallback = opts.statusCallback;
@@ -596,6 +604,7 @@ export class ServiceClient {
             .add(queue, request, requestStatusCallback)
             .then(responseRequest => this.invokeHooks(...responseRequest));
     }
+
 
     /**
      * Performs a GET request on the specified path.

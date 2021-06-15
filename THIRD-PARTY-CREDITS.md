@@ -5,6 +5,16 @@ The Splunk Developer Cloud SDK for JavaScript contains some libraries that were 
 
 We want to thank the contributors to these projects:
 
+## form-data
+
+Name: form-data
+
+Version: 4.0.0
+
+License: [MIT](https://github.com/form-data/form-data/raw/master/License)
+
+Repository: [https://github.com/form-data/form-data](https://github.com/form-data/form-data)
+
 ## @commitlint/cli
 
 Name: @commitlint/cli
@@ -69,7 +79,7 @@ Repository: [https://github.com/DefinitelyTyped/DefinitelyTyped](https://github.
 
 Name: @types/node
 
-Version: 10.14.13
+Version: 10.17.60
 
 License: [MIT](https://github.com/DefinitelyTyped/DefinitelyTyped/raw/master/LICENSE)
 

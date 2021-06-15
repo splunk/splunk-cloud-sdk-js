@@ -25,6 +25,8 @@
  */
 
 
+import FormData from 'form-data';
+import { createReadStream } from 'fs';
 import {
     Event,
     HECResponse,
@@ -170,13 +172,18 @@ export class GeneratedIngestService extends BaseApiService {
     }
     /**
      * Upload a CSV or text file that contains events. The file limit is 1MB or an error is returned.
+     * @param fileName file to be uploaded
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return UploadSuccessResponse
      */
-    public uploadFiles = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<UploadSuccessResponse> => {
+     public uploadFiles = (fileName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<UploadSuccessResponse> => {
         const path = `/ingest/v1beta2/files`;
-        return this.client.post(INGEST_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+        var formData = new FormData();
+        const readStream = createReadStream(fileName);
+        formData.append("upfile", readStream);
+        const formHeaders = formData.getHeaders();
+        return this.client.post(INGEST_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), formData, { query: args, headers: formHeaders, statusCallback:  requestStatusCallback})
             .then(response => response.body as UploadSuccessResponse);
     }
 }

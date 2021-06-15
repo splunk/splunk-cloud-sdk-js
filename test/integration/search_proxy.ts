@@ -53,7 +53,7 @@ const searchJobWithTimeBucket = {
 
 describe('integration tests Using Search APIs', () => {
     before(() => {
-        const events = [];
+        const events: any[] = [];
         for (let i = 0; i < 10; i++) {
             events.push({ body: { message: `Test event #${i}` } });
         }
