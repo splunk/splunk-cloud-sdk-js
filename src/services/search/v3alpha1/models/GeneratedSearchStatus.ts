@@ -25,7 +25,7 @@
  */
 
 /**
- * The current status of the search job. The valid status values are  'running', 'done', 'canceled', and 'failed'. 
+ * The current status of the search job. The valid status values are 'running', 'done', 'canceled', and 'failed'. 
  * @export
  */
 export enum SearchStatus {

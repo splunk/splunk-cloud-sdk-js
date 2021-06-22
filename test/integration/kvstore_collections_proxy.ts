@@ -128,7 +128,7 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                 .then(listRecordsResponse => {
                     assert.equal(listRecordsResponse.length, 3);
                     for (const record of listRecordsResponse) {
-                        assert.equal(Object.keys(record).length, 3);
+                        assert.equal(Object.keys(record).length, 4);
                     }
                 });
         });
@@ -221,8 +221,8 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
 export function createRecord(collection: string, record: object): Promise<object> {
     return splunkCloud.kvstore.insertRecord(collection, record as { [key: string]: string })
         .then(response => {
-            assert.notEqual(response.key, null);
-            assert.typeOf(response.key, 'string');
+            assert.notEqual(response._key, null);
+            assert.typeOf(response._key, 'string');
             return response;
         });
 }

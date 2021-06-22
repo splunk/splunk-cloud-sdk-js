@@ -106,6 +106,13 @@ export interface PipelineResponse {
 
     /**
      * 
+     * @type {{ [key: string]: string; }}
+     * @memberof PipelineResponse
+     */
+    labels?: { [key: string]: string; };
+
+    /**
+     * 
      * @type {number}
      * @memberof PipelineResponse
      */
@@ -154,6 +161,13 @@ export interface PipelineResponse {
     tenantId?: string;
 
     /**
+     * Null prior to initial activation. After deactivation, this field will be set to the SHA at the time of the last activation.
+     * @type {string}
+     * @memberof PipelineResponse
+     */
+    uberJarSha256?: string;
+
+    /**
      * 
      * @type {Array<string>}
      * @memberof PipelineResponse
@@ -177,6 +191,8 @@ export enum PipelineResponseStatusEnum {
     ACTIVATED = 'ACTIVATED',
     FAILED = 'FAILED',
     RESTARTING = 'RESTARTING',
-    FINISHED = 'FINISHED'
+    FINISHED = 'FINISHED',
+    ACTIVATING = 'ACTIVATING',
+    DEACTIVATING = 'DEACTIVATING'
 }
 

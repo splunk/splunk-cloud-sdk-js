@@ -24,8 +24,10 @@
  * Do not edit the class manually.
  */
 
+
+
 import FormData from 'form-data';
-import { createReadStream } from 'fs';
+import { createReadStream } from "fs";
 import {
     ActivatePipelineRequest,
     ConnectionPatchRequest,
@@ -49,6 +51,8 @@ import {
     Pipeline,
     PipelinePatchRequest,
     PipelineReactivateResponse,
+    PipelineReactivateResponseAsync,
+    PipelineReactivationStatus,
     PipelineRequest,
     PipelineResponse,
     PreviewData,
@@ -63,8 +67,10 @@ import {
     TemplatePutRequest,
     TemplateRequest,
     TemplateResponse,
+    UpgradePipelineRequest,
     UplType,
     UploadFileResponse,
+    ValidateConnectionRequest,
     ValidateRequest,
     ValidateResponse,
 } from '../models';
@@ -120,10 +126,11 @@ export class GeneratedStreamsService extends BaseApiService {
      * Create a new DSP connection.
      * @param connectionRequest Request JSON
      * @param args parameters to be sent with the request
+     * @param args.skipValidation Skip validation
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return ConnectionSaveResponse
      */
-    public createConnection = (connectionRequest: ConnectionRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ConnectionSaveResponse> => {
+    public createConnection = (connectionRequest: ConnectionRequest, args?: { skipValidation?: boolean, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ConnectionSaveResponse> => {
         const path = `/streams/v3beta1/connections`;
         return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), connectionRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as ConnectionSaveResponse);
@@ -522,6 +529,7 @@ export class GeneratedStreamsService extends BaseApiService {
     /**
      * Returns a list of all templates.
      * @param args parameters to be sent with the request
+     * @param args.createUserId createUserId
      * @param args.offset offset
      * @param args.pageSize pageSize
      * @param args.sortDir sortDir
@@ -529,7 +537,7 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return PaginatedResponseOfTemplateResponse
      */
-    public listTemplates = (args?: { offset?: number, pageSize?: number, sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfTemplateResponse> => {
+    public listTemplates = (args?: { createUserId?: string, offset?: number, pageSize?: number, sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfTemplateResponse> => {
         const path = `/streams/v3beta1/templates`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PaginatedResponseOfTemplateResponse);
@@ -600,6 +608,23 @@ export class GeneratedStreamsService extends BaseApiService {
         const path = this.template`/streams/v3beta1/pipelines/${'id'}/reactivate`(path_params);
         return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), reactivatePipelineRequest, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PipelineReactivateResponse);
+    }
+    /**
+     * Get pipeline reactivation status
+     * @param id Pipeline ID
+     * @param upgradeId Pipeline Upgrade ID
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return PipelineReactivationStatus
+     */
+    public reactivationStatus = (id: string, upgradeId: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PipelineReactivationStatus> => {
+        const path_params = {
+            id: id,
+            upgradeId: upgradeId
+        };
+        const path = this.template`/streams/v3beta1/pipelines/${'id'}/upgrade/${'upgradeId'}`(path_params);
+        return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as PipelineReactivationStatus);
     }
     /**
      * Creates a preview session for a pipeline.
@@ -676,6 +701,25 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as TemplateResponse);
     }
     /**
+     * Upgrades a pipeline async
+     * @param id Pipeline ID
+     * @param upgradePipelineRequest Request JSON
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return PipelineReactivateResponseAsync
+     */
+    public upgradePipeline = (id: string, upgradePipelineRequest?: UpgradePipelineRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PipelineReactivateResponseAsync> => {
+        if (!upgradePipelineRequest) {
+            throw new SplunkError({ message: `Bad Request: upgradePipelineRequest is empty or undefined` });
+        }
+        const path_params = {
+            id: id
+        };
+        const path = this.template`/streams/v3beta1/pipelines/${'id'}/upgrade`(path_params);
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), upgradePipelineRequest, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as PipelineReactivateResponseAsync);
+    }
+    /**
      * Upload new file.
      * @deprecated
      * @param fileName file to be uploaded
@@ -707,6 +751,17 @@ export class GeneratedStreamsService extends BaseApiService {
         const formHeaders = formData.getHeaders(); 
         return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), formData, { query: args, headers: formHeaders, statusCallback:  requestStatusCallback})
             .then(response => response.body as UploadFileResponse);
+    }
+    /**
+     * Validates the configuration of a DSP connection.
+     * @param validateConnectionRequest Request JSON
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public validateConnection = (validateConnectionRequest: ValidateConnectionRequest, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path = `/streams/v3beta1/connections/validate`;
+        return this.client.post(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), validateConnectionRequest, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
     }
     /**
      * Verifies whether the Streams JSON is valid.

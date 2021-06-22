@@ -63,6 +63,13 @@ export interface PipelinePatchRequest {
     description?: string;
 
     /**
+     * Optional labels in associated with the pipeline. A label is represented by a key and a value.
+     * @type {{ [key: string]: string; }}
+     * @memberof PipelinePatchRequest
+     */
+    labels?: { [key: string]: string; };
+
+    /**
      * The name of the pipeline.
      * @type {string}
      * @memberof PipelinePatchRequest

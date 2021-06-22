@@ -62,5 +62,12 @@ export interface PipelineRequest {
      */
     description?: string;
 
+    /**
+     * Optional labels in associated with the pipeline. A label is represented by a key and a value.
+     * @type {{ [key: string]: string; }}
+     * @memberof PipelineRequest
+     */
+    labels?: { [key: string]: string; };
+
 }
 

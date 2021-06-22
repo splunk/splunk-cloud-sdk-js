@@ -67,6 +67,13 @@ export interface TemplateResponse {
      * @type {string}
      * @memberof TemplateResponse
      */
+    learnMoreLocation?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof TemplateResponse
+     */
     name?: string;
 
     /**

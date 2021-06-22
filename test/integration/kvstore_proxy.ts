@@ -159,7 +159,7 @@ describe('Integration tests for KVStore Endpoints', () => {
                 splunkCloud.kvstore
                     .insertRecord(testKVCollectionName, oldRecord)
                     .then((response) => {
-                        oldKey = response.key;
+                        oldKey = response._key;
                     })
             );
 
@@ -174,7 +174,7 @@ describe('Integration tests for KVStore Endpoints', () => {
                     .putRecord(testKVCollectionName, oldKey, { lazy: 'god' })
                     .then(putResponse => {
                         assert.isObject(putResponse);
-                        assert.equal(putResponse.key, oldKey);
+                        assert.equal(putResponse._key, oldKey);
                     })
             );
 
@@ -183,7 +183,7 @@ describe('Integration tests for KVStore Endpoints', () => {
                     .putRecord(testKVCollectionName, newKey, newRecord)
                     .then(putResponse => {
                         assert.isObject(putResponse);
-                        assert.equal(putResponse.key, newKey);
+                        assert.equal(putResponse._key, newKey);
                     })
             );
         });

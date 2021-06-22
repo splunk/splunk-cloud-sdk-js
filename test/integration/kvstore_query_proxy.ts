@@ -130,7 +130,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                 .then(queryRecordsResponse => {
                     assert.equal(queryRecordsResponse.length, 3);
                     for (const recordObject of queryRecordsResponse) {
-                        assert.equal(Object.keys(recordObject).length, 3);
+                        assert.equal(Object.keys(recordObject).length, 4);
                     }
                 });
         });

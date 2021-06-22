@@ -32,17 +32,129 @@
 export interface Source {
     /**
      * 
-     * @type {string}
+     * @type {{ [key: string]: any; }}
      * @memberof Source
      */
-    node?: string;
+    arguments?: { [key: string]: any; };
 
     /**
      * 
      * @type {string}
      * @memberof Source
      */
-    pipelineVersion?: string;
+    connectionId?: string;
+
+    /**
+     * 
+     * @type {number}
+     * @memberof Source
+     */
+    connectionVersion?: number;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof Source
+     */
+    connectorId?: string;
+
+    /**
+     * 
+     * @type {number}
+     * @memberof Source
+     */
+    createDate?: number;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof Source
+     */
+    createUserId?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof Source
+     */
+    dataStreamId?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof Source
+     */
+    description?: string;
+
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Source
+     */
+    enabled?: boolean;
+
+    /**
+     * 
+     * @type {{ [key: string]: any; }}
+     * @memberof Source
+     */
+    eventAttributes?: { [key: string]: any; };
+
+    /**
+     * 
+     * @type {string}
+     * @memberof Source
+     */
+    id?: string;
+
+    /**
+     * 
+     * @type {number}
+     * @memberof Source
+     */
+    lastUpdateDate?: number;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof Source
+     */
+    lastUpdateUserId?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof Source
+     */
+    name?: string;
+
+    /**
+     * 
+     * @type {number}
+     * @memberof Source
+     */
+    parallelism?: number;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof Source
+     */
+    schedule?: string;
+
+    /**
+     * 
+     * @type {string}
+     * @memberof Source
+     */
+    tenantId?: string;
+
+    /**
+     * 
+     * @type {number}
+     * @memberof Source
+     */
+    version?: number;
 
 }
 

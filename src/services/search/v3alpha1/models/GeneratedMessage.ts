@@ -25,7 +25,7 @@
  */
 
 /**
- * The message field in search results or search jobs.  The types of messages are INFO, DEBUG, FATAL, and ERROR. 
+ * The message field in search results or search jobs. The types of messages are INFO, DEBUG, FATAL, and ERROR. 
  * @export
  * @interface Message
  */

@@ -31,7 +31,7 @@
  */
 export interface UpdateJob {
     /**
-     * The status to PATCH to an existing search job.  The only status values you can PATCH are 'canceled' and 'finalized'.  You can PATCH the 'canceled' status only to a search job that is running. 
+     * The status to PATCH to an existing search job. The only status values you can PATCH are 'canceled' and 'finalized'. You can PATCH the 'canceled' status only to a search job that is running. 
      * @type {string}
      * @memberof UpdateJob
      */

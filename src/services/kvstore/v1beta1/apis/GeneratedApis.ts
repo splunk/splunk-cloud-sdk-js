@@ -25,12 +25,13 @@
  */
 
 
+
 import {
     ErrorResponse,
     IndexDefinition,
     IndexDescription,
-    Key,
     PingResponse,
+    Record,
 } from '../models';
 import BaseApiService from "../../../../baseapiservice";
 import { KVStoreServiceExtensions } from "../../../../service_extensions/kvstore";
@@ -141,15 +142,15 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param body Record to add to the collection, formatted as a JSON object.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Key
+     * @return Record
      */
-    public insertRecord = (collection: string, body: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Key> => {
+    public insertRecord = (collection: string, body: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Record> => {
         const path_params = {
             collection: collection
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}`(path_params);
         return this.client.post(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Key);
+            .then(response => response.body as Record);
     }
     /**
      * Inserts multiple records in a single request.
@@ -221,16 +222,16 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param body Record to add to the collection, formatted as a JSON object.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Key
+     * @return Record
      */
-    public putRecord = (collection: string, key: string, body: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Key> => {
+    public putRecord = (collection: string, key: string, body: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Record> => {
         const path_params = {
             collection: collection,
             key: key
         };
         const path = this.template`/kvstore/v1beta1/collections/${'collection'}/records/${'key'}`(path_params);
         return this.client.put(KVSTORE_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Key);
+            .then(response => response.body as Record);
     }
     /**
      * Returns a list of query records in a collection.

@@ -81,6 +81,13 @@ export interface ConnectorResponse {
 
     /**
      * 
+     * @type {{ [key: string]: any; }}
+     * @memberof ConnectorResponse
+     */
+    metadata?: { [key: string]: any; };
+
+    /**
+     * 
      * @type {string}
      * @memberof ConnectorResponse
      */
