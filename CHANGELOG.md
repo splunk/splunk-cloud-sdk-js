@@ -44,6 +44,8 @@ All notable changes to this project will be documented in this file. See [standa
     - `ACTIVATING` and `DEACTIVATING` have been added to model `PipelineResponse` status enum
     - Model `Source` has changed with properties `node` and `pipelineVersion` deleted and 18 new properties added
     - Parameter `learnMoreLocation` has been added to model `TemplateResponse`
+    
+* Added support for file upload endpoints with a content-type multipart/form-data
 
 
 
