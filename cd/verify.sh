@@ -24,5 +24,8 @@ echo "import { SplunkCloud } from '@splunkdev/cloud-sdk';" > temp.jsx
 cat index.jsx >> temp.jsx
 mv temp.jsx index.jsx
 
+sed 's/module.exports = {/module.exports={node: {fs: \"empty\" },/' ../webpack.config.js > ../webpack1.config.js
+mv ../webpack1.config.js ../webpack.config.js
+
 echo "build the test app..."
 cd .. & yarn build
