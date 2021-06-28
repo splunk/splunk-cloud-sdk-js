@@ -2,6 +2,53 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="16.0.0-beta3"></a>
+# [16.0.0-beta3](https://github.com/splunk/splunk-cloud-sdk-js/compare/v16.0.0-beta2...v16.0.0-beta3) (2021-06-22)
+
+
+### Features
+#### Breaking Changes
+* Ingest Service (v1beta2):
+    - Model `HECResponse` and `InlineObject` have been removed
+    
+* KVStore Service (v1beta1):
+    - Model `Key` renamed to `Record` and has an additional required field `user`
+    - Endpoints `insertRecord` and `putRecord` have returnType Promise<Record> (earlier it was Promise<Key>)
+    
+* Search Service (v3alpha1): 
+    - Models `RecurringSearch` and `UpdateRecurringSearch` have been removed
+    - Endpoint `createDataset` takes in argument `DatasetPOST` instead of `Dataset`
+    - Endpoint `updateDatasetById` takes in argument `DatasetPATCH` instead of `Dataset`
+    - Endpoint `deleteDatasetById` has a returnType `Promise<object>` instead of `Promise<Dataset>`
+    - Endpoint `listSpl2Modules` has a returnType `Promise<ListModules>` instead of `Promise<Array<Module>>`
+    - Endpoints `createRecurringSearch`, `deleteRecurringSearch`, `getAllJobsForRecurringSearch`, `getJobForRecurringSearch`, `getRecurringSearch`, `listRecurringSearches` and `updateRecurringSearch` have been removed
+
+#### Non-Breaking Changes
+* Identity Service (v3):
+    - Models `ResetPasswordBody`, `UpdateGroupBody`, `UpdatePasswordBody`, `UpdateRoleBody` have been added
+    - Endpoints `resetPassword`, `updatePassword`, `updateGroup`, `updateRole` have been added
+    - Parameters `description` and `displayName` have been added to models `CreateGroupBody`, `CreateRoleBody`, `Role`, and `Group`.
+
+* Search Service (v3alpha1):
+    - Models `DatasetPATCH`, `DatasetPOST`, `FederatedConnection`, `FederatedConnectionInput` and `ListModules` have been added
+    - Endpoints `createFederatedConnection`, `deleteFederatedConnection`, `getFederatedConnectionByName` and `putFederatedConnectionByName` have been added
+
+* Streams Service (v3beta1):
+    - Models `PipelineReactivateResponseAsync`, `PipelineReactivationStatus`, `UpgradePipelineRequest` and `ValidateConnectionRequest` have been added. 
+    - Parameter `skipValidation` has been added to `createConnection` endpoint
+    - Parameter `createUserId` has been added to `listTemplates` endpoint
+    - Endpoints `reactivationStatus`, `validateConnection`, and `upgradePipeline` have been added
+    - Parameter `metadata`  has been added to `ConnectorResponse`
+    - Parameter `labels` has been added to `PipelinePatchRequest`, `PipelineRequest` and `PipelineResponse` models
+    - Parameter `uberJarSha256` has been added to `PipelineResponse` model
+    - `ACTIVATING` and `DEACTIVATING` have been added to model `PipelineResponse` status enum
+    - Model `Source` has changed with properties `node` and `pipelineVersion` deleted and 18 new properties added
+    - Parameter `learnMoreLocation` has been added to model `TemplateResponse`
+    
+* Added support for file upload endpoints with a content-type multipart/form-data
+
+
+
 <a name="16.0.0-beta2"></a>
 # [16.0.0-beta2](https://github.com/splunk/splunk-cloud-sdk-js/compare/v16.0.0-beta1...v16.0.0-beta2) (2021-04-26)
 
