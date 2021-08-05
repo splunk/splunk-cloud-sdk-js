@@ -6,9 +6,13 @@ All notable changes to this project will be documented in this file. See [standa
 # [16.0.0-beta4](https://github.com/splunk/splunk-cloud-sdk-js/compare/v16.0.0-beta3...v16.0.0-beta4) (2021-08-05)
 
 
-### Features
+#### Non-Breaking Changes
+* KVstore service (v1beta1): `deleteRecords()` has  added a new optional input parameter of `enableMvl`;  `queryRecords()` has  added  new optional input parameters of `enableMvl` and `shared`
 
-* update with code-generated api bindings and models performed 2021-08-05 ([f7e2012](https://github.com/splunk/splunk-cloud-sdk-js/commits/f7e2012))
+* Search service (v3alpha1): new api of `listDatasets()` is added
+
+* Streams service (v3beta1): `listPipelines()` has added a new optional input parameter of `includeStatus`; new api of `deleteSource()` is added
+
 
 
 
