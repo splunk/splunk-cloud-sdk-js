@@ -108,10 +108,11 @@ export class GeneratedKVStoreService extends BaseApiService {
      * Removes records in a collection that match the query.
      * @param collection The name of the collection.
      * @param args parameters to be sent with the request
+     * @param args.enableMvl Determines if the query needs to include results in multi valued fields
      * @param args.query Query JSON expression.
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteRecords = (collection: string, args?: { query?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+    public deleteRecords = (collection: string, args?: { enableMvl?: boolean, query?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             collection: collection
         };
@@ -238,14 +239,16 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param collection The name of the collection.
      * @param args parameters to be sent with the request
      * @param args.count Maximum number of records to return.
+     * @param args.enableMvl Determines if the query needs to include results in multi valued fields
      * @param args.fields Comma-separated list of fields to include or exclude.
      * @param args.offset Number of records to skip from the start.
      * @param args.orderby Sort order. Format is `<field>:<sort order>`. Valid sort orders are 1 for ascending, -1 for descending.
      * @param args.query Query JSON expression.
+     * @param args.shared Indicates whether to return records only for the user specified in the Splunk-User-Id header or for the default user as well. Only valid if Splunk-User-Id is specified
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<{ [key: string]: any; }>
      */
-    public queryRecords = (collection: string, args?: { count?: number, fields?: Array<string>, offset?: number, orderby?: Array<string>, query?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<{ [key: string]: any; }>> => {
+    public queryRecords = (collection: string, args?: { count?: number, enableMvl?: boolean, fields?: Array<string>, offset?: number, orderby?: Array<string>, query?: string, shared?: boolean, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<{ [key: string]: any; }>> => {
         const path_params = {
             collection: collection
         };

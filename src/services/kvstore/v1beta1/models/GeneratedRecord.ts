@@ -35,14 +35,14 @@ export interface Record {
      * @type {string}
      * @memberof Record
      */
-    _key: string;
+    key: string;
 
     /**
      * User of the resulting record.
      * @type {string}
      * @memberof Record
      */
-    _user: string;
+    user: string;
 
 }
 

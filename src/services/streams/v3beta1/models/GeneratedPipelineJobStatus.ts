@@ -51,5 +51,12 @@ export interface PipelineJobStatus {
      */
     pipelineId?: string;
 
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof PipelineJobStatus
+     */
+    taskStatus?: { [key: string]: string; };
+
 }
 

@@ -245,6 +245,20 @@ export class GeneratedStreamsService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
+     * Delete a source.
+     * @param id Source ID
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public deleteSource = (id: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path_params = {
+            id: id
+        };
+        const path = this.template`/streams/v3beta1/sources/${'id'}`(path_params);
+        return this.client.delete(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
+    /**
      * Removes a template with a specific ID.
      * @param templateId Template ID
      * @param args parameters to be sent with the request
@@ -513,6 +527,7 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param args.activated activated
      * @param args.createUserId createUserId
      * @param args.includeData includeData
+     * @param args.includeStatus includeStatus
      * @param args.name name
      * @param args.offset offset
      * @param args.pageSize pageSize
@@ -521,7 +536,7 @@ export class GeneratedStreamsService extends BaseApiService {
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return PaginatedResponseOfPipelineResponse
      */
-    public listPipelines = (args?: { activated?: boolean, createUserId?: string, includeData?: boolean, name?: string, offset?: number, pageSize?: number, sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfPipelineResponse> => {
+    public listPipelines = (args?: { activated?: boolean, createUserId?: string, includeData?: boolean, includeStatus?: boolean, name?: string, offset?: number, pageSize?: number, sortDir?: string, sortField?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<PaginatedResponseOfPipelineResponse> => {
         const path = `/streams/v3beta1/pipelines`;
         return this.client.get(STREAMS_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as PaginatedResponseOfPipelineResponse);

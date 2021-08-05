@@ -34,6 +34,7 @@ import {
     FederatedConnection,
     FederatedConnectionInput,
     FieldsSummary,
+    ListDatasets,
     ListModules,
     ListPreviewResultsResponse,
     ListSearchResultsResponse,
@@ -284,6 +285,17 @@ export class GeneratedSearchService extends BaseApiService {
         const path = this.template`/search/v3alpha1/spl2-modules/${'resourceName'}`(path_params);
         return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Module);
+    }
+    /**
+     * Returns a list of all datasets.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return ListDatasets
+     */
+    public listDatasets = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ListDatasets> => {
+        const path = `/search/v3alpha1/datasets`;
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as ListDatasets);
     }
     /**
      * Return events summary, for search ID (SID) search.

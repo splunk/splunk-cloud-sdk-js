@@ -26,6 +26,7 @@ export * from './GeneratedKVCollectionDataset';
 export * from './GeneratedKVCollectionDatasetKind';
 export * from './GeneratedKVCollectionDatasetPATCH';
 export * from './GeneratedKVCollectionDatasetProperties';
+export * from './GeneratedListDatasets';
 export * from './GeneratedListModules';
 export * from './GeneratedListPreviewResultsResponse';
 export * from './GeneratedListPreviewResultsResponseFields';
