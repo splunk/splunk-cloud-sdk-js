@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="16.0.0-beta4"></a>
+# [16.0.0-beta4](https://github.com/splunk/splunk-cloud-sdk-js/compare/v16.0.0-beta3...v16.0.0-beta4) (2021-08-05)
+
+
+### Features
+
+* update with code-generated api bindings and models performed 2021-08-05 ([f7e2012](https://github.com/splunk/splunk-cloud-sdk-js/commits/f7e2012))
+
+
+
 <a name="16.0.0-beta3"></a>
 # [16.0.0-beta3](https://github.com/splunk/splunk-cloud-sdk-js/compare/v16.0.0-beta2...v16.0.0-beta3) (2021-06-22)
 
