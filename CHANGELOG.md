@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file. See [standa
 <a name="16.0.0-beta4"></a>
 # [16.0.0-beta4](https://github.com/splunk/splunk-cloud-sdk-js/compare/v16.0.0-beta3...v16.0.0-beta4) (2021-08-05)
 
+#### Breaking Changes
+* KVstore service (v1beta1): `_key` in model `GeneratedRecord` is renamed as `key` 
 
 #### Non-Breaking Changes
 * KVstore service (v1beta1): `deleteRecords()` has  added a new optional input parameter of `enableMvl`;  `queryRecords()` has  added  new optional input parameters of `enableMvl` and `shared`
