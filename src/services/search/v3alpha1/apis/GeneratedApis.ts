@@ -338,7 +338,7 @@ export class GeneratedSearchService extends BaseApiService {
      * Returns a matching list of search jobs.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of jobs that you want to return the status entries for. 
-     * @param args.filter Filter the list of jobs by sid. Valid format is  `sid IN ({comma separated list of SIDs in quotes})`. A maximum of 50 SIDs can be specified in one query. 
+     * @param args.filter Filter the list of jobs by sid. Valid format is  `sid IN ({comma separated list of SIDs in quotes})`. A maximum of 30 SIDs can be specified in one query. 
      * @param args.status Filter the list of jobs by status. Valid status values are 'running', 'done', 'canceled', or 'failed'. 
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<SearchJob>
@@ -427,6 +427,42 @@ export class GeneratedSearchService extends BaseApiService {
         const path = this.template`/search/v3alpha1/connections/${'connectionName'}`(path_params);
         return this.client.put(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), federatedConnectionInput, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as FederatedConnection);
+    }
+    /**
+     * Refresh a federated connection to fetch new remote indexes and add/delete corresponding federated datasets. 
+     * @param connectionName The name of the federated connection.
+     * @param body
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public refreshFederatedConnection = (connectionName: string, body?: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        if (!body) {
+            throw new SplunkError({ message: `Bad Request: body is empty or undefined` });
+        }
+        const path_params = {
+            connectionName: connectionName
+        };
+        const path = this.template`/search/v3alpha1/connections/${'connectionName'}/refresh`(path_params);
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
+    /**
+     * Test connection with remote EC instance using federated connection parameters. 
+     * @param connectionName The name of the federated connection.
+     * @param body
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public testFederatedConnection = (connectionName: string, body?: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        if (!body) {
+            throw new SplunkError({ message: `Bad Request: body is empty or undefined` });
+        }
+        const path_params = {
+            connectionName: connectionName
+        };
+        const path = this.template`/search/v3alpha1/connections/${'connectionName'}/test`(path_params);
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
     }
     /**
      * Modifies a dataset with a specified dataset ID (datasetid). 

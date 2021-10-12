@@ -58,5 +58,10 @@ export interface QueryParameters {
      */
     timezone?: any;
 
+    /**
+     * dynamic keys capturing additional key/value pairs for this model
+     * @memberof QueryParameters
+     */
+    [additionalProperty: string]: any;
 }
 

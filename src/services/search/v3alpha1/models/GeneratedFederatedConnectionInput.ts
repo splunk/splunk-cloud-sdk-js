@@ -52,6 +52,13 @@ export interface FederatedConnectionInput {
     port?: number;
 
     /**
+     * The password of the service account.
+     * @type {string}
+     * @memberof FederatedConnectionInput
+     */
+    serviceaccountpassword?: string;
+
+    /**
      * The username on the service account.
      * @type {string}
      * @memberof FederatedConnectionInput

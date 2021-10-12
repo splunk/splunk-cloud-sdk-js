@@ -107,5 +107,10 @@ export interface SingleStatementQueryParameters {
      */
     timezone?: any;
 
+    /**
+     * dynamic keys capturing additional key/value pairs for this model
+     * @memberof SingleStatementQueryParameters
+     */
+    [additionalProperty: string]: any;
 }
 

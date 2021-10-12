@@ -166,7 +166,7 @@ export class GeneratedSearchService extends BaseApiService {
      * Return the matching list of search jobs.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of jobs that you want to return the status entries for. 
-     * @param args.filter Filter the list of jobs by sid. Valid format is  `sid IN ({comma separated list of SIDs in quotes})`. A maximum of 50 SIDs can be specified in one query. 
+     * @param args.filter Filter the list of jobs by sid. Valid format is  `sid IN ({comma separated list of SIDs in quotes})`. A maximum of 30 SIDs can be specified in one query. 
      * @param args.status Filter the list of jobs by status. Valid status values are 'running', 'done', 'canceled', or 'failed'. 
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<SearchJob>

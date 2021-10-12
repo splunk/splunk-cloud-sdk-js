@@ -51,5 +51,12 @@ export interface UpgradePipelineRequest {
      */
     skipRestoreState?: boolean;
 
+    /**
+     * Set to true to validate a savepoint before stopping the pipeline.
+     * @type {boolean}
+     * @memberof UpgradePipelineRequest
+     */
+    validateSavePoint?: boolean;
+
 }
 

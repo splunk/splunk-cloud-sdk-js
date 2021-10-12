@@ -154,11 +154,11 @@ export class GeneratedKVStoreService extends BaseApiService {
             .then(response => response.body as Record);
     }
     /**
-     * Inserts multiple records in a single request.
+     * Writes multiple records in a single request. If records have duplicate primary keys, only the last duplicate record will be written. If no errors occur, the response array will contain the keys of the written records, in no particular order.
      * @param collection The name of the collection.
      * @param requestBody Array of records to insert.
      * @param args parameters to be sent with the request
-     * @param args.allowUpdates Allow records with keys included to update their respective records in the database
+     * @param args.allowUpdates If allow_updates is false (default), the writes will be performed as a single INSERT. If any record already exists, the entire INSERT will fail and no records will be inserted. If allow_updates is true, the writes will be performed as a single INSERT ON CONFLICT. If one or more records already exists, said records will be updated and their _version's will be incremented. New records will be inserted with a _version of 0.
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<string>
      */
@@ -191,7 +191,7 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param collection The name of the collection.
      * @param args parameters to be sent with the request
      * @param args.count Maximum number of records to return.
-     * @param args.fields Comma-separated list of fields to include or exclude.
+     * @param args.fields Comma-separated list of fields to include or exclude. Format is `<field>:<include value>`. Valid include values are 1 for include, 0 for exclude with default being 1.
      * @param args.offset Number of records to skip from the start.
      * @param args.orderby Sort order. Format is `<field>:<sort order>`. Valid sort orders are 1 for ascending, -1 for descending.
      * @param requestStatusCallback callback function to listen to the status of a request
@@ -240,7 +240,7 @@ export class GeneratedKVStoreService extends BaseApiService {
      * @param args parameters to be sent with the request
      * @param args.count Maximum number of records to return.
      * @param args.enableMvl Determines if the query needs to include results in multi valued fields
-     * @param args.fields Comma-separated list of fields to include or exclude.
+     * @param args.fields Comma-separated list of fields to include or exclude. Format is `<field>:<include value>`. Valid include values are 1 for include, 0 for exclude with default being 1.
      * @param args.offset Number of records to skip from the start.
      * @param args.orderby Sort order. Format is `<field>:<sort order>`. Valid sort orders are 1 for ascending, -1 for descending.
      * @param args.query Query JSON expression.

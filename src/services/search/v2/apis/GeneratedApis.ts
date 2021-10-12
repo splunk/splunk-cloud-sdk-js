@@ -28,6 +28,8 @@
 
 import {
     DeleteSearchJob,
+    FederatedConnection,
+    FederatedConnectionInput,
     FieldsSummary,
     ListPreviewResultsResponse,
     ListSearchResultsResponse,
@@ -63,6 +65,21 @@ export class GeneratedSearchService extends BaseApiService {
         return SEARCH_SERVICE_PREFIX;
     }
     /**
+     * Creates a new federated connection with information about how to connect to a remote index. 
+     * @param federatedConnectionInput
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return FederatedConnection
+     */
+    public createFederatedConnection = (federatedConnectionInput?: FederatedConnectionInput, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<FederatedConnection> => {
+        if (!federatedConnectionInput) {
+            throw new SplunkError({ message: `Bad Request: federatedConnectionInput is empty or undefined` });
+        }
+        const path = `/search/v2/connections`;
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), federatedConnectionInput, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as FederatedConnection);
+    }
+    /**
      * Creates a search job.
      * @param searchJob
      * @param args parameters to be sent with the request
@@ -76,6 +93,20 @@ export class GeneratedSearchService extends BaseApiService {
         const path = `/search/v2/jobs`;
         return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), searchJob, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as SearchJob);
+    }
+    /**
+     * Deletes a federated connection with the specified name (connectionName) 
+     * @param connectionName The name of the federated connection.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public deleteFederatedConnection = (connectionName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path_params = {
+            connectionName: connectionName
+        };
+        const path = this.template`/search/v2/connections/${'connectionName'}`(path_params);
+        return this.client.delete(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
     }
     /**
      * Creates a search job that deletes events from an index. The events are deleted from the index in the specified module, based on the search criteria as specified by the predicate. 
@@ -109,6 +140,21 @@ export class GeneratedSearchService extends BaseApiService {
         const path = this.template`/search/v2/jobs/${'sid'}/export`(path_params);
         return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as { [key: string]: any; });
+    }
+    /**
+     * Returns the federated connection with the specified name (connectionName). 
+     * @param connectionName The name of the federated connection.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return FederatedConnection
+     */
+    public getFederatedConnectionByName = (connectionName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<FederatedConnection> => {
+        const path_params = {
+            connectionName: connectionName
+        };
+        const path = this.template`/search/v2/connections/${'connectionName'}`(path_params);
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as FederatedConnection);
     }
     /**
      * Returns the search job with the specified search ID (SID).
@@ -166,7 +212,7 @@ export class GeneratedSearchService extends BaseApiService {
      * Returns the matching list of search jobs.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of jobs that you want to return the status entries for. 
-     * @param args.filter Filter the list of jobs by 'sid'. Valid format is  `sid IN ({comma-separated list of SIDs. Each SID must be enclosed in double quotation marks.})`. A maximum of 50 SIDs can be specified in one query. 
+     * @param args.filter Filter the list of jobs by 'sid'. Valid format is  `sid IN ({comma-separated list of SIDs. Each SID must be enclosed in double quotation marks.})`. A maximum of 30 SIDs can be specified in one query. 
      * @param args.status Filter the list of jobs by status. Valid status values are 'running', 'done', 'canceled', or 'failed'. 
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<SearchJob>
@@ -225,6 +271,61 @@ export class GeneratedSearchService extends BaseApiService {
         const path = this.template`/search/v2/jobs/${'sid'}/timeline-metadata/auto/time-buckets`(path_params);
         return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as TimeBucketsSummary);
+    }
+    /**
+     * Creates or updates a federated connection with a specified name (connectionName). 
+     * @param connectionName The name of the federated connection.
+     * @param federatedConnectionInput
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return FederatedConnection
+     */
+    public putFederatedConnectionByName = (connectionName: string, federatedConnectionInput?: FederatedConnectionInput, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<FederatedConnection> => {
+        if (!federatedConnectionInput) {
+            throw new SplunkError({ message: `Bad Request: federatedConnectionInput is empty or undefined` });
+        }
+        const path_params = {
+            connectionName: connectionName
+        };
+        const path = this.template`/search/v2/connections/${'connectionName'}`(path_params);
+        return this.client.put(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), federatedConnectionInput, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as FederatedConnection);
+    }
+    /**
+     * Refresh a federated connection to fetch new remote indexes and add/delete corresponding federated datasets. 
+     * @param connectionName The name of the federated connection.
+     * @param body
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public refreshFederatedConnection = (connectionName: string, body?: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        if (!body) {
+            throw new SplunkError({ message: `Bad Request: body is empty or undefined` });
+        }
+        const path_params = {
+            connectionName: connectionName
+        };
+        const path = this.template`/search/v2/connections/${'connectionName'}/refresh`(path_params);
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
+    }
+    /**
+     * Test connection with remote EC instance using federated connection parameters. 
+     * @param connectionName The name of the federated connection.
+     * @param body
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public testFederatedConnection = (connectionName: string, body?: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        if (!body) {
+            throw new SplunkError({ message: `Bad Request: body is empty or undefined` });
+        }
+        const path_params = {
+            connectionName: connectionName
+        };
+        const path = this.template`/search/v2/connections/${'connectionName'}/test`(path_params);
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
     }
     /**
      * Updates the search job with the specified search ID (SID) with an action.

@@ -25,6 +25,7 @@
  */
 
 import {
+    Module,
     SingleStatementQueryParameters,
 } from './';
 
@@ -54,6 +55,13 @@ export interface SearchModule {
      * @memberof SearchModule
      */
     queryParameters?: { [key: string]: SingleStatementQueryParameters; };
+
+    /**
+     * WIP (Work in progress) modules which are used in the module's search statements, but not yet registered . 
+     * @type {{ [key: string]: Module; }}
+     * @memberof SearchModule
+     */
+    wipModules?: { [key: string]: Module; };
 
 }
 

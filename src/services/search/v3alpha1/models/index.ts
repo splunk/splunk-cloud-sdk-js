@@ -7,6 +7,8 @@ export * from './GeneratedDateMetadataProperties';
 export * from './GeneratedDeleteSearchJob';
 export * from './GeneratedFederatedConnection';
 export * from './GeneratedFederatedConnectionInput';
+export * from './GeneratedFederatedConnectionRefresh';
+export * from './GeneratedFederatedConnectionTest';
 export * from './GeneratedFederatedDataset';
 export * from './GeneratedFederatedDatasetKind';
 export * from './GeneratedFederatedDatasetPATCH';

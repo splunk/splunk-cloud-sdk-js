@@ -31,32 +31,32 @@
  */
 export interface Module {
     /**
-     * The timestamp when the module was created
-     * @type {string}
-     * @memberof Module
-     */
-    created?: string;
-
-    /**
-     * The user who created the module
-     * @type {string}
-     * @memberof Module
-     */
-    createdby?: string;
-
-    /**
      * The definition of the module
      * @type {string}
      * @memberof Module
      */
-    definition?: string;
+    definition: string;
 
     /**
      * The name of the module
      * @type {string}
      * @memberof Module
      */
-    name?: string;
+    name: string;
+
+    /**
+     * The timestamp when the module was created
+     * @type {string}
+     * @memberof Module
+     */
+    createdAt?: string;
+
+    /**
+     * The user who created the module
+     * @type {string}
+     * @memberof Module
+     */
+    createdBy?: string;
 
     /**
      * The namespace of the module
