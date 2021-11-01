@@ -20,13 +20,13 @@
 require('isomorphic-fetch');
 
 const { SplunkCloud } = require('../splunk');
-const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
+const { SPLUNK_CLOUD_API_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
 const MAX_RETRIES = 10;
 
 (async function () {
     // ***** STEP 1: Get Splunk Cloud client
     const splunk = new SplunkCloud({
-        urls: { api: SPLUNK_CLOUD_API_HOST, app: SPLUNK_CLOUD_APPS_HOST },
+        urls: { api: SPLUNK_CLOUD_API_HOST },
         tokenSource: BEARER_TOKEN,
         defaultTenant: TENANT_ID,
     });

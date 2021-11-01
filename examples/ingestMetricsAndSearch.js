@@ -21,8 +21,8 @@ require('isomorphic-fetch');
 
 const { SplunkCloud } = require('../splunk');
 const { searchResultsWithRetryTimeout } = require('./helpers/splunkCloudHelper');
-const { SPLUNK_CLOUD_API_HOST, SPLUNK_CLOUD_APPS_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
-const METRICS_INDEX_NAME = 'metrics_integration';
+const { SPLUNK_CLOUD_API_HOST, BEARER_TOKEN, TENANT_ID } = process.env;
+const METRICS_INDEX_NAME = 'metrics_gintegration';
 
 // Call to the ingest service to insert data
 async function sendDataViaIngest(splunk, host, source) {
@@ -105,8 +105,7 @@ async function sendDataViaIngest(splunk, host, source) {
     // ***** DESCRIPTION: Get Splunk Cloud client of a tenant using an authentication token.
     const splunk = new SplunkCloud({
         urls: {
-            api: SPLUNK_CLOUD_API_HOST,
-            app: SPLUNK_CLOUD_APPS_HOST
+            api: SPLUNK_CLOUD_API_HOST
         },
         tokenSource: BEARER_TOKEN,
         defaultTenant: TENANT_ID,

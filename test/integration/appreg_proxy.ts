@@ -39,7 +39,6 @@ const tenantID = config.stagingTenant;
 const splunk = new SplunkCloud({
     urls: {
         api: config.stagingApiHost,
-        app: config.stagingAppsHost,
     },
     tokenSource: config.stagingAuthToken,
     defaultTenant: tenantID,
@@ -120,11 +119,8 @@ describe('integration tests for app registry Endpoints', () => {
     describe('app secret', () => {
         const createApp = {
             name: appName(),
-            kind: appRegistry.AppResourceKind.Native,
+            kind: appRegistry.AppResourceKind.Service,
             title: `${appTitle()}z`,
-            redirectUrls: [
-                'https://localhost'
-            ]
         } as appRegistry.CreateAppRequest;
 
         let oldSecret: string = '';
@@ -135,7 +131,6 @@ describe('integration tests for app registry Endpoints', () => {
                     assert.equal(createApp.kind.toString(), app.kind.toString());
                     assert.equal(createApp.name, app.name);
                     assert.equal(createApp.title, app.title);
-                    assert.sameMembers(createApp.redirectUrls as string[], app.redirectUrls as string[]);
                     const newApp = app as appRegistry.ServiceApp;
                     oldSecret = newApp.clientSecret as string;
                 });
@@ -209,10 +204,10 @@ describe('integration tests for app registry Endpoints', () => {
                     assert.equal(subscription.appName, createApp.name);
                 });
         });
-        it('should get 503 trying to get a subscription for non-existent app', () => {
+        it('should get 404 trying to get a subscription for non-existent app', () => {
             return splunk.appreg.getSubscription('doesnotexist').catch((err) => {
                 assert.ok(err);
-                assert.equal(err.httpStatusCode, 503);
+                assert.equal(err.httpStatusCode, 404);
             });
         });
         it('should create second test app', () => {

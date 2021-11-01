@@ -20,7 +20,13 @@ import config from '../config';
 import { createKVCollectionDataset } from './catalog_proxy';
 import { createRecord } from './kvstore_collections_proxy';
 
-const splunkCloud = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
+const splunkCloud = new SplunkCloud({
+    urls: {
+        api: config.stagingApiHost,
+    },
+    tokenSource: config.stagingAuthToken,
+    defaultTenant: config.stagingTenant,
+});
 
 const testNamespace = config.testNamespace;
 
@@ -32,16 +38,19 @@ describe('Integration tests for KVStore Query Endpoints', () => {
         TEST_KEY_01: 'A',
         TEST_KEY_02: 'B',
         TEST_KEY_03: 'C',
+        order: 1,
     };
     const recordTwo = {
         TEST_KEY_01: 'B',
         TEST_KEY_02: 'C',
         TEST_KEY_03: 'A',
+        order: 2,
     };
     const recordThree = {
         TEST_KEY_01: 'C',
         TEST_KEY_02: 'A',
         TEST_KEY_03: 'B',
+        order: 3,
     };
 
     beforeEach(() => {
@@ -130,7 +139,7 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                 .then(queryRecordsResponse => {
                     assert.equal(queryRecordsResponse.length, 3);
                     for (const recordObject of queryRecordsResponse) {
-                        assert.equal(Object.keys(recordObject).length, 4);
+                        assert.equal(Object.keys(recordObject).length, 5);
                     }
                 });
         });
@@ -322,9 +331,12 @@ describe('Integration tests for KVStore Query Endpoints', () => {
                 })
                 .then(queryRecordsResponse => {
                     assert.equal(queryRecordsResponse.length, 3);
-                    assert.equal(queryRecordsResponse[0].TEST_KEY_01, 'A');
-                    assert.equal(queryRecordsResponse[1].TEST_KEY_01, 'B');
-                    assert.equal(queryRecordsResponse[2].TEST_KEY_01, 'C');
+                    const firstRecord: any = queryRecordsResponse.find(x => x.order === 1) || {};
+                    assert.equal(firstRecord.TEST_KEY_01, 'A');
+                    const secondRecord: any = queryRecordsResponse.find(x => x.order === 2) || {};
+                    assert.equal(secondRecord.TEST_KEY_01, 'B');
+                    const thirdRecord: any = queryRecordsResponse.find(x => x.order === 3) || {};
+                    assert.equal(thirdRecord.TEST_KEY_01, 'C');
                 });
         });
     });

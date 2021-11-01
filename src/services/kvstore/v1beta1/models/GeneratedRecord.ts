@@ -35,14 +35,16 @@ export interface Record {
      * @type {string}
      * @memberof Record
      */
-    key: string;
+    // TODO: Manual change - do not revert this to `key: string`, codegen fix needed
+    _key: string;
 
     /**
      * User of the resulting record.
      * @type {string}
      * @memberof Record
      */
-    user: string;
+    // TODO: Manual change - do not revert this to `user: string`, codegen fix needed
+    _user: string;
 
 }
 

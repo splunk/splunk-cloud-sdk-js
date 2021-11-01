@@ -34,7 +34,6 @@ const tenantID = config.stagingTenant;
 const splunkCloud = new SplunkCloud({
     urls: {
         api: config.stagingApiHost,
-        app: config.stagingAppsHost,
     },
     tokenSource: config.stagingAuthToken,
     defaultTenant: tenantID,

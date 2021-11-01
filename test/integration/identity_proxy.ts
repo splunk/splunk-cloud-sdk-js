@@ -26,7 +26,6 @@ const tenantID = config.stagingTenant;
 const splunk = new SplunkCloud({
     urls: {
         api: config.stagingApiHost,
-        app: config.stagingAppsHost,
     },
     tokenSource: config.stagingAuthToken,
     defaultTenant: tenantID,
@@ -43,8 +42,8 @@ describe('integration tests for Identity Tenant Endpoints', () => {
     const testPerm1 = `${tenantID}:*:jsperm.${Date.now()}`;
     const testPerm2 = `${testPerm1}?foo=bar`;
     const testGroupName = `jsgroup_${Date.now()}`;
-    const testPrincipal = config.testUsername;
-    const testMember = 'test1@splunk.com';
+    const testPrincipal = config.testUsername.toLowerCase(); // user that test token runs as
+    const testMember = config.pkceUser.toLowerCase(); // one to add/remove
 
     describe('Test Roles and Permissions Management', () => {
         const roleInput: identity.CreateRoleBody = {
@@ -151,7 +150,7 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         const groupInput = {
             name: testGroupName,
             roles: ['roles.test_user'],
-            members: ['sdk_test@splunk.com'],
+            members: [testMember],
         };
 
         afterEach(() => {
@@ -262,13 +261,13 @@ describe('integration tests for Identity Tenant Endpoints', () => {
         it('should retrieve all the permission for the given Member', () =>
             splunk.identity.listMemberPermissions(testPrincipal).then(data => {
                 assert.typeOf(data, 'Object');
-                assert.include(data.items, 'testsdks:*:*', JSON.stringify(data));
+                assert.include(data.items, `${tenantID}:*:*`, JSON.stringify(data));
             }));
 
         it('should retrieve all the roles for the given Member', () =>
             splunk.identity.listMemberRoles(testPrincipal).then(data => {
                 assert.typeOf(data, 'Object');
-                assert.include(JSON.stringify(data.items), 'tenant.admin');
+                assert.include(JSON.stringify(data.items), 'identity.admin');
             }));
     });
 

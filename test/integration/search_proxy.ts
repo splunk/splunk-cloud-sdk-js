@@ -21,44 +21,57 @@ import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
 const splunk = new SplunkCloud({
-    urls: { api: config.stagingApiHost, app: config.stagingAppsHost },
+    urls: {
+        api: config.stagingApiHost
+    },
     tokenSource: config.stagingAuthToken,
     defaultTenant: config.stagingTenant,
 });
 
 const standardQuery = {
-    query: '| from index:main | head 5',
-};
-
-const moduleQuery = {
-    query: '| from index:main | head 5',
-    // catalog service isn't ready for handling module
-    module: '',
+    query: `from [
+        {"name": "event1", "host": "myhost"},
+        {"name": "event2", "host": "myhost"},
+        {"name": "event3", "host": "myhost"},
+        {"name": "event4", "host": "myhost"},
+        {"name": "event5", "host": "myhost"}
+    ]`, // use 5 dummy events (similar to makeresults in SPL1) to guarantee events being returned
 };
 
 const searchJobWithEventSummary = {
-    query: '| from index:main | head 5',
+    query: `from [
+        {"name": "event1", "host": "myhost"},
+        {"name": "event2", "host": "myhost"},
+        {"name": "event3", "host": "myhost"},
+        {"name": "event4", "host": "myhost"},
+        {"name": "event5", "host": "myhost"}
+    ]`, // use 5 dummy events (similar to makeresults in SPL1) to guarantee events being returned
     collectEventSummary: true,
 };
 
 const searchJobWithFieldSummary = {
-    query: '| from index:main | head 5',
+    query: `from [
+        {"name": "event1", "host": "myhost"},
+        {"name": "event2", "host": "myhost"},
+        {"name": "event3", "host": "myhost"},
+        {"name": "event4", "host": "myhost"},
+        {"name": "event5", "host": "myhost"}
+    ]`, // use 5 dummy events (similar to makeresults in SPL1) to guarantee events being returned
     collectFieldSummary: true,
 };
 
 const searchJobWithTimeBucket = {
-    query: '| from index:main | head 5',
+    query: `from [
+        {"name": "event1", "host": "myhost"},
+        {"name": "event2", "host": "myhost"},
+        {"name": "event3", "host": "myhost"},
+        {"name": "event4", "host": "myhost"},
+        {"name": "event5", "host": "myhost"}
+    ]`, // use 5 dummy events (similar to makeresults in SPL1) to guarantee events being returned
     collectTimeBuckets: true,
 };
 
 describe('integration tests Using Search APIs', () => {
-    before(() => {
-        const events: any[] = [];
-        for (let i = 0; i < 10; i++) {
-            events.push({ body: { message: `Test event #${i}` } });
-        }
-        return splunk.ingest.postEvents(events);
-    });
 
     describe('Search', () => {
         it('should allow submitting a search and getting results', () =>
@@ -83,30 +96,8 @@ describe('integration tests Using Search APIs', () => {
                         });
                 }));
 
-        it('should allow submitting a search with module field and getting results', () =>
-            splunk.search
-                .createJob(moduleQuery)
-                .then(searchObj => {
-                    // Check the state of the job
-                    assert.property(searchObj, 'sid');
-                    assert.property(searchObj, 'status');
-                    return splunk.search.waitForJob(searchObj);
-                })
-                .then(searchObj => {
-                    // Ensure we have events when done
-                    assert.equal(searchObj.status, search.SearchStatus.Done);
-                    assert.equal(searchObj.resultsAvailable, 5);
-                    return splunk.search
-                        .listResults(searchObj.sid as string)
-                        .then(resultResponse => {
-                            const response = resultResponse as search.ListSearchResultsResponse;
-                            assert.equal(response.results.length, 5);
-                            assert.property(response, 'fields');
-                        });
-                }));
-
         it('should return a wait request if the job is not ready', () =>
-            splunk.search.createJob(moduleQuery).then(searchObj => {
+            splunk.search.createJob(standardQuery).then(searchObj => {
                 // Check the state of the job
                 assert.property(searchObj, 'sid');
                 assert.property(searchObj, 'status');

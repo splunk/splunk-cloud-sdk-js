@@ -21,8 +21,21 @@ import { Event, HTTPResponse, Metric, MetricEvent } from '../../services/ingest'
 import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
-const splunk = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
-const splunkBadToken = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.invalidAuthToken, defaultTenant: config.stagingTenant });
+const splunk = new SplunkCloud({
+    urls: {
+        api: config.stagingApiHost,
+    },
+    tokenSource: config.stagingAuthToken,
+    defaultTenant: config.stagingTenant,
+});
+
+const splunkBadToken = new SplunkCloud({
+    urls: {
+        api: config.stagingApiHost
+    },
+    tokenSource: config.invalidAuthToken,
+    defaultTenant: config.stagingTenant
+});
 
 
 describe('integration tests for Ingest Endpoints', () => {

@@ -21,7 +21,9 @@ import { SplunkCloud } from '../../splunk';
 import config from '../config';
 
 const splunkCloud = new SplunkCloud({
-    urls: { api: config.stagingApiHost, app: config.stagingAppsHost },
+    urls: {
+        api: config.stagingApiHost
+    },
     tokenSource: config.stagingAuthToken,
     defaultTenant: config.stagingTenant,
 });
@@ -148,7 +150,7 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
                             assert.isNotNull(getPipelineResponse);
                             assert.equal(getPipelineResponse.name, testPipelineName1);
                             assert.equal(getPipelineResponse.description, testPipelineDescription);
-                            assert.equal(getPipelineResponse.status, streams.PipelineResponseStatusEnum.ACTIVATED);
+                            assert.oneOf(getPipelineResponse.status, [streams.PipelineResponseStatusEnum.ACTIVATED, streams.PipelineResponseStatusEnum.ACTIVATING]);
                         });
                 });
         });
@@ -211,7 +213,7 @@ describe('Integration tests for Streams Pipeline Endpoints', () => {
 // Creates a test pipeline request
 function createPipelineRequest(name: string, description: string): Promise<streams.PipelineRequest> {
     const splCompileRequest: streams.SplCompileRequest = {
-        spl: '| from read_splunk_firehose() | into write_index("index", "main");',
+        spl: '| from splunk_firehose() | into index("index", "main");',
         validate: true,
     };
 

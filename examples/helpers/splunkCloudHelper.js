@@ -74,7 +74,7 @@ async function createIndex(client, indexName) {
  */
 async function createPipeline(client, tenant, pipelineName, indexName) {
     const splCompileRequest = {
-        spl: `| from read_splunk_firehose() | into write_index("", "${indexName}");`,
+        spl: `| from splunk_firehose() | into index(\"index\", \"${indexName}\");`,
         validate: true,
     };
 

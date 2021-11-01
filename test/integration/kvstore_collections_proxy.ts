@@ -19,7 +19,13 @@ import { SplunkCloud } from '../../splunk';
 import config from '../config';
 import { createKVCollectionDataset } from './catalog_proxy';
 
-const splunkCloud = new SplunkCloud({ urls: { api: config.stagingApiHost, app: config.stagingAppsHost }, tokenSource: config.stagingAuthToken, defaultTenant: config.stagingTenant });
+const splunkCloud = new SplunkCloud({
+    urls: {
+        api: config.stagingApiHost,
+    },
+    tokenSource: config.stagingAuthToken,
+    defaultTenant: config.stagingTenant,
+});
 
 const testNamespace = config.testNamespace;
 
@@ -28,16 +34,19 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
         TEST_KEY_01: 'A',
         TEST_KEY_02: 'B',
         TEST_KEY_03: 'C',
+        order: 1,
     };
     const recordTwo = {
         TEST_KEY_01: 'B',
         TEST_KEY_02: 'C',
         TEST_KEY_03: 'A',
+        order: 2,
     };
     const recordThree = {
         TEST_KEY_01: 'C',
         TEST_KEY_02: 'A',
         TEST_KEY_03: 'B',
+        order: 3,
     };
     // Required for `createKVCollectionDataset` helper
     let testKVCollectionName: string;
@@ -88,12 +97,19 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
         it('Should return the records that were created', () => {
             return splunkCloud.kvstore.listRecords(testKVCollectionName)
                 .then(listRecordsResponse => {
-                    const firstRecord = listRecordsResponse[0];
-
                     assert.equal(listRecordsResponse.length, 3);
+                    const firstRecord: any = listRecordsResponse.find(x => x.order === 1) || {};
                     assert.equal(firstRecord.TEST_KEY_01, 'A');
                     assert.equal(firstRecord.TEST_KEY_02, 'B');
                     assert.equal(firstRecord.TEST_KEY_03, 'C');
+                    const secondRecord: any = listRecordsResponse.find(x => x.order === 2) || {};
+                    assert.equal(secondRecord.TEST_KEY_01, 'B');
+                    assert.equal(secondRecord.TEST_KEY_02, 'C');
+                    assert.equal(secondRecord.TEST_KEY_03, 'A');
+                    const thirdRecord: any = listRecordsResponse.find(x => x.order === 3) || {};
+                    assert.equal(thirdRecord.TEST_KEY_01, 'C');
+                    assert.equal(thirdRecord.TEST_KEY_02, 'A');
+                    assert.equal(thirdRecord.TEST_KEY_03, 'B');
                 });
         });
     });
@@ -104,22 +120,29 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
     describe('Test GET ?fields= parameter Requests', () => {
         it('Should return all records when using empty filter', () => splunkCloud.kvstore.listRecords(testKVCollectionName)
             .then(listRecordsResponse => {
-                const firstRecord = listRecordsResponse[0];
-
                 assert.equal(listRecordsResponse.length, 3);
+                const firstRecord: any = listRecordsResponse.find(x => x.order === 1) || {};
                 assert.equal(firstRecord.TEST_KEY_01, 'A');
                 assert.equal(firstRecord.TEST_KEY_02, 'B');
                 assert.equal(firstRecord.TEST_KEY_03, 'C');
+                const secondRecord: any = listRecordsResponse.find(x => x.order === 2) || {};
+                assert.equal(secondRecord.TEST_KEY_01, 'B');
+                assert.equal(secondRecord.TEST_KEY_02, 'C');
+                assert.equal(secondRecord.TEST_KEY_03, 'A');
+                const thirdRecord: any = listRecordsResponse.find(x => x.order === 3) || {};
+                assert.equal(thirdRecord.TEST_KEY_01, 'C');
+                assert.equal(thirdRecord.TEST_KEY_02, 'A');
+                assert.equal(thirdRecord.TEST_KEY_03, 'B');
             })
         );
         it('Should filter records correctly using the fields parameter for include selection', () => {
             const queryParameters = { fields: ['TEST_KEY_01'] };
             return splunkCloud.kvstore.listRecords(testKVCollectionName, queryParameters)
                 .then(listRecordsResponse => {
-                    const firstRecord = listRecordsResponse[0];
-
                     assert.equal(listRecordsResponse.length, 3);
-                    assert.equal(firstRecord.TEST_KEY_01, 'A');
+                    assert.exists(listRecordsResponse.find(x => x.TEST_KEY_01 === 'A'));
+                    assert.exists(listRecordsResponse.find(x => x.TEST_KEY_01 === 'B'));
+                    assert.exists(listRecordsResponse.find(x => x.TEST_KEY_01 === 'C'));
                 });
         });
         it('Should filter records correctly using the fields parameter for exclude selection', () => {
@@ -128,7 +151,7 @@ describe('Integration tests for KVStore Collection Endpoints', () => {
                 .then(listRecordsResponse => {
                     assert.equal(listRecordsResponse.length, 3);
                     for (const record of listRecordsResponse) {
-                        assert.equal(Object.keys(record).length, 4);
+                        assert.equal(Object.keys(record).length, 5);
                     }
                 });
         });
