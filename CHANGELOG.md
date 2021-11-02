@@ -14,29 +14,6 @@ All notable changes to this project will be documented in this file. See [standa
 * Search new APIs: `createFederatedConnection`, `deleteFederatedConnection`, `getFederatedConnectionByName`, `putFederatedConnectionByName`, `refreshFederatedConnection`, `testFederatedConnection`
 
 
-
-<a name="16.0.0-beta4"></a>
-# 16.0.0-beta4 (2021-08-06)
-
-
-### Features
-
-* update with code-generated api bindings and models performed 2021-08-05 ([f7e2012](https://github.com/splunk/splunk-cloud-sdk-js/commits/f7e2012))
-
-
-
-<a name="16.0.0-beta5"></a>
-# [16.0.0-beta5](https://github.com/splunk/splunk-cloud-sdk-js/compare/v16.0.0-beta4...v16.0.0-beta5) (2021-11-01)
-
-#### Breaking Changes
-* Identity `IdentityProviderConfigBody` model removed field: `kind`
-* Reverted regression to KVStore `Record` to name fields `_key` and `_user` (with underscores)
-
-#### Non-Breaking Changes 
-* Identity new APIs: `createSamlClient`, `deleteSamlClient`, `getSamlClient`, `listSamlClients`, `updateSamlClient`
-* Search new APIs: `createFederatedConnection`, `deleteFederatedConnection`, `getFederatedConnectionByName`, `putFederatedConnectionByName`, `refreshFederatedConnection`, `testFederatedConnection`
-
-
 <a name="16.0.0-beta4"></a>
 # [16.0.0-beta4](https://github.com/splunk/splunk-cloud-sdk-js/compare/v16.0.0-beta3...v16.0.0-beta4) (2021-08-05)
 
