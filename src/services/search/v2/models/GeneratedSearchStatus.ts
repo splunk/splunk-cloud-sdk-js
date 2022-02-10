@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -25,14 +25,15 @@
  */
 
 /**
- * The current status of the search job. The valid status values are 'running', 'done', 'canceled', and 'failed'. 
+ * The current status of the search job. The valid status values are 'running', 'done', 'canceled', 'finalized' and 'failed'. 
  * @export
  */
 export enum SearchStatus {
     Running = 'running',
     Done = 'done',
     Canceled = 'canceled',
-    Failed = 'failed'
+    Failed = 'failed',
+    Finalized = 'finalized'
 }
 
 export function SearchStatusFromJSON(json: any): SearchStatus {

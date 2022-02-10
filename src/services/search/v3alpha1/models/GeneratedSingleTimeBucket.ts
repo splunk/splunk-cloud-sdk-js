@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -31,7 +31,7 @@
  */
 export interface SingleTimeBucket {
     /**
-     * Count of available events. Not all events in a bucket  are retrievable. Typically this count is capped at 10000. 
+     * Count of available events. Not all events in a bucket are retrievable. Typically this count is capped at 10000. 
      * @type {number}
      * @memberof SingleTimeBucket
      */
@@ -45,21 +45,21 @@ export interface SingleTimeBucket {
     duration?: number;
 
     /**
-     * The timestamp of the earliest event in the current bucket,  in UNIX format. This is the same time as 'earliestTimeStrfTime'  in UNIX format. 
+     * The timestamp of the earliest event in the current bucket, in UNIX format. This is the same time as 'earliestTimeStrfTime' in UNIX format. 
      * @type {number}
      * @memberof SingleTimeBucket
      */
     earliestTime?: number;
 
     /**
-     * The timestamp of the earliest event in the current bucket,  in UTC format with seconds. For example 2019-01-25T13:15:30Z,  which follows the ISO-8601 (%FT%T.%Q) format. 
+     * The timestamp of the earliest event in the current bucket, in UTC format with seconds. For example 2019-01-25T13:15:30Z, which follows the ISO-8601 (%FT%T.%Q) format. 
      * @type {string}
      * @memberof SingleTimeBucket
      */
     earliestTimeStrfTime?: string;
 
     /**
-     * Specifies if all of the events in the current bucket  have been finalized. 
+     * Specifies if all of the events in the current bucket have been finalized. 
      * @type {boolean}
      * @memberof SingleTimeBucket
      */

@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -35,35 +35,35 @@ export interface FederatedConnectionInput {
      * @type {string}
      * @memberof FederatedConnectionInput
      */
-    hostnameip?: string;
+    hostnameip: string;
 
     /**
      * The name of the federated connection.
      * @type {string}
      * @memberof FederatedConnectionInput
      */
-    name?: string;
+    name: string;
 
     /**
      * The remote port number.
      * @type {number}
      * @memberof FederatedConnectionInput
      */
-    port?: number;
+    port: number;
 
     /**
      * The password of the service account.
      * @type {string}
      * @memberof FederatedConnectionInput
      */
-    serviceaccountpassword?: string;
+    serviceaccountpassword: string;
 
     /**
      * The username on the service account.
      * @type {string}
      * @memberof FederatedConnectionInput
      */
-    serviceaccountuser?: string;
+    serviceaccountuser: string;
 
 }
 

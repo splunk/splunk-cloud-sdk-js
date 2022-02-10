@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -38,7 +38,7 @@ export interface SingleValueMode {
     count?: number;
 
     /**
-     * Specifies if the count is accurate.  The 'isExact' property is FALSE when the 'count' exceeds  the maximum count and an exact count is not available. 
+     * Specifies if the count is accurate. The 'isExact' property is FALSE when the 'count' exceeds the maximum count and an exact count is not available. 
      * @type {boolean}
      * @memberof SingleValueMode
      */

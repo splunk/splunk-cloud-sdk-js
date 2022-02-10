@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -35,7 +35,6 @@ export interface Record {
      * @type {string}
      * @memberof Record
      */
-    // TODO: Manual change - do not revert this to `key: string`, codegen fix needed
     _key: string;
 
     /**
@@ -43,7 +42,6 @@ export interface Record {
      * @type {string}
      * @memberof Record
      */
-    // TODO: Manual change - do not revert this to `user: string`, codegen fix needed
     _user: string;
 
 }

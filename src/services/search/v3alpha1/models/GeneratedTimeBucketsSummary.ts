@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -29,7 +29,7 @@ import {
 } from './';
 
 /**
- * A timeline metadata model of the event distribution.  The model shows the untransformed events that are read to date  for a specific for search ID (sid). 
+ * A timeline metadata model of the event distribution. The model shows the untransformed events that are read to date for a specific for search ID (sid). 
  * @export
  * @interface TimeBucketsSummary
  */
@@ -39,7 +39,7 @@ export interface TimeBucketsSummary {
      * @type {boolean}
      * @memberof TimeBucketsSummary
      */
-    isTimeCursored?: boolean;
+    IsTimeCursored?: boolean;
 
     /**
      * 
@@ -49,7 +49,7 @@ export interface TimeBucketsSummary {
     buckets?: Array<SingleTimeBucket>;
 
     /**
-     * Identifies where the cursor is, in processing the events.  The 'cursorTime' is a timestamp specified in UNIX time. 
+     * Identifies where the cursor is, in processing the events. The 'cursorTime' is a timestamp specified in UNIX time. 
      * @type {number}
      * @memberof TimeBucketsSummary
      */

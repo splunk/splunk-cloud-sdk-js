@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -50,7 +50,7 @@ export interface SearchModule {
     namespace?: string;
 
     /**
-     * The parameters on the search statement, such as 'earliest' and 'latest. The request can specify a \"defaults\" set of statement queryParameters which override the system default queryParameters. Each export statement requires to have a statement queryParameters in the object, it can be empty if there is no override. 
+     * The parameters on the search statement, such as 'earliest' and 'latest. The request can specify a \"defaults\" set of statement queryParameters which override the system default queryParameters. Each export statement requires to have a statement queryParameters in the object, it can be empty if there is no override. Search statement name can be \"defaults\". The \"defaults\" set of queryParameters will be applied to all other search statements in the module. 
      * @type {{ [key: string]: SingleStatementQueryParameters; }}
      * @memberof SearchModule
      */

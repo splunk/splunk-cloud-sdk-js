@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -35,28 +35,28 @@ export interface HECTokenAccessResponse {
      * @type {boolean}
      * @memberof HECTokenAccessResponse
      */
-    ackEnabled?: boolean;
+    ack_enabled?: boolean;
 
     /**
      * allow_query_string_auth is set to true if this token can be passed into the ingest endpoint's query parameter for auth  type: bool
      * @type {boolean}
      * @memberof HECTokenAccessResponse
      */
-    allowQueryStringAuth?: boolean;
+    allow_query_string_auth?: boolean;
 
     /**
      * created_at is a timestamp that captures when this token was created.  type: string format: date-time
      * @type {string}
      * @memberof HECTokenAccessResponse
      */
-    createdAt?: string;
+    created_at?: string;
 
     /**
      * created_by is the principal that created the token.  type: string
      * @type {string}
      * @memberof HECTokenAccessResponse
      */
-    createdBy?: string;
+    created_by?: string;
 
     /**
      * description is an optional description of the token.  type: string
@@ -91,14 +91,14 @@ export interface HECTokenAccessResponse {
      * @type {string}
      * @memberof HECTokenAccessResponse
      */
-    lastModifiedAt?: string;
+    last_modified_at?: string;
 
     /**
      * last_modified_by is the principal that last modified the token.  type: string
      * @type {string}
      * @memberof HECTokenAccessResponse
      */
-    lastModifiedBy?: string;
+    last_modified_by?: string;
 
     /**
      * name is the name of the token (unique within the tenant that it belongs to).  type: string

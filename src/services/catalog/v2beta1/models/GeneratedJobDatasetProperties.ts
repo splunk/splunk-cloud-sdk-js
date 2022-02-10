@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2020 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -14,8 +14,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *
- * Metadata Catalog service
- * With the Metadata Catalog in Splunk Cloud Services you can create and manage knowledge objects such as datasets, fields, rules, actions, dashboards, and workflows.
+ * Search Catalog service
+ * With the Metadata Catalog in Splunk Cloud Services you can create and manage knowledge objects such as datasets, fields, rules, actions, and dashboards.
  *
  * OpenAPI spec version: v2beta1.4 (recommended default)
  *
@@ -125,6 +125,13 @@ export interface JobDatasetProperties {
      * @memberof JobDatasetProperties
      */
     maxTime?: number;
+
+    /**
+     * Array of json objects to store critical search job messages.
+     * @type {Array<{ [key: string]: any; }>}
+     * @memberof JobDatasetProperties
+     */
+    messages?: Array<{ [key: string]: any; }>;
 
     /**
      * Parameters for the search job, mainly earliest, latest, timezone, and relativeTimeAnchor.

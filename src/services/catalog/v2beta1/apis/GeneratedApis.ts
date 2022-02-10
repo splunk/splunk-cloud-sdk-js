@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2020 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -14,8 +14,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  *
- * Metadata Catalog service
- * With the Metadata Catalog in Splunk Cloud Services you can create and manage knowledge objects such as datasets, fields, rules, actions, dashboards, and workflows.
+ * Search Catalog service
+ * With the Metadata Catalog in Splunk Cloud Services you can create and manage knowledge objects such as datasets, fields, rules, actions, and dashboards.
  *
  * OpenAPI spec version: v2beta1.4 (recommended default)
  *
@@ -23,6 +23,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+
 
 
 import {
@@ -49,15 +50,6 @@ import {
     Rule,
     RulePATCH,
     RulePOST,
-    Workflow,
-    WorkflowBuild,
-    WorkflowBuildPATCH,
-    WorkflowBuildPOST,
-    WorkflowPATCH,
-    WorkflowPOST,
-    WorkflowRun,
-    WorkflowRunPATCH,
-    WorkflowRunPOST,
 } from '../models';
 import BaseApiService from "../../../../baseapiservice";
 import { CatalogServiceExtensions } from "../../../../service_extensions/catalog";
@@ -67,9 +59,9 @@ export const CATALOG_SERVICE_PREFIX: string = '/catalog/v2beta1';
 export const CATALOG_SERVICE_CLUSTER: string = 'api';
 
 /**
- * Metadata Catalog service
+ * Search Catalog service
  * Version: v2beta1.4
- * With the Metadata Catalog in Splunk Cloud Services you can create and manage knowledge objects such as datasets, fields, rules, actions, dashboards, and workflows.
+ * With the Metadata Catalog in Splunk Cloud Services you can create and manage knowledge objects such as datasets, fields, rules, actions, and dashboards.
  */
 export class GeneratedCatalogService extends BaseApiService {
     getServiceCluster() : string {
@@ -80,98 +72,50 @@ export class GeneratedCatalogService extends BaseApiService {
         return CATALOG_SERVICE_PREFIX;
     }
     /**
-     * Creates a new action for a rule with the specified resource name.
-     * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
+     * Creates a new action for the specified rule by rule id or resource name.
+     * @param ruleresource The ID or resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param actionPOST The JSON representation of the action to be persisted.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public createActionForRule = (ruleresourcename: string, actionPOST: ActionPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
+    public createActionForRule = (ruleresource: string, actionPOST: ActionPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
-            ruleresourcename: ruleresourcename
+            ruleresource: ruleresource
         };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleresourcename'}/actions`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionPOST, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Action);
-    }
-    /**
-     * Creates a new action for the specified rule.
-     * @param ruleid ID of a Field.
-     * @param actionPOST The JSON representation of the action to be persisted.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Action
-     */
-    public createActionForRuleById = (ruleid: string, actionPOST: ActionPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
-        const path_params = {
-            ruleid: ruleid
-        };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleid'}/actions`(path_params);
+        const path = this.template`/catalog/v2beta1/rules/${'ruleresource'}/actions`(path_params);
         return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
      * Creates a new annotation for the specified dashboard.
-     * @param dashboardid ID of a dashboard.
+     * @param dashboardresource ID or the resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Annotation
      */
-    public createAnnotationForDashboardbyId = (dashboardid: string, annotationPOST: AnnotationPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Annotation> => {
+    public createAnnotationForDashboard = (dashboardresource: string, annotationPOST: AnnotationPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Annotation> => {
         const path_params = {
-            dashboardid: dashboardid
+            dashboardresource: dashboardresource
         };
-        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardid'}/annotations`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Annotation);
-    }
-    /**
-     * Creates a new annotation for the specified dataset resource name.
-     * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
-     * @param annotationPOST The JSON representation of the annotation to be persisted.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Annotation
-     */
-    public createAnnotationForDashboardsByResourceName = (dashboardresourcename: string, annotationPOST: AnnotationPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Annotation> => {
-        const path_params = {
-            dashboardresourcename: dashboardresourcename
-        };
-        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardresourcename'}/annotations`(path_params);
+        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardresource'}/annotations`(path_params);
         return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Annotation);
     }
     /**
      * Creates a new annotation for the specified dataset.
-     * @param datasetid ID of a Dataset.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param annotationPOST The JSON representation of the annotation to be persisted.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Annotation
      */
-    public createAnnotationForDatasetById = (datasetid: string, annotationPOST: AnnotationPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Annotation> => {
+    public createAnnotationForDataset = (datasetresource: string, annotationPOST: AnnotationPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Annotation> => {
         const path_params = {
-            datasetid: datasetid
+            datasetresource: datasetresource
         };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}/annotations`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Annotation);
-    }
-    /**
-     * Creates a new annotation for the specified dataset.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
-     * @param annotationPOST The JSON representation of the annotation to be persisted.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Annotation
-     */
-    public createAnnotationForDatasetByResourceName = (datasetresourcename: string, annotationPOST: AnnotationPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Annotation> => {
-        const path_params = {
-            datasetresourcename: datasetresourcename
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}/annotations`(path_params);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}/annotations`(path_params);
         return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), annotationPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Annotation);
     }
@@ -200,110 +144,37 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Dataset);
     }
     /**
-     * Creates a new dataset import using the resource name of the imported dataset.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
-     * @param datasetImportedBy
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Dataset
-     */
-    public createDatasetImport = (datasetresourcename: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
-        if (!datasetImportedBy) {
-            throw new SplunkError({ message: `Bad Request: datasetImportedBy is empty or undefined` });
-        }
-        const path_params = {
-            datasetresourcename: datasetresourcename
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}/imported-by`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Dataset);
-    }
-    /**
-     * Creates a new dataset import using the ID of the imported dataset.
-     * @param datasetid ID of a Dataset.
+     * Creates a new dataset import using the ID or resource name of the imported dataset.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetImportedBy
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return DatasetImportedBy
      */
-    public createDatasetImportById = (datasetid: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DatasetImportedBy> => {
+    public createDatasetImport = (datasetresource: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DatasetImportedBy> => {
         if (!datasetImportedBy) {
             throw new SplunkError({ message: `Bad Request: datasetImportedBy is empty or undefined` });
         }
         const path_params = {
-            datasetid: datasetid
+            datasetresource: datasetresource
         };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}/imported-by`(path_params);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}/imported-by`(path_params);
         return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as DatasetImportedBy);
     }
     /**
-     * Creates a new dataset import using the ID of the imported dataset.
-     * @param datasetid ID of a Dataset.
-     * @param datasetImportedBy
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return DatasetImportedBy
-     */
-    public createDatasetImportByIdv1 = (datasetid: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DatasetImportedBy> => {
-        if (!datasetImportedBy) {
-            throw new SplunkError({ message: `Bad Request: datasetImportedBy is empty or undefined` });
-        }
-        const path_params = {
-            datasetid: datasetid
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}/importedby`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as DatasetImportedBy);
-    }
-    /**
-     * Creates a new dataset import using the resource name of the imported dataset.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
-     * @param datasetImportedBy
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Dataset
-     */
-    public createDatasetImportv1 = (datasetresourcename: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
-        if (!datasetImportedBy) {
-            throw new SplunkError({ message: `Bad Request: datasetImportedBy is empty or undefined` });
-        }
-        const path_params = {
-            datasetresourcename: datasetresourcename
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}/importedby`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Dataset);
-    }
-    /**
-     * Creates a new field in the dataset with the specified resource name.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
+     * Adds a new field to the dataset with the specified ID or resource name.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param fieldPOST The JSON representation of the field to be persisted.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Field
      */
-    public createFieldForDataset = (datasetresourcename: string, fieldPOST: FieldPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
+    public createFieldForDataset = (datasetresource: string, fieldPOST: FieldPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
         const path_params = {
-            datasetresourcename: datasetresourcename
+            datasetresource: datasetresource
         };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}/fields`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), fieldPOST, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Field);
-    }
-    /**
-     * Adds a new field to the dataset with the specified ID.
-     * @param datasetid ID of a Dataset.
-     * @param fieldPOST The JSON representation of the field to be persisted.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Field
-     */
-    public createFieldForDatasetById = (datasetid: string, fieldPOST: FieldPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
-        const path_params = {
-            datasetid: datasetid
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}/fields`(path_params);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}/fields`(path_params);
         return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), fieldPOST, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Field);
     }
@@ -332,232 +203,94 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Rule);
     }
     /**
-     * Creates a new workflow configuration.
-     * @param workflowPOST The JSON representation of the workflow to be persisted.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Workflow
-     */
-    public createWorkflow = (workflowPOST: WorkflowPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Workflow> => {
-        const path = `/catalog/v2beta1/workflows`;
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowPOST, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Workflow);
-    }
-    /**
-     * Creates a new workflow build.
-     * @param workflowid ID of a workflow.
-     * @param workflowBuildPOST The JSON representation of the workflow build to be persisted.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return WorkflowBuild
-     */
-    public createWorkflowBuild = (workflowid: string, workflowBuildPOST: WorkflowBuildPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowBuild> => {
-        const path_params = {
-            workflowid: workflowid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}/builds`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowBuildPOST, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as WorkflowBuild);
-    }
-    /**
-     * Creates a new workflow run for the specified workflow build ID.
-     * @param workflowid ID of a workflow.
-     * @param workflowbuildid ID of a workflow build.
-     * @param workflowRunPOST The JSON representation of the workflow run to be persisted.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return WorkflowRun
-     */
-    public createWorkflowRun = (workflowid: string, workflowbuildid: string, workflowRunPOST: WorkflowRunPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowRun> => {
-        const path_params = {
-            workflowid: workflowid,
-            workflowbuildid: workflowbuildid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}/builds/${'workflowbuildid'}/runs`(path_params);
-        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowRunPOST, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as WorkflowRun);
-    }
-    /**
-     * Deletes the action with the specified ID that is associated with the specified rule resource name.
-     * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
-     * @param actionid ID of an Action.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteActionByIdForRule = (ruleresourcename: string, actionid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            ruleresourcename: ruleresourcename,
-            actionid: actionid
-        };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleresourcename'}/actions/${'actionid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
      * Deletes the action with the specified ID that is associated with the specified rule.
-     * @param ruleid ID of a Field.
+     * @param ruleresource The ID or resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param actionid ID of an Action.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteActionByIdForRuleById = (ruleid: string, actionid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+    public deleteActionByIdForRule = (ruleresource: string, actionid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
-            ruleid: ruleid,
+            ruleresource: ruleresource,
             actionid: actionid
         };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleid'}/actions/${'actionid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/rules/${'ruleresource'}/actions/${'actionid'}`(path_params);
         return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Deletes the annotation with the speciifed ID that is associted with the specified dashboard.
-     * @param dashboardid ID of a dashboard.
+     * @param dashboardresource ID or the resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param annotationid ID of a annotation.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteAnnotationOfDashboardById = (dashboardid: string, annotationid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+    public deleteAnnotationOfDashboard = (dashboardresource: string, annotationid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
-            dashboardid: dashboardid,
+            dashboardresource: dashboardresource,
             annotationid: annotationid
         };
-        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardid'}/annotations/${'annotationid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Deletes the annotation with the specified ID that is associated with the specified dashboard resource name.
-     * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
-     * @param annotationid ID of a annotation.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteAnnotationOfDashboardByResourceName = (dashboardresourcename: string, annotationid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            dashboardresourcename: dashboardresourcename,
-            annotationid: annotationid
-        };
-        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardresourcename'}/annotations/${'annotationid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardresource'}/annotations/${'annotationid'}`(path_params);
         return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Deletes the annotation with the specified ID that is associated with the specified dataset.
-     * @param datasetid ID of a Dataset.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param annotationid ID of a annotation.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteAnnotationOfDatasetById = (datasetid: string, annotationid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+    public deleteAnnotationOfDataset = (datasetresource: string, annotationid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
-            datasetid: datasetid,
+            datasetresource: datasetresource,
             annotationid: annotationid
         };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}/annotations/${'annotationid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}/annotations/${'annotationid'}`(path_params);
         return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
-     * Deletes the annotation with the specified iD that is associated with the specified dataset resource name.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
-     * @param annotationid ID of a annotation.
+     * Deletes the dashboard with the specified ID or resource name.
+     * @param dashboardresource ID or the resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteAnnotationOfDatasetByResourceName = (datasetresourcename: string, annotationid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+    public deleteDashboard = (dashboardresource: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
-            datasetresourcename: datasetresourcename,
-            annotationid: annotationid
+            dashboardresource: dashboardresource
         };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}/annotations/${'annotationid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardresource'}`(path_params);
         return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
-     * Deletes the dashboard with the specified ID.
-     * @param dashboardid ID of a dashboard.
+     * Deletes the dataset with the specified ID or resource name. Deleting a dataset also deletes its dependent objects, such as fields.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteDashboardById = (dashboardid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+    public deleteDataset = (datasetresource: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
-            dashboardid: dashboardid
+            datasetresource: datasetresource
         };
-        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Deletes the dashboard with the specified resource name.
-     * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteDashboardByResourceName = (dashboardresourcename: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            dashboardresourcename: dashboardresourcename
-        };
-        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardresourcename'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Deletes the dataset with the specified resource name, along with its dependencies. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteDataset = (datasetresourcename: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            datasetresourcename: datasetresourcename
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Deletes the dataset with the specified ID. Deleting a dataset also deletes its dependent objects, such as fields.
-     * @param datasetid ID of a Dataset.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteDatasetById = (datasetid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            datasetid: datasetid
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}`(path_params);
         return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Deletes the field with the specified ID that is part of the specified dataset.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteFieldByIdForDataset = (datasetresourcename: string, fieldid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+    public deleteFieldByIdForDataset = (datasetresource: string, fieldid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
-            datasetresourcename: datasetresourcename,
+            datasetresource: datasetresource,
             fieldid: fieldid
         };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}/fields/${'fieldid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Deletes the field with the specified ID that is part of the specified dataset.
-     * @param datasetid ID of a Dataset.
-     * @param fieldid ID of a Field.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteFieldByIdForDatasetById = (datasetid: string, fieldid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            datasetid: datasetid,
-            fieldid: fieldid
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}/fields/${'fieldid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}/fields/${'fieldid'}`(path_params);
         return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
@@ -576,174 +309,64 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as object);
     }
     /**
-     * Deletes the rule with the specified resource name and its dependencies.
-     * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
+     * Deletes the rule with the specfied ID or resource name. Deleting a rule also deleletes any objects that are dependents of that rule, such as rule actions.
+     * @param ruleresource The ID or resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public deleteRule = (ruleresourcename: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+    public deleteRule = (ruleresource: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
-            ruleresourcename: ruleresourcename
+            ruleresource: ruleresource
         };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleresourcename'}`(path_params);
+        const path = this.template`/catalog/v2beta1/rules/${'ruleresource'}`(path_params);
         return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
-    }
-    /**
-     * Deletes the rule with the specfied ID. Deleting a rule also deleletes any objects that are dependents of that rule, such as rule actions.
-     * @param ruleid ID of a Field.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteRuleById = (ruleid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            ruleid: ruleid
-        };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Deletes the workflow build with the specified workflow build ID.
-     * @param workflowid ID of a workflow.
-     * @param workflowbuildid ID of a workflow build.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteWorkflowBuildById = (workflowid: string, workflowbuildid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            workflowid: workflowid,
-            workflowbuildid: workflowbuildid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}/builds/${'workflowbuildid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Deletes the workflow with the specified workflow ID.
-     * @param workflowid ID of a workflow.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteWorkflowById = (workflowid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            workflowid: workflowid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Deletes the workflow run with the specified workflow run ID.
-     * @param workflowid ID of a workflow.
-     * @param workflowbuildid ID of a workflow build.
-     * @param workflowrunid ID of a workflow run.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public deleteWorkflowRunById = (workflowid: string, workflowbuildid: string, workflowrunid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            workflowid: workflowid,
-            workflowbuildid: workflowbuildid,
-            workflowrunid: workflowrunid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}/builds/${'workflowbuildid'}/runs/${'workflowrunid'}`(path_params);
-        return this.client.delete(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Returns the action with the specified ID that is associated with the specified rule resource name.
-     * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
-     * @param actionid ID of an Action.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Action
-     */
-    public getActionByIdForRule = (ruleresourcename: string, actionid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
-        const path_params = {
-            ruleresourcename: ruleresourcename,
-            actionid: actionid
-        };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleresourcename'}/actions/${'actionid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Action);
     }
     /**
      * Returns information about the action with the specified ID that is associated with the specified rule.
-     * @param ruleid ID of a Field.
+     * @param ruleresource The ID or resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param actionid ID of an Action.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public getActionByIdForRuleById = (ruleid: string, actionid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
+    public getActionByIdForRule = (ruleresource: string, actionid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
-            ruleid: ruleid,
+            ruleresource: ruleresource,
             actionid: actionid
         };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleid'}/actions/${'actionid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/rules/${'ruleresource'}/actions/${'actionid'}`(path_params);
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
-     * Returns information about the dashboard with the specified ID.
-     * @param dashboardid ID of a dashboard.
+     * Returns information about the dashboard with the specified ID or resource name.
+     * @param dashboardresource ID or the resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dashboard
      */
-    public getDashboardById = (dashboardid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dashboard> => {
+    public getDashboard = (dashboardresource: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dashboard> => {
         const path_params = {
-            dashboardid: dashboardid
+            dashboardresource: dashboardresource
         };
-        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardresource'}`(path_params);
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dashboard);
     }
     /**
-     * Returns information about the dashboard with the specified resource name.
-     * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Dashboard
-     */
-    public getDashboardByResourceName = (dashboardresourcename: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dashboard> => {
-        const path_params = {
-            dashboardresourcename: dashboardresourcename
-        };
-        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardresourcename'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Dashboard);
-    }
-    /**
-     * Returns the dataset with the specified resource name. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
+     * Returns information about the dataset with the specified ID or resource name. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param args parameters to be sent with the request
      * @param args.maxstale The number of seconds beyond which we will refresh index metadata.
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return DatasetGet
      */
-    public getDataset = (datasetresourcename: string, args?: { maxstale?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DatasetGet> => {
+    public getDataset = (datasetresource: string, args?: { maxstale?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DatasetGet> => {
         const path_params = {
-            datasetresourcename: datasetresourcename
+            datasetresource: datasetresource
         };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as DatasetGet);
-    }
-    /**
-     * Returns information about the dataset with the specified ID.
-     * @param datasetid ID of a Dataset.
-     * @param args parameters to be sent with the request
-     * @param args.maxstale The number of seconds beyond which we will refresh index metadata.
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return DatasetGet
-     */
-    public getDatasetById = (datasetid: string, args?: { maxstale?: number, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DatasetGet> => {
-        const path_params = {
-            datasetid: datasetid
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}`(path_params);
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as DatasetGet);
     }
@@ -764,35 +387,18 @@ export class GeneratedCatalogService extends BaseApiService {
     }
     /**
      * Returns the field with the specified ID that is part of the specified dataset.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param fieldid ID of a Field.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Field
      */
-    public getFieldByIdForDataset = (datasetresourcename: string, fieldid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
+    public getFieldByIdForDataset = (datasetresource: string, fieldid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
         const path_params = {
-            datasetresourcename: datasetresourcename,
+            datasetresource: datasetresource,
             fieldid: fieldid
         };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}/fields/${'fieldid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Field);
-    }
-    /**
-     * Returns the field with the specified ID that is part of the specified dataset.
-     * @param datasetid ID of a Dataset.
-     * @param fieldid ID of a Field.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Field
-     */
-    public getFieldByIdForDatasetById = (datasetid: string, fieldid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
-        const path_params = {
-            datasetid: datasetid,
-            fieldid: fieldid
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}/fields/${'fieldid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}/fields/${'fieldid'}`(path_params);
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Field);
     }
@@ -812,108 +418,42 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Relationship);
     }
     /**
-     * Returrns the rule with the specified resource name.
-     * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
+     * Returns information about rule with the specified rule ID or resource name.
+     * @param ruleresource The ID or resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Rule
      */
-    public getRule = (ruleresourcename: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Rule> => {
+    public getRule = (ruleresource: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Rule> => {
         const path_params = {
-            ruleresourcename: ruleresourcename
+            ruleresource: ruleresource
         };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleresourcename'}`(path_params);
+        const path = this.template`/catalog/v2beta1/rules/${'ruleresource'}`(path_params);
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Rule);
     }
     /**
-     * Returns information about rule with the specified rule ID.
-     * @param ruleid ID of a Field.
+     * Creates a new dataset import using the ID or resource name of the imported dataset.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
+     * @param datasetImportedBy
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Rule
+     * @return DatasetImportedBy
      */
-    public getRuleById = (ruleid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Rule> => {
+    public importDataset = (datasetresource: string, datasetImportedBy?: DatasetImportedBy, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<DatasetImportedBy> => {
+        if (!datasetImportedBy) {
+            throw new SplunkError({ message: `Bad Request: datasetImportedBy is empty or undefined` });
+        }
         const path_params = {
-            ruleid: ruleid
+            datasetresource: datasetresource
         };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Rule);
-    }
-    /**
-     * Returns information about the workflow build with the specified workflow build ID.
-     * @param workflowid ID of a workflow.
-     * @param workflowbuildid ID of a workflow build.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return WorkflowBuild
-     */
-    public getWorkflowBuildById = (workflowid: string, workflowbuildid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowBuild> => {
-        const path_params = {
-            workflowid: workflowid,
-            workflowbuildid: workflowbuildid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}/builds/${'workflowbuildid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as WorkflowBuild);
-    }
-    /**
-     * Returns information about the workflow with the specified workflow ID.
-     * @param workflowid ID of a workflow.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Workflow
-     */
-    public getWorkflowById = (workflowid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Workflow> => {
-        const path_params = {
-            workflowid: workflowid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Workflow);
-    }
-    /**
-     * Returns information about the workflow run with the specified workflow build ID.
-     * @param workflowid ID of a workflow.
-     * @param workflowbuildid ID of a workflow build.
-     * @param workflowrunid ID of a workflow run.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return WorkflowRun
-     */
-    public getWorkflowRunById = (workflowid: string, workflowbuildid: string, workflowrunid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<WorkflowRun> => {
-        const path_params = {
-            workflowid: workflowid,
-            workflowbuildid: workflowbuildid,
-            workflowrunid: workflowrunid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}/builds/${'workflowbuildid'}/runs/${'workflowrunid'}`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as WorkflowRun);
-    }
-    /**
-     * Returns the list of actions that are associated with the specified rule.
-     * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
-     * @param args parameters to be sent with the request
-     * @param args.count The maximum number of results to return.
-     * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
-     * @param args.offset The number of results to skip before the first one returned.
-     * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Array<Action>
-     */
-    public listActionsForRule = (ruleresourcename: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Action>> => {
-        const path_params = {
-            ruleresourcename: ruleresourcename
-        };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleresourcename'}/actions`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Array<Action>);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}/importedby`(path_params);
+        return this.client.post(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetImportedBy, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as DatasetImportedBy);
     }
     /**
      * Returns the set of actions that are part of the specified rule.
-     * @param ruleid ID of a Field.
+     * @param ruleresource The ID or resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
@@ -922,11 +462,11 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Action>
      */
-    public listActionsForRuleById = (ruleid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Action>> => {
+    public listActionsForRule = (ruleresource: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Action>> => {
         const path_params = {
-            ruleid: ruleid
+            ruleresource: ruleresource
         };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleid'}/actions`(path_params);
+        const path = this.template`/catalog/v2beta1/rules/${'ruleresource'}/actions`(path_params);
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Action>);
     }
@@ -947,39 +487,23 @@ export class GeneratedCatalogService extends BaseApiService {
     }
     /**
      * Returns the set of annotations that are associated with the specified dashboard.
-     * @param dashboardid ID of a dashboard.
+     * @param dashboardresource ID or the resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param args parameters to be sent with the request
      * @param args.filter A filter query to apply to the annotations.
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Annotation>
      */
-    public listAnnotationsForDashboardById = (dashboardid: string, args?: { filter?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Annotation>> => {
+    public listAnnotationsForDashboard = (dashboardresource: string, args?: { filter?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Annotation>> => {
         const path_params = {
-            dashboardid: dashboardid
+            dashboardresource: dashboardresource
         };
-        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardid'}/annotations`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Array<Annotation>);
-    }
-    /**
-     * Returns the set of annotations that are associated with the specified dashboard resource name.
-     * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
-     * @param args parameters to be sent with the request
-     * @param args.filter A filter query to apply to the annotations.
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Array<Annotation>
-     */
-    public listAnnotationsForDashboardByResourceName = (dashboardresourcename: string, args?: { filter?: string, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Annotation>> => {
-        const path_params = {
-            dashboardresourcename: dashboardresourcename
-        };
-        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardresourcename'}/annotations`(path_params);
+        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardresource'}/annotations`(path_params);
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Annotation>);
     }
     /**
      * Returns the set of annotations that are associated with the specified dataset.
-     * @param datasetid ID of a Dataset.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
      * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
@@ -988,30 +512,11 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Annotation>
      */
-    public listAnnotationsForDatasetById = (datasetid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Annotation>> => {
+    public listAnnotationsForDataset = (datasetresource: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Annotation>> => {
         const path_params = {
-            datasetid: datasetid
+            datasetresource: datasetresource
         };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}/annotations`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Array<Annotation>);
-    }
-    /**
-     * Returns the set of annotations that are associated with the specified dataset resource name.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
-     * @param args parameters to be sent with the request
-     * @param args.count The maximum number of results to return.
-     * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
-     * @param args.offset The number of results to skip before the first one returned.
-     * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Array<Annotation>
-     */
-    public listAnnotationsForDatasetByResourceName = (datasetresourcename: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Annotation>> => {
-        const path_params = {
-            datasetresourcename: datasetresourcename
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}/annotations`(path_params);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}/annotations`(path_params);
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Annotation>);
     }
@@ -1062,8 +567,8 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Field>);
     }
     /**
-     * Returns the list of fields in the specified dataset.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
+     * Returns the set of fields for the dataset with the specified ID or resource name.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of results to return.
      * @param args.filter A filter to apply to the dataset list. The filter must be a SPL predicate expression.
@@ -1072,30 +577,11 @@ export class GeneratedCatalogService extends BaseApiService {
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Array<Field>
      */
-    public listFieldsForDataset = (datasetresourcename: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Field>> => {
+    public listFieldsForDataset = (datasetresource: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Field>> => {
         const path_params = {
-            datasetresourcename: datasetresourcename
+            datasetresource: datasetresource
         };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}/fields`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Array<Field>);
-    }
-    /**
-     * Returns the set of fields for the dataset with the specified ID.
-     * @param datasetid ID of a Dataset.
-     * @param args parameters to be sent with the request
-     * @param args.count The maximum number of results to return.
-     * @param args.filter A filter to apply to the dataset list. The filter must be a SPL predicate expression.
-     * @param args.offset The number of results to skip before the first one returned.
-     * @param args.orderby A list of fields to order the results by. You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Array<Field>
-     */
-    public listFieldsForDatasetById = (datasetid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Field>> => {
-        const path_params = {
-            datasetid: datasetid
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}/fields`(path_params);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}/fields`(path_params);
         return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Array<Field>);
     }
@@ -1142,192 +628,70 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Array<Rule>);
     }
     /**
-     * Returns a list of Machine Learning workflow builds.
-     * @param workflowid ID of a workflow.
-     * @param args parameters to be sent with the request
-     * @param args.count The maximum number of results to return.
-     * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
-     * @param args.offset The number of results to skip before the first one returned.
-     * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Array<WorkflowBuild>
-     */
-    public listWorkflowBuilds = (workflowid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<WorkflowBuild>> => {
-        const path_params = {
-            workflowid: workflowid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}/builds`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Array<WorkflowBuild>);
-    }
-    /**
-     * Returns a list of Machine Learning workflow runs for specified workflow build ID.
-     * @param workflowid ID of a workflow.
-     * @param workflowbuildid ID of a workflow build.
-     * @param args parameters to be sent with the request
-     * @param args.count The maximum number of results to return.
-     * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
-     * @param args.offset The number of results to skip before the first one returned.
-     * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Array<WorkflowRun>
-     */
-    public listWorkflowRuns = (workflowid: string, workflowbuildid: string, args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<WorkflowRun>> => {
-        const path_params = {
-            workflowid: workflowid,
-            workflowbuildid: workflowbuildid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}/builds/${'workflowbuildid'}/runs`(path_params);
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Array<WorkflowRun>);
-    }
-    /**
-     * Return a list of Machine Learning workflow configurations.
-     * @param args parameters to be sent with the request
-     * @param args.count The maximum number of results to return.
-     * @param args.filter A filter to apply to the results list. The filter must be a SPL predicate expression.
-     * @param args.offset The number of results to skip before the first one returned.
-     * @param args.orderby A list of fields to order the results by.  You can specify either ascending or descending order using \"<field> asc\" or \"<field> desc.  Ascending order is the default.
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Array<Workflow>
-     */
-    public listWorkflows = (args?: { count?: number, filter?: string, offset?: number, orderby?: Array<string>, [key: string]: any }, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Array<Workflow>> => {
-        const path = `/catalog/v2beta1/workflows`;
-        return this.client.get(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Array<Workflow>);
-    }
-    /**
-     * Modifies the action with the specified ID that is associated with the specified rule resource name.
-     * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
-     * @param actionid ID of an Action.
-     * @param actionPATCH The fields to update in the specified action.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Action
-     */
-    public updateActionByIdForRule = (ruleresourcename: string, actionid: string, actionPATCH: ActionPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
-        const path_params = {
-            ruleresourcename: ruleresourcename,
-            actionid: actionid
-        };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleresourcename'}/actions/${'actionid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionPATCH, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Action);
-    }
-    /**
      * Modifies the action with the specified ID that is associated with the specified rule.
-     * @param ruleid ID of a Field.
+     * @param ruleresource The ID or resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param actionid ID of an Action.
      * @param actionPATCH The properties to update in the specified action.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Action
      */
-    public updateActionByIdForRuleById = (ruleid: string, actionid: string, actionPATCH: ActionPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
+    public updateActionByIdForRule = (ruleresource: string, actionid: string, actionPATCH: ActionPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Action> => {
         const path_params = {
-            ruleid: ruleid,
+            ruleresource: ruleresource,
             actionid: actionid
         };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleid'}/actions/${'actionid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/rules/${'ruleresource'}/actions/${'actionid'}`(path_params);
         return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), actionPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Action);
     }
     /**
-     * Modifies the dashboard with the specified ID.
-     * @param dashboardid ID of a dashboard.
+     * Modifies the dashboard with the specified ID or resource name.
+     * @param dashboardresource ID or the resource name of a dashvboard. The resource name format is module.dashboardname.
      * @param dashboardPATCH An updated representation of the dashboard to be persisted.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dashboard
      */
-    public updateDashboardById = (dashboardid: string, dashboardPATCH: DashboardPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dashboard> => {
+    public updateDashboard = (dashboardresource: string, dashboardPATCH: DashboardPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dashboard> => {
         const path_params = {
-            dashboardid: dashboardid
+            dashboardresource: dashboardresource
         };
-        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardresource'}`(path_params);
         return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dashboardPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dashboard);
     }
     /**
-     * Modifies the dashboard with the specified resource name.
-     * @param dashboardresourcename The resource name of a dashvboard. The resource name format is module.dashboardname.
-     * @param dashboardPATCH An updated representation of the dashboard to be persisted.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public updateDashboardByResourceName = (dashboardresourcename: string, dashboardPATCH: DashboardPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            dashboardresourcename: dashboardresourcename
-        };
-        const path = this.template`/catalog/v2beta1/dashboards/${'dashboardresourcename'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), dashboardPATCH, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Modifies the dataset with the specified resource name. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
+     * Modifies the dataset with the specified Dataset ID or Resource Name. For the default module, the resource name format is datasetName, otherwise, the resource name format is module.datasetName.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param datasetPATCH An updated representation of the dataset to be persisted.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Dataset
      */
-    public updateDataset = (datasetresourcename: string, datasetPATCH: DatasetPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
+    public updateDataset = (datasetresource: string, datasetPATCH: DatasetPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
         const path_params = {
-            datasetresourcename: datasetresourcename
+            datasetresource: datasetresource
         };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetPATCH, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Dataset);
-    }
-    /**
-     * Modifies the dataset with the specified ID.
-     * @param datasetid ID of a Dataset.
-     * @param datasetPATCH An updated representation of the dataset to be persisted.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Dataset
-     */
-    public updateDatasetById = (datasetid: string, datasetPATCH: DatasetPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
-        const path_params = {
-            datasetid: datasetid
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}`(path_params);
         return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Dataset);
     }
     /**
      * Modifies the field with the specified ID that is part of the specified dataset.
-     * @param datasetresourcename The resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
-     * @param fieldid ID of a Field.
-     * @param fieldPATCH The properties to update in the specified field.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Field
-     */
-    public updateFieldByIdForDataset = (datasetresourcename: string, fieldid: string, fieldPATCH: FieldPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
-        const path_params = {
-            datasetresourcename: datasetresourcename,
-            fieldid: fieldid
-        };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetresourcename'}/fields/${'fieldid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), fieldPATCH, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Field);
-    }
-    /**
-     * Modifies the field with the specified ID that is part of the specified dataset.
-     * @param datasetid ID of a Dataset.
+     * @param datasetresource ID of a Dataset or the resource name of a dataset. For the default module, the resource name format is datasetName. Otherwise, the resource name format is module.datasetName.
      * @param fieldid ID of a Field.
      * @param fieldPATCH The properties to update in the specified field, or the requesting user lacks catalog.datasets.read permission for them.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Field
      */
-    public updateFieldByIdForDatasetById = (datasetid: string, fieldid: string, fieldPATCH: FieldPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
+    public updateFieldByIdForDataset = (datasetresource: string, fieldid: string, fieldPATCH: FieldPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Field> => {
         const path_params = {
-            datasetid: datasetid,
+            datasetresource: datasetresource,
             fieldid: fieldid
         };
-        const path = this.template`/catalog/v2beta1/datasets/${'datasetid'}/fields/${'fieldid'}`(path_params);
+        const path = this.template`/catalog/v2beta1/datasets/${'datasetresource'}/fields/${'fieldid'}`(path_params);
         return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), fieldPATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Field);
     }
@@ -1348,87 +712,20 @@ export class GeneratedCatalogService extends BaseApiService {
             .then(response => response.body as Relationship);
     }
     /**
-     * Modifies the rule with the specified resource name.
-     * @param ruleresourcename The resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
+     * Modifies the rule with the specified rule ID or resource name.
+     * @param ruleresource The ID or resource name of a rule. For the default module, the resource name format is ruleName. Otherwise, the resource name format is module.ruleName.
      * @param rulePATCH The properties to update in the specified rule.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return Rule
      */
-    public updateRule = (ruleresourcename: string, rulePATCH: RulePATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Rule> => {
+    public updateRule = (ruleresource: string, rulePATCH: RulePATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Rule> => {
         const path_params = {
-            ruleresourcename: ruleresourcename
+            ruleresource: ruleresource
         };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleresourcename'}`(path_params);
+        const path = this.template`/catalog/v2beta1/rules/${'ruleresource'}`(path_params);
         return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), rulePATCH, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as Rule);
-    }
-    /**
-     * Modifies the rule with the specified rule ID.
-     * @param ruleid ID of a Field.
-     * @param rulePATCH The properties to update in the specified rule.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     * @return Rule
-     */
-    public updateRuleById = (ruleid: string, rulePATCH: RulePATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Rule> => {
-        const path_params = {
-            ruleid: ruleid
-        };
-        const path = this.template`/catalog/v2beta1/rules/${'ruleid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), rulePATCH, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as Rule);
-    }
-    /**
-     * Modifies the workflow build with the specified workflow build ID.
-     * @param workflowid ID of a workflow.
-     * @param workflowbuildid ID of a workflow build.
-     * @param workflowBuildPATCH An updated representation of the workflow build to be persisted.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public updateWorkflowBuildById = (workflowid: string, workflowbuildid: string, workflowBuildPATCH: WorkflowBuildPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            workflowid: workflowid,
-            workflowbuildid: workflowbuildid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}/builds/${'workflowbuildid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowBuildPATCH, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Modifies the workflow with the specified workflow ID.
-     * @param workflowid ID of a workflow.
-     * @param workflowPATCH An updated representation of the workflow to be persisted.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public updateWorkflowById = (workflowid: string, workflowPATCH: WorkflowPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            workflowid: workflowid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowPATCH, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
-    }
-    /**
-     * Modifies the workflow run with the specified workflow run ID.
-     * @param workflowid ID of a workflow.
-     * @param workflowbuildid ID of a workflow build.
-     * @param workflowrunid ID of a workflow run.
-     * @param workflowRunPATCH An updated representation of the workflow run to be persisted.
-     * @param args parameters to be sent with the request
-     * @param requestStatusCallback callback function to listen to the status of a request
-     */
-    public updateWorkflowRunById = (workflowid: string, workflowbuildid: string, workflowrunid: string, workflowRunPATCH: WorkflowRunPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        const path_params = {
-            workflowid: workflowid,
-            workflowbuildid: workflowbuildid,
-            workflowrunid: workflowrunid
-        };
-        const path = this.template`/catalog/v2beta1/workflows/${'workflowid'}/builds/${'workflowbuildid'}/runs/${'workflowrunid'}`(path_params);
-        return this.client.patch(CATALOG_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), workflowRunPATCH, { query: args, statusCallback:  requestStatusCallback})
-            .then(response => response.body as object);
     }
 }
 export type CatalogService = GeneratedCatalogService & CatalogServiceExtensions;

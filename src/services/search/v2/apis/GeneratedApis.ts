@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -27,10 +27,15 @@
 
 
 import {
+    Dataset,
+    DatasetPATCH,
+    DatasetPOST,
     DeleteSearchJob,
     FederatedConnection,
     FederatedConnectionInput,
     FieldsSummary,
+    ListDatasets,
+    ListFederatedConnections,
     ListPreviewResultsResponse,
     ListSearchResultsResponse,
     SearchJob,
@@ -65,6 +70,21 @@ export class GeneratedSearchService extends BaseApiService {
         return SEARCH_SERVICE_PREFIX;
     }
     /**
+     * Creates a dataset.
+     * @param datasetPOST
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Dataset
+     */
+    public createDataset = (datasetPOST?: DatasetPOST, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
+        if (!datasetPOST) {
+            throw new SplunkError({ message: `Bad Request: datasetPOST is empty or undefined` });
+        }
+        const path = `/search/v2/datasets`;
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetPOST, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Dataset);
+    }
+    /**
      * Creates a new federated connection with information about how to connect to a remote index. 
      * @param federatedConnectionInput
      * @param args parameters to be sent with the request
@@ -93,6 +113,20 @@ export class GeneratedSearchService extends BaseApiService {
         const path = `/search/v2/jobs`;
         return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), searchJob, { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as SearchJob);
+    }
+    /**
+     * Deletes a dataset with a specified dataset ID (datasetid). 
+     * @param datasetid The dataset ID.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     */
+    public deleteDatasetById = (datasetid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
+        const path_params = {
+            datasetid: datasetid
+        };
+        const path = this.template`/search/v2/datasets/${'datasetid'}`(path_params);
+        return this.client.delete(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as object);
     }
     /**
      * Deletes a federated connection with the specified name (connectionName) 
@@ -142,6 +176,32 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as { [key: string]: any; });
     }
     /**
+     * Returns all federated connections.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return ListFederatedConnections
+     */
+    public getAllFederatedConnections = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ListFederatedConnections> => {
+        const path = `/search/v2/connections`;
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as ListFederatedConnections);
+    }
+    /**
+     * Returns a dataset with a specified dataset ID (datasetid). 
+     * @param datasetid The dataset ID.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Dataset
+     */
+    public getDatasetById = (datasetid: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
+        const path_params = {
+            datasetid: datasetid
+        };
+        const path = this.template`/search/v2/datasets/${'datasetid'}`(path_params);
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Dataset);
+    }
+    /**
      * Returns the federated connection with the specified name (connectionName). 
      * @param connectionName The name of the federated connection.
      * @param args parameters to be sent with the request
@@ -172,13 +232,24 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as SearchJob);
     }
     /**
+     * Returns a list of all datasets.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return ListDatasets
+     */
+    public listDatasets = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ListDatasets> => {
+        const path = `/search/v2/datasets`;
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as ListDatasets);
+    }
+    /**
      * Returns an events summary for search ID (SID) search.
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @param args.count The maximum number of jobs that you want to return the status entries for. 
      * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2021-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
      * @param args.field One or more fields to return for the result set. Use a comma-separated list of field names to specify multiple fields. 
-     * @param args.latest The latest time filter in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2021-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
+     * @param args.latest The latest time filter in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2021-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. Latest time must be after Earliest time. 
      * @param args.offset Index number identifying the location of the first item to return.
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return ListSearchResultsResponse
@@ -196,7 +267,7 @@ export class GeneratedSearchService extends BaseApiService {
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2021-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
-     * @param args.latest The latest time filter in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2021-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
+     * @param args.latest The latest time filter in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2021-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. Latest time must be after Earliest time. 
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return FieldsSummary
      */
@@ -294,38 +365,49 @@ export class GeneratedSearchService extends BaseApiService {
     /**
      * Refresh a federated connection to fetch new remote indexes and add/delete corresponding federated datasets. 
      * @param connectionName The name of the federated connection.
-     * @param body
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public refreshFederatedConnection = (connectionName: string, body?: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        if (!body) {
-            throw new SplunkError({ message: `Bad Request: body is empty or undefined` });
-        }
+    public refreshFederatedConnection = (connectionName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             connectionName: connectionName
         };
         const path = this.template`/search/v2/connections/${'connectionName'}/refresh`(path_params);
-        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Test connection with remote EC instance using federated connection parameters. 
      * @param connectionName The name of the federated connection.
-     * @param body
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public testFederatedConnection = (connectionName: string, body?: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        if (!body) {
-            throw new SplunkError({ message: `Bad Request: body is empty or undefined` });
-        }
+    public testFederatedConnection = (connectionName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             connectionName: connectionName
         };
         const path = this.template`/search/v2/connections/${'connectionName'}/test`(path_params);
-        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
+    }
+    /**
+     * Modifies a dataset with a specified dataset ID (datasetid). 
+     * @param datasetid The dataset ID.
+     * @param datasetPATCH
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return Dataset
+     */
+    public updateDatasetById = (datasetid: string, datasetPATCH?: DatasetPATCH, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<Dataset> => {
+        if (!datasetPATCH) {
+            throw new SplunkError({ message: `Bad Request: datasetPATCH is empty or undefined` });
+        }
+        const path_params = {
+            datasetid: datasetid
+        };
+        const path = this.template`/search/v2/datasets/${'datasetid'}`(path_params);
+        return this.client.patch(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), datasetPATCH, { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as Dataset);
     }
     /**
      * Updates the search job with the specified search ID (SID) with an action.

@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -29,27 +29,27 @@ import {
 } from './';
 
 /**
- * Fields statistics summary model of the events to-date for  search ID (sid). 
+ * Fields statistics summary model of the events to-date for search ID (sid). 
  * @export
  * @interface FieldsSummary
  */
 export interface FieldsSummary {
     /**
-     * The amount of time, in seconds, that a time bucket  spans from the earliest to the latest time. 
+     * The amount of time, in seconds, that a time bucket spans from the earliest to the latest time. 
      * @type {number}
      * @memberof FieldsSummary
      */
     duration?: number;
 
     /**
-     * If specified, the earliest timestamp in UTC format  of the events to process. 
+     * If specified, the earliest timestamp in UTC format of the events to process. 
      * @type {string}
      * @memberof FieldsSummary
      */
     earliestTime?: string;
 
     /**
-     * The total number of events for all fields returned  in the time range ('earliestTime' and 'latestTime') specified. 
+     * The total number of events for all fields returned in the time range ('earliestTime' and 'latestTime') specified. 
      * @type {number}
      * @memberof FieldsSummary
      */
@@ -63,7 +63,7 @@ export interface FieldsSummary {
     fields?: { [key: string]: SingleFieldSummary; };
 
     /**
-     * If specified, the latest timestamp in UTC format  of the events to process. 
+     * If specified, the latest timestamp in UTC format of the events to process. 
      * @type {string}
      * @memberof FieldsSummary
      */

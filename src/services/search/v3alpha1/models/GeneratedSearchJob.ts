@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -44,35 +44,35 @@ export interface SearchJob {
     query: string;
 
     /**
-     * Specifies whether a search that contains commands with side effects  (with possible security risks) is allowed to run. 
+     * Specifies whether a search that contains commands with side effects (with possible security risks) is allowed to run. 
      * @type {boolean}
      * @memberof SearchJob
      */
     allowSideEffects?: boolean;
 
     /**
-     * Specifies whether a search is allowed to collect events summary  information during the run time. 
+     * Specifies whether a search is allowed to collect events summary information during the run time. 
      * @type {boolean}
      * @memberof SearchJob
      */
     collectEventSummary?: boolean;
 
     /**
-     * Specifies whether a search is allowed to collect fields summary  information during the run time. 
+     * Specifies whether a search is allowed to collect fields summary information during the run time. 
      * @type {boolean}
      * @memberof SearchJob
      */
     collectFieldSummary?: boolean;
 
     /**
-     * Specifies whether a search is allowed to collect timeline buckets  summary information during the run time. 
+     * Specifies whether a search is allowed to collect timeline buckets summary information during the run time. 
      * @type {boolean}
      * @memberof SearchJob
      */
     collectTimeBuckets?: boolean;
 
     /**
-     * The time, in GMT, that the search job is finished.  Empty if the search job has not completed. 
+     * The time, in GMT, that the search job is finished. Empty if the search job has not completed. 
      * @type {string}
      * @memberof SearchJob
      */
@@ -86,7 +86,7 @@ export interface SearchJob {
     readonly dispatchTime?: string;
 
     /**
-     * Specifies whether a search is allowed to collect preview results  during the run time. 
+     * Specifies whether a search is allowed to collect preview results during the run time. 
      * @type {boolean}
      * @memberof SearchJob
      */
@@ -107,7 +107,7 @@ export interface SearchJob {
     extractFields?: string;
 
     /**
-     * The number of seconds to run the search before finalizing the search.  The default value is 3600 seconds (1 hour).  The maximum value is 3600 seconds (1 hour). 
+     * The number of seconds to run the search before finalizing the search. The default value is 3600 seconds (1 hour). The maximum value is 3600 seconds (1 hour). 
      * @type {number}
      * @memberof SearchJob
      */
@@ -121,7 +121,7 @@ export interface SearchJob {
     messages?: Array<Message>;
 
     /**
-     * The module to run the search in. The default module is  used if a module is not specified. 
+     * The module to run the search in. The default module is used if a module is not specified. 
      * @type {string}
      * @memberof SearchJob
      */
@@ -135,28 +135,28 @@ export interface SearchJob {
     readonly name?: string;
 
     /**
-     * The 'rsid' of an associated recurring-search, if this search  job is dispatched by a recurring-search. 
+     * The 'rsid' of an associated recurring-search, if this search job is dispatched by a recurring-search. 
      * @type {string}
      * @memberof SearchJob
      */
     readonly parent?: string;
 
     /**
-     * An estimate of the percent of time remaining  before the job completes. 
+     * An estimate of the percent of time remaining before the job completes. 
      * @type {number}
      * @memberof SearchJob
      */
     readonly percentComplete?: number;
 
     /**
-     * Specifies if preview results are available for the search job.  The valid status values are 'unknown', 'true', and 'false'. 
+     * Specifies if preview results are available for the search job. The valid status values are 'unknown', 'true', and 'false'. 
      * @type {string}
      * @memberof SearchJob
      */
     readonly previewAvailable?: string;
 
     /**
-     * Represents parameters on the search job such as  'earliest' and 'latest'. 
+     * Represents parameters on the search job such as 'earliest' and 'latest'. 
      * @type {QueryParameters}
      * @memberof SearchJob
      */
@@ -170,14 +170,14 @@ export interface SearchJob {
     requiredFreshness?: number;
 
     /**
-     * The earliest time speciifed as an absolute value in GMT.  The time is computed based on the values you specify for the  'timezone' and 'earliest' queryParameters. 
+     * The earliest time speciifed as an absolute value in GMT. The time is computed based on the values you specify for the 'timezone' and 'earliest' queryParameters. 
      * @type {string}
      * @memberof SearchJob
      */
     readonly resolvedEarliest?: string;
 
     /**
-     * The latest time specified as an absolute value in GMT.  The time is computed based on the values you specify for the  'timezone' and 'earliest' queryParameters. 
+     * The latest time specified as an absolute value in GMT. The time is computed based on the values you specify for the 'timezone' and 'earliest' queryParameters. 
      * @type {string}
      * @memberof SearchJob
      */
@@ -191,7 +191,7 @@ export interface SearchJob {
     readonly resultsAvailable?: number;
 
     /**
-     * The number of the preview search results for the job with the  specified search ID (sid). 
+     * The number of the preview search results for the job with the specified search ID (sid). 
      * @type {number}
      * @memberof SearchJob
      */

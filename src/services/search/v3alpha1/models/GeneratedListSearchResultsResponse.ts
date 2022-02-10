@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -30,7 +30,7 @@ import {
 } from './';
 
 /**
- * The structure of the search results or events metadata that  is returned for the job with the specified search ID (sid). When a search is running, it might return incomplete or truncated  search results. Incomplete search results occur when a search  has not completed. Wait until search completes for the full result set. Truncated search results occur because the number of requested  results exceeds the page limit. Follow the &#39;nextLink&#39; URL to  retrieve the next page of results. 
+ * The structure of the search results or events metadata that is returned for the job with the specified search ID (sid). When a search is running, it might return incomplete or truncated search results. Incomplete search results occur when a search has not completed. Wait until search completes for the full result set. Truncated search results occur because the number of requested results exceeds the page limit. Follow the &#39;nextLink&#39; URL to retrieve the next page of results. 
  * @export
  * @interface ListSearchResultsResponse
  */

@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -42,14 +42,14 @@ export interface HECTokenCreateRequest {
      * @type {boolean}
      * @memberof HECTokenCreateRequest
      */
-    ackEnabled?: boolean;
+    ack_enabled?: boolean;
 
     /**
      * allow_query_string_auth is set to true if this token can be passed into the ingest endpoint's query parameter for auth  type: bool
      * @type {boolean}
      * @memberof HECTokenCreateRequest
      */
-    allowQueryStringAuth?: boolean;
+    allow_query_string_auth?: boolean;
 
     /**
      * description is an optional description of the token.  type: string

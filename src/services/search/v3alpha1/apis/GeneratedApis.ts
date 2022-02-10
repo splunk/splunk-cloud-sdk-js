@@ -1,6 +1,6 @@
 // tslint:disable
 /**
- * Copyright 2021 Splunk, Inc.
+ * Copyright 2022 Splunk, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"): you may
  * not use this file except in compliance with the License. You may obtain
@@ -35,6 +35,7 @@ import {
     FederatedConnectionInput,
     FieldsSummary,
     ListDatasets,
+    ListFederatedConnections,
     ListModules,
     ListPreviewResultsResponse,
     ListSearchResultsResponse,
@@ -227,6 +228,17 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as { [key: string]: any; });
     }
     /**
+     * Returns all federated connections.
+     * @param args parameters to be sent with the request
+     * @param requestStatusCallback callback function to listen to the status of a request
+     * @return ListFederatedConnections
+     */
+    public getAllFederatedConnections = (args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<ListFederatedConnections> => {
+        const path = `/search/v3alpha1/connections`;
+        return this.client.get(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
+            .then(response => response.body as ListFederatedConnections);
+    }
+    /**
      * Returns a dataset with a specified dataset ID (datasetid). 
      * @param datasetid The dataset ID.
      * @param args parameters to be sent with the request
@@ -272,7 +284,7 @@ export class GeneratedSearchService extends BaseApiService {
             .then(response => response.body as SearchJob);
     }
     /**
-     * Returns a module with a specified  resource name (resourceName). 
+     * Returns a module with a specified resource name (resourceName). 
      * @param resourceName The resource name.
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
@@ -304,7 +316,7 @@ export class GeneratedSearchService extends BaseApiService {
      * @param args.count The maximum number of entries to return. Set to 0 to return all available entries. 
      * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
      * @param args.field The field to return for the result set. Specify multiple fields of comma-separated values if multiple fields are required. 
-     * @param args.latest The latest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
+     * @param args.latest The latest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. Latest time must be after Earliest time. 
      * @param args.offset The index of the first item to return.
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return ListSearchResultsResponse
@@ -322,7 +334,7 @@ export class GeneratedSearchService extends BaseApiService {
      * @param sid The search ID.
      * @param args parameters to be sent with the request
      * @param args.earliest The earliest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
-     * @param args.latest The latest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. 
+     * @param args.latest The latest time filter, in absolute time. When specifying an absolute time specify either UNIX time, or UTC in seconds using the ISO-8601 (%FT%T.%Q) format. For example 2019-01-25T13:15:30Z. GMT is the default timezone. You must specify GMT when you specify UTC. Any offset specified is ignored. Latest time must be after Earliest time. 
      * @param requestStatusCallback callback function to listen to the status of a request
      * @return FieldsSummary
      */
@@ -431,37 +443,29 @@ export class GeneratedSearchService extends BaseApiService {
     /**
      * Refresh a federated connection to fetch new remote indexes and add/delete corresponding federated datasets. 
      * @param connectionName The name of the federated connection.
-     * @param body
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public refreshFederatedConnection = (connectionName: string, body?: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        if (!body) {
-            throw new SplunkError({ message: `Bad Request: body is empty or undefined` });
-        }
+    public refreshFederatedConnection = (connectionName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             connectionName: connectionName
         };
         const path = this.template`/search/v3alpha1/connections/${'connectionName'}/refresh`(path_params);
-        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
      * Test connection with remote EC instance using federated connection parameters. 
      * @param connectionName The name of the federated connection.
-     * @param body
      * @param args parameters to be sent with the request
      * @param requestStatusCallback callback function to listen to the status of a request
      */
-    public testFederatedConnection = (connectionName: string, body?: { [key: string]: any; }, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
-        if (!body) {
-            throw new SplunkError({ message: `Bad Request: body is empty or undefined` });
-        }
+    public testFederatedConnection = (connectionName: string, args?: object, requestStatusCallback?: (requestStatus: RequestStatus) => void): Promise<object> => {
         const path_params = {
             connectionName: connectionName
         };
         const path = this.template`/search/v3alpha1/connections/${'connectionName'}/test`(path_params);
-        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), body, { query: args, statusCallback:  requestStatusCallback})
+        return this.client.post(SEARCH_SERVICE_CLUSTER, this.client.buildPath('', path.split('/').slice(1)), { query: args, statusCallback:  requestStatusCallback})
             .then(response => response.body as object);
     }
     /**
