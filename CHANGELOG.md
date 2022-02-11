@@ -4,23 +4,28 @@ All notable changes to this project will be documented in this file. See [standa
 
 <a name="16.0.0-beta6"></a>
 # [16.0.0-beta6](https://github.com/splunk/splunk-cloud-sdk-js/compare/v16.0.0-beta3...v16.0.0-beta6) (2022-02-11)
+#### Breaking Changes
+* `Catalog service`: 
+	* v2beta1: 
+		* Apis whose name ends with `ById` have changed by removing `ById` in the name , and  apis whose name ends with `ByResourceName` have changed by removing `ByResourceName` in the name
+		* Apis of `createWorkflow`, `createWorkflowBuild`, `createWorkflowRun`, `deleteWorkflowBuildById`, `deleteWorkflowById`, `GetWorkflowBuildById`, `getWorkflowRunById`, `listWorkflows`, `updateWorkflowBuildById` were removed
 
 
-### Features
+* `Seach service`:
+	* v2: 
+		* Apis of `refreshFederatedConnection()` and `testFederatedConnection()` removed the input parameter of `body` 
+	* v3alpha1: 
+		* Apis of `refreshFederatedConnection()` and `testFederatedConnection()` removed the input parameter of `body` 
 
-* update with code-generated api bindings and models performed 2021-10-12 ([3a19a4c](https://github.com/splunk/splunk-cloud-sdk-js/commits/3a19a4c))
-* update with code-generated api bindings and models performed 2022-02-09 ([1b67208](https://github.com/splunk/splunk-cloud-sdk-js/commits/1b67208))
-
-
-
-<a name="16.0.0-beta4"></a>
-# 16.0.0-beta4 (2021-08-06)
-
-
-### Features
-
-* update with code-generated api bindings and models performed 2021-08-05 ([f7e2012](https://github.com/splunk/splunk-cloud-sdk-js/commits/f7e2012))
-
+#### Non-Breaking Changes 
+* `identity service`:
+	* v3:
+		* Added new apis of `getEntitlements`, `updateEntitlements`
+* `search sevice`: 
+	* v2: 
+		* Added new apis of `createDataset`,`deleteDatasetById`, `getDatasetById`, `listDatasets`, `getAllFederatedConnections`
+	* v3alpha1: 
+		* Added new api of `getAllFederatedConnections`
 
 
 <a name="16.0.0-beta5"></a>
