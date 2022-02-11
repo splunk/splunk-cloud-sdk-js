@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file. See [standa
 		* Apis of `createWorkflow`, `createWorkflowBuild`, `createWorkflowRun`, `deleteWorkflowBuildById`, `deleteWorkflowById`, `GetWorkflowBuildById`, `getWorkflowRunById`, `listWorkflows`, `updateWorkflowBuildById` were removed
 
 
-* `Seach service`:
+* `Search service`:
 	* v2: 
 		* Apis of `refreshFederatedConnection()` and `testFederatedConnection()` removed the input parameter of `body` 
 	* v3alpha1: 
